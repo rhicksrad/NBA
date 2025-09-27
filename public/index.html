@@ -15,6 +15,8 @@
       padding: 0 1rem 4rem;
       max-width: 1100px;
       margin-inline: auto;
+      background: #f4f6fb;
+      color: #0f172a;
       background: canvas;
       color: canvastext;
     }
@@ -56,7 +58,7 @@
       letter-spacing: 0.05em;
       font-weight: 600;
       margin-bottom: 0.4rem;
-      color: rgba(0, 0, 0, 0.6);
+      color: rgba(15, 23, 42, 0.68);
     }
     input[type="search"],
     input[type="number"],
@@ -718,6 +720,19 @@
       leadersGameRebounds: document.getElementById('leaders-game-rebounds'),
     };
 
+    function chartAvailable() {
+      return typeof window !== 'undefined' && typeof window.Chart !== 'undefined';
+    }
+
+    async function fetchJson(path, friendlyName) {
+      const url = new URL(path, document.baseURI);
+      const response = await fetch(url.toString(), { cache: 'no-store' });
+      if (!response.ok) {
+        throw new Error(`Failed to load ${friendlyName ?? path} (${response.status}) from ${url}`);
+      }
+      return response.json();
+    }
+
     let decadeChart;
     let scheduleChart;
     let playersHeightChart;
@@ -884,6 +899,10 @@
         borderRadius: 6,
       };
 
+      if (!chartAvailable()) {
+        return;
+      }
+
       if (!decadeChart) {
         const ctx = document.getElementById('decade-chart');
         decadeChart = new Chart(ctx, {
@@ -997,6 +1016,13 @@
           borderRadius: 6,
         },
       ];
+
+      if (!chartAvailable()) {
+        if (!dom.scheduleNote.textContent.includes('Chart.js')) {
+          dom.scheduleNote.textContent += ' Chart visualizations unavailable—Chart.js did not load.';
+        }
+        return;
+      }
 
       if (!scheduleChart) {
         scheduleChart = new Chart(dom.scheduleMonthlyCanvas, {
@@ -1184,6 +1210,13 @@
         const maxHeight = snapshot.heightSummary?.maxHeightInches;
         dom.playersHeightNote.textContent = `Covers ${formatNumber(totalPlayers)} players with listed heights from ${formatFeetAndInches(minHeight)} to ${formatFeetAndInches(maxHeight)}.`;
 
+        if (!chartAvailable()) {
+          if (!dom.playersHeightNote.textContent.includes('Chart.js')) {
+            dom.playersHeightNote.textContent += ' Chart visualization unavailable—Chart.js did not load.';
+          }
+          return;
+        }
+
         if (!playersHeightChart) {
           playersHeightChart = new Chart(dom.playersHeightCanvas, {
             type: 'bar',
@@ -1310,6 +1343,12 @@
       } else {
         const labels = gamesByDecade.map((entry) => entry.decade);
         const values = gamesByDecade.map((entry) => entry.games ?? 0);
+        if (!chartAvailable()) {
+          if (!dom.gamesNote.textContent.includes('Chart.js')) {
+            dom.gamesNote.textContent += ' Chart visualization unavailable—Chart.js did not load.';
+          }
+          return;
+        }
         if (!gamesDecadeChart) {
           gamesDecadeChart = new Chart(dom.gamesDecadeCanvas, {
             type: 'line',
@@ -1579,9 +1618,7 @@
 
     async function loadData() {
       try {
-        const response = await fetch('data/active_franchises.json', { cache: 'no-store' });
-        if (!response.ok) throw new Error('Failed to load franchise snapshot');
-        const snapshot = await response.json();
+        const snapshot = await fetchJson('data/active_franchises.json', 'franchise snapshot');
         state.snapshot = snapshot;
         state.raw = snapshot.activeFranchises;
         dom.generatedNote.textContent = `Snapshot generated ${new Date(snapshot.generatedAt).toLocaleString()} · ${formatNumber(snapshot.totals.nba)} NBA franchises active today.`;
@@ -1595,9 +1632,7 @@
 
     async function loadSchedule() {
       try {
-        const response = await fetch('data/season_24_25_schedule.json', { cache: 'no-store' });
-        if (!response.ok) throw new Error('Failed to load schedule snapshot');
-        const schedule = await response.json();
+        const schedule = await fetchJson('data/season_24_25_schedule.json', 'schedule snapshot');
         state.schedule = schedule;
         renderScheduleSummary();
         renderScheduleChart();
@@ -1618,9 +1653,7 @@
 
     async function loadPlayersOverview() {
       try {
-        const response = await fetch('data/players_overview.json', { cache: 'no-store' });
-        if (!response.ok) throw new Error('Failed to load players overview snapshot');
-        state.playersOverview = await response.json();
+        state.playersOverview = await fetchJson('data/players_overview.json', 'players overview snapshot');
         renderPlayersOverview();
       } catch (error) {
         console.error(error);
@@ -1640,9 +1673,7 @@
 
     async function loadHistoricGames() {
       try {
-        const response = await fetch('data/historic_games.json', { cache: 'no-store' });
-        if (!response.ok) throw new Error('Failed to load historical game snapshot');
-        state.historicGames = await response.json();
+        state.historicGames = await fetchJson('data/historic_games.json', 'historical game snapshot');
         renderHistoricGames();
       } catch (error) {
         console.error(error);
@@ -1661,9 +1692,7 @@
 
     async function loadTeamPerformance() {
       try {
-        const response = await fetch('data/team_performance.json', { cache: 'no-store' });
-        if (!response.ok) throw new Error('Failed to load team performance snapshot');
-        state.teamPerformance = await response.json();
+        state.teamPerformance = await fetchJson('data/team_performance.json', 'team performance snapshot');
         renderTeamPerformance();
       } catch (error) {
         console.error(error);
@@ -1678,9 +1707,7 @@
 
     async function loadPlayerLeaders() {
       try {
-        const response = await fetch('data/player_leaders.json', { cache: 'no-store' });
-        if (!response.ok) throw new Error('Failed to load player leaders snapshot');
-        state.playerLeaders = await response.json();
+        state.playerLeaders = await fetchJson('data/player_leaders.json', 'player leaders snapshot');
         renderPlayerLeaders();
       } catch (error) {
         console.error(error);
@@ -1711,3 +1738,4 @@
   </script>
 </body>
 </html>
+
