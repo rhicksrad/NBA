@@ -28,8 +28,8 @@
           <span class="eyebrow">League Archive</span>
           <h1>Chronicle the eras that shaped today's game.</h1>
           <p>
-            Build immersive history exhibits that tie archival data to iconic moments, playoff runs,
-            and franchise legacies.
+            Plug into curated timelines, record books, and attendance milestones to turn archival datasets
+            into rich interactive retrospectives.
           </p>
         </div>
       </header>
@@ -38,50 +38,123 @@
         <section>
           <h2>Era explorer</h2>
           <p class="lead">
-            Visualize pace changes, three-point revolutions, and defensive rules across decades using
-            the league schedule and team history datasets.
+            Trace the league's growth decade by decade and see how expansion bursts, archival coverage, and
+            postseason logs stack up across the NBA timeline.
           </p>
-          <div class="grid-two">
-            <div class="chart-placeholder">Decade comparison ribbon chart placeholder</div>
-            <div class="subsection">
-              <h3>Story threads</h3>
-              <div class="badge-list">
-                <span class="badge">Dynasty trackers</span>
-                <span class="badge">Rule shifts</span>
-                <span class="badge">Underdog runs</span>
-              </div>
+
+          <div class="summary-cards summary-cards--compact">
+            <article class="summary-card">
+              <strong>Archive breadth</strong>
               <p>
-                Stitch together statistical swing points with quotes, photos, and video cues to build
-                narrative arcs. Embed contextual annotations right beside the data.
+                <span data-history="total-games">--</span> games logged from
+                <span data-history="first-game">--</span> through <span data-history="latest-game">--</span>.
               </p>
+            </article>
+            <article class="summary-card">
+              <strong>Postseason catalog</strong>
+              <p>
+                <span data-history="playoff-games">--</span> playoff contests, representing
+                <span data-history="playoff-share">--</span> of the archive.
+              </p>
+            </article>
+            <article class="summary-card">
+              <strong>Attendance record</strong>
+              <p data-history="attendance-record">--</p>
+            </article>
+          </div>
+
+          <div class="grid-two">
+            <figure class="viz-card viz-card--inline" data-chart-wrapper>
+              <header class="viz-card__title">Games logged by decade</header>
+              <div class="viz-canvas">
+                <canvas data-chart="games-by-decade" aria-describedby="games-by-decade-caption"></canvas>
+              </div>
+              <figcaption id="games-by-decade-caption" class="viz-card__caption">
+                A filled line plot surfaces how the volume of tracked matchups accelerated from the early BAA
+                seasons through the modern 2020s slate.
+              </figcaption>
+            </figure>
+            <div class="subsection">
+              <h3>Expansion timeline</h3>
+              <p>
+                The franchise ledger now counts <span data-history="franchise-count">--</span> active NBA clubs. The
+                busiest era was the <span data-history="peak-expansion-decade">--</span>, which added
+                <span data-history="peak-expansion-total">--</span> teams.
+              </p>
+              <ol class="timeline" data-history="expansion-timeline"></ol>
             </div>
           </div>
         </section>
 
         <section>
           <h2>Playoff retrospectives</h2>
+          <p class="lead">
+            Compare the split between regular-season grinds and postseason epics, then dive into the biggest
+            blowouts and packed houses ever captured in the game logs.
+          </p>
+
           <div class="grid-two">
-            <div class="subsection">
-              <h3>Bracket replays</h3>
-              <p>
-                Recreate historic playoff brackets, highlight upset probabilities, and surface the
-                tactical adjustments that swung each series.
-              </p>
-            </div>
-            <div class="chart-placeholder">Historic bracket explorer coming soon</div>
+            <figure class="viz-card viz-card--inline" data-chart-wrapper>
+              <header class="viz-card__title">Game type distribution</header>
+              <div class="viz-canvas">
+                <canvas data-chart="game-type-share" aria-describedby="game-type-share-caption"></canvas>
+              </div>
+              <figcaption id="game-type-share-caption" class="viz-card__caption">
+                Doughnut segments show how regular season, playoffs, play-in tournaments, and showcase games
+                populate the historical record.
+              </figcaption>
+            </figure>
+            <figure class="viz-card viz-card--inline" data-chart-wrapper>
+              <header class="viz-card__title">Largest victory margins</header>
+              <div class="viz-canvas">
+                <canvas data-chart="largest-margins" aria-describedby="largest-margins-caption"></canvas>
+              </div>
+              <figcaption id="largest-margins-caption" class="viz-card__caption">
+                Horizontal bars spotlight the most lopsided scorelines on file, giving historians quick access
+                to blowout context.
+              </figcaption>
+            </figure>
           </div>
+
           <div class="card-grid">
             <article class="card">
-              <h3>Legends index</h3>
-              <p>Cross-reference milestones and accolades across every era in one interactive table.</p>
+              <h3>Scoreboard fireworks</h3>
+              <p>Highest combined point totals across the archive deliver instant storytelling starters.</p>
+              <ul class="list-grid list-grid--dense" data-history="record-games"></ul>
             </article>
             <article class="card">
-              <h3>Broadcast moments</h3>
-              <p>Attach archival clips and commentary transcripts to game-level data points.</p>
+              <h3>Mega crowds</h3>
+              <p>Attendance giants that redefined what a sold-out arena looks like.</p>
+              <div class="table-scroll">
+                <table class="history-table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Date</th>
+                      <th scope="col">Matchup</th>
+                      <th scope="col" class="history-table__numeric">Attendance</th>
+                    </tr>
+                  </thead>
+                  <tbody data-history="attendance-body"></tbody>
+                </table>
+              </div>
             </article>
             <article class="card">
-              <h3>Timeline builder</h3>
-              <p>Empower fans to craft personal timelines of the plays that defined their fandom.</p>
+              <h3>Archive cadence</h3>
+              <p>Monitor refresh cycles and coverage windows for the historical ingest.</p>
+              <dl class="history-facts">
+                <div class="history-facts__row">
+                  <dt>Last refresh</dt>
+                  <dd data-history="archive-updated">--</dd>
+                </div>
+                <div class="history-facts__row">
+                  <dt>Seasons tracked</dt>
+                  <dd><span data-history="season-range">--</span> (<span data-history="season-count">--</span>)</dd>
+                </div>
+                <div class="history-facts__row">
+                  <dt>Coverage span</dt>
+                  <dd><span data-history="first-game">--</span> – <span data-history="latest-game">--</span></dd>
+                </div>
+              </dl>
             </article>
           </div>
         </section>
@@ -89,5 +162,7 @@
 
       <footer class="page-footer">Preserving history to inform the next generation of NBA data stories.</footer>
     </div>
+    <script src="vendor/chart.umd.js" defer></script>
+    <script type="module" src="scripts/history.js"></script>
   </body>
 </html>
