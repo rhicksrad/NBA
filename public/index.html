@@ -90,6 +90,44 @@
           </div>
         </section>
 
+        <section class="league-visuals" id="league-visuals">
+          <div class="section-header">
+            <h2>League pulse in three charts</h2>
+            <p class="lead">
+              Track schedule volume, contender efficiency, and global player pipelines without leaving the landing hub.
+            </p>
+          </div>
+          <div class="viz-grid">
+            <figure class="viz-card viz-card--inline" data-chart-wrapper>
+              <header class="viz-card__title">Season cadence overview</header>
+              <div class="viz-canvas viz-canvas--flush">
+                <canvas data-chart="season-volume" aria-describedby="season-volume-caption"></canvas>
+              </div>
+              <figcaption id="season-volume-caption" class="viz-card__caption">
+                Monthly game counts show how preseason tune-ups give way to the 1,161-game regular season and December cup sprint.
+              </figcaption>
+            </figure>
+            <figure class="viz-card viz-card--inline" data-chart-wrapper>
+              <header class="viz-card__title">Contender efficiency scatter</header>
+              <div class="viz-canvas viz-canvas--flush">
+                <canvas data-chart="team-efficiency" aria-describedby="team-efficiency-caption"></canvas>
+              </div>
+              <figcaption id="team-efficiency-caption" class="viz-card__caption">
+                Bubble size scales with win rate, helping you spot which top-12 franchises pair elite offense with stingy defense.
+              </figcaption>
+            </figure>
+            <figure class="viz-card viz-card--inline" data-chart-wrapper>
+              <header class="viz-card__title">Global talent pipeline</header>
+              <div class="viz-canvas viz-canvas--flush">
+                <canvas data-chart="global-pipeline" aria-describedby="global-pipeline-caption"></canvas>
+              </div>
+              <figcaption id="global-pipeline-caption" class="viz-card__caption">
+                Horizontal bars rank the most prolific countries supplying active NBA players heading into the new season.
+              </figcaption>
+            </figure>
+          </div>
+        </section>
+
         <section class="story-verse" aria-labelledby="story-verse-title">
           <div class="section-header">
             <h2 id="story-verse-title">Narratives stitched from the data vault</h2>
