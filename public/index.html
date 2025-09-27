@@ -15,6 +15,8 @@
       padding: 0 1rem 4rem;
       max-width: 1100px;
       margin-inline: auto;
+      background: #f4f6fb;
+      color: #0f172a;
       background: canvas;
       color: canvastext;
     }
@@ -56,7 +58,7 @@
       letter-spacing: 0.05em;
       font-weight: 600;
       margin-bottom: 0.4rem;
-      color: rgba(0, 0, 0, 0.6);
+      color: rgba(15, 23, 42, 0.68);
     }
     input[type="search"],
     input[type="number"],
@@ -112,22 +114,53 @@
       font-size: clamp(1.5rem, 3vw, 2.1rem);
       font-weight: 700;
     }
+    .section-grid,
     .schedule-layout {
       display: grid;
       gap: 1.5rem;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       margin-top: 1.5rem;
     }
+    .panel,
     .schedule-panel {
       background: rgba(23, 105, 170, 0.06);
       border-radius: 12px;
       padding: 1.25rem;
       height: 100%;
     }
+    .panel-wide {
+      grid-column: 1 / -1;
+    }
+    .panel h3,
     .schedule-panel h3 {
       margin-top: 0;
       margin-bottom: 0.75rem;
       font-size: 1.05rem;
+    }
+    .panel .data-note {
+      margin-top: 0.75rem;
+    }
+    .tallest-list,
+    .special-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 0.85rem;
+    }
+    .tallest-list li {
+      line-height: 1.5;
+    }
+    .tallest-meta {
+      display: block;
+      color: rgba(0, 0, 0, 0.65);
+      font-size: 0.9rem;
+      margin-top: 0.25rem;
+    }
+    .table-note {
+      margin-top: 0.6rem;
+      font-size: 0.8rem;
+      color: rgba(0, 0, 0, 0.55);
     }
     table {
       width: 100%;
@@ -162,13 +195,6 @@
       color: rgba(23, 105, 170, 0.9);
       font-weight: 600;
       letter-spacing: 0.03em;
-    }
-    .special-list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      display: grid;
-      gap: 0.85rem;
     }
     .special-list li {
       line-height: 1.5;
@@ -210,10 +236,14 @@
         background: color-mix(in srgb, canvas 70%, canvastext 30%);
         border-color: rgba(255,255,255,0.2);
       }
+      .panel,
       .schedule-panel {
         background: color-mix(in srgb, canvas 75%, canvastext 25%);
       }
       .special-meta {
+        color: rgba(255, 255, 255, 0.6);
+      }
+      .tallest-meta {
         color: rgba(255, 255, 255, 0.6);
       }
     }
@@ -326,6 +356,308 @@
       </div>
     </section>
 
+    <section aria-labelledby="players-heading">
+      <h2 id="players-heading">Global player pipeline</h2>
+      <p id="players-note" class="data-note">Loading player overview…</p>
+      <div class="summary-cards" id="players-summary" aria-live="polite"></div>
+
+      <div class="section-grid">
+        <div class="panel">
+          <h3>Top represented countries</h3>
+          <div class="table-wrapper" role="region" aria-live="polite">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">Country</th>
+                  <th scope="col">Players</th>
+                </tr>
+              </thead>
+              <tbody id="players-countries-body">
+                <tr><td colspan="2">Loading country breakdown…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>Height distribution</h3>
+          <canvas id="players-height-chart" role="img" aria-label="Bar chart showing player counts by height bucket"></canvas>
+          <p class="data-note" id="players-height-note">Height snapshot loading…</p>
+        </div>
+
+        <div class="panel">
+          <h3>Tallest players on record</h3>
+          <ol class="tallest-list" id="players-tallest-list">
+            <li>Loading tallest players…</li>
+          </ol>
+        </div>
+
+        <div class="panel">
+          <h3>Top collegiate pipelines</h3>
+          <div class="table-wrapper" role="region" aria-live="polite">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">Program</th>
+                  <th scope="col">Players</th>
+                </tr>
+              </thead>
+              <tbody id="players-colleges-body">
+                <tr><td colspan="2">Loading college counts…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="games-heading">
+      <h2 id="games-heading">Historic game spotlights</h2>
+      <p id="games-note" class="data-note">Loading historical game insights…</p>
+      <div class="summary-cards" id="games-summary" aria-live="polite"></div>
+
+      <div class="section-grid">
+        <div class="panel">
+          <h3>Highest scoring games</h3>
+          <div class="table-wrapper" role="region" aria-live="polite">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">Date</th>
+                  <th scope="col">Matchup</th>
+                  <th scope="col">Total</th>
+                </tr>
+              </thead>
+              <tbody id="games-highest-body">
+                <tr><td colspan="3">Loading scoring highlights…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>Largest margins</h3>
+          <div class="table-wrapper" role="region" aria-live="polite">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">Date</th>
+                  <th scope="col">Result</th>
+                  <th scope="col">Margin</th>
+                </tr>
+              </thead>
+              <tbody id="games-margins-body">
+                <tr><td colspan="3">Loading margin data…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>Attendance leaders</h3>
+          <div class="table-wrapper" role="region" aria-live="polite">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">Date</th>
+                  <th scope="col">Matchup</th>
+                  <th scope="col">Attendance</th>
+                </tr>
+              </thead>
+              <tbody id="games-attendance-body">
+                <tr><td colspan="3">Loading attendance highlights…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="panel panel-wide">
+          <h3>Games by decade</h3>
+          <canvas id="games-decade-chart" role="img" aria-label="Line chart showing recorded NBA games by decade"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="team-heading">
+      <h2 id="team-heading">Team performance benchmarks</h2>
+      <p id="team-note" class="data-note">Loading team performance snapshot…</p>
+      <div class="summary-cards" id="team-summary" aria-live="polite"></div>
+
+      <div class="section-grid">
+        <div class="panel">
+          <h3>Win percentage leaders (≥ 500 games)</h3>
+          <div class="table-wrapper" role="region" aria-live="polite">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">Team</th>
+                  <th scope="col">Win %</th>
+                  <th scope="col">Games</th>
+                </tr>
+              </thead>
+              <tbody id="team-win-body">
+                <tr><td colspan="3">Loading team win percentages…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>Single-game scoring highs</h3>
+          <div class="table-wrapper" role="region" aria-live="polite">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">Team</th>
+                  <th scope="col">Opponent</th>
+                  <th scope="col">Points</th>
+                </tr>
+              </thead>
+              <tbody id="team-scoring-body">
+                <tr><td colspan="3">Loading team scoring highs…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>Single-game assist highs</h3>
+          <div class="table-wrapper" role="region" aria-live="polite">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">Team</th>
+                  <th scope="col">Opponent</th>
+                  <th scope="col">Assists</th>
+                </tr>
+              </thead>
+              <tbody id="team-assists-body">
+                <tr><td colspan="3">Loading assist highlights…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="leaders-heading">
+      <h2 id="leaders-heading">All-time player leaders</h2>
+      <p id="leaders-note" class="data-note">Loading player leaderboards…</p>
+      <div class="summary-cards" id="leaders-summary" aria-live="polite"></div>
+
+      <div class="section-grid">
+        <div class="panel">
+          <h3>Career points leaders</h3>
+          <div class="table-wrapper" role="region" aria-live="polite">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">Player</th>
+                  <th scope="col">PTS</th>
+                  <th scope="col">G</th>
+                </tr>
+              </thead>
+              <tbody id="leaders-career-points">
+                <tr><td colspan="3">Loading career points…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>Career assist leaders</h3>
+          <div class="table-wrapper" role="region" aria-live="polite">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">Player</th>
+                  <th scope="col">AST</th>
+                  <th scope="col">G</th>
+                </tr>
+              </thead>
+              <tbody id="leaders-career-assists">
+                <tr><td colspan="3">Loading career assists…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>Career rebound leaders</h3>
+          <div class="table-wrapper" role="region" aria-live="polite">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">Player</th>
+                  <th scope="col">REB</th>
+                  <th scope="col">G</th>
+                </tr>
+              </thead>
+              <tbody id="leaders-career-rebounds">
+                <tr><td colspan="3">Loading career rebounds…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-grid">
+        <div class="panel">
+          <h3>Single-game scoring highs</h3>
+          <div class="table-wrapper" role="region" aria-live="polite">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">Player</th>
+                  <th scope="col">PTS</th>
+                  <th scope="col">Date</th>
+                </tr>
+              </thead>
+              <tbody id="leaders-game-points">
+                <tr><td colspan="3">Loading single-game points…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>Single-game assist highs</h3>
+          <div class="table-wrapper" role="region" aria-live="polite">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">Player</th>
+                  <th scope="col">AST</th>
+                  <th scope="col">Date</th>
+                </tr>
+              </thead>
+              <tbody id="leaders-game-assists">
+                <tr><td colspan="3">Loading single-game assists…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>Single-game rebound highs</h3>
+          <div class="table-wrapper" role="region" aria-live="polite">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">Player</th>
+                  <th scope="col">REB</th>
+                  <th scope="col">Date</th>
+                </tr>
+              </thead>
+              <tbody id="leaders-game-rebounds">
+                <tr><td colspan="3">Loading single-game rebounds…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section aria-labelledby="meta-heading">
       <h2 id="meta-heading">About this snapshot</h2>
       <p>The data is generated from <code>TeamHistories.csv</code> in this repository using <code>scripts/build_snapshot.mjs</code>. The script keeps the dataset lightweight for the browser and powers the live filters and charts on this page.</p>
@@ -333,13 +665,17 @@
     </section>
   </main>
 
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.6/dist/chart.umd.min.js" integrity="sha384-DheX7XwjgzD+iLYZfSkgdAXuYEigsk6zD3Ymd1Pnh0VwZtL8XcluRybkJDN5OgHW" crossorigin="anonymous"></script>
+  <script src="vendor/chart.umd.js"></script>
   <script>
     const state = {
       raw: [],
       filtered: [],
       snapshot: null,
       schedule: null,
+      playersOverview: null,
+      historicGames: null,
+      teamPerformance: null,
+      playerLeaders: null,
     };
 
     const dom = {
@@ -356,13 +692,86 @@
       scheduleTeamsBody: document.getElementById('schedule-teams-body'),
       scheduleSpecialList: document.getElementById('schedule-special-list'),
       scheduleMonthlyCanvas: document.getElementById('schedule-monthly-chart'),
+      playersNote: document.getElementById('players-note'),
+      playersSummary: document.getElementById('players-summary'),
+      playersCountriesBody: document.getElementById('players-countries-body'),
+      playersHeightCanvas: document.getElementById('players-height-chart'),
+      playersHeightNote: document.getElementById('players-height-note'),
+      playersTallestList: document.getElementById('players-tallest-list'),
+      playersCollegesBody: document.getElementById('players-colleges-body'),
+      gamesNote: document.getElementById('games-note'),
+      gamesSummary: document.getElementById('games-summary'),
+      gamesHighestBody: document.getElementById('games-highest-body'),
+      gamesMarginsBody: document.getElementById('games-margins-body'),
+      gamesAttendanceBody: document.getElementById('games-attendance-body'),
+      gamesDecadeCanvas: document.getElementById('games-decade-chart'),
+      teamNote: document.getElementById('team-note'),
+      teamSummary: document.getElementById('team-summary'),
+      teamWinBody: document.getElementById('team-win-body'),
+      teamScoringBody: document.getElementById('team-scoring-body'),
+      teamAssistsBody: document.getElementById('team-assists-body'),
+      leadersNote: document.getElementById('leaders-note'),
+      leadersSummary: document.getElementById('leaders-summary'),
+      leadersCareerPoints: document.getElementById('leaders-career-points'),
+      leadersCareerAssists: document.getElementById('leaders-career-assists'),
+      leadersCareerRebounds: document.getElementById('leaders-career-rebounds'),
+      leadersGamePoints: document.getElementById('leaders-game-points'),
+      leadersGameAssists: document.getElementById('leaders-game-assists'),
+      leadersGameRebounds: document.getElementById('leaders-game-rebounds'),
     };
+
+    function chartAvailable() {
+      return typeof window !== 'undefined' && typeof window.Chart !== 'undefined';
+    }
+
+    async function fetchJson(path, friendlyName) {
+      const url = new URL(path, document.baseURI);
+      const response = await fetch(url.toString(), { cache: 'no-store' });
+      if (!response.ok) {
+        throw new Error(`Failed to load ${friendlyName ?? path} (${response.status}) from ${url}`);
+      }
+      return response.json();
+    }
 
     let decadeChart;
     let scheduleChart;
+    let playersHeightChart;
+    let gamesDecadeChart;
 
     function formatNumber(value) {
       return new Intl.NumberFormat().format(value);
+    }
+
+    function formatDecimal(value, digits = 1) {
+      if (value === null || value === undefined || Number.isNaN(Number(value))) return '—';
+      return new Intl.NumberFormat('en', {
+        minimumFractionDigits: digits,
+        maximumFractionDigits: digits,
+      }).format(Number(value));
+    }
+
+    function formatPercent(value, digits = 1) {
+      if (value === null || value === undefined || Number.isNaN(Number(value))) return '—';
+      return new Intl.NumberFormat('en', {
+        style: 'percent',
+        minimumFractionDigits: digits,
+        maximumFractionDigits: digits,
+      }).format(Number(value));
+    }
+
+    function formatFeetAndInches(value) {
+      if (value === null || value === undefined || Number.isNaN(Number(value))) return '—';
+      const total = Number(value);
+      const feet = Math.floor(total / 12);
+      const remainder = Math.round((total - feet * 12) * 10) / 10;
+      const rounded = Math.round(remainder);
+      const inches = Math.abs(remainder - rounded) < 0.05 ? String(rounded) : remainder.toFixed(1);
+      return `${feet}\u2032${inches}\u2033`;
+    }
+
+    function formatWeight(value) {
+      if (value === null || value === undefined || Number.isNaN(Number(value))) return '—';
+      return `${Math.round(Number(value))} lbs`;
     }
 
     const fullDateFormatter = new Intl.DateTimeFormat('en', { month: 'short', day: 'numeric', year: 'numeric' });
@@ -370,7 +779,32 @@
 
     function formatDate(isoString, formatter = fullDateFormatter) {
       if (!isoString) return '—';
-      return formatter.format(new Date(isoString));
+      const parsed = new Date(isoString);
+      if (!Number.isNaN(parsed.getTime())) {
+        return formatter.format(parsed);
+      }
+      const fallback = new Date(String(isoString).replace(' ', 'T'));
+      if (!Number.isNaN(fallback.getTime())) {
+        return formatter.format(fallback);
+      }
+      return '—';
+    }
+
+    function formatMatchup(home, away) {
+      const awayLabel = [away?.city, away?.name].filter(Boolean).join(' ') || 'Away team';
+      const homeLabel = [home?.city, home?.name].filter(Boolean).join(' ') || 'Home team';
+      return `<span class="team-name">${awayLabel}</span> @ <span class="team-name">${homeLabel}</span>`;
+    }
+
+    function formatResult(game) {
+      const homeScore = typeof game?.home?.score === 'number' ? game.home.score : Number(game?.home?.score) || 0;
+      const awayScore = typeof game?.away?.score === 'number' ? game.away.score : Number(game?.away?.score) || 0;
+      const homeName = [game?.home?.city, game?.home?.name].filter(Boolean).join(' ') || 'Home team';
+      const awayName = [game?.away?.city, game?.away?.name].filter(Boolean).join(' ') || 'Away team';
+      if (homeScore >= awayScore) {
+        return `<span class="team-name">${homeName}</span> ${formatNumber(homeScore)} – <span class="team-name">${awayName}</span> ${formatNumber(awayScore)}`;
+      }
+      return `<span class="team-name">${awayName}</span> ${formatNumber(awayScore)} – <span class="team-name">${homeName}</span> ${formatNumber(homeScore)}`;
     }
 
     function formatDateRange(startIso, endIso) {
@@ -464,6 +898,10 @@
         backgroundColor: 'rgba(23, 105, 170, 0.45)',
         borderRadius: 6,
       };
+
+      if (!chartAvailable()) {
+        return;
+      }
 
       if (!decadeChart) {
         const ctx = document.getElementById('decade-chart');
@@ -579,6 +1017,13 @@
         },
       ];
 
+      if (!chartAvailable()) {
+        if (!dom.scheduleNote.textContent.includes('Chart.js')) {
+          dom.scheduleNote.textContent += ' Chart visualizations unavailable—Chart.js did not load.';
+        }
+        return;
+      }
+
       if (!scheduleChart) {
         scheduleChart = new Chart(dom.scheduleMonthlyCanvas, {
           type: 'bar',
@@ -685,6 +1130,439 @@
       dom.scheduleSpecialList.innerHTML = items;
     }
 
+    function renderPlayersOverview() {
+      const snapshot = state.playersOverview;
+      if (!snapshot) return;
+
+      const totals = snapshot.totals ?? {};
+      const cards = [
+        { label: 'Players on record', value: formatNumber(totals.players ?? 0) },
+        { label: 'Average height (in)', value: formatDecimal(totals.averageHeightInches ?? 0, 2) },
+        { label: 'Average weight (lb)', value: formatDecimal(totals.averageWeightPounds ?? 0, 1) },
+        { label: 'Countries represented', value: formatNumber(totals.countriesRepresented ?? 0) },
+      ];
+      dom.playersSummary.innerHTML = cards
+        .map((card) => `
+          <div class="summary-card">
+            <h3>${card.label}</h3>
+            <p>${card.value}</p>
+          </div>
+        `)
+        .join('');
+
+      const generatedText = snapshot.generatedAt ? new Date(snapshot.generatedAt).toLocaleString() : '—';
+      dom.playersNote.textContent = `Snapshot generated ${generatedText}. Position flags — G: ${formatNumber(totals.guards ?? 0)}, F: ${formatNumber(totals.forwards ?? 0)}, C: ${formatNumber(totals.centers ?? 0)}.`;
+
+      const countries = snapshot.countries ?? [];
+      dom.playersCountriesBody.innerHTML = countries.length > 0
+        ? countries
+            .map((country) => `
+              <tr>
+                <td>${country.country}</td>
+                <td>${formatNumber(country.players ?? 0)}</td>
+              </tr>
+            `)
+            .join('')
+        : '<tr><td colspan="2">No country data available.</td></tr>';
+
+      const colleges = snapshot.colleges ?? [];
+      dom.playersCollegesBody.innerHTML = colleges.length > 0
+        ? colleges
+            .map((college) => `
+              <tr>
+                <td>${college.program}</td>
+                <td>${formatNumber(college.players ?? 0)}</td>
+              </tr>
+            `)
+            .join('')
+        : '<tr><td colspan="2">No college data available.</td></tr>';
+
+      const tallest = snapshot.tallestPlayers ?? [];
+      dom.playersTallestList.innerHTML = tallest.length > 0
+        ? tallest
+            .map((player, index) => {
+              const positions = (player.positions ?? []).join(' • ');
+              const metaParts = [];
+              if (player.weightPounds) metaParts.push(formatWeight(player.weightPounds));
+              if (player.country) metaParts.push(player.country);
+              return `
+                <li>
+                  <strong>${index + 1}. ${player.name}</strong> — ${formatFeetAndInches(player.heightInches)}${positions ? ` · ${positions}` : ''}
+                  <span class="tallest-meta">${metaParts.join(' • ')}</span>
+                </li>
+              `;
+            })
+            .join('')
+        : '<li>No height data available.</li>';
+
+      const heightBuckets = snapshot.heightBuckets ?? [];
+      if (heightBuckets.length === 0) {
+        if (playersHeightChart) {
+          playersHeightChart.destroy();
+          playersHeightChart = null;
+        }
+        dom.playersHeightNote.textContent = 'Height data unavailable.';
+      } else {
+        const labels = heightBuckets.map((bucket) => String(bucket.label || '').replace('"', '\u2033'));
+        const values = heightBuckets.map((bucket) => bucket.players ?? 0);
+        const totalPlayers = values.reduce((sum, value) => sum + value, 0);
+        const minHeight = snapshot.heightSummary?.minHeightInches;
+        const maxHeight = snapshot.heightSummary?.maxHeightInches;
+        dom.playersHeightNote.textContent = `Covers ${formatNumber(totalPlayers)} players with listed heights from ${formatFeetAndInches(minHeight)} to ${formatFeetAndInches(maxHeight)}.`;
+
+        if (!chartAvailable()) {
+          if (!dom.playersHeightNote.textContent.includes('Chart.js')) {
+            dom.playersHeightNote.textContent += ' Chart visualization unavailable—Chart.js did not load.';
+          }
+          return;
+        }
+
+        if (!playersHeightChart) {
+          playersHeightChart = new Chart(dom.playersHeightCanvas, {
+            type: 'bar',
+            data: {
+              labels,
+              datasets: [
+                {
+                  label: 'Players',
+                  data: values,
+                  backgroundColor: 'rgba(23, 105, 170, 0.65)',
+                  borderRadius: 6,
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              scales: {
+                x: { stacked: false },
+                y: {
+                  beginAtZero: true,
+                  ticks: { precision: 0 },
+                },
+              },
+              plugins: {
+                legend: { display: false },
+              },
+            },
+          });
+        } else {
+          playersHeightChart.data.labels = labels;
+          playersHeightChart.data.datasets[0].data = values;
+          playersHeightChart.update();
+        }
+      }
+    }
+
+    function renderHistoricGames() {
+      const snapshot = state.historicGames;
+      if (!snapshot) return;
+
+      const totals = snapshot.totals ?? {};
+      const cards = [];
+      if (totals.games) {
+        cards.push({ label: 'Games captured', value: formatNumber(totals.games) });
+      }
+      (totals.byType ?? []).slice(0, 3).forEach((entry) => {
+        cards.push({ label: `${entry.gameType} games`, value: formatNumber(entry.games ?? 0) });
+      });
+      if (totals.firstGame && totals.latestGame) {
+        cards.push({ label: 'Coverage', value: formatDateRange(totals.firstGame, totals.latestGame) });
+      }
+      dom.gamesSummary.innerHTML = cards
+        .map((card) => `
+          <div class="summary-card">
+            <h3>${card.label}</h3>
+            <p>${card.value}</p>
+          </div>
+        `)
+        .join('');
+
+      const generatedText = snapshot.generatedAt ? new Date(snapshot.generatedAt).toLocaleString() : '—';
+      dom.gamesNote.textContent = `Snapshot generated ${generatedText}.`;
+
+      const highest = snapshot.highestScoringGames ?? [];
+      dom.gamesHighestBody.innerHTML = highest.length > 0
+        ? highest
+            .slice(0, 10)
+            .map((game) => {
+              const meta = game.gameType ? `<span class="tallest-meta">${game.gameType}</span>` : '';
+              return `
+                <tr>
+                  <td>${formatDate(game.date)}</td>
+                  <td>${formatMatchup(game.home, game.away)}${meta}</td>
+                  <td>${formatNumber(game.totalPoints ?? 0)}</td>
+                </tr>
+              `;
+            })
+            .join('')
+        : '<tr><td colspan="3">No scoring highlights available.</td></tr>';
+
+      const margins = snapshot.largestMargins ?? [];
+      dom.gamesMarginsBody.innerHTML = margins.length > 0
+        ? margins
+            .slice(0, 10)
+            .map((game) => {
+              const extra = [formatMatchup(game.home, game.away)];
+              if (game.gameType) extra.push(game.gameType);
+              return `
+                <tr>
+                  <td>${formatDate(game.date)}</td>
+                  <td>${formatResult(game)}<span class="tallest-meta">${extra.join(' • ')}</span></td>
+                  <td>${formatNumber(game.margin ?? 0)}</td>
+                </tr>
+              `;
+            })
+            .join('')
+        : '<tr><td colspan="3">No margin data available.</td></tr>';
+
+      const attendance = snapshot.attendanceLeaders ?? [];
+      dom.gamesAttendanceBody.innerHTML = attendance.length > 0
+        ? attendance
+            .slice(0, 10)
+            .map((game) => {
+              const extra = [];
+              if (game.gameType) extra.push(game.gameType);
+              return `
+                <tr>
+                  <td>${formatDate(game.date)}</td>
+                  <td>${formatMatchup(game.home, game.away)}${extra.length ? ` <span class="tallest-meta">${extra.join(' • ')}</span>` : ''}</td>
+                  <td>${formatNumber(game.attendance ?? 0)}</td>
+                </tr>
+              `;
+            })
+            .join('')
+        : '<tr><td colspan="3">No attendance data available.</td></tr>';
+
+      const gamesByDecade = snapshot.gamesByDecade ?? [];
+      if (gamesByDecade.length === 0) {
+        if (gamesDecadeChart) {
+          gamesDecadeChart.destroy();
+          gamesDecadeChart = null;
+        }
+      } else {
+        const labels = gamesByDecade.map((entry) => entry.decade);
+        const values = gamesByDecade.map((entry) => entry.games ?? 0);
+        if (!chartAvailable()) {
+          if (!dom.gamesNote.textContent.includes('Chart.js')) {
+            dom.gamesNote.textContent += ' Chart visualization unavailable—Chart.js did not load.';
+          }
+          return;
+        }
+        if (!gamesDecadeChart) {
+          gamesDecadeChart = new Chart(dom.gamesDecadeCanvas, {
+            type: 'line',
+            data: {
+              labels,
+              datasets: [
+                {
+                  label: 'Games',
+                  data: values,
+                  fill: true,
+                  backgroundColor: 'rgba(23, 105, 170, 0.2)',
+                  borderColor: 'rgba(23, 105, 170, 0.7)',
+                  tension: 0.25,
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: { display: false },
+              },
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  ticks: { precision: 0 },
+                },
+              },
+            },
+          });
+        } else {
+          gamesDecadeChart.data.labels = labels;
+          gamesDecadeChart.data.datasets[0].data = values;
+          gamesDecadeChart.update();
+        }
+      }
+    }
+
+    function renderTeamPerformance() {
+      const snapshot = state.teamPerformance;
+      if (!snapshot) return;
+
+      const generatedText = snapshot.generatedAt ? new Date(snapshot.generatedAt).toLocaleString() : '—';
+      dom.teamNote.textContent = `Snapshot generated ${generatedText}. Single-game highs use the team perspective from TeamStatistics.csv.`;
+
+      const leaders = snapshot.winPctLeaders ?? [];
+      const cards = [];
+      if (leaders.length > 0) {
+        cards.push({ label: 'Qualified franchises', value: formatNumber(leaders.length) });
+        const top = leaders[0];
+        cards.push({ label: 'Top win %', value: `${top.team} · ${formatPercent(top.winPct ?? 0, 1)}` });
+      }
+      const scoringTop = snapshot.singleGameHighs?.scoring?.[0];
+      if (scoringTop) {
+        cards.push({ label: 'Highest single-game score', value: `${scoringTop.team} · ${formatNumber(scoringTop.points ?? 0)}` });
+      }
+      dom.teamSummary.innerHTML = cards
+        .map((card) => `
+          <div class="summary-card">
+            <h3>${card.label}</h3>
+            <p>${card.value}</p>
+          </div>
+        `)
+        .join('');
+
+      dom.teamWinBody.innerHTML = leaders.length > 0
+        ? leaders
+            .slice(0, 12)
+            .map((team) => {
+              const meta = `PPG ${formatDecimal(team.pointsPerGame ?? 0, 1)} · OPP ${formatDecimal(team.opponentPointsPerGame ?? 0, 1)}`;
+              return `
+                <tr>
+                  <td><span class="team-name">${team.team}</span><span class="tallest-meta">${meta}</span></td>
+                  <td>${formatPercent(team.winPct ?? 0, 1)}</td>
+                  <td>${formatNumber(team.games ?? 0)}</td>
+                </tr>
+              `;
+            })
+            .join('')
+        : '<tr><td colspan="3">No qualifying teams found.</td></tr>';
+
+      const scoringHighs = snapshot.singleGameHighs?.scoring ?? [];
+      dom.teamScoringBody.innerHTML = scoringHighs.length > 0
+        ? scoringHighs
+            .slice(0, 10)
+            .map((game) => {
+              const metaParts = [formatDate(game.date)];
+              if (game.gameType) metaParts.push(game.gameType);
+              return `
+                <tr>
+                  <td><span class="team-name">${game.team}</span><span class="tallest-meta">${metaParts.join(' • ')}</span></td>
+                  <td>${game.opponent ? `<span class="team-name">${game.opponent}</span>` : '—'}</td>
+                  <td>${formatNumber(game.points ?? 0)}</td>
+                </tr>
+              `;
+            })
+            .join('')
+        : '<tr><td colspan="3">No scoring highs available.</td></tr>';
+
+      const assistHighs = snapshot.singleGameHighs?.assists ?? [];
+      dom.teamAssistsBody.innerHTML = assistHighs.length > 0
+        ? assistHighs
+            .slice(0, 10)
+            .map((game) => {
+              const metaParts = [formatDate(game.date)];
+              if (game.gameType) metaParts.push(game.gameType);
+              return `
+                <tr>
+                  <td><span class="team-name">${game.team}</span><span class="tallest-meta">${metaParts.join(' • ')}</span></td>
+                  <td>${game.opponent ? `<span class="team-name">${game.opponent}</span>` : '—'}</td>
+                  <td>${formatNumber(game.assists ?? 0)}</td>
+                </tr>
+              `;
+            })
+            .join('')
+        : '<tr><td colspan="3">No assist highs available.</td></tr>';
+    }
+
+    function renderPlayerLeaders() {
+      const snapshot = state.playerLeaders;
+      if (!snapshot) return;
+
+      const totals = snapshot.totals ?? {};
+      const cards = [
+        { label: 'Player stat lines', value: formatNumber(totals.playerGameRows ?? 0) },
+        { label: 'Players with tracked games', value: formatNumber(totals.playersWithStats ?? 0) },
+      ];
+      const coverage = totals.seasonCoverage ?? {};
+      if (coverage.start && coverage.end) {
+        cards.push({ label: 'Season coverage', value: `${coverage.start} – ${coverage.end}` });
+      }
+      dom.leadersSummary.innerHTML = cards
+        .map((card) => `
+          <div class="summary-card">
+            <h3>${card.label}</h3>
+            <p>${card.value}</p>
+          </div>
+        `)
+        .join('');
+
+      const generatedText = snapshot.generatedAt ? new Date(snapshot.generatedAt).toLocaleString() : '—';
+      dom.leadersNote.textContent = `Snapshot generated ${generatedText}. Career totals include every entry in PlayerStatistics.csv.`;
+
+      const careerPoints = snapshot.careerLeaders?.points ?? [];
+      const careerAssists = snapshot.careerLeaders?.assists ?? [];
+      const careerRebounds = snapshot.careerLeaders?.rebounds ?? [];
+      const singleGamePoints = snapshot.singleGameHighs?.points ?? [];
+      const singleGameAssists = snapshot.singleGameHighs?.assists ?? [];
+      const singleGameRebounds = snapshot.singleGameHighs?.rebounds ?? [];
+
+      const avgKeyMap = {
+        points: 'pointsPerGame',
+        assists: 'assistsPerGame',
+        rebounds: 'reboundsPerGame',
+      };
+
+      function renderCareerTable(body, players, statKey) {
+        const avgKey = avgKeyMap[statKey];
+        if (!body) return;
+        if (!players || players.length === 0) {
+          body.innerHTML = '<tr><td colspan="3">No leaderboard data available.</td></tr>';
+          return;
+        }
+        body.innerHTML = players
+          .slice(0, 12)
+          .map((player) => {
+            const metaParts = [];
+            if (player[avgKey]) metaParts.push(`${statKey.toUpperCase()} PG ${formatDecimal(player[avgKey], 1)}`);
+            if (player.firstSeason && player.lastSeason) metaParts.push(`${player.firstSeason}–${player.lastSeason}`);
+            if (player.teams && player.teams.length > 0) metaParts.push(player.teams.join(' • '));
+            return `
+              <tr>
+                <td><span class="team-name">${player.name}</span><span class="tallest-meta">${metaParts.join(' • ')}</span></td>
+                <td>${formatNumber(Math.round(player[statKey] ?? 0))}</td>
+                <td>${formatNumber(player.games ?? 0)}</td>
+              </tr>
+            `;
+          })
+          .join('');
+      }
+
+      function renderSingleGameTable(body, games, statKey) {
+        if (!body) return;
+        if (!games || games.length === 0) {
+          body.innerHTML = '<tr><td colspan="3">No single-game records available.</td></tr>';
+          return;
+        }
+        body.innerHTML = games
+          .slice(0, 12)
+          .map((game) => {
+            const metaParts = [];
+            if (game.team) metaParts.push(game.team);
+            if (game.opponent) metaParts.push(`vs ${game.opponent}`);
+            if (game.gameType) metaParts.push(game.gameType);
+            if (game.minutes) metaParts.push(`${formatDecimal(game.minutes, 1)} min`);
+            return `
+              <tr>
+                <td><span class="team-name">${game.name}</span><span class="tallest-meta">${metaParts.join(' • ')}</span></td>
+                <td>${formatNumber(Math.round(game[statKey] ?? 0))}</td>
+                <td>${formatDate(game.gameDate)}</td>
+              </tr>
+            `;
+          })
+          .join('');
+      }
+
+      renderCareerTable(dom.leadersCareerPoints, careerPoints, 'points');
+      renderCareerTable(dom.leadersCareerAssists, careerAssists, 'assists');
+      renderCareerTable(dom.leadersCareerRebounds, careerRebounds, 'rebounds');
+      renderSingleGameTable(dom.leadersGamePoints, singleGamePoints, 'points');
+      renderSingleGameTable(dom.leadersGameAssists, singleGameAssists, 'assists');
+      renderSingleGameTable(dom.leadersGameRebounds, singleGameRebounds, 'rebounds');
+    }
+
     function applyFilters() {
       const searchTerm = dom.search.value.trim().toLowerCase();
       const selectedLeague = dom.league.value;
@@ -740,9 +1618,7 @@
 
     async function loadData() {
       try {
-        const response = await fetch('data/active_franchises.json', { cache: 'no-store' });
-        if (!response.ok) throw new Error('Failed to load franchise snapshot');
-        const snapshot = await response.json();
+        const snapshot = await fetchJson('data/active_franchises.json', 'franchise snapshot');
         state.snapshot = snapshot;
         state.raw = snapshot.activeFranchises;
         dom.generatedNote.textContent = `Snapshot generated ${new Date(snapshot.generatedAt).toLocaleString()} · ${formatNumber(snapshot.totals.nba)} NBA franchises active today.`;
@@ -756,9 +1632,7 @@
 
     async function loadSchedule() {
       try {
-        const response = await fetch('data/season_24_25_schedule.json', { cache: 'no-store' });
-        if (!response.ok) throw new Error('Failed to load schedule snapshot');
-        const schedule = await response.json();
+        const schedule = await fetchJson('data/season_24_25_schedule.json', 'schedule snapshot');
         state.schedule = schedule;
         renderScheduleSummary();
         renderScheduleChart();
@@ -777,6 +1651,78 @@
       }
     }
 
+    async function loadPlayersOverview() {
+      try {
+        state.playersOverview = await fetchJson('data/players_overview.json', 'players overview snapshot');
+        renderPlayersOverview();
+      } catch (error) {
+        console.error(error);
+        state.playersOverview = null;
+        dom.playersNote.textContent = 'Unable to load player overview snapshot. Please refresh to try again.';
+        dom.playersSummary.innerHTML = '';
+        dom.playersCountriesBody.innerHTML = '<tr><td colspan="2">Player snapshot unavailable.</td></tr>';
+        dom.playersCollegesBody.innerHTML = '<tr><td colspan="2">Player snapshot unavailable.</td></tr>';
+        dom.playersTallestList.innerHTML = '<li>Player snapshot unavailable.</li>';
+        dom.playersHeightNote.textContent = 'Height data unavailable.';
+        if (playersHeightChart) {
+          playersHeightChart.destroy();
+          playersHeightChart = null;
+        }
+      }
+    }
+
+    async function loadHistoricGames() {
+      try {
+        state.historicGames = await fetchJson('data/historic_games.json', 'historical game snapshot');
+        renderHistoricGames();
+      } catch (error) {
+        console.error(error);
+        state.historicGames = null;
+        dom.gamesNote.textContent = 'Unable to load historical game insights. Please refresh to try again.';
+        dom.gamesSummary.innerHTML = '';
+        dom.gamesHighestBody.innerHTML = '<tr><td colspan="3">Historical game snapshot unavailable.</td></tr>';
+        dom.gamesMarginsBody.innerHTML = '<tr><td colspan="3">Historical game snapshot unavailable.</td></tr>';
+        dom.gamesAttendanceBody.innerHTML = '<tr><td colspan="3">Historical game snapshot unavailable.</td></tr>';
+        if (gamesDecadeChart) {
+          gamesDecadeChart.destroy();
+          gamesDecadeChart = null;
+        }
+      }
+    }
+
+    async function loadTeamPerformance() {
+      try {
+        state.teamPerformance = await fetchJson('data/team_performance.json', 'team performance snapshot');
+        renderTeamPerformance();
+      } catch (error) {
+        console.error(error);
+        state.teamPerformance = null;
+        dom.teamNote.textContent = 'Unable to load team performance snapshot. Please refresh to try again.';
+        dom.teamSummary.innerHTML = '';
+        dom.teamWinBody.innerHTML = '<tr><td colspan="3">Team snapshot unavailable.</td></tr>';
+        dom.teamScoringBody.innerHTML = '<tr><td colspan="3">Team snapshot unavailable.</td></tr>';
+        dom.teamAssistsBody.innerHTML = '<tr><td colspan="3">Team snapshot unavailable.</td></tr>';
+      }
+    }
+
+    async function loadPlayerLeaders() {
+      try {
+        state.playerLeaders = await fetchJson('data/player_leaders.json', 'player leaders snapshot');
+        renderPlayerLeaders();
+      } catch (error) {
+        console.error(error);
+        state.playerLeaders = null;
+        dom.leadersNote.textContent = 'Unable to load player leaderboards. Please refresh to try again.';
+        dom.leadersSummary.innerHTML = '';
+        dom.leadersCareerPoints.innerHTML = '<tr><td colspan="3">Player leaderboard unavailable.</td></tr>';
+        dom.leadersCareerAssists.innerHTML = '<tr><td colspan="3">Player leaderboard unavailable.</td></tr>';
+        dom.leadersCareerRebounds.innerHTML = '<tr><td colspan="3">Player leaderboard unavailable.</td></tr>';
+        dom.leadersGamePoints.innerHTML = '<tr><td colspan="3">Player leaderboard unavailable.</td></tr>';
+        dom.leadersGameAssists.innerHTML = '<tr><td colspan="3">Player leaderboard unavailable.</td></tr>';
+        dom.leadersGameRebounds.innerHTML = '<tr><td colspan="3">Player leaderboard unavailable.</td></tr>';
+      }
+    }
+
     dom.search.addEventListener('input', () => applyFilters());
     dom.league.addEventListener('change', () => applyFilters());
     dom.seasonStart.addEventListener('change', () => applyFilters());
@@ -785,6 +1731,10 @@
 
     loadData();
     loadSchedule();
+    loadPlayersOverview();
+    loadHistoricGames();
+    loadTeamPerformance();
+    loadPlayerLeaders();
   </script>
 </body>
 </html>

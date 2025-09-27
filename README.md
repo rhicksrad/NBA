@@ -17,6 +17,16 @@
 - **How to regenerate:** Run `node scripts/build_schedule_snapshot.mjs` from the repository root. The script reads `LeagueSchedule24_25.csv` and joins against `TeamHistories.csv` to provide friendly team names.
 - **Why it matters:** Allows the MVP to surface upcoming season context without shipping the full 1,400-row CSV to the browser.
 
+### Insight snapshots (players, games, teams)
+- **Description:** Condensed JSON exports used by the "Global player pipeline", "Historic game spotlights", "Team performance benchmarks", and "All-time player leaders" sections in `public/index.html`.
+- **How to regenerate:** Run `python scripts/build_insights.py`. The script streams:
+  - `Players.csv` for roster metadata and height/position rollups,
+  - `Games.csv` for league-wide matchup highlights,
+  - `TeamStatistics.zip` for franchise benchmarks, and
+  - `PlayerStatistics.7z` for career and single-game leaderboards (requires the `7z` CLI from `p7zip-full`).
+- **Outputs:** `public/data/players_overview.json`, `public/data/historic_games.json`, `public/data/team_performance.json`, and `public/data/player_leaders.json`.
+- **Why it matters:** Keeps the browser payload tiny while ensuring the MVP reflects every dataset shipped with the repository.
+
 ### Players.csv
 - **Description:** Master roster metadata for players who have appeared in NBA history.
 - **Row count:** 6,533 player records.
