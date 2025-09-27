@@ -26,13 +26,25 @@ registerCharts([
               label: 'All-time win %',
               data: pct,
               backgroundColor: palette.royal,
+              borderRadius: 10,
+              maxBarThickness: 44,
             },
           ],
         },
         options: {
+          responsive: true,
+          maintainAspectRatio: false,
           indexAxis: 'y',
           layout: { padding: { top: 6, right: 8, bottom: 6, left: 8 } },
           plugins: {
+            title: {
+              display: true,
+              text: 'Franchise win pace',
+              align: 'start',
+              color: '#0b2545',
+              font: { weight: 700, size: 14 },
+              padding: { bottom: 8 },
+            },
             legend: { display: false },
             tooltip: {
               callbacks: {
@@ -49,10 +61,16 @@ registerCharts([
               grid: { color: 'rgba(11, 37, 69, 0.08)' },
               ticks: {
                 callback: (value) => `${helpers.formatNumber(value, 0)}%`,
+                color: '#42526c',
+                font: { size: 12 },
               },
             },
             y: {
               grid: { display: false },
+              ticks: {
+                color: '#0b2545',
+                font: { weight: 600 },
+              },
             },
           },
         },
@@ -86,12 +104,23 @@ registerCharts([
               pointBorderWidth: 1.5,
               pointRadius: (ctx) => 4 + Math.min(8, ctx.raw.totalGames / 24),
               pointHoverRadius: (ctx) => 6 + Math.min(8, ctx.raw.totalGames / 24),
+              pointHoverBorderWidth: 2,
             },
           ],
         },
         options: {
+          responsive: true,
+          maintainAspectRatio: false,
           layout: { padding: 8 },
           plugins: {
+            title: {
+              display: true,
+              text: 'Back-to-back pressure vs rest windows',
+              align: 'start',
+              color: '#0b2545',
+              font: { weight: 700, size: 14 },
+              padding: { bottom: 8 },
+            },
             legend: { display: false },
             tooltip: {
               callbacks: {
@@ -102,12 +131,15 @@ registerCharts([
               },
             },
           },
+          interaction: { mode: 'nearest', axis: 'xy', intersect: false },
           scales: {
             x: {
               title: { display: true, text: 'Back-to-back sets' },
               grid: { color: 'rgba(11, 37, 69, 0.08)' },
               ticks: {
                 callback: (value) => `${helpers.formatNumber(value, 0)}`,
+                color: '#42526c',
+                font: { size: 12 },
               },
             },
             y: {
@@ -115,6 +147,8 @@ registerCharts([
               grid: { color: 'rgba(11, 37, 69, 0.08)' },
               ticks: {
                 callback: (value) => `${helpers.formatNumber(value, 1)}`,
+                color: '#42526c',
+                font: { size: 12 },
               },
             },
           },

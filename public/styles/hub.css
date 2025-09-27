@@ -283,6 +283,253 @@ section h2 {
   color: var(--text-subtle);
 }
 
+.section-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.section-heading__actions {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.section-heading__actions--ghost {
+  justify-content: flex-end;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.4rem 0.85rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--royal);
+  background: color-mix(in srgb, rgba(17, 86, 214, 0.15) 65%, rgba(255, 255, 255, 0.9) 35%);
+  border: 1px solid color-mix(in srgb, var(--royal) 18%, transparent);
+}
+
+.chip--accent {
+  color: #fff;
+  background: linear-gradient(135deg, rgba(17, 86, 214, 0.92), rgba(239, 61, 91, 0.85));
+  border-color: transparent;
+  box-shadow: 0 12px 24px rgba(17, 86, 214, 0.28);
+}
+
+.chip--ghost {
+  color: var(--text-strong);
+  background: color-mix(in srgb, var(--surface-alt) 70%, rgba(17, 86, 214, 0.08) 30%);
+  border-color: color-mix(in srgb, var(--border) 75%, transparent);
+}
+
+.team-overview,
+.team-analytics {
+  display: grid;
+  gap: 1.75rem;
+}
+
+.team-overview__body {
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: minmax(260px, 0.95fr) minmax(320px, 1.05fr);
+  align-items: stretch;
+}
+
+.team-overview__summary {
+  display: grid;
+  gap: 1rem;
+  padding: 1.6rem;
+  border-radius: var(--radius-md);
+  border: 1px solid color-mix(in srgb, var(--border) 75%, transparent);
+  background: color-mix(in srgb, rgba(17, 86, 214, 0.12) 45%, rgba(255, 255, 255, 0.85) 55%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+.team-overview__summary h3 {
+  margin: 0;
+  font-size: 1.15rem;
+  color: var(--navy);
+}
+
+.checklist {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.6rem;
+}
+
+.checklist li {
+  display: flex;
+  gap: 0.55rem;
+  align-items: flex-start;
+  font-weight: 600;
+  color: var(--text-strong);
+}
+
+.checklist li::before {
+  content: '\2713';
+  flex: 0 0 auto;
+  display: inline-flex;
+  width: 1.25rem;
+  height: 1.25rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(17, 86, 214, 0.9), rgba(31, 123, 255, 0.85));
+  color: #fff;
+  font-size: 0.85rem;
+  margin-top: 0.1rem;
+}
+
+.team-overview__panels {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.team-kpi-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+.metric-card {
+  position: relative;
+  overflow: hidden;
+  padding: 1.2rem 1.25rem;
+  border-radius: var(--radius-md);
+  border: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
+  background:
+    linear-gradient(160deg, rgba(17, 86, 214, 0.18), rgba(244, 181, 63, 0.12)),
+    color-mix(in srgb, var(--surface-alt) 70%, rgba(255, 255, 255, 0.9) 30%);
+  display: grid;
+  gap: 0.55rem;
+  box-shadow: 0 14px 24px rgba(11, 37, 69, 0.14);
+}
+
+.metric-card::after {
+  content: '';
+  position: absolute;
+  inset: auto -20% -40% 40%;
+  height: 120px;
+  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.55), transparent 65%);
+  opacity: 0.8;
+}
+
+.metric-card__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 700;
+}
+
+.metric-card__label {
+  color: var(--navy);
+}
+
+.metric-card__pill {
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid color-mix(in srgb, var(--royal) 30%, transparent);
+  color: var(--royal);
+}
+
+.metric-card__value {
+  margin: 0;
+  font-size: clamp(1.7rem, 4vw, 2.1rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--navy);
+}
+
+.metric-card__hint {
+  margin: 0;
+  font-size: 0.92rem;
+  color: var(--text-subtle);
+}
+
+.team-overview__viz .viz-canvas {
+  min-height: 280px;
+}
+
+.team-analytics__grid {
+  display: grid;
+  gap: 1.75rem;
+  grid-template-columns: minmax(300px, 1.05fr) minmax(260px, 0.95fr);
+  align-items: stretch;
+}
+
+.stacked-panel {
+  display: grid;
+  gap: 1rem;
+  padding: 1.5rem 1.6rem;
+  border-radius: var(--radius-md);
+  border: 1px solid color-mix(in srgb, var(--border) 75%, transparent);
+  background: color-mix(in srgb, rgba(244, 181, 63, 0.22) 45%, rgba(255, 255, 255, 0.85) 55%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+.stacked-panel h3 {
+  margin: 0;
+  font-size: 1.15rem;
+  color: var(--navy);
+}
+
+.callout-grid {
+  display: grid;
+  gap: 0.85rem;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+.callout-card {
+  display: grid;
+  gap: 0.45rem;
+  padding: 1rem 1.1rem;
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, rgba(17, 86, 214, 0.12) 50%, rgba(255, 255, 255, 0.85) 50%);
+  border: 1px solid color-mix(in srgb, var(--royal) 18%, transparent);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+.callout-card__label {
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--royal);
+}
+
+.callout-card p {
+  margin: 0;
+  color: var(--text-subtle);
+  font-size: 0.95rem;
+}
+
+.team-initiatives {
+  display: grid;
+  gap: 1rem;
+}
+
+.team-initiatives h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: var(--navy);
+}
+
 .summary-cards {
   display: grid;
   gap: 1.1rem;
@@ -846,6 +1093,29 @@ section h2 {
 
   .story-spotlights {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 960px) {
+  .team-overview__body,
+  .team-analytics__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .section-heading {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 540px) {
+  .section-heading__actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .metric-card {
+    padding: 1.1rem 1.2rem;
   }
 }
 
