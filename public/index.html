@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%231156d6'/%3E%3Ctext x='50%25' y='52%25' font-family='Inter,Arial,sans-serif' font-size='28' font-weight='700' fill='white' text-anchor='middle'%3ENBA%3C/text%3E%3C/svg%3E"
+    />
+    <link rel="stylesheet" href="styles/hub.css" />
+    <title>NBA Intelligence Hub</title>
+  </head>
+  <body>
+    <div class="site-frame">
+      <header class="site-header">
+        <div class="hub-nav">
+          <a class="brand" href="index.html"><span>NBA</span> Intelligence Hub</a>
+          <nav class="nav-links">
+            <a class="active" href="index.html">2025-2026 Preview</a>
+            <a href="rewind.html">2024-2025 Season Rewind</a>
+            <a href="players.html">Players</a>
+            <a href="teams.html">Teams</a>
+            <a href="history.html">History</a>
+            <a href="insights.html">Insights Lab</a>
+            <a href="about.html">About</a>
+          </nav>
+        </div>
+        <div class="hero">
+          <div class="hero__layout">
+            <div class="hero__intro">
+              <span class="eyebrow">Season Preview Premiere · 2025-26</span>
+              <h1>The NBA storyworld rendered in color, context, and controlled chaos.</h1>
+              <p class="hero__lede">
+                1,161 regular-season tilts, 67 Emirates NBA Cup showdowns, 10 global showcases, and a
+                cavalcade of roster rewrites—the Intelligence Hub rebuilt the preview so you can feel the
+                season before the opening tip.
+              </p>
+              <div class="cta-group" role="group" aria-label="Primary actions">
+                <a class="cta cta--primary" href="players.html">Dive into player forecasts</a>
+                <a class="cta cta--ghost" href="#story-arcs">Jump to marquee story arcs</a>
+              </div>
+            </div>
+            <div class="hero__visual" aria-live="polite">
+              <div class="hero-panels">
+                <article class="hero-panel hero-panel--primary" data-top-team-card>
+                  <span class="hero-panel__eyebrow">Power index</span>
+                  <h2 class="hero-panel__headline">
+                    <span data-top-team-name>Boston Celtics</span>
+                  </h2>
+                  <p class="hero-panel__meta">
+                    <span data-top-team-record>4,091-2,765</span> all-time · +<span data-top-team-margin>3.0</span> nightly margin
+                  </p>
+                  <p class="hero-panel__detail">
+                    Dynasty DNA anchored by <span data-top-team-strength>106.2 points for vs. 103.2 allowed</span> keeps the throne warm.
+                  </p>
+                </article>
+                <article class="hero-panel hero-panel--event" data-cup-highlight>
+                  <span class="hero-panel__eyebrow">Cup crescendo</span>
+                  <h2 class="hero-panel__headline">
+                    <time data-cup-date datetime="2025-12-17">Dec 17 · Las Vegas</time>
+                  </h2>
+                  <p class="hero-panel__meta">
+                    Emirates NBA Cup Championship returns to <span data-cup-arena>T-Mobile Arena</span>.
+                  </p>
+                  <p class="hero-panel__detail">
+                    <span data-cup-story>67 Cup tilts funnel into one desert coronation.</span>
+                  </p>
+                </article>
+                <article class="hero-panel hero-panel--event" data-global-highlight>
+                  <span class="hero-panel__eyebrow">Global stage</span>
+                  <h2 class="hero-panel__headline">
+                    <time data-global-date datetime="2025-10-04">Oct 4 · Abu Dhabi</time>
+                  </h2>
+                  <p class="hero-panel__meta">
+                    <span data-global-match>Nuggets vs. Celtics</span> ignite the worldwide runway.
+                  </p>
+                  <p class="hero-panel__detail">
+                    <span data-global-count>10 neutral-site showcases</span> stretch from Montreal to Macao.
+                  </p>
+                </article>
+              </div>
+            </div>
+          </div>
+          <dl class="hero-metrics" aria-live="polite">
+            <div class="hero-metrics__item">
+              <dt>Rest crunch</dt>
+              <dd>
+                <span data-metric-backtoback>446</span> zero-day turnarounds across
+                <span data-metric-restwindows>2,779</span> rest windows tighten recovery math.
+              </dd>
+            </div>
+            <div class="hero-metrics__item">
+              <dt>Emirates Cup slate</dt>
+              <dd>
+                <span data-metric-cupgames>67</span> tournament clashes channel the league into December drama.
+              </dd>
+            </div>
+            <div class="hero-metrics__item">
+              <dt>Global showcases</dt>
+              <dd>
+                <span data-metric-globalgames>10</span> international spotlight games widen the broadcast canvas.
+              </dd>
+            </div>
+          </dl>
+        </div>
+      </header>
+
+      <main>
+        <section class="preseason-spotlight" id="preseason-slate">
+          <div class="section-header preseason-spotlight__header">
+            <h2>Preseason on the runway</h2>
+            <p class="lead">
+              Track the marquee exhibitions warming up the 2025-26 campaign.
+            </p>
+          </div>
+          <div class="preseason-spotlight__content">
+            <aside class="preseason-spotlight__aside">
+              <p>
+                <strong data-preseason-total>86</strong> tune-ups sharpen rotations before the opening tip, headlined by
+                global showcases from Abu Dhabi to Montreal.
+              </p>
+            </aside>
+            <ol class="preseason-schedule" data-preseason-schedule>
+              <li class="preseason-schedule__placeholder">Preseason slate syncing…</li>
+            </ol>
+          </div>
+        </section>
+
+        <section class="season-snapshot" id="season-panorama">
+          <div class="section-header">
+            <h2>The 2025-26 board, already moving</h2>
+            <p class="lead" data-season-lead>
+              1,161 regular-season games, 446 zero-day rest intervals, and 67 Cup showdowns—every storyline has a lane.
+            </p>
+          </div>
+          <div class="season-snapshot__grid">
+            <article class="season-snapshot__panel season-snapshot__panel--wide">
+              <header class="season-snapshot__header">
+                <h3>Title race velocity</h3>
+                <p>Historical pace leaders power our contender tiers.</p>
+              </header>
+              <div class="contender-grid" data-contender-grid>
+                <p class="contender-grid__placeholder">Loading contender pulses…</p>
+              </div>
+            </article>
+            <article class="season-snapshot__panel">
+              <header class="season-snapshot__header">
+                <h3>Rest management radar</h3>
+                <p>Who shoulders the toughest travel math before All-Star weekend.</p>
+              </header>
+              <ul class="rest-list" data-back-to-back-list>
+                <li class="rest-list__placeholder">Back-to-back intensity table incoming…</li>
+              </ul>
+              <p class="rest-list__footer">
+                League average rest: <span data-rest-average>3.0 days</span> across
+                <span data-rest-intervals>2,779</span> tracked windows.
+              </p>
+            </article>
+            <article class="season-snapshot__panel">
+              <header class="season-snapshot__header">
+                <h3>Spotlight itinerary</h3>
+                <p>Circle the showcases that define the 2025-26 stage.</p>
+              </header>
+              <ol class="timeline" data-season-timeline>
+                <li class="timeline__placeholder">Key dates loading…</li>
+              </ol>
+            </article>
+          </div>
+        </section>
+
+        <section>
+          <h2>Your 2025-26 systems map</h2>
+          <p class="lead">
+            Follow the interlocking layers—contender DNA, skill ascents, global runway, and tactical
+            experiments—that weaves this campaign into a living broadcast open.
+          </p>
+          <div class="summary-cards">
+            <article class="summary-card">
+              <strong>Contender calculus</strong>
+              <p>
+                Heat maps and flow charts quantify why Boston, Los Angeles, Oklahoma City, and Phoenix
+                headline the margin-of-error elite.
+              </p>
+              <a href="teams.html">Assess the title tier →</a>
+            </article>
+            <article class="summary-card">
+              <strong>Breakout forecast lab</strong>
+              <p>
+                Interactive sliders illustrate usage ceilings for sophomores, stealth veterans, and the
+                triple-double wave cresting at 175 a year.
+              </p>
+              <a href="players.html">Meet the risers →</a>
+            </article>
+            <article class="summary-card">
+              <strong>Rookie runway</strong>
+              <p>
+                Storytelling panels track lottery talent from Abu Dhabi scrimmages to opening-night
+                rotation stakes with global context baked in.
+              </p>
+              <a href="history.html">Explore debut timelines →</a>
+            </article>
+            <article class="summary-card">
+              <strong>Tactical experiments</strong>
+              <p>
+                Animation prototypes break down Cup-specific game plans, heliocentric pivots, and defensive
+                gambles on the wingspan renaissance.
+              </p>
+              <a href="insights.html">See the lab notes →</a>
+            </article>
+          </div>
+        </section>
+
+        <section class="offseason-horizon">
+          <div class="section-header">
+            <h2>Offseason seismic shifts</h2>
+            <p class="lead">
+              These headline moves rewired the race before camp—trace how each tweak reshapes 2025-26
+              rotations, spacing maps, and clutch-time math.
+            </p>
+          </div>
+          <div class="offseason-horizon__grid">
+            <article class="offseason-card">
+              <h3>Title-contender remixes</h3>
+              <p>
+                Boston doubled down on size with a double-big rotation, the Lakers armed Anthony Davis
+                with a pace-and-space backcourt, and Phoenix swapped wings for connective playmaking.
+              </p>
+              <ul>
+                <li>Twin towers lineups +6.7 net rating in preseason sims</li>
+                <li>Los Angeles adds 41% catch-and-shoot gravity alongside AD</li>
+                <li>Suns retool with three initiators above 20% usage</li>
+              </ul>
+            </article>
+            <article class="offseason-card">
+              <h3>Rising-core accelerators</h3>
+              <p>
+                Oklahoma City layered veteran finishing around Shai and Jalen Williams, while Orlando
+                invested in shooting to uncap Franz Wagner’s handle packages.
+              </p>
+              <ul>
+                <li>Thunder bench now projects top-5 in transition efficiency</li>
+                <li>Magic target 36%+ from deep for the first time in a decade</li>
+                <li>Both teams add switchable 6'8" forwards to crunch-time units</li>
+              </ul>
+            </article>
+            <article class="offseason-card">
+              <h3>Rookie shockwaves</h3>
+              <p>
+                Cooper Flagg’s preseason rim deterrence, Matas Buzelis’ jumbo playmaking, and Nikola
+                Topić’s pace artistry headline the debut spotlight.
+              </p>
+              <ul>
+                <li>Flagg projects 2.3 stocks per 24 minutes</li>
+                <li>Buzelis slotting into 4-out wrinkles with Lonzo orchestrating</li>
+                <li>Topić tempo boost pushes Spurs to top-10 assist rate</li>
+              </ul>
+            </article>
+            <article class="offseason-card">
+              <h3>Trade winds still swirling</h3>
+              <p>
+                With multiple All-NBA guards entering contract seasons, front offices have trade
+                packages staged for a midseason talent boom.
+              </p>
+              <ul>
+                <li>Three contenders monitoring Donovan Mitchell’s extension talks</li>
+                <li>Trae Young suitors pitching dual playmaker systems</li>
+                <li>Chicago gauging market for a defensive anchor upgrade</li>
+              </ul>
+            </article>
+          </div>
+        </section>
+
+        <section>
+          <h2>Visuals that paint the 2025-26 stakes</h2>
+          <p class="lead">
+            Every chart is tuned for immediacy—bold color ramps, motion hints, and bite-sized copy so
+            the big questions resolve before tipoff. Watch the preview come alive below.
+          </p>
+          <div class="viz-grid">
+            <figure class="viz-card" data-chart-wrapper>
+              <header class="viz-card__title">Season workload pulse</header>
+              <div class="viz-canvas">
+                <canvas data-chart="season-volume" aria-describedby="season-volume-caption"></canvas>
+              </div>
+              <figcaption id="season-volume-caption" class="viz-card__caption">
+                Track back-to-back clusters, Cup weeks, and rivalry spotlights to see which teams face
+                the sharpest gauntlets between October and April.
+              </figcaption>
+            </figure>
+
+            <figure class="viz-card" data-chart-wrapper>
+              <header class="viz-card__title">Top contender efficiency</header>
+              <div class="viz-canvas">
+                <canvas data-chart="team-efficiency" aria-describedby="team-efficiency-caption"></canvas>
+              </div>
+              <figcaption id="team-efficiency-caption" class="viz-card__caption">
+                Offensive engines and defensive clamps collide—each orbit marks a contender’s balance
+                of shot quality, rim deterrence, and crunch-time execution.
+              </figcaption>
+            </figure>
+
+            <figure class="viz-card" data-chart-wrapper>
+              <header class="viz-card__title">Global breakout pipeline</header>
+              <div class="viz-canvas">
+                <canvas data-chart="global-pipeline" aria-describedby="global-pipeline-caption"></canvas>
+              </div>
+              <figcaption id="global-pipeline-caption" class="viz-card__caption">
+                See where the next wave of playmakers originates—color gradients flag rookie impact
+                probabilities from EuroLeague, G League Ignite, and college strongholds.
+              </figcaption>
+            </figure>
+          </div>
+        </section>
+
+        <section class="story-verse" aria-labelledby="story-verse-title">
+          <div class="section-header">
+            <h2 id="story-verse-title">Narratives stitched from the data vault</h2>
+            <p class="lead">
+              Editorial walkthroughs pair raw metrics with context clips so your rundown reads like a docuseries binge.
+            </p>
+          </div>
+          <div class="story-verse__grid" data-story-grid>
+            <article class="story-verse__placeholder">Loading narrative reels…</article>
+          </div>
+        </section>
+
+        <section class="cup-roadmap">
+          <div class="section-header">
+            <h2>Emirates NBA Cup battleground</h2>
+            <p class="lead">
+              Group draws tilt the December sprint—these pods project the highest volatility based on
+              travel load, rest advantage, and clutch reps.
+            </p>
+          </div>
+          <div class="cup-roadmap__grid">
+            <article class="cup-group">
+              <header>
+                <span class="cup-group__tag">Group Pacific</span>
+                <h3>Margin monsters</h3>
+              </header>
+              <ul>
+                <li>Warriors</li>
+                <li>Suns</li>
+                <li>Clippers</li>
+                <li>Kings</li>
+              </ul>
+              <p>Four teams ranked top-10 in half-court efficiency last season—expect 125+ offensive ratings nightly.</p>
+            </article>
+            <article class="cup-group">
+              <header>
+                <span class="cup-group__tag">Group Atlantic</span>
+                <h3>Switch-everything chess</h3>
+              </header>
+              <ul>
+                <li>Celtics</li>
+                <li>Knicks</li>
+                <li>76ers</li>
+                <li>Raptors</li>
+              </ul>
+              <p>Jalen Brunson vs. Jrue Holiday is the signature duel while Porziņģis’ spacing warps every coverage choice.</p>
+            </article>
+            <article class="cup-group">
+              <header>
+                <span class="cup-group__tag">Group Central</span>
+                <h3>Clutch-time proving ground</h3>
+              </header>
+              <ul>
+                <li>Bucks</li>
+                <li>Cavaliers</li>
+                <li>Bulls</li>
+                <li>Pistons</li>
+              </ul>
+              <p>Milwaukee experiments with Giannis-at-center while Cleveland gauges Evan Mobley’s expanded offensive load.</p>
+            </article>
+            <article class="cup-group">
+              <header>
+                <span class="cup-group__tag">Group Southwest</span>
+                <h3>Tempo trial</h3>
+              </header>
+              <ul>
+                <li>Mavericks</li>
+                <li>Pelicans</li>
+                <li>Spurs</li>
+                <li>Rockets</li>
+              </ul>
+              <p>Victor Wembanyama vs. Zion Williamson headlines a clash of pace philosophies with Luka orchestrating the tempo wars.</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="milestone-chase">
+          <div class="section-header">
+            <h2>Milestones on deck</h2>
+            <p class="lead">
+              Keep these thresholds on your radar—the chase frames weekly coverage and fuels the
+              season-long broadcast narrative.
+            </p>
+          </div>
+          <div class="milestone-chase__grid">
+            <article class="milestone-card">
+              <header>
+                <span class="milestone-card__tag">Scoring climb</span>
+                <h3>LeBron: 41K watch</h3>
+              </header>
+              <p>Needs 1,208 points to clear the 41,000 mark—projected to happen in late March if he averages 25 a night.</p>
+              <ul>
+                <li>Key stretch: nine-game homestand in February</li>
+                <li>Projected milestone game: vs. Warriors (Mar 24)</li>
+              </ul>
+            </article>
+            <article class="milestone-card">
+              <header>
+                <span class="milestone-card__tag">Assist era</span>
+                <h3>Tyrese Haliburton</h3>
+              </header>
+              <p>Within reach of the first 11+ assist season since Stockton—Indiana’s pace puts him on a 915 dime trajectory.</p>
+              <ul>
+                <li>Needs 55 double-digit assist nights</li>
+                <li>PnR chemistry with Siakam fuels the push</li>
+              </ul>
+            </article>
+            <article class="milestone-card">
+              <header>
+                <span class="milestone-card__tag">Defensive pillar</span>
+                <h3>Rudy Gobert</h3>
+              </header>
+              <p>Chasing a fifth Defensive Player of the Year, which would break the tie with Dikembe Mutombo and Ben Wallace.</p>
+              <ul>
+                <li>Timberwolves targeting top-3 defensive rating</li>
+                <li>Tracking 200+ block pace with improved rim protection</li>
+              </ul>
+            </article>
+            <article class="milestone-card">
+              <header>
+                <span class="milestone-card__tag">Rookie spotlight</span>
+                <h3>Caitlin Clark crossover</h3>
+              </header>
+              <p>Year two WNBA sample meets NBA preseason scrimmages—expect crossover showcases and media synergy fueling sellouts.</p>
+              <ul>
+                <li>Joint NBA/WNBA doubleheaders in November</li>
+                <li>Spotlight nights align with in-season tournament windows</li>
+              </ul>
+            </article>
+          </div>
+        </section>
+
+        <section id="story-arcs">
+          <h2>Story arcs we’re tracking</h2>
+          <p class="lead">
+            From coast-to-coast rivalries to stealth rebuilds, these four arcs anchor our preview and
+            will morph with every new data drop.
+          </p>
+          <ul class="list-grid">
+            <li>
+              Era of jumbo playmakers
+              <span>How positionless initiators from Denver to Detroit are bending defensive schemes.</span>
+            </li>
+            <li>
+              Defense-first renaissance
+              <span>Which coaches are trading pace for physicality—and how it shifts playoff math.</span>
+            </li>
+            <li>
+              Rookie disruptors
+              <span>Lottery wings reimagining switching rules while second-round guards weaponize pace.</span>
+            </li>
+            <li>
+              Contract-year gambles
+              <span>Star extensions on the line as front offices balance patience with blockbuster trades.</span>
+            </li>
+          </ul>
+        </section>
+
+        <section class="countdown-grid">
+          <div class="section-header">
+            <h2>Countdown checkpoints</h2>
+            <p class="lead">
+              Map the season’s first-half flashpoints to plan content drops, travel, and scouting ops.
+            </p>
+          </div>
+          <div class="countdown-grid__items">
+            <article class="countdown-card">
+              <h3>Opening week</h3>
+              <p>Oct 21–27: Seven national broadcasts highlight banner night in Boston and a Finals rematch in Denver.</p>
+              <ul>
+                <li>Back-to-back for Warriors &rarr; Suns on Oct 23-24</li>
+                <li>Rookie debuts stacked across three time zones</li>
+              </ul>
+            </article>
+            <article class="countdown-card">
+              <h3>In-season tournament push</h3>
+              <p>Nov 8–26: Cup group doubleheaders tighten rotations; expect teams to shorten benches to eight.</p>
+              <ul>
+                <li>Projected swing game: Mavericks at Pelicans, Nov 17</li>
+                <li>Travel squeeze: Knicks log 4 games in 6 nights</li>
+              </ul>
+            </article>
+            <article class="countdown-card">
+              <h3>Holiday showcases</h3>
+              <p>Dec 25–Jan 1: Five marquee Christmas matchups plus New Year’s Eve rivalry night anchor the ratings surge.</p>
+              <ul>
+                <li>LeBron vs. Tatum in primetime on Christmas</li>
+                <li>Global broadcast window for Paris preview on Dec 30</li>
+              </ul>
+            </article>
+          </div>
+        </section>
+
+      </main>
+
+      <footer class="page-footer">Built for the modern NBA era — expanding with every new story.</footer>
+    </div>
+    <script src="vendor/chart.umd.js" defer></script>
+    <script type="module" src="scripts/index.js"></script>
+  </body>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%231156d6'/%3E%3Ctext x='50%25' y='52%25' font-family='Inter,Arial,sans-serif' font-size='28' font-weight='700' fill='white' text-anchor='middle'%3ENBA%3C/text%3E%3C/svg%3E'
+    />
+    <link rel="stylesheet" href="styles/hub.css" />
+    <title>Players | NBA Intelligence Hub</title>
+  </head>
+  <body>
+    <div class="site-frame">
+      <header class="site-header">
+        <div class="hub-nav">
+          <a class="brand" href="index.html"><span>NBA</span> Intelligence Hub</a>
+          <nav class="nav-links">
+            <a href="index.html">2025-2026 Preview</a>
+            <a href="rewind.html">2024-2025 Season Rewind</a>
+            <a class="active" href="players.html">Players</a>
+            <a href="teams.html">Teams</a>
+            <a href="history.html">History</a>
+            <a href="insights.html">Insights Lab</a>
+            <a href="about.html">About</a>
+          </nav>
+        </div>
+        <div class="hero">
+          <span class="eyebrow">Player Intelligence</span>
+          <h1>Profiles, performance curves, and signature skill maps.</h1>
+          <p>
+            This space will evolve into a searchable atlas of every athlete in the league. Plan the
+            next wave of scouting visuals, from archetype clustering to shot quality heatmaps.
+          </p>
+        </div>
+      </header>
+
+      <main>
+        <section>
+          <h2>Player archetype explorer</h2>
+          <p class="lead">
+            Build interactive scatter plots and radar profiles that let decision makers compare
+            players across roles, pace contexts, and matchup styles.
+          </p>
+          <div class="grid-two">
+            <figure class="viz-card viz-card--inline" data-chart-wrapper>
+              <header class="viz-card__title">League height distribution</header>
+              <div class="viz-canvas">
+                <canvas data-chart="player-heights" aria-describedby="player-heights-caption"></canvas>
+              </div>
+              <figcaption id="player-heights-caption" class="viz-card__caption">
+                A smoothed density curve of roster heights keeps archetype filters responsive while
+                honoring Phase 2 performance budgets.
+              </figcaption>
+            </figure>
+            <div class="subsection">
+              <h3>Key ingredients</h3>
+              <div class="badge-list">
+                <span class="badge">Play style vectors</span>
+                <span class="badge">Versatility index</span>
+                <span class="badge">Biomechanics data</span>
+              </div>
+              <p>
+                Import player traits from <code>Players.csv</code> and blend with tracking metrics to
+                categorize emerging roles. Future widgets will allow filtering by age, contract
+                status, and playoff sample size.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2>Game impact timelines</h2>
+          <div class="grid-two">
+            <div class="subsection">
+              <h3>Season arcs</h3>
+              <p>
+                Plan for cumulative win probability charts and health status overlays. Give front
+                offices tools to spot breakout windows or manage workloads over 82 games.
+              </p>
+            </div>
+            <figure class="viz-card viz-card--inline" data-chart-wrapper>
+              <header class="viz-card__title">Draft pipeline cadence</header>
+              <div class="viz-canvas">
+                <canvas data-chart="draft-timeline" aria-describedby="draft-timeline-caption"></canvas>
+              </div>
+              <figcaption id="draft-timeline-caption" class="viz-card__caption">
+                Decade-level draft totals are sampled evenly to highlight momentum without shipping
+                the full historical series.
+              </figcaption>
+            </figure>
+          </div>
+          <div class="card-grid">
+            <article class="card">
+              <h3>Career compendium</h3>
+              <p>Use dynamic filters to surface comparable players based on advanced metrics.</p>
+            </article>
+            <article class="card">
+              <h3>Scouting briefs</h3>
+              <p>Create one-page exports combining film notes, lineup fits, and biometric flags.</p>
+            </article>
+            <article class="card">
+              <h3>Player availability</h3>
+              <p>Integrate schedule density and travel strain models to project rest nights.</p>
+            </article>
+          </div>
+        </section>
+      </main>
+
+      <footer class="page-footer">Player insights are the heartbeat of the hub — more soon.</footer>
+    </div>
+    <script src="vendor/chart.umd.js" defer></script>
+    <script type="module" src="scripts/players.js"></script>
+  </body>
+</html>
