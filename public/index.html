@@ -2289,18 +2289,31 @@ section {
       }
     }
 
-    async function loadSchedule() {
-      const fallbackScheduleFiles = [
-        { path: 'data/season_24_25_schedule.json', label: '2024-25' },
-        { path: 'data/season_25_26_schedule.json', label: '2025-26' },
-      ];
+    function showScheduleUnavailable(message = 'Unable to load the latest schedule snapshot. Please refresh to try again.') {
+      state.schedule = null;
+      dom.scheduleNote.textContent = message;
+      dom.scheduleSummary.innerHTML = '';
+      dom.scheduleTeamsBody.innerHTML = '<tr><td colspan="5">Schedule data unavailable.</td></tr>';
+      dom.scheduleSpecialList.innerHTML = '<li>Schedule data unavailable.</li>';
+      dom.scheduleRestNote.textContent = 'Rest distribution unavailable.';
+      dom.scheduleBackToBackBody.innerHTML = '<tr><td colspan="4">Schedule data unavailable.</td></tr>';
+      if (scheduleChart) {
+        scheduleChart.destroy();
+        scheduleChart = null;
+      }
+      if (scheduleRestChart) {
+        scheduleRestChart.destroy();
+        scheduleRestChart = null;
+      }
+    }
 
-      let scheduleFiles = fallbackScheduleFiles;
+    async function loadSchedule() {
+      let scheduleFiles = [];
 
       try {
         const manifest = await fetchJson('data/schedule_manifest.json', 'schedule manifest');
         if (Array.isArray(manifest?.seasons)) {
-          const normalized = manifest.seasons
+          scheduleFiles = manifest.seasons
             .map((season) => {
               if (!season) return null;
               if (typeof season === 'string') {
@@ -2313,12 +2326,17 @@ section {
               return null;
             })
             .filter(Boolean);
-          if (normalized.length > 0) {
-            scheduleFiles = normalized;
-          }
         }
       } catch (error) {
-        console.warn('Unable to load schedule manifest. Falling back to default schedule list.', error);
+        console.error('Unable to load schedule manifest. Aborting schedule load.', error);
+        showScheduleUnavailable();
+        return;
+      }
+
+      if (scheduleFiles.length === 0) {
+        console.error('Schedule manifest did not include any seasons to load.');
+        showScheduleUnavailable();
+        return;
       }
 
       let lastError = null;
@@ -2339,21 +2357,8 @@ section {
         }
       }
 
-      console.error(lastError);
-      dom.scheduleNote.textContent = 'Unable to load the latest schedule snapshot. Please refresh to try again.';
-      dom.scheduleSummary.innerHTML = '';
-      dom.scheduleTeamsBody.innerHTML = '<tr><td colspan="5">Schedule data unavailable.</td></tr>';
-      dom.scheduleSpecialList.innerHTML = '<li>Schedule data unavailable.</li>';
-      dom.scheduleRestNote.textContent = 'Rest distribution unavailable.';
-      dom.scheduleBackToBackBody.innerHTML = '<tr><td colspan="4">Schedule data unavailable.</td></tr>';
-      if (scheduleChart) {
-        scheduleChart.destroy();
-        scheduleChart = null;
-      }
-      if (scheduleRestChart) {
-        scheduleRestChart.destroy();
-        scheduleRestChart = null;
-      }
+      console.error(lastError ?? new Error('All schedule files failed to load.'));
+      showScheduleUnavailable();
     }
 
     async function loadPlayersOverview() {
