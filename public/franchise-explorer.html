@@ -1935,10 +1935,45 @@
     }
 
     async function loadSchedule() {
-      const scheduleFiles = [
-        { path: 'data/season_25_26_schedule.json', label: '2025-26' },
-        { path: 'data/season_24_25_schedule.json', label: '2024-25' },
+      const fallbackScheduleFiles = [
+        { path: new URL('data/season_24_25_schedule.json', document.baseURI).toString(), label: '2024-25' },
+        { path: new URL('data/season_25_26_schedule.json', document.baseURI).toString(), label: '2025-26' },
       ];
+
+      let scheduleFiles = fallbackScheduleFiles;
+
+      try {
+        const manifestUrl = new URL('data/schedule_manifest.json', document.baseURI);
+        const manifestBase = new URL('./', manifestUrl);
+        const manifest = await fetchJson(manifestUrl.toString(), 'schedule manifest');
+        if (Array.isArray(manifest?.seasons)) {
+          const normalized = manifest.seasons
+            .map((season) => {
+              if (!season) return null;
+              let pathValue;
+              let labelValue;
+              if (typeof season === 'string') {
+                pathValue = season;
+                labelValue = season;
+              } else if (typeof season === 'object' && typeof season.path === 'string' && season.path.length > 0) {
+                pathValue = season.path;
+                labelValue = season.label;
+              }
+              if (typeof pathValue !== 'string' || pathValue.length === 0) {
+                return null;
+              }
+              const resolvedPath = new URL(pathValue, manifestBase).toString();
+              const label = typeof labelValue === 'string' && labelValue.length > 0 ? labelValue : pathValue;
+              return { path: resolvedPath, label };
+            })
+            .filter(Boolean);
+          if (normalized.length > 0) {
+            scheduleFiles = normalized;
+          }
+        }
+      } catch (error) {
+        console.warn('Unable to load schedule manifest. Falling back to default schedule list.', error);
+      }
 
       let lastError = null;
       for (const file of scheduleFiles) {
