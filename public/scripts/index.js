@@ -219,27 +219,37 @@ function hydrateHero(teamData) {
     const item = document.createElement('li');
     item.className = 'power-board__item';
 
-    const rank = document.createElement('span');
-    rank.className = 'power-board__rank';
-    rank.textContent = String(index + 1);
+    const teamLabel = entry.team ?? 'Team';
+
+    const marker = document.createElement('span');
+    marker.className = 'power-board__marker';
+    marker.appendChild(createTeamLogo(teamLabel, 'team-logo team-logo--small'));
 
     const body = document.createElement('div');
     body.className = 'power-board__content';
+
     const identity = document.createElement('div');
     identity.className = 'power-board__identity';
-    const teamLabel = entry.team ?? 'Team';
-    identity.appendChild(createTeamLogo(teamLabel, 'team-logo team-logo--medium'));
+
+    const rank = document.createElement('span');
+    rank.className = 'power-board__rank';
+    rank.textContent = `#${index + 1}`;
+
     const name = document.createElement('p');
     name.className = 'power-board__name';
     name.textContent = teamLabel;
-    identity.appendChild(name);
+
+    identity.append(rank, name);
+
     const note = document.createElement('p');
     note.className = 'power-board__note';
     note.textContent = entry.note;
+
     body.append(identity, note);
 
     const meta = document.createElement('div');
     meta.className = 'power-board__meta';
+
     const tier = document.createElement('span');
     tier.className = 'power-board__tier';
     tier.textContent = entry.tier;
@@ -256,7 +266,9 @@ function hydrateHero(teamData) {
       meta.appendChild(stat);
     }
 
-    item.append(rank, body, meta);
+    body.append(meta);
+
+    item.append(marker, body);
     list.appendChild(item);
   });
 }
