@@ -12,6 +12,11 @@
 - **How to regenerate:** Run `node scripts/build_snapshot.mjs` from the repository root. The script parses `TeamHistories.csv`, filters for active franchise eras, and writes `public/data/active_franchises.json`.
 - **Why it matters:** Keeps the browser payload small while guaranteeing the visualization reflects the latest CSV sources.
 
+### 2024-25 schedule snapshot
+- **Description:** Aggregated JSON powering the league calendar insights section in `public/index.html`, summarizing monthly volume, team workloads, and tagged special events.
+- **How to regenerate:** Run `node scripts/build_schedule_snapshot.mjs` from the repository root. The script reads `LeagueSchedule24_25.csv` and joins against `TeamHistories.csv` to provide friendly team names.
+- **Why it matters:** Allows the MVP to surface upcoming season context without shipping the full 1,400-row CSV to the browser.
+
 ### Players.csv
 - **Description:** Master roster metadata for players who have appeared in NBA history.
 - **Row count:** 6,533 player records.
