@@ -3,165 +3,470 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>NBA Active Franchises Snapshot</title>
+  <title>NBA Franchise Explorer</title>
   <style>
     :root {
       color-scheme: light dark;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.6;
     }
     body {
-      margin: 2rem auto;
-      max-width: 900px;
-      line-height: 1.6;
-      padding: 0 1rem;
+      margin: 0;
+      padding: 0 1rem 4rem;
+      max-width: 1100px;
+      margin-inline: auto;
+      background: canvas;
+      color: canvastext;
     }
     header {
+      padding: 3rem 0 1.5rem;
       text-align: center;
+    }
+    header h1 {
+      font-size: clamp(2rem, 4vw, 2.75rem);
+      margin-bottom: 0.5rem;
+    }
+    header p {
+      margin: 0.35rem 0;
+      color: rgba(0, 0, 0, 0.7);
+    }
+    main {
+      display: grid;
+      gap: 2rem;
+    }
+    section {
+      background: color-mix(in srgb, canvas 92%, canvastext 8%);
+      border-radius: 16px;
+      padding: 1.5rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+    }
+    section h2 {
+      margin-top: 0;
+      font-size: 1.3rem;
+    }
+    .controls-grid {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    }
+    label {
+      display: block;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+      color: rgba(0, 0, 0, 0.6);
+    }
+    input[type="search"],
+    input[type="number"],
+    select {
+      width: 100%;
+      padding: 0.6rem 0.7rem;
+      border: 1px solid rgba(0,0,0,0.2);
+      border-radius: 10px;
+      font-size: 1rem;
+      background: rgba(255,255,255,0.85);
+      color: inherit;
+    }
+    .controls-actions {
+      display: flex;
+      gap: 0.75rem;
+      align-items: flex-end;
+      flex-wrap: wrap;
+    }
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: 0.6rem 1.4rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      background: #1769aa;
+      color: #fff;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(23, 105, 170, 0.25);
+    }
+    .summary-cards {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    }
+    .summary-card {
+      padding: 1.1rem 1.3rem;
+      border-radius: 12px;
+      background: rgba(23, 105, 170, 0.08);
+    }
+    .summary-card h3 {
+      margin: 0 0 0.35rem;
+      font-size: 0.95rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: rgba(23,105,170,0.85);
+    }
+    .summary-card p {
+      margin: 0;
+      font-size: clamp(1.5rem, 3vw, 2.1rem);
+      font-weight: 700;
     }
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 1.5rem;
     }
-    th, td {
-      border: 1px solid rgba(0,0,0,0.2);
-      padding: 0.5rem;
+    thead th {
       text-align: left;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding-bottom: 0.6rem;
+      border-bottom: 2px solid rgba(0,0,0,0.2);
     }
-    th {
-      background: rgba(0,0,0,0.05);
+    tbody td {
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+      padding: 0.65rem 0;
+      vertical-align: top;
     }
-    caption {
-      caption-side: bottom;
-      font-size: 0.9rem;
-      color: rgba(0,0,0,0.7);
-      margin-top: 0.75rem;
+    tbody tr:last-child td {
+      border-bottom: none;
+    }
+    .team-name {
+      font-weight: 600;
+      font-size: 1.05rem;
+    }
+    .badge {
+      display: inline-block;
+      padding: 0.2rem 0.5rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      background: rgba(23, 105, 170, 0.15);
+      color: rgba(23, 105, 170, 0.9);
+      font-weight: 600;
+      letter-spacing: 0.03em;
+    }
+    canvas {
+      width: 100%;
+      min-height: 320px;
+      max-height: 420px;
+    }
+    .data-note {
+      font-size: 0.85rem;
+      color: rgba(0, 0, 0, 0.55);
+      margin-top: 1rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      header p,
+      label,
+      .summary-card h3,
+      .data-note {
+        color: rgba(255, 255, 255, 0.65);
+      }
+      section {
+        background: color-mix(in srgb, canvas 85%, canvastext 15%);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+      }
+      input[type="search"],
+      input[type="number"],
+      select {
+        background: color-mix(in srgb, canvas 70%, canvastext 30%);
+        border-color: rgba(255,255,255,0.2);
+      }
     }
   </style>
 </head>
 <body>
   <header>
-    <h1>NBA Active Franchises Snapshot</h1>
-    <p>This lightweight page is generated automatically from <code>TeamHistories.csv</code> in this repository.</p>
-    <p><strong>70</strong> franchises are marked as active in the dataset.</p>
-    <p class="timestamp">Last generated: 2025-09-27 14:05 UTC</p>
+    <p class="eyebrow">Data sandbox</p>
+    <h1>NBA Franchise Explorer</h1>
+    <p>Filter and benchmark every active franchise era from the league's rich history.</p>
+    <p id="generated-note" aria-live="polite">Loading snapshot…</p>
   </header>
   <main>
-    <section>
-      <h2>Current franchise eras</h2>
-      <p>The table lists each active franchise along with the city, nickname, historical abbreviation, and the first season in the current era.</p>
-      <table>
-        <thead>
-          <tr>
-            <th scope="col">City</th>
-            <th scope="col">Nickname</th>
-            <th scope="col">Abbrev.</th>
-            <th scope="col">Season Founded</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td>Istanbul</td><td>Fenerbahce</td><td>FEN</td><td>1913</td></tr>
-          <tr><td>Rio de Janeiro</td><td>Flamengo</td><td>FLA</td><td>1919</td></tr>
-          <tr><td>Athens</td><td>Panathinaikos</td><td>PAN</td><td>1919</td></tr>
-          <tr><td>Moscow</td><td>CSKA</td><td>MOS</td><td>1923</td></tr>
-          <tr><td>Barcelona</td><td>FC Barcelona Regal</td><td>FCB</td><td>1926</td></tr>
-          <tr><td>Madrid</td><td>Baloncesto (Real Madrid)</td><td>RMD</td><td>1931</td></tr>
-          <tr><td>Athens</td><td>Olympiacos</td><td>OLP</td><td>1931</td></tr>
-          <tr><td>Madrid</td><td>Real Madrid</td><td>RMA</td><td>1931</td></tr>
-          <tr><td>Madrid</td><td>Real Madrid</td><td>RMD</td><td>1931</td></tr>
-          <tr><td>Siena</td><td>Montepaschi Siena</td><td>MPS</td><td>1934</td></tr>
-          <tr><td>Buenos Aires</td><td>San Lorenzo</td><td>SLA</td><td>1936</td></tr>
-          <tr><td>China</td><td>Team China</td><td>CHN</td><td>1936</td></tr>
-          <tr><td>Kaunas</td><td>Zalgiris</td><td>ZAK</td><td>1944</td></tr>
-          <tr><td>Belgrade</td><td>Partizan</td><td>PAR</td><td>1945</td></tr>
-          <tr><td>Lyon-Villeurbanne</td><td>Adecco ASVEL</td><td>LYV</td><td>1948</td></tr>
-          <tr><td>Boston</td><td>Celtics</td><td>BOS</td><td>1949</td></tr>
-          <tr><td>New York</td><td>Knicks</td><td>NYK</td><td>1949</td></tr>
-          <tr><td>East</td><td>NBA All-Stars</td><td>EST</td><td>1951</td></tr>
-          <tr><td>West</td><td>NBA All-Stars</td><td>WST</td><td>1951</td></tr>
-          <tr><td>Haifa</td><td>Maccabi Haifa</td><td>MAC</td><td>1953</td></tr>
-          <tr><td>Detroit</td><td>Pistons</td><td>DET</td><td>1957</td></tr>
-          <tr><td>Franca (Brazil)</td><td>SESI/Franca</td><td>FRA</td><td>1959</td></tr>
-          <tr><td>Los Angeles</td><td>Lakers</td><td>LAL</td><td>1960</td></tr>
-          <tr><td>Philadelphia</td><td>76ers</td><td>PHI</td><td>1963</td></tr>
-          <tr><td>Chicago</td><td>Bulls</td><td>CHI</td><td>1966</td></tr>
-          <tr><td>Milwaukee</td><td>Bucks</td><td>MIL</td><td>1968</td></tr>
-          <tr><td>Atlanta</td><td>Hawks</td><td>ATL</td><td>1968</td></tr>
-          <tr><td>Phoenix</td><td>Suns</td><td>PHX</td><td>1968</td></tr>
-          <tr><td>Cleveland</td><td>Cavaliers</td><td>CLE</td><td>1970</td></tr>
-          <tr><td>Portland</td><td>Trail Blazers</td><td>POR</td><td>1970</td></tr>
-          <tr><td>Houston</td><td>Rockets</td><td>HOU</td><td>1971</td></tr>
-          <tr><td>Golden State</td><td>Warriors</td><td>GSW</td><td>1971</td></tr>
-          <tr><td>Istanbul</td><td>Efes Pilsen</td><td>EPT</td><td>1976</td></tr>
-          <tr><td>Denver</td><td>Nuggets</td><td>DEN</td><td>1976</td></tr>
-          <tr><td>Indiana</td><td>Pacers</td><td>IND</td><td>1976</td></tr>
-          <tr><td>San Antonio</td><td>Spurs</td><td>SAN</td><td>1976</td></tr>
-          <tr><td>Malaga</td><td>Unicaja</td><td>MAL</td><td>1977</td></tr>
-          <tr><td>Brisbane</td><td>Bullets</td><td>BNE</td><td>1979</td></tr>
-          <tr><td>Utah</td><td>Jazz</td><td>UTA</td><td>1979</td></tr>
-          <tr><td>Raanana</td><td>Maccabi Ra anana</td><td>MRA</td><td>1980</td></tr>
-          <tr><td>Dallas</td><td>Mavericks</td><td>DAL</td><td>1980</td></tr>
-          <tr><td>Adelaide</td><td>36ers</td><td>ADL</td><td>1982</td></tr>
-          <tr><td>Perth</td><td>Wildcats</td><td>PER</td><td>1982</td></tr>
-          <tr><td>Los Angeles</td><td>Clippers</td><td>LAC</td><td>1984</td></tr>
-          <tr><td>Sacramento</td><td>Kings</td><td>SAC</td><td>1985</td></tr>
-          <tr><td>Miami</td><td>Heat</td><td>MIA</td><td>1988</td></tr>
-          <tr><td>Sydney</td><td>Kings</td><td>SYD</td><td>1988</td></tr>
-          <tr><td>Orlando</td><td>Magic</td><td>ORL</td><td>1989</td></tr>
-          <tr><td>Minnesota</td><td>Timberwolves</td><td>MIN</td><td>1989</td></tr>
-          <tr><td>Berlin</td><td>ALBA Berlin</td><td>ALB</td><td>1991</td></tr>
-          <tr><td>Beijing</td><td>Ducks</td><td>BJD</td><td>1995</td></tr>
-          <tr><td>Toronto</td><td>Raptors</td><td>TOR</td><td>1995</td></tr>
-          <tr><td>Shanghai</td><td>Shanghai Sharks</td><td>SDS</td><td>1996</td></tr>
-          <tr><td>Shanghai</td><td>Sharks</td><td>SDS</td><td>1996</td></tr>
-          <tr><td>Khimki</td><td>BC Khimki</td><td>KHI</td><td>1997</td></tr>
-          <tr><td>Vilnius</td><td>Lietuvos Rytas</td><td>LRY</td><td>1997</td></tr>
-          <tr><td>Washington</td><td>Wizards</td><td>WAS</td><td>1997</td></tr>
-          <tr><td>Cairns</td><td>Taipans</td><td>CNS</td><td>1999</td></tr>
-          <tr><td>Bilbao</td><td>Bilbao Basket</td><td>UBB</td><td>2000</td></tr>
-          <tr><td>Memphis</td><td>Grizzlies</td><td>MEM</td><td>2001</td></tr>
-          <tr><td>Auckland</td><td>Breakers</td><td>NZB</td><td>2003</td></tr>
-          <tr><td>Oklahoma City</td><td>Thunder</td><td>OKC</td><td>2008</td></tr>
-          <tr><td>Guangzhou</td><td>Long-Lions</td><td>GUA</td><td>2010</td></tr>
-          <tr><td>Brooklyn</td><td>Nets</td><td>BKN</td><td>2012</td></tr>
-          <tr><td>New Orleans</td><td>Pelicans</td><td>NOP</td><td>2013</td></tr>
-          <tr><td>Charlotte</td><td>Hornets</td><td>CHA</td><td>2014</td></tr>
-          <tr><td>Melbourne</td><td>United</td><td>MEL</td><td>2014</td></tr>
-          <tr><td>All-Star</td><td>All-Star LeBron</td><td>LBN</td><td>2018</td></tr>
-          <tr><td>All-Star</td><td>Team LeBron</td><td>LBN</td><td>2018</td></tr>
-          <tr><td>All-Star</td><td>Team Giannis</td><td>GNS</td><td>2019</td></tr>
-        </tbody>
-        <caption>Data source: <code>TeamHistories.csv</code> &mdash; generated automatically on each push.</caption>
-      </table>
+    <section aria-labelledby="controls-heading">
+      <h2 id="controls-heading">Slice the active era data</h2>
+      <div class="controls-grid" role="group" aria-labelledby="controls-heading">
+        <div>
+          <label for="search">Search</label>
+          <input id="search" type="search" placeholder="City, nickname, abbreviation…" autocomplete="off" />
+        </div>
+        <div>
+          <label for="league">League</label>
+          <select id="league">
+            <option value="">All leagues</option>
+          </select>
+        </div>
+        <div>
+          <label for="season-start">Era start (min)</label>
+          <input id="season-start" type="number" />
+        </div>
+        <div>
+          <label for="season-end">Era start (max)</label>
+          <input id="season-end" type="number" />
+        </div>
+      </div>
+      <div class="controls-actions">
+        <button id="reset-filters" type="button">Reset filters</button>
+      </div>
     </section>
-    <section>
-      <h2>Active franchises by founding decade</h2>
-      <p>This quick snapshot shows how many modern franchises entered the league in each decade, offering an early look at potential era-based analyses.</p>
-      <table>
-        <thead>
-          <tr>
-            <th scope="col">Decade</th>
-            <th scope="col">Active Franchises</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td>1910s</td><td>3</td></tr>
-          <tr><td>1920s</td><td>2</td></tr>
-          <tr><td>1930s</td><td>7</td></tr>
-          <tr><td>1940s</td><td>5</td></tr>
-          <tr><td>1950s</td><td>5</td></tr>
-          <tr><td>1960s</td><td>6</td></tr>
-          <tr><td>1970s</td><td>11</td></tr>
-          <tr><td>1980s</td><td>10</td></tr>
-          <tr><td>1990s</td><td>9</td></tr>
-          <tr><td>2000s</td><td>4</td></tr>
-          <tr><td>2010s</td><td>8</td></tr>
-        </tbody>
-      </table>
+
+    <section aria-labelledby="summary-heading">
+      <h2 id="summary-heading">Franchise era overview</h2>
+      <div class="summary-cards" id="summary-cards" aria-live="polite"></div>
+      <p class="data-note">Totals update automatically with your filters. All time spans use the generated snapshot year.</p>
+    </section>
+
+    <section aria-labelledby="table-heading">
+      <h2 id="table-heading">Active franchise eras</h2>
+      <div class="table-wrapper" role="region" aria-live="polite">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">City</th>
+              <th scope="col">Franchise</th>
+              <th scope="col">League</th>
+              <th scope="col">Era start</th>
+              <th scope="col">Seasons</th>
+              <th scope="col">Abbrev.</th>
+            </tr>
+          </thead>
+          <tbody id="teams-body">
+            <tr><td colspan="6">Loading franchises…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section aria-labelledby="chart-heading">
+      <h2 id="chart-heading">Active franchises by founding decade</h2>
+      <canvas id="decade-chart" role="img" aria-label="Bar chart showing active franchise counts by decade"></canvas>
+      <p class="data-note">The chart respects the filters above so you can zoom in on expansion eras and compare leagues.</p>
+    </section>
+
+    <section aria-labelledby="meta-heading">
+      <h2 id="meta-heading">About this snapshot</h2>
+      <p>The data is generated from <code>TeamHistories.csv</code> in this repository using <code>scripts/build_snapshot.mjs</code>. The script keeps the dataset lightweight for the browser and powers the live filters and charts on this page.</p>
+      <p>Looking ahead, this playground can ingest player and game level datasets to power richer visuals—this snapshot is the first step toward that MVP.</p>
     </section>
   </main>
-  <footer>
-    <p>View the source on <a href="https://github.com/your-username/NBA">GitHub</a>.</p>
-  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.6/dist/chart.umd.min.js" integrity="sha384-DheX7XwjgzD+iLYZfSkgdAXuYEigsk6zD3Ymd1Pnh0VwZtL8XcluRybkJDN5OgHW" crossorigin="anonymous"></script>
+  <script>
+    const state = {
+      raw: [],
+      filtered: [],
+      snapshot: null,
+    };
+
+    const dom = {
+      generatedNote: document.getElementById('generated-note'),
+      league: document.getElementById('league'),
+      search: document.getElementById('search'),
+      seasonStart: document.getElementById('season-start'),
+      seasonEnd: document.getElementById('season-end'),
+      reset: document.getElementById('reset-filters'),
+      teamsBody: document.getElementById('teams-body'),
+      summaryCards: document.getElementById('summary-cards'),
+    };
+
+    let decadeChart;
+
+    function formatNumber(value) {
+      return new Intl.NumberFormat().format(value);
+    }
+
+    function buildSummary(franchises) {
+      const totals = state.snapshot?.totals ?? { all: 0, nba: 0 };
+      const cards = [
+        {
+          label: 'Filtered franchises',
+          value: franchises.length,
+        },
+        {
+          label: 'Active NBA franchises',
+          value: totals.nba,
+        },
+      ];
+
+      if (state.snapshot?.earliestSeason) {
+        cards.push({
+          label: 'Earliest era start',
+          value: state.snapshot.earliestSeason,
+        });
+      }
+      if (state.snapshot?.latestSeason) {
+        cards.push({
+          label: 'Latest era start',
+          value: state.snapshot.latestSeason,
+        });
+      }
+
+      dom.summaryCards.innerHTML = cards
+        .map(
+          (card) => `
+            <div class="summary-card">
+              <h3>${card.label}</h3>
+              <p>${formatNumber(card.value)}</p>
+            </div>
+          `,
+        )
+        .join('');
+    }
+
+    function renderTable(franchises) {
+      if (franchises.length === 0) {
+        dom.teamsBody.innerHTML = '<tr><td colspan="6">No franchises match your filters yet. Try expanding the range or clearing the search.</td></tr>';
+        return;
+      }
+
+      const rows = franchises
+        .map((team) => {
+          const seasons = team.seasonFounded ? (state.snapshot.currentYear - team.seasonFounded + 1) : null;
+          const spanLabel = seasons && seasons > 0 ? `${formatNumber(seasons)} seasons` : '—';
+          const eraStart = team.seasonFounded ?? '—';
+          const leagueBadge = `<span class="badge">${team.league}</span>`;
+
+          return `
+            <tr>
+              <td>${team.city}</td>
+              <td><span class="team-name">${team.name}</span></td>
+              <td>${leagueBadge}</td>
+              <td>${eraStart}</td>
+              <td>${spanLabel}</td>
+              <td>${team.abbreviation || '—'}</td>
+            </tr>
+          `;
+        })
+        .join('');
+
+      dom.teamsBody.innerHTML = rows;
+    }
+
+    function renderChart(franchises) {
+      if (!state.snapshot) return;
+
+      const decadeCounts = new Map();
+      for (const team of franchises) {
+        if (typeof team.seasonFounded === 'number') {
+          const decade = Math.floor(team.seasonFounded / 10) * 10;
+          decadeCounts.set(decade, (decadeCounts.get(decade) ?? 0) + 1);
+        }
+      }
+      const labels = Array.from(decadeCounts.keys()).sort((a, b) => a - b);
+      const values = labels.map((label) => decadeCounts.get(label));
+
+      const dataset = {
+        label: 'Active franchises',
+        data: values,
+        backgroundColor: 'rgba(23, 105, 170, 0.45)',
+        borderRadius: 6,
+      };
+
+      if (!decadeChart) {
+        const ctx = document.getElementById('decade-chart');
+        decadeChart = new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: labels.map((decade) => `${decade}s`),
+            datasets: [dataset],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              y: {
+                beginAtZero: true,
+                ticks: {
+                  precision: 0,
+                },
+              },
+            },
+          },
+        });
+      } else {
+        decadeChart.data.labels = labels.map((decade) => `${decade}s`);
+        decadeChart.data.datasets[0].data = values;
+        decadeChart.update();
+      }
+    }
+
+    function applyFilters() {
+      const searchTerm = dom.search.value.trim().toLowerCase();
+      const selectedLeague = dom.league.value;
+      const minSeason = Number.parseInt(dom.seasonStart.value, 10);
+      const maxSeason = Number.parseInt(dom.seasonEnd.value, 10);
+
+      state.filtered = state.raw.filter((team) => {
+        const matchesLeague = !selectedLeague || team.league === selectedLeague;
+        if (!matchesLeague) return false;
+
+        if (Number.isInteger(minSeason) && typeof team.seasonFounded === 'number') {
+          if (team.seasonFounded < minSeason) return false;
+        }
+        if (Number.isInteger(maxSeason) && typeof team.seasonFounded === 'number') {
+          if (team.seasonFounded > maxSeason) return false;
+        }
+
+        if (searchTerm.length > 0) {
+          const haystack = `${team.city} ${team.name} ${team.abbreviation}`.toLowerCase();
+          if (!haystack.includes(searchTerm)) return false;
+        }
+        return true;
+      });
+
+      renderTable(state.filtered);
+      buildSummary(state.filtered);
+      renderChart(state.filtered);
+    }
+
+    function resetFilters() {
+      if (!state.snapshot) return;
+      dom.search.value = '';
+      dom.league.value = 'NBA';
+      dom.seasonStart.value = state.snapshot.earliestSeason ?? '';
+      dom.seasonEnd.value = state.snapshot.currentYear ?? '';
+      applyFilters();
+    }
+
+    function hydrateControls(snapshot) {
+      dom.seasonStart.min = snapshot.earliestSeason ?? '';
+      dom.seasonStart.max = snapshot.currentYear ?? '';
+      dom.seasonEnd.min = snapshot.earliestSeason ?? '';
+      dom.seasonEnd.max = snapshot.currentYear ?? '';
+      dom.seasonStart.value = snapshot.earliestSeason ?? '';
+      dom.seasonEnd.value = snapshot.currentYear ?? '';
+
+      dom.league.innerHTML = '<option value="">All leagues</option>' + snapshot.leagues
+        .map((league) => `<option value="${league}">${league}</option>`)
+        .join('');
+
+      dom.league.value = snapshot.leagues.includes('NBA') ? 'NBA' : '';
+    }
+
+    async function loadData() {
+      try {
+        const response = await fetch('data/active_franchises.json', { cache: 'no-store' });
+        if (!response.ok) throw new Error('Failed to load franchise snapshot');
+        const snapshot = await response.json();
+        state.snapshot = snapshot;
+        state.raw = snapshot.activeFranchises;
+        dom.generatedNote.textContent = `Snapshot generated ${new Date(snapshot.generatedAt).toLocaleString()} · ${formatNumber(snapshot.totals.nba)} NBA franchises active today.`;
+        hydrateControls(snapshot);
+        applyFilters();
+      } catch (error) {
+        console.error(error);
+        dom.generatedNote.textContent = 'Unable to load franchise snapshot. Please refresh to try again.';
+      }
+    }
+
+    dom.search.addEventListener('input', () => applyFilters());
+    dom.league.addEventListener('change', () => applyFilters());
+    dom.seasonStart.addEventListener('change', () => applyFilters());
+    dom.seasonEnd.addEventListener('change', () => applyFilters());
+    dom.reset.addEventListener('click', () => resetFilters());
+
+    loadData();
+  </script>
 </body>
 </html>
