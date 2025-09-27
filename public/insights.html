@@ -41,20 +41,9 @@
             Keep track of weekly experiments, pipeline upgrades, and deployed visualizations. This log
             will sync with release notes once automation is in place.
           </p>
-          <ul class="list-grid">
-            <li>
-              Week 01
-              <span>Established multipage architecture and shared visual language for the hub.</span>
-            </li>
-            <li>
-              Week 02
-              <span>Hook up player data ingestion scripts and outline API-driven refresh cadence.</span>
-            </li>
-            <li>
-              Week 03
-              <span>Introduce prototype dashboards for shot quality and lineup constellations.</span>
-            </li>
-          </ul>
+          <div class="changelog" data-changelog aria-live="polite">
+            <p class="changelog__placeholder">Loading weekly experiments…</p>
+          </div>
         </section>
 
         <section>
@@ -67,6 +56,9 @@
             <aside class="story-walkthrough__sidebar">
               <div class="story-meta" data-story-meta>
                 <p class="story-meta__placeholder">Loading release details…</p>
+              </div>
+              <div class="release-tracker" data-release-tracker aria-live="polite">
+                <p class="release-tracker__placeholder">Loading release checklist…</p>
               </div>
               <nav
                 class="story-steps"
@@ -87,23 +79,8 @@
 
         <section>
           <h2>Experiment backlog</h2>
-          <div class="card-grid">
-            <article class="card">
-              <h3>Shot quality heatmap</h3>
-              <p>Blend spatial tracking data with defender proximity for contextual shot values.</p>
-            </article>
-            <article class="card">
-              <h3>Win probability narrations</h3>
-              <p>Pair automated story captions with game flow charts to explain momentum swings.</p>
-            </article>
-            <article class="card">
-              <h3>Fan sentiment index</h3>
-              <p>Scrape social channels and encode emotions into a gameday hype gauge.</p>
-            </article>
-            <article class="card">
-              <h3>Trade simulator</h3>
-              <p>Model cap mechanics, draft pick value, and culture fit before proposals go public.</p>
-            </article>
+          <div class="card-grid" data-experiments aria-live="polite">
+            <article class="card card--placeholder">Loading lab experiments…</article>
           </div>
         </section>
 
@@ -118,10 +95,9 @@
                 submit proposals for new modules. The lab champions iterative feedback and co-creation
                 across analysts, designers, and engineers.
               </p>
-              <div class="badge-list">
-                <span class="badge">Design reviews</span>
-                <span class="badge">Data QA</span>
-                <span class="badge">Story pitches</span>
+              <div class="badge-list" data-collaboration-tags></div>
+              <div class="collaboration-details" data-collaboration aria-live="polite">
+                <p class="collaboration-details__placeholder">Coordinating upcoming sync details…</p>
               </div>
             </div>
           </div>
