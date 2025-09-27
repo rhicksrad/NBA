@@ -8,6 +8,159 @@ const palette = {
   navy: '#0b2545',
 };
 
+const preseasonPowerIndex = [
+  {
+    team: 'Boston Celtics',
+    tier: 'Title favorite',
+    note: 'Two-way spine with Tatum, Brown, and double-big coverages keeps them atop the board.',
+  },
+  {
+    team: 'Denver Nuggets',
+    tier: 'Title favorite',
+    note: 'Jokić-Murray continuity still pilots the cleanest half-court offense in basketball.',
+  },
+  {
+    team: 'Oklahoma City Thunder',
+    tier: 'Title hopeful',
+    note: 'Shai-led creation plus length everywhere accelerates their contender timeline.',
+  },
+  {
+    team: 'Minnesota Timberwolves',
+    tier: 'Title hopeful',
+    note: 'League-best defense and ascendant Anthony Edwards keep the ceiling in championship range.',
+  },
+  {
+    team: 'New York Knicks',
+    tier: 'Contender',
+    note: 'Brunson engine and bruising depth give the East a new bully on the block.',
+  },
+  {
+    team: 'Milwaukee Bucks',
+    tier: 'Contender',
+    note: 'Giannis and Dame finally get a full camp to harmonize the downhill spacing map.',
+  },
+  {
+    team: 'Phoenix Suns',
+    tier: 'Contender',
+    note: 'Booker and Beal drive an elite offense if the refreshed supporting size holds up.',
+  },
+  {
+    team: 'Philadelphia 76ers',
+    tier: 'Contender',
+    note: 'Healthy Embiid plus rangier wings keeps them in trophy conversations.',
+  },
+  {
+    team: 'Dallas Mavericks',
+    tier: 'Contender',
+    note: 'Doncic-Irving chemistry with vertical spacing upgrades screams top-five attack.',
+  },
+  {
+    team: 'Cleveland Cavaliers',
+    tier: 'High-ceiling playoff',
+    note: 'Mitchell, Mobley, and a faster tempo aim for deeper May runs.',
+  },
+  {
+    team: 'Los Angeles Lakers',
+    tier: 'High-ceiling playoff',
+    note: 'LeBron and AD flanked by more shooting keeps the window cracked wide.',
+  },
+  {
+    team: 'Golden State Warriors',
+    tier: 'Playoff lock',
+    note: 'Curry still warps defenses while youth infusion protects the engine.',
+  },
+  {
+    team: 'Miami Heat',
+    tier: 'Playoff lock',
+    note: 'Spoelstra structure and Butler-Bam toughness always scale in spring.',
+  },
+  {
+    team: 'Sacramento Kings',
+    tier: 'Playoff lock',
+    note: 'Fox-Sabonis pace remains a nightmare once the threes fall.',
+  },
+  {
+    team: 'Memphis Grizzlies',
+    tier: 'Playoff lock',
+    note: 'Full year of Ja with Smart and Jaren anchors reloads the bite.',
+  },
+  {
+    team: 'New Orleans Pelicans',
+    tier: 'Playoff mix',
+    note: 'Zion and Ingram healthy makes every matchup a mismatch clinic.',
+  },
+  {
+    team: 'Orlando Magic',
+    tier: 'Playoff mix',
+    note: 'Banchero-Wagner leap plus elite length threatens a top-five defense.',
+  },
+  {
+    team: 'Indiana Pacers',
+    tier: 'Playoff mix',
+    note: 'Haliburton pace paired with Siakam keeps the scoreboard glowing.',
+  },
+  {
+    team: 'Los Angeles Clippers',
+    tier: 'Playoff mix',
+    note: 'If Kawhi and PG stay upright, Harden can orchestrate a balanced attack.',
+  },
+  {
+    team: 'Houston Rockets',
+    tier: 'Play-in hunt',
+    note: 'Udoka identity plus blossoming Jalen Green makes their first playoff push real.',
+  },
+  {
+    team: 'Atlanta Hawks',
+    tier: 'Play-in hunt',
+    note: 'Trae and Murray audition for full synergy under Snyder’s modern tweaks.',
+  },
+  {
+    team: 'Chicago Bulls',
+    tier: 'Play-in hunt',
+    note: 'Spacing upgrades and defensive buy-in try to extend the DeRozan window.',
+  },
+  {
+    team: 'San Antonio Spurs',
+    tier: 'Play-in swing',
+    note: 'Year-two Wemby experiments stretch the floor and the imagination.',
+  },
+  {
+    team: 'Brooklyn Nets',
+    tier: 'Play-in swing',
+    note: 'Bridges-led wingspan battalion hunts for enough offense to stick around.',
+  },
+  {
+    team: 'Toronto Raptors',
+    tier: 'Rebuild watch',
+    note: 'Scottie Barnes takes the controls while Masai plots the next core.',
+  },
+  {
+    team: 'Utah Jazz',
+    tier: 'Rebuild watch',
+    note: 'Markkanen firepower and young guards keep them pesky amid a reset.',
+  },
+  {
+    team: 'Detroit Pistons',
+    tier: 'Rebuild watch',
+    note: 'Cade Cunningham finally has vets to translate potential into wins.',
+  },
+  {
+    team: 'Charlotte Hornets',
+    tier: 'Rebuild watch',
+    note: 'LaMelo, Miller, and revamped support need reps before the leap.',
+  },
+  {
+    team: 'Portland Trail Blazers',
+    tier: 'Growth track',
+    note: 'Scoot Henderson’s learning curve defines a development-first season.',
+  },
+  {
+    team: 'Washington Wizards',
+    tier: 'Growth track',
+    note: 'New front office prioritizes reps for Coulibaly, Poole, and the kids.',
+  },
+];
+
 async function fetchJsonSafe(url) {
   try {
     const response = await fetch(url);
@@ -67,68 +220,269 @@ function formatMatchup(game, lookup) {
   return game.subLabel || game.label || 'Showcase';
 }
 
-function hydrateHero(teamData, scheduleData) {
-  const leaders = helpers.rankAndSlice(
-    Array.isArray(teamData?.winPctLeaders) ? teamData.winPctLeaders : [],
-    1,
-    (team) => team.winPct
-  );
-  const topTeam = leaders[0];
-  if (topTeam) {
-    const margin = (topTeam.pointsPerGame ?? 0) - (topTeam.opponentPointsPerGame ?? 0);
-    safeText('[data-top-team-name]', topTeam.team);
-    safeText('[data-top-team-record]', `${helpers.formatNumber(topTeam.wins, 0)}-${helpers.formatNumber(topTeam.losses, 0)}`);
-    safeText('[data-top-team-margin]', helpers.formatNumber(Math.abs(margin), 1));
-    safeText(
-      '[data-top-team-strength]',
-      `${helpers.formatNumber(topTeam.pointsPerGame ?? 0, 1)} points for vs. ${helpers.formatNumber(
-        topTeam.opponentPointsPerGame ?? 0,
-        1
-      )} allowed`
-    );
-  }
-
-  if (!scheduleData) {
+function hydrateHero(teamData) {
+  const list = document.querySelector('[data-power-index]');
+  if (!list) {
     return;
   }
 
-  const restSummary = scheduleData?.restSummary ?? {};
-  const labelBreakdown = Array.isArray(scheduleData?.labelBreakdown) ? scheduleData.labelBreakdown : [];
-  const specialGames = Array.isArray(scheduleData?.specialGames) ? scheduleData.specialGames : [];
-  const globalGames = specialGames.filter((game) => game?.subtype === 'Global Games');
-  const cupGamesEntry = labelBreakdown.find((entry) => entry?.label === 'Emirates NBA Cup');
-  const cupGamesCount = cupGamesEntry?.games ?? 0;
+  list.innerHTML = '';
 
-  safeText('[data-metric-backtoback]', helpers.formatNumber(restSummary.backToBackIntervals ?? 0, 0));
-  safeText('[data-metric-restwindows]', helpers.formatNumber(restSummary.totalIntervals ?? 0, 0));
-  safeText('[data-metric-cupgames]', helpers.formatNumber(cupGamesCount, 0));
-  safeText('[data-metric-globalgames]', helpers.formatNumber(globalGames.length || 0, 0));
-
-  const teamLookup = createTeamLookup(scheduleData);
-
-  const cupHighlight = specialGames
-    .filter((game) => game?.label === 'Emirates NBA Cup' && /championship|final/i.test(game?.subLabel ?? ''))
-    .sort((a, b) => new Date(a.date) - new Date(b.date))[0];
-  if (cupHighlight) {
-    const cupDate = document.querySelector('[data-cup-date]');
-    if (cupDate) {
-      cupDate.dateTime = cupHighlight.date;
-      cupDate.textContent = `${formatDateLabel(cupHighlight.date)} · ${formatLocation(cupHighlight)}`.trim();
-    }
-    safeText('[data-cup-arena]', cupHighlight.arena || 'Neutral site');
-    const cupTotal = cupGamesCount || labelBreakdown.find((entry) => entry?.label === 'Emirates NBA Cup')?.games || 0;
-    safeText('[data-cup-story]', `${helpers.formatNumber(cupTotal, 0)} Cup tilts funnel into one desert coronation.`);
+  const teams = Array.isArray(preseasonPowerIndex) ? preseasonPowerIndex : [];
+  if (!teams.length) {
+    const placeholder = document.createElement('li');
+    placeholder.className = 'power-board__placeholder';
+    placeholder.textContent = 'Power index will populate once the editorial board finalizes rankings.';
+    list.appendChild(placeholder);
+    return;
   }
 
-  const globalHighlight = globalGames.sort((a, b) => new Date(a.date) - new Date(b.date))[0];
-  if (globalHighlight) {
-    const globalDate = document.querySelector('[data-global-date]');
-    if (globalDate) {
-      globalDate.dateTime = globalHighlight.date;
-      globalDate.textContent = `${formatDateLabel(globalHighlight.date)} · ${formatLocation(globalHighlight)}`.trim();
+  const statLookup = new Map();
+  (Array.isArray(teamData?.winPctLeaders) ? teamData.winPctLeaders : []).forEach((team) => {
+    if (team?.team) {
+      statLookup.set(team.team, team);
     }
-    safeText('[data-global-match]', formatMatchup(globalHighlight, teamLookup));
-    safeText('[data-global-count]', `${helpers.formatNumber(globalGames.length || 0, 0)} neutral-site showcases`);
+  });
+
+  teams.forEach((entry, index) => {
+    const item = document.createElement('li');
+    item.className = 'power-board__item';
+
+    const rank = document.createElement('span');
+    rank.className = 'power-board__rank';
+    rank.textContent = String(index + 1);
+
+    const body = document.createElement('div');
+    body.className = 'power-board__content';
+    const name = document.createElement('p');
+    name.className = 'power-board__name';
+    name.textContent = entry.team;
+    const note = document.createElement('p');
+    note.className = 'power-board__note';
+    note.textContent = entry.note;
+    body.append(name, note);
+
+    const meta = document.createElement('div');
+    meta.className = 'power-board__meta';
+    const tier = document.createElement('span');
+    tier.className = 'power-board__tier';
+    tier.textContent = entry.tier;
+    meta.appendChild(tier);
+
+    const stats = statLookup.get(entry.team);
+    if (stats) {
+      const margin = (stats.pointsPerGame ?? 0) - (stats.opponentPointsPerGame ?? 0);
+      const stat = document.createElement('span');
+      stat.className = 'power-board__stat';
+      stat.textContent = `${helpers.formatNumber((stats.winPct ?? 0) * 100, 1)}% win pct · ${
+        margin >= 0 ? '+' : '–'
+      }${helpers.formatNumber(Math.abs(margin), 1)} margin`;
+      meta.appendChild(stat);
+    }
+
+    item.append(rank, body, meta);
+    list.appendChild(item);
+  });
+}
+
+function deriveItineraryContext(game) {
+  const descriptor = `${game?.subLabel ?? ''} ${game?.seriesText ?? ''} ${game?.label ?? ''}`.toLowerCase();
+  const subtype = (game?.subtype ?? '').toLowerCase();
+  if (subtype.includes('global') || descriptor.includes('global') || descriptor.includes('international')) {
+    return {
+      tag: 'Global stage',
+      focus: "International stop spotlights the league's worldwide push before opening night.",
+    };
+  }
+  if (descriptor.includes('abu dhabi') || descriptor.includes('paris') || descriptor.includes('macao')) {
+    return {
+      tag: 'Global stage',
+      focus: "Neutral-site showcase primes worldwide fanbases for the new season.",
+    };
+  }
+  if (descriptor.includes('classic') || descriptor.includes('rival') || descriptor.includes('derby')) {
+    return {
+      tag: 'Marquee rivalry',
+      focus: 'Legacy opponents turn a tune-up into a statement night.',
+    };
+  }
+  if (descriptor.includes('cup') || descriptor.includes('in-season')) {
+    return {
+      tag: 'Cup tune-up',
+      focus: 'Teams rehearse the pace and coverages that decide December tournament nights.',
+    };
+  }
+  if (descriptor.includes('rookie') || descriptor.includes('prospect') || descriptor.includes('sophomore')) {
+    return {
+      tag: 'Rookie spotlight',
+      focus: 'Young cores get extended runway to fight for rotation minutes.',
+    };
+  }
+  if (descriptor.includes('homecoming') || descriptor.includes('heritage') || descriptor.includes('community')) {
+    return {
+      tag: 'Community showcase',
+      focus: 'Local storytelling anchors the preseason party before standings matter.',
+    };
+  }
+  return {
+    tag: 'Camp primer',
+    focus: 'Training camp intensity lifts as rotations tighten toward opening night.',
+  };
+}
+
+function buildItineraryHighlights(game, context) {
+  const highlights = [];
+  const seen = new Set();
+  const addHighlight = (text) => {
+    const trimmed = typeof text === 'string' ? text.trim() : '';
+    if (!trimmed || seen.has(trimmed)) {
+      return;
+    }
+    highlights.push(trimmed);
+    seen.add(trimmed);
+  };
+
+  addHighlight(context.focus);
+
+  const venue = formatLocation(game);
+  if (venue) {
+    addHighlight(`Venue spotlight: ${venue}`);
+  }
+
+  addHighlight(game?.seriesText || game?.subLabel);
+  addHighlight('Rotation battles highlight spacing tweaks and new signings.');
+
+  return highlights.slice(0, 3);
+}
+
+function renderSpotlightItinerary(scheduleData) {
+  const feature = document.querySelector('[data-itinerary-feature]');
+  const list = document.querySelector('[data-itinerary-list]');
+  const footnote = document.querySelector('[data-itinerary-footnote]');
+  if (!feature && !list && !footnote) {
+    return;
+  }
+
+  const scheduleAvailable = Boolean(scheduleData);
+  const teamLookup = scheduleAvailable ? createTeamLookup(scheduleData) : new Map();
+  const seasonStartYear = scheduleAvailable && scheduleData?.dateRange?.start
+    ? new Date(scheduleData.dateRange.start).getFullYear()
+    : null;
+  const gamesSource = scheduleAvailable && Array.isArray(scheduleData?.specialGames) ? scheduleData.specialGames : [];
+  const preseasonGames = gamesSource
+    .filter((game) => `${game?.label ?? ''} ${game?.subLabel ?? ''}`.toLowerCase().includes('preseason'))
+    .map((game) => ({ ...game, parsedDate: game?.date ? new Date(game.date) : null }))
+    .filter((game) => game.parsedDate instanceof Date && !Number.isNaN(game.parsedDate.getTime()))
+    .filter((game) => (seasonStartYear !== null ? game.parsedDate.getFullYear() === seasonStartYear : true))
+    .sort((a, b) => a.parsedDate - b.parsedDate);
+
+  if (feature) {
+    feature.innerHTML = '';
+    if (!preseasonGames.length) {
+      const placeholder = document.createElement('p');
+      placeholder.className = 'spotlight-itinerary__placeholder';
+      placeholder.textContent = 'Feature matchup arrives once the preseason manifest is finalized.';
+      feature.appendChild(placeholder);
+    } else {
+      const headliner = preseasonGames[0];
+      const context = deriveItineraryContext(headliner);
+      const header = document.createElement('header');
+      header.className = 'itinerary-feature__header';
+
+      const tag = document.createElement('span');
+      tag.className = 'itinerary-feature__tag';
+      tag.textContent = context.tag;
+
+      const date = document.createElement('time');
+      date.className = 'itinerary-feature__date';
+      if (headliner.date) {
+        date.dateTime = headliner.date;
+        date.textContent = formatDateLabel(headliner.date, { weekday: 'short', month: 'short', day: 'numeric' });
+      } else {
+        date.textContent = 'Date to be announced';
+      }
+
+      const matchup = document.createElement('h3');
+      matchup.className = 'itinerary-feature__matchup';
+      matchup.textContent = formatMatchup(headliner, teamLookup) || 'Preseason showcase';
+
+      const subtitle = document.createElement('p');
+      subtitle.className = 'itinerary-feature__subtitle';
+      subtitle.textContent = headliner?.subLabel || headliner?.seriesText || 'Flagship preseason tilt';
+
+      const location = document.createElement('p');
+      location.className = 'itinerary-feature__location';
+      location.textContent = formatLocation(headliner) || 'Neutral site';
+
+      header.append(tag, date, matchup, subtitle, location);
+
+      const highlightList = document.createElement('ul');
+      highlightList.className = 'itinerary-feature__highlights';
+      buildItineraryHighlights(headliner, context).forEach((highlight) => {
+        const item = document.createElement('li');
+        item.textContent = highlight;
+        highlightList.appendChild(item);
+      });
+
+      feature.append(header, highlightList);
+    }
+  }
+
+  if (list) {
+    list.innerHTML = '';
+    if (!preseasonGames.length) {
+      const placeholder = document.createElement('li');
+      placeholder.className = 'itinerary-list__placeholder';
+      placeholder.textContent = 'Preseason manifest pending league release.';
+      list.appendChild(placeholder);
+    } else {
+      preseasonGames.slice(0, 8).forEach((game) => {
+        const context = deriveItineraryContext(game);
+        const item = document.createElement('li');
+        item.className = 'itinerary-list__item';
+
+        const date = document.createElement('time');
+        date.className = 'itinerary-list__date';
+        if (game.date) {
+          date.dateTime = game.date;
+          date.textContent = formatDateLabel(game.date, { month: 'short', day: 'numeric' });
+        } else {
+          date.textContent = 'TBD';
+        }
+
+        const body = document.createElement('div');
+        body.className = 'itinerary-list__body';
+
+        const tag = document.createElement('span');
+        tag.className = 'itinerary-list__tag';
+        tag.textContent = context.tag;
+
+        const matchup = document.createElement('p');
+        matchup.className = 'itinerary-list__matchup';
+        matchup.textContent = formatMatchup(game, teamLookup) || 'Preseason showcase';
+
+        const detail = document.createElement('p');
+        detail.className = 'itinerary-list__detail';
+        detail.textContent = game?.subLabel || game?.seriesText || 'Rotation checkup';
+
+        const location = document.createElement('p');
+        location.className = 'itinerary-list__location';
+        location.textContent = formatLocation(game) || 'Neutral site';
+
+        body.append(tag, matchup, detail, location);
+        item.append(date, body);
+        list.appendChild(item);
+      });
+    }
+  }
+
+  if (footnote) {
+    if (preseasonGames.length) {
+      const total = scheduleAvailable ? scheduleData?.totals?.preseason ?? preseasonGames.length : preseasonGames.length;
+      footnote.textContent = `Total preseason exhibitions logged: ${helpers.formatNumber(total, 0)} leaguewide — itinerary updates as slates finalize.`;
+    } else {
+      footnote.textContent = 'League preseason slate is still syncing — check back once the manifest locks.';
+    }
   }
 }
 
@@ -238,154 +592,6 @@ function renderBackToBack(scheduleData) {
     restAverage.textContent = `${helpers.formatNumber(scheduleData?.restSummary?.averageRestDays ?? 0, 2)} days`;
   }
   safeText('[data-rest-intervals]', helpers.formatNumber(scheduleData?.restSummary?.totalIntervals ?? 0, 0));
-}
-
-function renderTimeline(scheduleData) {
-  const list = document.querySelector('[data-season-timeline]');
-  if (!list) {
-    return;
-  }
-  list.innerHTML = '';
-  if (!scheduleData) {
-    const placeholder = document.createElement('li');
-    placeholder.className = 'timeline__placeholder';
-    placeholder.textContent = 'Spotlight dates arrive once the schedule manifest loads.';
-    list.appendChild(placeholder);
-    return;
-  }
-  const specialGames = Array.isArray(scheduleData?.specialGames) ? scheduleData.specialGames : [];
-  const teamLookup = createTeamLookup(scheduleData);
-  const events = [];
-
-  const addEvent = (game, headline) => {
-    if (!game) return;
-    events.push({
-      date: game.date,
-      headline,
-      detail: `${formatMatchup(game, teamLookup)} · ${game.arena || 'Neutral site'}`,
-      location: formatLocation(game),
-    });
-  };
-
-  const sortAsc = (a, b) => new Date(a.date) - new Date(b.date);
-  const globalGame = specialGames.filter((game) => game?.subtype === 'Global Games').sort(sortAsc)[0];
-  addEvent(globalGame, 'Global tip-off');
-  const cupFinal = specialGames
-    .filter((game) => game?.label === 'Emirates NBA Cup' && /championship|final/i.test(game?.subLabel ?? ''))
-    .sort(sortAsc)[0];
-  addEvent(cupFinal, 'Emirates NBA Cup championship');
-  const parisGame = specialGames.filter((game) => game?.label === 'NBA Paris Game').sort(sortAsc)[0];
-  addEvent(parisGame, 'Paris spotlight');
-  const mexicoGame = specialGames.filter((game) => game?.label === 'NBA Mexico City Game').sort(sortAsc)[0];
-  addEvent(mexicoGame, 'Mexico City showcase');
-  const finalsGame = specialGames
-    .filter((game) => game?.label === 'NBA Finals')
-    .sort((a, b) => new Date(b.date) - new Date(a.date))[0];
-  addEvent(finalsGame, 'Projected Finals climax');
-
-  const uniqueEvents = events.filter((event, index, array) => {
-    const key = `${event.headline}-${event.date}`;
-    return array.findIndex((candidate) => `${candidate.headline}-${candidate.date}` === key) === index;
-  });
-
-  if (!uniqueEvents.length) {
-    const placeholder = document.createElement('li');
-    placeholder.className = 'timeline__placeholder';
-    placeholder.textContent = 'Spotlight dates arrive once the schedule manifest loads.';
-    list.appendChild(placeholder);
-    return;
-  }
-
-  uniqueEvents
-    .sort((a, b) => new Date(a.date) - new Date(b.date))
-    .slice(0, 5)
-    .forEach((event) => {
-      const item = document.createElement('li');
-      item.className = 'timeline__item';
-      const dateLabel = document.createElement('time');
-      dateLabel.className = 'timeline__date';
-      dateLabel.dateTime = event.date;
-      dateLabel.textContent = formatDateLabel(event.date, { month: 'short', day: 'numeric', year: 'numeric' });
-      const headline = document.createElement('p');
-      headline.className = 'timeline__headline';
-      headline.textContent = event.headline;
-      const detail = document.createElement('p');
-      detail.className = 'timeline__detail';
-      detail.textContent = `${event.detail} — ${event.location}`;
-      item.append(dateLabel, headline, detail);
-      list.appendChild(item);
-    });
-}
-
-function renderPreseasonSchedule(scheduleData) {
-  const list = document.querySelector('[data-preseason-schedule]');
-  const totalNode = document.querySelector('[data-preseason-total]');
-
-  if (totalNode) {
-    const total = helpers.formatNumber(scheduleData?.totals?.preseason ?? 0, 0);
-    totalNode.textContent = total;
-  }
-
-  if (!list) {
-    return;
-  }
-
-  list.innerHTML = '';
-
-  if (!scheduleData) {
-    const placeholder = document.createElement('li');
-    placeholder.className = 'preseason-schedule__placeholder';
-    placeholder.textContent = 'Preseason fixtures populate once the schedule snapshot loads.';
-    list.appendChild(placeholder);
-    return;
-  }
-
-  const seasonStartYear = scheduleData?.dateRange?.start ? new Date(scheduleData.dateRange.start).getFullYear() : null;
-  const preseasonGames = (Array.isArray(scheduleData?.specialGames) ? scheduleData.specialGames : [])
-    .filter((game) => (game?.label ?? '').toLowerCase().includes('preseason'))
-    .map((game) => ({ ...game, parsedDate: game?.date ? new Date(game.date) : null }))
-    .filter((game) => game.parsedDate instanceof Date && !Number.isNaN(game.parsedDate.getTime()))
-    .filter((game) => (seasonStartYear !== null ? game.parsedDate.getFullYear() === seasonStartYear : true))
-    .sort((a, b) => a.parsedDate - b.parsedDate);
-
-  if (!preseasonGames.length) {
-    const placeholder = document.createElement('li');
-    placeholder.className = 'preseason-schedule__placeholder';
-    placeholder.textContent = 'Preseason fixtures will post once the league finalizes the slate.';
-    list.appendChild(placeholder);
-    return;
-  }
-
-  const teamLookup = createTeamLookup(scheduleData);
-
-  preseasonGames.slice(0, 6).forEach((game) => {
-    const item = document.createElement('li');
-    item.className = 'preseason-game';
-
-    const date = document.createElement('time');
-    date.className = 'preseason-game__date';
-    if (game.date) {
-      date.dateTime = game.date;
-      date.textContent = formatDateLabel(game.date, { weekday: 'short', month: 'short', day: 'numeric' });
-    } else {
-      date.textContent = 'TBD';
-    }
-
-    const matchup = document.createElement('p');
-    matchup.className = 'preseason-game__matchup';
-    matchup.textContent = formatMatchup(game, teamLookup) || 'Preseason showcase';
-
-    const meta = document.createElement('p');
-    meta.className = 'preseason-game__meta';
-    meta.textContent = game.subLabel || game.seriesText || 'Global exhibition';
-
-    const location = document.createElement('p');
-    location.className = 'preseason-game__location';
-    location.textContent = formatLocation(game) || 'Neutral site';
-
-    item.append(date, matchup, meta, location);
-    list.appendChild(item);
-  });
 }
 
 function renderStoryCards(storyData) {
@@ -662,12 +868,11 @@ async function bootstrap() {
     fetchJsonSafe('data/storytelling_walkthroughs.json'),
   ]);
 
-  hydrateHero(teamData, scheduleData);
+  hydrateHero(teamData);
   renderSeasonLead(scheduleData);
-  renderPreseasonSchedule(scheduleData);
+  renderSpotlightItinerary(scheduleData);
   renderContenderGrid(teamData);
   renderBackToBack(scheduleData);
-  renderTimeline(scheduleData);
   renderStoryCards(storyData);
 }
 
