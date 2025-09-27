@@ -1,0 +1,8 @@
+# Node dependencies
+node_modules/
+
+# Python artifacts
+__pycache__/
+*.pyc
+.pytest_cache/
+

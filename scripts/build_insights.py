@@ -15,6 +15,7 @@ message is raised describing the installation step.
 
 from __future__ import annotations
 
+import atexit
 import csv
 import io
 import json
@@ -28,8 +29,6 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Iterator
-
-import atexit
 
 try:  # Optional dependency used when the 7z CLI is unavailable.
     import py7zr  # type: ignore
