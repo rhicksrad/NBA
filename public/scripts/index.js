@@ -386,82 +386,6 @@ function renderStoryCards(storyData) {
   });
 }
 
-function renderLegacy(leadersData) {
-  const grid = document.querySelector('[data-legacy-grid]');
-  if (!grid) {
-    return;
-  }
-  grid.innerHTML = '';
-  const categories = [
-    { key: 'points', label: 'Scoring vault', valueKey: 'points', perGameKey: 'pointsPerGame', unit: 'pts' },
-    { key: 'assists', label: 'Playmaking lineage', valueKey: 'assists', perGameKey: 'assistsPerGame', unit: 'ast' },
-    { key: 'rebounds', label: 'Glass dynasty', valueKey: 'rebounds', perGameKey: 'reboundsPerGame', unit: 'reb' },
-  ];
-
-  if (!leadersData) {
-    const placeholder = document.createElement('article');
-    placeholder.className = 'legacy-card legacy-card--placeholder';
-    placeholder.textContent = 'Legendary benchmarks will populate once the leader archive loads.';
-    grid.appendChild(placeholder);
-    return;
-  }
-
-  categories.forEach((category) => {
-    const list = Array.isArray(leadersData?.careerLeaders?.[category.key])
-      ? leadersData.careerLeaders[category.key].slice(0, 3)
-      : [];
-    const card = document.createElement('article');
-    card.className = 'legacy-card';
-    const header = document.createElement('div');
-    header.className = 'legacy-card__header';
-    const tag = document.createElement('span');
-    tag.className = 'legacy-card__tag';
-    tag.textContent = category.label;
-    const title = document.createElement('h3');
-    title.textContent = list[0]?.name ?? 'Legacy leaders';
-    const summary = document.createElement('p');
-    summary.className = 'legacy-card__summary';
-    summary.textContent = list[0]
-      ? `${helpers.formatNumber(list[0][category.valueKey] ?? 0, 0)} ${category.unit} career • ${helpers.formatNumber(
-          list[0][category.perGameKey] ?? 0,
-          2
-        )} per game`
-      : 'Benchmarks updating in real time.';
-    header.append(tag, title, summary);
-
-    const ul = document.createElement('ul');
-    ul.className = 'legacy-card__list';
-    if (!list.length) {
-      const placeholder = document.createElement('li');
-      placeholder.className = 'legacy-card__list-item';
-      placeholder.textContent = 'Data pending for this category.';
-      ul.appendChild(placeholder);
-    } else {
-      list.forEach((player) => {
-        const li = document.createElement('li');
-        li.className = 'legacy-card__list-item';
-        const name = document.createElement('strong');
-        name.textContent = player.name;
-        const totals = document.createElement('span');
-        totals.textContent = `${helpers.formatNumber(player[category.valueKey] ?? 0, 0)} ${category.unit} • ${helpers.formatNumber(
-          player[category.perGameKey] ?? 0,
-          2
-        )} per game`;
-        const era = document.createElement('span');
-        const seasons = [player.firstSeason, player.lastSeason].filter((season) => typeof season === 'number');
-        const window = seasons.length === 2 ? `${seasons[0]}–${seasons[1]}` : '';
-        const teams = Array.isArray(player.teams) ? player.teams.slice(0, 3).join(', ') : '';
-        era.textContent = [window, teams].filter(Boolean).join(' • ');
-        li.append(name, totals, era);
-        ul.appendChild(li);
-      });
-    }
-
-    card.append(header, ul);
-    grid.appendChild(card);
-  });
-}
-
 async function resolveScheduleSource() {
   const fallback = 'data/season_25_26_schedule.json';
   try {
@@ -661,11 +585,10 @@ async function bootstrap() {
     },
   ]);
 
-  const [scheduleData, teamData, storyData, leaderData] = await Promise.all([
+  const [scheduleData, teamData, storyData] = await Promise.all([
     fetchJsonSafe(scheduleSource),
     fetchJsonSafe('data/team_performance.json'),
     fetchJsonSafe('data/storytelling_walkthroughs.json'),
-    fetchJsonSafe('data/player_leaders.json'),
   ]);
 
   hydrateHero(teamData, scheduleData);
@@ -674,7 +597,6 @@ async function bootstrap() {
   renderBackToBack(scheduleData);
   renderTimeline(scheduleData);
   renderStoryCards(storyData);
-  renderLegacy(leaderData);
 }
 
 bootstrap();
