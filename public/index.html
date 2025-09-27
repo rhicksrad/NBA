@@ -67,37 +67,45 @@
         </section>
 
         <section>
-          <h2>Featured canvases in development</h2>
-          <div class="grid-two">
-            <div class="subsection">
-              <h3>Dynamic player journeys</h3>
-              <p>
-                Follow athletes from draft night to All-NBA status with interconnected timelines,
-                contract evolutions, and advanced shot maps. Future releases will pair spatial
-                visualizations with video context.
-              </p>
-              <div class="badge-list">
-                <span class="badge">Career arcs</span>
-                <span class="badge">Shot charts</span>
-                <span class="badge">Contract trends</span>
+          <h2>Visual infrastructure prototypes</h2>
+          <p class="lead">
+            Phase 2 introduces reusable chart primitives that hydrate on demand, respect
+            performance budgets, and surface the latest league data without overwhelming the
+            browser.
+          </p>
+          <div class="viz-grid">
+            <figure class="viz-card" data-chart-wrapper>
+              <header class="viz-card__title">Season workload planner</header>
+              <div class="viz-canvas">
+                <canvas data-chart="season-volume" aria-describedby="season-volume-caption"></canvas>
               </div>
-            </div>
-            <div class="chart-placeholder">Interactive trajectory view loading soon</div>
-          </div>
-          <div class="grid-two">
-            <div class="chart-placeholder">League-wide possession flow visual on deck</div>
-            <div class="subsection">
-              <h3>Systems level team insights</h3>
-              <p>
-                Compare pace, space, and defensive schemes at a glance. Upcoming modules will
-                spotlight lineup chemistry networks, in-game adjustments, and schedule density.
-              </p>
-              <div class="badge-list">
-                <span class="badge">Lineup graphs</span>
-                <span class="badge">Scheme explorer</span>
-                <span class="badge">Schedule strain</span>
+              <figcaption id="season-volume-caption" class="viz-card__caption">
+                Stack preseason, regular season, and cup/postseason games for every month of the
+                2024-25 calendar to spot schedule surges in seconds.
+              </figcaption>
+            </figure>
+
+            <figure class="viz-card" data-chart-wrapper>
+              <header class="viz-card__title">Top franchise efficiency</header>
+              <div class="viz-canvas">
+                <canvas data-chart="team-efficiency" aria-describedby="team-efficiency-caption"></canvas>
               </div>
-            </div>
+              <figcaption id="team-efficiency-caption" class="viz-card__caption">
+                Compare points scored versus allowed for the winningest franchises ever—each point
+                scales with historical win percentage.
+              </figcaption>
+            </figure>
+
+            <figure class="viz-card" data-chart-wrapper>
+              <header class="viz-card__title">Global player pipeline</header>
+              <div class="viz-canvas">
+                <canvas data-chart="global-pipeline" aria-describedby="global-pipeline-caption"></canvas>
+              </div>
+              <figcaption id="global-pipeline-caption" class="viz-card__caption">
+                Track the leading international talent sources while keeping payloads lean through
+                ranked sampling of the roster database.
+              </figcaption>
+            </figure>
           </div>
         </section>
 
@@ -151,5 +159,7 @@
 
       <footer class="page-footer">Built for the modern NBA era — expanding with every new story.</footer>
     </div>
+    <script src="vendor/chart.umd.js" defer></script>
+    <script type="module" src="scripts/index.js"></script>
   </body>
 </html>
