@@ -1093,7 +1093,10 @@
         restParts.push(`${formatNumber(restSummary.backToBackIntervals)} zero-day turnarounds`);
       }
       const restSentence = restParts.length > 0 ? ` Rest outlook: ${restParts.join(', ')}.` : '';
-      dom.scheduleNote.textContent = `Schedule snapshot generated ${generatedText}. Coverage: ${coverage}. Totals include preseason, Emirates NBA Cup, play-in, and playoff rounds from LeagueSchedule24_25.csv.${restSentence}`;
+      const seasonInfo = state.schedule?.season ?? {};
+      const seasonLabel = seasonInfo.label ? ` (${seasonInfo.label})` : '';
+      const sourceCsv = seasonInfo.sourceCsv ?? 'LeagueSchedule24_25.csv';
+      dom.scheduleNote.textContent = `Schedule snapshot${seasonLabel} generated ${generatedText}. Coverage: ${coverage}. Totals include preseason, Emirates NBA Cup, play-in, and playoff rounds from ${sourceCsv}.${restSentence}`;
     }
 
     function renderScheduleChart() {
@@ -1932,31 +1935,43 @@
     }
 
     async function loadSchedule() {
-      try {
-        const schedule = await fetchJson('data/season_24_25_schedule.json', 'schedule snapshot');
-        state.schedule = schedule;
-        renderScheduleSummary();
-        renderScheduleChart();
-        renderScheduleTeams();
-        renderScheduleRest();
-        renderScheduleBackToBack();
-        renderScheduleSpecials();
-      } catch (error) {
-        console.error(error);
-        dom.scheduleNote.textContent = 'Unable to load the 2024-25 schedule snapshot. Please refresh to try again.';
-        dom.scheduleSummary.innerHTML = '';
-        dom.scheduleTeamsBody.innerHTML = '<tr><td colspan="5">Schedule data unavailable.</td></tr>';
-        dom.scheduleSpecialList.innerHTML = '<li>Schedule data unavailable.</li>';
-        dom.scheduleRestNote.textContent = 'Rest distribution unavailable.';
-        dom.scheduleBackToBackBody.innerHTML = '<tr><td colspan="4">Schedule data unavailable.</td></tr>';
-        if (scheduleChart) {
-          scheduleChart.destroy();
-          scheduleChart = null;
+      const scheduleFiles = [
+        { path: 'data/season_25_26_schedule.json', label: '2025-26' },
+        { path: 'data/season_24_25_schedule.json', label: '2024-25' },
+      ];
+
+      let lastError = null;
+      for (const file of scheduleFiles) {
+        try {
+          const schedule = await fetchJson(file.path, `${file.label} schedule snapshot`);
+          state.schedule = schedule;
+          renderScheduleSummary();
+          renderScheduleChart();
+          renderScheduleTeams();
+          renderScheduleRest();
+          renderScheduleBackToBack();
+          renderScheduleSpecials();
+          return;
+        } catch (error) {
+          console.warn(`Unable to load schedule from ${file.path}`, error);
+          lastError = error;
         }
-        if (scheduleRestChart) {
-          scheduleRestChart.destroy();
-          scheduleRestChart = null;
-        }
+      }
+
+      console.error(lastError);
+      dom.scheduleNote.textContent = 'Unable to load the latest schedule snapshot. Please refresh to try again.';
+      dom.scheduleSummary.innerHTML = '';
+      dom.scheduleTeamsBody.innerHTML = '<tr><td colspan="5">Schedule data unavailable.</td></tr>';
+      dom.scheduleSpecialList.innerHTML = '<li>Schedule data unavailable.</li>';
+      dom.scheduleRestNote.textContent = 'Rest distribution unavailable.';
+      dom.scheduleBackToBackBody.innerHTML = '<tr><td colspan="4">Schedule data unavailable.</td></tr>';
+      if (scheduleChart) {
+        scheduleChart.destroy();
+        scheduleChart = null;
+      }
+      if (scheduleRestChart) {
+        scheduleRestChart.destroy();
+        scheduleRestChart = null;
       }
     }
 

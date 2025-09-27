@@ -16,9 +16,11 @@
 - **How to regenerate:** Run `node scripts/build_snapshot.mjs` from the repository root. The script parses `TeamHistories.csv`, filters for active franchise eras, and writes `public/data/active_franchises.json`.
 - **Why it matters:** Keeps the browser payload small while guaranteeing the visualization reflects the latest CSV sources.
 
-### 2024-25 schedule snapshot
+### Schedule snapshot (upcoming season)
 - **Description:** Aggregated JSON powering the league calendar insights section in `public/franchise-explorer.html`, summarizing monthly volume, team workloads, and tagged special events.
-- **How to regenerate:** Run `node scripts/build_schedule_snapshot.mjs` from the repository root. The script reads `LeagueSchedule24_25.csv` and joins against `TeamHistories.csv` to provide friendly team names.
+- **How to regenerate:**
+  1. Download the latest schedule CSV (for example `LeagueSchedule25_26.csv`) by running `python scripts/fetch_schedule_from_bref.py`. The helper reads [Basketball-Reference](https://www.basketball-reference.com/leagues/NBA_2026_games.html#schedule) and reshapes the data into the repository schema.
+  2. Run `node scripts/build_schedule_snapshot.mjs` from the repository root. The script prefers `LeagueSchedule25_26.csv` when present and falls back to `LeagueSchedule24_25.csv`, joining against `TeamHistories.csv` to provide friendly team names.
 - **Why it matters:** Allows the MVP to surface upcoming season context without shipping the full 1,400-row CSV to the browser.
 
 ### Insight snapshots (players, games, teams)
@@ -96,8 +98,10 @@
 
 ### LeagueSchedule24_25.csv
 - **Description:** 2024-25 preseason and regular-season master schedule snapshot.
-- **Row count:** 1,408 scheduled games. 
+- **Row count:** 1,408 scheduled games.
 - **Provenance:** TBD.
+
+> **Note:** Use `python scripts/fetch_schedule_from_bref.py` to generate the upcoming season schedule (e.g., `LeagueSchedule25_26.csv`) before rebuilding the snapshot.
 
 | Column | Type | Description |
 | --- | --- | --- |
