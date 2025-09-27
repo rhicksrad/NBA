@@ -42,7 +42,16 @@
             players across roles, pace contexts, and matchup styles.
           </p>
           <div class="grid-two">
-            <div class="chart-placeholder">Archetype clustering scatterplot placeholder</div>
+            <figure class="viz-card viz-card--inline" data-chart-wrapper>
+              <header class="viz-card__title">League height distribution</header>
+              <div class="viz-canvas">
+                <canvas data-chart="player-heights" aria-describedby="player-heights-caption"></canvas>
+              </div>
+              <figcaption id="player-heights-caption" class="viz-card__caption">
+                A smoothed density curve of roster heights keeps archetype filters responsive while
+                honoring Phase 2 performance budgets.
+              </figcaption>
+            </figure>
             <div class="subsection">
               <h3>Key ingredients</h3>
               <div class="badge-list">
@@ -69,7 +78,16 @@
                 offices tools to spot breakout windows or manage workloads over 82 games.
               </p>
             </div>
-            <div class="chart-placeholder">Clutch impact timeline coming soon</div>
+            <figure class="viz-card viz-card--inline" data-chart-wrapper>
+              <header class="viz-card__title">Draft pipeline cadence</header>
+              <div class="viz-canvas">
+                <canvas data-chart="draft-timeline" aria-describedby="draft-timeline-caption"></canvas>
+              </div>
+              <figcaption id="draft-timeline-caption" class="viz-card__caption">
+                Decade-level draft totals are sampled evenly to highlight momentum without shipping
+                the full historical series.
+              </figcaption>
+            </figure>
           </div>
           <div class="card-grid">
             <article class="card">
@@ -90,5 +108,7 @@
 
       <footer class="page-footer">Player insights are the heartbeat of the hub — more soon.</footer>
     </div>
+    <script src="vendor/chart.umd.js" defer></script>
+    <script type="module" src="scripts/players.js"></script>
   </body>
 </html>

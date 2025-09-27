@@ -50,14 +50,32 @@
                 development pathways.
               </p>
             </div>
-            <div class="chart-placeholder">Momentum radar visualization in progress</div>
+            <figure class="viz-card viz-card--inline" data-chart-wrapper>
+              <header class="viz-card__title">Historical win rate leaders</header>
+              <div class="viz-canvas">
+                <canvas data-chart="win-leaders" aria-describedby="win-leaders-caption"></canvas>
+              </div>
+              <figcaption id="win-leaders-caption" class="viz-card__caption">
+                Horizontal bars showcase the ten most efficient franchises ever, trimmed via
+                ranked slicing to keep render times snappy.
+              </figcaption>
+            </figure>
           </div>
         </section>
 
         <section>
           <h2>Lineup chemistry lab</h2>
           <div class="grid-two">
-            <div class="chart-placeholder">Five-man network analysis placeholder</div>
+            <figure class="viz-card viz-card--inline" data-chart-wrapper>
+              <header class="viz-card__title">Schedule strain navigator</header>
+              <div class="viz-canvas">
+                <canvas data-chart="schedule-strain" aria-describedby="schedule-strain-caption"></canvas>
+              </div>
+              <figcaption id="schedule-strain-caption" class="viz-card__caption">
+                Bubble size scales with total games while the axes reveal the balance between
+                back-to-back sets and average rest days for busy clubs.
+              </figcaption>
+            </figure>
             <div class="subsection">
               <h3>Key overlays</h3>
               <div class="badge-list">
@@ -90,5 +108,7 @@
 
       <footer class="page-footer">Team stories will anchor the hub's competitive scouting tools.</footer>
     </div>
+    <script src="vendor/chart.umd.js" defer></script>
+    <script type="module" src="scripts/teams.js"></script>
   </body>
 </html>
