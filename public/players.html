@@ -36,6 +36,48 @@
 
       <main>
         <section>
+          <h2>Player landscape snapshot</h2>
+          <p class="lead">
+            Essential league-wide profile metrics distilled from the historical roster database.
+            These quick reads anchor conversations before diving into deeper scouting flows.
+          </p>
+          <div class="summary-cards" data-summary-cards>
+            <article class="summary-card">
+              <strong>Total players tracked</strong>
+              <p>
+                <span class="stat-value" data-stat="total-players">—</span>
+                athletes have logged at least one minute since the BAA era.
+              </p>
+            </article>
+            <article class="summary-card">
+              <strong>Average build</strong>
+              <p>
+                <span class="stat-value" data-stat="average-height">—</span>
+                &nbsp;•&nbsp;
+                <span class="stat-value" data-stat="average-weight">—</span>
+              </p>
+              <p class="stat-muted">
+                Height and weight trends guide lineup archetypes and medical load projections.
+              </p>
+            </article>
+            <article class="summary-card">
+              <strong>Position mix</strong>
+              <p>
+                <span class="stat-value" data-stat="role-breakdown">—</span>
+              </p>
+              <p class="stat-muted">Share of guards, forwards, and centers in the archive.</p>
+            </article>
+            <article class="summary-card">
+              <strong>Global footprint</strong>
+              <p>
+                Players representing <span class="stat-value" data-stat="countries">—</span>
+                countries have suited up across league history.
+              </p>
+            </article>
+          </div>
+        </section>
+
+        <section>
           <h2>Player archetype explorer</h2>
           <p class="lead">
             Build interactive scatter plots and radar profiles that let decision makers compare
@@ -64,6 +106,27 @@
                 categorize emerging roles. Future widgets will allow filtering by age, contract
                 status, and playoff sample size.
               </p>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2>Global reach &amp; development pipelines</h2>
+          <div class="grid-two grid-two--stretch">
+            <div class="subsection">
+              <h3>Top countries of origin</h3>
+              <p class="stat-muted">
+                International scouting remains a growth lever—keep tabs on where the next wave is
+                forming.
+              </p>
+              <ol class="rank-list" data-list="countries"></ol>
+            </div>
+            <div class="subsection">
+              <h3>Most prolific college programs</h3>
+              <p class="stat-muted">
+                Track campus-to-league pipelines to align collegiate coverage and NIL partnerships.
+              </p>
+              <ol class="rank-list" data-list="colleges"></ol>
             </div>
           </div>
         </section>
@@ -102,6 +165,28 @@
               <h3>Player availability</h3>
               <p>Integrate schedule density and travel strain models to project rest nights.</p>
             </article>
+          </div>
+        </section>
+
+        <section>
+          <h2>Tallest player profiles</h2>
+          <p class="lead">
+            High-leverage size outliers redefine matchup planning. This quick table keeps coaches and
+            analysts aligned on the longest bodies in league history.
+          </p>
+          <div class="table-scroller">
+            <table class="data-table" data-table="tallest">
+              <thead>
+                <tr>
+                  <th scope="col">Player</th>
+                  <th scope="col">Height</th>
+                  <th scope="col">Weight</th>
+                  <th scope="col">Country</th>
+                  <th scope="col">Position</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
           </div>
         </section>
       </main>
