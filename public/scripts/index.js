@@ -190,36 +190,6 @@ function formatDateLabel(dateString, options = { month: 'short', day: 'numeric' 
   return new Intl.DateTimeFormat('en-US', options).format(date);
 }
 
-function createTeamLookup(scheduleData) {
-  const map = new Map();
-  const teams = Array.isArray(scheduleData?.teams) ? scheduleData.teams : [];
-  teams.forEach((team) => {
-    if (team?.teamId) {
-      map.set(String(team.teamId), team);
-    }
-  });
-  return map;
-}
-
-function formatLocation(game) {
-  if (!game) return '';
-  const segments = [game.city, game.state].filter(Boolean);
-  return segments.join(', ') || 'Neutral site';
-}
-
-function formatMatchup(game, lookup) {
-  if (!game) return '';
-  const home = lookup.get(String(game.hometeamId))?.name;
-  const away = lookup.get(String(game.awayteamId))?.name;
-  if (home && away) {
-    return `${away} vs. ${home}`;
-  }
-  if (home || away) {
-    return home || away;
-  }
-  return game.subLabel || game.label || 'Showcase';
-}
-
 function hydrateHero(teamData) {
   const list = document.querySelector('[data-power-index]');
   if (!list) {
@@ -285,164 +255,59 @@ function hydrateHero(teamData) {
   });
 }
 
-function deriveItineraryContext(game) {
-  const descriptor = `${game?.subLabel ?? ''} ${game?.seriesText ?? ''} ${game?.label ?? ''}`.toLowerCase();
-  const subtype = (game?.subtype ?? '').toLowerCase();
-  if (subtype.includes('global') || descriptor.includes('global') || descriptor.includes('international')) {
-    return {
-      tag: 'Global stage',
-      focus: "International stop spotlights the league's worldwide push before opening night.",
-    };
+function formatTourVenue(entry) {
+  const location = [entry?.city, entry?.state].filter(Boolean).join(', ');
+  if (entry?.arena && location) {
+    return `${entry.arena} · ${location}`;
   }
-  if (descriptor.includes('abu dhabi') || descriptor.includes('paris') || descriptor.includes('macao')) {
-    return {
-      tag: 'Global stage',
-      focus: "Neutral-site showcase primes worldwide fanbases for the new season.",
-    };
+  if (entry?.arena) {
+    return entry.arena;
   }
-  if (descriptor.includes('classic') || descriptor.includes('rival') || descriptor.includes('derby')) {
-    return {
-      tag: 'Marquee rivalry',
-      focus: 'Legacy opponents turn a tune-up into a statement night.',
-    };
-  }
-  if (descriptor.includes('cup') || descriptor.includes('in-season')) {
-    return {
-      tag: 'Cup tune-up',
-      focus: 'Teams rehearse the pace and coverages that decide December tournament nights.',
-    };
-  }
-  if (descriptor.includes('rookie') || descriptor.includes('prospect') || descriptor.includes('sophomore')) {
-    return {
-      tag: 'Rookie spotlight',
-      focus: 'Young cores get extended runway to fight for rotation minutes.',
-    };
-  }
-  if (descriptor.includes('homecoming') || descriptor.includes('heritage') || descriptor.includes('community')) {
-    return {
-      tag: 'Community showcase',
-      focus: 'Local storytelling anchors the preseason party before standings matter.',
-    };
-  }
-  return {
-    tag: 'Camp primer',
-    focus: 'Training camp intensity lifts as rotations tighten toward opening night.',
-  };
+  return location || 'Venue TBA';
 }
 
-function buildItineraryHighlights(game, context) {
-  const highlights = [];
-  const seen = new Set();
-  const addHighlight = (text) => {
-    const trimmed = typeof text === 'string' ? text.trim() : '';
-    if (!trimmed || seen.has(trimmed)) {
-      return;
-    }
-    highlights.push(trimmed);
-    seen.add(trimmed);
-  };
-
-  addHighlight(context.focus);
-
-  const venue = formatLocation(game);
-  if (venue) {
-    addHighlight(`Venue spotlight: ${venue}`);
-  }
-
-  addHighlight(game?.seriesText || game?.subLabel);
-  addHighlight('Rotation battles highlight spacing tweaks and new signings.');
-
-  return highlights.slice(0, 3);
-}
-
-function renderSpotlightItinerary(scheduleData) {
-  const feature = document.querySelector('[data-itinerary-feature]');
-  const list = document.querySelector('[data-itinerary-list]');
-  const footnote = document.querySelector('[data-itinerary-footnote]');
-  if (!feature && !list && !footnote) {
+function renderPreseasonTour(openersData) {
+  const grid = document.querySelector('[data-tour-grid]');
+  const footnote = document.querySelector('[data-tour-footnote]');
+  if (!grid && !footnote) {
     return;
   }
 
-  const scheduleAvailable = Boolean(scheduleData);
-  const teamLookup = scheduleAvailable ? createTeamLookup(scheduleData) : new Map();
-  const seasonStartYear = scheduleAvailable && scheduleData?.dateRange?.start
-    ? new Date(scheduleData.dateRange.start).getFullYear()
-    : null;
-  const gamesSource = scheduleAvailable && Array.isArray(scheduleData?.specialGames) ? scheduleData.specialGames : [];
-  const preseasonGames = gamesSource
-    .filter((game) => `${game?.label ?? ''} ${game?.subLabel ?? ''}`.toLowerCase().includes('preseason'))
-    .map((game) => ({ ...game, parsedDate: game?.date ? new Date(game.date) : null }))
-    .filter((game) => game.parsedDate instanceof Date && !Number.isNaN(game.parsedDate.getTime()))
-    .filter((game) => (seasonStartYear !== null ? game.parsedDate.getFullYear() === seasonStartYear : true))
-    .sort((a, b) => a.parsedDate - b.parsedDate);
-
-  if (feature) {
-    feature.innerHTML = '';
-    if (!preseasonGames.length) {
-      const placeholder = document.createElement('p');
-      placeholder.className = 'spotlight-itinerary__placeholder';
-      placeholder.textContent = 'Feature matchup arrives once the preseason manifest is finalized.';
-      feature.appendChild(placeholder);
-    } else {
-      const headliner = preseasonGames[0];
-      const context = deriveItineraryContext(headliner);
-      const header = document.createElement('header');
-      header.className = 'itinerary-feature__header';
-
-      const tag = document.createElement('span');
-      tag.className = 'itinerary-feature__tag';
-      tag.textContent = context.tag;
-
-      const date = document.createElement('time');
-      date.className = 'itinerary-feature__date';
-      if (headliner.date) {
-        date.dateTime = headliner.date;
-        date.textContent = formatDateLabel(headliner.date, { weekday: 'short', month: 'short', day: 'numeric' });
-      } else {
-        date.textContent = 'Date to be announced';
-      }
-
-      const matchup = document.createElement('h3');
-      matchup.className = 'itinerary-feature__matchup';
-      matchup.textContent = formatMatchup(headliner, teamLookup) || 'Preseason showcase';
-
-      const subtitle = document.createElement('p');
-      subtitle.className = 'itinerary-feature__subtitle';
-      subtitle.textContent = headliner?.subLabel || headliner?.seriesText || 'Flagship preseason tilt';
-
-      const location = document.createElement('p');
-      location.className = 'itinerary-feature__location';
-      location.textContent = formatLocation(headliner) || 'Neutral site';
-
-      header.append(tag, date, matchup, subtitle, location);
-
-      const highlightList = document.createElement('ul');
-      highlightList.className = 'itinerary-feature__highlights';
-      buildItineraryHighlights(headliner, context).forEach((highlight) => {
-        const item = document.createElement('li');
-        item.textContent = highlight;
-        highlightList.appendChild(item);
-      });
-
-      feature.append(header, highlightList);
+  const games = Array.isArray(openersData?.games) ? openersData.games.slice() : [];
+  games.sort((a, b) => {
+    const dateA = a?.date ? new Date(a.date).getTime() : Number.POSITIVE_INFINITY;
+    const dateB = b?.date ? new Date(b.date).getTime() : Number.POSITIVE_INFINITY;
+    if (Number.isFinite(dateA) && Number.isFinite(dateB) && dateA !== dateB) {
+      return dateA - dateB;
     }
-  }
+    if (Number.isFinite(dateA) && !Number.isFinite(dateB)) {
+      return -1;
+    }
+    if (!Number.isFinite(dateA) && Number.isFinite(dateB)) {
+      return 1;
+    }
+    return (a?.teamName ?? '').localeCompare(b?.teamName ?? '');
+  });
 
-  if (list) {
-    list.innerHTML = '';
-    if (!preseasonGames.length) {
-      const placeholder = document.createElement('li');
-      placeholder.className = 'itinerary-list__placeholder';
-      placeholder.textContent = 'Preseason manifest pending league release.';
-      list.appendChild(placeholder);
+  if (grid) {
+    grid.innerHTML = '';
+    if (!games.length) {
+      const placeholder = document.createElement('p');
+      placeholder.className = 'tour-board__placeholder';
+      placeholder.textContent = 'Preseason openers will populate once the league finalizes exhibition dates.';
+      grid.appendChild(placeholder);
     } else {
-      preseasonGames.slice(0, 8).forEach((game) => {
-        const context = deriveItineraryContext(game);
-        const item = document.createElement('li');
-        item.className = 'itinerary-list__item';
+      games.forEach((game) => {
+        const card = document.createElement('a');
+        card.className = 'tour-card';
+        card.href = `previews/preseason-${game.gameId}.html`;
+        card.setAttribute(
+          'aria-label',
+          `${game.teamName} ${game.homeAway === 'home' ? 'vs.' : '@'} ${game.opponentName} preseason opener preview`
+        );
 
         const date = document.createElement('time');
-        date.className = 'itinerary-list__date';
+        date.className = 'tour-card__date';
         if (game.date) {
           date.dateTime = game.date;
           date.textContent = formatDateLabel(game.date, { month: 'short', day: 'numeric' });
@@ -450,38 +315,51 @@ function renderSpotlightItinerary(scheduleData) {
           date.textContent = 'TBD';
         }
 
-        const body = document.createElement('div');
-        body.className = 'itinerary-list__body';
-
-        const tag = document.createElement('span');
-        tag.className = 'itinerary-list__tag';
-        tag.textContent = context.tag;
+        const team = document.createElement('h3');
+        team.className = 'tour-card__team';
+        team.textContent = game.teamName ?? 'Preseason opener';
 
         const matchup = document.createElement('p');
-        matchup.className = 'itinerary-list__matchup';
-        matchup.textContent = formatMatchup(game, teamLookup) || 'Preseason showcase';
+        matchup.className = 'tour-card__matchup';
+        matchup.textContent = `${game.homeAway === 'home' ? 'vs.' : '@'} ${game.opponentName ?? 'Opponent TBA'}`;
 
-        const detail = document.createElement('p');
-        detail.className = 'itinerary-list__detail';
-        detail.textContent = game?.subLabel || game?.seriesText || 'Rotation checkup';
+        const tag = document.createElement('span');
+        tag.className = 'tour-card__tag';
+        tag.textContent = game.homeAway === 'home' ? 'Home start' : 'Road opener';
 
-        const location = document.createElement('p');
-        location.className = 'itinerary-list__location';
-        location.textContent = formatLocation(game) || 'Neutral site';
+        const venue = document.createElement('p');
+        venue.className = 'tour-card__meta';
+        venue.textContent = formatTourVenue(game);
 
-        body.append(tag, matchup, detail, location);
-        item.append(date, body);
-        list.appendChild(item);
+        const note = document.createElement('p');
+        note.className = 'tour-card__note';
+        const label = (game?.label ?? '').trim();
+        const labelText = label ? label : 'Preseason opener';
+        note.textContent = `${labelText} · Preview hub coming soon.`;
+
+        card.append(date, team, matchup, tag, venue, note);
+        grid.appendChild(card);
       });
     }
   }
 
   if (footnote) {
-    if (preseasonGames.length) {
-      const total = scheduleAvailable ? scheduleData?.totals?.preseason ?? preseasonGames.length : preseasonGames.length;
-      footnote.textContent = `Total preseason exhibitions logged: ${helpers.formatNumber(total, 0)} leaguewide — itinerary updates as slates finalize.`;
+    if (games.length) {
+      const total = helpers.formatNumber(games.length, 0);
+      const updatedRaw = openersData?.generatedAt ? new Date(openersData.generatedAt) : null;
+      const updated = updatedRaw instanceof Date && !Number.isNaN(updatedRaw.getTime())
+        ? new Intl.DateTimeFormat('en-US', {
+            month: 'short',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: '2-digit',
+            timeZone: 'UTC',
+            timeZoneName: 'short',
+          }).format(updatedRaw)
+        : 'recently';
+      footnote.textContent = `${total} preseason openers logged — data refreshed ${updated}. Tap any card to explore its placeholder preview.`;
     } else {
-      footnote.textContent = 'League preseason slate is still syncing — check back once the manifest locks.';
+      footnote.textContent = 'Preseason openers populate after the league locks each exhibition tip.';
     }
   }
 }
@@ -862,15 +740,16 @@ async function bootstrap() {
     },
   ]);
 
-  const [scheduleData, teamData, storyData] = await Promise.all([
+  const [scheduleData, teamData, storyData, preseasonOpeners] = await Promise.all([
     fetchJsonSafe(scheduleSource),
     fetchJsonSafe('data/team_performance.json'),
     fetchJsonSafe('data/storytelling_walkthroughs.json'),
+    fetchJsonSafe('data/preseason_openers.json'),
   ]);
 
   hydrateHero(teamData);
   renderSeasonLead(scheduleData);
-  renderSpotlightItinerary(scheduleData);
+  renderPreseasonTour(preseasonOpeners);
   renderContenderGrid(teamData);
   renderBackToBack(scheduleData);
   renderStoryCards(storyData);
