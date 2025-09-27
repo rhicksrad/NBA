@@ -7,6 +7,11 @@
 
 ## Datasets
 
+### Front-end snapshot
+- **Description:** Lightweight JSON used by the interactive MVP in `public/index.html`.
+- **How to regenerate:** Run `node scripts/build_snapshot.mjs` from the repository root. The script parses `TeamHistories.csv`, filters for active franchise eras, and writes `public/data/active_franchises.json`.
+- **Why it matters:** Keeps the browser payload small while guaranteeing the visualization reflects the latest CSV sources.
+
 ### Players.csv
 - **Description:** Master roster metadata for players who have appeared in NBA history.
 - **Row count:** 6,533 player records.
