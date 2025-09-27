@@ -1,5 +1,11 @@
 {
-  "generatedAt": "2025-09-27T15:53:07.542Z",
+  "generatedAt": "2025-09-27T17:02:12.803Z",
+  "season": {
+    "key": "24_25",
+    "label": "2024-25",
+    "sourceCsv": "LeagueSchedule24_25.csv",
+    "outputJson": "season_24_25_schedule.json"
+  },
   "totals": {
     "games": 1408,
     "preseason": 86,

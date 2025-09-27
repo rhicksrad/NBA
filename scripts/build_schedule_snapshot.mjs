@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -6,10 +6,21 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const repoRoot = join(__dirname, '..');
-const scheduleCsvPath = join(repoRoot, 'LeagueSchedule24_25.csv');
+const scheduleCandidates = [
+  { seasonKey: '25_26', label: '2025-26', csv: 'LeagueSchedule25_26.csv', json: 'season_25_26_schedule.json' },
+  { seasonKey: '24_25', label: '2024-25', csv: 'LeagueSchedule24_25.csv', json: 'season_24_25_schedule.json' },
+];
 const teamHistoryCsvPath = join(repoRoot, 'TeamHistories.csv');
 const outputDir = join(repoRoot, 'public', 'data');
-const outputPath = join(outputDir, 'season_24_25_schedule.json');
+
+const activeSeason = scheduleCandidates.find((candidate) => existsSync(join(repoRoot, candidate.csv)));
+
+if (!activeSeason) {
+  throw new Error('No LeagueScheduleXX_YY.csv file found. Run fetch_schedule_from_bref.py first.');
+}
+
+const scheduleCsvPath = join(repoRoot, activeSeason.csv);
+const outputPath = join(outputDir, activeSeason.json);
 
 function splitCsvLine(line) {
   const values = [];
@@ -340,6 +351,12 @@ function buildScheduleSnapshot() {
 
   const scheduleSnapshot = {
     generatedAt: new Date().toISOString(),
+    season: {
+      key: activeSeason.seasonKey,
+      label: activeSeason.label,
+      sourceCsv: activeSeason.csv,
+      outputJson: activeSeason.json,
+    },
     totals: {
       games: totals.games,
       preseason: totals.preseason,
