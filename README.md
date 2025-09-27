@@ -1,8 +1,7 @@
 # NBA
 
 ## Web experience overview
-- `public/index.html` now delivers the cinematic landing page that introduces the NBA Intelligence Hub.
-- `public/franchise-explorer.html` contains the interactive dashboards for franchises, schedules, players, and historical leaders.
+- `public/index.html` delivers the NBA Intelligence Hub — a single-page experience that combines the cinematic landing story with interactive dashboards for franchises, schedules, players, and historical leaders.
 
 ## Data dictionary conventions
 - **Types.** Unless noted otherwise, `int` columns are whole numbers, `float` columns may contain decimal precision, `string` columns are UTF-8 text, `date` columns follow ISO-8601 (`YYYY-MM-DD` or `YYYY-MM-DD hh:mm:ss`), and `enum` columns contain a constrained vocabulary (often booleans expressed as `True`/`False` or `0`/`1`).
@@ -12,12 +11,12 @@
 ## Datasets
 
 ### Front-end snapshot
-- **Description:** Lightweight JSON used by the interactive MVP in `public/franchise-explorer.html`.
+- **Description:** Lightweight JSON used by the interactive MVP in `public/index.html`.
 - **How to regenerate:** Run `node scripts/build_snapshot.mjs` from the repository root. The script parses `TeamHistories.csv`, filters for active franchise eras, and writes `public/data/active_franchises.json`.
 - **Why it matters:** Keeps the browser payload small while guaranteeing the visualization reflects the latest CSV sources.
 
 ### Schedule snapshot (upcoming season)
-- **Description:** Aggregated JSON powering the league calendar insights section in `public/franchise-explorer.html`, summarizing monthly volume, team workloads, and tagged special events.
+- **Description:** Aggregated JSON powering the league calendar insights section in `public/index.html`, summarizing monthly volume, team workloads, and tagged special events.
 - **How to regenerate:**
   1. Download the latest schedule CSV (for example `LeagueSchedule25_26.csv`) by running `python scripts/fetch_schedule_from_bref.py`. The helper reads [Basketball-Reference](https://www.basketball-reference.com/leagues/NBA_2026_games.html#schedule) and reshapes the data into the repository schema.
   2. Run `node scripts/build_schedule_snapshot.mjs` from the repository root. The script prefers `LeagueSchedule25_26.csv` when present and falls back to `LeagueSchedule24_25.csv`, joining against `TeamHistories.csv` to provide friendly team names.
