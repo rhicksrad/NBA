@@ -1,0 +1,42 @@
+{
+  "lastUpdated": "2024-05-27T08:30:00Z",
+  "source": {
+    "name": "NBA News Desk",
+    "url": "https://www.nba.com/news",
+    "updateCadence": "Updated daily"
+  },
+  "items": [
+    {
+      "label": "Power index",
+      "value": 112.4,
+      "unit": "index pts",
+      "status": "Live",
+      "change": 1.2,
+      "description": "Composite stability score blends roster moves and training load."
+    },
+    {
+      "label": "In-season cup",
+      "value": 87.0,
+      "unit": "index pts",
+      "status": "Beta",
+      "change": -0.4,
+      "description": "Testing cross-conference pods with travel smoothing heuristics."
+    },
+    {
+      "label": "Global stage",
+      "value": 74.5,
+      "unit": "index pts",
+      "status": "Live",
+      "change": 2.1,
+      "description": "Venue contracting and broadcast clearances for international showcases."
+    },
+    {
+      "label": "Rest crunch",
+      "value": 65.0,
+      "unit": "index pts",
+      "status": "Planned",
+      "change": 0,
+      "description": "Upcoming rollout to highlight stacked travel segments before winter road trips."
+    }
+  ]
+}

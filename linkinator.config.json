@@ -1,0 +1,13 @@
+{
+  "verbosity": "error",
+  "recurse": true,
+  "retry": 2,
+  "timeout": 10000,
+  "skip": [
+    "mailto:*",
+    "https://www.nba.com/*",
+    "https://stats.nba.com/*",
+    "https://rhicksrad.github.io/*"
+  ],
+  "format": "json"
+}

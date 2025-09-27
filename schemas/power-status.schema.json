@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["lastUpdated", "source", "items"],
+  "properties": {
+    "lastUpdated": { "type": "string", "format": "date-time" },
+    "source": {
+      "$ref": "#/definitions/source"
+    },
+    "items": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["label", "value", "unit", "status", "change"],
+        "properties": {
+          "label": { "type": "string" },
+          "value": { "type": "number" },
+          "unit": { "type": "string" },
+          "status": { "enum": ["Live", "Beta", "Planned"] },
+          "change": { "type": "number" },
+          "description": { "type": "string" }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "source": {
+      "type": "object",
+      "required": ["name", "url", "updateCadence"],
+      "properties": {
+        "name": { "type": "string" },
+        "url": { "type": "string", "format": "uri" },
+        "updateCadence": { "type": "string" }
+      }
+    }
+  }
+}
