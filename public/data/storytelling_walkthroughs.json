@@ -14,12 +14,12 @@
         "label": "Back-to-back windows",
         "value": "446",
         "unit": "intervals",
-        "context": "16% of the 2,779 rest windows logged for 2024-25."
+        "context": "16% of the 2,779 rest windows logged for 2025-26."
       },
       "editorial": [
-        "The 2024-25 schedule tracks 2,779 rest windows, and 446 of them arrive with zero recovery days. That keeps average downtime at 3.0 days and pushes staffs to coordinate recovery blocks weeks in advance.",
+        "The 2025-26 schedule tracks 2,779 rest windows, and 446 of them arrive with zero recovery days. That keeps average downtime at 3.0 days and pushes staffs to coordinate recovery blocks weeks in advance.",
         "One-day turnarounds (1,664 instances) dominate nearly 60% of the cadence, so even clubs with generous travel support must rehearse short-notice scouting and sports-science workflows.",
-        "Atlanta faces a league-high 17 back-to-backs, while the Clippers and Wizards both absorb seven-game road stretches—the longest gauntlets on the board."
+        "Atlanta faces a league-high 17 back-to-backs, while the Clippers and Wizards both absorb seven-game road stretches—the longest gauntlets on the 2025-26 board."
       ],
       "spotlights": [
         {
@@ -39,7 +39,7 @@
         }
       ],
       "sources": [
-        "season_24_25_schedule.json"
+        "season_25_26_schedule.json"
       ]
     },
     {
