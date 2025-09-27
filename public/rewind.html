@@ -75,46 +75,102 @@
               sharpened playoff chessboards.
             </p>
           </div>
+          <ul class="stat-callouts">
+            <li class="stat-callouts__item">
+              <span class="stat-callouts__label">Total games logged</span>
+              <span class="stat-callouts__value" data-stat-total-games>—</span>
+              <span class="stat-callouts__hint">Across preseason, regular season, and postseason windows.</span>
+            </li>
+            <li class="stat-callouts__item">
+              <span class="stat-callouts__label">Average rest window</span>
+              <span class="stat-callouts__value" data-stat-avg-rest>—</span>
+              <span class="stat-callouts__hint">League-wide spacing between scheduled tip-offs.</span>
+            </li>
+            <li class="stat-callouts__item">
+              <span class="stat-callouts__label">Back-to-back intervals</span>
+              <span class="stat-callouts__value" data-stat-back-to-backs>—</span>
+              <span class="stat-callouts__hint">Paired games flagged for workload monitoring.</span>
+            </li>
+            <li class="stat-callouts__item">
+              <span class="stat-callouts__label">Cup &amp; postseason volume</span>
+              <span class="stat-callouts__value" data-stat-alt-games>—</span>
+              <span class="stat-callouts__hint">Represents <span data-stat-alt-share>—</span>% of the schedule.</span>
+            </li>
+          </ul>
           <div class="season-snapshot__grid">
-            <article class="season-snapshot__panel season-snapshot__panel--wide">
+            <article class="season-snapshot__panel season-snapshot__panel--wide" data-chart-wrapper>
               <header class="season-snapshot__header">
-                <h3>Momentum tracker</h3>
-                <p>Monthly net rating delta for the top six teams.</p>
+                <h3>Schedule tempo tracker</h3>
+                <p>Monthly game volume across the 2024-25 slate.</p>
               </header>
-              <div class="contender-grid">
-                <ul class="timeline timeline--compact">
-                  <li><strong>Nov:</strong> Celtics +8.7 fueled by league-best half-court offense.</li>
-                  <li><strong>Jan:</strong> Nuggets rally with +9.1 surge after recalibrating bench units.</li>
-                  <li><strong>Mar:</strong> Thunder defense holds opponents to 108.5 per 100 possessions.</li>
-                  <li><strong>Apr:</strong> Knicks close 15-5 behind dual-big lineup pressure.</li>
-                </ul>
+              <div class="viz-canvas viz-canvas--flush">
+                <canvas data-chart="monthly-games" aria-describedby="monthly-games-caption"></canvas>
               </div>
+              <p id="monthly-games-caption" class="season-snapshot__caption">
+                Regular-season volume peaked in <span data-monthly-peak-month>—</span> with
+                <span data-monthly-peak-games>—</span> games, while auxiliary competitions filled
+                <span data-stat-alt-share>—</span>% of the calendar.
+              </p>
             </article>
             <article class="season-snapshot__panel">
               <header class="season-snapshot__header">
-                <h3>Health ledger</h3>
-                <p>Availability trends that dictated playoff prep.</p>
+                <h3>Recovery ledger</h3>
+                <p>Rest windows and high-intensity runs the medical staffs had to manage.</p>
               </header>
-              <ul class="rest-list">
-                <li><strong>Games lost:</strong> 4,212 combined, down 6% year-over-year.</li>
-                <li><strong>Low-minute caps:</strong> Clippers limited Kawhi to back-to-back rest twice.</li>
-                <li><strong>Return-to-play:</strong> Zion logged 68 appearances, stabilizing New Orleans.</li>
-              </ul>
-              <p class="rest-list__footer">Training staffs reported a 12% drop in soft-tissue setbacks.</p>
+              <div class="rest-overview">
+                <figure class="rest-overview__chart" data-chart-wrapper>
+                  <div class="viz-canvas viz-canvas--compact">
+                    <canvas data-chart="rest-distribution" aria-describedby="rest-distribution-caption"></canvas>
+                  </div>
+                  <figcaption id="rest-distribution-caption" class="season-snapshot__caption">
+                    Schedule engine grouped every travel interval to flag zero-rest, overnight, and extended pauses.
+                  </figcaption>
+                </figure>
+                <ol class="rest-list" data-back-to-back-list>
+                  <li class="rest-list__placeholder">Compiling back-to-back ledger…</li>
+                </ol>
+              </div>
+              <p class="rest-list__footer" data-rest-footer>
+                Zero-rest swings accounted for <span data-stat-zero-share>—</span>% of tracked intervals.
+              </p>
             </article>
             <article class="season-snapshot__panel">
               <header class="season-snapshot__header">
                 <h3>Signature moments</h3>
-                <p>Dates that defined the rewind narrative.</p>
+                <p>Global showcases and postseason pivots that defined the rewind.</p>
               </header>
-              <ol class="timeline">
-                <li><time datetime="2024-12-07">Dec 7</time> · In-Season Tournament final rematch lights up Las Vegas.</li>
-                <li><time datetime="2025-01-25">Jan 25</time> · Victor Wembanyama drops 48/18/6 against Milwaukee.</li>
-                <li><time datetime="2025-03-17">Mar 17</time> · Knicks clinch first division crown since 2013.</li>
-                <li><time datetime="2025-05-29">May 29</time> · Finals Game 5: Jayson Tatum posts 39-11-8 masterclass.</li>
+              <ol class="timeline" data-special-games>
+                <li class="timeline__placeholder">Loading league touchpoints…</li>
               </ol>
             </article>
           </div>
+        </section>
+
+        <section class="grid-two">
+          <div class="subsection">
+            <h2>Load management watch</h2>
+            <p>
+              Schedule modeling flagged <span data-stat-marathon-teams>—</span> teams with 95+ total games, led by
+              <span data-stat-max-games-team>—</span> charting <span data-stat-max-games>—</span>. The heaviest
+              back-to-back burden hit <span data-stat-b2b-leader-count>—</span> for <span data-stat-b2b-leader-team>—</span>,
+              shaping rest strategies ahead of the 2025-26 build.
+            </p>
+            <ul class="badge-list">
+              <li class="badge">Longest road swing: <span data-stat-longest-road>—</span></li>
+              <li class="badge">Longest home stand: <span data-stat-longest-home>—</span></li>
+              <li class="badge">Zero-rest share: <span data-stat-zero-share>—</span>% of intervals</li>
+            </ul>
+          </div>
+          <figure class="viz-card viz-card--inline" data-chart-wrapper>
+            <header class="viz-card__title">Top back-to-back loads</header>
+            <div class="viz-canvas">
+              <canvas data-chart="back-to-back-loads" aria-describedby="back-to-back-caption"></canvas>
+            </div>
+            <figcaption id="back-to-back-caption" class="viz-card__caption">
+              Bars rank the busiest back-to-back schedules in 2024-25, surfacing which contenders needed the most
+              load-balancing support.
+            </figcaption>
+          </figure>
         </section>
 
         <section>
@@ -206,5 +262,7 @@
 
       <footer class="page-footer">History loops forward—rewind insights fuel the preview engine.</footer>
     </div>
+    <script src="vendor/chart.umd.js" defer></script>
+    <script type="module" src="scripts/rewind.js"></script>
   </body>
 </html>
