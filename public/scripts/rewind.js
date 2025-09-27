@@ -1,4 +1,5 @@
 import { registerCharts, helpers } from './hub-charts.js';
+import { createTeamLogo } from './team-logos.js';
 
 const palette = {
   royal: '#1156d6',
@@ -287,9 +288,14 @@ function renderBackToBackList(data) {
     const content = document.createElement('div');
     content.className = 'rest-list__content';
 
+    const teamLabel = team.name ?? team.abbreviation ?? 'NBA';
     const name = document.createElement('p');
     name.className = 'rest-list__team';
-    name.textContent = team.name ?? team.abbreviation ?? 'Team';
+    name.textContent = teamLabel;
+    const identity = document.createElement('div');
+    identity.className = 'rest-list__identity';
+    identity.appendChild(createTeamLogo(teamLabel, 'team-logo team-logo--small'));
+    identity.appendChild(name);
 
     const meta = document.createElement('p');
     meta.className = 'rest-list__meta';
@@ -313,7 +319,7 @@ function renderBackToBackList(data) {
     if (longestHome) noteParts.push(`Longest home: ${longestHome}`);
     notes.textContent = noteParts.join(' · ');
 
-    content.append(name, meta);
+    content.append(identity, meta);
     if (noteParts.length) {
       content.append(notes);
     }
