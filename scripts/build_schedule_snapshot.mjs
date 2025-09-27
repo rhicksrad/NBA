@@ -400,6 +400,17 @@ function buildScheduleSnapshot() {
   mkdirSync(outputDir, { recursive: true });
   writeFileSync(outputPath, JSON.stringify(scheduleSnapshot, null, 2));
 
+  const manifestPath = join(outputDir, 'schedule_manifest.json');
+  const manifestPayload = {
+    seasons: [
+      {
+        path: `data/${activeSeason.json}`,
+        label: activeSeason.label,
+      },
+    ],
+  };
+  writeFileSync(manifestPath, JSON.stringify(manifestPayload, null, 2));
+
   return scheduleSnapshot;
 }
 
