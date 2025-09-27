@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2025-09-27T14:17:59.116Z",
+  "generatedAt": "2025-09-27T15:53:07.542Z",
   "totals": {
     "games": 1408,
     "preseason": 86,
@@ -153,7 +153,11 @@
       "homeGames": 51,
       "awayGames": 46,
       "firstGame": "2024-10-04T22:30:00.000Z",
-      "lastGame": "2025-10-17T22:30:00.000Z"
+      "lastGame": "2025-10-17T22:30:00.000Z",
+      "backToBacks": 14,
+      "averageRestDays": 3.94,
+      "longestHomeStand": 6,
+      "longestRoadTrip": 6
     },
     {
       "teamId": "1610612748",
@@ -166,7 +170,11 @@
       "homeGames": 49,
       "awayGames": 47,
       "firstGame": "2024-10-08T19:00:00.000Z",
-      "lastGame": "2025-10-17T20:00:00.000Z"
+      "lastGame": "2025-10-17T20:00:00.000Z",
+      "backToBacks": 16,
+      "averageRestDays": 3.94,
+      "longestHomeStand": 5,
+      "longestRoadTrip": 6
     },
     {
       "teamId": "1610612755",
@@ -179,7 +187,11 @@
       "homeGames": 44,
       "awayGames": 46,
       "firstGame": "2024-10-07T19:00:00.000Z",
-      "lastGame": "2025-10-04T11:00:00.000Z"
+      "lastGame": "2025-10-04T11:00:00.000Z",
+      "backToBacks": 15,
+      "averageRestDays": 4.06,
+      "longestHomeStand": 6,
+      "longestRoadTrip": 6
     },
     {
       "teamId": "1610612756",
@@ -192,7 +204,11 @@
       "homeGames": 44,
       "awayGames": 46,
       "firstGame": "2024-10-06T21:30:00.000Z",
-      "lastGame": "2025-10-12T07:00:00.000Z"
+      "lastGame": "2025-10-12T07:00:00.000Z",
+      "backToBacks": 15,
+      "averageRestDays": 4.16,
+      "longestHomeStand": 6,
+      "longestRoadTrip": 5
     },
     {
       "teamId": "1610612752",
@@ -205,7 +221,11 @@
       "homeGames": 54,
       "awayGames": 53,
       "firstGame": "2024-10-06T17:00:00.000Z",
-      "lastGame": "2025-10-04T11:00:00.000Z"
+      "lastGame": "2025-10-04T11:00:00.000Z",
+      "backToBacks": 15,
+      "averageRestDays": 3.42,
+      "longestHomeStand": 5,
+      "longestRoadTrip": 5
     },
     {
       "teamId": "1610612744",
@@ -218,7 +238,11 @@
       "homeGames": 50,
       "awayGames": 52,
       "firstGame": "2024-10-05T19:00:00.000Z",
-      "lastGame": "2025-10-12T21:30:00.000Z"
+      "lastGame": "2025-10-12T21:30:00.000Z",
+      "backToBacks": 14,
+      "averageRestDays": 3.68,
+      "longestHomeStand": 7,
+      "longestRoadTrip": 7
     },
     {
       "teamId": "1610612763",
@@ -231,7 +255,11 @@
       "homeGames": 46,
       "awayGames": 48,
       "firstGame": "2024-10-07T20:00:00.000Z",
-      "lastGame": "2025-10-17T20:00:00.000Z"
+      "lastGame": "2025-10-17T20:00:00.000Z",
+      "backToBacks": 15,
+      "averageRestDays": 4.03,
+      "longestHomeStand": 5,
+      "longestRoadTrip": 5
     },
     {
       "teamId": "1610612758",
@@ -244,7 +272,11 @@
       "homeGames": 44,
       "awayGames": 45,
       "firstGame": "2024-10-09T22:30:00.000Z",
-      "lastGame": "2025-10-17T22:30:00.000Z"
+      "lastGame": "2025-10-17T22:30:00.000Z",
+      "backToBacks": 16,
+      "averageRestDays": 4.24,
+      "longestHomeStand": 7,
+      "longestRoadTrip": 6
     },
     {
       "teamId": "1610612751",
@@ -257,7 +289,11 @@
       "homeGames": 44,
       "awayGames": 44,
       "firstGame": "2024-10-08T22:30:00.000Z",
-      "lastGame": "2025-10-12T07:00:00.000Z"
+      "lastGame": "2025-10-12T07:00:00.000Z",
+      "backToBacks": 15,
+      "averageRestDays": 4.23,
+      "longestHomeStand": 6,
+      "longestRoadTrip": 6
     },
     {
       "teamId": "1610612759",
@@ -270,7 +306,11 @@
       "homeGames": 44,
       "awayGames": 44,
       "firstGame": "2024-10-07T20:00:00.000Z",
-      "lastGame": "2025-10-08T19:30:00.000Z"
+      "lastGame": "2025-10-08T19:30:00.000Z",
+      "backToBacks": 15,
+      "averageRestDays": 4.21,
+      "longestHomeStand": 7,
+      "longestRoadTrip": 6
     },
     {
       "teamId": "1610612762",
@@ -283,7 +323,11 @@
       "homeGames": 44,
       "awayGames": 44,
       "firstGame": "2024-10-04T21:00:00.000Z",
-      "lastGame": "2025-04-13T15:30:00.000Z"
+      "lastGame": "2025-04-13T15:30:00.000Z",
+      "backToBacks": 15,
+      "averageRestDays": 2.19,
+      "longestHomeStand": 8,
+      "longestRoadTrip": 5
     },
     {
       "teamId": "1610612760",
@@ -296,7 +340,11 @@
       "homeGames": 58,
       "awayGames": 52,
       "firstGame": "2024-10-07T20:00:00.000Z",
-      "lastGame": "2025-06-22T20:00:00.000Z"
+      "lastGame": "2025-06-22T20:00:00.000Z",
+      "backToBacks": 16,
+      "averageRestDays": 2.37,
+      "longestHomeStand": 6,
+      "longestRoadTrip": 4
     },
     {
       "teamId": "1610612750",
@@ -309,7 +357,11 @@
       "homeGames": 50,
       "awayGames": 52,
       "firstGame": "2024-10-04T22:30:00.000Z",
-      "lastGame": "2025-05-28T20:30:00.000Z"
+      "lastGame": "2025-05-28T20:30:00.000Z",
+      "backToBacks": 15,
+      "averageRestDays": 2.34,
+      "longestHomeStand": 5,
+      "longestRoadTrip": 5
     },
     {
       "teamId": "1610612743",
@@ -322,7 +374,11 @@
       "homeGames": 51,
       "awayGames": 50,
       "firstGame": "2024-10-04T12:00:00.000Z",
-      "lastGame": "2025-05-18T15:30:00.000Z"
+      "lastGame": "2025-05-18T15:30:00.000Z",
+      "backToBacks": 15,
+      "averageRestDays": 2.26,
+      "longestHomeStand": 5,
+      "longestRoadTrip": 5
     },
     {
       "teamId": "1610612738",
@@ -335,7 +391,11 @@
       "homeGames": 50,
       "awayGames": 48,
       "firstGame": "2024-10-04T12:00:00.000Z",
-      "lastGame": "2025-05-16T20:00:00.000Z"
+      "lastGame": "2025-05-16T20:00:00.000Z",
+      "backToBacks": 14,
+      "averageRestDays": 2.31,
+      "longestHomeStand": 7,
+      "longestRoadTrip": 6
     },
     {
       "teamId": "1610612746",
@@ -348,7 +408,11 @@
       "homeGames": 49,
       "awayGames": 45,
       "firstGame": "2024-10-05T19:00:00.000Z",
-      "lastGame": "2025-05-03T19:30:00.000Z"
+      "lastGame": "2025-05-03T19:30:00.000Z",
+      "backToBacks": 16,
+      "averageRestDays": 2.26,
+      "longestHomeStand": 6,
+      "longestRoadTrip": 7
     },
     {
       "teamId": "1610612765",
@@ -361,7 +425,11 @@
       "homeGames": 47,
       "awayGames": 46,
       "firstGame": "2024-10-06T20:00:00.000Z",
-      "lastGame": "2025-05-01T19:30:00.000Z"
+      "lastGame": "2025-05-01T19:30:00.000Z",
+      "backToBacks": 15,
+      "averageRestDays": 2.25,
+      "longestHomeStand": 6,
+      "longestRoadTrip": 5
     },
     {
       "teamId": "1610612749",
@@ -374,7 +442,11 @@
       "homeGames": 46,
       "awayGames": 46,
       "firstGame": "2024-10-06T20:00:00.000Z",
-      "lastGame": "2025-10-06T19:30:00.000Z"
+      "lastGame": "2025-10-06T19:30:00.000Z",
+      "backToBacks": 15,
+      "averageRestDays": 4.01,
+      "longestHomeStand": 4,
+      "longestRoadTrip": 5
     },
     {
       "teamId": "1610612742",
@@ -387,7 +459,11 @@
       "homeGames": 43,
       "awayGames": 46,
       "firstGame": "2024-10-07T20:00:00.000Z",
-      "lastGame": "2025-10-15T22:00:00.000Z"
+      "lastGame": "2025-10-15T22:00:00.000Z",
+      "backToBacks": 13,
+      "averageRestDays": 4.24,
+      "longestHomeStand": 5,
+      "longestRoadTrip": 5
     },
     {
       "teamId": "1610612741",
@@ -400,7 +476,11 @@
       "homeGames": 45,
       "awayGames": 43,
       "firstGame": "2024-10-08T19:00:00.000Z",
-      "lastGame": "2025-04-16T19:30:00.000Z"
+      "lastGame": "2025-04-16T19:30:00.000Z",
+      "backToBacks": 13,
+      "averageRestDays": 2.18,
+      "longestHomeStand": 5,
+      "longestRoadTrip": 6
     },
     {
       "teamId": "1610612766",
@@ -413,7 +493,11 @@
       "homeGames": 43,
       "awayGames": 44,
       "firstGame": "2024-10-06T17:00:00.000Z",
-      "lastGame": "2025-04-13T13:00:00.000Z"
+      "lastGame": "2025-04-13T13:00:00.000Z",
+      "backToBacks": 13,
+      "averageRestDays": 2.2,
+      "longestHomeStand": 9,
+      "longestRoadTrip": 8
     },
     {
       "teamId": "1610612740",
@@ -426,7 +510,11 @@
       "homeGames": 44,
       "awayGames": 43,
       "firstGame": "2024-10-07T13:30:00.000Z",
-      "lastGame": "2025-10-05T02:30:00.000Z"
+      "lastGame": "2025-10-05T02:30:00.000Z",
+      "backToBacks": 16,
+      "averageRestDays": 4.22,
+      "longestHomeStand": 5,
+      "longestRoadTrip": 4
     },
     {
       "teamId": "1610612761",
@@ -439,7 +527,11 @@
       "homeGames": 43,
       "awayGames": 44,
       "firstGame": "2024-10-06T19:30:00.000Z",
-      "lastGame": "2025-04-13T15:30:00.000Z"
+      "lastGame": "2025-04-13T15:30:00.000Z",
+      "backToBacks": 15,
+      "averageRestDays": 2.2,
+      "longestHomeStand": 5,
+      "longestRoadTrip": 5
     },
     {
       "teamId": "1610612764",
@@ -452,7 +544,11 @@
       "homeGames": 43,
       "awayGames": 44,
       "firstGame": "2024-10-06T19:30:00.000Z",
-      "lastGame": "2025-04-13T13:00:00.000Z"
+      "lastGame": "2025-04-13T13:00:00.000Z",
+      "backToBacks": 16,
+      "averageRestDays": 2.19,
+      "longestHomeStand": 5,
+      "longestRoadTrip": 7
     },
     {
       "teamId": "1610612754",
@@ -465,7 +561,11 @@
       "homeGames": 54,
       "awayGames": 55,
       "firstGame": "2024-10-08T19:30:00.000Z",
-      "lastGame": "2025-06-22T20:00:00.000Z"
+      "lastGame": "2025-06-22T20:00:00.000Z",
+      "backToBacks": 14,
+      "averageRestDays": 2.38,
+      "longestHomeStand": 5,
+      "longestRoadTrip": 4
     },
     {
       "teamId": "1610612739",
@@ -478,7 +578,11 @@
       "homeGames": 48,
       "awayGames": 47,
       "firstGame": "2024-10-08T19:00:00.000Z",
-      "lastGame": "2025-05-13T19:00:00.000Z"
+      "lastGame": "2025-05-13T19:00:00.000Z",
+      "backToBacks": 16,
+      "averageRestDays": 2.31,
+      "longestHomeStand": 4,
+      "longestRoadTrip": 5
     },
     {
       "teamId": "1610612745",
@@ -491,7 +595,11 @@
       "homeGames": 47,
       "awayGames": 46,
       "firstGame": "2024-10-07T21:00:00.000Z",
-      "lastGame": "2025-05-04T20:30:00.000Z"
+      "lastGame": "2025-05-04T20:30:00.000Z",
+      "backToBacks": 16,
+      "averageRestDays": 2.27,
+      "longestHomeStand": 6,
+      "longestRoadTrip": 4
     },
     {
       "teamId": "1610612737",
@@ -504,7 +612,11 @@
       "homeGames": 43,
       "awayGames": 45,
       "firstGame": "2024-10-08T19:30:00.000Z",
-      "lastGame": "2025-04-18T19:00:00.000Z"
+      "lastGame": "2025-04-18T19:00:00.000Z",
+      "backToBacks": 17,
+      "averageRestDays": 2.21,
+      "longestHomeStand": 6,
+      "longestRoadTrip": 6
     },
     {
       "teamId": "1610612757",
@@ -517,7 +629,11 @@
       "homeGames": 43,
       "awayGames": 43,
       "firstGame": "2024-10-11T22:30:00.000Z",
-      "lastGame": "2025-04-13T15:30:00.000Z"
+      "lastGame": "2025-04-13T15:30:00.000Z",
+      "backToBacks": 13,
+      "averageRestDays": 2.16,
+      "longestHomeStand": 7,
+      "longestRoadTrip": 7
     },
     {
       "teamId": "1610612753",
@@ -530,7 +646,11 @@
       "homeGames": 45,
       "awayGames": 46,
       "firstGame": "2024-10-07T13:30:00.000Z",
-      "lastGame": "2025-04-29T20:30:00.000Z"
+      "lastGame": "2025-04-29T20:30:00.000Z",
+      "backToBacks": 13,
+      "averageRestDays": 2.27,
+      "longestHomeStand": 7,
+      "longestRoadTrip": 6
     },
     {
       "teamId": "15020",
@@ -543,7 +663,11 @@
       "homeGames": 0,
       "awayGames": 3,
       "firstGame": "2024-10-04T21:00:00.000Z",
-      "lastGame": "2024-10-10T20:00:00.000Z"
+      "lastGame": "2024-10-10T20:00:00.000Z",
+      "backToBacks": 0,
+      "averageRestDays": 2.98,
+      "longestHomeStand": 0,
+      "longestRoadTrip": 3
     },
     {
       "teamId": "15016",
@@ -556,7 +680,11 @@
       "homeGames": 0,
       "awayGames": 1,
       "firstGame": "2025-10-03T05:30:00.000Z",
-      "lastGame": "2025-10-03T05:30:00.000Z"
+      "lastGame": "2025-10-03T05:30:00.000Z",
+      "backToBacks": 0,
+      "averageRestDays": null,
+      "longestHomeStand": 0,
+      "longestRoadTrip": 1
     },
     {
       "teamId": "15025",
@@ -569,7 +697,11 @@
       "homeGames": 0,
       "awayGames": 1,
       "firstGame": "2024-10-16T22:00:00.000Z",
-      "lastGame": "2024-10-16T22:00:00.000Z"
+      "lastGame": "2024-10-16T22:00:00.000Z",
+      "backToBacks": 0,
+      "averageRestDays": null,
+      "longestHomeStand": 0,
+      "longestRoadTrip": 1
     },
     {
       "teamId": "50013",
@@ -582,7 +714,11 @@
       "homeGames": 0,
       "awayGames": 1,
       "firstGame": "2025-10-05T02:30:00.000Z",
-      "lastGame": "2025-10-05T02:30:00.000Z"
+      "lastGame": "2025-10-05T02:30:00.000Z",
+      "backToBacks": 0,
+      "averageRestDays": null,
+      "longestHomeStand": 0,
+      "longestRoadTrip": 1
     },
     {
       "teamId": "0",
@@ -595,7 +731,11 @@
       "homeGames": 2,
       "awayGames": 2,
       "firstGame": "2024-12-17T20:30:00.000Z",
-      "lastGame": "2025-02-16T00:00:00.000Z"
+      "lastGame": "2025-02-16T00:00:00.000Z",
+      "backToBacks": 0,
+      "averageRestDays": 60.15,
+      "longestHomeStand": 1,
+      "longestRoadTrip": 1
     }
   ],
   "specialGames": [
@@ -2795,6 +2935,121 @@
       "seriesText": "Neutral Site",
       "hometeamId": "1610612756",
       "awayteamId": "1610612751"
+    }
+  ],
+  "restSummary": {
+    "totalIntervals": 2779,
+    "averageRestDays": 3.0369062612450537,
+    "backToBackIntervals": 446
+  },
+  "restBuckets": [
+    {
+      "label": "0 days",
+      "intervals": 446
+    },
+    {
+      "label": "1 day",
+      "intervals": 1664
+    },
+    {
+      "label": "2 days",
+      "intervals": 427
+    },
+    {
+      "label": "3+ days",
+      "intervals": 242
+    }
+  ],
+  "backToBackLeaders": [
+    {
+      "teamId": "1610612737",
+      "name": "Atlanta Hawks",
+      "abbreviation": "ATL",
+      "backToBacks": 17,
+      "averageRestDays": 2.21,
+      "longestHomeStand": 6,
+      "longestRoadTrip": 6
+    },
+    {
+      "teamId": "1610612739",
+      "name": "Cleveland Cavaliers",
+      "abbreviation": "CLE",
+      "backToBacks": 16,
+      "averageRestDays": 2.31,
+      "longestHomeStand": 4,
+      "longestRoadTrip": 5
+    },
+    {
+      "teamId": "1610612745",
+      "name": "Houston Rockets",
+      "abbreviation": "HOU",
+      "backToBacks": 16,
+      "averageRestDays": 2.27,
+      "longestHomeStand": 6,
+      "longestRoadTrip": 4
+    },
+    {
+      "teamId": "1610612746",
+      "name": "Los Angeles Clippers",
+      "abbreviation": "LAC",
+      "backToBacks": 16,
+      "averageRestDays": 2.26,
+      "longestHomeStand": 6,
+      "longestRoadTrip": 7
+    },
+    {
+      "teamId": "1610612748",
+      "name": "Miami Heat",
+      "abbreviation": "MIA",
+      "backToBacks": 16,
+      "averageRestDays": 3.94,
+      "longestHomeStand": 5,
+      "longestRoadTrip": 6
+    },
+    {
+      "teamId": "1610612740",
+      "name": "New Orleans Pelicans",
+      "abbreviation": "NOP",
+      "backToBacks": 16,
+      "averageRestDays": 4.22,
+      "longestHomeStand": 5,
+      "longestRoadTrip": 4
+    },
+    {
+      "teamId": "1610612760",
+      "name": "Oklahoma City Thunder",
+      "abbreviation": "OKC",
+      "backToBacks": 16,
+      "averageRestDays": 2.37,
+      "longestHomeStand": 6,
+      "longestRoadTrip": 4
+    },
+    {
+      "teamId": "1610612758",
+      "name": "Sacramento Kings",
+      "abbreviation": "SAC",
+      "backToBacks": 16,
+      "averageRestDays": 4.24,
+      "longestHomeStand": 7,
+      "longestRoadTrip": 6
+    },
+    {
+      "teamId": "1610612764",
+      "name": "Washington Wizards",
+      "abbreviation": "WAS",
+      "backToBacks": 16,
+      "averageRestDays": 2.19,
+      "longestHomeStand": 5,
+      "longestRoadTrip": 7
+    },
+    {
+      "teamId": "1610612751",
+      "name": "Brooklyn Nets",
+      "abbreviation": "BKN",
+      "backToBacks": 15,
+      "averageRestDays": 4.23,
+      "longestHomeStand": 6,
+      "longestRoadTrip": 6
     }
   ]
 }
