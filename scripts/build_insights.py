@@ -21,16 +21,26 @@ import json
 import math
 import shutil
 import subprocess
+import tempfile
 import zipfile
-from collections import Counter
+from collections import Counter, defaultdict
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Iterator
 
+import atexit
+
+try:  # Optional dependency used when the 7z CLI is unavailable.
+    import py7zr  # type: ignore
+except Exception:  # pragma: no cover - fallback only triggered when module missing
+    py7zr = None
+
 
 ROOT = Path(__file__).resolve().parents[1]
 PUBLIC_DATA_DIR = ROOT / "public" / "data"
+
+_TEMP_PLAYER_STATS_DIR: Path | None = None
 
 
 # ---------------------------------------------------------------------------
@@ -127,13 +137,54 @@ class PlayerStatisticsStreamError(RuntimeError):
     """Raised when the PlayerStatistics archive cannot be streamed."""
 
 
-def iter_player_statistics_rows() -> Iterator[dict[str, str]]:
-    """Yield rows from ``PlayerStatistics.7z`` using the ``7z`` CLI.
+def _cleanup_temp_dir() -> None:
+    global _TEMP_PLAYER_STATS_DIR
+    if _TEMP_PLAYER_STATS_DIR and _TEMP_PLAYER_STATS_DIR.exists():
+        shutil.rmtree(_TEMP_PLAYER_STATS_DIR, ignore_errors=True)
+    _TEMP_PLAYER_STATS_DIR = None
 
-    The dataset ships as a 7z archive to stay within repository size
-    constraints.  The script shells out to the ``7z`` binary to stream the
-    extracted CSV to stdout, avoiding the need to unpack hundreds of megabytes
-    onto disk.
+
+def _ensure_player_statistics_csv() -> Path:
+    """Extract ``PlayerStatistics.csv`` to a temporary directory.
+
+    The helper caches the extraction for the lifetime of the process so the
+    heavy archive only needs to be unpacked once when the ``7z`` CLI is not
+    available.
+    """
+
+    global _TEMP_PLAYER_STATS_DIR
+    if _TEMP_PLAYER_STATS_DIR is not None and (_TEMP_PLAYER_STATS_DIR / "PlayerStatistics.csv").exists():
+        return _TEMP_PLAYER_STATS_DIR / "PlayerStatistics.csv"
+
+    if py7zr is None:
+        raise PlayerStatisticsStreamError(
+            "Unable to stream PlayerStatistics. Install the `p7zip-full` CLI or the `py7zr` Python package."
+        )
+
+    archive_path = ROOT / "PlayerStatistics.7z"
+    if not archive_path.exists():
+        raise PlayerStatisticsStreamError(
+            "PlayerStatistics.7z is missing. Ensure the archive is present before running the build script."
+        )
+
+    temp_dir = Path(tempfile.mkdtemp(prefix="playerstats_"))
+    with py7zr.SevenZipFile(archive_path, mode="r") as archive:
+        archive.extract(path=temp_dir, targets=["PlayerStatistics.csv"])
+
+    extracted_path = temp_dir / "PlayerStatistics.csv"
+    if not extracted_path.exists():
+        raise PlayerStatisticsStreamError("Failed to extract PlayerStatistics.csv from the archive using py7zr.")
+
+    _TEMP_PLAYER_STATS_DIR = temp_dir
+    atexit.register(_cleanup_temp_dir)
+    return extracted_path
+
+
+def iter_player_statistics_rows() -> Iterator[dict[str, str]]:
+    """Yield rows from ``PlayerStatistics.7z``.
+
+    The function prefers streaming via the ``7z`` CLI for speed. When the CLI
+    is unavailable, it falls back to extracting the CSV with ``py7zr``.
     """
 
     archive_path = ROOT / "PlayerStatistics.7z"
@@ -147,30 +198,34 @@ def iter_player_statistics_rows() -> Iterator[dict[str, str]]:
         if shutil.which(candidate):
             binary = candidate
             break
-    if binary is None:
-        raise PlayerStatisticsStreamError(
-            "The 7z utility is required to stream PlayerStatistics. Install it with `sudo apt-get install -y p7zip-full`."
+
+    if binary is not None:
+        process = subprocess.Popen(
+            [binary, "x", "-so", str(archive_path), "PlayerStatistics.csv"],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=False,
         )
 
-    process = subprocess.Popen(
-        [binary, "x", "-so", str(archive_path), "PlayerStatistics.csv"],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        text=False,
-    )
+        assert process.stdout is not None
+        with io.TextIOWrapper(process.stdout, encoding="utf-8", newline="") as handle:
+            reader = csv.DictReader(handle)
+            for row in reader:
+                yield row
 
-    assert process.stdout is not None
-    with io.TextIOWrapper(process.stdout, encoding="utf-8", newline="") as handle:
-        reader = csv.DictReader(handle)
+        stderr_output = process.stderr.read().decode("utf-8", errors="ignore") if process.stderr else ""
+        returncode = process.wait()
+        if returncode != 0:
+            raise PlayerStatisticsStreamError(
+                f"Failed to stream PlayerStatistics.csv from the 7z archive (exit code {returncode}).\n{stderr_output.strip()}"
+            )
+        return
+
+    csv_path = _ensure_player_statistics_csv()
+    with csv_path.open(newline="", encoding="utf-8") as csvfile:
+        reader = csv.DictReader(csvfile)
         for row in reader:
             yield row
-
-    stderr_output = process.stderr.read().decode("utf-8", errors="ignore") if process.stderr else ""
-    returncode = process.wait()
-    if returncode != 0:
-        raise PlayerStatisticsStreamError(
-            f"Failed to stream PlayerStatistics.csv from the 7z archive (exit code {returncode}).\n{stderr_output.strip()}"
-        )
 
 
 # ---------------------------------------------------------------------------
@@ -651,6 +706,270 @@ def build_player_leaders_snapshot() -> None:
 
 
 # ---------------------------------------------------------------------------
+# Player season insight snapshot
+
+
+def build_player_season_insights_snapshot() -> None:
+    season_player_totals: dict[tuple[str, int], dict[str, object]] = {}
+    player_meta: dict[str, dict[str, object]] = {}
+    triple_double_counts: Counter[str] = Counter()
+    triple_double_seasons: defaultdict[str, set[int]] = defaultdict(set)
+    season_totals: defaultdict[int, dict[str, float]] = defaultdict(
+        lambda: {"games": 0.0, "points": 0.0, "assists": 0.0, "rebounds": 0.0, "minutes": 0.0}
+    )
+    season_triple_counts: Counter[int] = Counter()
+    player_best_triple: dict[str, dict[str, object]] = {}
+    total_rows = 0
+    earliest_season: int | None = None
+    latest_season: int | None = None
+
+    for row in iter_player_statistics_rows():
+        total_rows += 1
+        person_id = row.get("personId") or ""
+        if not person_id:
+            continue
+
+        season_year = _year_from_date(row.get("gameDate"))
+        if season_year is None:
+            continue
+
+        if earliest_season is None or season_year < earliest_season:
+            earliest_season = season_year
+        if latest_season is None or season_year > latest_season:
+            latest_season = season_year
+
+        first_name = row.get("firstName", "").strip()
+        last_name = row.get("lastName", "").strip()
+        team_name = f"{row.get('playerteamCity', '').strip()} {row.get('playerteamName', '').strip()}".strip()
+
+        meta = player_meta.setdefault(
+            person_id,
+            {
+                "personId": person_id,
+                "firstName": first_name,
+                "lastName": last_name,
+                "teams": set(),
+                "firstSeason": season_year,
+                "lastSeason": season_year,
+            },
+        )
+        if first_name and not meta.get("firstName"):
+            meta["firstName"] = first_name
+        if last_name and not meta.get("lastName"):
+            meta["lastName"] = last_name
+
+        if meta.get("firstSeason") is None or (isinstance(meta.get("firstSeason"), int) and season_year < meta["firstSeason"]):
+            meta["firstSeason"] = season_year
+        if meta.get("lastSeason") is None or (isinstance(meta.get("lastSeason"), int) and season_year > meta["lastSeason"]):
+            meta["lastSeason"] = season_year
+
+        if team_name:
+            meta["teams"].add(team_name)
+
+        key = (person_id, season_year)
+        totals = season_player_totals.setdefault(
+            key,
+            {
+                "personId": person_id,
+                "season": season_year,
+                "games": 0,
+                "points": 0.0,
+                "assists": 0.0,
+                "rebounds": 0.0,
+                "minutes": 0.0,
+                "teams": set(),
+                "tripleDoubles": 0,
+            },
+        )
+
+        points = _to_float(row.get("points")) or 0.0
+        assists = _to_float(row.get("assists")) or 0.0
+        rebounds = _to_float(row.get("reboundsTotal")) or 0.0
+        minutes = _to_float(row.get("numMinutes")) or 0.0
+
+        totals["games"] = int(totals.get("games", 0)) + 1
+        totals["points"] = float(totals.get("points", 0.0)) + points
+        totals["assists"] = float(totals.get("assists", 0.0)) + assists
+        totals["rebounds"] = float(totals.get("rebounds", 0.0)) + rebounds
+        totals["minutes"] = float(totals.get("minutes", 0.0)) + minutes
+        if team_name:
+            totals["teams"].add(team_name)
+
+        season_totals_entry = season_totals[season_year]
+        season_totals_entry["games"] += 1
+        season_totals_entry["points"] += points
+        season_totals_entry["assists"] += assists
+        season_totals_entry["rebounds"] += rebounds
+        season_totals_entry["minutes"] += minutes
+
+        triple_double = points >= 10 and assists >= 10 and rebounds >= 10
+        if triple_double:
+            totals["tripleDoubles"] = int(totals.get("tripleDoubles", 0)) + 1
+            triple_double_counts[person_id] += 1
+            triple_double_seasons[person_id].add(season_year)
+            season_triple_counts[season_year] += 1
+
+    season_records: list[dict[str, object]] = []
+    for (person_id, season_year), totals in season_player_totals.items():
+        games = int(totals.get("games", 0))
+        if games == 0:
+            continue
+
+        meta = player_meta.get(person_id, {})
+        name = f"{meta.get('firstName', '')} {meta.get('lastName', '')}".strip()
+        teams = sorted(totals.get("teams", set()))
+
+        record = {
+            "personId": person_id,
+            "name": name or person_id,
+            "season": season_year,
+            "games": games,
+            "teams": teams,
+            "pointsPerGame": round(float(totals.get("points", 0.0)) / games, 2),
+            "assistsPerGame": round(float(totals.get("assists", 0.0)) / games, 2),
+            "reboundsPerGame": round(float(totals.get("rebounds", 0.0)) / games, 2),
+            "minutesPerGame": round(float(totals.get("minutes", 0.0)) / games, 1),
+            "totalPoints": round(float(totals.get("points", 0.0)), 1),
+            "totalAssists": round(float(totals.get("assists", 0.0)), 1),
+            "totalRebounds": round(float(totals.get("rebounds", 0.0)), 1),
+            "tripleDoubles": int(totals.get("tripleDoubles", 0)),
+        }
+
+        season_records.append(record)
+
+        if record["tripleDoubles"] > 0:
+            best = player_best_triple.get(person_id)
+            if not best or record["tripleDoubles"] > best["tripleDoubles"]:
+                player_best_triple[person_id] = {
+                    "season": season_year,
+                    "tripleDoubles": record["tripleDoubles"],
+                }
+
+    qualified = [record for record in season_records if record["games"] >= 40]
+
+    scoring_leaders = sorted(
+        qualified,
+        key=lambda item: (item["pointsPerGame"], item["totalPoints"]),
+        reverse=True,
+    )[:12]
+
+    assist_leaders = sorted(
+        qualified,
+        key=lambda item: (item["assistsPerGame"], item["totalAssists"]),
+        reverse=True,
+    )[:12]
+
+    rebound_leaders = sorted(
+        qualified,
+        key=lambda item: (item["reboundsPerGame"], item["totalRebounds"]),
+        reverse=True,
+    )[:12]
+
+    triple_double_leaders = []
+    for person_id, count in triple_double_counts.most_common(12):
+        meta = player_meta.get(person_id, {})
+        name = f"{meta.get('firstName', '')} {meta.get('lastName', '')}".strip()
+        triple_double_leaders.append(
+            {
+                "personId": person_id,
+                "name": name or person_id,
+                "tripleDoubles": int(count),
+                "seasonsWithTripleDouble": len(triple_double_seasons.get(person_id, set())),
+                "careerSpan": {
+                    "start": meta.get("firstSeason"),
+                    "end": meta.get("lastSeason"),
+                },
+                "bestSeason": player_best_triple.get(person_id),
+            }
+        )
+
+    season_trends = []
+    for season_year, totals in sorted(season_totals.items(), key=lambda item: item[0]):
+        games = totals["games"] or 1.0
+        season_trends.append(
+            {
+                "season": season_year,
+                "playerGames": int(games),
+                "avgPoints": round(totals["points"] / games, 2),
+                "avgAssists": round(totals["assists"] / games, 2),
+                "avgRebounds": round(totals["rebounds"] / games, 2),
+                "avgMinutes": round(totals["minutes"] / games, 2),
+                "tripleDoubles": int(season_triple_counts.get(season_year, 0)),
+            }
+        )
+
+    overall_games = sum(entry["games"] for entry in season_totals.values())
+    overall_points = sum(entry["points"] for entry in season_totals.values())
+    overall_assists = sum(entry["assists"] for entry in season_totals.values())
+    overall_rebounds = sum(entry["rebounds"] for entry in season_totals.values())
+
+    totals_payload = {
+        "playerGameRows": total_rows,
+        "playersTracked": len(player_meta),
+        "seasonsTracked": len(season_totals),
+        "seasonCoverage": {"start": earliest_season, "end": latest_season},
+        "tripleDoubleGames": int(sum(triple_double_counts.values())),
+        "playersWithTripleDouble": sum(1 for count in triple_double_counts.values() if count > 0),
+        "averagePlayerLine": {
+            "points": round(overall_points / overall_games, 2) if overall_games else 0.0,
+            "assists": round(overall_assists / overall_games, 2) if overall_games else 0.0,
+            "rebounds": round(overall_rebounds / overall_games, 2) if overall_games else 0.0,
+        },
+    }
+
+    if season_triple_counts:
+        season, count = season_triple_counts.most_common(1)[0]
+        totals_payload["mostTripleDoubleSeason"] = {"season": season, "tripleDoubles": int(count)}
+
+    payload = {
+        "generatedAt": _timestamp(),
+        "totals": totals_payload,
+        "seasonAverages": {
+            "points": [
+                {
+                    "personId": record["personId"],
+                    "name": record["name"],
+                    "season": record["season"],
+                    "games": record["games"],
+                    "pointsPerGame": record["pointsPerGame"],
+                    "totalPoints": record["totalPoints"],
+                    "teams": record["teams"],
+                }
+                for record in scoring_leaders
+            ],
+            "assists": [
+                {
+                    "personId": record["personId"],
+                    "name": record["name"],
+                    "season": record["season"],
+                    "games": record["games"],
+                    "assistsPerGame": record["assistsPerGame"],
+                    "totalAssists": record["totalAssists"],
+                    "teams": record["teams"],
+                }
+                for record in assist_leaders
+            ],
+            "rebounds": [
+                {
+                    "personId": record["personId"],
+                    "name": record["name"],
+                    "season": record["season"],
+                    "games": record["games"],
+                    "reboundsPerGame": record["reboundsPerGame"],
+                    "totalRebounds": record["totalRebounds"],
+                    "teams": record["teams"],
+                }
+                for record in rebound_leaders
+            ],
+        },
+        "tripleDoubleLeaders": triple_double_leaders,
+        "seasonTrends": season_trends,
+    }
+
+    _write_json("player_season_insights.json", payload)
+
+
+# ---------------------------------------------------------------------------
 
 
 def main() -> None:
@@ -658,6 +977,7 @@ def main() -> None:
     build_games_snapshot()
     build_team_performance_snapshot()
     build_player_leaders_snapshot()
+    build_player_season_insights_snapshot()
 
 
 if __name__ == "__main__":

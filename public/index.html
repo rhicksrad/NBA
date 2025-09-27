@@ -453,6 +453,100 @@
       </div>
     </section>
 
+    <section aria-labelledby="season-heading">
+      <h2 id="season-heading">Player season performance lens</h2>
+      <p id="season-note" class="data-note">Loading season insights…</p>
+      <div class="summary-cards" id="season-summary" aria-live="polite"></div>
+
+      <div class="section-grid">
+        <div class="panel panel-wide">
+          <h3>Season scoring pace</h3>
+          <canvas id="season-trends-chart" role="img" aria-label="Multi-series chart showing average player stat lines and triple-double counts by season"></canvas>
+          <p class="data-note" id="season-trends-note">Tracking average player points, assists, rebounds, and triple-double volume across league history.</p>
+        </div>
+
+        <div class="panel">
+          <h3>Top scoring seasons (≥ 40 games)</h3>
+          <div class="table-wrapper" role="region" aria-live="polite">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">Season</th>
+                  <th scope="col">Player</th>
+                  <th scope="col">PPG</th>
+                  <th scope="col">Games</th>
+                  <th scope="col">Total PTS</th>
+                </tr>
+              </thead>
+              <tbody id="season-scoring-body">
+                <tr><td colspan="5">Loading season scoring leaders…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>Top assist seasons (≥ 40 games)</h3>
+          <div class="table-wrapper" role="region" aria-live="polite">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">Season</th>
+                  <th scope="col">Player</th>
+                  <th scope="col">APG</th>
+                  <th scope="col">Games</th>
+                  <th scope="col">Total AST</th>
+                </tr>
+              </thead>
+              <tbody id="season-assist-body">
+                <tr><td colspan="5">Loading season assist leaders…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>Top rebound seasons (≥ 40 games)</h3>
+          <div class="table-wrapper" role="region" aria-live="polite">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">Season</th>
+                  <th scope="col">Player</th>
+                  <th scope="col">RPG</th>
+                  <th scope="col">Games</th>
+                  <th scope="col">Total REB</th>
+                </tr>
+              </thead>
+              <tbody id="season-rebound-body">
+                <tr><td colspan="5">Loading season rebound leaders…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>Triple-double leaders</h3>
+          <div class="table-wrapper" role="region" aria-live="polite">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">Player</th>
+                  <th scope="col">Triple-doubles</th>
+                  <th scope="col">Seasons</th>
+                  <th scope="col">Best season</th>
+                  <th scope="col">Career span</th>
+                </tr>
+              </thead>
+              <tbody id="season-triple-body">
+                <tr><td colspan="5">Loading triple-double leaders…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section aria-labelledby="games-heading">
       <h2 id="games-heading">Historic game spotlights</h2>
       <p id="games-note" class="data-note">Loading historical game insights…</p>
@@ -718,6 +812,7 @@
       historicGames: null,
       teamPerformance: null,
       playerLeaders: null,
+      playerSeasonInsights: null,
     };
 
     const dom = {
@@ -747,6 +842,14 @@
       playersDraftCanvas: document.getElementById('players-draft-chart'),
       playersDraftNote: document.getElementById('players-draft-note'),
       playersDraftDecadesBody: document.getElementById('players-draft-decades-body'),
+      seasonNote: document.getElementById('season-note'),
+      seasonSummary: document.getElementById('season-summary'),
+      seasonScoringBody: document.getElementById('season-scoring-body'),
+      seasonAssistBody: document.getElementById('season-assist-body'),
+      seasonReboundBody: document.getElementById('season-rebound-body'),
+      seasonTripleBody: document.getElementById('season-triple-body'),
+      seasonTrendsCanvas: document.getElementById('season-trends-chart'),
+      seasonTrendsNote: document.getElementById('season-trends-note'),
       gamesNote: document.getElementById('games-note'),
       gamesSummary: document.getElementById('games-summary'),
       gamesHighestBody: document.getElementById('games-highest-body'),
@@ -786,6 +889,7 @@
     let scheduleRestChart;
     let playersHeightChart;
     let playersDraftChart;
+    let seasonTrendsChart;
     let gamesDecadeChart;
 
     function formatNumber(value) {
@@ -798,6 +902,20 @@
         minimumFractionDigits: digits,
         maximumFractionDigits: digits,
       }).format(Number(value));
+    }
+
+    function formatCount(value) {
+      if (value === null || value === undefined || Number.isNaN(Number(value))) return '—';
+      return formatNumber(Math.round(Number(value)));
+    }
+
+    function formatSeasonSpan(start, end) {
+      if (start && end) {
+        return start === end ? `${start}` : `${start}–${end}`;
+      }
+      if (start) return `${start}`;
+      if (end) return `${end}`;
+      return '—';
     }
 
     function formatPercent(value, digits = 1) {
@@ -1428,6 +1546,224 @@
           playersDraftChart = null;
         }
       }
+    }
+
+    function renderSeasonLeaderTable(rows, body, config) {
+      if (!body) return;
+      if (!rows || rows.length === 0) {
+        body.innerHTML = `<tr><td colspan="5">${config.emptyMessage}</td></tr>`;
+        return;
+      }
+
+      const tableRows = rows
+        .map((row) => {
+          const seasonLabel = row.season ?? '—';
+          const teamMeta = row.teams && row.teams.length > 0
+            ? `<span class="tallest-meta">${row.teams.join(' / ')}</span>`
+            : '';
+          return `
+            <tr>
+              <td>${seasonLabel}</td>
+              <td><span class="team-name">${row.name}</span>${teamMeta}</td>
+              <td>${formatDecimal(row[config.perGameKey] ?? null, 2)}</td>
+              <td>${formatCount(row.games ?? null)}</td>
+              <td>${formatCount(row[config.totalKey] ?? null)}</td>
+            </tr>
+          `;
+        })
+        .join('');
+
+      body.innerHTML = tableRows;
+    }
+
+    function renderSeasonTripleLeaders(rows) {
+      if (!dom.seasonTripleBody) return;
+      if (!rows || rows.length === 0) {
+        dom.seasonTripleBody.innerHTML = '<tr><td colspan="5">No triple-double data available.</td></tr>';
+        return;
+      }
+
+      const tableRows = rows
+        .map((row) => {
+          const bestSeason = row.bestSeason
+            ? `${row.bestSeason.season ?? '—'} (${formatCount(row.bestSeason.tripleDoubles ?? null)})`
+            : '—';
+          const spanLabel = row.careerSpan ? formatSeasonSpan(row.careerSpan.start, row.careerSpan.end) : '—';
+          return `
+            <tr>
+              <td><span class="team-name">${row.name}</span></td>
+              <td>${formatCount(row.tripleDoubles ?? null)}</td>
+              <td>${formatCount(row.seasonsWithTripleDouble ?? null)}</td>
+              <td>${bestSeason}</td>
+              <td>${spanLabel}</td>
+            </tr>
+          `;
+        })
+        .join('');
+
+      dom.seasonTripleBody.innerHTML = tableRows;
+    }
+
+    function renderSeasonTrendsChart(trends) {
+      if (!dom.seasonTrendsCanvas) return;
+
+      if (!trends || trends.length === 0) {
+        if (seasonTrendsChart) {
+          seasonTrendsChart.destroy();
+          seasonTrendsChart = null;
+        }
+        dom.seasonTrendsNote.textContent = 'Season trend data unavailable.';
+        return;
+      }
+
+      if (!chartAvailable()) {
+        dom.seasonTrendsNote.textContent = 'Chart.js is unavailable, so the season trend visualization cannot be rendered.';
+        return;
+      }
+
+      const labels = trends.map((entry) => entry.season ?? '—');
+      const avgPoints = trends.map((entry) => entry.avgPoints ?? 0);
+      const avgAssists = trends.map((entry) => entry.avgAssists ?? 0);
+      const avgRebounds = trends.map((entry) => entry.avgRebounds ?? 0);
+      const tripleDoubles = trends.map((entry) => entry.tripleDoubles ?? 0);
+
+      if (seasonTrendsChart) {
+        seasonTrendsChart.destroy();
+        seasonTrendsChart = null;
+      }
+
+      seasonTrendsChart = new Chart(dom.seasonTrendsCanvas, {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [
+            {
+              label: 'Avg points',
+              data: avgPoints,
+              borderColor: 'rgba(23, 105, 170, 0.85)',
+              backgroundColor: 'rgba(23, 105, 170, 0.2)',
+              tension: 0.25,
+              fill: false,
+              yAxisID: 'y',
+            },
+            {
+              label: 'Avg assists',
+              data: avgAssists,
+              borderColor: 'rgba(34, 197, 94, 0.85)',
+              backgroundColor: 'rgba(34, 197, 94, 0.2)',
+              tension: 0.25,
+              fill: false,
+              yAxisID: 'y',
+            },
+            {
+              label: 'Avg rebounds',
+              data: avgRebounds,
+              borderColor: 'rgba(249, 115, 22, 0.85)',
+              backgroundColor: 'rgba(249, 115, 22, 0.2)',
+              tension: 0.25,
+              fill: false,
+              yAxisID: 'y',
+            },
+            {
+              type: 'bar',
+              label: 'Triple-double games',
+              data: tripleDoubles,
+              backgroundColor: 'rgba(148, 163, 184, 0.45)',
+              borderColor: 'rgba(148, 163, 184, 0.9)',
+              borderWidth: 1,
+              yAxisID: 'y1',
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: { mode: 'index', intersect: false },
+          scales: {
+            y: {
+              beginAtZero: true,
+              title: {
+                display: true,
+                text: 'Average per player game',
+              },
+            },
+            y1: {
+              position: 'right',
+              beginAtZero: true,
+              grid: { drawOnChartArea: false },
+              title: {
+                display: true,
+                text: 'Triple-double games',
+              },
+              ticks: { precision: 0 },
+            },
+          },
+          plugins: {
+            legend: { position: 'bottom' },
+          },
+        },
+      });
+    }
+
+    function renderPlayerSeasonInsights() {
+      const snapshot = state.playerSeasonInsights;
+      if (!snapshot) return;
+
+      const totals = snapshot.totals ?? {};
+      const cards = [];
+      cards.push({ label: 'Seasons tracked', value: formatCount(totals.seasonsTracked ?? null) });
+      cards.push({ label: 'Players tracked', value: formatCount(totals.playersTracked ?? null) });
+      cards.push({ label: 'Player game rows', value: formatCount(totals.playerGameRows ?? null) });
+      cards.push({ label: 'Triple-double games', value: formatCount(totals.tripleDoubleGames ?? null) });
+      if (totals.playersWithTripleDouble !== undefined) {
+        cards.push({ label: 'Players with a triple-double', value: formatCount(totals.playersWithTripleDouble) });
+      }
+      if (totals.mostTripleDoubleSeason) {
+        cards.push({
+          label: 'Peak triple-double season',
+          value: `${totals.mostTripleDoubleSeason.season ?? '—'} (${formatCount(totals.mostTripleDoubleSeason.tripleDoubles ?? null)})`,
+        });
+      }
+
+      dom.seasonSummary.innerHTML = cards
+        .map((card) => `
+          <div class="summary-card">
+            <h3>${card.label}</h3>
+            <p>${card.value}</p>
+          </div>
+        `)
+        .join('');
+
+      const coverage = totals.seasonCoverage ?? null;
+      if (coverage?.start && coverage?.end) {
+        dom.seasonNote.textContent = `Insights span seasons ${coverage.start} to ${coverage.end}.`;
+      } else {
+        dom.seasonNote.textContent = 'Season-level insights derived from PlayerStatistics.';
+      }
+
+      const averageLine = totals.averagePlayerLine ?? null;
+      if (averageLine) {
+        dom.seasonTrendsNote.textContent = `Average player game: ${formatDecimal(averageLine.points ?? null, 2)} pts · ${formatDecimal(averageLine.rebounds ?? null, 2)} reb · ${formatDecimal(averageLine.assists ?? null, 2)} ast.`;
+      }
+
+      renderSeasonLeaderTable(snapshot.seasonAverages?.points ?? [], dom.seasonScoringBody, {
+        emptyMessage: 'No season scoring leaders are available.',
+        perGameKey: 'pointsPerGame',
+        totalKey: 'totalPoints',
+      });
+      renderSeasonLeaderTable(snapshot.seasonAverages?.assists ?? [], dom.seasonAssistBody, {
+        emptyMessage: 'No season assist leaders are available.',
+        perGameKey: 'assistsPerGame',
+        totalKey: 'totalAssists',
+      });
+      renderSeasonLeaderTable(snapshot.seasonAverages?.rebounds ?? [], dom.seasonReboundBody, {
+        emptyMessage: 'No season rebound leaders are available.',
+        perGameKey: 'reboundsPerGame',
+        totalKey: 'totalRebounds',
+      });
+      renderSeasonTripleLeaders(snapshot.tripleDoubleLeaders ?? []);
+      renderSeasonTrendsChart(snapshot.seasonTrends ?? []);
+    }
 
       const tallest = snapshot.tallestPlayers ?? [];
       dom.playersTallestList.innerHTML = tallest.length > 0
@@ -1991,6 +2327,27 @@
       }
     }
 
+    async function loadPlayerSeasonInsights() {
+      try {
+        state.playerSeasonInsights = await fetchJson('data/player_season_insights.json', 'player season insight snapshot');
+        renderPlayerSeasonInsights();
+      } catch (error) {
+        console.error(error);
+        state.playerSeasonInsights = null;
+        dom.seasonSummary.innerHTML = '';
+        dom.seasonNote.textContent = 'Unable to load player season insights. Please refresh to try again.';
+        if (dom.seasonScoringBody) dom.seasonScoringBody.innerHTML = '<tr><td colspan="5">Season insights unavailable.</td></tr>';
+        if (dom.seasonAssistBody) dom.seasonAssistBody.innerHTML = '<tr><td colspan="5">Season insights unavailable.</td></tr>';
+        if (dom.seasonReboundBody) dom.seasonReboundBody.innerHTML = '<tr><td colspan="5">Season insights unavailable.</td></tr>';
+        if (dom.seasonTripleBody) dom.seasonTripleBody.innerHTML = '<tr><td colspan="5">Season insights unavailable.</td></tr>';
+        dom.seasonTrendsNote.textContent = 'Season trend visualization unavailable.';
+        if (seasonTrendsChart) {
+          seasonTrendsChart.destroy();
+          seasonTrendsChart = null;
+        }
+      }
+    }
+
     dom.search.addEventListener('input', () => applyFilters());
     dom.league.addEventListener('change', () => applyFilters());
     dom.seasonStart.addEventListener('change', () => applyFilters());
@@ -2000,6 +2357,7 @@
     loadData();
     loadSchedule();
     loadPlayersOverview();
+    loadPlayerSeasonInsights();
     loadHistoricGames();
     loadTeamPerformance();
     loadPlayerLeaders();
