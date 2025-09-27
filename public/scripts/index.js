@@ -1,4 +1,5 @@
 import { registerCharts, helpers } from './hub-charts.js';
+import { createTeamLogo } from './team-logos.js';
 
 const palette = {
   royal: '#1156d6',
@@ -224,13 +225,18 @@ function hydrateHero(teamData) {
 
     const body = document.createElement('div');
     body.className = 'power-board__content';
+    const identity = document.createElement('div');
+    identity.className = 'power-board__identity';
+    const teamLabel = entry.team ?? 'Team';
+    identity.appendChild(createTeamLogo(teamLabel, 'team-logo team-logo--medium'));
     const name = document.createElement('p');
     name.className = 'power-board__name';
-    name.textContent = entry.team;
+    name.textContent = teamLabel;
+    identity.appendChild(name);
     const note = document.createElement('p');
     note.className = 'power-board__note';
     note.textContent = entry.note;
-    body.append(name, note);
+    body.append(identity, note);
 
     const meta = document.createElement('div');
     meta.className = 'power-board__meta';
@@ -315,13 +321,28 @@ function renderPreseasonTour(openersData) {
           date.textContent = 'TBD';
         }
 
-        const team = document.createElement('h3');
-        team.className = 'tour-card__team';
-        team.textContent = game.teamName ?? 'Preseason opener';
+        const identity = document.createElement('div');
+        identity.className = 'tour-card__identity';
+        const teamLabel = game.teamName ?? 'Preseason opener';
+        identity.appendChild(createTeamLogo(teamLabel, 'team-logo team-logo--medium'));
+        const teamName = document.createElement('h3');
+        teamName.className = 'tour-card__team';
+        teamName.textContent = teamLabel;
+        identity.appendChild(teamName);
 
         const matchup = document.createElement('p');
         matchup.className = 'tour-card__matchup';
-        matchup.textContent = `${game.homeAway === 'home' ? 'vs.' : '@'} ${game.opponentName ?? 'Opponent TBA'}`;
+        if (game.opponentName) {
+          const opponent = document.createElement('span');
+          opponent.className = 'tour-card__opponent';
+          opponent.appendChild(createTeamLogo(game.opponentName, 'team-logo team-logo--tiny'));
+          const opponentLabel = document.createElement('span');
+          opponentLabel.textContent = `${game.homeAway === 'home' ? 'vs.' : '@'} ${game.opponentName}`;
+          opponent.appendChild(opponentLabel);
+          matchup.appendChild(opponent);
+        } else {
+          matchup.textContent = 'Opponent TBA';
+        }
 
         const tag = document.createElement('span');
         tag.className = 'tour-card__tag';
@@ -337,7 +358,7 @@ function renderPreseasonTour(openersData) {
         const labelText = label ? label : 'Preseason opener';
         note.textContent = `${labelText} · Preview hub coming soon.`;
 
-        card.append(date, team, matchup, tag, venue, note);
+        card.append(date, identity, matchup, tag, venue, note);
         grid.appendChild(card);
       });
     }
@@ -402,23 +423,47 @@ function renderContenderGrid(teamData) {
   teams.forEach((team, index) => {
     const card = document.createElement('article');
     card.className = 'contender-card';
+
+    const header = document.createElement('header');
+    header.className = 'contender-card__header';
+    const rank = document.createElement('span');
+    rank.className = 'contender-card__rank';
+    rank.textContent = String(index + 1);
+    const identity = document.createElement('div');
+    identity.className = 'contender-card__identity';
+    const teamLabel = team.team ?? team.abbreviation ?? 'Team';
+    identity.appendChild(createTeamLogo(teamLabel, 'team-logo team-logo--medium'));
+    const name = document.createElement('h4');
+    name.className = 'contender-card__team';
+    name.textContent = teamLabel;
+    identity.appendChild(name);
+    header.append(rank, identity);
+
+    const metrics = document.createElement('dl');
+    metrics.className = 'contender-card__metrics';
+    const addMetric = (label, value) => {
+      const row = document.createElement('div');
+      const term = document.createElement('dt');
+      term.textContent = label;
+      const detail = document.createElement('dd');
+      detail.textContent = value;
+      row.append(term, detail);
+      metrics.appendChild(row);
+    };
+    addMetric('Win rate', `${helpers.formatNumber((team.winPct ?? 0) * 100, 1)}%`);
     const margin = (team.pointsPerGame ?? 0) - (team.opponentPointsPerGame ?? 0);
     const marginLabel = `${margin >= 0 ? '+' : '–'}${helpers.formatNumber(Math.abs(margin), 1)}`;
-    card.innerHTML = `
-      <header class="contender-card__header">
-        <span class="contender-card__rank">${index + 1}</span>
-        <h4 class="contender-card__team">${team.team}</h4>
-      </header>
-      <dl class="contender-card__metrics">
-        <div><dt>Win rate</dt><dd>${helpers.formatNumber((team.winPct ?? 0) * 100, 1)}%</dd></div>
-        <div><dt>Scoring margin</dt><dd>${marginLabel}</dd></div>
-        <div><dt>Assist engine</dt><dd>${helpers.formatNumber(team.assistsPerGame ?? 0, 1)} apg</dd></div>
-      </dl>
-      <p class="contender-card__note">${helpers.formatNumber(team.pointsPerGame ?? 0, 1)} points per night, ${helpers.formatNumber(
+    addMetric('Scoring margin', marginLabel);
+    addMetric('Assist engine', `${helpers.formatNumber(team.assistsPerGame ?? 0, 1)} apg`);
+
+    const note = document.createElement('p');
+    note.className = 'contender-card__note';
+    note.textContent = `${helpers.formatNumber(team.pointsPerGame ?? 0, 1)} points per night, ${helpers.formatNumber(
       team.opponentPointsPerGame ?? 0,
       1
-    )} allowed.</p>
-    `;
+    )} allowed.`;
+
+    card.append(header, metrics, note);
     container.appendChild(card);
   });
 }
@@ -444,9 +489,14 @@ function renderBackToBack(scheduleData) {
       rank.textContent = String(index + 1);
       const body = document.createElement('div');
       body.className = 'rest-list__content';
+      const identity = document.createElement('div');
+      identity.className = 'rest-list__identity';
+      const teamLabel = entry.name ?? entry.abbreviation ?? 'NBA';
+      identity.appendChild(createTeamLogo(teamLabel, 'team-logo team-logo--small'));
       const team = document.createElement('p');
       team.className = 'rest-list__team';
-      team.textContent = entry.name;
+      team.textContent = teamLabel;
+      identity.appendChild(team);
       const meta = document.createElement('p');
       meta.className = 'rest-list__meta';
       meta.textContent = `${helpers.formatNumber(entry.backToBacks ?? 0, 0)} back-to-backs · ${helpers.formatNumber(
@@ -459,7 +509,7 @@ function renderBackToBack(scheduleData) {
         entry.longestRoadTrip ?? 0,
         0
       )}`;
-      body.append(team, meta, notes);
+      body.append(identity, meta, notes);
       item.append(rank, body);
       list.appendChild(item);
     });
