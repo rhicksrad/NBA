@@ -40,6 +40,14 @@ except Exception:  # pragma: no cover - fallback only triggered when module miss
 ROOT = Path(__file__).resolve().parents[1]
 PUBLIC_DATA_DIR = ROOT / "public" / "data"
 
+# Some legacy player records report incorrect country information in the
+# ``Players.csv`` extract. Patch them here so downstream snapshots and the UI
+# display the expected nationalities.
+PLAYER_COUNTRY_OVERRIDES = {
+    "76195": "Sudan",  # Manute Bol
+    "22": "Netherlands",  # Rik Smits
+}
+
 _TEMP_PLAYER_STATS_DIR: Path | None = None
 
 
@@ -253,6 +261,7 @@ def build_players_overview() -> None:
         for row in reader:
             total_players += 1
 
+            person_id = (row.get("personId") or "").strip()
             height = _to_float(row.get("height"))
             weight = _to_float(row.get("bodyWeight"))
             if height is not None:
@@ -270,6 +279,8 @@ def build_players_overview() -> None:
                 center_count += 1
 
             country = row.get("country", "").strip()
+            if person_id and person_id in PLAYER_COUNTRY_OVERRIDES:
+                country = PLAYER_COUNTRY_OVERRIDES[person_id]
             if country:
                 country_counts[country] += 1
 
@@ -297,7 +308,7 @@ def build_players_overview() -> None:
             has_valid_weight = weight is not None and 120 <= weight <= 400
             if height is not None:
                 player_entry = {
-                    "personId": row.get("personId"),
+                    "personId": person_id or row.get("personId"),
                     "name": f"{row.get('firstName', '').strip()} {row.get('lastName', '').strip()}".strip(),
                     "heightInches": height,
                     "weightPounds": weight if has_valid_weight else None,
