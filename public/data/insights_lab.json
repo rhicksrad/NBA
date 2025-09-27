@@ -44,7 +44,7 @@
       "summary": "Blend player-tracking XY coordinates with defender proximity to surface expected shot value by zone.",
       "objectives": [
         "Calibrate accuracy with last-two-minute possession samples.",
-        "Stress test against 2024-25 schedule density for caching strategy."
+        "Stress test against 2025-26 schedule density for caching strategy."
       ],
       "tags": ["Tracking data", "Spatial model", "UX polish"]
     },

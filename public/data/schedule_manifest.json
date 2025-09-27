@@ -2,7 +2,8 @@
   "seasons": [
     {
       "path": "data/season_25_26_schedule.json",
-      "label": "2025-26"
+      "label": "2025-26",
+      "current": true
     },
     {
       "path": "data/season_24_25_schedule.json",
