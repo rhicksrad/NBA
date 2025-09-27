@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%231156d6'/%3E%3Ctext x='50%25' y='52%25' font-family='Inter,Arial,sans-serif' font-size='28' font-weight='700' fill='white' text-anchor='middle'%3ENBA%3C/text%3E%3C/svg%3E'
+    />
+    <link rel="stylesheet" href="styles/hub.css" />
+    <title>GOAT Index | NBA Intelligence Hub</title>
+  </head>
+  <body>
+    <div class="site-frame">
+      <header class="site-header">
+        <div class="hub-nav">
+          <a class="brand" href="index.html"><span>NBA</span> Intelligence Hub</a>
+          <nav class="nav-links">
+            <a href="index.html">2025-2026 Preview</a>
+            <a href="rewind.html">2024-2025 Season Rewind</a>
+            <a href="players.html">Players</a>
+            <a href="teams.html">Teams</a>
+            <a href="history.html">History</a>
+            <a href="insights.html">Insights Lab</a>
+            <a class="active" href="goat.html">GOAT Index</a>
+            <a href="about.html">About</a>
+          </nav>
+        </div>
+        <div class="hero hero--goat">
+          <div class="hero__intro">
+            <span class="eyebrow">GOAT Index Debut</span>
+            <h1>The all-time race through the General Overall Attribute Total.</h1>
+            <p class="hero__lede">
+              GOAT blends peak impact, stage dominance, longevity, versatility, and cultural capital into a single rating so we
+              can map the pantheon and spotlight who is charging up the mountain next.
+            </p>
+            <div class="cta-group" role="group" aria-label="Primary actions">
+              <a class="cta cta--primary" href="#goat-board">See the leaderboard</a>
+              <a class="cta cta--ghost" href="#goat-method">Understand the formula</a>
+            </div>
+          </div>
+          <div class="hero__visual" aria-hidden="true">
+            <div class="goat-hero-graphic">
+              <div class="goat-hero-planet"></div>
+              <div class="goat-hero-orbit"></div>
+              <div class="goat-hero-orbit goat-hero-orbit--delay"></div>
+              <div class="goat-hero-node goat-hero-node--primary"></div>
+              <div class="goat-hero-node goat-hero-node--secondary"></div>
+              <div class="goat-hero-node goat-hero-node--tertiary"></div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main>
+        <section id="goat-method" class="goat-methodology">
+          <div class="section-header">
+            <h2>How the General Overall Attribute Total is built</h2>
+            <p class="lead">
+              Inspired by the lessons of PER, EPM, and championship equity models, the GOAT Index weights five dimensions that
+              explain how players bend winning across eras.
+            </p>
+          </div>
+          <div class="goat-methodology__grid" data-weight-list>
+            <article class="goat-weight-card">
+              <header>
+                <span class="goat-weight-label">Loading components…</span>
+              </header>
+              <p class="goat-weight-copy">The weighting profile is on its way.</p>
+            </article>
+          </div>
+        </section>
+
+        <section id="goat-board" class="goat-leaderboard">
+          <div class="section-header">
+            <h2>Pantheon leaderboard</h2>
+            <p class="lead">
+              Rankings refresh monthly using rolling play-by-play impact data, postseason equity share, and cultural resonance
+              signals.
+            </p>
+          </div>
+          <div class="goat-leaderboard__layout">
+            <div class="goat-table-wrapper">
+              <table class="goat-table" data-goat-table aria-describedby="goat-table-footnote">
+                <thead>
+                  <tr>
+                    <th scope="col">Rank</th>
+                    <th scope="col">Player</th>
+                    <th scope="col">GOAT</th>
+                    <th scope="col">Δ 12 mo.</th>
+                    <th scope="col">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td colspan="5">Computing pantheon order…</td>
+                  </tr>
+                </tbody>
+              </table>
+              <p id="goat-table-footnote" class="goat-table-footnote">
+                Δ indicates the twelve-month swing in GOAT points after factoring fresh data and retroactive era adjustments.
+              </p>
+            </div>
+            <aside class="goat-detail" data-goat-detail>
+              <header>
+                <h3 data-goat-name>Select a player</h3>
+                <p class="goat-detail__meta" data-goat-meta>Pick a name from the table to see the GOAT recipe.</p>
+              </header>
+              <div class="goat-detail__summary">
+                <p class="goat-detail__resume" data-goat-resume></p>
+                <dl class="goat-detail__list" data-goat-components></dl>
+              </div>
+              <footer class="goat-detail__footer" data-goat-footer></footer>
+            </aside>
+          </div>
+        </section>
+
+        <section class="goat-visuals">
+          <div class="section-header">
+            <h2>Score distribution</h2>
+            <p class="lead">A barline view shows how tightly packed the modern pantheon has become.</p>
+          </div>
+          <figure class="viz-card viz-card--inline" data-chart-wrapper>
+            <header class="viz-card__title">Top GOAT scores</header>
+            <div class="viz-canvas">
+              <canvas data-chart="goat-top-bar" aria-describedby="goat-chart-caption"></canvas>
+            </div>
+            <figcaption id="goat-chart-caption" class="viz-card__caption">
+              GOAT points aggregate weighted impact, stage, longevity, versatility, and cultural capital on a 0-100 scale.
+            </figcaption>
+          </figure>
+        </section>
+
+        <section class="goat-risers">
+          <div class="section-header">
+            <h2>Who is rising?</h2>
+            <p class="lead">Movement scores combine year-over-year GOAT deltas with projected sustainability markers.</p>
+          </div>
+          <div class="goat-risers__grid" data-goat-risers>
+            <article class="goat-riser-card">
+              <h3>Tracking signals…</h3>
+              <p>The next generation will surface here when the data loads.</p>
+            </article>
+          </div>
+        </section>
+      </main>
+
+      <footer class="page-footer">GOAT Index is the sandbox for all-time debates — refreshed each month.</footer>
+    </div>
+    <script src="vendor/chart.umd.js" defer></script>
+    <script type="module" src="scripts/goat.js"></script>
+  </body>
+</html>
