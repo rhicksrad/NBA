@@ -1,230 +1,794 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>NBA Intelligence Hub</title>
-    <link rel="stylesheet" href="styles/landing.css" />
-  </head>
-  <body>
-    <header class="site-header">
-      <div class="inner">
-        <div class="brand">NBA Intelligence Lab</div>
-        <nav aria-label="Primary">
-          <a href="franchise-explorer.html">Franchise Explorer</a>
-          <a href="franchise-explorer.html#schedule-heading">Schedule Outlook</a>
-          <a href="franchise-explorer.html#players-heading">Player Pipeline</a>
-          <a href="franchise-explorer.html#team-heading">Team Benchmarks</a>
-        </nav>
-        <div class="cta-group">
-          <a class="cta cta-outline" href="https://github.com" rel="noreferrer" target="_blank">View repo</a>
-          <a class="cta cta-primary" href="franchise-explorer.html">Launch explorer →</a>
-        </div>
-      </div>
-    </header>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NBA Franchise Explorer</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.6;
+      --nba-navy: #0b2545;
+      --nba-royal: #1156d6;
+      --nba-sky: #1f7bff;
+      --nba-red: #ef3d5b;
+      --nba-gold: #f4b53f;
+      --court-light: #fce8c7;
+      --court-mid: #f4d5a6;
+      --court-dark: #d9b17d;
+      --surface: color-mix(in srgb, var(--court-light) 76%, white 24%);
+      --surface-elevated: color-mix(in srgb, white 80%, var(--nba-navy) 20%);
+      --surface-muted: color-mix(in srgb, var(--nba-royal) 12%, white 88%);
+      --text-primary: #0f172a;
+      --text-subtle: color-mix(in srgb, var(--text-primary) 65%, transparent);
+      --card-border: color-mix(in srgb, var(--nba-navy) 12%, white 88%);
+      --shadow-soft: 0 12px 30px rgba(11, 37, 69, 0.15);
+      --radius-lg: 20px;
+      --radius-md: 14px;
+      --radius-sm: 10px;
+      --content-max: 1180px;
+    }
 
-    <main>
-      <section class="hero">
-        <div class="hero-copy">
-          <div class="hero-badges">
-            <span class="badge">Data-first experience</span>
-            <span class="badge">Season 2024-25 ready</span>
-          </div>
-          <h1>Own every era of NBA dominance with one control center.</h1>
-          <p>
-            NBA Intelligence Hub is your launchpad for franchise timelines, schedule pressure testing,
-            and global player scouting intel. Explore the data-rich dashboards that power the modern
-            basketball front office.
-          </p>
-          <div class="cta-group">
-            <a class="cta cta-primary" href="franchise-explorer.html">Dive into the data →</a>
-            <a class="cta cta-outline" href="#capabilities">Preview capabilities</a>
-          </div>
-        </div>
+    body {
+      margin: 0;
+      padding: 0 1.5rem 4.5rem;
+      max-width: var(--content-max);
+      margin-inline: auto;
+      color: var(--text-primary);
+      background:
+        linear-gradient(120deg, rgba(17, 86, 214, 0.18), rgba(239, 61, 91, 0.12)) fixed,
+        var(--court-light);
+      position: relative;
+      min-height: 100vh;
+    }
 
-        <div class="hero-visual" aria-hidden="true">
-          <div class="hero-chart">
-            <h2>Live franchise pulse</h2>
-            <div class="stat-stack">
-              <div class="stat">
-                <span class="label">Tracked franchises</span>
-                <span class="value" id="stat-franchises">—</span>
-              </div>
-              <div class="stat">
-                <span class="label">Active NBA teams</span>
-                <span class="value" id="stat-nba">—</span>
-              </div>
-              <div class="stat">
-                <span class="label">Snapshot vintage</span>
-                <span class="value" id="stat-vintage">—</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        repeating-linear-gradient(
+          90deg,
+          rgba(217, 177, 125, 0.4) 0,
+          rgba(217, 177, 125, 0.4) 6px,
+          transparent 6px,
+          transparent 140px
+        ),
+        radial-gradient(circle at 50% -20%, rgba(255, 255, 255, 0.65), transparent 65%),
+        linear-gradient(180deg, rgba(0, 0, 0, 0.08), transparent 40%);
+      opacity: 0.7;
+      pointer-events: none;
+      z-index: -2;
+    }
 
-      <div class="section-title" id="insights">
-        <h2>High-velocity intel from the lab</h2>
-        <p>
-          We synthesize league history, upcoming schedules, and player pipelines into focused modules.
-          Refresh these numbers in the explorer to reshape your scouting or storytelling workflow.
-        </p>
-      </div>
-      <section class="stat-grid" aria-labelledby="insights">
-        <article class="stat-card">
-          <h3>Countries represented</h3>
-          <div class="value" id="stat-countries">—</div>
-          <p>Global talent spanning continents with fresh scouting notes baked in.</p>
-        </article>
-        <article class="stat-card">
-          <h3>Average player size</h3>
-          <div class="value"><span id="stat-height">—</span> / <span id="stat-weight">—</span></div>
-          <p>Build the prototype roster by blending height, wingspan, and positional agility.</p>
-        </article>
-        <article class="stat-card">
-          <h3>Season 2024-25 workload</h3>
-          <div class="value" id="stat-games">—</div>
-          <p>Follow the grind—preseason to postseason—before tip-off even arrives.</p>
-        </article>
-        <article class="stat-card">
-          <h3>Longest-running era</h3>
-          <div class="value" id="stat-era">—</div>
-          <p>Zoom into the dynasties redefining basketball longevity and innovation.</p>
-        </article>
-      </section>
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.72));
+      mix-blend-mode: lighten;
+      pointer-events: none;
+      z-index: -1;
+    }
 
-      <section class="section-title" id="capabilities">
-        <h2>Built for storytellers, analysts, and diehard fans</h2>
-        <p>
-          Each module is tuned for clarity—slicing timeframes, benchmarking elite teams, and
-          spotlighting signature performances across eras.
-        </p>
-      </section>
-      <section class="features">
-        <article class="feature-card">
-          <span class="tag">Franchises</span>
-          <h3>Slice 100+ years of team history</h3>
-          <p>
-            Filter by league, era, or market to discover expansion waves and dynastic cores. Export
-            clean tables for your next research thread.
-          </p>
-        </article>
-        <article class="feature-card">
-          <span class="tag">Schedule</span>
-          <h3>Stress-test travel and rest windows</h3>
-          <p>
-            Compare monthly workloads, rest distributions, and back-to-back gauntlets before they shape
-            the standings.
-          </p>
-        </article>
-        <article class="feature-card">
-          <span class="tag">Players</span>
-          <h3>Map the global talent supply</h3>
-          <p>
-            Track international pipelines, positional depth, and draft pathways to build smarter boards
-            and scouting decks.
-          </p>
-        </article>
-      </section>
+    header {
+      padding: 3.5rem 0 2rem;
+      text-align: center;
+      position: relative;
+    }
 
-      <section class="preview-section" aria-label="Preview panels">
-        <div class="preview-grid">
-          <article class="preview-card">
-            <div class="bg-icon">🏙️</div>
-            <h3>Franchise Explorer</h3>
-            <p>Navigate every active era with filters and charts designed for storytelling velocity.</p>
-            <a class="cta-inline" href="franchise-explorer.html">Open the explorer →</a>
-          </article>
-          <article class="preview-card">
-            <div class="bg-icon">🗓️</div>
-            <h3>Schedule Outlook</h3>
-            <p>Quantify month-by-month workloads and travel strain for the 2024-25 campaign.</p>
-            <a class="cta-inline" href="franchise-explorer.html#schedule-heading">View schedule intel →</a>
-          </article>
-          <article class="preview-card">
-            <div class="bg-icon">🌍</div>
-            <h3>Player Pipeline</h3>
-            <p>Surface the countries, colleges, and prototypes fueling tomorrow's rosters.</p>
-            <a class="cta-inline" href="franchise-explorer.html#players-heading">Explore player data →</a>
-          </article>
-        </div>
-      </section>
-    </main>
+    header::after {
+      content: "";
+      position: absolute;
+      inset-inline: max(0px, (100% - var(--content-max)) / -2);
+      bottom: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(15, 23, 42, 0.15), transparent);
+    }
 
-    <footer>
-      Built for the modern NBA storyteller. Data snapshots refresh via repository scripts and will
-      expand as new modules ship.
-    </footer>
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.35rem 0.75rem;
+      font-size: 0.8rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: 700;
+      border-radius: 999px;
+      background: linear-gradient(135deg, rgba(17, 86, 214, 0.95), rgba(239, 61, 91, 0.9));
+      color: #fff;
+      box-shadow: var(--shadow-soft);
+    }
 
-    <script>
-      async function loadLandingStats() {
-        const fallback = () => {
-          const placeholders = ['stat-franchises', 'stat-nba', 'stat-vintage', 'stat-era', 'stat-countries', 'stat-height', 'stat-weight', 'stat-games'];
-          for (const id of placeholders) {
-            const el = document.getElementById(id);
-            if (el && el.textContent.trim() === '—') {
-              el.textContent = 'N/A';
-            }
-          }
-        };
+    header h1 {
+      font-size: clamp(2.3rem, 5vw, 3.3rem);
+      margin: 1rem 0 0.75rem;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      text-shadow: 0 12px 32px rgba(11, 37, 69, 0.25);
+    }
 
-        try {
-          const [franchisesResp, playersResp, scheduleResp] = await Promise.all([
-            fetch('data/active_franchises.json'),
-            fetch('data/players_overview.json'),
-            fetch('data/season_24_25_schedule.json'),
-          ]);
+    header p {
+      margin: 0.35rem 0;
+      color: var(--text-subtle);
+      max-width: 640px;
+      margin-inline: auto;
+      font-size: 1.02rem;
+    }
 
-          const [franchises, players, schedule] = await Promise.all([
-            franchisesResp.json(),
-            playersResp.json(),
-            scheduleResp.json(),
-          ]);
+    #generated-note {
+      font-weight: 600;
+      color: var(--nba-navy);
+    }
 
-          const totalFranchises = franchises?.totals?.all ?? null;
-          const totalNBA = franchises?.totals?.nba ?? null;
-          const snapshotYear = franchises?.currentYear ?? null;
-          const longestEraStart = franchises?.earliestSeason ?? null;
+    main {
+      display: grid;
+      gap: 2.25rem;
+    }
 
-          if (typeof totalFranchises === 'number') {
-            document.getElementById('stat-franchises').textContent = totalFranchises.toLocaleString();
-          }
-          if (typeof totalNBA === 'number') {
-            document.getElementById('stat-nba').textContent = totalNBA.toLocaleString();
-          }
-          if (snapshotYear) {
-            document.getElementById('stat-vintage').textContent = snapshotYear;
-          }
-          if (longestEraStart) {
-            const eraLabel = snapshotYear ? `${longestEraStart} → ${snapshotYear}` : `${longestEraStart} → present`;
-            document.getElementById('stat-era').textContent = eraLabel;
-          }
+    section {
+      background: color-mix(in srgb, var(--surface) 70%, rgba(255, 255, 255, 0.95) 30%);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem clamp(1.5rem, 4vw, 2.25rem);
+      box-shadow: var(--shadow-soft);
+      border: 1px solid var(--card-border);
+      backdrop-filter: blur(6px);
+    }
 
-          const countries = players?.totals?.countriesRepresented ?? null;
-          if (countries) {
-            document.getElementById('stat-countries').textContent = countries.toLocaleString();
-          }
+    section h2 {
+      margin-top: 0;
+      font-size: clamp(1.35rem, 3vw, 1.7rem);
+      letter-spacing: 0.01em;
+      color: var(--nba-navy);
+    }
 
-          const avgHeight = players?.totals?.averageHeightInches ?? null;
-          const avgWeight = players?.totals?.averageWeightPounds ?? null;
-          if (avgHeight) {
-            document.getElementById('stat-height').textContent = `${Math.round(avgHeight)}"`; 
-          }
-          if (avgWeight) {
-            document.getElementById('stat-weight').textContent = `${Math.round(avgWeight)} lbs`;
-          }
+    .controls-grid {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      margin-top: 1.5rem;
+    }
 
-          const totalGames = schedule?.totals?.games ?? null;
-          if (totalGames) {
-            document.getElementById('stat-games').textContent = totalGames.toLocaleString();
-          }
-        } catch (error) {
-          console.error('Failed to load landing stats', error);
-          fallback();
-        }
+    label {
+      display: block;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 700;
+      margin-bottom: 0.45rem;
+      color: color-mix(in srgb, var(--nba-navy) 70%, transparent);
+    }
+
+    input[type="search"],
+    input[type="number"],
+    select {
+      width: 100%;
+      padding: 0.7rem 0.9rem;
+      border: 1px solid color-mix(in srgb, var(--nba-navy) 15%, transparent);
+      border-radius: var(--radius-sm);
+      font-size: 1rem;
+      background: color-mix(in srgb, white 90%, var(--nba-royal) 10%);
+      color: inherit;
+      box-shadow: inset 0 1px 2px rgba(11, 37, 69, 0.08);
+      transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+    }
+
+    input[type="search"]:focus,
+    input[type="number"]:focus,
+    select:focus {
+      outline: none;
+      border-color: color-mix(in srgb, var(--nba-royal) 60%, transparent);
+      box-shadow: 0 0 0 4px rgba(17, 86, 214, 0.18);
+      transform: translateY(-1px);
+    }
+
+    .controls-actions {
+      display: flex;
+      gap: 0.9rem;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      margin-top: 1.1rem;
+    }
+
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: 0.72rem 1.6rem;
+      font-size: 0.98rem;
+      font-weight: 700;
+      cursor: pointer;
+      background: linear-gradient(135deg, var(--nba-royal), var(--nba-sky));
+      color: #fff;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      box-shadow: 0 8px 20px rgba(17, 86, 214, 0.35);
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    button:hover {
+      transform: translateY(-2px) scale(1.01);
+      box-shadow: 0 16px 30px rgba(17, 86, 214, 0.4);
+    }
+
+    button:focus-visible {
+      outline: 3px solid var(--nba-gold);
+      outline-offset: 2px;
+    }
+
+    .summary-cards {
+      display: grid;
+      gap: 1.1rem;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      margin-top: 1.5rem;
+    }
+
+    .summary-card {
+      position: relative;
+      padding: 1.25rem 1.5rem 1.35rem;
+      border-radius: var(--radius-md);
+      background: radial-gradient(circle at 15% 20%, rgba(244, 181, 63, 0.25), transparent 55%),
+        color-mix(in srgb, white 88%, var(--nba-royal) 12%);
+      border: 1px solid color-mix(in srgb, var(--nba-royal) 15%, transparent);
+      overflow: hidden;
+      min-height: 140px;
+      display: grid;
+      align-content: space-between;
+    }
+
+    .summary-card::after {
+      content: "";
+      position: absolute;
+      inset: 18px 18px auto auto;
+      width: 74px;
+      height: 74px;
+      border-radius: 50%;
+      border: 4px solid rgba(244, 181, 63, 0.4);
+      opacity: 0.35;
+      box-shadow: inset 0 0 0 6px rgba(17, 86, 214, 0.2);
+      transform: rotate(8deg);
+      pointer-events: none;
+    }
+
+    .summary-card h3 {
+      margin: 0 0 0.4rem;
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: color-mix(in srgb, var(--nba-navy) 75%, transparent);
+    }
+
+    .summary-card p {
+      margin: 0;
+      font-size: clamp(1.6rem, 3.5vw, 2.35rem);
+      font-weight: 800;
+      color: var(--nba-navy);
+    }
+
+    .section-grid,
+    .schedule-layout {
+      display: grid;
+      gap: 1.6rem;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      margin-top: 1.75rem;
+    }
+
+    .panel,
+    .schedule-panel {
+      background: color-mix(in srgb, white 78%, var(--nba-royal) 22%);
+      border-radius: var(--radius-md);
+      padding: 1.35rem 1.4rem 1.5rem;
+      border: 1px solid color-mix(in srgb, var(--nba-royal) 20%, transparent);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .panel::before,
+    .schedule-panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.3), transparent 60%);
+      opacity: 0.55;
+      pointer-events: none;
+    }
+
+    .panel > *,
+    .schedule-panel > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .panel-wide {
+      grid-column: 1 / -1;
+    }
+
+    .panel h3,
+    .schedule-panel h3 {
+      margin-top: 0;
+      margin-bottom: 0.85rem;
+      font-size: 1.08rem;
+      color: var(--nba-navy);
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    .panel h3::before,
+    .schedule-panel h3::before {
+      content: "";
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 40% 35%, rgba(244, 181, 63, 0.9), rgba(239, 61, 91, 0.85));
+      box-shadow: 0 0 0 3px rgba(17, 86, 214, 0.15);
+    }
+
+    .panel .data-note {
+      margin-top: 0.75rem;
+    }
+
+    .tallest-list,
+    .special-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 0.9rem;
+    }
+
+    .tallest-list li,
+    .special-list li {
+      line-height: 1.5;
+      background: rgba(255, 255, 255, 0.5);
+      padding: 0.75rem 0.9rem;
+      border-radius: var(--radius-sm);
+      border: 1px solid rgba(15, 23, 42, 0.06);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+    }
+
+    .tallest-meta,
+    .special-meta {
+      display: block;
+      color: color-mix(in srgb, var(--text-primary) 60%, transparent);
+      font-size: 0.92rem;
+      margin-top: 0.35rem;
+    }
+
+    .special-list time {
+      font-weight: 700;
+      margin-right: 0.5rem;
+      color: var(--nba-royal);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.97rem;
+      background: rgba(255, 255, 255, 0.55);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    }
+
+    thead th {
+      text-align: left;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      padding: 0.75rem 0.75rem 0.55rem;
+      border-bottom: 2px solid rgba(11, 37, 69, 0.14);
+      background: color-mix(in srgb, var(--nba-royal) 14%, white 86%);
+      color: var(--nba-navy);
+    }
+
+    tbody td {
+      border-bottom: 1px solid rgba(11, 37, 69, 0.08);
+      padding: 0.7rem 0.75rem;
+      vertical-align: top;
+    }
+
+    tbody tr:nth-child(even) td {
+      background: rgba(17, 86, 214, 0.06);
+    }
+
+    tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    tbody tr:hover td {
+      background: rgba(244, 181, 63, 0.15);
+    }
+
+    .team-name {
+      font-weight: 700;
+      font-size: 1.02rem;
+      color: var(--nba-navy);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.25rem 0.6rem;
+      border-radius: 999px;
+      font-size: 0.76rem;
+      background: linear-gradient(135deg, rgba(17, 86, 214, 0.9), rgba(31, 123, 255, 0.85));
+      color: #fff;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      box-shadow: 0 4px 14px rgba(17, 86, 214, 0.35);
+    }
+
+    .badge::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--nba-gold);
+      box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.4);
+    }
+
+    canvas {
+      width: 100%;
+      min-height: 320px;
+      max-height: 440px;
+      background: rgba(255, 255, 255, 0.6);
+      border-radius: var(--radius-sm);
+      border: 1px solid rgba(11, 37, 69, 0.08);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.85);
+      padding: 0.75rem;
+    }
+
+    .data-note {
+      font-size: 0.88rem;
+      color: color-mix(in srgb, var(--nba-navy) 65%, transparent);
+      margin-top: 1.1rem;
+      padding-left: 0.9rem;
+      border-left: 3px solid rgba(244, 181, 63, 0.65);
+    }
+
+    .table-note {
+      margin-top: 0.6rem;
+      font-size: 0.8rem;
+      color: color-mix(in srgb, var(--nba-navy) 50%, transparent);
+    }
+
+    code {
+      padding: 0.15rem 0.4rem;
+      border-radius: 6px;
+      background: rgba(17, 86, 214, 0.12);
+      color: var(--nba-navy);
+      font-weight: 600;
+    }
+
+    @media (max-width: 720px) {
+      body {
+        padding: 0 1rem 3.5rem;
       }
 
-      loadLandingStats();
-    </script>
-  </body>
+      header {
+        padding-top: 2.75rem;
+      }
+
+      section {
+        padding: 1.5rem 1.25rem 1.6rem;
+      }
+
+      .controls-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --surface: color-mix(in srgb, var(--nba-navy) 25%, black 75%);
+        --surface-elevated: color-mix(in srgb, #0f172a 70%, #020617 30%);
+        --surface-muted: color-mix(in srgb, var(--nba-royal) 25%, #020617 75%);
+        --text-primary: #e2e8f0;
+        --text-subtle: color-mix(in srgb, #e2e8f0 65%, transparent);
+        --card-border: rgba(17, 86, 214, 0.35);
+      }
+
+      body {
+        background:
+          linear-gradient(130deg, rgba(17, 86, 214, 0.3), rgba(239, 61, 91, 0.22)) fixed,
+          #050810;
+      }
+
+      body::before {
+        opacity: 0.5;
+      }
+
+      body::after {
+        background: linear-gradient(180deg, rgba(8, 12, 24, 0.92), rgba(8, 12, 24, 0.65));
+        mix-blend-mode: normal;
+      }
+
+      section {
+        background: color-mix(in srgb, var(--surface-elevated) 70%, rgba(17, 86, 214, 0.25) 30%);
+        border-color: rgba(17, 86, 214, 0.25);
+        box-shadow: 0 20px 45px rgba(2, 6, 23, 0.7);
+      }
+
+      header p,
+      label,
+      .summary-card h3,
+      .data-note,
+      .table-note,
+      .tallest-meta,
+      .special-meta {
+        color: var(--text-subtle);
+      }
+
+      #generated-note {
+        color: color-mix(in srgb, var(--nba-gold) 75%, #fff 25%);
+      }
+
+      .summary-card {
+        background: radial-gradient(circle at 15% 20%, rgba(244, 181, 63, 0.15), transparent 55%),
+          color-mix(in srgb, rgba(17, 25, 40, 0.8) 60%, rgba(17, 86, 214, 0.25) 40%);
+        border-color: rgba(17, 86, 214, 0.4);
+      }
+
+      .summary-card p,
+      .team-name,
+      thead th {
+        color: #f8fafc;
+      }
+
+      table {
+        background: rgba(10, 16, 32, 0.75);
+      }
+
+      thead th {
+        background: rgba(17, 86, 214, 0.3);
+        border-bottom-color: rgba(17, 86, 214, 0.45);
+      }
+
+      tbody td {
+        border-bottom-color: rgba(148, 163, 184, 0.1);
+      }
+
+      tbody tr:nth-child(even) td {
+        background: rgba(148, 163, 184, 0.08);
+      }
+
+      tbody tr:hover td {
+        background: rgba(244, 181, 63, 0.18);
+      }
+
+      canvas {
+        background: rgba(4, 9, 20, 0.8);
+        border-color: rgba(17, 86, 214, 0.25);
+      }
+
+      .tallest-list li,
+      .special-list li {
+        background: rgba(5, 8, 16, 0.85);
+        border-color: rgba(17, 86, 214, 0.25);
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <p class="eyebrow">Data sandbox</p>
+    <h1>NBA Franchise Explorer</h1>
+    <p>Filter and benchmark every active franchise era from the league's rich history.</p>
+    <p id="generated-note" aria-live="polite">Loading snapshot…</p>
+  </header>
+
+  <main>
+    <section aria-labelledby="controls-heading">
+      <h2 id="controls-heading">Slice the active era data</h2>
+      <div class="controls-grid" role="group" aria-labelledby="controls-heading">
+        <div>
+          <label for="search">Search</label>
+          <input id="search" type="search" placeholder="City, nickname, abbreviation…" autocomplete="off" />
+        </div>
+        <div>
+          <label for="league">League</label>
+          <select id="league">
+            <option value="">All leagues</option>
+          </select>
+        </div>
+        <div>
+          <label for="season-start">Era start (min)</label>
+          <input id="season-start" type="number" />
+        </div>
+        <div>
+          <label for="season-end">Era start (max)</label>
+          <input id="season-end" type="number" />
+        </div>
+      </div>
+      <div class="controls-actions">
+        <button id="reset-filters" type="button">Reset filters</button>
+      </div>
+    </section>
+
+    <section aria-labelledby="summary-heading">
+      <h2 id="summary-heading">Franchise era overview</h2>
+      <div class="summary-cards" id="summary-cards" aria-live="polite"></div>
+      <p class="data-note">Totals update automatically with your filters. All time spans use the generated snapshot year.</p>
+    </section>
+
+    <section aria-labelledby="table-heading">
+      <h2 id="table-heading">Active franchise eras</h2>
+      <div class="table-wrapper" role="region" aria-live="polite">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">City</th>
+              <th scope="col">Franchise</th>
+              <th scope="col">League</th>
+              <th scope="col">Era start</th>
+              <th scope="col">Seasons</th>
+              <th scope="col">Abbrev.</th>
+            </tr>
+          </thead>
+          <tbody id="teams-body">
+            <tr><td colspan="6">Loading franchises…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section aria-labelledby="chart-heading">
+      <h2 id="chart-heading">Active franchises by founding decade</h2>
+      <canvas id="decade-chart" role="img" aria-label="Bar chart showing active franchise counts by decade"></canvas>
+      <p class="data-note">The chart respects the filters above so you can zoom in on expansion eras and compare leagues.</p>
+    </section>
+
+    <section aria-labelledby="schedule-heading">
+      <h2 id="schedule-heading">2024-25 league calendar outlook</h2>
+      <p id="schedule-note" class="data-note">Loading 2024-25 schedule insights…</p>
+      <div class="summary-cards" id="schedule-summary" aria-live="polite"></div>
+
+      <div class="schedule-layout">
+        <div class="schedule-panel">
+          <h3>Monthly game volume</h3>
+          <canvas id="schedule-monthly-chart" role="img" aria-label="Stacked bar chart showing 2024-25 NBA schedule volume by month"></canvas>
+        </div>
+        <div class="schedule-panel">
+          <h3>Teams with the busiest slates</h3>
+          <div class="table-wrapper" role="region" aria-live="polite">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">Team</th>
+                  <th scope="col">Regular</th>
+                  <th scope="col">Cup &amp; playoffs</th>
+                  <th scope="col">Preseason</th>
+                  <th scope="col">Total</th>
+                </tr>
+              </thead>
+              <tbody id="schedule-teams-body">
+                <tr><td colspan="5">Loading team workloads…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="schedule-panel">
+          <h3>Rest distribution</h3>
+          <canvas id="schedule-rest-chart" role="img" aria-label="Horizontal bar chart showing rest day distribution between games"></canvas>
+          <p class="data-note" id="schedule-rest-note">Loading rest distribution…</p>
+        </div>
+        <div class="schedule-panel">
+          <h3>Back-to-back leaders</h3>
+          <div class="table-wrapper" role="region" aria-live="polite">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">Team</th>
+                  <th scope="col">B2B sets</th>
+                  <th scope="col">Avg. rest</th>
+                  <th scope="col">Longest road</th>
+                </tr>
+              </thead>
+              <tbody id="schedule-backtoback-body">
+                <tr><td colspan="4">Loading back-to-back data…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="schedule-panel">
+        <h3>Spotlight events</h3>
+        <ul class="special-list" id="schedule-special-list">
+          <li>Loading marquee matchups…</li>
+        </ul>
+      </div>
+    </section>
+
+    <section aria-labelledby="players-heading">
+      <h2 id="players-heading">Global player pipeline</h2>
+      <p id="players-note" class="data-note">Loading player overview…</p>
+      <div class="summary-cards" id="players-summary" aria-live="polite"></div>
+
+      <div class="section-grid">
+        <div class="panel">
+          <h3>Top represented countries</h3>
+          <div class="table-wrapper" role="region" aria-live="polite">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">Country</th>
+                  <th scope="col">Players</th>
+                </tr>
+              </thead>
+              <tbody id="players-countries-body">
+                <tr><td colspan="2">Loading country breakdown…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>Height distribution</h3>
+          <canvas id="players-height-chart" role="img" aria-label="Bar chart showing player counts by height bucket"></canvas>
+          <p class="data-note" id="players-height-note">Height snapshot loading…</p>
+        </div>
+
+        <div class="panel">
+          <h3>Tallest players on record</h3>
+          <ol class="tallest-list" id="players-tallest-list">
+            <li>Loading tallest players…</li>
+          </ol>
+        </div>
+
+        <div class="panel">
+          <h3>Top collegiate pipelines</h3>
+          <div class="table-wrapper" role="region" aria-live="polite">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">Program</th>
+                  <th scope="col">Players</th>
+                </tr>
+              </thead>
+              <tbody id="players-colleges-body">
+                <tr><td colspan="2">Loading college counts…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>Draft pipeline snapshot</h3>
+          <canvas id="players-draft-chart" role="img" aria-label="Doughnut chart showing drafted versus undrafted players"></canvas>
+          <p class="data-note" id="players-draft-note">Loading draft overview…</p>
+          <div class="table-wrapper" role="region" aria-live="polite">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">Draft decade</th>
+                  <th scope="col">Players</th>
+                </tr>
+              </thead>
+              <tbody id="players-draft-decades-body">
+                <tr><td colspan="2">Loading draft decade rollup…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
 </html>
