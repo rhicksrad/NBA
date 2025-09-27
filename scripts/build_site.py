@@ -159,6 +159,19 @@ def render_html(teams: list[dict[str, str]], generated_at: datetime) -> str:
 
 def main() -> None:
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+
+    # The repository now ships a hand-crafted single page app in
+    # ``public/index.html``. The original version of this script generated a
+    # minimal HTML table that overwrote the richer experience during the
+    # GitHub Pages build. Detect the presence of the new front-end (keyed off
+    # its document title) and leave it untouched so the published site matches
+    # local previews.
+    if OUTPUT_FILE.exists():
+        existing = OUTPUT_FILE.read_text(encoding="utf-8", errors="ignore")
+        if "NBA Franchise Explorer" in existing:
+            print("Detected prebuilt NBA Franchise Explorer UI; skipping auto-generation.")
+            return
+
     teams = load_active_franchises(DATA_FILE)
     html = render_html(teams, datetime.now(tz=timezone.utc))
     OUTPUT_FILE.write_text(html, encoding="utf-8")
