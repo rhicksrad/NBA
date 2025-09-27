@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2025-09-27T16:05:25.815186+00:00",
+  "generatedAt": "2025-09-27T17:33:26.973703+00:00",
   "totals": {
     "players": 6533,
     "averageHeightInches": 78.03,
@@ -7,7 +7,7 @@
     "guards": 1983,
     "forwards": 2121,
     "centers": 857,
-    "countriesRepresented": 79
+    "countriesRepresented": 80
   },
   "heightSummary": {
     "minHeightInches": 65.0,
@@ -18,7 +18,7 @@
   "countries": [
     {
       "country": "USA",
-      "players": 4247
+      "players": 4245
     },
     {
       "country": "France",
@@ -213,7 +213,7 @@
       "name": "Manute Bol",
       "heightInches": 90.0,
       "weightPounds": 200.0,
-      "country": "USA",
+      "country": "Sudan",
       "positions": [
         "C"
       ]
@@ -303,7 +303,7 @@
       "name": "Rik Smits",
       "heightInches": 88.0,
       "weightPounds": 265.0,
-      "country": "USA",
+      "country": "Netherlands",
       "positions": [
         "C"
       ]
