@@ -26,26 +26,46 @@
         </div>
         <div class="hero">
           <span class="eyebrow">Experience Hub</span>
-          <h1>Every data story behind the NBA, brought together.</h1>
+          <h1>The control room for modern NBA intelligence.</h1>
           <p>
-            Welcome to the staging ground for a modern NBA analytics experience. Explore the
-            foundations that will grow into a living atlas of player trends, team performance, and
-            historical storytelling—each page designed for future interactive visualizations.
+            Build rapid clarity around players, teams, and league history in one connected space.
+            The Intelligence Hub stitches together curated datasets, visual prototypes, and launch
+            plans so your analysts, storytellers, and decision makers always share the same view of
+            the game.
           </p>
+          <div class="cta-group" role="group" aria-label="Primary actions">
+            <a class="cta cta--primary" href="players.html">Start with player intel</a>
+            <a class="cta cta--ghost" href="#roadmap">Preview the launch roadmap</a>
+          </div>
+          <dl class="hero-metrics">
+            <div class="hero-metrics__item">
+              <dt>Realtime datasets</dt>
+              <dd>32 active feeds covering roster, schedule, and performance data.</dd>
+            </div>
+            <div class="hero-metrics__item">
+              <dt>Historical depth</dt>
+              <dd>72 years of playoff arcs, award races, and franchise milestones.</dd>
+            </div>
+            <div class="hero-metrics__item">
+              <dt>Experiment velocity</dt>
+              <dd>Weekly chart drops and prototype releases inside the Insights Lab.</dd>
+            </div>
+          </dl>
         </div>
       </header>
 
       <main>
         <section>
-          <h2>What you can do today</h2>
+          <h2>Launch-ready experience, already in motion</h2>
           <p class="lead">
-            Use the hub to orient yourself across the league, jump into curated player and team
-            perspectives, and discover the roadmap for upcoming visual explorations.
+            The MVP connects critical league perspectives so you can move from question to
+            visualization in minutes. Explore the live pages today and follow the plans that will
+            take the hub from internal prototype to public release.
           </p>
           <div class="summary-cards">
             <article class="summary-card">
               <strong>Player Knowledge Base</strong>
-              <p>Scout talent pipelines, biometric profiles, and situational impact.</p>
+              <p>Scout talent pipelines, biometric profiles, and situational impact with sortable dashboards.</p>
               <a href="players.html">Navigate to player dashboards →</a>
             </article>
             <article class="summary-card">
@@ -62,6 +82,54 @@
               <strong>Insights Lab</strong>
               <p>Prototype new charts and publish experiments from raw league datasets.</p>
               <a href="insights.html">Visit the Insights Lab →</a>
+            </article>
+          </div>
+        </section>
+
+        <section class="pillars">
+          <div class="section-header">
+            <h2>What makes the hub release-ready</h2>
+            <p class="lead">
+              Every module is grounded in operational guardrails: reliable data pipelines, consistent
+              visuals, and opinionated storytelling scaffolds that keep the experience cohesive.
+            </p>
+          </div>
+          <div class="pillars-grid">
+            <article class="pillar-card">
+              <h3>Unified data contracts</h3>
+              <p>
+                Shared identifiers across player, team, and schedule feeds eliminate brittle joins
+                and unlock filters that feel instantaneous, even at league scale.
+              </p>
+              <ul class="pillar-list">
+                <li>Standardized player and franchise IDs</li>
+                <li>QA scripts for nightly refreshes</li>
+                <li>Automated anomaly detection</li>
+              </ul>
+            </article>
+            <article class="pillar-card">
+              <h3>Composable visuals</h3>
+              <p>
+                Chart primitives share motion, typography, and interaction rules so new modules can
+                be shipped in days without design drift or accessibility regressions.
+              </p>
+              <ul class="pillar-list">
+                <li>Theme-aware Chart.js presets</li>
+                <li>Server-friendly lazy hydration</li>
+                <li>Keyboard and screen reader support</li>
+              </ul>
+            </article>
+            <article class="pillar-card">
+              <h3>Editorial clarity</h3>
+              <p>
+                Templates for story ledes, callouts, and comparison blocks keep analysts focused on
+                insight quality instead of page layout chores.
+              </p>
+              <ul class="pillar-list">
+                <li>Reusable storytelling panels</li>
+                <li>Context-first copy guidelines</li>
+                <li>Publish-ready export formats</li>
+              </ul>
             </article>
           </div>
         </section>
@@ -109,7 +177,44 @@
           </div>
         </section>
 
-        <section>
+        <section class="insight-preview">
+          <div class="insight-preview__content">
+            <h2>From datasets to decisions in three beats</h2>
+            <p class="lead">
+              The MVP flow mirrors real basketball operations—from nightly scouting syncs to
+              long-form historical research. Reuse it as-is or extend with your own automated
+              insights.
+            </p>
+            <ol class="insight-steps">
+              <li>
+                <strong>Scan league pulse.</strong>
+                Players and teams pages surface the deltas that matter: availability, rotation shifts,
+                and efficiency swings.
+              </li>
+              <li>
+                <strong>Deep-dive context.</strong>
+                Jump into history archives or Insights Lab experiments to understand the why behind
+                trends.
+              </li>
+              <li>
+                <strong>Decide and share.</strong>
+                Export snapshots or embed charts directly into your scouting briefs and presentations.
+              </li>
+            </ol>
+            <a class="cta cta--inline" href="insights.html">See the latest experiments →</a>
+          </div>
+          <aside class="insight-preview__panel" aria-label="Platform coverage">
+            <h3>Coverage at launch</h3>
+            <ul class="coverage-list">
+              <li><span>Live roster &amp; contract tracking</span> <strong>Daily refresh</strong></li>
+              <li><span>Team offensive &amp; defensive ratings</span> <strong>Rolling 10-game windows</strong></li>
+              <li><span>Prospect journey database</span> <strong>Global leagues + NCAA</strong></li>
+              <li><span>Historical award race index</span> <strong>1951 to present</strong></li>
+            </ul>
+          </aside>
+        </section>
+
+        <section id="roadmap">
           <h2>Roadmap to launch</h2>
           <p class="lead">
             This experience hub is designed to scale. Each milestone below unlocks new sections,
@@ -154,6 +259,44 @@
               <a href="scripts/README.html">View ingestion details →</a>
             </article>
           </div>
+        </section>
+
+        <section class="faq">
+          <h2>Frequently asked questions</h2>
+          <div class="faq-grid">
+            <details>
+              <summary>How often is the data refreshed?</summary>
+              <p>
+                Core player, team, and schedule tables are ingested nightly with automated QA. Alerts
+                trigger immediate refreshes when official league feeds publish critical updates.
+              </p>
+            </details>
+            <details>
+              <summary>Can I extend the hub with proprietary metrics?</summary>
+              <p>
+                Yes. The data contracts expose merge-friendly IDs and the visualization layer reads
+                from JSON configs, making it straightforward to add custom feeds or bespoke charts.
+              </p>
+            </details>
+            <details>
+              <summary>What is required for 1.0 release?</summary>
+              <p>
+                Finalize authentication, enable user workspaces, and productionize the Insights Lab
+                publishing workflow so analysts can collaborate directly inside the platform.
+              </p>
+            </details>
+          </div>
+        </section>
+
+        <section class="callout">
+          <div class="callout__content">
+            <h2>Ready to make the jump from template to trusted tool?</h2>
+            <p>
+              Rally stakeholders around a single source of NBA truth. The Intelligence Hub is built
+              to go live—bring your branding, plug in your access controls, and launch.
+            </p>
+          </div>
+          <a class="cta cta--primary" href="mailto:product@nbahub.local">Book a rollout session</a>
         </section>
       </main>
 
