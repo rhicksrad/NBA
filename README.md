@@ -1,5 +1,9 @@
 # NBA
 
+## Web experience overview
+- `public/index.html` now delivers the cinematic landing page that introduces the NBA Intelligence Hub.
+- `public/franchise-explorer.html` contains the interactive dashboards for franchises, schedules, players, and historical leaders.
+
 ## Data dictionary conventions
 - **Types.** Unless noted otherwise, `int` columns are whole numbers, `float` columns may contain decimal precision, `string` columns are UTF-8 text, `date` columns follow ISO-8601 (`YYYY-MM-DD` or `YYYY-MM-DD hh:mm:ss`), and `enum` columns contain a constrained vocabulary (often booleans expressed as `True`/`False` or `0`/`1`).
 - **Nulls.** Missing values are stored as blank strings; numeric columns with blanks should be interpreted as `NA`.
@@ -8,16 +12,17 @@
 ## Datasets
 
 ### Front-end snapshot
-- **Description:** Lightweight JSON used by the interactive MVP in `public/index.html`.
+- **Description:** Lightweight JSON used by the interactive MVP in `public/franchise-explorer.html`.
 - **How to regenerate:** Run `node scripts/build_snapshot.mjs` from the repository root. The script parses `TeamHistories.csv`, filters for active franchise eras, and writes `public/data/active_franchises.json`.
 - **Why it matters:** Keeps the browser payload small while guaranteeing the visualization reflects the latest CSV sources.
 
 ### 2024-25 schedule snapshot
-- **Description:** Aggregated JSON powering the league calendar insights section in `public/index.html`, summarizing monthly volume, team workloads, and tagged special events.
+- **Description:** Aggregated JSON powering the league calendar insights section in `public/franchise-explorer.html`, summarizing monthly volume, team workloads, and tagged special events.
 - **How to regenerate:** Run `node scripts/build_schedule_snapshot.mjs` from the repository root. The script reads `LeagueSchedule24_25.csv` and joins against `TeamHistories.csv` to provide friendly team names.
 - **Why it matters:** Allows the MVP to surface upcoming season context without shipping the full 1,400-row CSV to the browser.
 
 ### Insight snapshots (players, games, teams)
+
 - **Description:** Condensed JSON exports used by the "Global player pipeline", "Historic game spotlights", "Team performance benchmarks", and "All-time player leaders" sections in `public/index.html`.
 - **How to regenerate:** Run `python scripts/build_insights.py`. The script streams (via the `7z` CLI when available, or falls back to the [`py7zr`](https://pypi.org/project/py7zr/) Python package):
   - `Players.csv` for roster metadata and height/position rollups,
