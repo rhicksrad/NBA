@@ -318,14 +318,14 @@
     </section>
 
     <section aria-labelledby="schedule-heading">
-      <h2 id="schedule-heading">2024-25 league calendar outlook</h2>
-      <p id="schedule-note" class="data-note">Loading 2024-25 schedule insights…</p>
+      <h2 id="schedule-heading">2025-26 league calendar outlook</h2>
+      <p id="schedule-note" class="data-note">Loading 2025-26 schedule insights…</p>
       <div class="summary-cards" id="schedule-summary" aria-live="polite"></div>
 
       <div class="schedule-layout">
         <div class="schedule-panel">
           <h3>Monthly game volume</h3>
-          <canvas id="schedule-monthly-chart" role="img" aria-label="Stacked bar chart showing 2024-25 NBA schedule volume by month"></canvas>
+          <canvas id="schedule-monthly-chart" role="img" aria-label="Stacked bar chart showing 2025-26 NBA schedule volume by month"></canvas>
         </div>
         <div class="schedule-panel">
           <h3>Teams with the busiest slates</h3>
@@ -974,7 +974,7 @@
 
       const generatedText = generatedAt ? new Date(generatedAt).toLocaleString() : '—';
       const coverage = dateRange ? formatDateRange(dateRange.start, dateRange.end) : '—';
-      dom.scheduleNote.textContent = `Schedule snapshot generated ${generatedText}. Coverage: ${coverage}. Totals include preseason, Emirates NBA Cup, play-in, and playoff rounds from LeagueSchedule24_25.csv.`;
+      dom.scheduleNote.textContent = `Schedule snapshot generated ${generatedText}. Coverage: ${coverage}. Totals include preseason, Emirates NBA Cup, play-in, and playoff rounds from LeagueSchedule25_26.csv.`;
     }
 
     function renderScheduleChart() {
@@ -1634,7 +1634,7 @@
 
     async function loadSchedule() {
       try {
-        const schedule = await fetchJson('data/season_24_25_schedule.json', 'schedule snapshot');
+        const schedule = await fetchJson('data/season_25_26_schedule.json', 'schedule snapshot');
         state.schedule = schedule;
         renderScheduleSummary();
         renderScheduleChart();
@@ -1642,7 +1642,7 @@
         renderScheduleSpecials();
       } catch (error) {
         console.error(error);
-        dom.scheduleNote.textContent = 'Unable to load the 2024-25 schedule snapshot. Please refresh to try again.';
+        dom.scheduleNote.textContent = 'Unable to load the 2025-26 schedule snapshot. Please refresh to try again.';
         dom.scheduleSummary.innerHTML = '';
         dom.scheduleTeamsBody.innerHTML = '<tr><td colspan="5">Schedule data unavailable.</td></tr>';
         dom.scheduleSpecialList.innerHTML = '<li>Schedule data unavailable.</li>';

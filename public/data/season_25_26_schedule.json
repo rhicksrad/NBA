@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2025-09-27T14:17:59.116Z",
+  "generatedAt": "2025-09-27T16:00:32.097Z",
   "totals": {
     "games": 1408,
     "preseason": 86,
@@ -66,76 +66,76 @@
     }
   ],
   "dateRange": {
-    "start": "2024-10-04T12:00:00.000Z",
-    "end": "2025-10-17T22:30:00.000Z"
+    "start": "2025-10-04T12:00:00Z",
+    "end": "2026-10-17T22:30:00Z"
   },
   "monthlyCounts": [
     {
-      "month": "2024-10",
-      "label": "Oct 2024",
+      "month": "2025-10",
+      "label": "Oct 2025",
       "games": 144,
       "preseason": 73,
       "regularSeason": 71
     },
     {
-      "month": "2024-11",
-      "label": "Nov 2024",
+      "month": "2025-11",
+      "label": "Nov 2025",
       "games": 222,
       "preseason": 0,
       "regularSeason": 172
     },
     {
-      "month": "2024-12",
-      "label": "Dec 2024",
+      "month": "2025-12",
+      "label": "Dec 2025",
       "games": 192,
       "preseason": 0,
       "regularSeason": 174
     },
     {
-      "month": "2025-01",
-      "label": "Jan 2025",
+      "month": "2026-01",
+      "label": "Jan 2026",
       "games": 231,
       "preseason": 0,
       "regularSeason": 229
     },
     {
-      "month": "2025-02",
-      "label": "Feb 2025",
+      "month": "2026-02",
+      "label": "Feb 2026",
       "games": 175,
       "preseason": 0,
       "regularSeason": 174
     },
     {
-      "month": "2025-03",
-      "label": "Mar 2025",
+      "month": "2026-03",
+      "label": "Mar 2026",
       "games": 237,
       "preseason": 0,
       "regularSeason": 237
     },
     {
-      "month": "2025-04",
-      "label": "Apr 2025",
+      "month": "2026-04",
+      "label": "Apr 2026",
       "games": 148,
       "preseason": 0,
       "regularSeason": 104
     },
     {
-      "month": "2025-05",
-      "label": "May 2025",
+      "month": "2026-05",
+      "label": "May 2026",
       "games": 39,
       "preseason": 0,
       "regularSeason": 0
     },
     {
-      "month": "2025-06",
-      "label": "Jun 2025",
+      "month": "2026-06",
+      "label": "Jun 2026",
       "games": 7,
       "preseason": 0,
       "regularSeason": 0
     },
     {
-      "month": "2025-10",
-      "label": "Oct 2025",
+      "month": "2026-10",
+      "label": "Oct 2026",
       "games": 13,
       "preseason": 13,
       "regularSeason": 0
@@ -152,8 +152,8 @@
       "totalGames": 97,
       "homeGames": 51,
       "awayGames": 46,
-      "firstGame": "2024-10-04T22:30:00.000Z",
-      "lastGame": "2025-10-17T22:30:00.000Z"
+      "firstGame": "2025-10-04T22:30:00Z",
+      "lastGame": "2026-10-17T22:30:00Z"
     },
     {
       "teamId": "1610612748",
@@ -165,8 +165,8 @@
       "totalGames": 96,
       "homeGames": 49,
       "awayGames": 47,
-      "firstGame": "2024-10-08T19:00:00.000Z",
-      "lastGame": "2025-10-17T20:00:00.000Z"
+      "firstGame": "2025-10-08T19:00:00Z",
+      "lastGame": "2026-10-17T20:00:00Z"
     },
     {
       "teamId": "1610612755",
@@ -178,8 +178,8 @@
       "totalGames": 90,
       "homeGames": 44,
       "awayGames": 46,
-      "firstGame": "2024-10-07T19:00:00.000Z",
-      "lastGame": "2025-10-04T11:00:00.000Z"
+      "firstGame": "2025-10-07T19:00:00Z",
+      "lastGame": "2026-10-04T11:00:00Z"
     },
     {
       "teamId": "1610612756",
@@ -191,8 +191,8 @@
       "totalGames": 90,
       "homeGames": 44,
       "awayGames": 46,
-      "firstGame": "2024-10-06T21:30:00.000Z",
-      "lastGame": "2025-10-12T07:00:00.000Z"
+      "firstGame": "2025-10-06T21:30:00Z",
+      "lastGame": "2026-10-12T07:00:00Z"
     },
     {
       "teamId": "1610612752",
@@ -204,8 +204,8 @@
       "totalGames": 107,
       "homeGames": 54,
       "awayGames": 53,
-      "firstGame": "2024-10-06T17:00:00.000Z",
-      "lastGame": "2025-10-04T11:00:00.000Z"
+      "firstGame": "2025-10-06T17:00:00Z",
+      "lastGame": "2026-10-04T11:00:00Z"
     },
     {
       "teamId": "1610612744",
@@ -217,8 +217,8 @@
       "totalGames": 102,
       "homeGames": 50,
       "awayGames": 52,
-      "firstGame": "2024-10-05T19:00:00.000Z",
-      "lastGame": "2025-10-12T21:30:00.000Z"
+      "firstGame": "2025-10-05T19:00:00Z",
+      "lastGame": "2026-10-12T21:30:00Z"
     },
     {
       "teamId": "1610612763",
@@ -230,8 +230,8 @@
       "totalGames": 94,
       "homeGames": 46,
       "awayGames": 48,
-      "firstGame": "2024-10-07T20:00:00.000Z",
-      "lastGame": "2025-10-17T20:00:00.000Z"
+      "firstGame": "2025-10-07T20:00:00Z",
+      "lastGame": "2026-10-17T20:00:00Z"
     },
     {
       "teamId": "1610612758",
@@ -243,8 +243,8 @@
       "totalGames": 89,
       "homeGames": 44,
       "awayGames": 45,
-      "firstGame": "2024-10-09T22:30:00.000Z",
-      "lastGame": "2025-10-17T22:30:00.000Z"
+      "firstGame": "2025-10-09T22:30:00Z",
+      "lastGame": "2026-10-17T22:30:00Z"
     },
     {
       "teamId": "1610612751",
@@ -256,8 +256,8 @@
       "totalGames": 88,
       "homeGames": 44,
       "awayGames": 44,
-      "firstGame": "2024-10-08T22:30:00.000Z",
-      "lastGame": "2025-10-12T07:00:00.000Z"
+      "firstGame": "2025-10-08T22:30:00Z",
+      "lastGame": "2026-10-12T07:00:00Z"
     },
     {
       "teamId": "1610612759",
@@ -269,8 +269,8 @@
       "totalGames": 88,
       "homeGames": 44,
       "awayGames": 44,
-      "firstGame": "2024-10-07T20:00:00.000Z",
-      "lastGame": "2025-10-08T19:30:00.000Z"
+      "firstGame": "2025-10-07T20:00:00Z",
+      "lastGame": "2026-10-08T19:30:00Z"
     },
     {
       "teamId": "1610612762",
@@ -282,8 +282,8 @@
       "totalGames": 88,
       "homeGames": 44,
       "awayGames": 44,
-      "firstGame": "2024-10-04T21:00:00.000Z",
-      "lastGame": "2025-04-13T15:30:00.000Z"
+      "firstGame": "2025-10-04T21:00:00Z",
+      "lastGame": "2026-04-13T15:30:00Z"
     },
     {
       "teamId": "1610612760",
@@ -295,8 +295,8 @@
       "totalGames": 110,
       "homeGames": 58,
       "awayGames": 52,
-      "firstGame": "2024-10-07T20:00:00.000Z",
-      "lastGame": "2025-06-22T20:00:00.000Z"
+      "firstGame": "2025-10-07T20:00:00Z",
+      "lastGame": "2026-06-22T20:00:00Z"
     },
     {
       "teamId": "1610612750",
@@ -308,8 +308,8 @@
       "totalGames": 102,
       "homeGames": 50,
       "awayGames": 52,
-      "firstGame": "2024-10-04T22:30:00.000Z",
-      "lastGame": "2025-05-28T20:30:00.000Z"
+      "firstGame": "2025-10-04T22:30:00Z",
+      "lastGame": "2026-05-28T20:30:00Z"
     },
     {
       "teamId": "1610612743",
@@ -321,8 +321,8 @@
       "totalGames": 101,
       "homeGames": 51,
       "awayGames": 50,
-      "firstGame": "2024-10-04T12:00:00.000Z",
-      "lastGame": "2025-05-18T15:30:00.000Z"
+      "firstGame": "2025-10-04T12:00:00Z",
+      "lastGame": "2026-05-18T15:30:00Z"
     },
     {
       "teamId": "1610612738",
@@ -334,8 +334,8 @@
       "totalGames": 98,
       "homeGames": 50,
       "awayGames": 48,
-      "firstGame": "2024-10-04T12:00:00.000Z",
-      "lastGame": "2025-05-16T20:00:00.000Z"
+      "firstGame": "2025-10-04T12:00:00Z",
+      "lastGame": "2026-05-16T20:00:00Z"
     },
     {
       "teamId": "1610612746",
@@ -347,8 +347,8 @@
       "totalGames": 94,
       "homeGames": 49,
       "awayGames": 45,
-      "firstGame": "2024-10-05T19:00:00.000Z",
-      "lastGame": "2025-05-03T19:30:00.000Z"
+      "firstGame": "2025-10-05T19:00:00Z",
+      "lastGame": "2026-05-03T19:30:00Z"
     },
     {
       "teamId": "1610612765",
@@ -360,8 +360,8 @@
       "totalGames": 93,
       "homeGames": 47,
       "awayGames": 46,
-      "firstGame": "2024-10-06T20:00:00.000Z",
-      "lastGame": "2025-05-01T19:30:00.000Z"
+      "firstGame": "2025-10-06T20:00:00Z",
+      "lastGame": "2026-05-01T19:30:00Z"
     },
     {
       "teamId": "1610612749",
@@ -373,8 +373,8 @@
       "totalGames": 92,
       "homeGames": 46,
       "awayGames": 46,
-      "firstGame": "2024-10-06T20:00:00.000Z",
-      "lastGame": "2025-10-06T19:30:00.000Z"
+      "firstGame": "2025-10-06T20:00:00Z",
+      "lastGame": "2026-10-06T19:30:00Z"
     },
     {
       "teamId": "1610612742",
@@ -386,8 +386,8 @@
       "totalGames": 89,
       "homeGames": 43,
       "awayGames": 46,
-      "firstGame": "2024-10-07T20:00:00.000Z",
-      "lastGame": "2025-10-15T22:00:00.000Z"
+      "firstGame": "2025-10-07T20:00:00Z",
+      "lastGame": "2026-10-15T22:00:00Z"
     },
     {
       "teamId": "1610612741",
@@ -399,8 +399,8 @@
       "totalGames": 88,
       "homeGames": 45,
       "awayGames": 43,
-      "firstGame": "2024-10-08T19:00:00.000Z",
-      "lastGame": "2025-04-16T19:30:00.000Z"
+      "firstGame": "2025-10-08T19:00:00Z",
+      "lastGame": "2026-04-16T19:30:00Z"
     },
     {
       "teamId": "1610612766",
@@ -412,8 +412,8 @@
       "totalGames": 87,
       "homeGames": 43,
       "awayGames": 44,
-      "firstGame": "2024-10-06T17:00:00.000Z",
-      "lastGame": "2025-04-13T13:00:00.000Z"
+      "firstGame": "2025-10-06T17:00:00Z",
+      "lastGame": "2026-04-13T13:00:00Z"
     },
     {
       "teamId": "1610612740",
@@ -425,8 +425,8 @@
       "totalGames": 87,
       "homeGames": 44,
       "awayGames": 43,
-      "firstGame": "2024-10-07T13:30:00.000Z",
-      "lastGame": "2025-10-05T02:30:00.000Z"
+      "firstGame": "2025-10-07T13:30:00Z",
+      "lastGame": "2026-10-05T02:30:00Z"
     },
     {
       "teamId": "1610612761",
@@ -438,8 +438,8 @@
       "totalGames": 87,
       "homeGames": 43,
       "awayGames": 44,
-      "firstGame": "2024-10-06T19:30:00.000Z",
-      "lastGame": "2025-04-13T15:30:00.000Z"
+      "firstGame": "2025-10-06T19:30:00Z",
+      "lastGame": "2026-04-13T15:30:00Z"
     },
     {
       "teamId": "1610612764",
@@ -451,8 +451,8 @@
       "totalGames": 87,
       "homeGames": 43,
       "awayGames": 44,
-      "firstGame": "2024-10-06T19:30:00.000Z",
-      "lastGame": "2025-04-13T13:00:00.000Z"
+      "firstGame": "2025-10-06T19:30:00Z",
+      "lastGame": "2026-04-13T13:00:00Z"
     },
     {
       "teamId": "1610612754",
@@ -464,8 +464,8 @@
       "totalGames": 109,
       "homeGames": 54,
       "awayGames": 55,
-      "firstGame": "2024-10-08T19:30:00.000Z",
-      "lastGame": "2025-06-22T20:00:00.000Z"
+      "firstGame": "2025-10-08T19:30:00Z",
+      "lastGame": "2026-06-22T20:00:00Z"
     },
     {
       "teamId": "1610612739",
@@ -477,8 +477,8 @@
       "totalGames": 95,
       "homeGames": 48,
       "awayGames": 47,
-      "firstGame": "2024-10-08T19:00:00.000Z",
-      "lastGame": "2025-05-13T19:00:00.000Z"
+      "firstGame": "2025-10-08T19:00:00Z",
+      "lastGame": "2026-05-13T19:00:00Z"
     },
     {
       "teamId": "1610612745",
@@ -490,8 +490,8 @@
       "totalGames": 93,
       "homeGames": 47,
       "awayGames": 46,
-      "firstGame": "2024-10-07T21:00:00.000Z",
-      "lastGame": "2025-05-04T20:30:00.000Z"
+      "firstGame": "2025-10-07T21:00:00Z",
+      "lastGame": "2026-05-04T20:30:00Z"
     },
     {
       "teamId": "1610612737",
@@ -503,8 +503,8 @@
       "totalGames": 88,
       "homeGames": 43,
       "awayGames": 45,
-      "firstGame": "2024-10-08T19:30:00.000Z",
-      "lastGame": "2025-04-18T19:00:00.000Z"
+      "firstGame": "2025-10-08T19:30:00Z",
+      "lastGame": "2026-04-18T19:00:00Z"
     },
     {
       "teamId": "1610612757",
@@ -516,8 +516,8 @@
       "totalGames": 86,
       "homeGames": 43,
       "awayGames": 43,
-      "firstGame": "2024-10-11T22:30:00.000Z",
-      "lastGame": "2025-04-13T15:30:00.000Z"
+      "firstGame": "2025-10-11T22:30:00Z",
+      "lastGame": "2026-04-13T15:30:00Z"
     },
     {
       "teamId": "1610612753",
@@ -529,8 +529,8 @@
       "totalGames": 91,
       "homeGames": 45,
       "awayGames": 46,
-      "firstGame": "2024-10-07T13:30:00.000Z",
-      "lastGame": "2025-04-29T20:30:00.000Z"
+      "firstGame": "2025-10-07T13:30:00Z",
+      "lastGame": "2026-04-29T20:30:00Z"
     },
     {
       "teamId": "15020",
@@ -542,8 +542,8 @@
       "totalGames": 3,
       "homeGames": 0,
       "awayGames": 3,
-      "firstGame": "2024-10-04T21:00:00.000Z",
-      "lastGame": "2024-10-10T20:00:00.000Z"
+      "firstGame": "2025-10-04T21:00:00Z",
+      "lastGame": "2025-10-10T20:00:00Z"
     },
     {
       "teamId": "15016",
@@ -555,8 +555,8 @@
       "totalGames": 1,
       "homeGames": 0,
       "awayGames": 1,
-      "firstGame": "2025-10-03T05:30:00.000Z",
-      "lastGame": "2025-10-03T05:30:00.000Z"
+      "firstGame": "2026-10-03T05:30:00Z",
+      "lastGame": "2026-10-03T05:30:00Z"
     },
     {
       "teamId": "15025",
@@ -568,8 +568,8 @@
       "totalGames": 1,
       "homeGames": 0,
       "awayGames": 1,
-      "firstGame": "2024-10-16T22:00:00.000Z",
-      "lastGame": "2024-10-16T22:00:00.000Z"
+      "firstGame": "2025-10-16T22:00:00Z",
+      "lastGame": "2025-10-16T22:00:00Z"
     },
     {
       "teamId": "50013",
@@ -581,8 +581,8 @@
       "totalGames": 1,
       "homeGames": 0,
       "awayGames": 1,
-      "firstGame": "2025-10-05T02:30:00.000Z",
-      "lastGame": "2025-10-05T02:30:00.000Z"
+      "firstGame": "2026-10-05T02:30:00Z",
+      "lastGame": "2026-10-05T02:30:00Z"
     },
     {
       "teamId": "0",
@@ -594,14 +594,14 @@
       "totalGames": 4,
       "homeGames": 2,
       "awayGames": 2,
-      "firstGame": "2024-12-17T20:30:00.000Z",
-      "lastGame": "2025-02-16T00:00:00.000Z"
+      "firstGame": "2025-12-17T20:30:00Z",
+      "lastGame": "2026-02-16T00:00:00Z"
     }
   ],
   "specialGames": [
     {
       "gameId": "12400001",
-      "date": "2024-10-04T12:00:00.000Z",
+      "date": "2025-10-04T12:00:00Z",
       "arena": "Etihad Arena",
       "city": "Abu Dhabi",
       "state": "",
@@ -614,7 +614,7 @@
     },
     {
       "gameId": "12400005",
-      "date": "2024-10-06T10:00:00.000Z",
+      "date": "2025-10-06T10:00:00Z",
       "arena": "Etihad Arena",
       "city": "Abu Dhabi",
       "state": "",
@@ -627,7 +627,7 @@
     },
     {
       "gameId": "12400007",
-      "date": "2024-10-06T19:30:00.000Z",
+      "date": "2025-10-06T19:30:00Z",
       "arena": "Bell Centre",
       "city": "Montreal",
       "state": "QC",
@@ -640,7 +640,7 @@
     },
     {
       "gameId": "22400147",
-      "date": "2024-11-02T21:30:00.000Z",
+      "date": "2025-11-02T21:30:00Z",
       "arena": "Arena CDMX",
       "city": "Mexico City",
       "state": "MX",
@@ -653,7 +653,7 @@
     },
     {
       "gameId": "22400001",
-      "date": "2024-11-12T19:00:00.000Z",
+      "date": "2025-11-12T19:00:00Z",
       "arena": "TD Garden",
       "city": "Boston",
       "state": "MA",
@@ -666,7 +666,7 @@
     },
     {
       "gameId": "22400002",
-      "date": "2024-11-12T19:00:00.000Z",
+      "date": "2025-11-12T19:00:00Z",
       "arena": "Little Caesars Arena",
       "city": "Detroit",
       "state": "MI",
@@ -679,7 +679,7 @@
     },
     {
       "gameId": "22400003",
-      "date": "2024-11-12T19:00:00.000Z",
+      "date": "2025-11-12T19:00:00Z",
       "arena": "Kia Center",
       "city": "Orlando",
       "state": "FL",
@@ -692,7 +692,7 @@
     },
     {
       "gameId": "22400004",
-      "date": "2024-11-12T19:30:00.000Z",
+      "date": "2025-11-12T19:30:00Z",
       "arena": "Wells Fargo Center",
       "city": "Philadelphia",
       "state": "PA",
@@ -705,7 +705,7 @@
     },
     {
       "gameId": "22400005",
-      "date": "2024-11-12T20:00:00.000Z",
+      "date": "2025-11-12T20:00:00Z",
       "arena": "Fiserv Forum",
       "city": "Milwaukee",
       "state": "WI",
@@ -718,7 +718,7 @@
     },
     {
       "gameId": "22400006",
-      "date": "2024-11-12T21:00:00.000Z",
+      "date": "2025-11-12T21:00:00Z",
       "arena": "Delta Center",
       "city": "Salt Lake City",
       "state": "UT",
@@ -731,7 +731,7 @@
     },
     {
       "gameId": "22400007",
-      "date": "2024-11-12T22:00:00.000Z",
+      "date": "2025-11-12T22:00:00Z",
       "arena": "Chase Center",
       "city": "San Francisco",
       "state": "CA",
@@ -744,7 +744,7 @@
     },
     {
       "gameId": "22400008",
-      "date": "2024-11-12T22:00:00.000Z",
+      "date": "2025-11-12T22:00:00Z",
       "arena": "Moda Center",
       "city": "Portland",
       "state": "OR",
@@ -757,7 +757,7 @@
     },
     {
       "gameId": "22400009",
-      "date": "2024-11-15T19:00:00.000Z",
+      "date": "2025-11-15T19:00:00Z",
       "arena": "Gainbridge Fieldhouse",
       "city": "Indianapolis",
       "state": "IN",
@@ -770,7 +770,7 @@
     },
     {
       "gameId": "22400010",
-      "date": "2024-11-15T19:00:00.000Z",
+      "date": "2025-11-15T19:00:00Z",
       "arena": "Kia Center",
       "city": "Orlando",
       "state": "FL",
@@ -783,7 +783,7 @@
     },
     {
       "gameId": "22400011",
-      "date": "2024-11-15T19:00:00.000Z",
+      "date": "2025-11-15T19:00:00Z",
       "arena": "Scotiabank Arena",
       "city": "Toronto",
       "state": "ON",
@@ -796,7 +796,7 @@
     },
     {
       "gameId": "22400012",
-      "date": "2024-11-15T19:30:00.000Z",
+      "date": "2025-11-15T19:30:00Z",
       "arena": "State Farm Arena",
       "city": "Atlanta",
       "state": "GA",
@@ -809,7 +809,7 @@
     },
     {
       "gameId": "22400013",
-      "date": "2024-11-15T19:30:00.000Z",
+      "date": "2025-11-15T19:30:00Z",
       "arena": "Rocket Mortgage FieldHouse",
       "city": "Cleveland",
       "state": "OH",
@@ -822,7 +822,7 @@
     },
     {
       "gameId": "22400014",
-      "date": "2024-11-15T19:30:00.000Z",
+      "date": "2025-11-15T19:30:00Z",
       "arena": "Madison Square Garden",
       "city": "New York",
       "state": "NY",
@@ -835,7 +835,7 @@
     },
     {
       "gameId": "22400015",
-      "date": "2024-11-15T19:30:00.000Z",
+      "date": "2025-11-15T19:30:00Z",
       "arena": "Frost Bank Center",
       "city": "San Antonio",
       "state": "TX",
@@ -848,7 +848,7 @@
     },
     {
       "gameId": "22400016",
-      "date": "2024-11-15T20:00:00.000Z",
+      "date": "2025-11-15T20:00:00Z",
       "arena": "Toyota Center",
       "city": "Houston",
       "state": "TX",
@@ -861,7 +861,7 @@
     },
     {
       "gameId": "22400017",
-      "date": "2024-11-15T20:00:00.000Z",
+      "date": "2025-11-15T20:00:00Z",
       "arena": "Smoothie King Center",
       "city": "New Orleans",
       "state": "LA",
@@ -874,7 +874,7 @@
     },
     {
       "gameId": "22400018",
-      "date": "2024-11-15T20:00:00.000Z",
+      "date": "2025-11-15T20:00:00Z",
       "arena": "Paycom Center",
       "city": "Oklahoma City",
       "state": "OK",
@@ -887,7 +887,7 @@
     },
     {
       "gameId": "22400019",
-      "date": "2024-11-15T22:00:00.000Z",
+      "date": "2025-11-15T22:00:00Z",
       "arena": "Chase Center",
       "city": "San Francisco",
       "state": "CA",
@@ -900,7 +900,7 @@
     },
     {
       "gameId": "22400020",
-      "date": "2024-11-15T22:00:00.000Z",
+      "date": "2025-11-15T22:00:00Z",
       "arena": "Golden 1 Center",
       "city": "Sacramento",
       "state": "CA",
@@ -913,7 +913,7 @@
     },
     {
       "gameId": "22400021",
-      "date": "2024-11-19T19:00:00.000Z",
+      "date": "2025-11-19T19:00:00Z",
       "arena": "TD Garden",
       "city": "Boston",
       "state": "MA",
@@ -926,7 +926,7 @@
     },
     {
       "gameId": "22400022",
-      "date": "2024-11-19T19:30:00.000Z",
+      "date": "2025-11-19T19:30:00Z",
       "arena": "Barclays Center",
       "city": "Brooklyn",
       "state": "NY",
@@ -939,7 +939,7 @@
     },
     {
       "gameId": "22400023",
-      "date": "2024-11-19T20:00:00.000Z",
+      "date": "2025-11-19T20:00:00Z",
       "arena": "FedExForum",
       "city": "Memphis",
       "state": "TN",
@@ -952,7 +952,7 @@
     },
     {
       "gameId": "22400024",
-      "date": "2024-11-19T20:30:00.000Z",
+      "date": "2025-11-19T20:30:00Z",
       "arena": "American Airlines Center",
       "city": "Dallas",
       "state": "TX",
@@ -965,7 +965,7 @@
     },
     {
       "gameId": "22400025",
-      "date": "2024-11-19T21:30:00.000Z",
+      "date": "2025-11-19T21:30:00Z",
       "arena": "Frost Bank Center",
       "city": "San Antonio",
       "state": "TX",
@@ -978,7 +978,7 @@
     },
     {
       "gameId": "22400026",
-      "date": "2024-11-19T22:30:00.000Z",
+      "date": "2025-11-19T22:30:00Z",
       "arena": "Crypto.com Arena",
       "city": "Los Angeles",
       "state": "CA",
@@ -991,7 +991,7 @@
     },
     {
       "gameId": "22400027",
-      "date": "2024-11-22T19:00:00.000Z",
+      "date": "2025-11-22T19:00:00Z",
       "arena": "Wells Fargo Center",
       "city": "Philadelphia",
       "state": "PA",
@@ -1004,7 +1004,7 @@
     },
     {
       "gameId": "22400028",
-      "date": "2024-11-22T19:00:00.000Z",
+      "date": "2025-11-22T19:00:00Z",
       "arena": "Capital One Arena",
       "city": "Washington",
       "state": "DC",
@@ -1017,7 +1017,7 @@
     },
     {
       "gameId": "22400032",
-      "date": "2024-11-22T19:30:00.000Z",
+      "date": "2025-11-22T19:30:00Z",
       "arena": "Smoothie King Center",
       "city": "New Orleans",
       "state": "LA",
@@ -1030,7 +1030,7 @@
     },
     {
       "gameId": "22400029",
-      "date": "2024-11-22T20:00:00.000Z",
+      "date": "2025-11-22T20:00:00Z",
       "arena": "Fiserv Forum",
       "city": "Milwaukee",
       "state": "WI",
@@ -1043,7 +1043,7 @@
     },
     {
       "gameId": "22400030",
-      "date": "2024-11-22T20:00:00.000Z",
+      "date": "2025-11-22T20:00:00Z",
       "arena": "United Center",
       "city": "Chicago",
       "state": "IL",
@@ -1056,7 +1056,7 @@
     },
     {
       "gameId": "22400031",
-      "date": "2024-11-22T20:00:00.000Z",
+      "date": "2025-11-22T20:00:00Z",
       "arena": "Toyota Center",
       "city": "Houston",
       "state": "TX",
@@ -1069,7 +1069,7 @@
     },
     {
       "gameId": "22400033",
-      "date": "2024-11-22T22:00:00.000Z",
+      "date": "2025-11-22T22:00:00Z",
       "arena": "Ball Arena",
       "city": "Denver",
       "state": "CO",
@@ -1082,7 +1082,7 @@
     },
     {
       "gameId": "22400034",
-      "date": "2024-11-22T22:30:00.000Z",
+      "date": "2025-11-22T22:30:00Z",
       "arena": "Intuit Dome",
       "city": "Inglewood",
       "state": "CA",
@@ -1095,7 +1095,7 @@
     },
     {
       "gameId": "22400035",
-      "date": "2024-11-26T19:00:00.000Z",
+      "date": "2025-11-26T19:00:00Z",
       "arena": "Capital One Arena",
       "city": "Washington",
       "state": "DC",
@@ -1108,7 +1108,7 @@
     },
     {
       "gameId": "22400036",
-      "date": "2024-11-26T19:30:00.000Z",
+      "date": "2025-11-26T19:30:00Z",
       "arena": "Kaseya Center",
       "city": "Miami",
       "state": "FL",
@@ -1121,7 +1121,7 @@
     },
     {
       "gameId": "22400037",
-      "date": "2024-11-26T20:00:00.000Z",
+      "date": "2025-11-26T20:00:00Z",
       "arena": "Target Center",
       "city": "Minneapolis",
       "state": "MN",
@@ -1134,7 +1134,7 @@
     },
     {
       "gameId": "22400038",
-      "date": "2024-11-26T21:00:00.000Z",
+      "date": "2025-11-26T21:00:00Z",
       "arena": "Delta Center",
       "city": "Salt Lake City",
       "state": "UT",
@@ -1147,7 +1147,7 @@
     },
     {
       "gameId": "22400039",
-      "date": "2024-11-26T22:00:00.000Z",
+      "date": "2025-11-26T22:00:00Z",
       "arena": "Footprint Center",
       "city": "Phoenix",
       "state": "AZ",
@@ -1160,7 +1160,7 @@
     },
     {
       "gameId": "22400040",
-      "date": "2024-11-29T12:00:00.000Z",
+      "date": "2025-11-29T12:00:00Z",
       "arena": "Spectrum Center",
       "city": "Charlotte",
       "state": "NC",
@@ -1173,7 +1173,7 @@
     },
     {
       "gameId": "22400041",
-      "date": "2024-11-29T14:30:00.000Z",
+      "date": "2025-11-29T14:30:00Z",
       "arena": "State Farm Arena",
       "city": "Atlanta",
       "state": "GA",
@@ -1186,7 +1186,7 @@
     },
     {
       "gameId": "22400042",
-      "date": "2024-11-29T17:00:00.000Z",
+      "date": "2025-11-29T17:00:00Z",
       "arena": "FedExForum",
       "city": "Memphis",
       "state": "TN",
@@ -1199,7 +1199,7 @@
     },
     {
       "gameId": "22400043",
-      "date": "2024-11-29T19:30:00.000Z",
+      "date": "2025-11-29T19:30:00Z",
       "arena": "Barclays Center",
       "city": "Brooklyn",
       "state": "NY",
@@ -1212,7 +1212,7 @@
     },
     {
       "gameId": "22400044",
-      "date": "2024-11-29T19:30:00.000Z",
+      "date": "2025-11-29T19:30:00Z",
       "arena": "Target Center",
       "city": "Minneapolis",
       "state": "MN",
@@ -1225,7 +1225,7 @@
     },
     {
       "gameId": "22400045",
-      "date": "2024-11-29T20:00:00.000Z",
+      "date": "2025-11-29T20:00:00Z",
       "arena": "Gainbridge Fieldhouse",
       "city": "Indianapolis",
       "state": "IN",
@@ -1238,7 +1238,7 @@
     },
     {
       "gameId": "22400046",
-      "date": "2024-11-29T20:00:00.000Z",
+      "date": "2025-11-29T20:00:00Z",
       "arena": "Kaseya Center",
       "city": "Miami",
       "state": "FL",
@@ -1251,7 +1251,7 @@
     },
     {
       "gameId": "22400047",
-      "date": "2024-11-29T20:00:00.000Z",
+      "date": "2025-11-29T20:00:00Z",
       "arena": "United Center",
       "city": "Chicago",
       "state": "IL",
@@ -1264,7 +1264,7 @@
     },
     {
       "gameId": "22400048",
-      "date": "2024-11-29T22:00:00.000Z",
+      "date": "2025-11-29T22:00:00Z",
       "arena": "Crypto.com Arena",
       "city": "Los Angeles",
       "state": "CA",
@@ -1277,7 +1277,7 @@
     },
     {
       "gameId": "22400049",
-      "date": "2024-11-29T22:00:00.000Z",
+      "date": "2025-11-29T22:00:00Z",
       "arena": "Moda Center",
       "city": "Portland",
       "state": "OR",
@@ -1290,7 +1290,7 @@
     },
     {
       "gameId": "22400050",
-      "date": "2024-12-03T19:00:00.000Z",
+      "date": "2025-12-03T19:00:00Z",
       "arena": "Spectrum Center",
       "city": "Charlotte",
       "state": "NC",
@@ -1303,7 +1303,7 @@
     },
     {
       "gameId": "22400051",
-      "date": "2024-12-03T19:00:00.000Z",
+      "date": "2025-12-03T19:00:00Z",
       "arena": "Rocket Mortgage FieldHouse",
       "city": "Cleveland",
       "state": "OH",
@@ -1316,7 +1316,7 @@
     },
     {
       "gameId": "22400052",
-      "date": "2024-12-03T19:00:00.000Z",
+      "date": "2025-12-03T19:00:00Z",
       "arena": "Little Caesars Arena",
       "city": "Detroit",
       "state": "MI",
@@ -1329,7 +1329,7 @@
     },
     {
       "gameId": "22400053",
-      "date": "2024-12-03T19:30:00.000Z",
+      "date": "2025-12-03T19:30:00Z",
       "arena": "Madison Square Garden",
       "city": "New York",
       "state": "NY",
@@ -1342,7 +1342,7 @@
     },
     {
       "gameId": "22400054",
-      "date": "2024-12-03T19:30:00.000Z",
+      "date": "2025-12-03T19:30:00Z",
       "arena": "Scotiabank Arena",
       "city": "Toronto",
       "state": "ON",
@@ -1355,7 +1355,7 @@
     },
     {
       "gameId": "22400055",
-      "date": "2024-12-03T20:00:00.000Z",
+      "date": "2025-12-03T20:00:00Z",
       "arena": "Paycom Center",
       "city": "Oklahoma City",
       "state": "OK",
@@ -1368,7 +1368,7 @@
     },
     {
       "gameId": "22400056",
-      "date": "2024-12-03T20:30:00.000Z",
+      "date": "2025-12-03T20:30:00Z",
       "arena": "American Airlines Center",
       "city": "Dallas",
       "state": "TX",
@@ -1381,7 +1381,7 @@
     },
     {
       "gameId": "22400057",
-      "date": "2024-12-03T21:00:00.000Z",
+      "date": "2025-12-03T21:00:00Z",
       "arena": "Footprint Center",
       "city": "Phoenix",
       "state": "AZ",
@@ -1394,7 +1394,7 @@
     },
     {
       "gameId": "22400058",
-      "date": "2024-12-03T22:00:00.000Z",
+      "date": "2025-12-03T22:00:00Z",
       "arena": "Ball Arena",
       "city": "Denver",
       "state": "CO",
@@ -1407,7 +1407,7 @@
     },
     {
       "gameId": "22400059",
-      "date": "2024-12-03T22:00:00.000Z",
+      "date": "2025-12-03T22:00:00Z",
       "arena": "Golden 1 Center",
       "city": "Sacramento",
       "state": "CA",
@@ -1420,7 +1420,7 @@
     },
     {
       "gameId": "22400060",
-      "date": "2024-12-03T22:30:00.000Z",
+      "date": "2025-12-03T22:30:00Z",
       "arena": "Intuit Dome",
       "city": "Inglewood",
       "state": "CA",
@@ -1433,7 +1433,7 @@
     },
     {
       "gameId": "22401201",
-      "date": "2024-12-10T19:00:00.000Z",
+      "date": "2025-12-10T19:00:00Z",
       "arena": "Fiserv Forum",
       "city": "Milwaukee",
       "state": "WI",
@@ -1446,7 +1446,7 @@
     },
     {
       "gameId": "22401203",
-      "date": "2024-12-10T21:30:00.000Z",
+      "date": "2025-12-10T21:30:00Z",
       "arena": "Paycom Center",
       "city": "Oklahoma City",
       "state": "OK",
@@ -1459,7 +1459,7 @@
     },
     {
       "gameId": "22401202",
-      "date": "2024-12-11T19:00:00.000Z",
+      "date": "2025-12-11T19:00:00Z",
       "arena": "Madison Square Garden",
       "city": "New York",
       "state": "NY",
@@ -1472,7 +1472,7 @@
     },
     {
       "gameId": "22401204",
-      "date": "2024-12-11T21:30:00.000Z",
+      "date": "2025-12-11T21:30:00Z",
       "arena": "Toyota Center",
       "city": "Houston",
       "state": "TX",
@@ -1485,7 +1485,7 @@
     },
     {
       "gameId": "22401229",
-      "date": "2024-12-14T16:30:00.000Z",
+      "date": "2025-12-14T16:30:00Z",
       "arena": "T-Mobile Arena",
       "city": "Las Vegas",
       "state": "NV",
@@ -1498,7 +1498,7 @@
     },
     {
       "gameId": "22401230",
-      "date": "2024-12-14T20:30:00.000Z",
+      "date": "2025-12-14T20:30:00Z",
       "arena": "T-Mobile Arena",
       "city": "Las Vegas",
       "state": "NV",
@@ -1511,7 +1511,7 @@
     },
     {
       "gameId": "62400001",
-      "date": "2024-12-17T20:30:00.000Z",
+      "date": "2025-12-17T20:30:00Z",
       "arena": "T-Mobile Arena",
       "city": "Las Vegas",
       "state": "NV",
@@ -1524,7 +1524,7 @@
     },
     {
       "gameId": "22400621",
-      "date": "2025-01-23T14:00:00.000Z",
+      "date": "2026-01-23T14:00:00Z",
       "arena": "Accor Arena",
       "city": "Paris",
       "state": "FR",
@@ -1537,7 +1537,7 @@
     },
     {
       "gameId": "22400633",
-      "date": "2025-01-25T12:00:00.000Z",
+      "date": "2026-01-25T12:00:00Z",
       "arena": "Accor Arena",
       "city": "Paris",
       "state": "FR",
@@ -1550,7 +1550,7 @@
     },
     {
       "gameId": "52400101",
-      "date": "2025-04-15T19:30:00.000Z",
+      "date": "2026-04-15T19:30:00Z",
       "arena": "Kia Center",
       "city": "Orlando",
       "state": "FL",
@@ -1563,7 +1563,7 @@
     },
     {
       "gameId": "52400121",
-      "date": "2025-04-15T22:00:00.000Z",
+      "date": "2026-04-15T22:00:00Z",
       "arena": "Chase Center",
       "city": "San Francisco",
       "state": "CA",
@@ -1576,7 +1576,7 @@
     },
     {
       "gameId": "52400111",
-      "date": "2025-04-16T19:30:00.000Z",
+      "date": "2026-04-16T19:30:00Z",
       "arena": "United Center",
       "city": "Chicago",
       "state": "IL",
@@ -1589,7 +1589,7 @@
     },
     {
       "gameId": "52400131",
-      "date": "2025-04-16T22:00:00.000Z",
+      "date": "2026-04-16T22:00:00Z",
       "arena": "Golden 1 Center",
       "city": "Sacramento",
       "state": "CA",
@@ -1602,7 +1602,7 @@
     },
     {
       "gameId": "52400201",
-      "date": "2025-04-18T19:00:00.000Z",
+      "date": "2026-04-18T19:00:00Z",
       "arena": "State Farm Arena",
       "city": "Atlanta",
       "state": "GA",
@@ -1615,7 +1615,7 @@
     },
     {
       "gameId": "52400211",
-      "date": "2025-04-18T21:30:00.000Z",
+      "date": "2026-04-18T21:30:00Z",
       "arena": "FedExForum",
       "city": "Memphis",
       "state": "TN",
@@ -1628,7 +1628,7 @@
     },
     {
       "gameId": "42400131",
-      "date": "2025-04-19T13:00:00.000Z",
+      "date": "2026-04-19T13:00:00Z",
       "arena": "Gainbridge Fieldhouse",
       "city": "Indianapolis",
       "state": "IN",
@@ -1641,7 +1641,7 @@
     },
     {
       "gameId": "42400171",
-      "date": "2025-04-19T15:30:00.000Z",
+      "date": "2026-04-19T15:30:00Z",
       "arena": "Ball Arena",
       "city": "Denver",
       "state": "CO",
@@ -1654,7 +1654,7 @@
     },
     {
       "gameId": "42400121",
-      "date": "2025-04-19T18:00:00.000Z",
+      "date": "2026-04-19T18:00:00Z",
       "arena": "Madison Square Garden",
       "city": "New York",
       "state": "NY",
@@ -1667,7 +1667,7 @@
     },
     {
       "gameId": "42400161",
-      "date": "2025-04-19T20:30:00.000Z",
+      "date": "2026-04-19T20:30:00Z",
       "arena": "Crypto.com Arena",
       "city": "Los Angeles",
       "state": "CA",
@@ -1680,7 +1680,7 @@
     },
     {
       "gameId": "42400141",
-      "date": "2025-04-20T13:00:00.000Z",
+      "date": "2026-04-20T13:00:00Z",
       "arena": "Paycom Center",
       "city": "Oklahoma City",
       "state": "OK",
@@ -1693,7 +1693,7 @@
     },
     {
       "gameId": "42400111",
-      "date": "2025-04-20T15:30:00.000Z",
+      "date": "2026-04-20T15:30:00Z",
       "arena": "TD Garden",
       "city": "Boston",
       "state": "MA",
@@ -1706,7 +1706,7 @@
     },
     {
       "gameId": "42400101",
-      "date": "2025-04-20T19:00:00.000Z",
+      "date": "2026-04-20T19:00:00Z",
       "arena": "Rocket Arena",
       "city": "Cleveland",
       "state": "OH",
@@ -1719,7 +1719,7 @@
     },
     {
       "gameId": "42400151",
-      "date": "2025-04-20T21:30:00.000Z",
+      "date": "2026-04-20T21:30:00Z",
       "arena": "Toyota Center",
       "city": "Houston",
       "state": "TX",
@@ -1732,7 +1732,7 @@
     },
     {
       "gameId": "42400122",
-      "date": "2025-04-21T19:30:00.000Z",
+      "date": "2026-04-21T19:30:00Z",
       "arena": "Madison Square Garden",
       "city": "New York",
       "state": "NY",
@@ -1745,7 +1745,7 @@
     },
     {
       "gameId": "42400172",
-      "date": "2025-04-21T22:00:00.000Z",
+      "date": "2026-04-21T22:00:00Z",
       "arena": "Ball Arena",
       "city": "Denver",
       "state": "CO",
@@ -1758,7 +1758,7 @@
     },
     {
       "gameId": "42400132",
-      "date": "2025-04-22T19:00:00.000Z",
+      "date": "2026-04-22T19:00:00Z",
       "arena": "Gainbridge Fieldhouse",
       "city": "Indianapolis",
       "state": "IN",
@@ -1771,7 +1771,7 @@
     },
     {
       "gameId": "42400142",
-      "date": "2025-04-22T19:30:00.000Z",
+      "date": "2026-04-22T19:30:00Z",
       "arena": "Paycom Center",
       "city": "Oklahoma City",
       "state": "OK",
@@ -1784,7 +1784,7 @@
     },
     {
       "gameId": "42400162",
-      "date": "2025-04-22T22:00:00.000Z",
+      "date": "2026-04-22T22:00:00Z",
       "arena": "Crypto.com Arena",
       "city": "Los Angeles",
       "state": "CA",
@@ -1797,7 +1797,7 @@
     },
     {
       "gameId": "42400112",
-      "date": "2025-04-23T19:00:00.000Z",
+      "date": "2026-04-23T19:00:00Z",
       "arena": "TD Garden",
       "city": "Boston",
       "state": "MA",
@@ -1810,7 +1810,7 @@
     },
     {
       "gameId": "42400102",
-      "date": "2025-04-23T19:30:00.000Z",
+      "date": "2026-04-23T19:30:00Z",
       "arena": "Rocket Arena",
       "city": "Cleveland",
       "state": "OH",
@@ -1823,7 +1823,7 @@
     },
     {
       "gameId": "42400152",
-      "date": "2025-04-23T21:30:00.000Z",
+      "date": "2026-04-23T21:30:00Z",
       "arena": "Toyota Center",
       "city": "Houston",
       "state": "TX",
@@ -1836,7 +1836,7 @@
     },
     {
       "gameId": "42400123",
-      "date": "2025-04-24T19:00:00.000Z",
+      "date": "2026-04-24T19:00:00Z",
       "arena": "Little Caesars Arena",
       "city": "Detroit",
       "state": "MI",
@@ -1849,7 +1849,7 @@
     },
     {
       "gameId": "42400143",
-      "date": "2025-04-24T21:30:00.000Z",
+      "date": "2026-04-24T21:30:00Z",
       "arena": "FedExForum",
       "city": "Memphis",
       "state": "TN",
@@ -1862,7 +1862,7 @@
     },
     {
       "gameId": "42400173",
-      "date": "2025-04-24T22:00:00.000Z",
+      "date": "2026-04-24T22:00:00Z",
       "arena": "Intuit Dome",
       "city": "Inglewood",
       "state": "CA",
@@ -1875,7 +1875,7 @@
     },
     {
       "gameId": "42400113",
-      "date": "2025-04-25T19:00:00.000Z",
+      "date": "2026-04-25T19:00:00Z",
       "arena": "Kia Center",
       "city": "Orlando",
       "state": "FL",
@@ -1888,7 +1888,7 @@
     },
     {
       "gameId": "42400133",
-      "date": "2025-04-25T20:00:00.000Z",
+      "date": "2026-04-25T20:00:00Z",
       "arena": "Fiserv Forum",
       "city": "Milwaukee",
       "state": "WI",
@@ -1901,7 +1901,7 @@
     },
     {
       "gameId": "42400163",
-      "date": "2025-04-25T21:30:00.000Z",
+      "date": "2026-04-25T21:30:00Z",
       "arena": "Target Center",
       "city": "Minneapolis",
       "state": "MN",
@@ -1914,7 +1914,7 @@
     },
     {
       "gameId": "42400103",
-      "date": "2025-04-26T13:00:00.000Z",
+      "date": "2026-04-26T13:00:00Z",
       "arena": "Kaseya Center",
       "city": "Miami",
       "state": "FL",
@@ -1927,7 +1927,7 @@
     },
     {
       "gameId": "42400144",
-      "date": "2025-04-26T15:30:00.000Z",
+      "date": "2026-04-26T15:30:00Z",
       "arena": "FedExForum",
       "city": "Memphis",
       "state": "TN",
@@ -1940,7 +1940,7 @@
     },
     {
       "gameId": "42400174",
-      "date": "2025-04-26T18:00:00.000Z",
+      "date": "2026-04-26T18:00:00Z",
       "arena": "Intuit Dome",
       "city": "Inglewood",
       "state": "CA",
@@ -1953,7 +1953,7 @@
     },
     {
       "gameId": "42400153",
-      "date": "2025-04-26T20:30:00.000Z",
+      "date": "2026-04-26T20:30:00Z",
       "arena": "Chase Center",
       "city": "San Francisco",
       "state": "CA",
@@ -1966,7 +1966,7 @@
     },
     {
       "gameId": "42400124",
-      "date": "2025-04-27T13:00:00.000Z",
+      "date": "2026-04-27T13:00:00Z",
       "arena": "Little Caesars Arena",
       "city": "Detroit",
       "state": "MI",
@@ -1979,7 +1979,7 @@
     },
     {
       "gameId": "42400164",
-      "date": "2025-04-27T15:30:00.000Z",
+      "date": "2026-04-27T15:30:00Z",
       "arena": "Target Center",
       "city": "Minneapolis",
       "state": "MN",
@@ -1992,7 +1992,7 @@
     },
     {
       "gameId": "42400114",
-      "date": "2025-04-27T19:00:00.000Z",
+      "date": "2026-04-27T19:00:00Z",
       "arena": "Kia Center",
       "city": "Orlando",
       "state": "FL",
@@ -2005,7 +2005,7 @@
     },
     {
       "gameId": "42400134",
-      "date": "2025-04-27T21:30:00.000Z",
+      "date": "2026-04-27T21:30:00Z",
       "arena": "Fiserv Forum",
       "city": "Milwaukee",
       "state": "WI",
@@ -2018,7 +2018,7 @@
     },
     {
       "gameId": "42400104",
-      "date": "2025-04-28T19:30:00.000Z",
+      "date": "2026-04-28T19:30:00Z",
       "arena": "Kaseya Center",
       "city": "Miami",
       "state": "FL",
@@ -2031,7 +2031,7 @@
     },
     {
       "gameId": "42400154",
-      "date": "2025-04-28T22:00:00.000Z",
+      "date": "2026-04-28T22:00:00Z",
       "arena": "Chase Center",
       "city": "San Francisco",
       "state": "CA",
@@ -2044,7 +2044,7 @@
     },
     {
       "gameId": "42400135",
-      "date": "2025-04-29T18:00:00.000Z",
+      "date": "2026-04-29T18:00:00Z",
       "arena": "Gainbridge Fieldhouse",
       "city": "Indianapolis",
       "state": "IN",
@@ -2057,7 +2057,7 @@
     },
     {
       "gameId": "42400125",
-      "date": "2025-04-29T19:30:00.000Z",
+      "date": "2026-04-29T19:30:00Z",
       "arena": "Madison Square Garden",
       "city": "New York",
       "state": "NY",
@@ -2070,7 +2070,7 @@
     },
     {
       "gameId": "42400115",
-      "date": "2025-04-29T20:30:00.000Z",
+      "date": "2026-04-29T20:30:00Z",
       "arena": "TD Garden",
       "city": "Boston",
       "state": "MA",
@@ -2083,7 +2083,7 @@
     },
     {
       "gameId": "42400175",
-      "date": "2025-04-29T22:00:00.000Z",
+      "date": "2026-04-29T22:00:00Z",
       "arena": "Ball Arena",
       "city": "Denver",
       "state": "CO",
@@ -2096,7 +2096,7 @@
     },
     {
       "gameId": "42400155",
-      "date": "2025-04-30T19:30:00.000Z",
+      "date": "2026-04-30T19:30:00Z",
       "arena": "Toyota Center",
       "city": "Houston",
       "state": "TX",
@@ -2109,7 +2109,7 @@
     },
     {
       "gameId": "42400165",
-      "date": "2025-04-30T22:00:00.000Z",
+      "date": "2026-04-30T22:00:00Z",
       "arena": "Crypto.com Arena",
       "city": "Los Angeles",
       "state": "CA",
@@ -2122,7 +2122,7 @@
     },
     {
       "gameId": "42400126",
-      "date": "2025-05-01T19:30:00.000Z",
+      "date": "2026-05-01T19:30:00Z",
       "arena": "Little Caesars Arena",
       "city": "Detroit",
       "state": "MI",
@@ -2135,7 +2135,7 @@
     },
     {
       "gameId": "42400176",
-      "date": "2025-05-01T22:00:00.000Z",
+      "date": "2026-05-01T22:00:00Z",
       "arena": "Intuit Dome",
       "city": "Inglewood",
       "state": "CA",
@@ -2148,7 +2148,7 @@
     },
     {
       "gameId": "42400156",
-      "date": "2025-05-02T21:00:00.000Z",
+      "date": "2026-05-02T21:00:00Z",
       "arena": "Chase Center",
       "city": "San Francisco",
       "state": "CA",
@@ -2161,7 +2161,7 @@
     },
     {
       "gameId": "42400177",
-      "date": "2025-05-03T19:30:00.000Z",
+      "date": "2026-05-03T19:30:00Z",
       "arena": "Ball Arena",
       "city": "Denver",
       "state": "CO",
@@ -2174,7 +2174,7 @@
     },
     {
       "gameId": "42400201",
-      "date": "2025-05-04T18:00:00.000Z",
+      "date": "2026-05-04T18:00:00Z",
       "arena": "Rocket Arena",
       "city": "Cleveland",
       "state": "OH",
@@ -2187,7 +2187,7 @@
     },
     {
       "gameId": "42400157",
-      "date": "2025-05-04T20:30:00.000Z",
+      "date": "2026-05-04T20:30:00Z",
       "arena": "Toyota Center",
       "city": "Houston",
       "state": "TX",
@@ -2200,7 +2200,7 @@
     },
     {
       "gameId": "42400211",
-      "date": "2025-05-05T19:00:00.000Z",
+      "date": "2026-05-05T19:00:00Z",
       "arena": "TD Garden",
       "city": "Boston",
       "state": "MA",
@@ -2213,7 +2213,7 @@
     },
     {
       "gameId": "42400221",
-      "date": "2025-05-05T21:30:00.000Z",
+      "date": "2026-05-05T21:30:00Z",
       "arena": "Paycom Center",
       "city": "Oklahoma City",
       "state": "OK",
@@ -2226,7 +2226,7 @@
     },
     {
       "gameId": "42400202",
-      "date": "2025-05-06T19:00:00.000Z",
+      "date": "2026-05-06T19:00:00Z",
       "arena": "Rocket Arena",
       "city": "Cleveland",
       "state": "OH",
@@ -2239,7 +2239,7 @@
     },
     {
       "gameId": "42400231",
-      "date": "2025-05-06T21:30:00.000Z",
+      "date": "2026-05-06T21:30:00Z",
       "arena": "Target Center",
       "city": "Minneapolis",
       "state": "MN",
@@ -2252,7 +2252,7 @@
     },
     {
       "gameId": "42400212",
-      "date": "2025-05-07T19:00:00.000Z",
+      "date": "2026-05-07T19:00:00Z",
       "arena": "TD Garden",
       "city": "Boston",
       "state": "MA",
@@ -2265,7 +2265,7 @@
     },
     {
       "gameId": "42400222",
-      "date": "2025-05-07T21:30:00.000Z",
+      "date": "2026-05-07T21:30:00Z",
       "arena": "Paycom Center",
       "city": "Oklahoma City",
       "state": "OK",
@@ -2278,7 +2278,7 @@
     },
     {
       "gameId": "42400232",
-      "date": "2025-05-08T20:30:00.000Z",
+      "date": "2026-05-08T20:30:00Z",
       "arena": "Target Center",
       "city": "Minneapolis",
       "state": "MN",
@@ -2291,7 +2291,7 @@
     },
     {
       "gameId": "42400203",
-      "date": "2025-05-09T19:30:00.000Z",
+      "date": "2026-05-09T19:30:00Z",
       "arena": "Gainbridge Fieldhouse",
       "city": "Indianapolis",
       "state": "IN",
@@ -2304,7 +2304,7 @@
     },
     {
       "gameId": "42400223",
-      "date": "2025-05-09T22:00:00.000Z",
+      "date": "2026-05-09T22:00:00Z",
       "arena": "Ball Arena",
       "city": "Denver",
       "state": "CO",
@@ -2317,7 +2317,7 @@
     },
     {
       "gameId": "42400213",
-      "date": "2025-05-10T15:30:00.000Z",
+      "date": "2026-05-10T15:30:00Z",
       "arena": "Madison Square Garden",
       "city": "New York",
       "state": "NY",
@@ -2330,7 +2330,7 @@
     },
     {
       "gameId": "42400233",
-      "date": "2025-05-10T20:30:00.000Z",
+      "date": "2026-05-10T20:30:00Z",
       "arena": "Chase Center",
       "city": "San Francisco",
       "state": "CA",
@@ -2343,7 +2343,7 @@
     },
     {
       "gameId": "42400224",
-      "date": "2025-05-11T15:30:00.000Z",
+      "date": "2026-05-11T15:30:00Z",
       "arena": "Ball Arena",
       "city": "Denver",
       "state": "CO",
@@ -2356,7 +2356,7 @@
     },
     {
       "gameId": "42400204",
-      "date": "2025-05-11T20:00:00.000Z",
+      "date": "2026-05-11T20:00:00Z",
       "arena": "Gainbridge Fieldhouse",
       "city": "Indianapolis",
       "state": "IN",
@@ -2369,7 +2369,7 @@
     },
     {
       "gameId": "42400214",
-      "date": "2025-05-12T19:30:00.000Z",
+      "date": "2026-05-12T19:30:00Z",
       "arena": "Madison Square Garden",
       "city": "New York",
       "state": "NY",
@@ -2382,7 +2382,7 @@
     },
     {
       "gameId": "42400234",
-      "date": "2025-05-12T22:00:00.000Z",
+      "date": "2026-05-12T22:00:00Z",
       "arena": "Chase Center",
       "city": "San Francisco",
       "state": "CA",
@@ -2395,7 +2395,7 @@
     },
     {
       "gameId": "42400205",
-      "date": "2025-05-13T19:00:00.000Z",
+      "date": "2026-05-13T19:00:00Z",
       "arena": "Rocket Arena",
       "city": "Cleveland",
       "state": "OH",
@@ -2408,7 +2408,7 @@
     },
     {
       "gameId": "42400225",
-      "date": "2025-05-13T21:30:00.000Z",
+      "date": "2026-05-13T21:30:00Z",
       "arena": "Paycom Center",
       "city": "Oklahoma City",
       "state": "OK",
@@ -2421,7 +2421,7 @@
     },
     {
       "gameId": "42400215",
-      "date": "2025-05-14T19:00:00.000Z",
+      "date": "2026-05-14T19:00:00Z",
       "arena": "TD Garden",
       "city": "Boston",
       "state": "MA",
@@ -2434,7 +2434,7 @@
     },
     {
       "gameId": "42400235",
-      "date": "2025-05-14T21:30:00.000Z",
+      "date": "2026-05-14T21:30:00Z",
       "arena": "Target Center",
       "city": "Minneapolis",
       "state": "MN",
@@ -2447,7 +2447,7 @@
     },
     {
       "gameId": "42400226",
-      "date": "2025-05-15T20:30:00.000Z",
+      "date": "2026-05-15T20:30:00Z",
       "arena": "Ball Arena",
       "city": "Denver",
       "state": "CO",
@@ -2460,7 +2460,7 @@
     },
     {
       "gameId": "42400216",
-      "date": "2025-05-16T20:00:00.000Z",
+      "date": "2026-05-16T20:00:00Z",
       "arena": "Madison Square Garden",
       "city": "New York",
       "state": "NY",
@@ -2473,7 +2473,7 @@
     },
     {
       "gameId": "42400227",
-      "date": "2025-05-18T15:30:00.000Z",
+      "date": "2026-05-18T15:30:00Z",
       "arena": "Paycom Center",
       "city": "Oklahoma City",
       "state": "OK",
@@ -2486,7 +2486,7 @@
     },
     {
       "gameId": "42400311",
-      "date": "2025-05-20T20:30:00.000Z",
+      "date": "2026-05-20T20:30:00Z",
       "arena": "Paycom Center",
       "city": "Oklahoma City",
       "state": "OK",
@@ -2499,7 +2499,7 @@
     },
     {
       "gameId": "42400301",
-      "date": "2025-05-21T20:00:00.000Z",
+      "date": "2026-05-21T20:00:00Z",
       "arena": "Madison Square Garden",
       "city": "New York",
       "state": "NY",
@@ -2512,7 +2512,7 @@
     },
     {
       "gameId": "42400312",
-      "date": "2025-05-22T20:30:00.000Z",
+      "date": "2026-05-22T20:30:00Z",
       "arena": "Paycom Center",
       "city": "Oklahoma City",
       "state": "OK",
@@ -2525,7 +2525,7 @@
     },
     {
       "gameId": "42400302",
-      "date": "2025-05-23T20:00:00.000Z",
+      "date": "2026-05-23T20:00:00Z",
       "arena": "Madison Square Garden",
       "city": "New York",
       "state": "NY",
@@ -2538,7 +2538,7 @@
     },
     {
       "gameId": "42400313",
-      "date": "2025-05-24T20:30:00.000Z",
+      "date": "2026-05-24T20:30:00Z",
       "arena": "Target Center",
       "city": "Minneapolis",
       "state": "MN",
@@ -2551,7 +2551,7 @@
     },
     {
       "gameId": "42400303",
-      "date": "2025-05-25T20:00:00.000Z",
+      "date": "2026-05-25T20:00:00Z",
       "arena": "Gainbridge Fieldhouse",
       "city": "Indianapolis",
       "state": "IN",
@@ -2564,7 +2564,7 @@
     },
     {
       "gameId": "42400314",
-      "date": "2025-05-26T20:30:00.000Z",
+      "date": "2026-05-26T20:30:00Z",
       "arena": "Target Center",
       "city": "Minneapolis",
       "state": "MN",
@@ -2577,7 +2577,7 @@
     },
     {
       "gameId": "42400304",
-      "date": "2025-05-27T20:00:00.000Z",
+      "date": "2026-05-27T20:00:00Z",
       "arena": "Gainbridge Fieldhouse",
       "city": "Indianapolis",
       "state": "IN",
@@ -2590,7 +2590,7 @@
     },
     {
       "gameId": "42400315",
-      "date": "2025-05-28T20:30:00.000Z",
+      "date": "2026-05-28T20:30:00Z",
       "arena": "Paycom Center",
       "city": "Oklahoma City",
       "state": "OK",
@@ -2603,7 +2603,7 @@
     },
     {
       "gameId": "42400305",
-      "date": "2025-05-29T20:00:00.000Z",
+      "date": "2026-05-29T20:00:00Z",
       "arena": "Madison Square Garden",
       "city": "New York",
       "state": "NY",
@@ -2616,7 +2616,7 @@
     },
     {
       "gameId": "42400306",
-      "date": "2025-05-31T20:00:00.000Z",
+      "date": "2026-05-31T20:00:00Z",
       "arena": "Gainbridge Fieldhouse",
       "city": "Indianapolis",
       "state": "IN",
@@ -2629,7 +2629,7 @@
     },
     {
       "gameId": "42400401",
-      "date": "2025-06-05T20:30:00.000Z",
+      "date": "2026-06-05T20:30:00Z",
       "arena": "Paycom Center",
       "city": "Oklahoma City",
       "state": "OK",
@@ -2642,7 +2642,7 @@
     },
     {
       "gameId": "42400402",
-      "date": "2025-06-08T20:00:00.000Z",
+      "date": "2026-06-08T20:00:00Z",
       "arena": "Paycom Center",
       "city": "Oklahoma City",
       "state": "OK",
@@ -2655,7 +2655,7 @@
     },
     {
       "gameId": "42400403",
-      "date": "2025-06-11T20:30:00.000Z",
+      "date": "2026-06-11T20:30:00Z",
       "arena": "Gainbridge Fieldhouse",
       "city": "Indianapolis",
       "state": "IN",
@@ -2668,7 +2668,7 @@
     },
     {
       "gameId": "42400404",
-      "date": "2025-06-13T20:30:00.000Z",
+      "date": "2026-06-13T20:30:00Z",
       "arena": "Gainbridge Fieldhouse",
       "city": "Indianapolis",
       "state": "IN",
@@ -2681,7 +2681,7 @@
     },
     {
       "gameId": "42400405",
-      "date": "2025-06-16T20:30:00.000Z",
+      "date": "2026-06-16T20:30:00Z",
       "arena": "Paycom Center",
       "city": "Oklahoma City",
       "state": "OK",
@@ -2694,7 +2694,7 @@
     },
     {
       "gameId": "42400406",
-      "date": "2025-06-19T20:30:00.000Z",
+      "date": "2026-06-19T20:30:00Z",
       "arena": "Gainbridge Fieldhouse",
       "city": "Indianapolis",
       "state": "IN",
@@ -2707,7 +2707,7 @@
     },
     {
       "gameId": "42400407",
-      "date": "2025-06-22T20:00:00.000Z",
+      "date": "2026-06-22T20:00:00Z",
       "arena": "Paycom Center",
       "city": "Oklahoma City",
       "state": "OK",
@@ -2720,7 +2720,7 @@
     },
     {
       "gameId": "12500008",
-      "date": "2025-10-02T12:00:00.000Z",
+      "date": "2026-10-02T12:00:00Z",
       "arena": "Etihad Arena",
       "city": "Abu Dhabi",
       "state": "",
@@ -2733,7 +2733,7 @@
     },
     {
       "gameId": "12500009",
-      "date": "2025-10-03T05:30:00.000Z",
+      "date": "2026-10-03T05:30:00Z",
       "arena": "Rod Laver Arena",
       "city": "Melbourne",
       "state": "",
@@ -2746,7 +2746,7 @@
     },
     {
       "gameId": "12500010",
-      "date": "2025-10-04T11:00:00.000Z",
+      "date": "2026-10-04T11:00:00Z",
       "arena": "Etihad Arena",
       "city": "Abu Dhabi",
       "state": "",
@@ -2759,7 +2759,7 @@
     },
     {
       "gameId": "12500011",
-      "date": "2025-10-05T02:30:00.000Z",
+      "date": "2026-10-05T02:30:00Z",
       "arena": "Rod Laver Arena",
       "city": "Melbourne",
       "state": "",
@@ -2772,7 +2772,7 @@
     },
     {
       "gameId": "12500012",
-      "date": "2025-10-10T08:00:00.000Z",
+      "date": "2026-10-10T08:00:00Z",
       "arena": "Venetian Arena",
       "city": "Macao, China",
       "state": "",
@@ -2785,7 +2785,7 @@
     },
     {
       "gameId": "12500013",
-      "date": "2025-10-12T07:00:00.000Z",
+      "date": "2026-10-12T07:00:00Z",
       "arena": "Venetian Arena",
       "city": "Macao, China",
       "state": "",

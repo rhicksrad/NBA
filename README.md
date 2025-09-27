@@ -12,9 +12,9 @@
 - **How to regenerate:** Run `node scripts/build_snapshot.mjs` from the repository root. The script parses `TeamHistories.csv`, filters for active franchise eras, and writes `public/data/active_franchises.json`.
 - **Why it matters:** Keeps the browser payload small while guaranteeing the visualization reflects the latest CSV sources.
 
-### 2024-25 schedule snapshot
+### 2025-26 schedule snapshot
 - **Description:** Aggregated JSON powering the league calendar insights section in `public/index.html`, summarizing monthly volume, team workloads, and tagged special events.
-- **How to regenerate:** Run `node scripts/build_schedule_snapshot.mjs` from the repository root. The script reads `LeagueSchedule24_25.csv` and joins against `TeamHistories.csv` to provide friendly team names.
+- **How to regenerate:** Run `node scripts/build_schedule_snapshot.mjs` from the repository root. The script reads `LeagueSchedule25_26.csv` and joins against `TeamHistories.csv` to provide friendly team names.
 - **Why it matters:** Allows the MVP to surface upcoming season context without shipping the full 1,400-row CSV to the browser.
 
 ### Insight snapshots (players, games, teams)
@@ -89,8 +89,8 @@
 | seasonActiveTill | int | Last season of the era (`YYYY`, `2100` indicates active). |
 | league | enum | League membership (`BAA`, `NBA`, etc.). |
 
-### LeagueSchedule24_25.csv
-- **Description:** 2024-25 preseason and regular-season master schedule snapshot.
+### LeagueSchedule25_26.csv
+- **Description:** 2025-26 preseason and regular-season master schedule snapshot.
 - **Row count:** 1,408 scheduled games. 
 - **Provenance:** TBD.
 
@@ -212,5 +212,5 @@
 | coachId | string | Coach identifier (blank when unavailable). |
 
 ### Sharding layout
-- Core CSVs stored at the repository root (Players, Games, TeamHistories, LeagueSchedule24_25) are already under the 25 MB guideline and are distributed as single files.
+- Core CSVs stored at the repository root (Players, Games, TeamHistories, LeagueSchedule25_26) are already under the 25 MB guideline and are distributed as single files.
 - `PlayerStatistics.7z` and `TeamStatistics.zip` currently contain monolithic CSV extracts that exceed the 25 MB limit when unpacked. Before committing new revisions of these tables, re-export them into logical shards (e.g., `PlayerStatistics/season=YYYY/part-*.csv` and `TeamStatistics/season=YYYY/part-*.csv`), each shard kept below 25 MB. Downstream consumers should glob those shard paths once available; until sharding is complete, extract the archive locally and work with the single CSV payload.

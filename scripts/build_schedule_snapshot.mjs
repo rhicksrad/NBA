@@ -6,10 +6,10 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const repoRoot = join(__dirname, '..');
-const scheduleCsvPath = join(repoRoot, 'LeagueSchedule24_25.csv');
+const scheduleCsvPath = join(repoRoot, 'LeagueSchedule25_26.csv');
 const teamHistoryCsvPath = join(repoRoot, 'TeamHistories.csv');
 const outputDir = join(repoRoot, 'public', 'data');
-const outputPath = join(outputDir, 'season_24_25_schedule.json');
+const outputPath = join(outputDir, 'season_25_26_schedule.json');
 
 function splitCsvLine(line) {
   const values = [];
