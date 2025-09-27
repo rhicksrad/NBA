@@ -112,6 +112,23 @@
       font-size: clamp(1.5rem, 3vw, 2.1rem);
       font-weight: 700;
     }
+    .schedule-layout {
+      display: grid;
+      gap: 1.5rem;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      margin-top: 1.5rem;
+    }
+    .schedule-panel {
+      background: rgba(23, 105, 170, 0.06);
+      border-radius: 12px;
+      padding: 1.25rem;
+      height: 100%;
+    }
+    .schedule-panel h3 {
+      margin-top: 0;
+      margin-bottom: 0.75rem;
+      font-size: 1.05rem;
+    }
     table {
       width: 100%;
       border-collapse: collapse;
@@ -146,6 +163,26 @@
       font-weight: 600;
       letter-spacing: 0.03em;
     }
+    .special-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 0.85rem;
+    }
+    .special-list li {
+      line-height: 1.5;
+    }
+    .special-list time {
+      font-weight: 600;
+      margin-right: 0.5rem;
+    }
+    .special-meta {
+      display: block;
+      color: rgba(0, 0, 0, 0.65);
+      font-size: 0.9rem;
+      margin-top: 0.25rem;
+    }
     canvas {
       width: 100%;
       min-height: 320px;
@@ -172,6 +209,12 @@
       select {
         background: color-mix(in srgb, canvas 70%, canvastext 30%);
         border-color: rgba(255,255,255,0.2);
+      }
+      .schedule-panel {
+        background: color-mix(in srgb, canvas 75%, canvastext 25%);
+      }
+      .special-meta {
+        color: rgba(255, 255, 255, 0.6);
       }
     }
   </style>
@@ -244,6 +287,45 @@
       <p class="data-note">The chart respects the filters above so you can zoom in on expansion eras and compare leagues.</p>
     </section>
 
+    <section aria-labelledby="schedule-heading">
+      <h2 id="schedule-heading">2024-25 league calendar outlook</h2>
+      <p id="schedule-note" class="data-note">Loading 2024-25 schedule insights…</p>
+      <div class="summary-cards" id="schedule-summary" aria-live="polite"></div>
+
+      <div class="schedule-layout">
+        <div class="schedule-panel">
+          <h3>Monthly game volume</h3>
+          <canvas id="schedule-monthly-chart" role="img" aria-label="Stacked bar chart showing 2024-25 NBA schedule volume by month"></canvas>
+        </div>
+        <div class="schedule-panel">
+          <h3>Teams with the busiest slates</h3>
+          <div class="table-wrapper" role="region" aria-live="polite">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">Team</th>
+                  <th scope="col">Regular</th>
+                  <th scope="col">Cup &amp; playoffs</th>
+                  <th scope="col">Preseason</th>
+                  <th scope="col">Total</th>
+                </tr>
+              </thead>
+              <tbody id="schedule-teams-body">
+                <tr><td colspan="5">Loading team workloads…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="schedule-panel">
+        <h3>Spotlight events</h3>
+        <ul class="special-list" id="schedule-special-list">
+          <li>Loading marquee matchups…</li>
+        </ul>
+      </div>
+    </section>
+
     <section aria-labelledby="meta-heading">
       <h2 id="meta-heading">About this snapshot</h2>
       <p>The data is generated from <code>TeamHistories.csv</code> in this repository using <code>scripts/build_snapshot.mjs</code>. The script keeps the dataset lightweight for the browser and powers the live filters and charts on this page.</p>
@@ -257,6 +339,7 @@
       raw: [],
       filtered: [],
       snapshot: null,
+      schedule: null,
     };
 
     const dom = {
@@ -268,12 +351,31 @@
       reset: document.getElementById('reset-filters'),
       teamsBody: document.getElementById('teams-body'),
       summaryCards: document.getElementById('summary-cards'),
+      scheduleNote: document.getElementById('schedule-note'),
+      scheduleSummary: document.getElementById('schedule-summary'),
+      scheduleTeamsBody: document.getElementById('schedule-teams-body'),
+      scheduleSpecialList: document.getElementById('schedule-special-list'),
+      scheduleMonthlyCanvas: document.getElementById('schedule-monthly-chart'),
     };
 
     let decadeChart;
+    let scheduleChart;
 
     function formatNumber(value) {
       return new Intl.NumberFormat().format(value);
+    }
+
+    const fullDateFormatter = new Intl.DateTimeFormat('en', { month: 'short', day: 'numeric', year: 'numeric' });
+    const shortDateFormatter = new Intl.DateTimeFormat('en', { month: 'short', day: 'numeric' });
+
+    function formatDate(isoString, formatter = fullDateFormatter) {
+      if (!isoString) return '—';
+      return formatter.format(new Date(isoString));
+    }
+
+    function formatDateRange(startIso, endIso) {
+      if (!startIso || !endIso) return '—';
+      return `${formatDate(startIso)} → ${formatDate(endIso)}`;
     }
 
     function buildSummary(franchises) {
@@ -391,6 +493,198 @@
       }
     }
 
+    function renderScheduleSummary() {
+      if (!state.schedule) return;
+
+      const { totals, generatedAt, dateRange } = state.schedule;
+      const cards = [
+        {
+          label: 'Total scheduled games',
+          value: totals.games,
+        },
+        {
+          label: 'Teams with games',
+          value: totals.teams,
+        },
+        {
+          label: 'Regular-season games',
+          value: totals.regularSeason,
+        },
+        {
+          label: 'Preseason games',
+          value: totals.preseason,
+        },
+      ];
+
+      if (totals.other > 0) {
+        cards.push({
+          label: 'Cup & playoff games',
+          value: totals.other,
+        });
+      }
+
+      dom.scheduleSummary.innerHTML = cards
+        .map(
+          (card) => `
+            <div class="summary-card">
+              <h3>${card.label}</h3>
+              <p>${formatNumber(card.value)}</p>
+            </div>
+          `,
+        )
+        .join('');
+
+      const generatedText = generatedAt ? new Date(generatedAt).toLocaleString() : '—';
+      const coverage = dateRange ? formatDateRange(dateRange.start, dateRange.end) : '—';
+      dom.scheduleNote.textContent = `Schedule snapshot generated ${generatedText}. Coverage: ${coverage}. Totals include preseason, Emirates NBA Cup, play-in, and playoff rounds from LeagueSchedule24_25.csv.`;
+    }
+
+    function renderScheduleChart() {
+      if (!state.schedule || !dom.scheduleMonthlyCanvas) return;
+      const months = state.schedule.monthlyCounts ?? [];
+      if (months.length === 0) {
+        if (scheduleChart) {
+          scheduleChart.destroy();
+          scheduleChart = null;
+        }
+        return;
+      }
+
+      const labels = months.map((month) => month.label);
+      const preseasonData = months.map((month) => month.preseason ?? 0);
+      const regularData = months.map((month) => month.regularSeason ?? 0);
+      const otherData = months.map((month) => Math.max(0, (month.games ?? 0) - (month.preseason ?? 0) - (month.regularSeason ?? 0)));
+
+      const datasets = [
+        {
+          label: 'Preseason',
+          data: preseasonData,
+          backgroundColor: 'rgba(23, 105, 170, 0.35)',
+          stack: 'schedule',
+          borderRadius: 6,
+        },
+        {
+          label: 'Regular season',
+          data: regularData,
+          backgroundColor: 'rgba(23, 105, 170, 0.7)',
+          stack: 'schedule',
+          borderRadius: 6,
+        },
+        {
+          label: 'Cup & playoffs',
+          data: otherData,
+          backgroundColor: 'rgba(249, 115, 22, 0.65)',
+          stack: 'schedule',
+          borderRadius: 6,
+        },
+      ];
+
+      if (!scheduleChart) {
+        scheduleChart = new Chart(dom.scheduleMonthlyCanvas, {
+          type: 'bar',
+          data: {
+            labels,
+            datasets,
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              x: { stacked: true },
+              y: {
+                stacked: true,
+                beginAtZero: true,
+                ticks: { precision: 0 },
+              },
+            },
+            plugins: {
+              legend: {
+                position: 'bottom',
+              },
+            },
+          },
+        });
+      } else {
+        scheduleChart.data.labels = labels;
+        scheduleChart.data.datasets[0].data = preseasonData;
+        scheduleChart.data.datasets[1].data = regularData;
+        scheduleChart.data.datasets[2].data = otherData;
+        scheduleChart.update();
+      }
+    }
+
+    function renderScheduleTeams() {
+      if (!state.schedule) return;
+      const teams = state.schedule.teams ?? [];
+      if (teams.length === 0) {
+        dom.scheduleTeamsBody.innerHTML = '<tr><td colspan="5">No team workload data is available yet.</td></tr>';
+        return;
+      }
+
+      const rows = [...teams]
+        .sort((a, b) => {
+          if (b.otherGames === a.otherGames) {
+            if (b.totalGames === a.totalGames) {
+              return a.name.localeCompare(b.name);
+            }
+            return b.totalGames - a.totalGames;
+          }
+          return b.otherGames - a.otherGames;
+        })
+        .slice(0, 8)
+        .map((team) => {
+          const badge = team.abbreviation ? ` <span class="badge">${team.abbreviation}</span>` : '';
+          return `
+            <tr>
+              <td><span class="team-name">${team.name}</span>${badge}</td>
+              <td>${formatNumber(team.regularSeasonGames)}</td>
+              <td>${formatNumber(team.otherGames)}</td>
+              <td>${formatNumber(team.preseasonGames)}</td>
+              <td>${formatNumber(team.totalGames)}</td>
+            </tr>
+          `;
+        })
+        .join('');
+
+      dom.scheduleTeamsBody.innerHTML = rows;
+    }
+
+    function renderScheduleSpecials() {
+      if (!state.schedule) return;
+      const specials = state.schedule.specialGames ?? [];
+      if (specials.length === 0) {
+        dom.scheduleSpecialList.innerHTML = '<li>No special events were tagged in this schedule snapshot.</li>';
+        return;
+      }
+
+      const teamLookup = new Map((state.schedule.teams ?? []).map((team) => [team.teamId, team]));
+      const items = specials
+        .slice(0, 10)
+        .map((game) => {
+          const dateLabel = game.date ? formatDate(game.date, shortDateFormatter) : 'TBD';
+          const descriptors = [game.label];
+          if (game.subLabel && !descriptors.includes(game.subLabel)) descriptors.push(game.subLabel);
+          if (game.subtype && !descriptors.includes(game.subtype)) descriptors.push(game.subtype);
+          if (game.seriesText && !descriptors.includes(game.seriesText)) descriptors.push(game.seriesText);
+          const descriptorText = descriptors.filter((value) => value && value.length > 0).join(' · ');
+          const home = teamLookup.get(game.hometeamId)?.name ?? game.hometeamId ?? '';
+          const away = teamLookup.get(game.awayteamId)?.name ?? game.awayteamId ?? '';
+          const matchup = home && away ? `${away} @ ${home}` : home || away || 'Matchup TBA';
+          const locationParts = [game.arena, game.city, game.state].filter((value) => value && value.length > 0);
+          const locationText = locationParts.join(', ');
+          const dateAttr = game.date ? ` datetime="${game.date}"` : '';
+          return `
+            <li>
+              <div><time${dateAttr}>${dateLabel}</time>${descriptorText ? ` ${descriptorText}` : ''}</div>
+              <span class="special-meta">${matchup}${locationText ? ` • ${locationText}` : ''}</span>
+            </li>
+          `;
+        })
+        .join('');
+
+      dom.scheduleSpecialList.innerHTML = items;
+    }
+
     function applyFilters() {
       const searchTerm = dom.search.value.trim().toLowerCase();
       const selectedLeague = dom.league.value;
@@ -460,6 +754,29 @@
       }
     }
 
+    async function loadSchedule() {
+      try {
+        const response = await fetch('data/season_24_25_schedule.json', { cache: 'no-store' });
+        if (!response.ok) throw new Error('Failed to load schedule snapshot');
+        const schedule = await response.json();
+        state.schedule = schedule;
+        renderScheduleSummary();
+        renderScheduleChart();
+        renderScheduleTeams();
+        renderScheduleSpecials();
+      } catch (error) {
+        console.error(error);
+        dom.scheduleNote.textContent = 'Unable to load the 2024-25 schedule snapshot. Please refresh to try again.';
+        dom.scheduleSummary.innerHTML = '';
+        dom.scheduleTeamsBody.innerHTML = '<tr><td colspan="5">Schedule data unavailable.</td></tr>';
+        dom.scheduleSpecialList.innerHTML = '<li>Schedule data unavailable.</li>';
+        if (scheduleChart) {
+          scheduleChart.destroy();
+          scheduleChart = null;
+        }
+      }
+    }
+
     dom.search.addEventListener('input', () => applyFilters());
     dom.league.addEventListener('change', () => applyFilters());
     dom.seasonStart.addEventListener('change', () => applyFilters());
@@ -467,6 +784,7 @@
     dom.reset.addEventListener('click', () => resetFilters());
 
     loadData();
+    loadSchedule();
   </script>
 </body>
 </html>
