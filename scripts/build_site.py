@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import csv
 import os
+from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -34,13 +35,35 @@ def load_active_franchises(path: Path) -> list[dict[str, str]]:
     return teams
 
 
+def summarize_by_decade(teams: list[dict[str, str]]) -> list[tuple[str, int]]:
+    """Return (decade, count) tuples sorted chronologically."""
+    decade_counts: Counter[str] = Counter()
+    for team in teams:
+        founded_raw = team.get("seasonFounded", "").strip()
+        try:
+            founded_year = int(founded_raw)
+        except ValueError:
+            # Skip rows without a parsable founding year.
+            continue
+
+        decade_start = (founded_year // 10) * 10
+        label = f"{decade_start}s"
+        decade_counts[label] += 1
+
+    return sorted(decade_counts.items(), key=lambda item: int(item[0][:4]))
+
+
 def render_html(teams: list[dict[str, str]], generated_at: datetime) -> str:
     timestamp = generated_at.strftime("%Y-%m-%d %H:%M UTC")
     repository = os.environ.get("GITHUB_REPOSITORY", "your-username/NBA")
+    decades = summarize_by_decade(teams)
     rows = "\n          ".join(
         f"<tr><td>{team['teamCity'].strip()}</td><td>{team['teamName'].strip()}</td>"
         f"<td>{team['teamAbbrev'].strip()}</td><td>{team['seasonFounded'].strip()}</td></tr>"
         for team in teams
+    )
+    decade_rows = "\n          ".join(
+        f"<tr><td>{decade}</td><td>{count}</td></tr>" for decade, count in decades
     )
 
     return f"""<!DOCTYPE html>
@@ -108,6 +131,21 @@ def render_html(teams: list[dict[str, str]], generated_at: datetime) -> str:
           {rows}
         </tbody>
         <caption>Data source: <code>TeamHistories.csv</code> &mdash; generated automatically on each push.</caption>
+      </table>
+    </section>
+    <section>
+      <h2>Active franchises by founding decade</h2>
+      <p>This quick snapshot shows how many modern franchises entered the league in each decade, offering an early look at potential era-based analyses.</p>
+      <table>
+        <thead>
+          <tr>
+            <th scope=\"col\">Decade</th>
+            <th scope=\"col\">Active Franchises</th>
+          </tr>
+        </thead>
+        <tbody>
+          {decade_rows}
+        </tbody>
       </table>
     </section>
   </main>
