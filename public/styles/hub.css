@@ -1022,6 +1022,157 @@ section h2 { margin-top: 0; font-size: clamp(1.35rem, 3vw, 1.8rem); letter-spaci
 
 .list-grid li span { display: block; font-size: 0.9rem; font-weight: 500; color: var(--text-subtle); }
 
+.offseason-horizon__grid {
+  margin-top: 1.5rem;
+  display: grid;
+  gap: 1.2rem;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.offseason-card {
+  background: color-mix(in srgb, rgba(17, 86, 214, 0.08) 45%, #fff 55%);
+  border-radius: var(--radius-md);
+  border: 1px solid color-mix(in srgb, var(--royal) 22%, transparent);
+  padding: 1.35rem;
+  box-shadow: 0 16px 26px rgba(11, 37, 69, 0.16);
+  display: grid;
+  gap: 0.85rem;
+}
+
+.offseason-card h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  letter-spacing: 0.01em;
+}
+
+.offseason-card p {
+  margin: 0;
+  color: var(--text-subtle);
+}
+
+.offseason-card ul {
+  margin: 0;
+  padding-left: 1.1rem;
+  display: grid;
+  gap: 0.35rem;
+  color: color-mix(in srgb, var(--navy) 70%, var(--text-subtle) 30%);
+  font-size: 0.9rem;
+}
+
+.cup-roadmap__grid {
+  display: grid;
+  gap: 1.2rem;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  margin-top: 1.5rem;
+}
+
+.cup-group {
+  border-radius: var(--radius-md);
+  border: 1px solid color-mix(in srgb, var(--border) 65%, transparent);
+  background: linear-gradient(155deg, rgba(17, 86, 214, 0.12), rgba(244, 181, 63, 0.1));
+  padding: 1.35rem;
+  display: grid;
+  gap: 0.75rem;
+  box-shadow: 0 14px 24px rgba(11, 37, 69, 0.15);
+}
+
+.cup-group header { display: grid; gap: 0.4rem; }
+.cup-group h3 { margin: 0; font-size: 1.1rem; letter-spacing: 0.02em; }
+.cup-group__tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  background: rgba(17, 86, 214, 0.18);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--royal);
+}
+
+.cup-group ul {
+  margin: 0;
+  padding-left: 1.1rem;
+  display: grid;
+  gap: 0.25rem;
+  font-weight: 600;
+  color: color-mix(in srgb, var(--navy) 80%, var(--text-subtle) 20%);
+}
+
+.cup-group p { margin: 0; color: var(--text-subtle); font-size: 0.92rem; }
+
+.milestone-chase__grid {
+  display: grid;
+  gap: 1.2rem;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  margin-top: 1.5rem;
+}
+
+.milestone-card {
+  border-radius: var(--radius-md);
+  border: 1px solid color-mix(in srgb, var(--royal) 18%, transparent);
+  background: color-mix(in srgb, rgba(239, 61, 91, 0.12) 35%, #fff 65%);
+  padding: 1.4rem;
+  display: grid;
+  gap: 0.75rem;
+  box-shadow: 0 16px 28px rgba(11, 37, 69, 0.15);
+}
+
+.milestone-card header { display: grid; gap: 0.4rem; }
+.milestone-card h3 { margin: 0; font-size: 1.1rem; }
+.milestone-card p { margin: 0; color: var(--text-subtle); }
+.milestone-card ul {
+  margin: 0;
+  padding-left: 1.1rem;
+  display: grid;
+  gap: 0.35rem;
+  font-size: 0.9rem;
+  color: color-mix(in srgb, var(--navy) 70%, var(--text-subtle) 30%);
+}
+
+.milestone-card__tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  background: rgba(239, 61, 91, 0.16);
+  color: var(--red);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.countdown-grid__items {
+  margin-top: 1.5rem;
+  display: grid;
+  gap: 1.2rem;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.countdown-card {
+  border-radius: var(--radius-md);
+  border: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
+  background: linear-gradient(160deg, rgba(31, 123, 255, 0.12), rgba(244, 181, 63, 0.08));
+  padding: 1.35rem;
+  display: grid;
+  gap: 0.75rem;
+  box-shadow: 0 16px 28px rgba(11, 37, 69, 0.14);
+}
+
+.countdown-card h3 { margin: 0; font-size: 1.1rem; }
+.countdown-card p { margin: 0; color: var(--text-subtle); }
+.countdown-card ul {
+  margin: 0;
+  padding-left: 1.1rem;
+  display: grid;
+  gap: 0.3rem;
+  font-size: 0.9rem;
+  color: color-mix(in srgb, var(--navy) 75%, var(--text-subtle) 25%);
+}
+
 .page-footer { margin: 3rem 0 1rem; text-align: center; color: var(--text-subtle); font-size: 0.85rem; }
 
 /* Responsive */
