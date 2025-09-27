@@ -152,11 +152,21 @@ a:hover, a:focus { color: var(--sky); }
 
 .hero--power {
   padding: clamp(1.8rem, 5vw, 2.6rem) clamp(1rem, 4vw, 1.6rem) clamp(1.6rem, 4vw, 2.1rem);
-  display: flex;
-  justify-content: center;
+  display: grid;
+  gap: clamp(1.4rem, 3vw, 2rem);
+  align-items: stretch;
+  justify-items: stretch;
+  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
 }
 .hero--power > * {
-  width: 100%;
+  min-width: 0;
+}
+.hero--power .power-board--compact {
+  margin-inline: 0;
+}
+
+.rest-radar-card {
+  position: relative;
 }
 .hero--rewind {
   position: relative;
