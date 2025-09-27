@@ -1,0 +1,9 @@
+[
+  {
+    "id": "2024-05-27-prod",
+    "title": "Production hardening release",
+    "summary": "Rebuilt the NBA Pulse dashboard with live modules, provenance, and CI guards.",
+    "url": "https://rhicksrad.github.io/NBA/",
+    "date": "2024-05-27T09:00:00Z"
+  }
+]

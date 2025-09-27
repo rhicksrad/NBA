@@ -1,0 +1,21 @@
+{
+  "name": "nba-pulse-site",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build-assets.mjs",
+    "validate:data": "node scripts/validate-data.mjs",
+    "check:links": "linkinator --config linkinator.config.json index.html about/methods.html changelog/index.html",
+    "check:lighthouse": "lhci autorun",
+    "test": "pnpm run validate:data && pnpm run check:links && pnpm run check:lighthouse"
+  },
+  "devDependencies": {
+    "@lhci/cli": "^0.13.0",
+    "ajv": "^8.12.0",
+    "ajv-formats": "^2.1.1",
+    "esbuild": "^0.20.2",
+    "linkinator": "^6.1.4",
+    "typescript": "^5.4.0"
+  }
+}
