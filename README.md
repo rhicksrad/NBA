@@ -33,6 +33,18 @@
 - **Outputs:** `public/data/players_overview.json`, `public/data/historic_games.json`, `public/data/team_performance.json`, `public/data/player_leaders.json`, and `public/data/player_season_insights.json`.
 - **Why it matters:** Keeps the browser payload tiny while ensuring the MVP reflects every dataset shipped with the repository.
 
+### Phase 1 — Data plumbing pipeline
+
+- **Description:** Integrates official league roster feeds, standardizes historical CSV tables, and normalizes `personId` references across datasets.
+- **How to regenerate:** Run `python scripts/phase1_pipeline.py`. For offline development you can point to the sample fixtures in `scripts/testdata`:
+  ```
+  python scripts/phase1_pipeline.py \
+    --players-feed scripts/testdata/nba_players_feed_sample.json \
+    --teams-feed scripts/testdata/nba_teams_feed_sample.json
+  ```
+- **Outputs:** `public/data/league_directory.json` and `public/data/historical_audit.json`.
+- **Why it matters:** Establishes a single source of truth for player identifiers, flags anomalies in legacy tables, and prepares downstream phases with clean, merged rosters.
+
 ### Players.csv
 - **Description:** Master roster metadata for players who have appeared in NBA history.
 - **Row count:** 6,533 player records.
