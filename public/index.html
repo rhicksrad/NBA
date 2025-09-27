@@ -26,243 +26,102 @@
             <a href="about.html">About</a>
           </nav>
         </div>
-        <div class="hero hero--power" aria-live="polite">
-          <article class="power-board power-board--compact" data-power-index-card>
-            <header class="power-board__header">
-              <span class="power-board__eyebrow">Power index</span>
-              <h2>Preseason conviction board</h2>
-              <p>Every franchise on our expectation ladder before the 2025-26 tip.</p>
-            </header>
-            <ol class="power-board__list" data-power-index>
-              <li class="power-board__placeholder">Power index syncing…</li>
-            </ol>
-          </article>
-        </div>
       </header>
 
-      <main>
-        <section class="spotlight-itinerary" id="spotlight-itinerary">
-          <div class="spotlight-itinerary__lead">
-            <span class="chip chip--accent">Spotlight itinerary</span>
-            <h2>Preseason world tour preview</h2>
-            <p class="lead">
-              Track the first tune-up for every franchise—quick-hit cards today, deep-dive previews coming soon.
-            </p>
-          </div>
-          <div class="tour-board">
-            <div class="tour-board__grid" data-tour-grid>
-              <p class="tour-board__placeholder">Preseason openers syncing…</p>
-            </div>
-            <p class="tour-board__footnote" data-tour-footnote></p>
-          </div>
-        </section>
-
-        <section class="season-snapshot" id="season-panorama">
-          <div class="section-header">
-            <h2>The 2025-26 board, already moving</h2>
-            <p class="lead" data-season-lead>
-              1,161 regular-season games, 446 zero-day rest intervals, and 67 Cup showdowns—every storyline has a lane.
-            </p>
-          </div>
-          <div class="season-snapshot__grid">
-            <article class="season-snapshot__panel season-snapshot__panel--wide">
-              <header class="season-snapshot__header">
-                <h3>Title race velocity</h3>
-                <p>Historical pace leaders power our contender tiers.</p>
+      <main class="hub-layout">
+        <section class="hub-main">
+          <div class="hero hero--power" aria-live="polite">
+            <article class="power-board power-board--compact" data-power-index-card>
+              <header class="power-board__header">
+                <span class="power-board__eyebrow">Power index</span>
+                <h2>Preseason conviction board</h2>
+                <p>Every franchise on our expectation ladder before the 2025-26 tip.</p>
               </header>
-              <div class="contender-grid" data-contender-grid>
-                <p class="contender-grid__placeholder">Loading contender pulses…</p>
-              </div>
+              <ol class="power-board__list" data-power-index>
+                <li class="power-board__placeholder">Power index syncing…</li>
+              </ol>
             </article>
-            <article class="season-snapshot__panel">
-              <header class="season-snapshot__header">
-                <h3>Rest management radar</h3>
-                <p>Who shoulders the toughest travel math before All-Star weekend.</p>
-              </header>
-              <ul class="rest-list" data-back-to-back-list>
-                <li class="rest-list__placeholder">Back-to-back intensity table incoming…</li>
-              </ul>
-              <p class="rest-list__footer">
-                League average rest: <span data-rest-average>3.0 days</span> across
-                <span data-rest-intervals>2,779</span> tracked windows.
+          </div>
+
+          <section class="spotlight-itinerary" id="spotlight-itinerary">
+            <div class="spotlight-itinerary__lead">
+              <span class="chip chip--accent">Spotlight itinerary</span>
+              <h2>Preseason world tour preview</h2>
+              <p class="lead">
+                Track the first tune-up for every franchise—quick-hit cards today, deep-dive previews coming soon.
               </p>
-            </article>
-          </div>
-        </section>
-
-        <section class="league-visuals" id="league-visuals">
-          <div class="section-header">
-            <h2>League pulse in three charts</h2>
-            <p class="lead">
-              Track schedule volume, contender efficiency, and global player pipelines without leaving the landing hub.
-            </p>
-          </div>
-          <div class="viz-grid">
-            <figure class="viz-card viz-card--inline" data-chart-wrapper>
-              <header class="viz-card__title">Season cadence overview</header>
-              <div class="viz-canvas viz-canvas--flush">
-                <canvas data-chart="season-volume" aria-describedby="season-volume-caption"></canvas>
+            </div>
+            <div class="tour-board">
+              <div class="tour-board__grid" data-tour-grid>
+                <p class="tour-board__placeholder">Preseason openers syncing…</p>
               </div>
-              <figcaption id="season-volume-caption" class="viz-card__caption">
-                Monthly game counts show how preseason tune-ups give way to the 1,161-game regular season and December cup sprint.
-              </figcaption>
-            </figure>
-            <figure class="viz-card viz-card--inline" data-chart-wrapper>
-              <header class="viz-card__title">Contender efficiency scatter</header>
-              <div class="viz-canvas viz-canvas--flush">
-                <canvas data-chart="team-efficiency" aria-describedby="team-efficiency-caption"></canvas>
-              </div>
-              <figcaption id="team-efficiency-caption" class="viz-card__caption">
-                Bubble size scales with win rate, helping you spot which top-12 franchises pair elite offense with stingy defense.
-              </figcaption>
-            </figure>
-            <figure class="viz-card viz-card--inline" data-chart-wrapper>
-              <header class="viz-card__title">Global talent pipeline</header>
-              <div class="viz-canvas viz-canvas--flush">
-                <canvas data-chart="global-pipeline" aria-describedby="global-pipeline-caption"></canvas>
-              </div>
-              <figcaption id="global-pipeline-caption" class="viz-card__caption">
-                Horizontal bars rank the most prolific countries supplying active NBA players heading into the new season.
-              </figcaption>
-            </figure>
-          </div>
+              <p class="tour-board__footnote" data-tour-footnote></p>
+            </div>
+          </section>
         </section>
 
-        <section class="story-verse" aria-labelledby="story-verse-title">
-          <div class="section-header">
-            <h2 id="story-verse-title">Narratives stitched from the data vault</h2>
-            <p class="lead">
-              Editorial walkthroughs pair raw metrics with context clips so your rundown reads like a docuseries binge.
+        <aside class="hub-sidebar" aria-labelledby="sidebar-updates">
+          <h2 id="sidebar-updates" class="visually-hidden">Season watchlist</h2>
+
+          <section class="sidebar-card sidebar-card--rest">
+            <header class="sidebar-card__header">
+              <span class="chip chip--accent">Travel analytics</span>
+              <h3>Rest management radar</h3>
+              <p>Who shoulders the toughest travel math before All-Star weekend.</p>
+            </header>
+            <ul class="rest-list" data-back-to-back-list>
+              <li class="rest-list__placeholder">Back-to-back intensity table incoming…</li>
+            </ul>
+            <p class="rest-list__footer">
+              League average rest: <span data-rest-average>3.0 days</span> across
+              <span data-rest-intervals>2,779</span> tracked windows.
             </p>
-          </div>
-          <div class="story-verse__grid" data-story-grid>
-            <article class="story-verse__placeholder">Loading narrative reels…</article>
-          </div>
-        </section>
+          </section>
 
-        <section class="cup-roadmap">
-          <div class="section-header">
-            <h2>Emirates NBA Cup battleground</h2>
-            <p class="lead">
-              Group draws tilt the December sprint—these pods project the highest volatility based on
-              travel load, rest advantage, and clutch reps.
-            </p>
-          </div>
-          <div class="cup-roadmap__grid">
-            <article class="cup-group">
-              <header>
-                <span class="cup-group__tag">Group Pacific</span>
-                <h3>Margin monsters</h3>
-              </header>
-              <ul>
-                <li>Warriors</li>
-                <li>Suns</li>
-                <li>Clippers</li>
-                <li>Kings</li>
-              </ul>
-              <p>Four teams ranked top-10 in half-court efficiency last season—expect 125+ offensive ratings nightly.</p>
-            </article>
-            <article class="cup-group">
-              <header>
-                <span class="cup-group__tag">Group Atlantic</span>
-                <h3>Switch-everything chess</h3>
-              </header>
-              <ul>
-                <li>Celtics</li>
-                <li>Knicks</li>
-                <li>76ers</li>
-                <li>Raptors</li>
-              </ul>
-              <p>Jalen Brunson vs. Jrue Holiday is the signature duel while Porziņģis’ spacing warps every coverage choice.</p>
-            </article>
-            <article class="cup-group">
-              <header>
-                <span class="cup-group__tag">Group Central</span>
-                <h3>Clutch-time proving ground</h3>
-              </header>
-              <ul>
-                <li>Bucks</li>
-                <li>Cavaliers</li>
-                <li>Bulls</li>
-                <li>Pistons</li>
-              </ul>
-              <p>Milwaukee experiments with Giannis-at-center while Cleveland gauges Evan Mobley’s expanded offensive load.</p>
-            </article>
-            <article class="cup-group">
-              <header>
-                <span class="cup-group__tag">Group Southwest</span>
-                <h3>Tempo trial</h3>
-              </header>
-              <ul>
-                <li>Mavericks</li>
-                <li>Pelicans</li>
-                <li>Spurs</li>
-                <li>Rockets</li>
-              </ul>
-              <p>Victor Wembanyama vs. Zion Williamson headlines a clash of pace philosophies with Luka orchestrating the tempo wars.</p>
-            </article>
-          </div>
-        </section>
-
-        <section class="milestone-chase">
-          <div class="section-header">
-            <h2>Milestones on deck</h2>
-            <p class="lead">
-              Keep these thresholds on your radar—the chase frames weekly coverage and fuels the
-              season-long broadcast narrative.
-            </p>
-          </div>
-          <div class="milestone-chase__grid">
-            <article class="milestone-card">
-              <header>
-                <span class="milestone-card__tag">Scoring climb</span>
-                <h3>LeBron: 41K watch</h3>
-              </header>
-              <p>Needs 1,208 points to clear the 41,000 mark—projected to happen in late March if he averages 25 a night.</p>
-              <ul>
-                <li>Key stretch: nine-game homestand in February</li>
-                <li>Projected milestone game: vs. Warriors (Mar 24)</li>
-              </ul>
-            </article>
-            <article class="milestone-card">
-              <header>
-                <span class="milestone-card__tag">Assist era</span>
-                <h3>Tyrese Haliburton</h3>
-              </header>
-              <p>Within reach of the first 11+ assist season since Stockton—Indiana’s pace puts him on a 915 dime trajectory.</p>
-              <ul>
-                <li>Needs 55 double-digit assist nights</li>
-                <li>PnR chemistry with Siakam fuels the push</li>
-              </ul>
-            </article>
-            <article class="milestone-card">
-              <header>
-                <span class="milestone-card__tag">Defensive pillar</span>
-                <h3>Rudy Gobert</h3>
-              </header>
-              <p>Chasing a fifth Defensive Player of the Year, which would break the tie with Dikembe Mutombo and Ben Wallace.</p>
-              <ul>
-                <li>Timberwolves targeting top-3 defensive rating</li>
-                <li>Tracking 200+ block pace with improved rim protection</li>
-              </ul>
-            </article>
-            <article class="milestone-card">
-              <header>
-                <span class="milestone-card__tag">Rookie spotlight</span>
-                <h3>Caitlin Clark crossover</h3>
-              </header>
-              <p>Year two WNBA sample meets NBA preseason scrimmages—expect crossover showcases and media synergy fueling sellouts.</p>
-              <ul>
-                <li>Joint NBA/WNBA doubleheaders in November</li>
-                <li>Spotlight nights align with in-season tournament windows</li>
-              </ul>
-            </article>
-          </div>
-        </section>
-
+          <section class="sidebar-card sidebar-card--milestones">
+            <header class="sidebar-card__header">
+              <span class="chip chip--accent">Chase file</span>
+              <h3>Milestones on deck</h3>
+              <p>Keep these thresholds on your radar—the chase frames weekly coverage and fuels the season-long narrative.</p>
+            </header>
+            <div class="milestone-chase__grid milestone-chase__grid--stacked">
+              <article class="milestone-card">
+                <header>
+                  <span class="milestone-card__tag">Scoring climb</span>
+                  <h3>LeBron: 41K watch</h3>
+                </header>
+                <p>Needs 1,208 points to clear the 41,000 mark—projected to happen in late March if he averages 25 a night.</p>
+                <ul>
+                  <li>Key stretch: nine-game homestand in February</li>
+                  <li>Projected milestone game: vs. Warriors (Mar 24)</li>
+                </ul>
+              </article>
+              <article class="milestone-card">
+                <header>
+                  <span class="milestone-card__tag">Defensive pillar</span>
+                  <h3>Rudy Gobert</h3>
+                </header>
+                <p>Chasing a fifth Defensive Player of the Year, which would break the tie with Dikembe Mutombo and Ben Wallace.</p>
+                <ul>
+                  <li>Timberwolves targeting top-3 defensive rating</li>
+                  <li>Tracking 200+ block pace with improved rim protection</li>
+                </ul>
+              </article>
+              <article class="milestone-card">
+                <header>
+                  <span class="milestone-card__tag">Rookie spotlight</span>
+                  <h3>Caitlin Clark crossover</h3>
+                </header>
+                <p>Year two WNBA sample meets NBA preseason scrimmages—expect crossover showcases and media synergy fueling sellouts.</p>
+                <ul>
+                  <li>Joint NBA/WNBA doubleheaders in November</li>
+                  <li>Spotlight nights align with in-season tournament windows</li>
+                </ul>
+              </article>
+            </div>
+          </section>
+        </aside>
       </main>
-
-      
     </div>
     <script src="vendor/chart.umd.js" defer></script>
     <script type="module" src="scripts/index.js"></script>
