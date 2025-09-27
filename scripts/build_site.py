@@ -168,8 +168,8 @@ def main() -> None:
     # local previews.
     if OUTPUT_FILE.exists():
         existing = OUTPUT_FILE.read_text(encoding="utf-8", errors="ignore")
-        if "NBA Franchise Explorer" in existing:
-            print("Detected prebuilt NBA Franchise Explorer UI; skipping auto-generation.")
+        if "NBA Intelligence Hub" in existing:
+            print("Detected prebuilt NBA Intelligence Hub UI; skipping auto-generation.")
             return
 
     teams = load_active_franchises(DATA_FILE)
