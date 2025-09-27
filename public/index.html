@@ -346,6 +346,29 @@
             </table>
           </div>
         </div>
+        <div class="schedule-panel">
+          <h3>Rest distribution</h3>
+          <canvas id="schedule-rest-chart" role="img" aria-label="Horizontal bar chart showing rest day distribution between games"></canvas>
+          <p class="data-note" id="schedule-rest-note">Loading rest distribution…</p>
+        </div>
+        <div class="schedule-panel">
+          <h3>Back-to-back leaders</h3>
+          <div class="table-wrapper" role="region" aria-live="polite">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">Team</th>
+                  <th scope="col">B2B sets</th>
+                  <th scope="col">Avg. rest</th>
+                  <th scope="col">Longest road</th>
+                </tr>
+              </thead>
+              <tbody id="schedule-backtoback-body">
+                <tr><td colspan="4">Loading back-to-back data…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
 
       <div class="schedule-panel">
@@ -404,6 +427,25 @@
               </thead>
               <tbody id="players-colleges-body">
                 <tr><td colspan="2">Loading college counts…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>Draft pipeline snapshot</h3>
+          <canvas id="players-draft-chart" role="img" aria-label="Doughnut chart showing drafted versus undrafted players"></canvas>
+          <p class="data-note" id="players-draft-note">Loading draft overview…</p>
+          <div class="table-wrapper" role="region" aria-live="polite">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">Draft decade</th>
+                  <th scope="col">Players</th>
+                </tr>
+              </thead>
+              <tbody id="players-draft-decades-body">
+                <tr><td colspan="2">Loading draft decade rollup…</td></tr>
               </tbody>
             </table>
           </div>
@@ -692,6 +734,9 @@
       scheduleTeamsBody: document.getElementById('schedule-teams-body'),
       scheduleSpecialList: document.getElementById('schedule-special-list'),
       scheduleMonthlyCanvas: document.getElementById('schedule-monthly-chart'),
+      scheduleRestCanvas: document.getElementById('schedule-rest-chart'),
+      scheduleRestNote: document.getElementById('schedule-rest-note'),
+      scheduleBackToBackBody: document.getElementById('schedule-backtoback-body'),
       playersNote: document.getElementById('players-note'),
       playersSummary: document.getElementById('players-summary'),
       playersCountriesBody: document.getElementById('players-countries-body'),
@@ -699,6 +744,9 @@
       playersHeightNote: document.getElementById('players-height-note'),
       playersTallestList: document.getElementById('players-tallest-list'),
       playersCollegesBody: document.getElementById('players-colleges-body'),
+      playersDraftCanvas: document.getElementById('players-draft-chart'),
+      playersDraftNote: document.getElementById('players-draft-note'),
+      playersDraftDecadesBody: document.getElementById('players-draft-decades-body'),
       gamesNote: document.getElementById('games-note'),
       gamesSummary: document.getElementById('games-summary'),
       gamesHighestBody: document.getElementById('games-highest-body'),
@@ -735,7 +783,9 @@
 
     let decadeChart;
     let scheduleChart;
+    let scheduleRestChart;
     let playersHeightChart;
+    let playersDraftChart;
     let gamesDecadeChart;
 
     function formatNumber(value) {
@@ -934,25 +984,25 @@
     function renderScheduleSummary() {
       if (!state.schedule) return;
 
-      const { totals, generatedAt, dateRange } = state.schedule;
-      const cards = [
-        {
-          label: 'Total scheduled games',
-          value: totals.games,
-        },
-        {
-          label: 'Teams with games',
-          value: totals.teams,
-        },
-        {
-          label: 'Regular-season games',
-          value: totals.regularSeason,
-        },
-        {
-          label: 'Preseason games',
-          value: totals.preseason,
-        },
-      ];
+        const { totals, generatedAt, dateRange, restSummary } = state.schedule;
+        const cards = [
+          {
+            label: 'Total scheduled games',
+            value: totals.games,
+          },
+          {
+            label: 'Teams with games',
+            value: totals.teams,
+          },
+          {
+            label: 'Regular-season games',
+            value: totals.regularSeason,
+          },
+          {
+            label: 'Preseason games',
+            value: totals.preseason,
+          },
+        ];
 
       if (totals.other > 0) {
         cards.push({
@@ -961,20 +1011,42 @@
         });
       }
 
-      dom.scheduleSummary.innerHTML = cards
-        .map(
-          (card) => `
-            <div class="summary-card">
-              <h3>${card.label}</h3>
-              <p>${formatNumber(card.value)}</p>
-            </div>
-          `,
-        )
-        .join('');
+        if (restSummary?.averageRestDays) {
+          cards.push({
+            label: 'Avg. rest days',
+            value: restSummary.averageRestDays,
+            formatter: (value) => formatDecimal(value, 2),
+          });
+        }
+        if (restSummary?.backToBackIntervals) {
+          cards.push({
+            label: 'Back-to-back sets',
+            value: restSummary.backToBackIntervals,
+          });
+        }
+
+        dom.scheduleSummary.innerHTML = cards
+          .map(
+            (card) => `
+              <div class="summary-card">
+                <h3>${card.label}</h3>
+                <p>${card.formatter ? card.formatter(card.value) : formatNumber(card.value)}</p>
+              </div>
+            `,
+          )
+          .join('');
 
       const generatedText = generatedAt ? new Date(generatedAt).toLocaleString() : '—';
       const coverage = dateRange ? formatDateRange(dateRange.start, dateRange.end) : '—';
-      dom.scheduleNote.textContent = `Schedule snapshot generated ${generatedText}. Coverage: ${coverage}. Totals include preseason, Emirates NBA Cup, play-in, and playoff rounds from LeagueSchedule24_25.csv.`;
+      const restParts = [];
+      if (restSummary?.averageRestDays && restSummary?.totalIntervals) {
+        restParts.push(`Average rest ${formatDecimal(restSummary.averageRestDays, 2)} days across ${formatNumber(restSummary.totalIntervals)} schedule gaps`);
+      }
+      if (restSummary?.backToBackIntervals) {
+        restParts.push(`${formatNumber(restSummary.backToBackIntervals)} zero-day turnarounds`);
+      }
+      const restSentence = restParts.length > 0 ? ` Rest outlook: ${restParts.join(', ')}.` : '';
+      dom.scheduleNote.textContent = `Schedule snapshot generated ${generatedText}. Coverage: ${coverage}. Totals include preseason, Emirates NBA Cup, play-in, and playoff rounds from LeagueSchedule24_25.csv.${restSentence}`;
     }
 
     function renderScheduleChart() {
@@ -1094,6 +1166,104 @@
       dom.scheduleTeamsBody.innerHTML = rows;
     }
 
+    function renderScheduleRest() {
+      if (!dom.scheduleRestNote) return;
+      const restBuckets = state.schedule?.restBuckets ?? [];
+      const restSummary = state.schedule?.restSummary ?? {};
+
+      const summaryParts = [];
+      if (restSummary?.totalIntervals && restSummary?.averageRestDays) {
+        summaryParts.push(`Average rest ${formatDecimal(restSummary.averageRestDays, 2)} days across ${formatNumber(restSummary.totalIntervals)} gaps`);
+      }
+      if (restSummary?.backToBackIntervals) {
+        summaryParts.push(`${formatNumber(restSummary.backToBackIntervals)} involve zero-day turnarounds`);
+      }
+      dom.scheduleRestNote.textContent = summaryParts.length > 0
+        ? `${summaryParts.join('. ')}.`
+        : 'Rest distribution summarizes the time between games for each franchise in the snapshot.';
+
+      if (!dom.scheduleRestCanvas) return;
+      if (restBuckets.length === 0) {
+        if (scheduleRestChart) {
+          scheduleRestChart.destroy();
+          scheduleRestChart = null;
+        }
+        return;
+      }
+
+      const labels = restBuckets.map((bucket) => bucket.label ?? 'Unknown');
+      const values = restBuckets.map((bucket) => bucket.intervals ?? 0);
+
+      if (!chartAvailable()) {
+        if (!dom.scheduleRestNote.textContent.includes('Chart.js')) {
+          dom.scheduleRestNote.textContent += ' Chart visualization unavailable—Chart.js did not load.';
+        }
+        return;
+      }
+
+      if (!scheduleRestChart) {
+        scheduleRestChart = new Chart(dom.scheduleRestCanvas, {
+          type: 'bar',
+          data: {
+            labels,
+            datasets: [
+              {
+                label: 'Rest intervals',
+                data: values,
+                backgroundColor: 'rgba(23, 105, 170, 0.6)',
+                borderRadius: 6,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            indexAxis: 'y',
+            scales: {
+              x: {
+                beginAtZero: true,
+                ticks: { precision: 0 },
+              },
+            },
+            plugins: {
+              legend: { display: false },
+            },
+          },
+        });
+      } else {
+        scheduleRestChart.data.labels = labels;
+        scheduleRestChart.data.datasets[0].data = values;
+        scheduleRestChart.update();
+      }
+    }
+
+    function renderScheduleBackToBack() {
+      if (!dom.scheduleBackToBackBody) return;
+      const leaders = state.schedule?.backToBackLeaders ?? [];
+      if (!leaders || leaders.length === 0) {
+        dom.scheduleBackToBackBody.innerHTML = '<tr><td colspan="4">No back-to-back insights available.</td></tr>';
+        return;
+      }
+
+      dom.scheduleBackToBackBody.innerHTML = leaders
+        .map((team) => {
+          const badge = team.abbreviation ? ` <span class="badge">${team.abbreviation}</span>` : '';
+          const avgRest = typeof team.averageRestDays === 'number'
+            ? `${formatDecimal(team.averageRestDays, 2)} d`
+            : '—';
+          const longestRoad = team.longestRoadTrip ? `${formatNumber(team.longestRoadTrip)} games` : '—';
+          return `
+            <tr>
+              <td><span class="team-name">${team.name}</span>${badge}</td>
+              <td>${formatNumber(team.backToBacks ?? 0)}</td>
+              <td>${avgRest}</td>
+              <td>${longestRoad}</td>
+            </tr>
+          `;
+        })
+        .join('');
+    }
+
     function renderScheduleSpecials() {
       if (!state.schedule) return;
       const specials = state.schedule.specialGames ?? [];
@@ -1135,12 +1305,23 @@
       if (!snapshot) return;
 
       const totals = snapshot.totals ?? {};
+      const totalPlayers = totals.players ?? 0;
+      const draftSummary = snapshot.draftSummary ?? null;
+      const draftedPlayers = draftSummary?.draftedPlayers ?? 0;
+      const undraftedPlayers = draftSummary?.undraftedPlayers ?? 0;
       const cards = [
-        { label: 'Players on record', value: formatNumber(totals.players ?? 0) },
+        { label: 'Players on record', value: formatNumber(totalPlayers) },
         { label: 'Average height (in)', value: formatDecimal(totals.averageHeightInches ?? 0, 2) },
         { label: 'Average weight (lb)', value: formatDecimal(totals.averageWeightPounds ?? 0, 1) },
         { label: 'Countries represented', value: formatNumber(totals.countriesRepresented ?? 0) },
       ];
+      if (draftSummary) {
+        const draftedShare = totalPlayers > 0 ? draftedPlayers / totalPlayers : null;
+        const draftedLabel = draftedShare !== null
+          ? `${formatNumber(draftedPlayers)} (${formatPercent(draftedShare, 1)})`
+          : formatNumber(draftedPlayers);
+        cards.push({ label: 'Drafted players', value: draftedLabel });
+      }
       dom.playersSummary.innerHTML = cards
         .map((card) => `
           <div class="summary-card">
@@ -1151,7 +1332,10 @@
         .join('');
 
       const generatedText = snapshot.generatedAt ? new Date(snapshot.generatedAt).toLocaleString() : '—';
-      dom.playersNote.textContent = `Snapshot generated ${generatedText}. Position flags — G: ${formatNumber(totals.guards ?? 0)}, F: ${formatNumber(totals.forwards ?? 0)}, C: ${formatNumber(totals.centers ?? 0)}.`;
+      const draftLedger = draftSummary
+        ? ` Draft ledger — Drafted: ${formatNumber(draftedPlayers)}, Undrafted: ${formatNumber(undraftedPlayers)}.`
+        : '';
+      dom.playersNote.textContent = `Snapshot generated ${generatedText}. Position flags — G: ${formatNumber(totals.guards ?? 0)}, F: ${formatNumber(totals.forwards ?? 0)}, C: ${formatNumber(totals.centers ?? 0)}.${draftLedger}`;
 
       const countries = snapshot.countries ?? [];
       dom.playersCountriesBody.innerHTML = countries.length > 0
@@ -1176,6 +1360,74 @@
             `)
             .join('')
         : '<tr><td colspan="2">No college data available.</td></tr>';
+
+      const decades = draftSummary?.decadeCounts ?? [];
+      if (draftSummary) {
+        dom.playersDraftDecadesBody.innerHTML = decades.length > 0
+          ? decades
+              .map((entry) => `
+                <tr>
+                  <td>${entry.decade}</td>
+                  <td>${formatNumber(entry.players ?? 0)}</td>
+                </tr>
+              `)
+              .join('')
+          : '<tr><td colspan="2">No draft year breakdown available.</td></tr>';
+
+        const draftNoteParts = [];
+        if (draftSummary.earliestDraftYear && draftSummary.latestDraftYear) {
+          draftNoteParts.push(`Draft years span ${draftSummary.earliestDraftYear}–${draftSummary.latestDraftYear}`);
+        }
+        draftNoteParts.push(`${formatNumber(draftedPlayers)} drafted, ${formatNumber(undraftedPlayers)} undrafted`);
+        dom.playersDraftNote.textContent = `${draftNoteParts.join('. ')}.`;
+
+        if (dom.playersDraftCanvas) {
+          const values = [draftedPlayers, undraftedPlayers];
+          const labels = ['Drafted', 'Undrafted'];
+          if (!chartAvailable()) {
+            if (!dom.playersDraftNote.textContent.includes('Chart.js')) {
+              dom.playersDraftNote.textContent += ' Chart visualization unavailable—Chart.js did not load.';
+            }
+          } else if (!playersDraftChart) {
+            playersDraftChart = new Chart(dom.playersDraftCanvas, {
+              type: 'doughnut',
+              data: {
+                labels,
+                datasets: [
+                  {
+                    data: values,
+                    backgroundColor: [
+                      'rgba(23, 105, 170, 0.75)',
+                      'rgba(148, 163, 184, 0.6)',
+                    ],
+                    borderWidth: 0,
+                  },
+                ],
+              },
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                  legend: {
+                    position: 'bottom',
+                  },
+                },
+              },
+            });
+          } else {
+            playersDraftChart.data.labels = labels;
+            playersDraftChart.data.datasets[0].data = values;
+            playersDraftChart.update();
+          }
+        }
+      } else {
+        dom.playersDraftDecadesBody.innerHTML = '<tr><td colspan="2">No draft data available.</td></tr>';
+        dom.playersDraftNote.textContent = 'Draft snapshot unavailable.';
+        if (playersDraftChart) {
+          playersDraftChart.destroy();
+          playersDraftChart = null;
+        }
+      }
 
       const tallest = snapshot.tallestPlayers ?? [];
       dom.playersTallestList.innerHTML = tallest.length > 0
@@ -1639,6 +1891,8 @@
         renderScheduleSummary();
         renderScheduleChart();
         renderScheduleTeams();
+        renderScheduleRest();
+        renderScheduleBackToBack();
         renderScheduleSpecials();
       } catch (error) {
         console.error(error);
@@ -1646,9 +1900,15 @@
         dom.scheduleSummary.innerHTML = '';
         dom.scheduleTeamsBody.innerHTML = '<tr><td colspan="5">Schedule data unavailable.</td></tr>';
         dom.scheduleSpecialList.innerHTML = '<li>Schedule data unavailable.</li>';
+        dom.scheduleRestNote.textContent = 'Rest distribution unavailable.';
+        dom.scheduleBackToBackBody.innerHTML = '<tr><td colspan="4">Schedule data unavailable.</td></tr>';
         if (scheduleChart) {
           scheduleChart.destroy();
           scheduleChart = null;
+        }
+        if (scheduleRestChart) {
+          scheduleRestChart.destroy();
+          scheduleRestChart = null;
         }
       }
     }
@@ -1666,9 +1926,15 @@
         dom.playersCollegesBody.innerHTML = '<tr><td colspan="2">Player snapshot unavailable.</td></tr>';
         dom.playersTallestList.innerHTML = '<li>Player snapshot unavailable.</li>';
         dom.playersHeightNote.textContent = 'Height data unavailable.';
+        dom.playersDraftNote.textContent = 'Draft snapshot unavailable.';
+        dom.playersDraftDecadesBody.innerHTML = '<tr><td colspan="2">Player snapshot unavailable.</td></tr>';
         if (playersHeightChart) {
           playersHeightChart.destroy();
           playersHeightChart = null;
+        }
+        if (playersDraftChart) {
+          playersDraftChart.destroy();
+          playersDraftChart = null;
         }
       }
     }

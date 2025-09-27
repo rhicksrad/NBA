@@ -162,6 +162,11 @@ function buildScheduleSnapshot() {
         awayGames: 0,
         firstGame: null,
         lastGame: null,
+        games: [],
+        backToBacks: 0,
+        averageRestDays: null,
+        longestHomeStand: 0,
+        longestRoadTrip: 0,
       };
       if (isPreseason) {
         teamRecord.preseasonGames += 1;
@@ -182,6 +187,9 @@ function buildScheduleSnapshot() {
         if (!teamRecord.lastGame || date > teamRecord.lastGame) {
           teamRecord.lastGame = date;
         }
+        teamRecord.games.push({ date, isHome: role === 'home' });
+      } else {
+        teamRecord.games.push({ date: null, isHome: role === 'home' });
       }
       teams.set(teamId, teamRecord);
     }
@@ -206,6 +214,90 @@ function buildScheduleSnapshot() {
     }
   }
 
+  const restBucketDefinitions = [
+    { label: '0 days', test: (days) => days < 1.25 },
+    { label: '1 day', test: (days) => days < 2.25 },
+    { label: '2 days', test: (days) => days < 3.25 },
+    { label: '3+ days', test: () => true },
+  ];
+
+  const restBucketCounts = new Map(restBucketDefinitions.map((bucket) => [bucket.label, 0]));
+  let totalRestIntervals = 0;
+  let totalRestDays = 0;
+  let totalBackToBacks = 0;
+
+  for (const team of teams.values()) {
+    const chronologicalGames = team.games
+      .filter((game) => game.date instanceof Date)
+      .sort((a, b) => a.date - b.date);
+
+    let previousGame = null;
+    let homeStreak = 0;
+    let roadStreak = 0;
+    let longestHome = 0;
+    let longestRoad = 0;
+    let restIntervals = 0;
+    let restTotal = 0;
+    let backToBacks = 0;
+
+    for (const game of chronologicalGames) {
+      if (game.isHome) {
+        homeStreak += 1;
+        roadStreak = 0;
+      } else {
+        roadStreak += 1;
+        homeStreak = 0;
+      }
+
+      if (homeStreak > longestHome) longestHome = homeStreak;
+      if (roadStreak > longestRoad) longestRoad = roadStreak;
+
+      if (previousGame) {
+        const diffMs = game.date.getTime() - previousGame.date.getTime();
+        if (Number.isFinite(diffMs) && diffMs > 0) {
+          const diffDays = diffMs / (1000 * 60 * 60 * 24);
+          restIntervals += 1;
+          restTotal += diffDays;
+
+          let bucketLabel = '3+ days';
+          for (const bucket of restBucketDefinitions) {
+            if (bucket.test(diffDays)) {
+              bucketLabel = bucket.label;
+              break;
+            }
+          }
+          restBucketCounts.set(bucketLabel, (restBucketCounts.get(bucketLabel) ?? 0) + 1);
+
+          if (diffDays < 1.25) {
+            backToBacks += 1;
+          }
+        }
+      }
+
+      previousGame = game;
+    }
+
+    team.backToBacks = backToBacks;
+    team.averageRestDays = restIntervals > 0 ? restTotal / restIntervals : null;
+    team.longestHomeStand = longestHome;
+    team.longestRoadTrip = longestRoad;
+
+    totalRestIntervals += restIntervals;
+    totalRestDays += restTotal;
+    totalBackToBacks += backToBacks;
+  }
+
+  const restSummary = {
+    totalIntervals: totalRestIntervals,
+    averageRestDays: totalRestIntervals > 0 ? totalRestDays / totalRestIntervals : null,
+    backToBackIntervals: totalBackToBacks,
+  };
+
+  const restBuckets = restBucketDefinitions.map((bucket) => ({
+    label: bucket.label,
+    intervals: restBucketCounts.get(bucket.label) ?? 0,
+  }));
+
   const formattedTeams = Array.from(teams.values()).map((team) => {
     const directoryEntry = teamDirectory.get(team.teamId);
     const name = directoryEntry ? `${directoryEntry.teamCity} ${directoryEntry.teamName}` : team.teamId;
@@ -222,6 +314,10 @@ function buildScheduleSnapshot() {
       awayGames: team.awayGames,
       firstGame: team.firstGame ? team.firstGame.toISOString() : null,
       lastGame: team.lastGame ? team.lastGame.toISOString() : null,
+      backToBacks: team.backToBacks,
+      averageRestDays: team.averageRestDays !== null ? Number(team.averageRestDays.toFixed(2)) : null,
+      longestHomeStand: team.longestHomeStand,
+      longestRoadTrip: team.longestRoadTrip,
     };
   });
 
@@ -263,6 +359,25 @@ function buildScheduleSnapshot() {
       .map(({ key, ...rest }) => ({ month: key, ...rest })),
     teams: formattedTeams,
     specialGames,
+    restSummary,
+    restBuckets,
+    backToBackLeaders: formattedTeams
+      .map((team) => ({
+        teamId: team.teamId,
+        name: team.name,
+        abbreviation: team.abbreviation,
+        backToBacks: team.backToBacks,
+        averageRestDays: team.averageRestDays,
+        longestHomeStand: team.longestHomeStand,
+        longestRoadTrip: team.longestRoadTrip,
+      }))
+      .sort((a, b) => {
+        if (b.backToBacks === a.backToBacks) {
+          return a.name.localeCompare(b.name);
+        }
+        return b.backToBacks - a.backToBacks;
+      })
+      .slice(0, 10),
   };
 
   mkdirSync(outputDir, { recursive: true });
