@@ -1595,7 +1595,7 @@
     function resetFilters() {
       if (!state.snapshot) return;
       dom.search.value = '';
-      dom.league.value = 'NBA';
+      dom.league.value = '';
       dom.seasonStart.value = state.snapshot.earliestSeason ?? '';
       dom.seasonEnd.value = state.snapshot.currentYear ?? '';
       applyFilters();
@@ -1613,7 +1613,7 @@
         .map((league) => `<option value="${league}">${league}</option>`)
         .join('');
 
-      dom.league.value = snapshot.leagues.includes('NBA') ? 'NBA' : '';
+      dom.league.value = '';
     }
 
     async function loadData() {
@@ -1621,7 +1621,9 @@
         const snapshot = await fetchJson('data/active_franchises.json', 'franchise snapshot');
         state.snapshot = snapshot;
         state.raw = snapshot.activeFranchises;
-        dom.generatedNote.textContent = `Snapshot generated ${new Date(snapshot.generatedAt).toLocaleString()} · ${formatNumber(snapshot.totals.nba)} NBA franchises active today.`;
+        const totalFranchises = formatNumber(snapshot.totals?.all ?? state.raw.length);
+        const totalNbaFranchises = snapshot.totals?.nba ? ` (${formatNumber(snapshot.totals.nba)} NBA)` : '';
+        dom.generatedNote.textContent = `Snapshot generated ${new Date(snapshot.generatedAt).toLocaleString()} · ${totalFranchises} franchises active today${totalNbaFranchises}.`;
         hydrateControls(snapshot);
         applyFilters();
       } catch (error) {
