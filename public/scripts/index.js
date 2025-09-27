@@ -316,13 +316,21 @@ function renderPreseasonTour(openersData) {
       grid.appendChild(placeholder);
     } else {
       games.forEach((game) => {
-        const card = document.createElement('a');
+        const hasPreview = Boolean(game?.gameId);
+        const card = document.createElement(hasPreview ? 'a' : 'article');
         card.className = 'tour-card';
-        card.href = `previews/preseason-${game.gameId}.html`;
-        card.setAttribute(
-          'aria-label',
-          `${game.teamName} ${game.homeAway === 'home' ? 'vs.' : '@'} ${game.opponentName} preseason opener preview`
-        );
+        const teamLabel = game.teamName ?? 'Preseason opener';
+        const opponentLabel = game.opponentName ?? 'TBD opponent';
+        const homeAway = game.homeAway === 'home' ? 'home' : game.homeAway === 'away' ? 'away' : null;
+        const matchupGlyph = homeAway === 'away' ? '@' : 'vs.';
+
+        if (hasPreview) {
+          card.href = `previews/preseason-${game.gameId}.html`;
+          card.setAttribute('aria-label', `${teamLabel} ${matchupGlyph} ${opponentLabel} preseason opener preview`);
+        } else {
+          card.setAttribute('aria-label', `${teamLabel} preseason opener details pending`);
+          card.setAttribute('role', 'group');
+        }
 
         const date = document.createElement('time');
         date.className = 'tour-card__date';
@@ -335,7 +343,6 @@ function renderPreseasonTour(openersData) {
 
         const identity = document.createElement('div');
         identity.className = 'tour-card__identity';
-        const teamLabel = game.teamName ?? 'Preseason opener';
         identity.appendChild(createTeamLogo(teamLabel, 'team-logo team-logo--medium'));
         const teamName = document.createElement('h3');
         teamName.className = 'tour-card__team';
@@ -349,7 +356,7 @@ function renderPreseasonTour(openersData) {
           opponent.className = 'tour-card__opponent';
           opponent.appendChild(createTeamLogo(game.opponentName, 'team-logo team-logo--tiny'));
           const opponentLabel = document.createElement('span');
-          opponentLabel.textContent = `${game.homeAway === 'home' ? 'vs.' : '@'} ${game.opponentName}`;
+          opponentLabel.textContent = `${matchupGlyph} ${game.opponentName}`;
           opponent.appendChild(opponentLabel);
           matchup.appendChild(opponent);
         } else {
@@ -358,7 +365,7 @@ function renderPreseasonTour(openersData) {
 
         const tag = document.createElement('span');
         tag.className = 'tour-card__tag';
-        tag.textContent = game.homeAway === 'home' ? 'Home start' : 'Road opener';
+        tag.textContent = homeAway === 'home' ? 'Home start' : homeAway === 'away' ? 'Road opener' : 'Tip-off pending';
 
         const venue = document.createElement('p');
         venue.className = 'tour-card__meta';
@@ -390,7 +397,7 @@ function renderPreseasonTour(openersData) {
             timeZoneName: 'short',
           }).format(updatedRaw)
         : 'recently';
-      footnote.textContent = `${total} preseason openers logged — data refreshed ${updated}. Tap any card to explore its placeholder preview.`;
+      footnote.textContent = `${total} preseason openers logged — data refreshed ${updated}. Tap any card to explore its preview capsule.`;
     } else {
       footnote.textContent = 'Preseason openers populate after the league locks each exhibition tip.';
     }
