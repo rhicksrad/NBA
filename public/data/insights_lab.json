@@ -1,0 +1,114 @@
+{
+  "changelog": [
+    {
+      "week": "Week 05",
+      "date": "2024-10-12",
+      "status": "Released",
+      "summary": "Storytelling walkthrough shipped with accessible tab navigation and release tracker.",
+      "highlights": [
+        "Introduced a dynamic release checklist to monitor launch readiness.",
+        "Connected lab data feeds to hydrate changelog and experiment backlog content.",
+        "Documented QA feedback loop for narrative copy updates."
+      ],
+      "owner": "Insights Lab Core Team"
+    },
+    {
+      "week": "Week 04",
+      "date": "2024-10-05",
+      "status": "QA",
+      "summary": "Validating experiment backlog metadata before opening to contributors.",
+      "highlights": [
+        "Codified experiment brief template with objectives and tagging guidance.",
+        "Created Slack and Notion workflow to sync async collaboration updates."
+      ],
+      "owner": "Product Operations"
+    },
+    {
+      "week": "Week 03",
+      "date": "2024-09-28",
+      "status": "Discovery",
+      "summary": "Researched automation to sync pipeline metrics with release notes.",
+      "highlights": [
+        "Mapped ingestion hooks between schedule and storytelling datasets.",
+        "Interviewed analysts on preferred release cadence dashboards."
+      ],
+      "owner": "R&D Discovery Pod"
+    }
+  ],
+  "experiments": [
+    {
+      "title": "Shot quality heatmap",
+      "status": "In progress",
+      "owner": "Design Systems",
+      "timeline": "Prototype handoff — Oct 18",
+      "summary": "Blend player-tracking XY coordinates with defender proximity to surface expected shot value by zone.",
+      "objectives": [
+        "Calibrate accuracy with last-two-minute possession samples.",
+        "Stress test against 2025-26 schedule density for caching strategy."
+      ],
+      "tags": ["Tracking data", "Spatial model", "UX polish"]
+    },
+    {
+      "title": "Win probability narrations",
+      "status": "QA",
+      "owner": "Editorial Analytics",
+      "timeline": "QA window — Oct 21",
+      "summary": "Pair auto-generated story captions with live win probability charts to explain momentum swings without manual scripting.",
+      "objectives": [
+        "Validate caption tone against broadcast guidelines.",
+        "Expose instrumentation hook for real-time updates."
+      ],
+      "tags": ["Story engine", "Automation"]
+    },
+    {
+      "title": "Fan sentiment index",
+      "status": "Discovery",
+      "owner": "Community Lab",
+      "timeline": "Research sprint — Oct 25",
+      "summary": "Scrape social channels and encode emotions into a gameday hype gauge that updates hourly.",
+      "objectives": [
+        "Establish moderation thresholds for raw text ingestion.",
+        "Prototype emoji-to-sentiment mapping for rapid visual cues."
+      ],
+      "tags": ["NLP", "Realtime", "Signals"]
+    },
+    {
+      "title": "Trade simulator",
+      "status": "Planned",
+      "owner": "Front Office Research",
+      "timeline": "Scoping — Nov 01",
+      "summary": "Model cap mechanics, draft pick value, and culture fit before proposals go public.",
+      "objectives": [
+        "Define compatibility scoring for multi-team scenarios.",
+        "Outline salary-matching validation and trade rules."
+      ],
+      "tags": ["CBA rules", "Scenario planning"]
+    }
+  ],
+  "collaboration": {
+    "badges": ["Design reviews", "Data QA", "Story pitches"],
+    "nextSync": "2024-10-17T15:00:00-04:00",
+    "location": "Virtual war room",
+    "agenda": [
+      "Review onboarding for experiment brief template.",
+      "Walk through instrumentation for storytelling release checklist.",
+      "Assign owners for fan sentiment ingestion spike."
+    ],
+    "channels": [
+      {"label": "Slack", "value": "#nba-insights-lab"},
+      {"label": "Notion", "value": "Insights Lab control room"},
+      {"label": "Miro", "value": "Experiment storyboard"}
+    ],
+    "contributors": [
+      {"name": "Avery Chen", "focus": "Data science · metrics validation"},
+      {"name": "Jordan Ellis", "focus": "Design systems · interaction polish"},
+      {"name": "Riley Gomez", "focus": "Editorial analytics · narrative QA"}
+    ]
+  },
+  "releaseChecklist": [
+    {"label": "Narrative data connected", "progress": 100},
+    {"label": "QA sign-off", "progress": 65},
+    {"label": "Accessibility review", "progress": 80},
+    {"label": "Launch comms brief", "progress": 45}
+  ]
+}

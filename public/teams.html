@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%231156d6'/%3E%3Ctext x='50%25' y='52%25' font-family='Inter,Arial,sans-serif' font-size='28' font-weight='700' fill='white' text-anchor='middle'%3ENBA%3C/text%3E%3C/svg%3E"
+    />
+    <link rel="stylesheet" href="styles/hub.css" />
+    <title>Teams | NBA Intelligence Hub</title>
+  </head>
+  <body>
+    <div class="site-frame">
+      <header class="site-header">
+        <div class="hub-nav">
+          <a class="brand" href="index.html"><span>NBA</span> Intelligence Hub</a>
+          <nav class="nav-links">
+            <a href="index.html">2025-2026 Preview</a>
+            <a href="rewind.html">2024-2025 Season Rewind</a>
+            <a href="players.html">Players</a>
+            <a class="active" href="teams.html">Teams</a>
+            <a href="history.html">History</a>
+            <a href="insights.html">Insights Lab</a>
+            <a href="about.html">About</a>
+          </nav>
+        </div>
+        <div class="hero">
+          <span class="eyebrow">Team Systems</span>
+          <h1>Benchmark every franchise from culture to crunch time.</h1>
+          <p>
+            Map out the forthcoming dashboards that surface team DNA, lineup chemistry, and schematic
+            evolution throughout the season.
+          </p>
+        </div>
+      </header>
+
+      <main>
+        <section class="team-overview">
+          <div class="section-heading">
+            <div>
+              <h2>Franchise health monitor</h2>
+              <p class="lead">
+                Design modular views that blend efficiency numbers with qualitative markers so front
+                offices can assess culture, continuity, and coaching tweaks at a glance.
+              </p>
+            </div>
+            <div class="section-heading__actions">
+              <span class="chip chip--accent">MVP scope</span>
+              <span class="chip">Culture index</span>
+              <span class="chip">Roster churn</span>
+              <span class="chip">Financial runway</span>
+            </div>
+          </div>
+          <div class="team-overview__body">
+            <article class="team-overview__summary">
+              <h3>Organization pulse</h3>
+              <p>
+                Extend <code>TeamHistories.csv</code> with modern pace-and-space indicators to see how
+                strategies evolve. Layer on roster churn, draft capital, and development pathways to
+                reveal which franchises are building lasting systems.
+              </p>
+              <ul class="checklist">
+                <li>Normalize pace arcs to compare dynasties across eras.</li>
+                <li>Overlay scouting intel with scouting grades from partner clubs.</li>
+                <li>Bookmark chemistry breakpoints before trade and free agency windows.</li>
+              </ul>
+            </article>
+            <div class="team-overview__panels">
+              <div class="team-kpi-grid">
+                <article class="metric-card">
+                  <header class="metric-card__head">
+                    <span class="metric-card__label">Dynasty tier</span>
+                    <span class="metric-card__pill">Historical</span>
+                  </header>
+                  <p class="metric-card__value">Top 10</p>
+                  <p class="metric-card__hint">Clubs living above a 60% win pace, updated nightly.</p>
+                </article>
+                <article class="metric-card">
+                  <header class="metric-card__head">
+                    <span class="metric-card__label">Continuity meter</span>
+                    <span class="metric-card__pill">Rolling 30 days</span>
+                  </header>
+                  <p class="metric-card__value">87%</p>
+                  <p class="metric-card__hint">Lineup overlap weighted by clutch possessions.</p>
+                </article>
+                <article class="metric-card">
+                  <header class="metric-card__head">
+                    <span class="metric-card__label">Travel tax</span>
+                    <span class="metric-card__pill">Season to date</span>
+                  </header>
+                  <p class="metric-card__value">1.6</p>
+                  <p class="metric-card__hint">Average rest advantage compared to opponents.</p>
+                </article>
+                <article class="metric-card">
+                  <header class="metric-card__head">
+                    <span class="metric-card__label">Playbook depth</span>
+                    <span class="metric-card__pill">Video tags</span>
+                  </header>
+                  <p class="metric-card__value">42</p>
+                  <p class="metric-card__hint">Tracked sets with confirmed counters this month.</p>
+                </article>
+              </div>
+              <figure class="viz-card viz-card--inline team-overview__viz" data-chart-wrapper>
+                <header class="viz-card__title">Historical win rate leaders</header>
+                <div class="viz-canvas">
+                  <canvas data-chart="win-leaders" aria-describedby="win-leaders-caption"></canvas>
+                </div>
+                <figcaption id="win-leaders-caption" class="viz-card__caption">
+                  Horizontal bars spotlight the ten most efficient franchises ever, trimmed via ranked
+                  slicing to keep render times snappy.
+                </figcaption>
+              </figure>
+            </div>
+          </div>
+        </section>
+
+        <section class="team-analytics">
+          <div class="section-heading">
+            <div>
+              <h2>Lineup chemistry lab</h2>
+              <p class="lead">
+                Translate schedule strain, spacing scores, and defensive tags into actionable lineup
+                experiments before the playoffs hit.
+              </p>
+            </div>
+            <div class="section-heading__actions section-heading__actions--ghost">
+              <span class="chip chip--ghost">Spacing scores</span>
+              <span class="chip chip--ghost">Defensive tags</span>
+              <span class="chip chip--ghost">Clutch usage</span>
+            </div>
+          </div>
+          <div class="team-analytics__grid">
+            <figure class="viz-card viz-card--inline" data-chart-wrapper>
+              <header class="viz-card__title">Schedule strain navigator</header>
+              <div class="viz-canvas">
+                <canvas data-chart="schedule-strain" aria-describedby="schedule-strain-caption"></canvas>
+              </div>
+              <figcaption id="schedule-strain-caption" class="viz-card__caption">
+                Bubble size scales with total games while the axes reveal the balance between
+                back-to-back sets and average rest days for busy clubs.
+              </figcaption>
+            </figure>
+            <div class="stacked-panel">
+              <h3>Key overlays</h3>
+              <p>
+                Feed in the latest shifts from <code>TeamStatistics.zip</code> as the data warehouse is
+                unlocked. Allow coaches to stress-test lineup combinations and anticipate fatigue
+                spikes weeks in advance.
+              </p>
+              <div class="badge-list">
+                <span class="badge">Spacing scores</span>
+                <span class="badge">Defensive tags</span>
+                <span class="badge">Clutch usage</span>
+              </div>
+              <div class="callout-grid">
+                <article class="callout-card">
+                  <span class="callout-card__label">Continuity lenses</span>
+                  <p>Blend substitution patterns with culture grades to flag lineup volatility.</p>
+                </article>
+                <article class="callout-card">
+                  <span class="callout-card__label">Load management</span>
+                  <p>Surface travel burdens and altitude swings before scheduling rest days.</p>
+                </article>
+                <article class="callout-card">
+                  <span class="callout-card__label">Playbook sync</span>
+                  <p>Connect scout reports with video tags so staff can demo counters instantly.</p>
+                </article>
+              </div>
+            </div>
+          </div>
+          <div class="team-initiatives">
+            <h3>Activation backlog</h3>
+            <div class="card-grid">
+              <article class="card">
+                <h3>Schedule strain</h3>
+                <p>Quantify back-to-back fatigue, travel, and altitude changes in a single gauge.</p>
+              </article>
+              <article class="card">
+                <h3>Game plan repository</h3>
+                <p>Store scout reports, counter plays, and set breakdowns for each opponent.</p>
+              </article>
+              <article class="card">
+                <h3>Community signals</h3>
+                <p>Integrate fan sentiment and social listening to anticipate arena energy swings.</p>
+              </article>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="page-footer">Team stories will anchor the hub's competitive scouting tools.</footer>
+    </div>
+    <script src="vendor/chart.umd.js" defer></script>
+    <script type="module" src="scripts/teams.js"></script>
+  </body>
+</html>
