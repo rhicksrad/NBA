@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Changelog — NBA Pulse</title>
+    <meta name="description" content="Release notes for the NBA Pulse project site." />
+    <meta property="og:title" content="Changelog — NBA Pulse" />
+    <meta property="og:description" content="Release notes for the NBA Pulse project site." />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://rhicksrad.github.io/NBA/changelog/" />
+    <meta property="og:image" content="https://rhicksrad.github.io/NBA/assets/img/social-preview.svg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Changelog — NBA Pulse" />
+    <meta name="twitter:description" content="Release notes for the NBA Pulse project site." />
+    <meta name="twitter:image" content="https://rhicksrad.github.io/NBA/assets/img/social-preview.svg" />
+    <link rel="canonical" href="https://rhicksrad.github.io/NBA/changelog/" />
+    <base id="site-base" href="../" />
+    <script>
+      (function () {
+        var base = document.getElementById('site-base');
+        if (!base) return;
+        var path = window.location.pathname || '';
+        if (path.includes('/NBA/')) {
+          base.setAttribute('href', '/NBA/');
+        }
+      })();
+    </script>
+    <link rel="stylesheet" href="../assets/css/site.0f9b6c2d.css" />
+    <style>
+      body {
+        margin: 0;
+        font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+        background: #0f172a;
+        color: #f8fafc;
+      }
+      .skip-link {
+        position: absolute;
+        top: -48px;
+        left: 16px;
+        background: #facc15;
+        color: #000;
+        padding: 0.5rem 1rem;
+        border-radius: 999px;
+        transition: top 0.2s ease;
+        z-index: 1000;
+      }
+      .skip-link:focus {
+        top: 16px;
+      }
+      main {
+        max-width: 840px;
+        margin: 0 auto;
+        padding: 3rem 5vw 4rem;
+      }
+      h1 {
+        font-size: clamp(2rem, 5vw, 3rem);
+        margin-top: 0;
+      }
+      article {
+        background: rgba(17, 28, 52, 0.9);
+        border: 1px solid rgba(148, 163, 184, 0.2);
+        border-radius: 20px;
+        padding: 1.5rem 2rem;
+      }
+      time {
+        font-family: "JetBrains Mono", "Fira Mono", monospace;
+        color: #cbd5f5;
+      }
+      a {
+        color: #38bdf8;
+      }
+      a:focus {
+        outline: 3px solid #facc15;
+        outline-offset: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <main id="main">
+      <h1>Changelog</h1>
+      <article>
+        <h2>Stabilize NBA Pulse for production</h2>
+        <p><time datetime="2024-05-27">2024-05-27</time></p>
+        <ul>
+          <li>Rebuilt the dashboard with accessible navigation, consistent modules, and CTA-driven hero content.</li>
+          <li>Introduced sparkline and bar chart visualizations backed by static JSON snapshots.</li>
+          <li>Added provenance documentation and automated CI checks prior to GitHub Pages deployment.</li>
+        </ul>
+        <p><a href="../index.html">Return to the dashboard</a></p>
+      </article>
+    </main>
+  </body>
+</html>

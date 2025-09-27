@@ -1,0 +1,24 @@
+{
+  "lastUpdated": "2024-05-27T09:00:00Z",
+  "source": {
+    "name": "NBA Advanced Stats",
+    "url": "https://stats.nba.com/teams/traditional/",
+    "updateCadence": "Updated daily"
+  },
+  "team": "Denver Nuggets",
+  "metric": "Offensive rating (last 10 games)",
+  "unit": "points per 100 possessions",
+  "values": [
+    { "date": "2024-05-12", "value": 114.2 },
+    { "date": "2024-05-13", "value": 116.5 },
+    { "date": "2024-05-15", "value": 118.1 },
+    { "date": "2024-05-17", "value": 112.7 },
+    { "date": "2024-05-19", "value": 110.4 },
+    { "date": "2024-05-21", "value": 113.9 },
+    { "date": "2024-05-23", "value": 115.2 },
+    { "date": "2024-05-24", "value": 117.6 },
+    { "date": "2024-05-25", "value": 119.1 },
+    { "date": "2024-05-26", "value": 118.7 }
+  ],
+  "summary": "Denver’s half-court sets are trending +4.5 rating points over the ten-game window, aided by improved corner three volume."
+}
