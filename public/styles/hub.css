@@ -76,16 +76,46 @@ a:hover, a:focus { color: var(--sky); }
   color: #fff; border-color: transparent; box-shadow: 0 12px 22px rgba(17, 86, 214, 0.35);
 }
 
-.hero { text-align: center; padding: 3rem 0 2.5rem; }
+.hero {
+  padding: clamp(2.6rem, 6vw, 3.6rem) 0 2.75rem;
+  display: grid;
+  gap: clamp(2rem, 4vw, 3rem);
+}
+.hero__layout {
+  display: grid;
+  gap: clamp(1.6rem, 3.5vw, 3rem);
+  align-items: start;
+}
+.hero__intro {
+  display: grid;
+  gap: 1.1rem;
+  max-width: min(520px, 100%);
+  margin-inline: auto;
+  text-align: center;
+}
 .eyebrow {
   display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.35rem 0.75rem; font-size: 0.8rem;
   letter-spacing: 0.12em; text-transform: uppercase; font-weight: 700; border-radius: 999px;
   background: linear-gradient(135deg, rgba(17, 86, 214, 0.9), rgba(239, 61, 91, 0.88)); color: #fff; box-shadow: var(--shadow-soft);
 }
-.hero h1 { font-size: clamp(2.3rem, 5vw, 3.3rem); margin: 1rem 0 0.75rem; font-weight: 800; letter-spacing: -0.01em; }
-.hero p { margin: 0.35rem auto 0; color: var(--text-subtle); max-width: 640px; font-size: clamp(1.02rem, 2.4vw, 1.18rem); }
+.hero h1 {
+  font-size: clamp(2rem, 4.6vw, 2.85rem);
+  margin: 0.6rem 0 0;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+.hero__lede {
+  margin: 0;
+  color: var(--text-subtle);
+  font-size: clamp(0.96rem, 2.3vw, 1.12rem);
+  line-height: 1.7;
+}
+.hero__visual {
+  display: flex;
+  justify-content: center;
+}
 
-.cta-group { margin-top: 1.8rem; display: flex; justify-content: center; flex-wrap: wrap; gap: 0.75rem; }
+.cta-group { margin-top: 1.4rem; display: flex; justify-content: center; flex-wrap: wrap; gap: 0.75rem; }
 .cta {
   display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem; padding: 0.75rem 1.4rem;
   border-radius: 999px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; text-decoration: none;
@@ -192,11 +222,116 @@ a:hover, a:focus { color: var(--sky); }
   .hero-panel--primary { grid-column: span 2; }
 }
 
+@media (min-width: 960px) {
+  .hero__layout {
+    grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+    align-items: stretch;
+  }
+  .hero__intro {
+    text-align: left;
+    margin: 0;
+    align-content: start;
+  }
+  .cta-group { justify-content: flex-start; }
+  .hero__visual { align-items: stretch; }
+  .hero-panels {
+    margin-top: 0;
+    align-content: stretch;
+    grid-auto-rows: 1fr;
+  }
+}
+
 main { display: grid; gap: 2.25rem; }
 
 section {
   background: var(--surface); border-radius: var(--radius-lg);
   padding: 1.75rem clamp(1.5rem, 4vw, 2.5rem); box-shadow: var(--shadow-soft); border: 1px solid var(--border);
+}
+
+.preseason-spotlight {
+  display: grid;
+  gap: clamp(1.4rem, 3vw, 2rem);
+}
+.preseason-spotlight__content {
+  display: grid;
+  gap: clamp(1.2rem, 3vw, 1.8rem);
+}
+.preseason-spotlight__aside {
+  padding: 1.1rem 1.4rem;
+  border-radius: var(--radius-md);
+  border: 1px solid color-mix(in srgb, var(--border) 75%, transparent);
+  background: color-mix(in srgb, rgba(17, 86, 214, 0.08) 40%, rgba(255, 255, 255, 0.92) 60%);
+  box-shadow: var(--shadow-soft);
+  color: var(--text-subtle);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+.preseason-spotlight__aside strong {
+  display: block;
+  font-size: 1.45rem;
+  color: var(--royal);
+  margin-bottom: 0.4rem;
+}
+.preseason-schedule {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 1rem;
+}
+.preseason-schedule__placeholder {
+  margin: 0;
+  padding: 1.4rem 1.2rem;
+  text-align: center;
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, rgba(17, 86, 214, 0.1) 40%, rgba(242, 246, 255, 0.9) 60%);
+  color: var(--text-subtle);
+  border: 1px dashed color-mix(in srgb, var(--royal) 35%, transparent);
+}
+.preseason-game {
+  display: grid;
+  gap: 0.45rem;
+  padding: 1rem 1.2rem 1.1rem;
+  border-radius: var(--radius-md);
+  border: 1px solid color-mix(in srgb, var(--border) 65%, transparent);
+  background:
+    linear-gradient(135deg, rgba(17, 86, 214, 0.12), rgba(244, 181, 63, 0.08)),
+    color-mix(in srgb, rgba(255, 255, 255, 0.95) 70%, rgba(242, 246, 255, 0.9) 30%);
+  box-shadow: var(--shadow-soft);
+}
+.preseason-game__date {
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(17, 86, 214, 0.85);
+  font-weight: 700;
+}
+.preseason-game__matchup {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--navy);
+}
+.preseason-game__meta {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--text-subtle);
+}
+.preseason-game__location {
+  margin: 0;
+  font-size: 0.85rem;
+  color: rgba(11, 37, 69, 0.65);
+}
+
+@media (min-width: 880px) {
+  .preseason-spotlight__content {
+    grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr);
+    align-items: start;
+  }
+  .preseason-spotlight__aside {
+    position: sticky;
+    top: 1.5rem;
+  }
 }
 section h2 { margin-top: 0; font-size: clamp(1.35rem, 3vw, 1.8rem); letter-spacing: 0.01em; color: var(--navy); }
 .lead { font-size: clamp(1.05rem, 2.4vw, 1.25rem); color: var(--text-subtle); }

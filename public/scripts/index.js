@@ -317,6 +317,77 @@ function renderTimeline(scheduleData) {
     });
 }
 
+function renderPreseasonSchedule(scheduleData) {
+  const list = document.querySelector('[data-preseason-schedule]');
+  const totalNode = document.querySelector('[data-preseason-total]');
+
+  if (totalNode) {
+    const total = helpers.formatNumber(scheduleData?.totals?.preseason ?? 0, 0);
+    totalNode.textContent = total;
+  }
+
+  if (!list) {
+    return;
+  }
+
+  list.innerHTML = '';
+
+  if (!scheduleData) {
+    const placeholder = document.createElement('li');
+    placeholder.className = 'preseason-schedule__placeholder';
+    placeholder.textContent = 'Preseason fixtures populate once the schedule snapshot loads.';
+    list.appendChild(placeholder);
+    return;
+  }
+
+  const seasonStartYear = scheduleData?.dateRange?.start ? new Date(scheduleData.dateRange.start).getFullYear() : null;
+  const preseasonGames = (Array.isArray(scheduleData?.specialGames) ? scheduleData.specialGames : [])
+    .filter((game) => (game?.label ?? '').toLowerCase().includes('preseason'))
+    .map((game) => ({ ...game, parsedDate: game?.date ? new Date(game.date) : null }))
+    .filter((game) => game.parsedDate instanceof Date && !Number.isNaN(game.parsedDate.getTime()))
+    .filter((game) => (seasonStartYear !== null ? game.parsedDate.getFullYear() === seasonStartYear : true))
+    .sort((a, b) => a.parsedDate - b.parsedDate);
+
+  if (!preseasonGames.length) {
+    const placeholder = document.createElement('li');
+    placeholder.className = 'preseason-schedule__placeholder';
+    placeholder.textContent = 'Preseason fixtures will post once the league finalizes the slate.';
+    list.appendChild(placeholder);
+    return;
+  }
+
+  const teamLookup = createTeamLookup(scheduleData);
+
+  preseasonGames.slice(0, 6).forEach((game) => {
+    const item = document.createElement('li');
+    item.className = 'preseason-game';
+
+    const date = document.createElement('time');
+    date.className = 'preseason-game__date';
+    if (game.date) {
+      date.dateTime = game.date;
+      date.textContent = formatDateLabel(game.date, { weekday: 'short', month: 'short', day: 'numeric' });
+    } else {
+      date.textContent = 'TBD';
+    }
+
+    const matchup = document.createElement('p');
+    matchup.className = 'preseason-game__matchup';
+    matchup.textContent = formatMatchup(game, teamLookup) || 'Preseason showcase';
+
+    const meta = document.createElement('p');
+    meta.className = 'preseason-game__meta';
+    meta.textContent = game.subLabel || game.seriesText || 'Global exhibition';
+
+    const location = document.createElement('p');
+    location.className = 'preseason-game__location';
+    location.textContent = formatLocation(game) || 'Neutral site';
+
+    item.append(date, matchup, meta, location);
+    list.appendChild(item);
+  });
+}
+
 function renderStoryCards(storyData) {
   const grid = document.querySelector('[data-story-grid]');
   if (!grid) {
@@ -593,6 +664,7 @@ async function bootstrap() {
 
   hydrateHero(teamData, scheduleData);
   renderSeasonLead(scheduleData);
+  renderPreseasonSchedule(scheduleData);
   renderContenderGrid(teamData);
   renderBackToBack(scheduleData);
   renderTimeline(scheduleData);

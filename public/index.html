@@ -27,54 +27,60 @@
           </nav>
         </div>
         <div class="hero">
-          <span class="eyebrow">Season Preview Premiere · 2025-26</span>
-          <h1>The NBA storyworld rendered in color, context, and controlled chaos.</h1>
-          <p>
-            1,161 regular-season tilts, 67 Emirates NBA Cup showdowns, 10 global showcases, and a
-            cavalcade of roster rewrites—the Intelligence Hub rebuilt the preview so you can feel the
-            season before the opening tip.
-          </p>
-          <div class="hero-panels" aria-live="polite">
-            <article class="hero-panel hero-panel--primary" data-top-team-card>
-              <span class="hero-panel__eyebrow">Power index</span>
-              <h2 class="hero-panel__headline">
-                <span data-top-team-name>Boston Celtics</span>
-              </h2>
-              <p class="hero-panel__meta">
-                <span data-top-team-record>4,091-2,765</span> all-time · +<span data-top-team-margin>3.0</span> nightly margin
+          <div class="hero__layout">
+            <div class="hero__intro">
+              <span class="eyebrow">Season Preview Premiere · 2025-26</span>
+              <h1>The NBA storyworld rendered in color, context, and controlled chaos.</h1>
+              <p class="hero__lede">
+                1,161 regular-season tilts, 67 Emirates NBA Cup showdowns, 10 global showcases, and a
+                cavalcade of roster rewrites—the Intelligence Hub rebuilt the preview so you can feel the
+                season before the opening tip.
               </p>
-              <p class="hero-panel__detail">
-                Dynasty DNA anchored by <span data-top-team-strength>106.2 points for vs. 103.2 allowed</span> keeps the throne warm.
-              </p>
-            </article>
-            <article class="hero-panel hero-panel--event" data-cup-highlight>
-              <span class="hero-panel__eyebrow">Cup crescendo</span>
-              <h2 class="hero-panel__headline">
-                <time data-cup-date datetime="2025-12-17">Dec 17 · Las Vegas</time>
-              </h2>
-              <p class="hero-panel__meta">
-                Emirates NBA Cup Championship returns to <span data-cup-arena>T-Mobile Arena</span>.
-              </p>
-              <p class="hero-panel__detail">
-                <span data-cup-story>67 Cup tilts funnel into one desert coronation.</span>
-              </p>
-            </article>
-            <article class="hero-panel hero-panel--event" data-global-highlight>
-              <span class="hero-panel__eyebrow">Global stage</span>
-              <h2 class="hero-panel__headline">
-                <time data-global-date datetime="2025-10-04">Oct 4 · Abu Dhabi</time>
-              </h2>
-              <p class="hero-panel__meta">
-                <span data-global-match>Nuggets vs. Celtics</span> ignite the worldwide runway.
-              </p>
-              <p class="hero-panel__detail">
-                <span data-global-count>10 neutral-site showcases</span> stretch from Montreal to Macao.
-              </p>
-            </article>
-          </div>
-          <div class="cta-group" role="group" aria-label="Primary actions">
-            <a class="cta cta--primary" href="players.html">Dive into player forecasts</a>
-            <a class="cta cta--ghost" href="#story-arcs">Jump to marquee story arcs</a>
+              <div class="cta-group" role="group" aria-label="Primary actions">
+                <a class="cta cta--primary" href="players.html">Dive into player forecasts</a>
+                <a class="cta cta--ghost" href="#story-arcs">Jump to marquee story arcs</a>
+              </div>
+            </div>
+            <div class="hero__visual" aria-live="polite">
+              <div class="hero-panels">
+                <article class="hero-panel hero-panel--primary" data-top-team-card>
+                  <span class="hero-panel__eyebrow">Power index</span>
+                  <h2 class="hero-panel__headline">
+                    <span data-top-team-name>Boston Celtics</span>
+                  </h2>
+                  <p class="hero-panel__meta">
+                    <span data-top-team-record>4,091-2,765</span> all-time · +<span data-top-team-margin>3.0</span> nightly margin
+                  </p>
+                  <p class="hero-panel__detail">
+                    Dynasty DNA anchored by <span data-top-team-strength>106.2 points for vs. 103.2 allowed</span> keeps the throne warm.
+                  </p>
+                </article>
+                <article class="hero-panel hero-panel--event" data-cup-highlight>
+                  <span class="hero-panel__eyebrow">Cup crescendo</span>
+                  <h2 class="hero-panel__headline">
+                    <time data-cup-date datetime="2025-12-17">Dec 17 · Las Vegas</time>
+                  </h2>
+                  <p class="hero-panel__meta">
+                    Emirates NBA Cup Championship returns to <span data-cup-arena>T-Mobile Arena</span>.
+                  </p>
+                  <p class="hero-panel__detail">
+                    <span data-cup-story>67 Cup tilts funnel into one desert coronation.</span>
+                  </p>
+                </article>
+                <article class="hero-panel hero-panel--event" data-global-highlight>
+                  <span class="hero-panel__eyebrow">Global stage</span>
+                  <h2 class="hero-panel__headline">
+                    <time data-global-date datetime="2025-10-04">Oct 4 · Abu Dhabi</time>
+                  </h2>
+                  <p class="hero-panel__meta">
+                    <span data-global-match>Nuggets vs. Celtics</span> ignite the worldwide runway.
+                  </p>
+                  <p class="hero-panel__detail">
+                    <span data-global-count>10 neutral-site showcases</span> stretch from Montreal to Macao.
+                  </p>
+                </article>
+              </div>
+            </div>
           </div>
           <dl class="hero-metrics" aria-live="polite">
             <div class="hero-metrics__item">
@@ -101,6 +107,26 @@
       </header>
 
       <main>
+        <section class="preseason-spotlight" id="preseason-slate">
+          <div class="section-header preseason-spotlight__header">
+            <h2>Preseason on the runway</h2>
+            <p class="lead">
+              Track the marquee exhibitions warming up the 2025-26 campaign.
+            </p>
+          </div>
+          <div class="preseason-spotlight__content">
+            <aside class="preseason-spotlight__aside">
+              <p>
+                <strong data-preseason-total>86</strong> tune-ups sharpen rotations before the opening tip, headlined by
+                global showcases from Abu Dhabi to Montreal.
+              </p>
+            </aside>
+            <ol class="preseason-schedule" data-preseason-schedule>
+              <li class="preseason-schedule__placeholder">Preseason slate syncing…</li>
+            </ol>
+          </div>
+        </section>
+
         <section class="season-snapshot" id="season-panorama">
           <div class="section-header">
             <h2>The 2025-26 board, already moving</h2>
