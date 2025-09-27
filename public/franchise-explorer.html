@@ -1935,10 +1935,36 @@
     }
 
     async function loadSchedule() {
-      const scheduleFiles = [
-        { path: 'data/season_25_26_schedule.json', label: '2025-26' },
+      const fallbackScheduleFiles = [
         { path: 'data/season_24_25_schedule.json', label: '2024-25' },
+        { path: 'data/season_25_26_schedule.json', label: '2025-26' },
       ];
+
+      let scheduleFiles = fallbackScheduleFiles;
+
+      try {
+        const manifest = await fetchJson('data/schedule_manifest.json', 'schedule manifest');
+        if (Array.isArray(manifest?.seasons)) {
+          const normalized = manifest.seasons
+            .map((season) => {
+              if (!season) return null;
+              if (typeof season === 'string') {
+                return { path: season, label: season };
+              }
+              if (typeof season === 'object' && typeof season.path === 'string' && season.path.length > 0) {
+                const label = typeof season.label === 'string' && season.label.length > 0 ? season.label : season.path;
+                return { path: season.path, label };
+              }
+              return null;
+            })
+            .filter(Boolean);
+          if (normalized.length > 0) {
+            scheduleFiles = normalized;
+          }
+        }
+      } catch (error) {
+        console.warn('Unable to load schedule manifest. Falling back to default schedule list.', error);
+      }
 
       let lastError = null;
       for (const file of scheduleFiles) {
