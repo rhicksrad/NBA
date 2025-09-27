@@ -276,8 +276,17 @@ a:hover, a:focus { color: var(--sky); }
 }
 
 @media (min-width: 900px) {
-  .hero-panels { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .hero-panel--primary { grid-column: span 2; }
+  .hero-panels {
+    grid-template-columns: minmax(260px, 1.15fr) minmax(220px, 0.85fr);
+    align-items: stretch;
+  }
+  .hero-panel--primary {
+    grid-column: 1;
+    grid-row: span 2;
+  }
+  .hero-panels .hero-panel:not(.hero-panel--primary) {
+    grid-column: 2;
+  }
 }
 
 @media (min-width: 960px) {
@@ -1331,6 +1340,12 @@ section h2 { margin-top: 0; font-size: clamp(1.35rem, 3vw, 1.8rem); letter-spaci
   min-height: 240px;
   width: 100%;
   overflow: hidden;
+}
+.viz-canvas canvas {
+  display: block;
+  width: 100% !important;
+  max-width: 100%;
+  height: auto !important;
 }
 .viz-card canvas {
   display: block;
