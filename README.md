@@ -22,13 +22,14 @@
 - **Why it matters:** Allows the MVP to surface upcoming season context without shipping the full 1,400-row CSV to the browser.
 
 ### Insight snapshots (players, games, teams)
-- **Description:** Condensed JSON exports used by the "Global player pipeline", "Historic game spotlights", "Team performance benchmarks", and "All-time player leaders" sections in `public/franchise-explorer.html`.
-- **How to regenerate:** Run `python scripts/build_insights.py`. The script streams:
+
+- **Description:** Condensed JSON exports used by the "Global player pipeline", "Historic game spotlights", "Team performance benchmarks", and "All-time player leaders" sections in `public/index.html`.
+- **How to regenerate:** Run `python scripts/build_insights.py`. The script streams (via the `7z` CLI when available, or falls back to the [`py7zr`](https://pypi.org/project/py7zr/) Python package):
   - `Players.csv` for roster metadata and height/position rollups,
   - `Games.csv` for league-wide matchup highlights,
   - `TeamStatistics.zip` for franchise benchmarks, and
-  - `PlayerStatistics.7z` for career and single-game leaderboards (requires the `7z` CLI from `p7zip-full`).
-- **Outputs:** `public/data/players_overview.json`, `public/data/historic_games.json`, `public/data/team_performance.json`, and `public/data/player_leaders.json`.
+  - `PlayerStatistics.7z` for career, single-game, and season leaderboards.
+- **Outputs:** `public/data/players_overview.json`, `public/data/historic_games.json`, `public/data/team_performance.json`, `public/data/player_leaders.json`, and `public/data/player_season_insights.json`.
 - **Why it matters:** Keeps the browser payload tiny while ensuring the MVP reflects every dataset shipped with the repository.
 
 ### Players.csv
