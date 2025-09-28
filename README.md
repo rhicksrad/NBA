@@ -33,6 +33,13 @@
 - **Outputs:** `public/data/players_overview.json`, `public/data/historic_games.json`, `public/data/team_performance.json`, `public/data/player_leaders.json`, and `public/data/player_season_insights.json`.
 - **Why it matters:** Keeps the browser payload tiny while ensuring the MVP reflects every dataset shipped with the repository.
 
+### Insights lab snapshot
+
+- **Description:** Aggregated metrics powering the experimental modules in `public/insights.html`, including monthly scoring curves, rest advantage splits, overtime outcomes, and long-run three-point trends.
+- **How to regenerate:** Run `python scripts/build_insights_lab.py`. The helper streams `Games.csv` and `TeamStatistics.zip`, computes rest differentials for every matchup, and writes the compact browser payload.
+- **Outputs:** `public/data/insights_lab.json`.
+- **Why it matters:** Guarantees that every chart on the Insights Lab page is backed by verifiable data instead of placeholder values.
+
 ### Team profile snapshot (map experience)
 
 - **Description:** All-time franchise dashboards backing the map interaction on `public/teams.html`, including wins, losses, and twelve per-game benchmarks.
