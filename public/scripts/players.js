@@ -13,6 +13,287 @@ const palette = {
 
 const accents = [palette.royal, palette.gold, palette.coral, palette.violet, palette.teal, '#9050d8', palette.sky, '#f48fb1'];
 
+const atlasMetricBlueprint = {
+  'offensive-creation': {
+    extract(context) {
+      const value = context.components?.impact;
+      return Number.isFinite(value) ? value : null;
+    },
+    describe(context) {
+      const value = context.components?.impact;
+      if (Number.isFinite(value)) {
+        return `Impact pillar graded at ${helpers.formatNumber(value, 1)} GOAT points.`;
+      }
+      return 'Impact pillar percentile unavailable.';
+    },
+  },
+  'half-court-shotmaking': {
+    extract(context) {
+      const value = context.components?.stage;
+      return Number.isFinite(value) ? value : null;
+    },
+    describe(context) {
+      const value = context.components?.stage;
+      if (Number.isFinite(value)) {
+        return `Stage pillar captures ${helpers.formatNumber(value, 1)} GOAT points of playoff shotmaking.`;
+      }
+      return 'Stage pillar percentile unavailable.';
+    },
+  },
+  'passing-vision': {
+    extract(context) {
+      const value = context.components?.versatility;
+      return Number.isFinite(value) ? value : null;
+    },
+    describe(context) {
+      const value = context.components?.versatility;
+      if (Number.isFinite(value)) {
+        return `Versatility pillar logs ${helpers.formatNumber(value, 1)} GOAT points of creation.`;
+      }
+      return 'Versatility pillar percentile unavailable.';
+    },
+  },
+  'rim-pressure': {
+    extract(context) {
+      const impact = context.components?.impact;
+      const culture = context.components?.culture;
+      if (Number.isFinite(impact) && Number.isFinite(culture)) {
+        return impact * 0.75 + culture * 0.25;
+      }
+      if (Number.isFinite(impact)) {
+        return impact;
+      }
+      if (Number.isFinite(culture)) {
+        return culture;
+      }
+      return null;
+    },
+    describe(context) {
+      const impact = Number.isFinite(context.components?.impact)
+        ? helpers.formatNumber(context.components.impact, 1)
+        : null;
+      const culture = Number.isFinite(context.components?.culture)
+        ? helpers.formatNumber(context.components.culture, 1)
+        : null;
+      if (impact && culture) {
+        return `Blend of impact (${impact}) and culture (${culture}) GOAT points fuels rim pressure.`;
+      }
+      if (impact) {
+        return `Impact pillar at ${impact} GOAT points drives rim pressure.`;
+      }
+      if (culture) {
+        return `Culture pillar at ${culture} GOAT points steadies rim pressure.`;
+      }
+      return 'Rim pressure percentile unavailable.';
+    },
+  },
+  'rebound-dominance': {
+    extract(context) {
+      const impact = context.components?.impact;
+      const longevity = context.components?.longevity;
+      if (Number.isFinite(longevity) && Number.isFinite(impact)) {
+        return longevity * 0.6 + impact * 0.4;
+      }
+      if (Number.isFinite(longevity)) {
+        return longevity;
+      }
+      if (Number.isFinite(impact)) {
+        return impact;
+      }
+      return null;
+    },
+    describe(context) {
+      const impact = Number.isFinite(context.components?.impact)
+        ? helpers.formatNumber(context.components.impact, 1)
+        : null;
+      const longevity = Number.isFinite(context.components?.longevity)
+        ? helpers.formatNumber(context.components.longevity, 1)
+        : null;
+      if (longevity && impact) {
+        return `Longevity (${longevity}) and impact (${impact}) GOAT scores anchor the glass profile.`;
+      }
+      if (longevity) {
+        return `Longevity pillar at ${longevity} GOAT points highlights sustained board work.`;
+      }
+      if (impact) {
+        return `Impact pillar at ${impact} GOAT points fuels board dominance.`;
+      }
+      return 'Rebound dominance percentile unavailable.';
+    },
+  },
+  'defensive-playmaking': {
+    extract(context) {
+      const value = context.components?.culture;
+      return Number.isFinite(value) ? value : null;
+    },
+    describe(context) {
+      const value = context.components?.culture;
+      if (Number.isFinite(value)) {
+        return `Culture pillar contributes ${helpers.formatNumber(value, 1)} GOAT points of defensive playmaking.`;
+      }
+      return 'Defensive playmaking percentile unavailable.';
+    },
+  },
+  'post-efficiency': {
+    extract(context) {
+      const value = context.components?.stage;
+      return Number.isFinite(value) ? value : null;
+    },
+    describe(context) {
+      const value = context.components?.stage;
+      if (Number.isFinite(value)) {
+        return `Stage pillar at ${helpers.formatNumber(value, 1)} GOAT points reflects postseason post craft.`;
+      }
+      return 'Post efficiency percentile unavailable.';
+    },
+  },
+  'stretch-gravity': {
+    extract(context) {
+      const value = context.components?.versatility;
+      return Number.isFinite(value) ? value : null;
+    },
+    describe(context) {
+      const value = context.components?.versatility;
+      if (Number.isFinite(value)) {
+        return `Versatility pillar logged at ${helpers.formatNumber(value, 1)} GOAT points.`;
+      }
+      return 'Stretch gravity percentile unavailable.';
+    },
+  },
+  'tempo-control': {
+    extract(context) {
+      const parts = [];
+      if (Number.isFinite(context.components?.versatility)) {
+        parts.push(context.components.versatility * 0.45);
+      }
+      if (Number.isFinite(context.components?.culture)) {
+        parts.push(context.components.culture * 0.35);
+      }
+      if (Number.isFinite(context.winPct)) {
+        parts.push(context.winPct * 40);
+      }
+      if (!parts.length) {
+        return null;
+      }
+      return parts.reduce((sum, value) => sum + value, 0);
+    },
+    describe(context) {
+      const winPct = Number.isFinite(context.winPct) ? helpers.formatNumber(context.winPct * 100, 1) : null;
+      const versatility = Number.isFinite(context.components?.versatility)
+        ? helpers.formatNumber(context.components.versatility, 1)
+        : null;
+      if (winPct && versatility) {
+        return `Versatility (${versatility}) GOAT points plus a ${winPct}% win rate steer tempo.`;
+      }
+      if (versatility) {
+        return `Versatility pillar at ${versatility} GOAT points anchors pace control.`;
+      }
+      if (winPct) {
+        return `Career win rate of ${winPct}% keeps possessions in command.`;
+      }
+      return 'Tempo control percentile unavailable.';
+    },
+  },
+  'clutch-index': {
+    extract(context) {
+      const stage = Number.isFinite(context.components?.stage) ? context.components.stage : null;
+      const playoff = Number.isFinite(context.playoffWinPct) ? context.playoffWinPct * 40 : null;
+      if (stage !== null && playoff !== null) {
+        return stage * 0.55 + playoff;
+      }
+      if (stage !== null) {
+        return stage;
+      }
+      if (playoff !== null) {
+        return playoff;
+      }
+      return null;
+    },
+    describe(context) {
+      const stage = Number.isFinite(context.components?.stage)
+        ? helpers.formatNumber(context.components.stage, 1)
+        : null;
+      const playoff = Number.isFinite(context.playoffWinPct)
+        ? helpers.formatNumber(context.playoffWinPct * 100, 1)
+        : null;
+      if (stage && playoff) {
+        return `Stage pillar (${stage}) and ${playoff}% playoff win clip highlight clutch DNA.`;
+      }
+      if (stage) {
+        return `Stage pillar at ${stage} GOAT points drives late-game shotmaking.`;
+      }
+      if (playoff) {
+        return `Playoff win rate of ${playoff}% underscores clutch pedigree.`;
+      }
+      return 'Clutch index percentile unavailable.';
+    },
+  },
+  'durability-index': {
+    extract(context) {
+      const longevity = Number.isFinite(context.components?.longevity) ? context.components.longevity : null;
+      const seasons = Number.isFinite(context.careerSeasons) ? context.careerSeasons : null;
+      if (longevity !== null && seasons !== null) {
+        return longevity * 0.6 + seasons * 0.4;
+      }
+      if (longevity !== null) {
+        return longevity;
+      }
+      if (seasons !== null) {
+        return seasons;
+      }
+      return null;
+    },
+    describe(context) {
+      const longevity = Number.isFinite(context.components?.longevity)
+        ? helpers.formatNumber(context.components.longevity, 1)
+        : null;
+      const seasons = Number.isFinite(context.careerSeasons)
+        ? helpers.formatNumber(context.careerSeasons, 0)
+        : null;
+      if (longevity && seasons) {
+        return `Longevity (${longevity}) GOAT points across ${seasons} seasons underline availability.`;
+      }
+      if (longevity) {
+        return `Longevity pillar at ${longevity} GOAT points tracks the mileage.`;
+      }
+      if (seasons) {
+        return `${seasons} seasons logged keep durability near the top of the class.`;
+      }
+      return 'Durability percentile unavailable.';
+    },
+  },
+  'processing-speed': {
+    extract(context) {
+      const versatility = Number.isFinite(context.components?.versatility) ? context.components.versatility : null;
+      const impact = Number.isFinite(context.components?.impact) ? context.components.impact : null;
+      const delta = Number.isFinite(context.delta) ? context.delta : null;
+      if (versatility === null && impact === null && delta === null) {
+        return null;
+      }
+      const base = (versatility ?? 0) * 0.5 + (impact ?? 0) * 0.35;
+      const momentum = delta !== null ? (delta + 5) * 2 : 0;
+      const total = base + momentum;
+      return total || base || momentum || null;
+    },
+    describe(context) {
+      const versatility = Number.isFinite(context.components?.versatility)
+        ? helpers.formatNumber(context.components.versatility, 1)
+        : null;
+      const delta = Number.isFinite(context.delta) ? helpers.formatNumber(context.delta, 1) : null;
+      if (versatility && delta) {
+        return `Versatility (${versatility}) GOAT points and a ${delta} season delta speed up reads.`;
+      }
+      if (versatility) {
+        return `Versatility pillar at ${versatility} GOAT points captures processing feel.`;
+      }
+      if (delta) {
+        return `Season-over-season delta of ${delta} fuels processing momentum.`;
+      }
+      return 'Processing speed percentile unavailable.';
+    },
+  },
+};
+
 function createVerticalGradient(context, stops) {
   const { chart } = context;
   const { ctx, chartArea } = chart || {};
@@ -805,6 +1086,9 @@ function buildGoatScoreLookup(indexSource, recentSource) {
         return;
       }
       const entry = entries.get(nameKey) ?? { name: player.name, nameKey };
+      if (player?.personId) {
+        entry.personId = String(player.personId);
+      }
       entry.historical = Number.isFinite(player.goatScore) ? player.goatScore : null;
       entry.historicalRank = Number.isFinite(player.rank) ? player.rank : null;
       entry.resume = player.resume ?? entry.resume;
@@ -857,6 +1141,149 @@ function buildGoatScoreLookup(indexSource, recentSource) {
   });
 
   return { byId, byName, recent: leaderboard };
+}
+
+function parseSeasonRange(range) {
+  if (typeof range !== 'string') {
+    return null;
+  }
+  const match = range.match(/(\d{4})\s*-\s*(\d{4})/);
+  if (!match) {
+    return null;
+  }
+  const start = Number.parseInt(match[1], 10);
+  const end = Number.parseInt(match[2], 10);
+  if (!Number.isFinite(start) || !Number.isFinite(end) || end < start) {
+    return null;
+  }
+  return end - start + 1;
+}
+
+function buildAtlasMetrics(catalog, goatSource) {
+  const byId = new Map();
+  const byName = new Map();
+
+  if (!Array.isArray(catalog) || !catalog.length || !Array.isArray(goatSource?.players)) {
+    return { byId, byName };
+  }
+
+  const metrics = catalog
+    .map((metric) => {
+      const config = atlasMetricBlueprint[metric.id];
+      if (!config) {
+        return null;
+      }
+      return { id: metric.id, config };
+    })
+    .filter(Boolean);
+
+  if (!metrics.length) {
+    return { byId, byName };
+  }
+
+  const toNumber = (value) => {
+    const number = Number(value);
+    return Number.isFinite(number) ? number : null;
+  };
+
+  const rawBuckets = new Map();
+  metrics.forEach((metric) => rawBuckets.set(metric.id, []));
+
+  const playerRecords = [];
+
+  goatSource.players.forEach((player) => {
+    if (!player) return;
+    const personId = player.personId ? String(player.personId) : null;
+    const nameKey = normalizeName(player.name);
+    const componentSource = player.goatComponents || {};
+    const components = {};
+    ['impact', 'stage', 'longevity', 'versatility', 'culture'].forEach((key) => {
+      const value = toNumber(componentSource[key]);
+      if (value !== null) {
+        components[key] = value;
+      }
+    });
+    const context = {
+      entry: player,
+      components,
+      winPct: toNumber(player.winPct),
+      playoffWinPct: toNumber(player.playoffWinPct),
+      delta: toNumber(player.delta),
+      goatScore: toNumber(player.goatScore),
+      careerSeasons: parseSeasonRange(player.careerSpan),
+      primeSeasons: parseSeasonRange(player.primeWindow),
+    };
+
+    const rawMetrics = {};
+    let hasMetric = false;
+    metrics.forEach((metric) => {
+      const raw = metric.config.extract(context);
+      if (!Number.isFinite(raw)) {
+        return;
+      }
+      hasMetric = true;
+      rawMetrics[metric.id] = raw;
+      rawBuckets.get(metric.id).push(raw);
+    });
+
+    if (!hasMetric) {
+      return;
+    }
+
+    playerRecords.push({ personId, nameKey, context, rawMetrics });
+  });
+
+  const percentileTables = new Map();
+  rawBuckets.forEach((values, metricId) => {
+    if (!values.length) {
+      percentileTables.set(metricId, new Map());
+      return;
+    }
+    const sorted = values.slice().sort((a, b) => a - b);
+    const groups = new Map();
+    sorted.forEach((value, index) => {
+      if (!groups.has(value)) {
+        groups.set(value, []);
+      }
+      groups.get(value).push(index);
+    });
+    const mapping = new Map();
+    groups.forEach((indexes, value) => {
+      const average = indexes.reduce((sum, item) => sum + item, 0) / indexes.length;
+      const percentile = sorted.length > 1 ? (average / (sorted.length - 1)) * 100 : 100;
+      mapping.set(value, percentile);
+    });
+    percentileTables.set(metricId, mapping);
+  });
+
+  playerRecords.forEach(({ personId, nameKey, context, rawMetrics }) => {
+    const metricsPayload = {};
+    let hasMetric = false;
+    metrics.forEach((metric) => {
+      const raw = rawMetrics[metric.id];
+      if (!Number.isFinite(raw)) {
+        return;
+      }
+      const percentile = percentileTables.get(metric.id)?.get(raw);
+      if (!Number.isFinite(percentile)) {
+        return;
+      }
+      hasMetric = true;
+      const note = typeof metric.config.describe === 'function' ? metric.config.describe(context, percentile, raw) : null;
+      metricsPayload[metric.id] = { value: percentile, note: note || undefined };
+    });
+    if (!hasMetric) {
+      return;
+    }
+    if (personId) {
+      byId.set(personId, metricsPayload);
+    }
+    if (nameKey) {
+      byName.set(nameKey, metricsPayload);
+    }
+  });
+
+  return { byId, byName };
 }
 
 function initPlayerAtlas() {
@@ -915,6 +1342,7 @@ function initPlayerAtlas() {
   let isLoaded = false;
   let hasError = false;
   let goatLookup = { byId: new Map(), byName: new Map(), recent: [] };
+  let atlasMetrics = { byId: new Map(), byName: new Map() };
   const defaultEmptyText = empty?.textContent?.trim() ?? '';
   const formatGoatNumber = (value) => (Number.isFinite(value) ? helpers.formatNumber(value, 1) : '—');
   const formatGoatRank = (rank) => `No. ${Number.isFinite(rank) ? helpers.formatNumber(rank, 0) : '—'}`;
@@ -968,6 +1396,7 @@ function initPlayerAtlas() {
     if (player?.position) parts.push(player.position);
     if (player?.team) parts.push(player.team);
     if (player?.era) parts.push(`${player.era} era`);
+    if (player?.goatTier) parts.push(`${player.goatTier} tier`);
     return parts.join(' · ');
   };
 
@@ -1211,7 +1640,10 @@ function initPlayerAtlas() {
     const historicValue = Number.isFinite(goatScores?.historical)
       ? goatScores.historical
       : fallbackHistorical;
-    const historicRank = Number.isFinite(goatScores?.historicalRank) ? goatScores.historicalRank : null;
+    const fallbackHistoricalRank = Number.isFinite(player?.goatRank) ? player.goatRank : null;
+    const historicRank = Number.isFinite(goatScores?.historicalRank)
+      ? goatScores.historicalRank
+      : fallbackHistoricalRank;
     renderGoatScore(
       goatHistoricContainer,
       goatHistoricValueEl,
@@ -1220,7 +1652,24 @@ function initPlayerAtlas() {
       historicRank,
       'Career GOAT score'
     );
-    bioEl.textContent = player?.bio || '';
+    const ensureSentence = (text) => {
+      if (!text) return null;
+      const trimmed = text.trim();
+      if (!trimmed) return null;
+      return /[.!?]$/.test(trimmed) ? trimmed : `${trimmed}.`;
+    };
+    const resumeText = player?.goatResume || goatScores?.resume || null;
+    const tierText = player?.goatTier || goatScores?.tier || null;
+    const bioSegments = [];
+    const baseBio = ensureSentence(player?.bio);
+    if (baseBio) bioSegments.push(baseBio);
+    if (resumeText) {
+      bioSegments.push(ensureSentence(`Career resume: ${resumeText}`));
+    }
+    if (tierText) {
+      bioSegments.push(ensureSentence(`GOAT tier: ${tierText}`));
+    }
+    bioEl.textContent = bioSegments.filter(Boolean).join(' ');
     archetypeEl.textContent = player?.archetype || '—';
     if (vitalsEl) {
       const vitals = renderVitals(player);
@@ -1293,8 +1742,9 @@ function initPlayerAtlas() {
 
   const hydrate = async () => {
     try {
-      const [profilesResponse, goatIndexResponse, goatRecentResponse] = await Promise.all([
+      const [profilesResponse, goatSystemResponse, goatIndexResponse, goatRecentResponse] = await Promise.all([
         fetch('data/player_profiles.json'),
+        fetch('data/goat_system.json').catch(() => null),
         fetch('data/goat_index.json').catch(() => null),
         fetch('data/goat_recent.json').catch(() => null),
       ]);
@@ -1302,6 +1752,18 @@ function initPlayerAtlas() {
         throw new Error(`Failed to load player profiles: ${profilesResponse?.status}`);
       }
       const data = await profilesResponse.json();
+
+      catalog = Array.isArray(data?.metrics) ? data.metrics : [];
+      const roster = Array.isArray(data?.players) ? data.players : [];
+
+      let goatSystemData = null;
+      if (goatSystemResponse && goatSystemResponse.ok) {
+        try {
+          goatSystemData = await goatSystemResponse.json();
+        } catch (goatSystemError) {
+          console.warn('Unable to parse GOAT system data', goatSystemError);
+        }
+      }
 
       let goatIndexData = null;
       if (goatIndexResponse && goatIndexResponse.ok) {
@@ -1321,7 +1783,9 @@ function initPlayerAtlas() {
         }
       }
 
-      goatLookup = buildGoatScoreLookup(goatIndexData, goatRecentData);
+      const goatHistoricalSource = goatSystemData ?? goatIndexData;
+      goatLookup = buildGoatScoreLookup(goatHistoricalSource, goatRecentData);
+      atlasMetrics = buildAtlasMetrics(catalog, goatSystemData ?? goatHistoricalSource);
       renderRecentLeaderboard(goatLookup.recent, recentLeaderboard, recentPlaceholder);
 
       const resolveGoatScores = (personId, name) => {
@@ -1335,20 +1799,44 @@ function initPlayerAtlas() {
         return null;
       };
 
-      catalog = Array.isArray(data?.metrics) ? data.metrics : [];
-      const roster = Array.isArray(data?.players) ? data.players : [];
       players = roster.map((player) => {
         const personId = extractPersonIdFromProfile(player);
+        const nameKey = normalizeName(player?.name);
         const goatScores = resolveGoatScores(personId, player?.name);
         const historicalGoat = Number.isFinite(goatScores?.historical) ? goatScores.historical : player?.goatScore;
-        return {
+        const metricsRecord =
+          (personId && atlasMetrics.byId.get(personId)) ||
+          (nameKey && atlasMetrics.byName.get(nameKey)) ||
+          null;
+        const enriched = {
           ...player,
           searchTokens: buildPlayerTokens(player),
           nameToken: simplifyText(player?.name),
           personId,
           goatScores,
           goatScore: Number.isFinite(historicalGoat) ? historicalGoat : player?.goatScore,
+          metrics: metricsRecord ?? player?.metrics ?? {},
         };
+        if (metricsRecord) {
+          enriched.metrics = metricsRecord;
+        }
+        const resumeText = goatScores?.resume || player?.goatResume;
+        if (resumeText) {
+          enriched.goatResume = resumeText;
+        }
+        const tierText = goatScores?.tier || player?.goatTier;
+        if (tierText) {
+          enriched.goatTier = tierText;
+        }
+        const resolvedRank = Number.isFinite(player?.goatRank)
+          ? player.goatRank
+          : Number.isFinite(goatScores?.historicalRank)
+            ? goatScores.historicalRank
+            : null;
+        if (Number.isFinite(resolvedRank)) {
+          enriched.goatRank = resolvedRank;
+        }
+        return enriched;
       });
       isLoaded = true;
       hasError = false;
