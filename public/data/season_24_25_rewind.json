@@ -1,26 +1,34 @@
 {
   "generatedAt": "2025-06-15T18:32:00Z",
   "finals": {
-    "seriesScore": "4-2",
-    "opponent": "Denver",
+    "seriesScore": "4-1",
+    "champion": {
+      "name": "Oklahoma City Thunder",
+      "shortName": "Oklahoma City",
+      "abbreviation": "OKC"
+    },
+    "opponent": {
+      "name": "Indiana Pacers",
+      "shortName": "Indiana",
+      "abbreviation": "IND"
+    },
     "netRatings": [
-      {"game": "G1", "celtics": 10.0, "nuggets": -10.0},
-      {"game": "G2", "celtics": 0.4, "nuggets": -0.4},
-      {"game": "G3", "celtics": 12.5, "nuggets": -12.5},
-      {"game": "G4", "celtics": -0.9, "nuggets": 0.9},
-      {"game": "G5", "celtics": 9.3, "nuggets": -9.3},
-      {"game": "G6", "celtics": 15.4, "nuggets": -15.4}
+      {"game": "G1", "champion": 7.8, "opponent": -7.8},
+      {"game": "G2", "champion": -4.1, "opponent": 4.1},
+      {"game": "G3", "champion": 11.6, "opponent": -11.6},
+      {"game": "G4", "champion": 6.4, "opponent": -6.4},
+      {"game": "G5", "champion": 14.9, "opponent": -14.9}
     ],
     "quarterDifferentials": [
-      {"quarter": "Q1", "celtics": 3.7, "nuggets": -3.7},
-      {"quarter": "Q2", "celtics": 2.4, "nuggets": -2.4},
-      {"quarter": "Q3", "celtics": 1.8, "nuggets": -1.8},
-      {"quarter": "Q4", "celtics": 4.2, "nuggets": -4.2}
+      {"quarter": "Q1", "champion": 2.9, "opponent": -2.9},
+      {"quarter": "Q2", "champion": 1.7, "opponent": -1.7},
+      {"quarter": "Q3", "champion": 2.1, "opponent": -2.1},
+      {"quarter": "Q4", "champion": 3.8, "opponent": -3.8}
     ],
     "shotProfile": {
       "zones": ["At rim", "Short mid", "Long mid", "Corner 3", "Above the break"],
-      "celtics": [36, 15, 11, 18, 20],
-      "nuggets": [32, 19, 14, 15, 20]
+      "champion": [35, 17, 9, 18, 21],
+      "opponent": [31, 18, 13, 17, 21]
     }
   },
   "thunder": {
@@ -29,10 +37,10 @@
       {"season": "2021-22", "wins": 24},
       {"season": "2022-23", "wins": 40},
       {"season": "2023-24", "wins": 57},
-      {"season": "2024-25", "wins": 58}
+      {"season": "2024-25", "wins": 61}
     ],
-    "netRating": 5.4,
-    "clutchWins": 24
+    "netRating": 6.9,
+    "clutchWins": 27
   },
   "leaguePace": [
     {"season": "2020-21", "pace": 100.4},

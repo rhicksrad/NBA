@@ -11,6 +11,9 @@ const palette = {
 
 const finalsZoneColors = ['#1156d6', '#1f7bf0', '#2fb4c8', '#f4b53f', '#ef3d5b'];
 
+const FINALS_CHAMPION_KEY = 'champion';
+const FINALS_OPPONENT_KEY = 'opponent';
+
 const scheduleLabelColors = [
   '#1156d6',
   '#1f6bd4',
@@ -57,17 +60,29 @@ function setStat(attribute, value, formatter = (v) => v, fallback = '—') {
   });
 }
 
+function getFinalsTeamLabels(finals) {
+  const champion = finals?.champion ?? {};
+  const opponent = finals?.opponent ?? {};
+  const championLabel =
+    champion.shortName ?? champion.name ?? champion.abbreviation ?? champion.label ?? 'Champion';
+  const opponentLabel =
+    opponent.shortName ?? opponent.name ?? opponent.abbreviation ?? opponent.label ?? 'Opponent';
+  return { championLabel, opponentLabel };
+}
+
 registerCharts([
   {
     element: document.querySelector('[data-chart="finals-net-rating"]'),
     async createConfig() {
       const data = await highlightDataPromise;
-      const netRatings = Array.isArray(data?.finals?.netRatings) ? data.finals.netRatings : [];
+      const finals = data?.finals ?? {};
+      const netRatings = Array.isArray(finals.netRatings) ? finals.netRatings : [];
       if (!netRatings.length) return null;
 
       const labels = netRatings.map((entry) => entry.game ?? '');
-      const celtics = netRatings.map((entry) => entry.celtics ?? 0);
-      const nuggets = netRatings.map((entry) => entry.nuggets ?? 0);
+      const championValues = netRatings.map((entry) => entry[FINALS_CHAMPION_KEY] ?? 0);
+      const opponentValues = netRatings.map((entry) => entry[FINALS_OPPONENT_KEY] ?? 0);
+      const { championLabel, opponentLabel } = getFinalsTeamLabels(finals);
 
       return {
         type: 'line',
@@ -75,8 +90,8 @@ registerCharts([
           labels,
           datasets: [
             {
-              label: 'Boston net rating',
-              data: celtics,
+              label: `${championLabel} net rating`,
+              data: championValues,
               borderColor: palette.royal,
               backgroundColor: 'rgba(17, 86, 214, 0.18)',
               pointRadius: 4,
@@ -85,8 +100,8 @@ registerCharts([
               fill: false,
             },
             {
-              label: 'Denver net rating',
-              data: nuggets,
+              label: `${opponentLabel} net rating`,
+              data: opponentValues,
               borderColor: palette.coral,
               backgroundColor: 'rgba(239, 61, 91, 0.16)',
               pointRadius: 4,
@@ -126,14 +141,16 @@ registerCharts([
     element: document.querySelector('[data-chart="finals-quarter-differentials"]'),
     async createConfig() {
       const data = await highlightDataPromise;
-      const quarters = Array.isArray(data?.finals?.quarterDifferentials)
-        ? data.finals.quarterDifferentials
+      const finals = data?.finals ?? {};
+      const quarters = Array.isArray(finals.quarterDifferentials)
+        ? finals.quarterDifferentials
         : [];
       if (!quarters.length) return null;
 
       const labels = quarters.map((entry) => entry.quarter ?? '');
-      const celtics = quarters.map((entry) => entry.celtics ?? 0);
-      const nuggets = quarters.map((entry) => entry.nuggets ?? 0);
+      const championValues = quarters.map((entry) => entry[FINALS_CHAMPION_KEY] ?? 0);
+      const opponentValues = quarters.map((entry) => entry[FINALS_OPPONENT_KEY] ?? 0);
+      const { championLabel, opponentLabel } = getFinalsTeamLabels(finals);
 
       return {
         type: 'bar',
@@ -141,15 +158,15 @@ registerCharts([
           labels,
           datasets: [
             {
-              label: 'Boston',
-              data: celtics,
+              label: championLabel,
+              data: championValues,
               backgroundColor: palette.royal,
               borderRadius: 10,
               maxBarThickness: 34,
             },
             {
-              label: 'Denver',
-              data: nuggets,
+              label: opponentLabel,
+              data: opponentValues,
               backgroundColor: palette.coral,
               borderRadius: 10,
               maxBarThickness: 34,
@@ -184,13 +201,15 @@ registerCharts([
     element: document.querySelector('[data-chart="finals-shot-profile"]'),
     async createConfig() {
       const data = await highlightDataPromise;
-      const profile = data?.finals?.shotProfile ?? {};
+      const finals = data?.finals ?? {};
+      const profile = finals?.shotProfile ?? {};
       const zones = Array.isArray(profile.zones) ? profile.zones : [];
-      const celtics = Array.isArray(profile.celtics) ? profile.celtics : [];
-      const nuggets = Array.isArray(profile.nuggets) ? profile.nuggets : [];
-      if (!zones.length || !celtics.length || !nuggets.length) return null;
+      const championShots = Array.isArray(profile[FINALS_CHAMPION_KEY]) ? profile[FINALS_CHAMPION_KEY] : [];
+      const opponentShots = Array.isArray(profile[FINALS_OPPONENT_KEY]) ? profile[FINALS_OPPONENT_KEY] : [];
+      if (!zones.length || !championShots.length || !opponentShots.length) return null;
 
       const sharedColors = zones.map((_, index) => finalsZoneColors[index % finalsZoneColors.length]);
+      const { championLabel, opponentLabel } = getFinalsTeamLabels(finals);
 
       return {
         type: 'doughnut',
@@ -198,14 +217,14 @@ registerCharts([
           labels: zones,
           datasets: [
             {
-              label: 'Boston',
-              data: celtics,
+              label: championLabel,
+              data: championShots,
               backgroundColor: sharedColors,
               hoverOffset: 4,
             },
             {
-              label: 'Denver',
-              data: nuggets,
+              label: opponentLabel,
+              data: opponentShots,
               backgroundColor: sharedColors.map((color) => `${color}CC`),
               hoverOffset: 4,
               spacing: 2,
@@ -882,24 +901,25 @@ function populateHighlightPanels(data) {
   const games = netRatings.length;
 
   if (games) {
-    const aggregate = netRatings.reduce((sum, entry) => sum + (entry.celtics ?? 0), 0);
+    const aggregate = netRatings.reduce((sum, entry) => sum + (entry[FINALS_CHAMPION_KEY] ?? 0), 0);
     const combinedNet = aggregate / games;
     setStat('stat-finals-net', combinedNet, (value) => formatSigned(value, 1));
     setStat('stat-finals-games', games, (value) => helpers.formatNumber(value, 0));
 
     const closerWindow = netRatings.slice(-2);
     if (closerWindow.length) {
-      const closerNet = closerWindow.reduce((sum, entry) => sum + (entry.celtics ?? 0), 0) / closerWindow.length;
+      const closerNet =
+        closerWindow.reduce((sum, entry) => sum + (entry[FINALS_CHAMPION_KEY] ?? 0), 0) / closerWindow.length;
       setStat('stat-finals-closer', closerNet, (value) => formatSigned(value, 1));
       setStat('stat-finals-closer-games', closerWindow.length, (value) => helpers.formatNumber(value, 0));
     }
 
     const peak = netRatings.reduce((best, entry) =>
-      (entry.celtics ?? -Infinity) > (best?.celtics ?? -Infinity) ? entry : best,
+      (entry[FINALS_CHAMPION_KEY] ?? -Infinity) > (best?.[FINALS_CHAMPION_KEY] ?? -Infinity) ? entry : best,
       null
     );
     setStat('stat-finals-peak-game', peak?.game, (value) => value);
-    setStat('stat-finals-peak-margin', peak?.celtics, (value) => formatSigned(value, 1));
+    setStat('stat-finals-peak-margin', peak?.[FINALS_CHAMPION_KEY], (value) => formatSigned(value, 1));
   } else {
     setStat('stat-finals-net', null);
     setStat('stat-finals-games', null);
