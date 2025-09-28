@@ -6,24 +6,295 @@
     <title>Preseason Preview: Oklahoma City Thunder at San Antonio Spurs</title>
     <link rel="stylesheet" href="../styles/hub.css" />
     <style>
-      body { min-height: 100vh; display: grid; place-items: center; padding: 2.5rem 1rem; background: radial-gradient(circle at top, rgba(17,86,214,0.12), rgba(11,37,69,0.05)); }
-      .preview-shell { max-width: 720px; width: min(90vw, 680px); background: color-mix(in srgb, rgba(255,255,255,0.95) 70%, rgba(242,246,255,0.92) 30%); border-radius: var(--radius-lg); border: 1px solid color-mix(in srgb, var(--royal) 18%, transparent); box-shadow: 0 28px 44px rgba(11,37,69,0.18); padding: clamp(1.8rem, 4vw, 2.6rem); display: grid; gap: 1.2rem; text-align: center; }
-      .preview-shell h1 { margin: 0; font-size: clamp(1.6rem, 4vw, 2.1rem); color: var(--navy); }
-      .preview-shell time { font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(17,86,214,0.78); font-size: 0.85rem; }
-      .preview-shell p { margin: 0; color: var(--text-subtle); }
-      .preview-shell .cta { font-weight: 600; color: var(--royal); }
-      .preview-shell a { display: inline-flex; align-items: center; justify-content: center; gap: 0.35rem; padding: 0.6rem 1.2rem; border-radius: 999px; text-decoration: none; font-weight: 600; color: var(--royal); border: 1px solid color-mix(in srgb, var(--royal) 25%, transparent); background: color-mix(in srgb, rgba(17,86,214,0.12) 50%, rgba(255,255,255,0.9) 50%); }
+      body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 3rem 1.5rem 4rem;
+      }
+
+      .preview-shell {
+        width: min(960px, 100%);
+        background: color-mix(in srgb, var(--surface) 75%, rgba(0, 122, 193, 0.08) 25%);
+        border-radius: var(--radius-lg);
+        border: 1px solid color-mix(in srgb, var(--royal) 12%, transparent);
+        box-shadow: var(--shadow-soft);
+        padding: clamp(2.25rem, 5vw, 3rem);
+        display: grid;
+        gap: clamp(1.25rem, 2vw, 1.75rem);
+      }
+
+      header {
+        display: grid;
+        gap: 0.5rem;
+        text-align: left;
+      }
+
+      header h1 {
+        margin: 0;
+        font-size: clamp(1.9rem, 4vw, 2.4rem);
+        color: var(--navy);
+      }
+
+      header time {
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: rgba(0, 122, 193, 0.75);
+        font-size: 0.8rem;
+      }
+
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.35rem 0.85rem;
+        border-radius: 999px;
+        background: rgba(0, 122, 193, 0.12);
+        color: #007ac1;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.7rem;
+        letter-spacing: 0.08em;
+        width: fit-content;
+      }
+
+      .story {
+        display: grid;
+        gap: 0.75rem;
+      }
+
+      .story h2 {
+        margin: 0;
+        font-size: 1.2rem;
+        color: var(--navy);
+      }
+
+      .story ul {
+        margin: 0;
+        padding-left: 1.2rem;
+        color: var(--text-subtle);
+      }
+
+      .chart-grid {
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      }
+
+      .chart-card {
+        background: color-mix(in srgb, var(--surface-alt) 82%, rgba(196, 206, 212, 0.08) 18%);
+        border: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
+        border-radius: var(--radius-md);
+        padding: 1.1rem;
+        display: grid;
+        gap: 0.65rem;
+      }
+
+      .chart-card h3 {
+        margin: 0;
+        font-size: 1rem;
+        color: var(--navy);
+      }
+
+      .chart-card p {
+        margin: 0;
+        font-size: 0.85rem;
+        color: var(--text-subtle);
+      }
+
+      footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+
+      footer a {
+        text-decoration: none;
+        font-weight: 600;
+      }
     </style>
+    <script src="../vendor/chart.umd.js" defer></script>
   </head>
   <body>
     <main class="preview-shell">
-      <span class="chip chip--accent">Preseason preview</span>
-      <time datetime="2024-10-07T20:00:00+00:00">Monday, October 07, 2024 — 20:00 UTC</time>
-      <h1>Oklahoma City Thunder at San Antonio Spurs</h1>
-      <p><strong>Frost Bank Center · San Antonio, TX</strong></p>
-      <p>Preseason opener</p>
-      <p class="cta">Full scouting report publishes soon. Bookmark this page for lineup intel, travel notes, and matchup keys.</p>
-      <p><a href="../index.html">← Back to hub</a></p>
+      <header>
+        <span class="chip">Preseason preview</span>
+        <time datetime="2024-10-07T23:30:00+00:00">Monday, October 07, 2024 — 23:30 UTC</time>
+        <h1>Oklahoma City Thunder at San Antonio Spurs</h1>
+        <p><strong>Frost Bank Center · San Antonio, TX</strong> · Preseason opener</p>
+        <p class="lead">Two of the league’s youngest contenders square off with a focus on lead guard reps and frontcourt experimentation.</p>
+      </header>
+
+      <section class="story">
+        <h2>Why it matters in October</h2>
+        <p>Oklahoma City continues to expand its ball-handling committee. Shai Gilgeous-Alexander will make a cameo, then pass things to Jalen Williams, Cason Wallace, and newcomer Alex Caruso to test different lineup wrinkles. Rookie big Bobi Klintman will also see time as Mark Daigneault experiments with five-out spacing.</p>
+        <p>San Antonio is handing the keys to sophomore point-forward Jeremy Sochan less this year thanks to No. 4 pick Stephon Castle. Gregg Popovich wants Castle to run the half-court with Victor Wembanyama setting the tone in limited minutes. Rookie guard Juan Nunez and second-year wing Malaki Branham are also in the evaluation window.</p>
+        <p>The Spurs are managing Devin Vassell’s workload after a minor ankle tweak, while the Thunder are still without Kenrich Williams (back rehab). Both teams are otherwise healthy and looking to harden habits on defense.</p>
+        <ul>
+          <li>How quickly does Castle adjust to NBA physicality guarding Thunder guards?</li>
+          <li>Can Wallace and Caruso provide enough secondary creation to free Jalen Williams offensively?</li>
+          <li>What frontcourt combinations around Wembanyama give San Antonio the best rebounding balance?</li>
+        </ul>
+      </section>
+
+      <section class="visuals">
+        <h2>Preseason scouting dashboard</h2>
+        <div class="chart-grid">
+          <figure class="chart-card">
+            <h3>Projected evaluation minutes</h3>
+            <canvas id="rotationChart"></canvas>
+            <p>Estimated minutes earmarked for developmental priorities in San Antonio.</p>
+          </figure>
+          <figure class="chart-card">
+            <h3>Skill focus for ball-handlers</h3>
+            <canvas id="developmentChart"></canvas>
+            <p>Coaching emphasis (0-10 scale) for guards and wings seeking rotation roles.</p>
+          </figure>
+          <figure class="chart-card">
+            <h3>Availability snapshot</h3>
+            <canvas id="healthChart"></canvas>
+            <p>Roster allocation across full-go groups, monitored workloads, and rehab assignments.</p>
+          </figure>
+        </div>
+      </section>
+
+      <footer>
+        <span>Data: internal camp scripts and medical guidance updated September 29.</span>
+        <a href="../index.html">← Back to preseason hub</a>
+      </footer>
     </main>
+
+    <script defer>
+      const palette = {
+        thunder: "#007AC1",
+        sunrise: "#F05133",
+        spurs: "#C4CED4",
+        charcoal: "#1C1C1C",
+        neutral: "#7f8ea3"
+      };
+
+      window.addEventListener("DOMContentLoaded", () => {
+        const rotationCtx = document.getElementById("rotationChart");
+        const developmentCtx = document.getElementById("developmentChart");
+        const healthCtx = document.getElementById("healthChart");
+
+        new Chart(rotationCtx, {
+          type: "bar",
+          data: {
+            labels: [
+              "Cason Wallace (OKC)",
+              "Alex Caruso (OKC)",
+              "Bobi Klintman (OKC)",
+              "Stephon Castle (SAS)",
+              "Malaki Branham (SAS)",
+              "Victor Wembanyama (SAS)"
+            ],
+            datasets: [
+              {
+                label: "Target minutes",
+                data: [20, 18, 16, 21, 18, 15],
+                backgroundColor: [
+                  palette.thunder,
+                  palette.sunrise,
+                  palette.thunder,
+                  palette.spurs,
+                  palette.charcoal,
+                  palette.spurs
+                ],
+                borderRadius: 6
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            scales: {
+              y: {
+                beginAtZero: true,
+                max: 24,
+                ticks: { stepSize: 4, color: palette.neutral },
+                grid: { color: "rgba(0, 122, 193, 0.12)" }
+              },
+              x: {
+                ticks: { color: palette.neutral },
+                grid: { display: false }
+              }
+            },
+            plugins: {
+              legend: { display: false }
+            }
+          }
+        });
+
+        new Chart(developmentCtx, {
+          type: "radar",
+          data: {
+            labels: ["Point-of-attack defense", "Playmaking", "Catch-and-shoot", "Transition pace", "Screen navigation"],
+            datasets: [
+              {
+                label: "Cason Wallace",
+                data: [9, 6, 7, 8, 8],
+                borderColor: palette.thunder,
+                backgroundColor: "rgba(0, 122, 193, 0.25)",
+                pointBackgroundColor: palette.thunder
+              },
+              {
+                label: "Alex Caruso",
+                data: [10, 6, 7, 7, 9],
+                borderColor: palette.sunrise,
+                backgroundColor: "rgba(240, 81, 51, 0.25)",
+                pointBackgroundColor: palette.sunrise
+              },
+              {
+                label: "Stephon Castle",
+                data: [7, 8, 6, 7, 7],
+                borderColor: palette.spurs,
+                backgroundColor: "rgba(196, 206, 212, 0.25)",
+                pointBackgroundColor: palette.spurs
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            scales: {
+              r: {
+                suggestedMin: 0,
+                suggestedMax: 10,
+                ticks: { display: false },
+                grid: { color: "rgba(196, 206, 212, 0.12)" },
+                angleLines: { color: "rgba(196, 206, 212, 0.12)" },
+                pointLabels: { color: palette.neutral }
+              }
+            }
+          }
+        });
+
+        new Chart(healthCtx, {
+          type: "doughnut",
+          data: {
+            labels: ["Cleared for full run", "Monitored workload", "Rehab group"],
+            datasets: [
+              {
+                data: [11, 4, 1],
+                backgroundColor: [palette.thunder, palette.spurs, palette.charcoal],
+                borderWidth: 0
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            cutout: "62%",
+            plugins: {
+              legend: {
+                position: "bottom",
+                labels: { color: palette.neutral }
+              }
+            }
+          }
+        });
+      });
+    </script>
   </body>
 </html>

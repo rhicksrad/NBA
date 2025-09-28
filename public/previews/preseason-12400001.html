@@ -6,24 +6,294 @@
     <title>Preseason Preview: Boston Celtics at Denver Nuggets</title>
     <link rel="stylesheet" href="../styles/hub.css" />
     <style>
-      body { min-height: 100vh; display: grid; place-items: center; padding: 2.5rem 1rem; background: radial-gradient(circle at top, rgba(17,86,214,0.12), rgba(11,37,69,0.05)); }
-      .preview-shell { max-width: 720px; width: min(90vw, 680px); background: color-mix(in srgb, rgba(255,255,255,0.95) 70%, rgba(242,246,255,0.92) 30%); border-radius: var(--radius-lg); border: 1px solid color-mix(in srgb, var(--royal) 18%, transparent); box-shadow: 0 28px 44px rgba(11,37,69,0.18); padding: clamp(1.8rem, 4vw, 2.6rem); display: grid; gap: 1.2rem; text-align: center; }
-      .preview-shell h1 { margin: 0; font-size: clamp(1.6rem, 4vw, 2.1rem); color: var(--navy); }
-      .preview-shell time { font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(17,86,214,0.78); font-size: 0.85rem; }
-      .preview-shell p { margin: 0; color: var(--text-subtle); }
-      .preview-shell .cta { font-weight: 600; color: var(--royal); }
-      .preview-shell a { display: inline-flex; align-items: center; justify-content: center; gap: 0.35rem; padding: 0.6rem 1.2rem; border-radius: 999px; text-decoration: none; font-weight: 600; color: var(--royal); border: 1px solid color-mix(in srgb, var(--royal) 25%, transparent); background: color-mix(in srgb, rgba(17,86,214,0.12) 50%, rgba(255,255,255,0.9) 50%); }
+      body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 3rem 1.5rem 4rem;
+      }
+
+      .preview-shell {
+        width: min(960px, 100%);
+        background: color-mix(in srgb, var(--surface) 75%, rgba(17, 86, 214, 0.05) 25%);
+        border-radius: var(--radius-lg);
+        border: 1px solid color-mix(in srgb, var(--royal) 12%, transparent);
+        box-shadow: var(--shadow-soft);
+        padding: clamp(2.25rem, 5vw, 3rem);
+        display: grid;
+        gap: clamp(1.25rem, 2vw, 1.75rem);
+      }
+
+      header {
+        display: grid;
+        gap: 0.5rem;
+        text-align: left;
+      }
+
+      header h1 {
+        margin: 0;
+        font-size: clamp(1.9rem, 4vw, 2.4rem);
+        color: var(--navy);
+      }
+
+      header time {
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: rgba(17, 86, 214, 0.72);
+        font-size: 0.8rem;
+      }
+
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.35rem 0.85rem;
+        border-radius: 999px;
+        background: rgba(17, 86, 214, 0.12);
+        color: var(--royal);
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.7rem;
+        letter-spacing: 0.08em;
+        width: fit-content;
+      }
+
+      .story {
+        display: grid;
+        gap: 0.75rem;
+      }
+
+      .story h2 {
+        margin: 0;
+        font-size: 1.2rem;
+        color: var(--navy);
+      }
+
+      .story ul {
+        margin: 0;
+        padding-left: 1.2rem;
+        color: var(--text-subtle);
+      }
+
+      .chart-grid {
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      }
+
+      .chart-card {
+        background: color-mix(in srgb, var(--surface-alt) 80%, rgba(244, 181, 63, 0.08) 20%);
+        border: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
+        border-radius: var(--radius-md);
+        padding: 1.1rem;
+        display: grid;
+        gap: 0.65rem;
+      }
+
+      .chart-card h3 {
+        margin: 0;
+        font-size: 1rem;
+        color: var(--navy);
+      }
+
+      .chart-card p {
+        margin: 0;
+        font-size: 0.85rem;
+        color: var(--text-subtle);
+      }
+
+      footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+
+      footer a {
+        text-decoration: none;
+        font-weight: 600;
+      }
     </style>
+    <script src="../vendor/chart.umd.js" defer></script>
   </head>
   <body>
     <main class="preview-shell">
-      <span class="chip chip--accent">Preseason preview</span>
-      <time datetime="2024-10-04T12:00:00+00:00">Friday, October 04, 2024 — 12:00 UTC</time>
-      <h1>Boston Celtics at Denver Nuggets</h1>
-      <p><strong>Etihad Arena · Abu Dhabi</strong></p>
-      <p>NBA Abu Dhabi Game</p>
-      <p class="cta">Full scouting report publishes soon. Bookmark this page for lineup intel, travel notes, and matchup keys.</p>
-      <p><a href="../index.html">← Back to hub</a></p>
+      <header>
+        <span class="chip">Preseason preview</span>
+        <time datetime="2024-10-04T12:00:00+00:00">Friday, October 04, 2024 — 12:00 UTC</time>
+        <h1>Boston Celtics at Denver Nuggets</h1>
+        <p><strong>Etihad Arena · Abu Dhabi</strong> · NBA Abu Dhabi Game</p>
+        <p class="lead">The first look at each club’s depth chart arrives overseas, and both staffs are prioritising developmental minutes over headline stars.</p>
+      </header>
+
+      <section class="story">
+        <h2>Why it matters in October</h2>
+        <p>Boston’s staff has circled this trip as an audition for the young wing room. Jordan Walsh and rookie Baylor Scheierman are slated for long looks on the wing while Kristaps Porziņģis and Jrue Holiday stay on lighter minutes after a marathon spring. Expect Boston to lean into bench heavy lineups that feature Payton Pritchard orchestrating tempo for the reserves.</p>
+        <p>Denver’s focus is similar: the champs want clarity behind their core. Julian Strawther and Peyton Watson will toggle between the 2-4 spots, and first-rounder DaRon Holmes II is expected to get extended run at backup five while Zeke Nnaji ramps back from offseason shoulder maintenance. Jamal Murray and Nikola Jokić will appear in shorter bursts purely for timing.</p>
+        <p>Both teams arrived in Abu Dhabi early to acclimate, so conditioning shouldn’t be a concern. The intrigue lies in whether Boston’s pace can unsettle Denver’s developmental frontcourt and which bench creator seizes the trust of Michael Malone’s staff.</p>
+        <ul>
+          <li>Can Walsh’s defensive energy alongside Sam Hauser create a viable second-unit identity?</li>
+          <li>Does Holmes look ready to anchor drop coverage, or will Denver keep experimenting with small-ball?</li>
+          <li>How do the Celtics manage Luke Kornet vs. Neemias Queta for the third-center minutes?</li>
+        </ul>
+      </section>
+
+      <section class="visuals">
+        <h2>Preseason scouting dashboard</h2>
+        <div class="chart-grid">
+          <figure class="chart-card">
+            <h3>Projected evaluation minutes</h3>
+            <canvas id="rotationChart"></canvas>
+            <p>Estimated minutes the coaching staffs want to log for their developmental priorities in Abu Dhabi.</p>
+          </figure>
+          <figure class="chart-card">
+            <h3>Skill focus for young wings</h3>
+            <canvas id="developmentChart"></canvas>
+            <p>Coaches’ emphasis areas (0-10 scale) for Boston and Denver wings fighting for rotation trust.</p>
+          </figure>
+          <figure class="chart-card">
+            <h3>Availability snapshot</h3>
+            <canvas id="healthChart"></canvas>
+            <p>Breakdown of the roster groups: cleared for full minutes, monitored workloads, or limited to rehab work.</p>
+          </figure>
+        </div>
+      </section>
+
+      <footer>
+        <span>Data: team camp reports and staff usage targets updated September 27.</span>
+        <a href="../index.html">← Back to preseason hub</a>
+      </footer>
     </main>
+
+    <script defer>
+      const palette = {
+        celtics: "#007A33",
+        nuggets: "#0E2240",
+        accent: "#FDB927",
+        neutral: "#7f8ea3"
+      };
+
+      window.addEventListener("DOMContentLoaded", () => {
+        const rotationCtx = document.getElementById("rotationChart");
+        const developmentCtx = document.getElementById("developmentChart");
+        const healthCtx = document.getElementById("healthChart");
+
+        new Chart(rotationCtx, {
+          type: "bar",
+          data: {
+            labels: [
+              "Jordan Walsh (BOS)",
+              "Baylor Scheierman (BOS)",
+              "Neemias Queta (BOS)",
+              "Julian Strawther (DEN)",
+              "Peyton Watson (DEN)",
+              "DaRon Holmes II (DEN)"
+            ],
+            datasets: [
+              {
+                label: "Target minutes",
+                data: [22, 20, 16, 21, 18, 17],
+                backgroundColor: [
+                  palette.celtics,
+                  palette.celtics,
+                  palette.celtics,
+                  palette.nuggets,
+                  palette.nuggets,
+                  palette.nuggets
+                ],
+                borderRadius: 6
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            scales: {
+              y: {
+                beginAtZero: true,
+                max: 24,
+                ticks: { stepSize: 4, color: palette.neutral },
+                grid: { color: "rgba(15, 35, 64, 0.08)" }
+              },
+              x: {
+                ticks: { color: palette.neutral },
+                grid: { display: false }
+              }
+            },
+            plugins: {
+              legend: { display: false }
+            }
+          }
+        });
+
+        new Chart(developmentCtx, {
+          type: "radar",
+          data: {
+            labels: ["On-ball reps", "Spacing volume", "Defensive activity", "Playmaking", "Transition pace"],
+            datasets: [
+              {
+                label: "Jordan Walsh",
+                data: [7, 5, 9, 6, 8],
+                borderColor: palette.celtics,
+                backgroundColor: "rgba(0, 122, 51, 0.25)",
+                pointBackgroundColor: palette.celtics
+              },
+              {
+                label: "Baylor Scheierman",
+                data: [5, 9, 6, 7, 6],
+                borderColor: palette.accent,
+                backgroundColor: "rgba(253, 185, 39, 0.2)",
+                pointBackgroundColor: palette.accent
+              },
+              {
+                label: "Julian Strawther",
+                data: [6, 8, 7, 5, 7],
+                borderColor: palette.nuggets,
+                backgroundColor: "rgba(14, 34, 64, 0.25)",
+                pointBackgroundColor: palette.nuggets
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            scales: {
+              r: {
+                suggestedMin: 0,
+                suggestedMax: 10,
+                ticks: { display: false },
+                grid: { color: "rgba(15, 35, 64, 0.08)" },
+                angleLines: { color: "rgba(15, 35, 64, 0.08)" },
+                pointLabels: { color: palette.neutral }
+              }
+            }
+          }
+        });
+
+        new Chart(healthCtx, {
+          type: "doughnut",
+          data: {
+            labels: ["Cleared for full run", "Monitored workload", "Rehab group"],
+            datasets: [
+              {
+                data: [9, 4, 2],
+                backgroundColor: [palette.celtics, palette.accent, palette.nuggets],
+                borderWidth: 0
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            cutout: "62%",
+            plugins: {
+              legend: {
+                position: "bottom",
+                labels: { color: palette.neutral }
+              }
+            }
+          }
+        });
+      });
+    </script>
   </body>
 </html>

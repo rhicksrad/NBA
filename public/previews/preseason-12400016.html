@@ -6,24 +6,295 @@
     <title>Preseason Preview: Chicago Bulls at Cleveland Cavaliers</title>
     <link rel="stylesheet" href="../styles/hub.css" />
     <style>
-      body { min-height: 100vh; display: grid; place-items: center; padding: 2.5rem 1rem; background: radial-gradient(circle at top, rgba(17,86,214,0.12), rgba(11,37,69,0.05)); }
-      .preview-shell { max-width: 720px; width: min(90vw, 680px); background: color-mix(in srgb, rgba(255,255,255,0.95) 70%, rgba(242,246,255,0.92) 30%); border-radius: var(--radius-lg); border: 1px solid color-mix(in srgb, var(--royal) 18%, transparent); box-shadow: 0 28px 44px rgba(11,37,69,0.18); padding: clamp(1.8rem, 4vw, 2.6rem); display: grid; gap: 1.2rem; text-align: center; }
-      .preview-shell h1 { margin: 0; font-size: clamp(1.6rem, 4vw, 2.1rem); color: var(--navy); }
-      .preview-shell time { font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(17,86,214,0.78); font-size: 0.85rem; }
-      .preview-shell p { margin: 0; color: var(--text-subtle); }
-      .preview-shell .cta { font-weight: 600; color: var(--royal); }
-      .preview-shell a { display: inline-flex; align-items: center; justify-content: center; gap: 0.35rem; padding: 0.6rem 1.2rem; border-radius: 999px; text-decoration: none; font-weight: 600; color: var(--royal); border: 1px solid color-mix(in srgb, var(--royal) 25%, transparent); background: color-mix(in srgb, rgba(17,86,214,0.12) 50%, rgba(255,255,255,0.9) 50%); }
+      body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 3rem 1.5rem 4rem;
+      }
+
+      .preview-shell {
+        width: min(960px, 100%);
+        background: color-mix(in srgb, var(--surface) 75%, rgba(206, 17, 65, 0.08) 25%);
+        border-radius: var(--radius-lg);
+        border: 1px solid color-mix(in srgb, var(--royal) 12%, transparent);
+        box-shadow: var(--shadow-soft);
+        padding: clamp(2.25rem, 5vw, 3rem);
+        display: grid;
+        gap: clamp(1.25rem, 2vw, 1.75rem);
+      }
+
+      header {
+        display: grid;
+        gap: 0.5rem;
+        text-align: left;
+      }
+
+      header h1 {
+        margin: 0;
+        font-size: clamp(1.9rem, 4vw, 2.4rem);
+        color: var(--navy);
+      }
+
+      header time {
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: rgba(206, 17, 65, 0.75);
+        font-size: 0.8rem;
+      }
+
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.35rem 0.85rem;
+        border-radius: 999px;
+        background: rgba(206, 17, 65, 0.12);
+        color: #ce1141;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.7rem;
+        letter-spacing: 0.08em;
+        width: fit-content;
+      }
+
+      .story {
+        display: grid;
+        gap: 0.75rem;
+      }
+
+      .story h2 {
+        margin: 0;
+        font-size: 1.2rem;
+        color: var(--navy);
+      }
+
+      .story ul {
+        margin: 0;
+        padding-left: 1.2rem;
+        color: var(--text-subtle);
+      }
+
+      .chart-grid {
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      }
+
+      .chart-card {
+        background: color-mix(in srgb, var(--surface-alt) 82%, rgba(111, 38, 61, 0.08) 18%);
+        border: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
+        border-radius: var(--radius-md);
+        padding: 1.1rem;
+        display: grid;
+        gap: 0.65rem;
+      }
+
+      .chart-card h3 {
+        margin: 0;
+        font-size: 1rem;
+        color: var(--navy);
+      }
+
+      .chart-card p {
+        margin: 0;
+        font-size: 0.85rem;
+        color: var(--text-subtle);
+      }
+
+      footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+
+      footer a {
+        text-decoration: none;
+        font-weight: 600;
+      }
     </style>
+    <script src="../vendor/chart.umd.js" defer></script>
   </head>
   <body>
     <main class="preview-shell">
-      <span class="chip chip--accent">Preseason preview</span>
-      <time datetime="2024-10-08T19:00:00+00:00">Tuesday, October 08, 2024 — 19:00 UTC</time>
-      <h1>Chicago Bulls at Cleveland Cavaliers</h1>
-      <p><strong>Rocket Mortgage FieldHouse · Cleveland, OH</strong></p>
-      <p>Preseason opener</p>
-      <p class="cta">Full scouting report publishes soon. Bookmark this page for lineup intel, travel notes, and matchup keys.</p>
-      <p><a href="../index.html">← Back to hub</a></p>
+      <header>
+        <span class="chip">Preseason preview</span>
+        <time datetime="2024-10-08T19:00:00+00:00">Tuesday, October 08, 2024 — 19:00 UTC</time>
+        <h1>Chicago Bulls at Cleveland Cavaliers</h1>
+        <p><strong>Rocket Mortgage FieldHouse · Cleveland, OH</strong> · Preseason opener</p>
+        <p class="lead">Chicago debuts its retooled backcourt while Cleveland’s new coaching staff experiments with pace and spacing.</p>
+      </header>
+
+      <section class="story">
+        <h2>Why it matters in October</h2>
+        <p>The Bulls pivoted into a younger build by adding Josh Giddey and re-signing Patrick Williams. Billy Donovan wants to see how Giddey meshes with Coby White and whether rookie forward Terrence Shannon Jr. can guard up a position. Zach LaVine remains on the roster but will play limited minutes as trade discussions percolate.</p>
+        <p>Cleveland enters under new head coach Kenny Atkinson, who is installing quicker decision-making and more movement. Donovan Mitchell and Darius Garland will get short stints before passing control to Caris LeVert, rookie Jaylon Tyson, and second-year wing Emoni Bates. Jarrett Allen is still in return-to-play protocols after late-season rib soreness, so Isaiah Hartenstein and Tristan Thompson absorb the center minutes.</p>
+        <p>Both teams are healthy outside of Allen’s ramp-up and Lonzo Ball’s ongoing absence. Expect Atkinson to push tempo while Donovan tinkers with jumbo lineups featuring Giddey at the 3.</p>
+        <ul>
+          <li>Can Giddey’s playmaking coexist with White’s improved scoring without clogging spacing?</li>
+          <li>How quickly do the Cavaliers pick up Atkinson’s read-and-react offense?</li>
+          <li>Does Shannon Jr. provide the defensive pop Chicago needs on the wing?</li>
+        </ul>
+      </section>
+
+      <section class="visuals">
+        <h2>Preseason scouting dashboard</h2>
+        <div class="chart-grid">
+          <figure class="chart-card">
+            <h3>Projected evaluation minutes</h3>
+            <canvas id="rotationChart"></canvas>
+            <p>Estimated minutes earmarked for developmental priorities in Cleveland.</p>
+          </figure>
+          <figure class="chart-card">
+            <h3>Skill focus for perimeter pieces</h3>
+            <canvas id="developmentChart"></canvas>
+            <p>Coaching emphasis (0-10 scale) for guards and wings chasing rotation certainty.</p>
+          </figure>
+          <figure class="chart-card">
+            <h3>Availability snapshot</h3>
+            <canvas id="healthChart"></canvas>
+            <p>Roster allocation across full-go groups, monitored workloads, and rehab assignments.</p>
+          </figure>
+        </div>
+      </section>
+
+      <footer>
+        <span>Data: camp depth charts and medical notes gathered September 29.</span>
+        <a href="../index.html">← Back to preseason hub</a>
+      </footer>
     </main>
+
+    <script defer>
+      const palette = {
+        bulls: "#CE1141",
+        black: "#000000",
+        cavs: "#6F263D",
+        gold: "#FDBB30",
+        neutral: "#7f8ea3"
+      };
+
+      window.addEventListener("DOMContentLoaded", () => {
+        const rotationCtx = document.getElementById("rotationChart");
+        const developmentCtx = document.getElementById("developmentChart");
+        const healthCtx = document.getElementById("healthChart");
+
+        new Chart(rotationCtx, {
+          type: "bar",
+          data: {
+            labels: [
+              "Josh Giddey (CHI)",
+              "Coby White (CHI)",
+              "Terrence Shannon Jr. (CHI)",
+              "Caris LeVert (CLE)",
+              "Jaylon Tyson (CLE)",
+              "Emoni Bates (CLE)"
+            ],
+            datasets: [
+              {
+                label: "Target minutes",
+                data: [21, 20, 16, 20, 18, 17],
+                backgroundColor: [
+                  palette.bulls,
+                  palette.black,
+                  palette.bulls,
+                  palette.cavs,
+                  palette.gold,
+                  palette.cavs
+                ],
+                borderRadius: 6
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            scales: {
+              y: {
+                beginAtZero: true,
+                max: 24,
+                ticks: { stepSize: 4, color: palette.neutral },
+                grid: { color: "rgba(206, 17, 65, 0.12)" }
+              },
+              x: {
+                ticks: { color: palette.neutral },
+                grid: { display: false }
+              }
+            },
+            plugins: {
+              legend: { display: false }
+            }
+          }
+        });
+
+        new Chart(developmentCtx, {
+          type: "radar",
+          data: {
+            labels: ["Playmaking", "Catch-and-shoot", "Defensive versatility", "Transition pace", "Physicality"],
+            datasets: [
+              {
+                label: "Josh Giddey",
+                data: [9, 6, 6, 7, 6],
+                borderColor: palette.bulls,
+                backgroundColor: "rgba(206, 17, 65, 0.25)",
+                pointBackgroundColor: palette.bulls
+              },
+              {
+                label: "Coby White",
+                data: [6, 8, 5, 7, 6],
+                borderColor: palette.black,
+                backgroundColor: "rgba(0, 0, 0, 0.2)",
+                pointBackgroundColor: palette.black
+              },
+              {
+                label: "Jaylon Tyson",
+                data: [6, 7, 7, 6, 7],
+                borderColor: palette.cavs,
+                backgroundColor: "rgba(111, 38, 61, 0.25)",
+                pointBackgroundColor: palette.cavs
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            scales: {
+              r: {
+                suggestedMin: 0,
+                suggestedMax: 10,
+                ticks: { display: false },
+                grid: { color: "rgba(111, 38, 61, 0.12)" },
+                angleLines: { color: "rgba(111, 38, 61, 0.12)" },
+                pointLabels: { color: palette.neutral }
+              }
+            }
+          }
+        });
+
+        new Chart(healthCtx, {
+          type: "doughnut",
+          data: {
+            labels: ["Cleared for full run", "Monitored workload", "Rehab group"],
+            datasets: [
+              {
+                data: [10, 5, 2],
+                backgroundColor: [palette.cavs, palette.bulls, palette.gold],
+                borderWidth: 0
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            cutout: "62%",
+            plugins: {
+              legend: {
+                position: "bottom",
+                labels: { color: palette.neutral }
+              }
+            }
+          }
+        });
+      });
+    </script>
   </body>
 </html>

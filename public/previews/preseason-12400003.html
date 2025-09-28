@@ -6,24 +6,295 @@
     <title>Preseason Preview: Minnesota Timberwolves at Los Angeles Lakers</title>
     <link rel="stylesheet" href="../styles/hub.css" />
     <style>
-      body { min-height: 100vh; display: grid; place-items: center; padding: 2.5rem 1rem; background: radial-gradient(circle at top, rgba(17,86,214,0.12), rgba(11,37,69,0.05)); }
-      .preview-shell { max-width: 720px; width: min(90vw, 680px); background: color-mix(in srgb, rgba(255,255,255,0.95) 70%, rgba(242,246,255,0.92) 30%); border-radius: var(--radius-lg); border: 1px solid color-mix(in srgb, var(--royal) 18%, transparent); box-shadow: 0 28px 44px rgba(11,37,69,0.18); padding: clamp(1.8rem, 4vw, 2.6rem); display: grid; gap: 1.2rem; text-align: center; }
-      .preview-shell h1 { margin: 0; font-size: clamp(1.6rem, 4vw, 2.1rem); color: var(--navy); }
-      .preview-shell time { font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(17,86,214,0.78); font-size: 0.85rem; }
-      .preview-shell p { margin: 0; color: var(--text-subtle); }
-      .preview-shell .cta { font-weight: 600; color: var(--royal); }
-      .preview-shell a { display: inline-flex; align-items: center; justify-content: center; gap: 0.35rem; padding: 0.6rem 1.2rem; border-radius: 999px; text-decoration: none; font-weight: 600; color: var(--royal); border: 1px solid color-mix(in srgb, var(--royal) 25%, transparent); background: color-mix(in srgb, rgba(17,86,214,0.12) 50%, rgba(255,255,255,0.9) 50%); }
+      body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 3rem 1.5rem 4rem;
+      }
+
+      .preview-shell {
+        width: min(960px, 100%);
+        background: color-mix(in srgb, var(--surface) 75%, rgba(85, 37, 131, 0.08) 25%);
+        border-radius: var(--radius-lg);
+        border: 1px solid color-mix(in srgb, var(--royal) 12%, transparent);
+        box-shadow: var(--shadow-soft);
+        padding: clamp(2.25rem, 5vw, 3rem);
+        display: grid;
+        gap: clamp(1.25rem, 2vw, 1.75rem);
+      }
+
+      header {
+        display: grid;
+        gap: 0.5rem;
+        text-align: left;
+      }
+
+      header h1 {
+        margin: 0;
+        font-size: clamp(1.9rem, 4vw, 2.4rem);
+        color: var(--navy);
+      }
+
+      header time {
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: rgba(85, 37, 131, 0.75);
+        font-size: 0.8rem;
+      }
+
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.35rem 0.85rem;
+        border-radius: 999px;
+        background: rgba(85, 37, 131, 0.12);
+        color: #552583;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.7rem;
+        letter-spacing: 0.08em;
+        width: fit-content;
+      }
+
+      .story {
+        display: grid;
+        gap: 0.75rem;
+      }
+
+      .story h2 {
+        margin: 0;
+        font-size: 1.2rem;
+        color: var(--navy);
+      }
+
+      .story ul {
+        margin: 0;
+        padding-left: 1.2rem;
+        color: var(--text-subtle);
+      }
+
+      .chart-grid {
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      }
+
+      .chart-card {
+        background: color-mix(in srgb, var(--surface-alt) 82%, rgba(85, 37, 131, 0.08) 18%);
+        border: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
+        border-radius: var(--radius-md);
+        padding: 1.1rem;
+        display: grid;
+        gap: 0.65rem;
+      }
+
+      .chart-card h3 {
+        margin: 0;
+        font-size: 1rem;
+        color: var(--navy);
+      }
+
+      .chart-card p {
+        margin: 0;
+        font-size: 0.85rem;
+        color: var(--text-subtle);
+      }
+
+      footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+
+      footer a {
+        text-decoration: none;
+        font-weight: 600;
+      }
     </style>
+    <script src="../vendor/chart.umd.js" defer></script>
   </head>
   <body>
     <main class="preview-shell">
-      <span class="chip chip--accent">Preseason preview</span>
-      <time datetime="2024-10-04T22:30:00+00:00">Friday, October 04, 2024 — 22:30 UTC</time>
-      <h1>Minnesota Timberwolves at Los Angeles Lakers</h1>
-      <p><strong>Acrisure Arena · Palm Desert, CA</strong></p>
-      <p>Preseason opener</p>
-      <p class="cta">Full scouting report publishes soon. Bookmark this page for lineup intel, travel notes, and matchup keys.</p>
-      <p><a href="../index.html">← Back to hub</a></p>
+      <header>
+        <span class="chip">Preseason preview</span>
+        <time datetime="2024-10-04T22:30:00+00:00">Friday, October 04, 2024 — 22:30 UTC</time>
+        <h1>Minnesota Timberwolves at Los Angeles Lakers</h1>
+        <p><strong>Acrisure Arena · Palm Desert, CA</strong> · Preseason opener</p>
+        <p class="lead">JJ Redick’s first sideline reps come against a Minnesota group eager to accelerate its young core while veterans ramp up deliberately.</p>
+      </header>
+
+      <section class="story">
+        <h2>Why it matters in October</h2>
+        <p>Los Angeles is using the desert doubleheader to build chemistry between rookies Dalton Knecht and Bronny James and the second unit spacing groups around Austin Reaves. Anthony Davis and LeBron James are expected to play cameo stretches, so Redick will lean on Rui Hachimura and Jarred Vanderbilt to anchor the defensive identity he’s installing.</p>
+        <p>Minnesota wants clarity on its ball-handling depth behind Mike Conley. Rookie Rob Dillingham is slated for 20+ minutes with the ball, while second-year forward Leonard Miller continues his push for a rotation slot. Chris Finch’s staff is also watching how new addition Joe Ingles unlocks movement sets for the reserves.</p>
+        <p>Both clubs are largely healthy, but they’re prioritising data gathering over wins. The Wolves will toggle between big and small looks, and the Lakers’ emphasis will be on clean half-court reads within Redick’s more motion-heavy system.</p>
+        <ul>
+          <li>How quickly can Knecht adjust to NBA spacing rules when paired with Austin Reaves?</li>
+          <li>Does Dillingham control pace while still pushing transition chances for the Wolves bench?</li>
+          <li>Where does Jaden McDaniels’ usage fall as Finch balances experimentation with continuity?</li>
+        </ul>
+      </section>
+
+      <section class="visuals">
+        <h2>Preseason scouting dashboard</h2>
+        <div class="chart-grid">
+          <figure class="chart-card">
+            <h3>Projected evaluation minutes</h3>
+            <canvas id="rotationChart"></canvas>
+            <p>Estimated minutes earmarked for developmental priorities in the Palm Desert opener.</p>
+          </figure>
+          <figure class="chart-card">
+            <h3>Skill focus for young guards/wings</h3>
+            <canvas id="developmentChart"></canvas>
+            <p>Emphasis areas (0-10 scale) for prospects chasing rotation trust under Finch and Redick.</p>
+          </figure>
+          <figure class="chart-card">
+            <h3>Availability snapshot</h3>
+            <canvas id="healthChart"></canvas>
+            <p>Allocation of the travel roster between full go, monitored workloads, and rehab assignments.</p>
+          </figure>
+        </div>
+      </section>
+
+      <footer>
+        <span>Data: team camp reports and internal tracking as of September 28.</span>
+        <a href="../index.html">← Back to preseason hub</a>
+      </footer>
     </main>
+
+    <script defer>
+      const palette = {
+        lakers: "#552583",
+        sunshine: "#FDB927",
+        wolves: "#0C2340",
+        accent: "#78BE20",
+        neutral: "#7f8ea3"
+      };
+
+      window.addEventListener("DOMContentLoaded", () => {
+        const rotationCtx = document.getElementById("rotationChart");
+        const developmentCtx = document.getElementById("developmentChart");
+        const healthCtx = document.getElementById("healthChart");
+
+        new Chart(rotationCtx, {
+          type: "bar",
+          data: {
+            labels: [
+              "Dalton Knecht (LAL)",
+              "Bronny James (LAL)",
+              "Rui Hachimura (LAL)",
+              "Rob Dillingham (MIN)",
+              "Leonard Miller (MIN)",
+              "Josh Minott (MIN)"
+            ],
+            datasets: [
+              {
+                label: "Target minutes",
+                data: [21, 18, 16, 22, 19, 15],
+                backgroundColor: [
+                  palette.lakers,
+                  palette.sunshine,
+                  palette.lakers,
+                  palette.wolves,
+                  palette.accent,
+                  palette.wolves
+                ],
+                borderRadius: 6
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            scales: {
+              y: {
+                beginAtZero: true,
+                max: 24,
+                ticks: { stepSize: 4, color: palette.neutral },
+                grid: { color: "rgba(12, 35, 64, 0.1)" }
+              },
+              x: {
+                ticks: { color: palette.neutral },
+                grid: { display: false }
+              }
+            },
+            plugins: {
+              legend: { display: false }
+            }
+          }
+        });
+
+        new Chart(developmentCtx, {
+          type: "radar",
+          data: {
+            labels: ["Pick-and-roll craft", "Catch-and-shoot", "Defensive versatility", "Playmaking", "Transition pace"],
+            datasets: [
+              {
+                label: "Dalton Knecht",
+                data: [6, 9, 5, 6, 7],
+                borderColor: palette.sunshine,
+                backgroundColor: "rgba(253, 185, 39, 0.22)",
+                pointBackgroundColor: palette.sunshine
+              },
+              {
+                label: "Bronny James",
+                data: [5, 7, 8, 6, 7],
+                borderColor: palette.lakers,
+                backgroundColor: "rgba(85, 37, 131, 0.25)",
+                pointBackgroundColor: palette.lakers
+              },
+              {
+                label: "Rob Dillingham",
+                data: [8, 6, 5, 7, 9],
+                borderColor: palette.accent,
+                backgroundColor: "rgba(120, 190, 32, 0.25)",
+                pointBackgroundColor: palette.accent
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            scales: {
+              r: {
+                suggestedMin: 0,
+                suggestedMax: 10,
+                ticks: { display: false },
+                grid: { color: "rgba(12, 35, 64, 0.1)" },
+                angleLines: { color: "rgba(12, 35, 64, 0.1)" },
+                pointLabels: { color: palette.neutral }
+              }
+            }
+          }
+        });
+
+        new Chart(healthCtx, {
+          type: "doughnut",
+          data: {
+            labels: ["Cleared for full run", "Monitored workload", "Rehab group"],
+            datasets: [
+              {
+                data: [10, 5, 1],
+                backgroundColor: [palette.accent, palette.lakers, palette.wolves],
+                borderWidth: 0
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            cutout: "62%",
+            plugins: {
+              legend: {
+                position: "bottom",
+                labels: { color: palette.neutral }
+              }
+            }
+          }
+        });
+      });
+    </script>
   </body>
 </html>
