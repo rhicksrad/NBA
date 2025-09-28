@@ -44,59 +44,94 @@ const atlasEls = {
   spotlight: document.querySelector('[data-state-spotlight]'),
 };
 
-const tileCoordinates = {
-  AL: { col: 6, row: 5 },
-  AK: { col: 1, row: 6 },
-  AZ: { col: 1, row: 4 },
-  AR: { col: 5, row: 4 },
-  CA: { col: 1, row: 3 },
-  CO: { col: 3, row: 4 },
-  CT: { col: 11, row: 2 },
-  DC: { col: 10, row: 4 },
-  DE: { col: 10, row: 3 },
-  FL: { col: 8, row: 5 },
-  GA: { col: 9, row: 4 },
-  HI: { col: 9, row: 6 },
-  IA: { col: 4, row: 2 },
-  ID: { col: 2, row: 2 },
-  IL: { col: 5, row: 2 },
-  IN: { col: 6, row: 2 },
-  KS: { col: 4, row: 4 },
-  KY: { col: 6, row: 3 },
-  LA: { col: 4, row: 5 },
-  MA: { col: 11, row: 3 },
-  MD: { col: 9, row: 3 },
-  ME: { col: 10, row: 1 },
-  MI: { col: 6, row: 1 },
-  MN: { col: 4, row: 1 },
-  MO: { col: 5, row: 3 },
-  MS: { col: 5, row: 5 },
-  MT: { col: 2, row: 1 },
-  NC: { col: 7, row: 4 },
-  ND: { col: 3, row: 1 },
-  NE: { col: 4, row: 3 },
-  NH: { col: 9, row: 1 },
-  NJ: { col: 10, row: 2 },
-  NM: { col: 1, row: 5 },
-  NV: { col: 2, row: 3 },
-  NY: { col: 9, row: 2 },
-  OH: { col: 7, row: 2 },
-  OK: { col: 2, row: 5 },
-  OR: { col: 1, row: 2 },
-  PA: { col: 8, row: 2 },
-  RI: { col: 12, row: 2 },
-  SC: { col: 8, row: 4 },
-  SD: { col: 3, row: 2 },
-  TN: { col: 6, row: 4 },
-  TX: { col: 3, row: 5 },
-  UT: { col: 2, row: 4 },
-  VA: { col: 8, row: 3 },
-  VT: { col: 8, row: 1 },
-  WA: { col: 1, row: 1 },
-  WI: { col: 5, row: 1 },
-  WV: { col: 7, row: 3 },
-  WY: { col: 3, row: 3 },
+const stateNames = {
+  AL: 'Alabama',
+  AK: 'Alaska',
+  AZ: 'Arizona',
+  AR: 'Arkansas',
+  CA: 'California',
+  CO: 'Colorado',
+  CT: 'Connecticut',
+  DC: 'District of Columbia',
+  DE: 'Delaware',
+  FL: 'Florida',
+  GA: 'Georgia',
+  HI: 'Hawaii',
+  IA: 'Iowa',
+  ID: 'Idaho',
+  IL: 'Illinois',
+  IN: 'Indiana',
+  KS: 'Kansas',
+  KY: 'Kentucky',
+  LA: 'Louisiana',
+  MA: 'Massachusetts',
+  MD: 'Maryland',
+  ME: 'Maine',
+  MI: 'Michigan',
+  MN: 'Minnesota',
+  MO: 'Missouri',
+  MS: 'Mississippi',
+  MT: 'Montana',
+  NC: 'North Carolina',
+  ND: 'North Dakota',
+  NE: 'Nebraska',
+  NH: 'New Hampshire',
+  NJ: 'New Jersey',
+  NM: 'New Mexico',
+  NV: 'Nevada',
+  NY: 'New York',
+  OH: 'Ohio',
+  OK: 'Oklahoma',
+  OR: 'Oregon',
+  PA: 'Pennsylvania',
+  RI: 'Rhode Island',
+  SC: 'South Carolina',
+  SD: 'South Dakota',
+  TN: 'Tennessee',
+  TX: 'Texas',
+  UT: 'Utah',
+  VA: 'Virginia',
+  VT: 'Vermont',
+  WA: 'Washington',
+  WI: 'Wisconsin',
+  WV: 'West Virginia',
+  WY: 'Wyoming',
+  PR: 'Puerto Rico',
 };
+
+let stateMapMarkup = null;
+let activeStateShape = null;
+
+async function loadStateMapSvg() {
+  if (!stateMapMarkup) {
+    const response = await fetch('vendor/us-states.svg');
+    if (!response.ok) {
+      throw new Error('Failed to load state atlas map');
+    }
+    stateMapMarkup = await response.text();
+  }
+  const template = document.createElement('template');
+  template.innerHTML = stateMapMarkup.trim();
+  const svg = template.content.firstElementChild;
+  if (svg) {
+    svg.classList.add('state-map__svg');
+    svg.setAttribute('focusable', 'false');
+  }
+  return svg;
+}
+
+function selectStateShape(shape, entry) {
+  if (activeStateShape && activeStateShape !== shape) {
+    activeStateShape.classList.remove('state-shape--selected');
+    activeStateShape.setAttribute('aria-pressed', 'false');
+  }
+  activeStateShape = shape || null;
+  if (shape) {
+    shape.classList.add('state-shape--selected');
+    shape.setAttribute('aria-pressed', 'true');
+  }
+  renderStateSpotlight(entry || null);
+}
 
 function parseDate(value) {
   if (!value) return null;
@@ -178,62 +213,99 @@ function renderStateSpotlight(entry) {
   }
 }
 
-function renderStateAtlas(atlas) {
+async function renderStateAtlas(atlas) {
   if (!atlasEls.map) return;
   const entries = Array.isArray(atlas?.states) ? atlas.states : [];
-  atlasEls.map.innerHTML = '';
+  const entryByCode = new Map(entries.map((entry) => [entry.state, entry]));
 
-  let activeTile = null;
+  let svg;
+  try {
+    svg = await loadStateMapSvg();
+  } catch (error) {
+    console.error(error);
+    atlasEls.map.innerHTML = '';
+    renderStateSpotlight(null);
+    return;
+  }
+
+  if (!svg) {
+    atlasEls.map.innerHTML = '';
+    renderStateSpotlight(null);
+    return;
+  }
+
+  atlasEls.map.innerHTML = '';
+  atlasEls.map.append(svg);
+
+  activeStateShape = null;
   let defaultSelection = null;
 
-  entries.forEach((entry) => {
-    const coords = tileCoordinates[entry.state];
-    if (!coords) return;
-    const tile = document.createElement('button');
-    tile.type = 'button';
-    tile.className = 'state-tile';
-    if (entry.player) {
-      tile.setAttribute('aria-pressed', 'false');
-    } else {
-      tile.classList.add('state-tile--empty');
-    }
-    tile.textContent = entry.state;
-    tile.style.gridColumn = coords.col;
-    tile.style.gridRow = coords.row;
-    tile.title = entry.player
-      ? `${entry.player} — ${entry.headline ?? ''}`.trim()
-      : `${entry.stateName ?? entry.state}: ${entry.headline ?? 'No NBA alumni yet'}`;
+  svg.querySelectorAll('[data-state]').forEach((shape) => {
+    const code = shape.getAttribute('data-state');
+    if (!code) return;
+    const entry = entryByCode.get(code) || null;
+    const stateLabel = entry?.stateName || stateNames[code] || code;
 
-    if (entry.player) {
-      tile.addEventListener('click', () => {
-        if (activeTile === tile) return;
-        if (activeTile) {
-          activeTile.classList.remove('state-tile--selected');
-          activeTile.setAttribute('aria-pressed', 'false');
+    shape.removeAttribute('tabindex');
+    shape.removeAttribute('role');
+    shape.removeAttribute('aria-pressed');
+    shape.classList.remove('state-shape--available', 'state-shape--selected', 'state-shape--empty');
+
+    if (entry && entry.player) {
+      shape.classList.add('state-shape--available');
+      shape.setAttribute('role', 'button');
+      shape.setAttribute('tabindex', '0');
+      shape.setAttribute('aria-pressed', 'false');
+      const detail = entry.headline ? ` — ${entry.headline}` : '';
+      shape.setAttribute('aria-label', `${stateLabel}: ${entry.player}`);
+      shape.setAttribute('title', `${entry.player}${detail}`);
+
+      const activate = () => {
+        if (activeStateShape === shape) return;
+        selectStateShape(shape, entry);
+      };
+
+      shape.addEventListener('click', activate);
+      shape.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          activate();
         }
-        activeTile = tile;
-        tile.classList.add('state-tile--selected');
-        tile.setAttribute('aria-pressed', 'true');
-        renderStateSpotlight(entry);
       });
+
       if (!defaultSelection) {
-        defaultSelection = { entry, tile };
+        defaultSelection = { entry, shape };
       }
     } else {
-      tile.addEventListener('click', () => {
-        renderStateSpotlight(entry);
+      shape.classList.add('state-shape--empty');
+      shape.setAttribute('role', 'button');
+      shape.setAttribute('tabindex', '0');
+      shape.setAttribute('aria-pressed', 'false');
+      shape.setAttribute(
+        'aria-label',
+        `${stateLabel}: ${entry?.headline ?? 'No NBA alumni recorded yet.'}`,
+      );
+      if (entry) {
+        shape.setAttribute('title', entry.headline ?? stateLabel);
+      } else {
+        shape.removeAttribute('title');
+      }
+      shape.addEventListener('click', () => {
+        selectStateShape(shape, entry);
+      });
+      shape.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          selectStateShape(shape, entry);
+        }
       });
     }
-
-    atlasEls.map.append(tile);
   });
 
   if (defaultSelection) {
-    defaultSelection.tile.classList.add('state-tile--selected');
-    defaultSelection.tile.setAttribute('aria-pressed', 'true');
-    renderStateSpotlight(defaultSelection.entry);
-  } else if (atlasEls.spotlight) {
-    renderStateSpotlight(null);
+    selectStateShape(defaultSelection.shape, defaultSelection.entry);
+  } else {
+    selectStateShape(null, null);
   }
 }
 
@@ -428,7 +500,7 @@ async function bootstrap() {
     }
 
     if (atlas) {
-      renderStateAtlas(atlas);
+      await renderStateAtlas(atlas);
     } else if (atlasEls.spotlight) {
       renderStateSpotlight(null);
     }

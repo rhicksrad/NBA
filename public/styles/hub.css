@@ -2767,59 +2767,67 @@ section h2 { margin-top: 0; font-size: clamp(1.35rem, 3vw, 1.8rem); letter-spaci
 }
 
 .state-map {
-  display: grid;
-  grid-template-columns: repeat(12, minmax(2.75rem, 1fr));
-  grid-auto-rows: minmax(2.75rem, 1fr);
-  gap: 0.35rem;
-  padding: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(1rem, 3vw, 1.5rem);
   border-radius: var(--radius-md);
   border: 1px solid color-mix(in srgb, var(--royal) 18%, transparent);
   background: linear-gradient(135deg, rgba(17, 86, 214, 0.08), rgba(244, 181, 63, 0.08));
+  min-height: 0;
 }
 
-.state-tile {
-  border-radius: 10px;
-  border: 1px solid color-mix(in srgb, var(--royal) 20%, transparent);
-  background: rgba(255, 255, 255, 0.9);
-  color: var(--navy);
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  font-size: 0.85rem;
-  text-transform: uppercase;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
-  cursor: pointer;
-  position: relative;
-  padding: 0.2rem;
+.state-map__svg {
+  width: min(100%, 720px);
+  height: auto;
+  display: block;
 }
 
-.state-tile:hover,
-.state-tile:focus-visible {
-  transform: translateY(-1px);
-  box-shadow: 0 12px 20px rgba(17, 86, 214, 0.18);
-  outline: none;
-}
-
-.state-tile--selected {
-  background: linear-gradient(135deg, rgba(17, 86, 214, 0.92), rgba(239, 61, 91, 0.85));
-  color: #fff;
-  box-shadow: 0 16px 26px rgba(17, 86, 214, 0.32);
-}
-
-.state-tile--empty {
-  background: rgba(255, 255, 255, 0.65);
-  color: var(--text-subtle);
-  border-style: dashed;
+.state-shape {
+  fill: rgba(255, 255, 255, 0.85);
+  stroke: color-mix(in srgb, var(--navy) 18%, rgba(17, 86, 214, 0.32) 82%);
+  stroke-width: 0.9;
+  transition: fill 0.2s ease, stroke 0.2s ease, transform 0.2s ease, filter 0.2s ease;
   cursor: default;
-  box-shadow: none;
 }
 
-.state-tile--empty:hover,
-.state-tile--empty:focus-visible {
-  transform: none;
-  box-shadow: none;
+.state-shape[role='button'] {
+  cursor: pointer;
+}
+
+.state-shape--available {
+  fill: color-mix(in srgb, var(--sky) 42%, white 58%);
+}
+
+.state-shape--empty {
+  fill: rgba(255, 255, 255, 0.6);
+  stroke-dasharray: 2.4;
+}
+
+.state-shape--available:hover,
+.state-shape--available:focus-visible,
+.state-shape--empty:hover,
+.state-shape--empty:focus-visible {
+  outline: none;
+  stroke: color-mix(in srgb, var(--royal) 70%, white 30%);
+  filter: drop-shadow(0 12px 24px rgba(17, 86, 214, 0.22));
+  transform: translateY(-1px);
+}
+
+.state-shape--selected {
+  fill: color-mix(in srgb, var(--royal) 70%, var(--crimson) 30%);
+  stroke: color-mix(in srgb, var(--royal) 65%, white 35%);
+  filter: drop-shadow(0 16px 30px rgba(17, 86, 214, 0.28));
+}
+
+.state-shape--empty.state-shape--selected {
+  stroke-dasharray: none;
+}
+
+@media (max-width: 720px) {
+  .state-map__svg {
+    width: 100%;
+  }
 }
 
 .state-spotlight {
