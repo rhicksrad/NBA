@@ -8,6 +8,7 @@ import {
   SourceTeamRecord,
   TransactionRecord,
 } from "../lib/types.js";
+import { loadCanonicalLeagueSource } from "./canonical_cache.js";
 
 const BBR_BASE = "https://www.basketball-reference.com";
 
@@ -27,11 +28,23 @@ function resolveEndYear(season: string): number {
 
 export async function fetchBbrRosters(season: string): Promise<LeagueDataSource> {
   const endYear = resolveEndYear(season);
+  const canonicalFallback = await loadCanonicalLeagueSource();
   const teams: Record<string, Partial<SourceTeamRecord>> = {};
   const players: Record<string, SourcePlayerRecord> = {};
-  const transactions: TransactionRecord[] = [];
-  const coaches: Record<string, CoachRecord> = {};
-  const injuries: InjuryRecord[] = [];
+  const transactions: TransactionRecord[] = canonicalFallback
+    ? canonicalFallback.transactions.map((transaction) => ({ ...transaction }))
+    : [];
+  const coaches: Record<string, CoachRecord> = canonicalFallback
+    ? Object.fromEntries(
+        Object.entries(canonicalFallback.coaches).map(([team, record]) => [
+          team,
+          { ...record },
+        ])
+      )
+    : {};
+  const injuries: InjuryRecord[] = canonicalFallback
+    ? canonicalFallback.injuries.map((injury) => ({ ...injury }))
+    : [];
 
   for (const meta of TEAM_METADATA) {
     const tricode = meta.tricode;
@@ -78,15 +91,38 @@ export async function fetchBbrRosters(season: string): Promise<LeagueDataSource>
       };
     } catch (error) {
       console.warn(`Failed to fetch Basketball-Reference roster for ${tricode}: ${(error as Error).message}`);
-      teams[tricode] = {
-        teamId: meta.teamId,
-        tricode,
-        market: meta.market,
-        name: meta.name,
-        roster: [],
-        lastSeasonWins: meta.lastSeasonWins,
-        lastSeasonSRS: meta.lastSeasonSRS,
-      };
+      const fallbackTeam = canonicalFallback?.teams[tricode];
+      if (fallbackTeam) {
+        const roster = (fallbackTeam.roster ?? []).map((player) => ({ ...player }));
+        const fallbackCoach = coaches[tricode] ?? (fallbackTeam.coach ? { ...fallbackTeam.coach } : undefined);
+        if (fallbackCoach) {
+          coaches[tricode] = { ...fallbackCoach };
+        }
+        teams[tricode] = {
+          teamId: fallbackTeam.teamId ?? meta.teamId,
+          tricode: fallbackTeam.tricode ?? tricode,
+          market: fallbackTeam.market ?? meta.market,
+          name: fallbackTeam.name ?? meta.name,
+          roster,
+          coach: fallbackCoach ? { ...fallbackCoach } : undefined,
+          lastSeasonWins: fallbackTeam.lastSeasonWins ?? meta.lastSeasonWins,
+          lastSeasonSRS: fallbackTeam.lastSeasonSRS ?? meta.lastSeasonSRS,
+        };
+        for (const player of roster) {
+          const key = player.playerId ?? player.name;
+          players[key] = { ...player };
+        }
+      } else {
+        teams[tricode] = {
+          teamId: meta.teamId,
+          tricode,
+          market: meta.market,
+          name: meta.name,
+          roster: [],
+          lastSeasonWins: meta.lastSeasonWins,
+          lastSeasonSRS: meta.lastSeasonSRS,
+        };
+      }
     }
   }
 
