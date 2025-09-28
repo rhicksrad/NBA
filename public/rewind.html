@@ -104,29 +104,7 @@
               sharpened playoff chessboards.
             </p>
           </div>
-          <ul class="stat-callouts">
-            <li class="stat-callouts__item">
-              <span class="stat-callouts__label">Total games logged</span>
-              <span class="stat-callouts__value" data-stat-total-games>—</span>
-              <span class="stat-callouts__hint">Across preseason, regular season, and postseason windows.</span>
-            </li>
-            <li class="stat-callouts__item">
-              <span class="stat-callouts__label">Average rest window</span>
-              <span class="stat-callouts__value" data-stat-avg-rest>—</span>
-              <span class="stat-callouts__hint">League-wide spacing between scheduled tip-offs.</span>
-            </li>
-            <li class="stat-callouts__item">
-              <span class="stat-callouts__label">Back-to-back intervals</span>
-              <span class="stat-callouts__value" data-stat-back-to-backs>—</span>
-              <span class="stat-callouts__hint">Paired games flagged for workload monitoring.</span>
-            </li>
-            <li class="stat-callouts__item">
-              <span class="stat-callouts__label">Cup &amp; postseason volume</span>
-              <span class="stat-callouts__value" data-stat-alt-games>—</span>
-              <span class="stat-callouts__hint">Represents <span data-stat-alt-share>—</span>% of the schedule.</span>
-            </li>
-          </ul>
-          <div class="season-snapshot__grid">
+          <div class="season-snapshot__grid season-snapshot__grid--mosaic">
             <article class="season-snapshot__panel" data-chart-wrapper>
               <header class="season-snapshot__header">
                 <h3>Schedule tempo tracker</h3>
@@ -155,42 +133,92 @@
                     Schedule engine grouped every travel interval to flag zero-rest, overnight, and extended pauses.
                   </figcaption>
                 </figure>
-                <ol class="rest-list" data-back-to-back-list>
-                  <li class="rest-list__placeholder">Compiling back-to-back ledger…</li>
-                </ol>
+                <figure class="rest-overview__chart" data-chart-wrapper>
+                  <div class="viz-canvas viz-canvas--mini">
+                    <canvas data-chart="rest-zero-share" aria-describedby="rest-zero-share-caption"></canvas>
+                  </div>
+                  <figcaption id="rest-zero-share-caption" class="season-snapshot__caption">
+                    Gauge charts zero-rest strain relative to all tracked intervals across the calendar.
+                  </figcaption>
+                </figure>
               </div>
-              <p class="rest-list__footer" data-rest-footer>
-                Zero-rest swings accounted for <span data-stat-zero-share>—</span>% of tracked intervals.
-              </p>
+            </article>
+            <article class="season-snapshot__panel" data-chart-wrapper>
+              <header class="season-snapshot__header">
+                <h3>Schedule label mix</h3>
+                <p>How regular, cup, and showcase nights split the broadcast calendar.</p>
+              </header>
+              <div class="viz-canvas viz-canvas--compact">
+                <canvas data-chart="schedule-label-mix" aria-describedby="schedule-label-mix-caption"></canvas>
+              </div>
+              <p id="schedule-label-mix-caption" class="season-snapshot__caption">
+                Each wedge scales to total contests logged under that label with <span data-stat-total-games>—</span>
+                overall tip-offs.</p>
+            </article>
+            <article class="season-snapshot__panel" data-chart-wrapper>
+              <header class="season-snapshot__header">
+                <h3>Back-to-back furnace</h3>
+                <p>Elite workload clusters sorted by total paired nights.</p>
+              </header>
+              <div class="viz-canvas viz-canvas--compact">
+                <canvas data-chart="back-to-back-loads" aria-describedby="back-to-back-loads-caption"></canvas>
+              </div>
+              <p id="back-to-back-loads-caption" class="season-snapshot__caption">
+                Bars highlight the eight busiest travel gauntlets and annotate average rest when available.</p>
+            </article>
+            <article class="season-snapshot__panel" data-chart-wrapper>
+              <header class="season-snapshot__header">
+                <h3>Travel extremes scatter</h3>
+                <p>Correlation between rest days and back-to-back volume among high-usage itineraries.</p>
+              </header>
+              <div class="viz-canvas viz-canvas--compact">
+                <canvas data-chart="travel-extremes" aria-describedby="travel-extremes-caption"></canvas>
+              </div>
+              <p id="travel-extremes-caption" class="season-snapshot__caption">
+                Bubble size maps to total games logged; hover to surface full travel readouts.</p>
+            </article>
+            <article class="season-snapshot__panel" data-chart-wrapper>
+              <header class="season-snapshot__header">
+                <h3>Global showcase cadence</h3>
+                <p>Neutral site, cup, and finals touchpoints sequenced across the season.</p>
+              </header>
+              <div class="viz-canvas viz-canvas--compact">
+                <canvas data-chart="global-showcase-timeline" aria-describedby="global-showcase-timeline-caption"></canvas>
+              </div>
+              <p id="global-showcase-timeline-caption" class="season-snapshot__caption">
+                Timeline stacks special event families per month to spotlight when storytelling spikes hit.</p>
             </article>
           </div>
         </section>
 
-        <section class="grid-two">
-          <div class="subsection">
-            <h2>Production leaders</h2>
-            <p>
-              Spotlighting the headline acts that dominated usage, versatility, and clutch windows.
-              Pair these notes with your data models to surface broadcast-ready storytelling angles.
-            </p>
-            <ul class="badge-list">
-              <li class="badge">MVP: Shai Gilgeous-Alexander</li>
-              <li class="badge">ROY: Matas Buzelis</li>
-              <li class="badge">DPOY: Anthony Davis</li>
-              <li class="badge">Sixth: Malik Monk</li>
-            </ul>
+        <section class="impact-lab">
+          <div class="section-header">
+            <h2>Impact laboratory</h2>
+            <p class="lead">Dual-view visuals illuminate who owned clutch possessions and how efficiently they closed.</p>
           </div>
-          <figure class="viz-card viz-card--inline viz-card--rewind">
-            <header class="viz-card__title">Clutch time composite</header>
-            <div class="viz-canvas" data-chart-wrapper>
-              <canvas data-chart="clutch-index" aria-describedby="clutch-index-caption"></canvas>
-            </div>
-            <figcaption id="clutch-index-caption" class="viz-card__caption">
-              Composite blends usage-weighted scoring and stops; <span data-stat-clutch-leader>—</span>
-              leads at <span data-stat-clutch-leader-index>—</span> with
-              <span data-stat-clutch-leader-ts>—</span> true shooting.
-            </figcaption>
-          </figure>
+          <div class="impact-lab__grid">
+            <figure class="viz-card viz-card--inline viz-card--rewind">
+              <header class="viz-card__title">Clutch time composite</header>
+              <div class="viz-canvas" data-chart-wrapper>
+                <canvas data-chart="clutch-index" aria-describedby="clutch-index-caption"></canvas>
+              </div>
+              <figcaption id="clutch-index-caption" class="viz-card__caption">
+                Composite blends usage-weighted scoring and stops; <span data-stat-clutch-leader>—</span>
+                leads at <span data-stat-clutch-leader-index>—</span> with
+                <span data-stat-clutch-leader-ts>—</span> true shooting.
+              </figcaption>
+            </figure>
+            <figure class="viz-card viz-card--inline viz-card--rewind">
+              <header class="viz-card__title">Accuracy vs. takeover map</header>
+              <div class="viz-canvas" data-chart-wrapper>
+                <canvas data-chart="clutch-accuracy" aria-describedby="clutch-accuracy-caption"></canvas>
+              </div>
+              <figcaption id="clutch-accuracy-caption" class="viz-card__caption">
+                Scatter positions top closers by composite index and true shooting to expose balance between volume and
+                precision.
+              </figcaption>
+            </figure>
+          </div>
         </section>
 
       </main>
