@@ -48,142 +48,59 @@
       </header>
 
       <main>
-        <section class="team-lab">
-          <div class="team-lab__header">
-            <div class="team-lab__title">
-              <h2>Franchise systems observatory</h2>
-            </div>
-            <div class="team-lab__metrics">
-              <div class="metric-tile">
-                <span class="metric-tile__label">Average rest</span>
-                <span class="metric-tile__value">3.04 days</span>
-              </div>
-              <div class="metric-tile">
-                <span class="metric-tile__label">Total schedule intervals</span>
-                <span class="metric-tile__value">2,779</span>
-              </div>
-              <div class="metric-tile">
-                <span class="metric-tile__label">Historic assist spike</span>
-                <span class="metric-tile__value">53 dimes</span>
-              </div>
-              <div class="metric-tile">
-                <span class="metric-tile__label">Expansion waves</span>
-                <span class="metric-tile__value">6 surges</span>
-              </div>
-            </div>
-            <div class="team-lab__legend">
-              <span class="chip chip--accent">Team performance archives</span>
-              <span class="chip">Active franchise census</span>
-              <span class="chip chip--ghost">Season 24-25 schedule telemetry</span>
+        <section class="team-explorer">
+          <div class="team-explorer__intro">
+            <span class="eyebrow">Conference geography</span>
+            <h2>Explore every franchise through a living map.</h2>
+            <p>
+              Pins are color coded by conference and expand into a live dashboard with scoring, efficiency, and
+              depth insights pulled from the 2024-25 data set.
+            </p>
+            <div class="team-explorer__legend">
+              <span class="legend-chip legend-chip--east">Eastern Conference</span>
+              <span class="legend-chip legend-chip--west">Western Conference</span>
             </div>
           </div>
-          <div class="team-lab__grid viz-grid">
-            <figure class="viz-card viz-card--inline" data-chart-wrapper>
-              <header class="viz-card__title">Historical win rate leaders</header>
-              <div class="viz-canvas">
-                <canvas data-chart="win-leaders" aria-describedby="win-leaders-caption"></canvas>
-              </div>
-              <figcaption id="win-leaders-caption" class="viz-card__caption">
-                Horizontal bars spotlight the ten most efficient franchises ever, trimmed via ranked
-                slicing to keep render times snappy.
-              </figcaption>
-            </figure>
-            <figure class="viz-card viz-card--inline" data-chart-wrapper>
-              <header class="viz-card__title">Schedule strain navigator</header>
-              <div class="viz-canvas">
-                <canvas data-chart="schedule-strain" aria-describedby="schedule-strain-caption"></canvas>
-              </div>
-              <figcaption id="schedule-strain-caption" class="viz-card__caption">
-                Bubble size scales with total games while the axes reveal the balance between
-                back-to-back sets and average rest days for busy clubs.
-              </figcaption>
-            </figure>
-            <figure class="viz-card viz-card--inline" data-chart-wrapper>
-              <header class="viz-card__title">Expansion wave tracker</header>
-              <div class="viz-canvas">
-                <canvas data-chart="expansion-waves" aria-describedby="expansion-waves-caption"></canvas>
-              </div>
-              <figcaption id="expansion-waves-caption" class="viz-card__caption">
-                Filled line shows how franchise counts ballooned across decades, highlighting eighties
-                and tens surges.
-              </figcaption>
-            </figure>
-            <figure class="viz-card viz-card--inline" data-chart-wrapper>
-              <header class="viz-card__title">Offensive identity scatter</header>
-              <div class="viz-canvas">
-                <canvas data-chart="offense-synergy" aria-describedby="offense-synergy-caption"></canvas>
-              </div>
-              <figcaption id="offense-synergy-caption" class="viz-card__caption">
-                Bubble positions merge scoring pace and defensive drag while size encodes assist
-                volume for all-time leaders.
-              </figcaption>
-            </figure>
-            <figure class="viz-card viz-card--inline" data-chart-wrapper>
-              <header class="viz-card__title">Assist fireworks timeline</header>
-              <div class="viz-canvas">
-                <canvas data-chart="assist-fireworks" aria-describedby="assist-fireworks-caption"></canvas>
-              </div>
-              <figcaption id="assist-fireworks-caption" class="viz-card__caption">
-                Ribbon line charts the most prolific dime nights ever recorded and tags the arenas
-                that hosted them.
-              </figcaption>
-            </figure>
-            <figure class="viz-card viz-card--inline" data-chart-wrapper>
-              <header class="viz-card__title">Margin avalanches</header>
-              <div class="viz-canvas">
-                <canvas data-chart="margin-surges" aria-describedby="margin-surges-caption"></canvas>
-              </div>
-              <figcaption id="margin-surges-caption" class="viz-card__caption">
-                Horizontal bars isolate the fiercest single-game blowouts, sorted by sheer point
-                separation.
-              </figcaption>
-            </figure>
-            <figure class="viz-card viz-card--inline" data-chart-wrapper>
-              <header class="viz-card__title">Rest spectrum</header>
-              <div class="viz-canvas">
-                <canvas data-chart="rest-spectrum" aria-describedby="rest-spectrum-caption"></canvas>
-              </div>
-              <figcaption id="rest-spectrum-caption" class="viz-card__caption">
-                Polar slices map how often teams see zero to three-plus days between outings this
-                season.
-              </figcaption>
-            </figure>
-            <figure class="viz-card viz-card--inline" data-chart-wrapper>
-              <header class="viz-card__title">Homestand endurance radar</header>
-              <div class="viz-canvas">
-                <canvas data-chart="homestand-radar" aria-describedby="homestand-radar-caption"></canvas>
-              </div>
-              <figcaption id="homestand-radar-caption" class="viz-card__caption">
-                Radar lob compares longest home and road swings for schedule grinders with extended
-                travel runs.
-              </figcaption>
-            </figure>
-            <figure class="viz-card viz-card--inline" data-chart-wrapper>
-              <header class="viz-card__title">Monthly load river</header>
-              <div class="viz-canvas">
-                <canvas data-chart="monthly-volume" aria-describedby="monthly-volume-caption"></canvas>
-              </div>
-              <figcaption id="monthly-volume-caption" class="viz-card__caption">
-                Layered lines show how preseason heat gives way to regular-season torrents across the
-                calendar.
-              </figcaption>
-            </figure>
-            <figure class="viz-card viz-card--inline" data-chart-wrapper>
-              <header class="viz-card__title">Back-to-back gauntlet</header>
-              <div class="viz-canvas">
-                <canvas data-chart="back-to-back" aria-describedby="back-to-back-caption"></canvas>
-              </div>
-              <figcaption id="back-to-back-caption" class="viz-card__caption">
-                Column chart stacks the franchises carrying the heaviest double-night burdens.
-              </figcaption>
-            </figure>
+
+          <div class="team-explorer__map">
+            <div class="team-map" data-map-canvas aria-label="NBA team geography" aria-live="polite"></div>
           </div>
+
+          <section class="team-detail" data-team-panel aria-live="polite">
+            <div class="team-detail__empty" data-team-placeholder>
+              <h3>Select a franchise marker</h3>
+              <p>Tap or click a team on the map to open its twelve-metric performance profile.</p>
+            </div>
+            <div class="team-detail__body" data-team-body hidden>
+              <header class="team-detail__header">
+                <div class="team-detail__identity">
+                  <span class="team-detail__conference" data-team-conference></span>
+                  <h3 data-team-name></h3>
+                  <p data-team-meta></p>
+                </div>
+                <dl class="team-detail__summary">
+                  <div>
+                    <dt>Games sampled</dt>
+                    <dd data-team-games></dd>
+                  </div>
+                  <div>
+                    <dt>Record</dt>
+                    <dd data-team-record></dd>
+                  </div>
+                  <div>
+                    <dt>Net margin</dt>
+                    <dd data-team-net></dd>
+                  </div>
+                </dl>
+              </header>
+              <div class="team-detail__visuals" data-team-visuals></div>
+            </div>
+          </section>
         </section>
       </main>
 
       <footer class="page-footer">Team stories will anchor the hub's competitive scouting tools.</footer>
     </div>
-    <script src="vendor/chart.umd.js" defer></script>
     <script type="module" src="scripts/teams.js"></script>
   </body>
 </html>
