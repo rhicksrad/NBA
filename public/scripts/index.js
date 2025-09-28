@@ -162,6 +162,99 @@ const preseasonPowerIndex = [
   },
 ];
 
+const injuryAvailabilityPulse = [
+  {
+    team: 'Philadelphia 76ers',
+    player: 'Joel Embiid',
+    role: 'C · MVP 2024',
+    statusLabel: 'Ramp-up',
+    statusLevel: 'monitor',
+    readiness: 68,
+    timeline: 'Targeting Oct 23 vs. Bucks',
+    impact: '+11.5 net swing on/off',
+    note: 'Minute plan keeps Embiid near 28 per night through the first two weeks as his knee load scales.',
+  },
+  {
+    team: 'Los Angeles Clippers',
+    player: 'Kawhi Leonard',
+    role: 'F · Playoff fulcrum',
+    statusLabel: 'Clearance pending',
+    statusLevel: 'caution',
+    readiness: 54,
+    timeline: 'Next evaluation Oct 18',
+    impact: '+7.9 lineup net rating when active',
+    note: 'Quad tendinopathy monitoring could scratch early back-to-backs; staff wants sub-32 minute nights until Thanksgiving.',
+  },
+  {
+    team: 'Memphis Grizzlies',
+    player: 'Ja Morant',
+    role: 'G · Lead creator',
+    statusLabel: 'Full go',
+    statusLevel: 'ready',
+    readiness: 82,
+    timeline: 'Cleared for Oct 28 opener',
+    impact: '+8.4 pace swing when on court',
+    note: 'Memphis is leaning into five-out secondary breaks to keep Morant in downhill lanes without added collisions.',
+  },
+];
+
+const projectedTempoLeaders = [
+  {
+    team: 'Indiana Pacers',
+    tempoScore: 86,
+    paceProjection: 102.9,
+    tempoDelta: 3.6,
+    travelMiles: 36450,
+    backToBacks: 13,
+    note: 'Opening 9 games in 14 nights with Siakam small-ball groups turbocharging drag screens and hit-ahead threes.',
+  },
+  {
+    team: 'Sacramento Kings',
+    tempoScore: 80,
+    paceProjection: 101.7,
+    tempoDelta: 2.8,
+    travelMiles: 35200,
+    backToBacks: 11,
+    note: 'Rebuilt dribble handoff tree has Monk as co-pilot to goose early-clock triples and Fox rim pressure.',
+  },
+  {
+    team: 'San Antonio Spurs',
+    tempoScore: 74,
+    paceProjection: 101.2,
+    tempoDelta: 2.4,
+    travelMiles: 38410,
+    backToBacks: 15,
+    note: 'Wembanyama-at-5 lineups push the ball off the glass; November road swing stress-tests their young guards.',
+  },
+];
+
+const spacingExperimentDeck = [
+  {
+    team: 'Oklahoma City Thunder',
+    spacingLift: 4.6,
+    fiveOutFrequency: 0.48,
+    threePointRate: 0.44,
+    cornerThreeRate: 0.12,
+    note: 'Holmgren trail threes plus Giddey short-roll reads put five-out spacing on nearly half their trips.',
+  },
+  {
+    team: 'New York Knicks',
+    spacingLift: 3.8,
+    fiveOutFrequency: 0.37,
+    threePointRate: 0.39,
+    cornerThreeRate: 0.16,
+    note: 'Brunson-Hartenstein delay actions bend defenses to the corners, juicing kickout volume for Donte and Mikal.',
+  },
+  {
+    team: 'Orlando Magic',
+    spacingLift: 3.2,
+    fiveOutFrequency: 0.33,
+    threePointRate: 0.36,
+    cornerThreeRate: 0.19,
+    note: 'Franz Wagner as a jumbo initiator lifts corner gravity while Suggs hammers relocation triples.',
+  },
+];
+
 async function fetchJsonSafe(url) {
   try {
     const response = await fetch(url);
@@ -180,6 +273,14 @@ function safeText(target, value) {
   if (node && typeof value !== 'undefined' && value !== null) {
     node.textContent = value;
   }
+}
+
+function clampPercent(value) {
+  const numeric = Number(value);
+  if (!Number.isFinite(numeric)) {
+    return 0;
+  }
+  return Math.min(100, Math.max(0, numeric));
 }
 
 function formatDateLabel(dateString, options = { month: 'short', day: 'numeric' }) {
@@ -610,6 +711,258 @@ function renderStoryCards(storyData) {
   });
 }
 
+function renderInjuryPulse() {
+  const container = document.querySelector('[data-injury-report]');
+  const footnote = document.querySelector('[data-injury-footnote]');
+  if (!container) {
+    return;
+  }
+
+  container.innerHTML = '';
+
+  if (!injuryAvailabilityPulse.length) {
+    const placeholder = document.createElement('p');
+    placeholder.className = 'injury-grid__placeholder';
+    placeholder.textContent = 'Injury board updates once medical reports finalize.';
+    container.appendChild(placeholder);
+  } else {
+    injuryAvailabilityPulse.forEach((entry) => {
+      const card = document.createElement('article');
+      card.className = 'injury-card';
+
+      const header = document.createElement('header');
+      header.className = 'injury-card__header';
+
+      const identity = document.createElement('div');
+      identity.className = 'injury-card__identity';
+      identity.appendChild(createTeamLogo(entry.team, 'team-logo team-logo--small'));
+
+      const label = document.createElement('div');
+      label.className = 'injury-card__label';
+      const name = document.createElement('strong');
+      name.textContent = entry.player;
+      label.appendChild(name);
+      if (entry.role) {
+        const role = document.createElement('span');
+        role.textContent = entry.role;
+        label.appendChild(role);
+      }
+      identity.appendChild(label);
+      header.appendChild(identity);
+
+      if (entry.statusLabel) {
+        const status = document.createElement('span');
+        const level = entry.statusLevel === 'ready' || entry.statusLevel === 'monitor' || entry.statusLevel === 'caution'
+          ? entry.statusLevel
+          : 'monitor';
+        status.className = `injury-card__status injury-card__status--${level}`;
+        status.textContent = entry.statusLabel;
+        header.appendChild(status);
+      }
+
+      card.appendChild(header);
+
+      const metrics = document.createElement('dl');
+      metrics.className = 'injury-card__metrics';
+
+      const addMetric = (labelText, valueText) => {
+        if (!labelText || !valueText) return;
+        const row = document.createElement('div');
+        row.className = 'injury-card__metric';
+        const term = document.createElement('dt');
+        term.textContent = labelText;
+        const detail = document.createElement('dd');
+        detail.textContent = valueText;
+        row.append(term, detail);
+        metrics.appendChild(row);
+      };
+
+      addMetric('Timeline', entry.timeline);
+      addMetric('Impact', entry.impact);
+
+      if (metrics.childElementCount) {
+        card.appendChild(metrics);
+      }
+
+      const readiness = clampPercent(entry.readiness);
+      const readinessBar = document.createElement('div');
+      readinessBar.className = 'injury-card__readiness';
+      readinessBar.style.setProperty('--fill', `${readiness}%`);
+      card.appendChild(readinessBar);
+
+      const readinessLabel = document.createElement('span');
+      readinessLabel.className = 'injury-card__readiness-label';
+      readinessLabel.textContent = `Readiness index: ${helpers.formatNumber(readiness, 0)} / 100`;
+      card.appendChild(readinessLabel);
+
+      if (entry.note) {
+        const note = document.createElement('p');
+        note.className = 'injury-card__note';
+        note.textContent = entry.note;
+        card.appendChild(note);
+      }
+
+      container.appendChild(card);
+    });
+  }
+
+  if (footnote) {
+    footnote.textContent = 'Readiness index blends ramp-up participation, travel tolerance, and medical reports—100 signals full go.';
+  }
+}
+
+function renderPaceRadar() {
+  const list = document.querySelector('[data-pace-radar]');
+  const footnote = document.querySelector('[data-pace-footnote]');
+  if (!list) {
+    return;
+  }
+
+  list.innerHTML = '';
+
+  if (!projectedTempoLeaders.length) {
+    const placeholder = document.createElement('li');
+    placeholder.className = 'tempo-gauge__placeholder';
+    placeholder.textContent = 'Tempo board updates once schedule modeling completes.';
+    list.appendChild(placeholder);
+  } else {
+    projectedTempoLeaders.forEach((entry, index) => {
+      const item = document.createElement('li');
+      item.className = 'tempo-gauge__item';
+
+      const header = document.createElement('header');
+      header.className = 'tempo-gauge__header';
+
+      const rank = document.createElement('span');
+      rank.className = 'tempo-gauge__rank';
+      rank.textContent = String(index + 1);
+      header.appendChild(rank);
+
+      const identity = document.createElement('div');
+      identity.className = 'tempo-gauge__identity';
+      identity.appendChild(createTeamLogo(entry.team, 'team-logo team-logo--small'));
+      const team = document.createElement('p');
+      team.className = 'tempo-gauge__team';
+      team.textContent = entry.team;
+      identity.appendChild(team);
+      header.appendChild(identity);
+
+      const delta = Number(entry.tempoDelta) || 0;
+      const tag = document.createElement('span');
+      tag.className = `tempo-gauge__tag ${delta >= 2 ? 'tempo-gauge__tag--surge' : 'tempo-gauge__tag--steady'}`;
+      tag.textContent = `${delta >= 0 ? '+' : '−'}${helpers.formatNumber(Math.abs(delta), 1)} possessions`;
+      header.appendChild(tag);
+
+      item.appendChild(header);
+
+      const meter = document.createElement('div');
+      meter.className = 'tempo-gauge__meter';
+      meter.style.setProperty('--fill', `${clampPercent(entry.tempoScore)}%`);
+      const meterLabel = document.createElement('span');
+      meterLabel.textContent = `${helpers.formatNumber(entry.paceProjection, 1)} pace projection`;
+      meter.appendChild(meterLabel);
+      item.appendChild(meter);
+
+      const meta = document.createElement('p');
+      meta.className = 'tempo-gauge__meta';
+      const travel = Number(entry.travelMiles) || 0;
+      const miles = helpers.formatNumber(travel / 1000, 1);
+      meta.textContent = `Road miles: ${miles}k · Back-to-backs: ${helpers.formatNumber(entry.backToBacks ?? 0, 0)}`;
+      item.appendChild(meta);
+
+      if (entry.note) {
+        const note = document.createElement('p');
+        note.className = 'tempo-gauge__note';
+        note.textContent = entry.note;
+        item.appendChild(note);
+      }
+
+      list.appendChild(item);
+    });
+  }
+
+  if (footnote) {
+    footnote.textContent = 'Tempo pressure score normalizes 95-105 possessions per 48; the meter peaks when projections hit 105.';
+  }
+}
+
+function renderSpacingLab() {
+  const lab = document.querySelector('[data-spacing-lab]');
+  if (!lab) {
+    return;
+  }
+
+  lab.innerHTML = '';
+
+  if (!spacingExperimentDeck.length) {
+    const placeholder = document.createElement('p');
+    placeholder.className = 'spacing-lab__placeholder';
+    placeholder.textContent = 'Spacing experiments post once tracking installs new shot-mapping layers.';
+    lab.appendChild(placeholder);
+    return;
+  }
+
+  spacingExperimentDeck.forEach((entry) => {
+    const card = document.createElement('article');
+    card.className = 'spacing-card';
+
+    const header = document.createElement('header');
+    header.className = 'spacing-card__header';
+
+    const identity = document.createElement('div');
+    identity.className = 'spacing-card__identity';
+    identity.appendChild(createTeamLogo(entry.team, 'team-logo team-logo--small'));
+    const team = document.createElement('p');
+    team.className = 'spacing-card__team';
+    team.textContent = entry.team;
+    identity.appendChild(team);
+    header.appendChild(identity);
+
+    const lift = Number(entry.spacingLift) || 0;
+    const tag = document.createElement('span');
+    tag.className = 'spacing-card__tag';
+    tag.textContent = `${lift >= 0 ? '+' : '−'}${helpers.formatNumber(Math.abs(lift), 1)} pts/100 lift`;
+    header.appendChild(tag);
+
+    card.appendChild(header);
+
+    const metrics = document.createElement('dl');
+    metrics.className = 'spacing-card__metrics';
+
+    const addMetric = (labelText, percent, formatter) => {
+      if (!labelText || !Number.isFinite(percent)) return;
+      const row = document.createElement('div');
+      row.className = 'spacing-card__metric';
+      const term = document.createElement('dt');
+      term.textContent = labelText;
+      const detail = document.createElement('dd');
+      const value = document.createElement('span');
+      value.textContent = formatter(percent);
+      const bar = document.createElement('span');
+      bar.className = 'spacing-card__bar';
+      bar.style.setProperty('--fill', `${clampPercent(percent * 100)}%`);
+      detail.append(value, bar);
+      row.append(term, detail);
+      metrics.appendChild(row);
+    };
+
+    addMetric('Five-out frequency', Number(entry.fiveOutFrequency ?? 0), (value) => `${helpers.formatNumber(value * 100, 1)}% of trips`);
+    addMetric('Projected 3P rate', Number(entry.threePointRate ?? 0), (value) => `${helpers.formatNumber(value * 100, 1)}% of FGA`);
+    addMetric('Corner 3 share', Number(entry.cornerThreeRate ?? 0), (value) => `${helpers.formatNumber(value * 100, 1)}% of attempts`);
+
+    card.appendChild(metrics);
+
+    if (entry.note) {
+      const note = document.createElement('p');
+      note.className = 'spacing-card__note';
+      note.textContent = entry.note;
+      card.appendChild(note);
+    }
+
+    lab.appendChild(card);
+  });
+}
+
 async function resolveScheduleSource() {
   const fallback = 'data/season_25_26_schedule.json';
   try {
@@ -816,6 +1169,9 @@ async function bootstrap() {
     fetchJsonSafe('data/preseason_openers.json'),
   ]);
 
+  renderInjuryPulse();
+  renderPaceRadar();
+  renderSpacingLab();
   hydrateHero(teamData);
   renderSeasonLead(scheduleData);
   renderPreseasonTour(preseasonOpeners);
