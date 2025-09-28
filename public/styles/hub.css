@@ -2759,6 +2759,10 @@ section h2 { margin-top: 0; font-size: clamp(1.35rem, 3vw, 1.8rem); letter-spaci
   align-items: stretch;
 }
 
+.history-mosaic--atlas .timeline-panel {
+  grid-column: 1 / -1;
+}
+
 .history-mosaic--triptych {
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
 }
