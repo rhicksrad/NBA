@@ -1,0 +1,149 @@
+{
+  "generatedAt": "2025-10-12T08:30:00Z",
+  "sampleSize": 487,
+  "momentumAtlas": {
+    "teams": [
+      {
+        "team": "Oklahoma City Thunder",
+        "abbreviation": "OKC",
+        "firstHalfMargin": 3.8,
+        "secondHalfMargin": 9.4,
+        "largestRun": 23,
+        "gamesTracked": 74
+      },
+      {
+        "team": "Indiana Pacers",
+        "abbreviation": "IND",
+        "firstHalfMargin": 1.6,
+        "secondHalfMargin": 7.2,
+        "largestRun": 19,
+        "gamesTracked": 71
+      },
+      {
+        "team": "Boston Celtics",
+        "abbreviation": "BOS",
+        "firstHalfMargin": 6.2,
+        "secondHalfMargin": 8.1,
+        "largestRun": 17,
+        "gamesTracked": 68
+      },
+      {
+        "team": "Minnesota Timberwolves",
+        "abbreviation": "MIN",
+        "firstHalfMargin": 2.4,
+        "secondHalfMargin": 7.9,
+        "largestRun": 21,
+        "gamesTracked": 69
+      },
+      {
+        "team": "Sacramento Kings",
+        "abbreviation": "SAC",
+        "firstHalfMargin": -1.2,
+        "secondHalfMargin": 8.6,
+        "largestRun": 26,
+        "gamesTracked": 66
+      },
+      {
+        "team": "New Orleans Pelicans",
+        "abbreviation": "NOP",
+        "firstHalfMargin": 0.4,
+        "secondHalfMargin": 5.8,
+        "largestRun": 16,
+        "gamesTracked": 64
+      },
+      {
+        "team": "Phoenix Suns",
+        "abbreviation": "PHX",
+        "firstHalfMargin": 4.8,
+        "secondHalfMargin": 2.1,
+        "largestRun": 14,
+        "gamesTracked": 75
+      }
+    ]
+  },
+  "travelTax": {
+    "segments": [
+      {
+        "label": "Pacific Pinball",
+        "miles": 4876,
+        "games": 4,
+        "days": 6,
+        "netRating": -7.5
+      },
+      {
+        "label": "Rust Belt Blitz",
+        "miles": 3014,
+        "games": 3,
+        "days": 5,
+        "netRating": -6.1
+      },
+      {
+        "label": "Gulf Streamer",
+        "miles": 2140,
+        "games": 3,
+        "days": 4,
+        "netRating": 4.3
+      },
+      {
+        "label": "Mountain Marathon",
+        "miles": 3580,
+        "games": 5,
+        "days": 7,
+        "netRating": -3.6
+      },
+      {
+        "label": "Atlantic Echo",
+        "miles": 1675,
+        "games": 4,
+        "days": 5,
+        "netRating": 5.1
+      }
+    ]
+  },
+  "crowdPulse": {
+    "arenas": [
+      {
+        "arena": "Paycom Center",
+        "team": "Oklahoma City Thunder",
+        "decibelSurge": 6.8,
+        "comebackRate": 0.64,
+        "homeWinPct": 0.72
+      },
+      {
+        "arena": "Gainbridge Fieldhouse",
+        "team": "Indiana Pacers",
+        "decibelSurge": 5.9,
+        "comebackRate": 0.58,
+        "homeWinPct": 0.69
+      },
+      {
+        "arena": "TD Garden",
+        "team": "Boston Celtics",
+        "decibelSurge": 6.1,
+        "comebackRate": 0.55,
+        "homeWinPct": 0.78
+      },
+      {
+        "arena": "Target Center",
+        "team": "Minnesota Timberwolves",
+        "decibelSurge": 5.4,
+        "comebackRate": 0.52,
+        "homeWinPct": 0.74
+      },
+      {
+        "arena": "Golden 1 Center",
+        "team": "Sacramento Kings",
+        "decibelSurge": 6.5,
+        "comebackRate": 0.62,
+        "homeWinPct": 0.68
+      },
+      {
+        "arena": "Footprint Center",
+        "team": "Phoenix Suns",
+        "decibelSurge": 4.7,
+        "comebackRate": 0.49,
+        "homeWinPct": 0.65
+      }
+    ]
+  }
+}
