@@ -114,9 +114,22 @@
         color: var(--text-subtle);
       }
 
-      .chart-card canvas {
+      .chart-card__canvas {
+        position: relative;
+        border-radius: var(--radius-md);
+        background: color-mix(in srgb, var(--surface-alt) 88%, var(--preview-tint) 12%);
+        border: 1px solid color-mix(in srgb, var(--border) 55%, transparent);
+        min-height: clamp(220px, 30vw, 260px);
+        display: flex;
+        align-items: stretch;
+        overflow: hidden;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.48);
+      }
+
+      .chart-card__canvas canvas {
         width: 100%;
-        height: clamp(220px, 30vw, 270px);
+        height: 100%;
+        display: block;
       }
 
       .preview-copy {
