@@ -32,20 +32,6 @@
   - `PlayerStatistics.7z` for career, single-game, and season leaderboards.
 - **Outputs:** `public/data/players_overview.json`, `public/data/historic_games.json`, `public/data/team_performance.json`, `public/data/player_leaders.json`, and `public/data/player_season_insights.json`.
 - **Why it matters:** Keeps the browser payload tiny while ensuring the MVP reflects every dataset shipped with the repository.
-
-### GOAT birthplace atlas (history spotlight)
-
-- **Description:** Supplies the state and international legends spotlight on the `public/history.html` page with pre-ranked leaderboards of the best ten NBA players born in each location.
-- **How to regenerate:**
-  1. Ensure the CSV extracts in `data/nba_birthplaces.csv` and `data/nba_draft_birthplaces.csv` are populated. They are lightweight, two-column slices (`player`, `birthplace`) produced from Basketball-Reference rosters and draft archives.
-  2. Run `python scripts/generate_goat_birth_index.py` from the repository root.
-  3. Commit the refreshed `public/data/goat_birth_index.json`, `public/data/state_birth_legends.json`, and `public/data/world_birth_legends.json` outputs.
-- **Outputs:**
-  - `public/data/goat_birth_index.json` (canonical lookup of GOAT rankings joined to normalized birthplaces),
-  - `public/data/state_birth_legends.json` (United States atlas data with `topPlayers` arrays), and
-  - `public/data/world_birth_legends.json` (international atlas data with `topPlayers`).
-- **Why it matters:** Prevents shipping heavyweight spreadsheets while keeping the historical atlas reproducible from transparent, version-controlled text sources.
-
 ### Team profile snapshot (map experience)
 
 - **Description:** All-time franchise dashboards backing the map interaction on `public/teams.html`, including wins, losses, and twelve per-game benchmarks.
