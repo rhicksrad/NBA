@@ -484,7 +484,16 @@ registerCharts([
             tooltip: {
               callbacks: {
                 label(context) {
-                  return `${context.label}: ${helpers.formatNumber(context.parsed, 0)} intervals`;
+                  const parsed = context.parsed;
+                  const value =
+                    typeof parsed === 'number'
+                      ? parsed
+                      : typeof parsed?.r === 'number'
+                        ? parsed.r
+                        : typeof context.raw === 'number'
+                          ? context.raw
+                          : 0;
+                  return `${context.label}: ${helpers.formatNumber(value, 0)} intervals`;
                 },
               },
             },
