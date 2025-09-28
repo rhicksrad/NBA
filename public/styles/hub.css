@@ -3012,7 +3012,11 @@ section h2 { margin-top: 0; font-size: clamp(1.35rem, 3vw, 1.8rem); letter-spaci
   color: rgba(17, 86, 214, 0.78);
 }
 .metric-tile__value { font-size: 1.05rem; font-weight: 700; color: var(--navy); }
-.viz-grid { display: grid; gap: 1.5rem; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+.viz-grid {
+  display: grid;
+  gap: clamp(0.75rem, 2.2vw, 1.15rem);
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+}
 .players-lab { display: grid; gap: clamp(2.4rem, 5vw, 3.8rem); margin-bottom: 4rem; }
 .players-lab__section { display: grid; gap: 1.5rem; }
 .players-lab__section-header { display: grid; gap: 0.6rem; max-width: 660px; }
@@ -3025,9 +3029,14 @@ section h2 { margin-top: 0; font-size: clamp(1.35rem, 3vw, 1.8rem); letter-spaci
 }
 .players-lab__grid { align-items: stretch; }
 .viz-card {
-  position: relative; display: grid; gap: 0.9rem; padding: 1.2rem 1.3rem 1.4rem; border-radius: var(--radius-md);
+  position: relative;
+  display: grid;
+  gap: 0.8rem;
+  padding: clamp(0.9rem, 1.8vw, 1.15rem) clamp(1rem, 2.4vw, 1.35rem) clamp(1.05rem, 2.6vw, 1.4rem);
+  border-radius: var(--radius-md);
   border: 1px solid color-mix(in srgb, var(--border) 75%, transparent);
-  background: linear-gradient(160deg, rgba(17, 86, 214, 0.08), rgba(244, 181, 63, 0.1)); box-shadow: var(--shadow-soft);
+  background: linear-gradient(160deg, rgba(17, 86, 214, 0.08), rgba(244, 181, 63, 0.1));
+  box-shadow: var(--shadow-soft);
 }
 .viz-card--rewind {
   overflow: hidden;
@@ -3050,10 +3059,10 @@ section h2 { margin-top: 0; font-size: clamp(1.35rem, 3vw, 1.8rem); letter-spaci
   grid-template-rows: auto minmax(0, 1fr) auto;
 }
 .viz-card__title { margin: 0; font-size: 1.05rem; font-weight: 700; color: var(--navy); }
-.viz-card__caption { margin: 0; font-size: 0.92rem; color: var(--text-subtle); }
+.viz-card__caption { margin: 0; font-size: 0.9rem; color: var(--text-subtle); }
 .viz-canvas {
   position: relative;
-  min-height: 240px;
+  min-height: clamp(260px, 32vw, 360px);
   width: 100%;
   overflow: hidden;
 }
