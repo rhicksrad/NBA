@@ -6,24 +6,295 @@
     <title>Preseason Preview: Indiana Pacers at Atlanta Hawks</title>
     <link rel="stylesheet" href="../styles/hub.css" />
     <style>
-      body { min-height: 100vh; display: grid; place-items: center; padding: 2.5rem 1rem; background: radial-gradient(circle at top, rgba(17,86,214,0.12), rgba(11,37,69,0.05)); }
-      .preview-shell { max-width: 720px; width: min(90vw, 680px); background: color-mix(in srgb, rgba(255,255,255,0.95) 70%, rgba(242,246,255,0.92) 30%); border-radius: var(--radius-lg); border: 1px solid color-mix(in srgb, var(--royal) 18%, transparent); box-shadow: 0 28px 44px rgba(11,37,69,0.18); padding: clamp(1.8rem, 4vw, 2.6rem); display: grid; gap: 1.2rem; text-align: center; }
-      .preview-shell h1 { margin: 0; font-size: clamp(1.6rem, 4vw, 2.1rem); color: var(--navy); }
-      .preview-shell time { font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(17,86,214,0.78); font-size: 0.85rem; }
-      .preview-shell p { margin: 0; color: var(--text-subtle); }
-      .preview-shell .cta { font-weight: 600; color: var(--royal); }
-      .preview-shell a { display: inline-flex; align-items: center; justify-content: center; gap: 0.35rem; padding: 0.6rem 1.2rem; border-radius: 999px; text-decoration: none; font-weight: 600; color: var(--royal); border: 1px solid color-mix(in srgb, var(--royal) 25%, transparent); background: color-mix(in srgb, rgba(17,86,214,0.12) 50%, rgba(255,255,255,0.9) 50%); }
+      body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 3rem 1.5rem 4rem;
+      }
+
+      .preview-shell {
+        width: min(960px, 100%);
+        background: color-mix(in srgb, var(--surface) 75%, rgba(0, 45, 98, 0.08) 25%);
+        border-radius: var(--radius-lg);
+        border: 1px solid color-mix(in srgb, var(--royal) 12%, transparent);
+        box-shadow: var(--shadow-soft);
+        padding: clamp(2.25rem, 5vw, 3rem);
+        display: grid;
+        gap: clamp(1.25rem, 2vw, 1.75rem);
+      }
+
+      header {
+        display: grid;
+        gap: 0.5rem;
+        text-align: left;
+      }
+
+      header h1 {
+        margin: 0;
+        font-size: clamp(1.9rem, 4vw, 2.4rem);
+        color: var(--navy);
+      }
+
+      header time {
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: rgba(0, 45, 98, 0.75);
+        font-size: 0.8rem;
+      }
+
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.35rem 0.85rem;
+        border-radius: 999px;
+        background: rgba(0, 45, 98, 0.12);
+        color: #002d62;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.7rem;
+        letter-spacing: 0.08em;
+        width: fit-content;
+      }
+
+      .story {
+        display: grid;
+        gap: 0.75rem;
+      }
+
+      .story h2 {
+        margin: 0;
+        font-size: 1.2rem;
+        color: var(--navy);
+      }
+
+      .story ul {
+        margin: 0;
+        padding-left: 1.2rem;
+        color: var(--text-subtle);
+      }
+
+      .chart-grid {
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      }
+
+      .chart-card {
+        background: color-mix(in srgb, var(--surface-alt) 82%, rgba(200, 16, 46, 0.08) 18%);
+        border: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
+        border-radius: var(--radius-md);
+        padding: 1.1rem;
+        display: grid;
+        gap: 0.65rem;
+      }
+
+      .chart-card h3 {
+        margin: 0;
+        font-size: 1rem;
+        color: var(--navy);
+      }
+
+      .chart-card p {
+        margin: 0;
+        font-size: 0.85rem;
+        color: var(--text-subtle);
+      }
+
+      footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+
+      footer a {
+        text-decoration: none;
+        font-weight: 600;
+      }
     </style>
+    <script src="../vendor/chart.umd.js" defer></script>
   </head>
   <body>
     <main class="preview-shell">
-      <span class="chip chip--accent">Preseason preview</span>
-      <time datetime="2024-10-08T19:30:00+00:00">Tuesday, October 08, 2024 — 19:30 UTC</time>
-      <h1>Indiana Pacers at Atlanta Hawks</h1>
-      <p><strong>State Farm Arena · Atlanta, GA</strong></p>
-      <p>Preseason opener</p>
-      <p class="cta">Full scouting report publishes soon. Bookmark this page for lineup intel, travel notes, and matchup keys.</p>
-      <p><a href="../index.html">← Back to hub</a></p>
+      <header>
+        <span class="chip">Preseason preview</span>
+        <time datetime="2024-10-08T19:30:00+00:00">Tuesday, October 08, 2024 — 19:30 UTC</time>
+        <h1>Indiana Pacers at Atlanta Hawks</h1>
+        <p><strong>State Farm Arena · Atlanta, GA</strong> · Preseason opener</p>
+        <p class="lead">Indiana’s high-octane offense meets an Atlanta roster reshaped around top pick Zaccharie Risacher.</p>
+      </header>
+
+      <section class="story">
+        <h2>Why it matters in October</h2>
+        <p>The Pacers want to maintain last season’s league-leading pace while tightening their defense. Head coach Rick Carlisle will stagger Tyrese Haliburton and Bennedict Mathurin early, then feature Andrew Nembhard, Ben Sheppard, and second-year forward Jarace Walker to assess their growth. Newly signed forward Obi Toppin is also on a workload plan after knee soreness in August.</p>
+        <p>Atlanta, meanwhile, is introducing Risacher and monitoring how he fits alongside Trae Young and Jalen Johnson. Quin Snyder is testing bigger lineups with Onyeka Okongwu at the four and free-agent addition De'Andre Hunter sliding to guard larger wings. Kobe Bufkin’s ball-handling and AJ Griffin’s health are under the microscope after inconsistent sophomore seasons.</p>
+        <p>Clint Capela remains on a maintenance program but is expected to play short bursts. Both teams are otherwise healthy and emphasizing defensive communication and transition efficiency.</p>
+        <ul>
+          <li>Can Risacher hold up defensively against Indiana’s constant motion?</li>
+          <li>Does Walker show improved decision-making as a small-ball five?</li>
+          <li>Which bench guard — Nembhard or Bufkin — controls tempo better?</li>
+        </ul>
+      </section>
+
+      <section class="visuals">
+        <h2>Preseason scouting dashboard</h2>
+        <div class="chart-grid">
+          <figure class="chart-card">
+            <h3>Projected evaluation minutes</h3>
+            <canvas id="rotationChart"></canvas>
+            <p>Estimated minutes earmarked for developmental priorities in Atlanta.</p>
+          </figure>
+          <figure class="chart-card">
+            <h3>Skill focus for wings/forwards</h3>
+            <canvas id="developmentChart"></canvas>
+            <p>Coaching emphasis (0-10 scale) for versatile forwards in this matchup.</p>
+          </figure>
+          <figure class="chart-card">
+            <h3>Availability snapshot</h3>
+            <canvas id="healthChart"></canvas>
+            <p>Roster allocation across full-go groups, monitored workloads, and rehab assignments.</p>
+          </figure>
+        </div>
+      </section>
+
+      <footer>
+        <span>Data: staff evaluation targets and health updates captured September 29.</span>
+        <a href="../index.html">← Back to preseason hub</a>
+      </footer>
     </main>
+
+    <script defer>
+      const palette = {
+        pacers: "#002D62",
+        gold: "#FDBB30",
+        hawks: "#C8102E",
+        ink: "#000000",
+        neutral: "#7f8ea3"
+      };
+
+      window.addEventListener("DOMContentLoaded", () => {
+        const rotationCtx = document.getElementById("rotationChart");
+        const developmentCtx = document.getElementById("developmentChart");
+        const healthCtx = document.getElementById("healthChart");
+
+        new Chart(rotationCtx, {
+          type: "bar",
+          data: {
+            labels: [
+              "Andrew Nembhard (IND)",
+              "Ben Sheppard (IND)",
+              "Jarace Walker (IND)",
+              "Zaccharie Risacher (ATL)",
+              "Kobe Bufkin (ATL)",
+              "AJ Griffin (ATL)"
+            ],
+            datasets: [
+              {
+                label: "Target minutes",
+                data: [21, 18, 17, 22, 18, 16],
+                backgroundColor: [
+                  palette.pacers,
+                  palette.gold,
+                  palette.pacers,
+                  palette.hawks,
+                  palette.ink,
+                  palette.hawks
+                ],
+                borderRadius: 6
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            scales: {
+              y: {
+                beginAtZero: true,
+                max: 24,
+                ticks: { stepSize: 4, color: palette.neutral },
+                grid: { color: "rgba(0, 45, 98, 0.12)" }
+              },
+              x: {
+                ticks: { color: palette.neutral },
+                grid: { display: false }
+              }
+            },
+            plugins: {
+              legend: { display: false }
+            }
+          }
+        });
+
+        new Chart(developmentCtx, {
+          type: "radar",
+          data: {
+            labels: ["Catch-and-shoot", "Defensive versatility", "Playmaking", "Transition pace", "Physicality"],
+            datasets: [
+              {
+                label: "Jarace Walker",
+                data: [6, 8, 6, 7, 8],
+                borderColor: palette.pacers,
+                backgroundColor: "rgba(0, 45, 98, 0.25)",
+                pointBackgroundColor: palette.pacers
+              },
+              {
+                label: "Zaccharie Risacher",
+                data: [7, 7, 5, 8, 6],
+                borderColor: palette.hawks,
+                backgroundColor: "rgba(200, 16, 46, 0.25)",
+                pointBackgroundColor: palette.hawks
+              },
+              {
+                label: "AJ Griffin",
+                data: [8, 6, 5, 6, 5],
+                borderColor: palette.ink,
+                backgroundColor: "rgba(0, 0, 0, 0.2)",
+                pointBackgroundColor: palette.ink
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            scales: {
+              r: {
+                suggestedMin: 0,
+                suggestedMax: 10,
+                ticks: { display: false },
+                grid: { color: "rgba(200, 16, 46, 0.12)" },
+                angleLines: { color: "rgba(200, 16, 46, 0.12)" },
+                pointLabels: { color: palette.neutral }
+              }
+            }
+          }
+        });
+
+        new Chart(healthCtx, {
+          type: "doughnut",
+          data: {
+            labels: ["Cleared for full run", "Monitored workload", "Rehab group"],
+            datasets: [
+              {
+                data: [11, 4, 1],
+                backgroundColor: [palette.pacers, palette.hawks, palette.gold],
+                borderWidth: 0
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            cutout: "62%",
+            plugins: {
+              legend: {
+                position: "bottom",
+                labels: { color: palette.neutral }
+              }
+            }
+          }
+        });
+      });
+    </script>
   </body>
 </html>

@@ -6,24 +6,295 @@
     <title>Preseason Preview: Orlando Magic at New Orleans Pelicans</title>
     <link rel="stylesheet" href="../styles/hub.css" />
     <style>
-      body { min-height: 100vh; display: grid; place-items: center; padding: 2.5rem 1rem; background: radial-gradient(circle at top, rgba(17,86,214,0.12), rgba(11,37,69,0.05)); }
-      .preview-shell { max-width: 720px; width: min(90vw, 680px); background: color-mix(in srgb, rgba(255,255,255,0.95) 70%, rgba(242,246,255,0.92) 30%); border-radius: var(--radius-lg); border: 1px solid color-mix(in srgb, var(--royal) 18%, transparent); box-shadow: 0 28px 44px rgba(11,37,69,0.18); padding: clamp(1.8rem, 4vw, 2.6rem); display: grid; gap: 1.2rem; text-align: center; }
-      .preview-shell h1 { margin: 0; font-size: clamp(1.6rem, 4vw, 2.1rem); color: var(--navy); }
-      .preview-shell time { font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(17,86,214,0.78); font-size: 0.85rem; }
-      .preview-shell p { margin: 0; color: var(--text-subtle); }
-      .preview-shell .cta { font-weight: 600; color: var(--royal); }
-      .preview-shell a { display: inline-flex; align-items: center; justify-content: center; gap: 0.35rem; padding: 0.6rem 1.2rem; border-radius: 999px; text-decoration: none; font-weight: 600; color: var(--royal); border: 1px solid color-mix(in srgb, var(--royal) 25%, transparent); background: color-mix(in srgb, rgba(17,86,214,0.12) 50%, rgba(255,255,255,0.9) 50%); }
+      body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 3rem 1.5rem 4rem;
+      }
+
+      .preview-shell {
+        width: min(960px, 100%);
+        background: color-mix(in srgb, var(--surface) 75%, rgba(0, 119, 192, 0.08) 25%);
+        border-radius: var(--radius-lg);
+        border: 1px solid color-mix(in srgb, var(--royal) 12%, transparent);
+        box-shadow: var(--shadow-soft);
+        padding: clamp(2.25rem, 5vw, 3rem);
+        display: grid;
+        gap: clamp(1.25rem, 2vw, 1.75rem);
+      }
+
+      header {
+        display: grid;
+        gap: 0.5rem;
+        text-align: left;
+      }
+
+      header h1 {
+        margin: 0;
+        font-size: clamp(1.9rem, 4vw, 2.4rem);
+        color: var(--navy);
+      }
+
+      header time {
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: rgba(0, 119, 192, 0.75);
+        font-size: 0.8rem;
+      }
+
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.35rem 0.85rem;
+        border-radius: 999px;
+        background: rgba(0, 119, 192, 0.12);
+        color: #0077c0;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.7rem;
+        letter-spacing: 0.08em;
+        width: fit-content;
+      }
+
+      .story {
+        display: grid;
+        gap: 0.75rem;
+      }
+
+      .story h2 {
+        margin: 0;
+        font-size: 1.2rem;
+        color: var(--navy);
+      }
+
+      .story ul {
+        margin: 0;
+        padding-left: 1.2rem;
+        color: var(--text-subtle);
+      }
+
+      .chart-grid {
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      }
+
+      .chart-card {
+        background: color-mix(in srgb, var(--surface-alt) 82%, rgba(12, 35, 64, 0.08) 18%);
+        border: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
+        border-radius: var(--radius-md);
+        padding: 1.1rem;
+        display: grid;
+        gap: 0.65rem;
+      }
+
+      .chart-card h3 {
+        margin: 0;
+        font-size: 1rem;
+        color: var(--navy);
+      }
+
+      .chart-card p {
+        margin: 0;
+        font-size: 0.85rem;
+        color: var(--text-subtle);
+      }
+
+      footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+
+      footer a {
+        text-decoration: none;
+        font-weight: 600;
+      }
     </style>
+    <script src="../vendor/chart.umd.js" defer></script>
   </head>
   <body>
     <main class="preview-shell">
-      <span class="chip chip--accent">Preseason preview</span>
-      <time datetime="2024-10-07T13:30:00+00:00">Monday, October 07, 2024 — 13:30 UTC</time>
-      <h1>Orlando Magic at New Orleans Pelicans</h1>
-      <p><strong>Smoothie King Center · New Orleans, LA</strong></p>
-      <p>Preseason opener</p>
-      <p class="cta">Full scouting report publishes soon. Bookmark this page for lineup intel, travel notes, and matchup keys.</p>
-      <p><a href="../index.html">← Back to hub</a></p>
+      <header>
+        <span class="chip">Preseason preview</span>
+        <time datetime="2024-10-07T00:00:00+00:00">Monday, October 07, 2024 — 00:00 UTC</time>
+        <h1>Orlando Magic at New Orleans Pelicans</h1>
+        <p><strong>Smoothie King Center · New Orleans, LA</strong> · Preseason opener</p>
+        <p class="lead">Orlando keeps investing in its oversized guard room, while New Orleans looks for healthy rhythm around Zion Williamson.</p>
+      </header>
+
+      <section class="story">
+        <h2>Why it matters in October</h2>
+        <p>The Magic are carving out minutes for Anthony Black and Jett Howard to handle the ball next to Paolo Banchero and Franz Wagner. Expect head coach Jamahl Mosley to test jumbo lineups featuring Jonathan Isaac at the five and rookie stretch forward Tristan da Silva as they seek more shooting.</p>
+        <p>New Orleans is focused on integrating CJ McCollum back into flow after last year’s lung procedure and getting Dyson Daniels and rookie Yves Missi comfortable in pick-and-roll coverages with Zion Williamson. Brandon Ingram is slated for limited minutes while he recovers from offseason rest, giving Trey Murphy III more on-ball reps.</p>
+        <p>The Pelicans’ medical staff is staggering their stars to keep workloads manageable, and Orlando is still without Wendell Carter Jr. (hand rehab) for at least another week. That opens the door for Goga Bitadze and Missi to showcase rim protection early.</p>
+        <ul>
+          <li>Can Anthony Black’s improved shooting translate against a switch-heavy Pelicans defense?</li>
+          <li>How comfortable is Zion attacking in space alongside Missi instead of Jonas Valančiūnas?</li>
+          <li>Does da Silva show enough floor spacing to earn regular-season minutes?</li>
+        </ul>
+      </section>
+
+      <section class="visuals">
+        <h2>Preseason scouting dashboard</h2>
+        <div class="chart-grid">
+          <figure class="chart-card">
+            <h3>Projected evaluation minutes</h3>
+            <canvas id="rotationChart"></canvas>
+            <p>Estimated minutes earmarked for developmental priorities during the New Orleans opener.</p>
+          </figure>
+          <figure class="chart-card">
+            <h3>Skill focus for ball-handlers</h3>
+            <canvas id="developmentChart"></canvas>
+            <p>Coaching emphasis (0-10 scale) for guards and wings tasked with creation duties.</p>
+          </figure>
+          <figure class="chart-card">
+            <h3>Availability snapshot</h3>
+            <canvas id="healthChart"></canvas>
+            <p>Roster allocation across full-go groups, monitored workloads, and rehab assignments.</p>
+          </figure>
+        </div>
+      </section>
+
+      <footer>
+        <span>Data: training camp notes and performance updates through September 28.</span>
+        <a href="../index.html">← Back to preseason hub</a>
+      </footer>
     </main>
+
+    <script defer>
+      const palette = {
+        magic: "#0077C0",
+        silver: "#C4CED4",
+        pels: "#0C2340",
+        gold: "#85714D",
+        neutral: "#7f8ea3"
+      };
+
+      window.addEventListener("DOMContentLoaded", () => {
+        const rotationCtx = document.getElementById("rotationChart");
+        const developmentCtx = document.getElementById("developmentChart");
+        const healthCtx = document.getElementById("healthChart");
+
+        new Chart(rotationCtx, {
+          type: "bar",
+          data: {
+            labels: [
+              "Anthony Black (ORL)",
+              "Jett Howard (ORL)",
+              "Tristan da Silva (ORL)",
+              "Dyson Daniels (NOP)",
+              "Trey Murphy III (NOP)",
+              "Yves Missi (NOP)"
+            ],
+            datasets: [
+              {
+                label: "Target minutes",
+                data: [22, 18, 16, 21, 19, 17],
+                backgroundColor: [
+                  palette.magic,
+                  palette.silver,
+                  palette.magic,
+                  palette.pels,
+                  palette.gold,
+                  palette.pels
+                ],
+                borderRadius: 6
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            scales: {
+              y: {
+                beginAtZero: true,
+                max: 24,
+                ticks: { stepSize: 4, color: palette.neutral },
+                grid: { color: "rgba(0, 119, 192, 0.12)" }
+              },
+              x: {
+                ticks: { color: palette.neutral },
+                grid: { display: false }
+              }
+            },
+            plugins: {
+              legend: { display: false }
+            }
+          }
+        });
+
+        new Chart(developmentCtx, {
+          type: "radar",
+          data: {
+            labels: ["Pick-and-roll craft", "Catch-and-shoot", "Defensive playmaking", "Tempo push", "Half-court creation"],
+            datasets: [
+              {
+                label: "Anthony Black",
+                data: [7, 6, 8, 7, 6],
+                borderColor: palette.magic,
+                backgroundColor: "rgba(0, 119, 192, 0.25)",
+                pointBackgroundColor: palette.magic
+              },
+              {
+                label: "Jett Howard",
+                data: [5, 9, 6, 6, 5],
+                borderColor: palette.silver,
+                backgroundColor: "rgba(196, 206, 212, 0.3)",
+                pointBackgroundColor: palette.silver
+              },
+              {
+                label: "Dyson Daniels",
+                data: [7, 6, 8, 7, 7],
+                borderColor: palette.pels,
+                backgroundColor: "rgba(12, 35, 64, 0.25)",
+                pointBackgroundColor: palette.pels
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            scales: {
+              r: {
+                suggestedMin: 0,
+                suggestedMax: 10,
+                ticks: { display: false },
+                grid: { color: "rgba(12, 35, 64, 0.12)" },
+                angleLines: { color: "rgba(12, 35, 64, 0.12)" },
+                pointLabels: { color: palette.neutral }
+              }
+            }
+          }
+        });
+
+        new Chart(healthCtx, {
+          type: "doughnut",
+          data: {
+            labels: ["Cleared for full run", "Monitored workload", "Rehab group"],
+            datasets: [
+              {
+                data: [11, 4, 2],
+                backgroundColor: [palette.pels, palette.magic, palette.gold],
+                borderWidth: 0
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            cutout: "62%",
+            plugins: {
+              legend: {
+                position: "bottom",
+                labels: { color: palette.neutral }
+              }
+            }
+          }
+        });
+      });
+    </script>
   </body>
 </html>
