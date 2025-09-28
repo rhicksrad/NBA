@@ -1625,8 +1625,10 @@ function initPlayerAtlas() {
     nameEl.textContent = player.name;
     metaEl.textContent = renderMeta(player);
     const goatScores = player?.goatScores;
-    const recentValue = Number.isFinite(goatScores?.recent) ? goatScores.recent : null;
-    const recentRank = Number.isFinite(goatScores?.recentRank) ? goatScores.recentRank : null;
+    const fallbackRecentValue = Number.isFinite(player?.goatRecentScore) ? player.goatRecentScore : null;
+    const recentValue = Number.isFinite(goatScores?.recent) ? goatScores.recent : fallbackRecentValue;
+    const fallbackRecentRank = Number.isFinite(player?.goatRecentRank) ? player.goatRecentRank : null;
+    const recentRank = Number.isFinite(goatScores?.recentRank) ? goatScores.recentRank : fallbackRecentRank;
     renderGoatScore(
       goatRecentContainer,
       goatRecentValueEl,
@@ -1803,7 +1805,19 @@ function initPlayerAtlas() {
         const personId = extractPersonIdFromProfile(player);
         const nameKey = normalizeName(player?.name);
         const goatScores = resolveGoatScores(personId, player?.name);
-        const historicalGoat = Number.isFinite(goatScores?.historical) ? goatScores.historical : player?.goatScore;
+        const mergedGoatScores = goatScores ? { ...goatScores } : {};
+        if (!Number.isFinite(mergedGoatScores.recent) && Number.isFinite(player?.goatRecentScore)) {
+          mergedGoatScores.recent = player.goatRecentScore;
+        }
+        if (!Number.isFinite(mergedGoatScores.recentRank) && Number.isFinite(player?.goatRecentRank)) {
+          mergedGoatScores.recentRank = player.goatRecentRank;
+        }
+        if (!Number.isFinite(mergedGoatScores.historical) && Number.isFinite(player?.goatScore)) {
+          mergedGoatScores.historical = player.goatScore;
+        }
+        const historicalGoat = Number.isFinite(mergedGoatScores?.historical)
+          ? mergedGoatScores.historical
+          : player?.goatScore;
         const metricsRecord =
           (personId && atlasMetrics.byId.get(personId)) ||
           (nameKey && atlasMetrics.byName.get(nameKey)) ||
@@ -1813,7 +1827,7 @@ function initPlayerAtlas() {
           searchTokens: buildPlayerTokens(player),
           nameToken: simplifyText(player?.name),
           personId,
-          goatScores,
+          goatScores: Object.keys(mergedGoatScores).length ? mergedGoatScores : null,
           goatScore: Number.isFinite(historicalGoat) ? historicalGoat : player?.goatScore,
           metrics: metricsRecord ?? player?.metrics ?? {},
         };
