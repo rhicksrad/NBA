@@ -18,6 +18,7 @@ DEFAULT_ACTIVE_ROSTER = ROOT / "data" / "active_players.json"
 DEFAULT_PLAYERS_CSV = ROOT / "Players.csv"
 DEFAULT_TEAM_HISTORIES = ROOT / "TeamHistories.csv"
 DEFAULT_OUTPUT = ROOT / "public" / "data" / "player_profiles.json"
+DEFAULT_GOAT_SYSTEM = ROOT / "public" / "data" / "goat_system.json"
 DEFAULT_BIRTHPLACE_FILES = [
     ROOT / "data" / "nba_birthplaces.csv",
     ROOT / "data" / "nba_draft_birthplaces.csv",
@@ -354,17 +355,61 @@ def _load_birthplaces(paths: list[Path]) -> dict[str, str]:
     return mapping
 
 
+def _load_goat_scores(path: Path) -> tuple[dict[str, dict[str, Any]], dict[str, dict[str, Any]]]:
+    """Build lookup tables for GOAT system data keyed by personId and normalized name."""
+
+    if not path.exists():
+        return {}, {}
+
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}, {}
+
+    players = data.get("players")
+    if not isinstance(players, list):
+        return {}, {}
+
+    by_id: dict[str, dict[str, Any]] = {}
+    by_name: dict[str, dict[str, Any]] = {}
+    for entry in players:
+        if not isinstance(entry, dict):
+            continue
+
+        person_id_raw = entry.get("personId")
+        person_id = str(person_id_raw).strip() if person_id_raw is not None else ""
+        name = (entry.get("name") or "").strip()
+        if not person_id and not name:
+            continue
+
+        record: dict[str, Any] = {
+            "score": _parse_float(entry.get("goatScore")),
+            "rank": _parse_int(entry.get("rank")),
+            "tier": (entry.get("tier") or "").strip() or None,
+            "resume": (entry.get("resume") or "").strip() or None,
+        }
+
+        if person_id:
+            by_id[person_id] = record
+        if name:
+            by_name[_normalize_name_key(name)] = record
+
+    return by_id, by_name
+
+
 def build_player_profiles(
     *,
     active_roster: Path = DEFAULT_ACTIVE_ROSTER,
     players_csv: Path = DEFAULT_PLAYERS_CSV,
     team_histories: Path = DEFAULT_TEAM_HISTORIES,
     birthplace_files: list[Path] = DEFAULT_BIRTHPLACE_FILES,
+    goat_system: Path = DEFAULT_GOAT_SYSTEM,
 ) -> dict[str, Any]:
     players = _load_active_players(active_roster)
     roster_lookup = _load_roster(players_csv)
     teams = _load_team_lookup(team_histories)
     birthplaces = _load_birthplaces(birthplace_files)
+    goat_by_id, goat_by_name = _load_goat_scores(goat_system)
 
     profiles: list[dict[str, Any]] = []
     for player in players:
@@ -403,7 +448,29 @@ def build_player_profiles(
             origin,
             draft,
         )
-        keywords = _build_keywords(player, team_meta, codes, origin)
+        keywords_list = _build_keywords(player, team_meta, codes, origin)
+
+        goat_meta = goat_by_id.get(player.person_id)
+        if not goat_meta:
+            goat_meta = goat_by_name.get(name_key)
+        if not goat_meta and name_key != _normalize_name_key(player.full_name):
+            goat_meta = goat_by_name.get(_normalize_name_key(player.full_name))
+
+        keywords = set(keywords_list)
+        goat_score = None
+        goat_rank = None
+        goat_tier = None
+        goat_resume = None
+        if goat_meta:
+            goat_score = goat_meta.get("score")
+            goat_rank = goat_meta.get("rank")
+            goat_tier = goat_meta.get("tier")
+            goat_resume = goat_meta.get("resume")
+            keywords.add("goat")
+            if goat_tier:
+                keywords.update(part for part in goat_tier.lower().split() if part)
+
+        keywords = sorted(keywords)
 
         profiles.append(
             {
@@ -418,7 +485,10 @@ def build_player_profiles(
                 "draft": draft,
                 "era": era,
                 "archetype": archetype,
-                "goatScore": None,
+                "goatScore": goat_score,
+                "goatRank": goat_rank,
+                "goatTier": goat_tier,
+                "goatResume": goat_resume,
                 "bio": bio,
                 "keywords": keywords,
                 "metrics": {},
@@ -439,6 +509,7 @@ def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--active-roster", type=Path, default=DEFAULT_ACTIVE_ROSTER, help="Path to active_players.json roster feed.")
     parser.add_argument("--players-csv", type=Path, default=DEFAULT_PLAYERS_CSV, help="Path to Players.csv metadata table.")
     parser.add_argument("--team-histories", type=Path, default=DEFAULT_TEAM_HISTORIES, help="Path to TeamHistories.csv for franchise metadata.")
+    parser.add_argument("--goat-system", type=Path, default=DEFAULT_GOAT_SYSTEM, help="Path to GOAT system rankings feed.")
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT, help="Destination for the generated player_profiles.json file.")
     return parser.parse_args(argv)
 
@@ -449,6 +520,7 @@ def main(argv: list[str] | None = None) -> None:
         active_roster=args.active_roster,
         players_csv=args.players_csv,
         team_histories=args.team_histories,
+        goat_system=args.goat_system,
     )
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
