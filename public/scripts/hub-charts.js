@@ -1,7 +1,70 @@
 const dataCache = new Map();
 const chartRegistry = new Map();
 const pendingDefinitions = new Map();
+const sizingRegistry = new Map();
 let observerRef = null;
+
+const FALLBACK_RATIO = 0.6;
+
+function getChartContainer(canvas) {
+  if (!canvas) return null;
+  return canvas.closest('.viz-canvas') ?? canvas.parentElement ?? null;
+}
+
+function setupCanvasSizing(canvas) {
+  const container = getChartContainer(canvas);
+  if (!container) {
+    return null;
+  }
+
+  const previousInline = {
+    containerHeight: container.style.height,
+    canvasHeight: canvas.style.height,
+  };
+
+  const ratioAttr = Number.parseFloat(canvas.dataset.chartRatio ?? canvas.dataset.aspectRatio);
+  const ratio = Number.isFinite(ratioAttr) && ratioAttr > 0 ? ratioAttr : FALLBACK_RATIO;
+
+  const updateHeight = () => {
+    const width = container.clientWidth;
+    if (!width) {
+      return;
+    }
+    const styles = window.getComputedStyle(container);
+    const minHeight = Number.parseFloat(styles.minHeight) || 0;
+    const maxHeight = Number.parseFloat(styles.maxHeight);
+    let nextHeight = width * ratio;
+    if (minHeight) {
+      nextHeight = Math.max(nextHeight, minHeight);
+    }
+    if (Number.isFinite(maxHeight) && maxHeight > 0) {
+      nextHeight = Math.min(nextHeight, maxHeight);
+    }
+    container.style.height = `${nextHeight}px`;
+    canvas.style.height = '100%';
+  };
+
+  updateHeight();
+
+  const resizeCallback = () => updateHeight();
+  let observer;
+  if ('ResizeObserver' in window) {
+    observer = new ResizeObserver(resizeCallback);
+    observer.observe(container);
+  } else {
+    window.addEventListener('resize', resizeCallback, { passive: true });
+  }
+
+  return () => {
+    if (observer) {
+      observer.disconnect();
+    } else {
+      window.removeEventListener('resize', resizeCallback);
+    }
+    container.style.height = previousInline.containerHeight;
+    canvas.style.height = previousInline.canvasHeight;
+  };
+}
 
 function ensureChartDefaults() {
   if (!window.Chart || ensureChartDefaults._set) return;
@@ -93,11 +156,20 @@ function instantiateChart(canvas, definition) {
   }
 
   const run = async () => {
+    const existingCleanup = sizingRegistry.get(canvas);
+    if (existingCleanup) {
+      existingCleanup();
+      sizingRegistry.delete(canvas);
+    }
+    const sizingCleanup = setupCanvasSizing(canvas);
     try {
       ensureChartDefaults();
       const sourceData = definition.source ? await loadJson(definition.source) : undefined;
       const config = await definition.createConfig(sourceData, helpers);
       if (!config || !canvas.isConnected) {
+        if (sizingCleanup) {
+          sizingCleanup();
+        }
         return;
       }
       if (prefersReducedMotion()) {
@@ -106,7 +178,13 @@ function instantiateChart(canvas, definition) {
       }
       const chart = new window.Chart(canvas.getContext('2d'), config);
       chartRegistry.set(canvas, chart);
+      if (sizingCleanup) {
+        sizingRegistry.set(canvas, sizingCleanup);
+      }
     } catch (error) {
+      if (sizingCleanup) {
+        sizingCleanup();
+      }
       console.error('Unable to mount chart', error);
       const container = canvas.closest('[data-chart-wrapper]');
       if (container && !container.querySelector('.viz-error__message')) {
@@ -167,7 +245,14 @@ export function registerCharts(configs) {
 }
 
 export function destroyCharts() {
-  chartRegistry.forEach((chart) => chart.destroy());
+  chartRegistry.forEach((chart, canvas) => {
+    chart.destroy();
+    const cleanup = sizingRegistry.get(canvas);
+    if (cleanup) {
+      cleanup();
+      sizingRegistry.delete(canvas);
+    }
+  });
   chartRegistry.clear();
   pendingDefinitions.clear();
   if (observerRef) {
