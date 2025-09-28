@@ -108,7 +108,7 @@ async function loadStateMapSvg() {
     if (!response.ok) {
       throw new Error('Failed to load state atlas map');
     }
-    stateMapMarkup = await response.text();
+    stateMapMarkup = (await response.text()).replace(/ns0:/g, '');
   }
   const template = document.createElement('template');
   template.innerHTML = stateMapMarkup.trim();
