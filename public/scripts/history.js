@@ -323,11 +323,15 @@ function renderAtlasSpotlight(entry, config = activeAtlasConfig) {
       body.append(nameLine);
 
       const detailParts = [];
+      if (typeof player.groupRank === 'number') {
+        const scopeLabel = modeConfig.id === 'domestic' ? 'State' : 'Country';
+        detailParts.push(`${scopeLabel} rank #${player.groupRank}`);
+      }
       if (typeof player.rank === 'number') {
-        detailParts.push(`GOAT No. ${player.rank}`);
+        detailParts.push(`Global GOAT No. ${player.rank}`);
       }
       if (typeof player.goatScore === 'number') {
-        detailParts.push(`${scoreFormatter.format(player.goatScore)} GOAT score`);
+        detailParts.push(`${scoreFormatter.format(player.goatScore)} GOAT points`);
       }
       const birthplace = formatLocation(player);
       if (birthplace) {
