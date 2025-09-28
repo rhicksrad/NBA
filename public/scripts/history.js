@@ -1,4 +1,5 @@
 import { registerCharts, helpers } from './hub-charts.js';
+import { enablePanZoom, enhanceUsaInsets } from './map-utils.js';
 
 const palette = {
   navy: '#0b2545',
@@ -409,6 +410,16 @@ async function renderAtlas(mode, atlas) {
   atlasEls.map.innerHTML = '';
   atlasEls.map.append(svg);
   atlasEls.map.dataset.atlasMode = mode;
+
+  if (mode === 'domestic') {
+    enhanceUsaInsets(svg);
+  }
+
+  enablePanZoom(atlasEls.map, svg, {
+    maxScale: mode === 'domestic' ? 6 : 5,
+    minScale: 1,
+    zoomStep: 0.35,
+  });
 
   activeAtlasShape = null;
   activeAtlasConfig = config;

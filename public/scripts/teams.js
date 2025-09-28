@@ -1,3 +1,5 @@
+import { enablePanZoom, enhanceUsaInsets } from './map-utils.js';
+
 const MAP_WIDTH = 960;
 const MAP_HEIGHT = 600;
 const SVG_NS = 'http://www.w3.org/2000/svg';
@@ -139,6 +141,7 @@ const LEGACY_METRICS = [
 ];
 
 const mapCanvas = document.querySelector('[data-map-canvas]');
+let mapViewport = null;
 const detailPanel = document.querySelector('[data-team-panel]');
 const detailPlaceholder = document.querySelector('[data-team-placeholder]');
 const detailBody = document.querySelector('[data-team-body]');
@@ -244,10 +247,22 @@ function computePolygonCentroid(points) {
   };
 }
 
+function getMapViewport() {
+  if (!mapViewport || !mapViewport.isConnected) {
+    mapViewport = mapCanvas ? mapCanvas.querySelector('.team-map__viewport') : null;
+  }
+  return mapViewport;
+}
+
 function renderDivisionOverlays(teams) {
   if (!mapCanvas || !Array.isArray(teams)) return;
 
-  const existingOverlay = mapCanvas.querySelector('.team-map__overlay');
+  const viewport = getMapViewport();
+  if (!viewport) {
+    return;
+  }
+
+  const existingOverlay = viewport.querySelector('.team-map__overlay');
   if (existingOverlay) {
     existingOverlay.remove();
   }
@@ -312,7 +327,7 @@ function renderDivisionOverlays(teams) {
   });
 
   if (overlay.childNodes.length) {
-    mapCanvas.append(overlay);
+    viewport.append(overlay);
   }
 }
 
@@ -770,12 +785,17 @@ function handleMarkerClick(event) {
 function buildMarkers(teams) {
   if (!mapCanvas) return;
 
-  const existingLayers = mapCanvas.querySelectorAll('.team-map__markers');
+  const viewport = getMapViewport();
+  if (!viewport) {
+    return;
+  }
+
+  const existingLayers = viewport.querySelectorAll('.team-map__markers');
   existingLayers.forEach((layer) => layer.remove());
 
   const markerLayer = document.createElement('div');
   markerLayer.className = 'team-map__markers';
-  mapCanvas.append(markerLayer);
+  viewport.append(markerLayer);
 
   markerButtons = teams.map((team) => {
     const { latitude, longitude, abbreviation, conference, name } = team;
@@ -846,12 +866,17 @@ function computeLegacyExtents(teams) {
 function injectMap(svgMarkup) {
   if (!mapCanvas) return;
   const sanitized = svgMarkup.replace(/ns0:/g, '');
-  mapCanvas.innerHTML = `<div class="team-map__stage">${sanitized}</div>`;
+  mapCanvas.innerHTML = `<div class="team-map__viewport"><div class="team-map__stage">${sanitized}</div></div>`;
+  mapViewport = mapCanvas.querySelector('.team-map__viewport');
   const svg = mapCanvas.querySelector('svg');
   if (svg) {
     svg.classList.add('team-map__svg');
     svg.setAttribute('focusable', 'false');
     svg.setAttribute('aria-hidden', 'true');
+    enhanceUsaInsets(svg);
+  }
+  if (mapViewport) {
+    enablePanZoom(mapCanvas, mapViewport, { maxScale: 6, zoomStep: 0.4 });
   }
 }
 
