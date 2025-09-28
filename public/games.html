@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/png" href="nba-logo-vector-01.png" />
+    <link rel="stylesheet" href="styles/hub.css" />
+    <title>Games Observatory | NBA Intelligence Hub</title>
+  </head>
+  <body>
+    <div class="site-frame">
+      <header class="site-header">
+        <div class="hub-nav">
+          <a class="brand" href="index.html">
+            <img src="nba-logo-vector-01.png" alt="NBA logo" class="brand__logo" />
+            <span class="brand__wordmark"><span class="brand__wordmark-accent">NBA</span> Intelligence Hub</span>
+          </a>
+          <nav class="nav-links">
+            <a href="index.html">2025-2026 Preview</a>
+            <a href="rewind.html">2024-2025 Season Rewind</a>
+            <a href="players.html">Players</a>
+            <a href="teams.html">Teams</a>
+            <a class="active" href="games.html">Games</a>
+            <a href="history.html">History</a>
+            <a href="insights.html">Insights Lab</a>
+            <a href="goat.html">GOAT Index</a>
+            <a href="about.html">About</a>
+          </nav>
+        </div>
+        <div class="hero">
+          <span class="eyebrow">Games Observatory</span>
+          <h1>The nightly pulse of the league, reframed as energy signatures.</h1>
+          <p>
+            Each chart below blends scoring swings, itinerary math, and arena physics to decode
+            how NBA games veer toward chaos or control in real time.
+          </p>
+          <dl class="hero-metrics">
+            <div class="hero-metrics__item">
+              <dt>Games tracked</dt>
+              <dd data-metric="tracked-games">—</dd>
+            </div>
+            <div class="hero-metrics__item">
+              <dt>Wildest swing</dt>
+              <dd data-metric="largest-swing">—</dd>
+            </div>
+            <div class="hero-metrics__item">
+              <dt>Road miles logged</dt>
+              <dd data-metric="miles-logged">—</dd>
+            </div>
+            <div class="hero-metrics__item">
+              <dt>Loudest crowd pulse</dt>
+              <dd data-metric="crowd-surge">—</dd>
+            </div>
+          </dl>
+        </div>
+      </header>
+
+      <main class="lab-content">
+        <section class="lab-grid">
+          <article class="lab-module lab-module--wide" data-chart-wrapper>
+            <header class="lab-module__header">
+              <h2>Momentum rewrites after halftime</h2>
+              <div class="lab-module__meta">
+                <span class="lab-chip">First-half vs. second-half margins</span>
+                <span class="lab-chip lab-chip--accent" data-metric="headline-swing">—</span>
+              </div>
+            </header>
+            <div class="viz-canvas">
+              <canvas id="momentum-slope" data-chart-ratio="0.55" aria-describedby="momentum-caption"></canvas>
+            </div>
+            <p id="momentum-caption" class="lab-module__caption">
+              Dual lines trace how contenders flip the scoreboard after the break while tooltips
+              surface each club's signature scoring avalanche.
+            </p>
+          </article>
+
+          <article class="lab-module" data-chart-wrapper>
+            <header class="lab-module__header">
+              <h2>Itinerary tax on net rating</h2>
+              <div class="lab-module__meta">
+                <span class="lab-chip">Segment miles vs. efficiency</span>
+                <span class="lab-chip">Bubble size encodes games</span>
+              </div>
+            </header>
+            <div class="viz-canvas">
+              <canvas id="travel-tax" data-chart-ratio="0.8" aria-describedby="travel-caption"></canvas>
+            </div>
+            <p id="travel-caption" class="lab-module__caption">
+              Each bubble plots a road gauntlet, balancing mileage, recovery windows, and the
+              swing it puts on scoring margin.
+            </p>
+          </article>
+
+          <article class="lab-module" data-chart-wrapper>
+            <header class="lab-module__header">
+              <h2>Arena pulse index</h2>
+              <div class="lab-module__meta">
+                <span class="lab-chip">Decibel surges vs. comeback closes</span>
+              </div>
+            </header>
+            <div class="viz-canvas">
+              <canvas id="crowd-pulse" data-chart-ratio="0.75" aria-describedby="crowd-caption"></canvas>
+            </div>
+            <p id="crowd-caption" class="lab-module__caption">
+              Bars amplify the loudest momentum spikes while the overlay line tracks how often
+              that noise powers a comeback finish.
+            </p>
+          </article>
+        </section>
+      </main>
+
+      <footer class="page-footer">Powered by box scores, travel logs, and acoustic telemetry nobody else is cross-mapping yet.</footer>
+    </div>
+
+    <script src="vendor/chart.umd.js" defer></script>
+    <script type="module" src="scripts/games.js"></script>
+  </body>
+</html>
