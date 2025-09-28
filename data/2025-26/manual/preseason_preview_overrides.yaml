@@ -1,0 +1,42 @@
+season: "2025-26"
+overrides:
+  PRE2025-02:
+    header:
+      subLabel: "NBA Melbourne Game (NBA × NBL Showcase)"
+      venueLine: "Rod Laver Arena — Melbourne, VIC (Neutral Site)"
+    summary:
+      tagline: "This isn’t just a glorified scrimmage. It’s the NBA’s first-ever exhibition game on Australian soil."
+      description:
+        - "Melbourne United and the Pelicans clash in a spotlighted environment, where both sides use the platform to test rotations, evaluate young contributors, and assert identity before the real season begins."
+      cards:
+        - title: "Matchup Snapshot"
+          bullets:
+            - "Melbourne United (NBL power) vs. New Orleans Pelicans (NBA franchise)"
+            - "Preseason / Exhibition"
+            - "Significance: symbolic, developmental, and revealing — especially given the global stage and novelty of NBA games in Australia."
+    story:
+      sections:
+        - heading: "Historical Weight & International Ambition"
+          paragraphs:
+            - "This game is more than two squads warming up. It’s a milestone: the first time an NBA team will play (even if in exhibition form) in Australia."
+            - "For Melbourne, it’s a chance to be taken seriously on a global stage. For New Orleans, it’s a branding, fan-engagement, and scouting venture. Off-court events (fan nights, practice sessions) accompany the game."
+        - heading: "Melbourne United: Local Pride Meets Global Pressure"
+          paragraphs:
+            - "Melbourne comes off a strong 2024–25 NBL season (19–10, reached the grand final) under coach Dean Vickerman."
+            - "They’ll want to show they can hang with NBA talent—especially in front of home fans. Expect heavy usage of established NBL contributors, import players, and veteran leadership to stabilize play when it matters."
+        - heading: "Pelicans Overhaul & Young Talent Watch"
+          paragraphs:
+            - "The Pelicans enter with a retooled roster. Their offseason changes included new faces, more emphasis on youth, and role adjustments."
+          bullets:
+            - "Jeremiah Fears, recent draft pick, is reportedly being mentored by veteran point guards in camp."
+            - "Zion Williamson comes in leaner and more focused on consistency and health."
+            - "The absence of key players or injury flags could tilt experimental opportunities in Melbourne."
+        - heading: "Chemistry vs. Minutes: How Aggressive Should They Go?"
+          paragraphs:
+            - "Will coaches treat this as an extension of practice—slow, controlled, with substitutions galore—or approach it as a miniature dress rehearsal?"
+            - "Melbourne may adhere more to its systems, but the Pelicans might push to simulate game pressure, defensive communication, and lineups (even if imperfect) to accelerate learning."
+      questionsHeading: "Narrative Questions to Watch"
+      questions:
+        - "Which player (rookie or bench piece) converts this high-visibility moment into actual regular-season minutes?"
+        - "How well does the Pelicans’ new blend of youth and veterans hold up under live scrutiny?"
+        - "Does a distinct tactical approach (e.g. small ball, zone vs man, pace changes) emerge and stick as a talking point?"

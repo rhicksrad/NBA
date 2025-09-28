@@ -93,6 +93,13 @@
         max-width: 56ch;
       }
 
+      .preview-summary__description {
+        margin: 0;
+        font-size: 0.95rem;
+        color: var(--text-subtle);
+        max-width: 66ch;
+      }
+
       .preview-summary__grid {
         display: grid;
         gap: clamp(1rem, 3vw, 1.6rem);
@@ -183,6 +190,48 @@
       .preview-story__paragraph {
         margin: 0;
         color: var(--text-subtle);
+      }
+
+      .preview-story__entries {
+        margin: 0;
+        padding-left: 1.2rem;
+        display: grid;
+        gap: 1rem;
+      }
+
+      .preview-story__entry {
+        margin: 0;
+        color: var(--text-subtle);
+      }
+
+      .preview-story__entry-title {
+        margin: 0;
+        font-size: 1.05rem;
+        color: var(--text-strong);
+      }
+
+      .preview-story__entry-body {
+        display: grid;
+        gap: 0.55rem;
+        margin-top: 0.35rem;
+      }
+
+      .preview-story__entry-body p {
+        margin: 0;
+        color: var(--text-subtle);
+      }
+
+      .preview-story__entry-body ul {
+        margin: 0;
+        padding-left: 1.1rem;
+        display: grid;
+        gap: 0.4rem;
+      }
+
+      .preview-story__subheading {
+        margin: 0;
+        font-size: 1rem;
+        color: var(--text-strong);
       }
 
       .preview-story__list {
@@ -309,13 +358,17 @@
         <header class="preview-summary__header">
           <h2 class="preview-summary__title">Game essentials</h2>
           <p class="preview-summary__tagline">Key context before rotations start moving.</p>
+          
         </header>
         <div class="preview-summary__grid">
+          
           <section class="preview-summary__card">
             <h2>Matchup snapshot</h2>
             <p>Orlando Magic vs. Miami Heat</p>
             <p>Preseason</p>
+            
           </section>
+        
           
           
         </div>

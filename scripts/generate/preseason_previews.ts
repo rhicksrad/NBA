@@ -99,6 +99,46 @@ interface TeamProfilesPayload {
   teams?: TeamProfileEntry[];
 }
 
+interface SummaryCardContent {
+  title: string;
+  body?: string[];
+  bullets?: string[];
+}
+
+interface SummaryOverride {
+  tagline?: string;
+  description?: string[];
+  cards?: SummaryCardContent[];
+}
+
+interface HeaderOverride {
+  subLabel?: string;
+  venueLine?: string;
+}
+
+interface StorySectionOverride {
+  heading: string;
+  paragraphs?: string[];
+  bullets?: string[];
+}
+
+interface StoryOverride {
+  introParagraphs?: string[];
+  sections?: StorySectionOverride[];
+  questionsHeading?: string;
+  questions?: string[];
+}
+
+interface PreviewOverride {
+  header?: HeaderOverride;
+  summary?: SummaryOverride;
+  story?: StoryOverride;
+}
+
+interface PreviewOverridesPayload {
+  overrides?: Record<string, PreviewOverride>;
+}
+
 const PRIOR_SEASON = "2024-25";
 
 const SIGNATURE_VISUALS: MetricConfig[] = [
@@ -204,6 +244,30 @@ async function loadJson<T>(fileName: string): Promise<T> {
   const filePath = path.join(CANONICAL_DIR, fileName);
   const raw = await readFile(filePath, "utf8");
   return JSON.parse(raw) as T;
+}
+
+async function loadPreviewOverrides(): Promise<Record<string, PreviewOverride>> {
+  try {
+    const payload = await loadJson<PreviewOverridesPayload>("preseason_preview_overrides.json");
+    if (!payload || typeof payload !== "object") {
+      return {};
+    }
+    const overrides = payload.overrides;
+    if (!overrides || typeof overrides !== "object") {
+      return {};
+    }
+    return Object.entries(overrides).reduce<Record<string, PreviewOverride>>((acc, [key, value]) => {
+      if (value && typeof value === "object") {
+        acc[key] = value;
+      }
+      return acc;
+    }, {});
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code !== "ENOENT") {
+      console.warn("Unable to load preseason preview overrides.", error);
+    }
+    return {};
+  }
 }
 
 async function ensureOutputDirs(): Promise<void> {
@@ -470,6 +534,48 @@ function describeShowcase(game: PreseasonGame): string {
   return `this ${base.toLowerCase()} matchup`;
 }
 
+function buildDefaultSummaryCards(
+  game: PreseasonGame,
+  away: TeamContext,
+  home: TeamContext
+): SummaryCardContent[] {
+  const lines = [`${away.displayName} vs. ${home.displayName}`];
+  const competition = game.subLabel ? `${game.label} · ${game.subLabel}` : game.label;
+  if (competition) {
+    lines.push(competition);
+  }
+  return [
+    {
+      title: "Matchup snapshot",
+      body: lines,
+    },
+  ];
+}
+
+function renderSummaryCards(cards: SummaryCardContent[]): string {
+  return cards
+    .map((card) => {
+      const body = Array.isArray(card.body)
+        ? card.body
+            .map((line) => `<p>${line}</p>`)
+            .join("\n            ")
+        : "";
+      const bullets = Array.isArray(card.bullets) && card.bullets.length
+        ? `<ul class="preview-summary__list">
+              ${card.bullets.map((item) => `<li>${item}</li>`).join("\n              ")}
+            </ul>`
+        : "";
+      return `
+          <section class="preview-summary__card">
+            <h2>${card.title}</h2>
+            ${body}
+            ${bullets}
+          </section>
+        `;
+    })
+    .join("\n        ");
+}
+
 function buildStoryParagraphs(game: PreseasonGame, away: TeamContext, home: TeamContext, venueLine: string): string[] {
   const neutralNote = neutralSuffix(game.venue, game.notes);
   const crowdDescriptor = neutralNote ? "neutral crowd" : `${home.descriptor} crowd`;
@@ -490,6 +596,63 @@ function buildStoryBullets(game: PreseasonGame, away: TeamContext, home: TeamCon
     `How do ${home.displayName} balance veteran rhythm with developmental minutes during ${showcase}?`,
     "Which camp emphasis becomes a lasting talking point for both benches?",
   ];
+}
+
+function renderStoryIntroParagraphs(paragraphs: string[] = []): string {
+  if (!paragraphs.length) {
+    return "";
+  }
+  return paragraphs
+    .map((paragraph, index) => {
+      const className = index === 0 ? "preview-story__lead" : "preview-story__paragraph";
+      return `<p class="${className}">${paragraph}</p>`;
+    })
+    .join("\n        ");
+}
+
+function renderStorySections(sections: StorySectionOverride[] = []): string {
+  if (!sections.length) {
+    return "";
+  }
+  const items = sections
+    .map((section) => {
+      const paragraphs = Array.isArray(section.paragraphs)
+        ? section.paragraphs
+            .map((paragraph) => `<p>${paragraph}</p>`)
+            .join("\n            ")
+        : "";
+      const bullets = Array.isArray(section.bullets) && section.bullets.length
+        ? `<ul>
+              ${section.bullets.map((bullet) => `<li>${bullet}</li>`).join("\n              ")}
+            </ul>`
+        : "";
+      return `<li class="preview-story__entry">
+            <h3 class="preview-story__entry-title">${section.heading}</h3>
+            <div class="preview-story__entry-body">
+              ${paragraphs}
+              ${bullets}
+            </div>
+          </li>`;
+    })
+    .join("\n          ");
+  return `<ol class="preview-story__entries">
+          ${items}
+        </ol>`;
+}
+
+function renderStoryQuestions(
+  heading: string | undefined,
+  questions: string[] | undefined
+): string {
+  if (!questions || !questions.length) {
+    return "";
+  }
+  const title = heading ? `<h3 class="preview-story__subheading">${heading}</h3>` : "";
+  const list = `<ul class="preview-story__list">
+            ${questions.map((question) => `<li>${question}</li>`).join("\n            ")}
+          </ul>`;
+  return `${title}
+          ${list}`;
 }
 
 function hasVisualMetrics(team: TeamContext): boolean {
@@ -609,14 +772,30 @@ function renderGamePage(
   game: PreseasonGame,
   away: TeamContext,
   home: TeamContext,
-  metricExtents: Map<TeamMetricKey, MetricExtent>
+  metricExtents: Map<TeamMetricKey, MetricExtent>,
+  override?: PreviewOverride
 ): string {
-  const venueLine = formatVenueLine(game.venue);
+  const headerOverride = override?.header;
+  const summaryOverride = override?.summary;
+  const storyOverride = override?.story;
+
+  const venueLine = headerOverride?.venueLine ?? formatVenueLine(game.venue);
   const etString = formatDateTime(game.tipoff, "America/New_York");
   const utcString = formatDateTime(game.tipoff, "UTC");
-  const neutralNote = neutralSuffix(game.venue, game.notes);
-  const story = buildStoryParagraphs(game, away, home, venueLine);
-  const bullets = buildStoryBullets(game, away, home);
+  const neutralNote = headerOverride?.venueLine ? undefined : neutralSuffix(game.venue, game.notes);
+  const subLabel = headerOverride?.subLabel ?? game.subLabel;
+  const leadLine = subLabel ? `<p class="lead">${subLabel}</p>` : "";
+
+  const summaryTagline = summaryOverride?.tagline ?? "Key context before rotations start moving.";
+  const summaryDescription = summaryOverride?.description ?? [];
+  const summaryDescriptionHtml = summaryDescription
+    .map((paragraph) => `<p class="preview-summary__description">${paragraph}</p>`)
+    .join("\n          ");
+  const summaryCards =
+    summaryOverride?.cards && summaryOverride.cards.length
+      ? summaryOverride.cards
+      : buildDefaultSummaryCards(game, away, home);
+
   const notes = game.notes.filter((note) => !note.toLowerCase().includes("neutral"));
   const hasCoverage = Boolean(game.coverage?.tv?.length || game.coverage?.radio?.length);
   const visualsSection = renderVisualsSection(away, home, metricExtents);
@@ -642,12 +821,29 @@ function renderGamePage(
         `
     : "";
 
-  const storyParagraphs = story
-    .map((paragraph, index) => {
-      const className = index === 0 ? "preview-story__lead" : "preview-story__paragraph";
-      return `<p class="${className}">${paragraph}</p>`;
-    })
-    .join("\n        ");
+  let storyContent = "";
+  let storyQuestionsHtml = "";
+
+  if (storyOverride) {
+    const intro = renderStoryIntroParagraphs(storyOverride.introParagraphs ?? []);
+    const sections = renderStorySections(storyOverride.sections ?? []);
+    storyContent = [intro, sections].filter(Boolean).join("\n        ");
+    storyQuestionsHtml = renderStoryQuestions(storyOverride.questionsHeading, storyOverride.questions);
+  } else {
+    const story = buildStoryParagraphs(game, away, home, venueLine);
+    const bullets = buildStoryBullets(game, away, home);
+    storyContent = story
+      .map((paragraph, index) => {
+        const className = index === 0 ? "preview-story__lead" : "preview-story__paragraph";
+        return `<p class="${className}">${paragraph}</p>`;
+      })
+      .join("\n        ");
+    storyQuestionsHtml = `<ul class="preview-story__list">
+            ${bullets.map((bullet) => `<li>${bullet}</li>`).join("\n            ")}
+          </ul>`;
+  }
+
+  const summaryCardsHtml = renderSummaryCards(summaryCards);
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -744,6 +940,13 @@ function renderGamePage(
         max-width: 56ch;
       }
 
+      .preview-summary__description {
+        margin: 0;
+        font-size: 0.95rem;
+        color: var(--text-subtle);
+        max-width: 66ch;
+      }
+
       .preview-summary__grid {
         display: grid;
         gap: clamp(1rem, 3vw, 1.6rem);
@@ -834,6 +1037,48 @@ function renderGamePage(
       .preview-story__paragraph {
         margin: 0;
         color: var(--text-subtle);
+      }
+
+      .preview-story__entries {
+        margin: 0;
+        padding-left: 1.2rem;
+        display: grid;
+        gap: 1rem;
+      }
+
+      .preview-story__entry {
+        margin: 0;
+        color: var(--text-subtle);
+      }
+
+      .preview-story__entry-title {
+        margin: 0;
+        font-size: 1.05rem;
+        color: var(--text-strong);
+      }
+
+      .preview-story__entry-body {
+        display: grid;
+        gap: 0.55rem;
+        margin-top: 0.35rem;
+      }
+
+      .preview-story__entry-body p {
+        margin: 0;
+        color: var(--text-subtle);
+      }
+
+      .preview-story__entry-body ul {
+        margin: 0;
+        padding-left: 1.1rem;
+        display: grid;
+        gap: 0.4rem;
+      }
+
+      .preview-story__subheading {
+        margin: 0;
+        font-size: 1rem;
+        color: var(--text-strong);
       }
 
       .preview-story__list {
@@ -953,20 +1198,17 @@ function renderGamePage(
         <p>${utcString} (UTC)</p>
         <h1>${away.displayName} at ${home.displayName}</h1>
         <p><strong>${venueLine}</strong>${neutralNote ? ` · ${neutralNote}` : ""}</p>
-        ${game.subLabel ? `<p class="lead">${game.subLabel}</p>` : ""}
+        ${leadLine}
       </header>
 
       <section class="preview-summary">
         <header class="preview-summary__header">
           <h2 class="preview-summary__title">Game essentials</h2>
-          <p class="preview-summary__tagline">Key context before rotations start moving.</p>
+          <p class="preview-summary__tagline">${summaryTagline}</p>
+          ${summaryDescriptionHtml}
         </header>
         <div class="preview-summary__grid">
-          <section class="preview-summary__card">
-            <h2>Matchup snapshot</h2>
-            <p>${away.displayName} vs. ${home.displayName}</p>
-            <p>${labelLine(game)}</p>
-          </section>
+          ${summaryCardsHtml}
           ${coverageSection}
           ${notesSection}
         </div>
@@ -975,10 +1217,8 @@ function renderGamePage(
       <div class="preview-body">
         <article class="preview-story preview-card preview-card--story">
           <h2>Camp storylines to monitor</h2>
-          ${storyParagraphs}
-          <ul class="preview-story__list">
-            ${bullets.map((bullet) => `<li>${bullet}</li>`).join("\n            ")}
-          </ul>
+          ${storyContent}
+          ${storyQuestionsHtml}
         </article>
 
         ${visualsSection}
@@ -992,14 +1232,6 @@ function renderGamePage(
   </body>
 </html>`;
 }
-
-function labelLine(game: PreseasonGame): string {
-  if (game.subLabel) {
-    return `${game.label} · ${game.subLabel}`;
-  }
-  return game.label;
-}
-
 function renderIndex(schedule: PreseasonSchedule, awayContexts: Map<string, TeamContext>, homeContexts: Map<string, TeamContext>): string {
   const rows = schedule.games
     .map((game) => {
@@ -1151,10 +1383,11 @@ async function writeOpeners(entries: OpenersEntry[], season: string): Promise<vo
 }
 
 async function generatePreseasonPreviews(): Promise<void> {
-  const [schedule, teams, teamMetrics] = await Promise.all([
+  const [schedule, teams, teamMetrics, overrides] = await Promise.all([
     loadJson<PreseasonSchedule>("preseason_schedule.json"),
     loadJson<TeamRecord[]>("teams.json"),
     loadTeamMetrics(),
+    loadPreviewOverrides(),
   ]);
 
   await ensureOutputDirs();
@@ -1177,7 +1410,7 @@ async function generatePreseasonPreviews(): Promise<void> {
 
     const slug = slugify(game.id);
     const filePath = path.join(PREVIEWS_DIR, `preseason-${slug}.html`);
-    const html = renderGamePage(game, away, home, metricExtents);
+    const html = renderGamePage(game, away, home, metricExtents, overrides[game.id]);
     await writeFile(filePath, `${html}\n`, "utf8");
   }
 

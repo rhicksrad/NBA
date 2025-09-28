@@ -93,6 +93,13 @@
         max-width: 56ch;
       }
 
+      .preview-summary__description {
+        margin: 0;
+        font-size: 0.95rem;
+        color: var(--text-subtle);
+        max-width: 66ch;
+      }
+
       .preview-summary__grid {
         display: grid;
         gap: clamp(1rem, 3vw, 1.6rem);
@@ -183,6 +190,48 @@
       .preview-story__paragraph {
         margin: 0;
         color: var(--text-subtle);
+      }
+
+      .preview-story__entries {
+        margin: 0;
+        padding-left: 1.2rem;
+        display: grid;
+        gap: 1rem;
+      }
+
+      .preview-story__entry {
+        margin: 0;
+        color: var(--text-subtle);
+      }
+
+      .preview-story__entry-title {
+        margin: 0;
+        font-size: 1.05rem;
+        color: var(--text-strong);
+      }
+
+      .preview-story__entry-body {
+        display: grid;
+        gap: 0.55rem;
+        margin-top: 0.35rem;
+      }
+
+      .preview-story__entry-body p {
+        margin: 0;
+        color: var(--text-subtle);
+      }
+
+      .preview-story__entry-body ul {
+        margin: 0;
+        padding-left: 1.1rem;
+        display: grid;
+        gap: 0.4rem;
+      }
+
+      .preview-story__subheading {
+        margin: 0;
+        font-size: 1rem;
+        color: var(--text-strong);
       }
 
       .preview-story__list {
@@ -301,21 +350,28 @@
         <time datetime="2025-10-03T09:30:00.000Z">Friday, October 3, 2025 at 5:30 AM EDT</time>
         <p>Friday, October 3, 2025 at 9:30 AM UTC (UTC)</p>
         <h1>Melbourne United at New Orleans Pelicans</h1>
-        <p><strong>Rod Laver Arena · Melbourne, VIC</strong> · Neutral Site</p>
-        <p class="lead">NBA Melbourne Game</p>
+        <p><strong>Rod Laver Arena — Melbourne, VIC (Neutral Site)</strong></p>
+        <p class="lead">NBA Melbourne Game (NBA × NBL Showcase)</p>
       </header>
 
       <section class="preview-summary">
         <header class="preview-summary__header">
           <h2 class="preview-summary__title">Game essentials</h2>
-          <p class="preview-summary__tagline">Key context before rotations start moving.</p>
+          <p class="preview-summary__tagline">This isn’t just a glorified scrimmage. It’s the NBA’s first-ever exhibition game on Australian soil.</p>
+          <p class="preview-summary__description">Melbourne United and the Pelicans clash in a spotlighted environment, where both sides use the platform to test rotations, evaluate young contributors, and assert identity before the real season begins.</p>
         </header>
         <div class="preview-summary__grid">
+          
           <section class="preview-summary__card">
-            <h2>Matchup snapshot</h2>
-            <p>Melbourne United vs. New Orleans Pelicans</p>
-            <p>Preseason · NBA Melbourne Game</p>
+            <h2>Matchup Snapshot</h2>
+            
+            <ul class="preview-summary__list">
+              <li>Melbourne United (NBL power) vs. New Orleans Pelicans (NBA franchise)</li>
+              <li>Preseason / Exhibition</li>
+              <li>Significance: symbolic, developmental, and revealing — especially given the global stage and novelty of NBA games in Australia.</li>
+            </ul>
           </section>
+        
           
           
         </div>
@@ -324,12 +380,48 @@
       <div class="preview-body">
         <article class="preview-story preview-card preview-card--story">
           <h2>Camp storylines to monitor</h2>
-          <p class="preview-story__lead">Melbourne United face the Pelicans at Rod Laver Arena · Melbourne, VIC, opening the 2025-26 preseason with the NBA Melbourne Game showcase designed to stress-test training camp priorities.</p>
-        <p class="preview-story__paragraph">Melbourne United’s staff expects to spotlight rotation hopefuls and sharpen conditioning, while New Orleans focuses on lineup chemistry in front of a neutral crowd. Both clubs are using this window to evaluate how younger pieces complement their established cores.</p>
+          <ol class="preview-story__entries">
+          <li class="preview-story__entry">
+            <h3 class="preview-story__entry-title">Historical Weight & International Ambition</h3>
+            <div class="preview-story__entry-body">
+              <p>This game is more than two squads warming up. It’s a milestone: the first time an NBA team will play (even if in exhibition form) in Australia.</p>
+            <p>For Melbourne, it’s a chance to be taken seriously on a global stage. For New Orleans, it’s a branding, fan-engagement, and scouting venture. Off-court events (fan nights, practice sessions) accompany the game.</p>
+              
+            </div>
+          </li>
+          <li class="preview-story__entry">
+            <h3 class="preview-story__entry-title">Melbourne United: Local Pride Meets Global Pressure</h3>
+            <div class="preview-story__entry-body">
+              <p>Melbourne comes off a strong 2024–25 NBL season (19–10, reached the grand final) under coach Dean Vickerman.</p>
+            <p>They’ll want to show they can hang with NBA talent—especially in front of home fans. Expect heavy usage of established NBL contributors, import players, and veteran leadership to stabilize play when it matters.</p>
+              
+            </div>
+          </li>
+          <li class="preview-story__entry">
+            <h3 class="preview-story__entry-title">Pelicans Overhaul & Young Talent Watch</h3>
+            <div class="preview-story__entry-body">
+              <p>The Pelicans enter with a retooled roster. Their offseason changes included new faces, more emphasis on youth, and role adjustments.</p>
+              <ul>
+              <li>Jeremiah Fears, recent draft pick, is reportedly being mentored by veteran point guards in camp.</li>
+              <li>Zion Williamson comes in leaner and more focused on consistency and health.</li>
+              <li>The absence of key players or injury flags could tilt experimental opportunities in Melbourne.</li>
+            </ul>
+            </div>
+          </li>
+          <li class="preview-story__entry">
+            <h3 class="preview-story__entry-title">Chemistry vs. Minutes: How Aggressive Should They Go?</h3>
+            <div class="preview-story__entry-body">
+              <p>Will coaches treat this as an extension of practice—slow, controlled, with substitutions galore—or approach it as a miniature dress rehearsal?</p>
+            <p>Melbourne may adhere more to its systems, but the Pelicans might push to simulate game pressure, defensive communication, and lineups (even if imperfect) to accelerate learning.</p>
+              
+            </div>
+          </li>
+        </ol>
+          <h3 class="preview-story__subheading">Narrative Questions to Watch</h3>
           <ul class="preview-story__list">
-            <li>Which emerging contributor helps Melbourne United turn preseason reps into regular-season trust?</li>
-            <li>How do New Orleans Pelicans balance veteran rhythm with developmental minutes during the NBA Melbourne Game showcase?</li>
-            <li>Which camp emphasis becomes a lasting talking point for both benches?</li>
+            <li>Which player (rookie or bench piece) converts this high-visibility moment into actual regular-season minutes?</li>
+            <li>How well does the Pelicans’ new blend of youth and veterans hold up under live scrutiny?</li>
+            <li>Does a distinct tactical approach (e.g. small ball, zone vs man, pace changes) emerge and stick as a talking point?</li>
           </ul>
         </article>
 
