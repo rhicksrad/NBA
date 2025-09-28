@@ -495,29 +495,25 @@ registerCharts([
 
       const total = breakdown.reduce((sum, entry) => sum + (entry.games ?? 0), 0);
       return {
-        type: 'polarArea',
+        type: 'doughnut',
         data: {
           labels: breakdown.map((entry) => entry.label ?? ''),
           datasets: [
             {
               data: breakdown.map((entry) => entry.games ?? 0),
               backgroundColor: breakdown.map((_, index) => scheduleLabelColors[index % scheduleLabelColors.length]),
+              borderWidth: 0,
             },
           ],
         },
         options: {
-          scales: {
-            r: {
-              grid: { color: 'rgba(11, 37, 69, 0.08)' },
-              ticks: { callback: (value) => helpers.formatNumber(value, 0) },
-            },
-          },
+          cutout: '48%',
           plugins: {
             legend: { position: 'right', labels: { usePointStyle: true } },
             tooltip: {
               callbacks: {
                 label(context) {
-                  const value = context.parsed.r;
+                  const value = context.parsed;
                   const share = total ? (value / total) * 100 : 0;
                   return `${context.label}: ${helpers.formatNumber(value, 0)} games (${helpers.formatNumber(share, 1)}%)`;
                 },
