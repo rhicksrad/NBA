@@ -10,7 +10,18 @@
       {"game": "G4", "celtics": -0.9, "nuggets": 0.9},
       {"game": "G5", "celtics": 9.3, "nuggets": -9.3},
       {"game": "G6", "celtics": 15.4, "nuggets": -15.4}
-    ]
+    ],
+    "quarterDifferentials": [
+      {"quarter": "Q1", "celtics": 3.7, "nuggets": -3.7},
+      {"quarter": "Q2", "celtics": 2.4, "nuggets": -2.4},
+      {"quarter": "Q3", "celtics": 1.8, "nuggets": -1.8},
+      {"quarter": "Q4", "celtics": 4.2, "nuggets": -4.2}
+    ],
+    "shotProfile": {
+      "zones": ["At rim", "Short mid", "Long mid", "Corner 3", "Above the break"],
+      "celtics": [36, 15, 11, 18, 20],
+      "nuggets": [32, 19, 14, 15, 20]
+    }
   },
   "thunder": {
     "wins": [

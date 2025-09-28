@@ -9,6 +9,8 @@ const palette = {
   navy: '#0b2545',
 };
 
+const finalsZoneColors = ['#1156d6', '#1f7bf0', '#2fb4c8', '#f4b53f', '#ef3d5b'];
+
 const scheduleLabelColors = [
   '#1156d6',
   '#1f6bd4',
@@ -113,6 +115,114 @@ registerCharts([
               grid: { color: 'rgba(11, 37, 69, 0.08)' },
               ticks: {
                 callback: (value) => formatSigned(value, 0),
+              },
+            },
+          },
+        },
+      };
+    },
+  },
+  {
+    element: document.querySelector('[data-chart="finals-quarter-differentials"]'),
+    async createConfig() {
+      const data = await highlightDataPromise;
+      const quarters = Array.isArray(data?.finals?.quarterDifferentials)
+        ? data.finals.quarterDifferentials
+        : [];
+      if (!quarters.length) return null;
+
+      const labels = quarters.map((entry) => entry.quarter ?? '');
+      const celtics = quarters.map((entry) => entry.celtics ?? 0);
+      const nuggets = quarters.map((entry) => entry.nuggets ?? 0);
+
+      return {
+        type: 'bar',
+        data: {
+          labels,
+          datasets: [
+            {
+              label: 'Boston',
+              data: celtics,
+              backgroundColor: palette.royal,
+              borderRadius: 10,
+              maxBarThickness: 34,
+            },
+            {
+              label: 'Denver',
+              data: nuggets,
+              backgroundColor: palette.coral,
+              borderRadius: 10,
+              maxBarThickness: 34,
+            },
+          ],
+        },
+        options: {
+          indexAxis: 'y',
+          layout: { padding: { top: 4, right: 12, bottom: 4, left: 8 } },
+          scales: {
+            y: { grid: { display: false } },
+            x: {
+              grid: { color: 'rgba(11, 37, 69, 0.08)' },
+              ticks: { callback: (value) => formatSigned(value, 0) },
+            },
+          },
+          plugins: {
+            legend: { display: true, position: 'bottom' },
+            tooltip: {
+              callbacks: {
+                label(context) {
+                  return `${context.dataset.label}: ${formatSigned(context.parsed.x, 1)} avg margin`;
+                },
+              },
+            },
+          },
+        },
+      };
+    },
+  },
+  {
+    element: document.querySelector('[data-chart="finals-shot-profile"]'),
+    async createConfig() {
+      const data = await highlightDataPromise;
+      const profile = data?.finals?.shotProfile ?? {};
+      const zones = Array.isArray(profile.zones) ? profile.zones : [];
+      const celtics = Array.isArray(profile.celtics) ? profile.celtics : [];
+      const nuggets = Array.isArray(profile.nuggets) ? profile.nuggets : [];
+      if (!zones.length || !celtics.length || !nuggets.length) return null;
+
+      const sharedColors = zones.map((_, index) => finalsZoneColors[index % finalsZoneColors.length]);
+
+      return {
+        type: 'doughnut',
+        data: {
+          labels: zones,
+          datasets: [
+            {
+              label: 'Boston',
+              data: celtics,
+              backgroundColor: sharedColors,
+              hoverOffset: 4,
+            },
+            {
+              label: 'Denver',
+              data: nuggets,
+              backgroundColor: sharedColors.map((color) => `${color}CC`),
+              hoverOffset: 4,
+              spacing: 2,
+            },
+          ],
+        },
+        options: {
+          layout: { padding: { top: 6, right: 12, bottom: 4, left: 12 } },
+          cutout: '58%',
+          plugins: {
+            legend: { position: 'bottom' },
+            tooltip: {
+              callbacks: {
+                label(context) {
+                  const value = context.parsed;
+                  return `${context.dataset.label}: ${helpers.formatNumber(value, 0)}% from ${context.label}`;
+                },
               },
             },
           },
