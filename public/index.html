@@ -44,6 +44,68 @@
             </article>
           </div>
 
+          <section class="preseason-map" id="camp-atlas">
+            <div class="preseason-map__lead">
+              <span class="chip chip--accent">Training camp atlas</span>
+              <h2>Map every 2025-26 preseason storyline</h2>
+              <p class="lead">
+                Tap a franchise pin to open the scouting capsule anchored to the 2024-25 baseline and see how
+                training camp momentum is building.
+              </p>
+            </div>
+            <div class="preseason-map__layout">
+              <div class="preseason-map__canvas">
+                <div
+                  class="team-map preseason-map__map"
+                  data-preseason-map
+                  aria-label="2025-26 preseason outlook map"
+                  aria-live="polite"
+                ></div>
+              </div>
+              <section class="preseason-map__panel" data-preseason-panel aria-live="polite">
+                <div class="preseason-map__empty" data-preseason-placeholder>
+                  <h3>Select a franchise marker</h3>
+                  <p>We’ll surface the preseason storyline, core strength, and swing factor once you pick a team.</p>
+                </div>
+                <article class="preseason-map__card" data-preseason-card hidden>
+                  <header class="preseason-map__header">
+                    <span class="preseason-map__conference" data-preseason-conference></span>
+                    <h3 data-preseason-heading></h3>
+                    <p class="preseason-map__status" data-preseason-status></p>
+                    <p class="preseason-map__scoreline" data-preseason-scoreline></p>
+                  </header>
+                  <div class="preseason-map__intro" data-preseason-intro></div>
+                  <div class="preseason-map__highlights">
+                    <article>
+                      <h4>Core strength</h4>
+                      <p data-preseason-core></p>
+                    </article>
+                    <article>
+                      <h4>Primary risk</h4>
+                      <p data-preseason-risk></p>
+                    </article>
+                    <article>
+                      <h4>Swing factor</h4>
+                      <p data-preseason-swing></p>
+                    </article>
+                  </div>
+                  <footer class="preseason-map__footer">
+                    <p data-preseason-season></p>
+                    <a
+                      class="button-link button-link--ghost preseason-map__link"
+                      data-preseason-link
+                      href="#"
+                      target="_blank"
+                      rel="noopener"
+                    >
+                      Open full preseason outlook
+                    </a>
+                  </footer>
+                </article>
+              </section>
+            </div>
+          </section>
+
           <section class="spotlight-itinerary" id="spotlight-itinerary">
             <div class="spotlight-itinerary__lead">
               <span class="chip chip--accent">Spotlight itinerary</span>
