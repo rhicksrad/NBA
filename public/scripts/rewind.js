@@ -1,5 +1,4 @@
 import { registerCharts, helpers } from './hub-charts.js';
-import { createTeamLogo } from './team-logos.js';
 
 const palette = {
   royal: '#1156d6',
@@ -315,6 +314,98 @@ registerCharts([
     },
   },
   {
+    element: document.querySelector('[data-chart="rest-zero-share"]'),
+    async createConfig() {
+      const data = await scheduleDataPromise;
+      const restBuckets = Array.isArray(data?.restBuckets) ? data.restBuckets : [];
+      if (!restBuckets.length) return null;
+      const total = restBuckets.reduce((sum, bucket) => sum + (bucket.intervals ?? 0), 0);
+      if (!total) return null;
+
+      const zero = restBuckets.find((bucket) => bucket.label === '0 days')?.intervals ?? 0;
+      const remaining = Math.max(0, total - zero);
+
+      return {
+        type: 'doughnut',
+        data: {
+          labels: ['Zero rest', '1+ days rest'],
+          datasets: [
+            {
+              data: [zero, remaining],
+              backgroundColor: [palette.coral, 'rgba(17, 86, 214, 0.18)'],
+              borderWidth: 0,
+            },
+          ],
+        },
+        options: {
+          cutout: '70%',
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label(context) {
+                  const value = context.parsed;
+                  const share = total ? (value / total) * 100 : 0;
+                  return `${context.label}: ${helpers.formatNumber(value, 0)} intervals (${helpers.formatNumber(share, 1)}%)`;
+                },
+              },
+            },
+            subtitle: {
+              display: true,
+              text: `${helpers.formatNumber((zero / total) * 100, 1)}% zero rest`,
+              color: palette.navy,
+              font: { size: 14, weight: 'bold' },
+            },
+          },
+        },
+      };
+    },
+  },
+  {
+    element: document.querySelector('[data-chart="schedule-label-mix"]'),
+    async createConfig() {
+      const data = await scheduleDataPromise;
+      const breakdown = Array.isArray(data?.labelBreakdown) ? data.labelBreakdown : [];
+      if (!breakdown.length) return null;
+
+      const total = breakdown.reduce((sum, entry) => sum + (entry.games ?? 0), 0);
+      const colors = [palette.royal, palette.gold, palette.sky, palette.teal, palette.coral];
+
+      return {
+        type: 'polarArea',
+        data: {
+          labels: breakdown.map((entry) => entry.label ?? ''),
+          datasets: [
+            {
+              data: breakdown.map((entry) => entry.games ?? 0),
+              backgroundColor: breakdown.map((_, index) => colors[index % colors.length]),
+            },
+          ],
+        },
+        options: {
+          scales: {
+            r: {
+              grid: { color: 'rgba(11, 37, 69, 0.08)' },
+              ticks: { callback: (value) => helpers.formatNumber(value, 0) },
+            },
+          },
+          plugins: {
+            legend: { position: 'right', labels: { usePointStyle: true } },
+            tooltip: {
+              callbacks: {
+                label(context) {
+                  const value = context.parsed.r;
+                  const share = total ? (value / total) * 100 : 0;
+                  return `${context.label}: ${helpers.formatNumber(value, 0)} games (${helpers.formatNumber(share, 1)}%)`;
+                },
+              },
+            },
+          },
+        },
+      };
+    },
+  },
+  {
     element: document.querySelector('[data-chart="back-to-back-loads"]'),
     async createConfig() {
       const data = await scheduleDataPromise;
@@ -365,6 +456,180 @@ registerCharts([
             },
             y: {
               grid: { display: false },
+            },
+          },
+        },
+      };
+    },
+  },
+  {
+    element: document.querySelector('[data-chart="travel-extremes"]'),
+    async createConfig() {
+      const data = await scheduleDataPromise;
+      const teams = Array.isArray(data?.teams) ? data.teams : [];
+      if (!teams.length) return null;
+
+      const ranked = helpers.rankAndSlice(teams, 18, (team) => team.totalGames ?? 0);
+      if (!ranked.length) return null;
+
+      const points = ranked.map((team, index) => ({
+        x: typeof team.averageRestDays === 'number' ? team.averageRestDays : 0,
+        y: typeof team.backToBacks === 'number' ? team.backToBacks : 0,
+        r: Math.max(6, Math.min(24, (team.totalGames ?? 0) * 0.18)),
+        team,
+        backgroundColor: index === 0 ? palette.coral : palette.sky,
+      }));
+
+      return {
+        type: 'bubble',
+        data: {
+          datasets: [
+            {
+              label: 'Team workload',
+              data: points,
+              backgroundColor: points.map((point) => point.backgroundColor),
+              borderColor: 'rgba(11, 37, 69, 0.18)',
+            },
+          ],
+        },
+        options: {
+          parsing: false,
+          layout: { padding: { top: 8, right: 12, bottom: 8, left: 8 } },
+          scales: {
+            x: {
+              title: { display: true, text: 'Average rest days' },
+              grid: { color: 'rgba(11, 37, 69, 0.08)' },
+              ticks: { callback: (value) => helpers.formatNumber(value, 1) },
+            },
+            y: {
+              title: { display: true, text: 'Back-to-back sets' },
+              grid: { color: 'rgba(11, 37, 69, 0.08)' },
+              ticks: { callback: (value) => helpers.formatNumber(value, 0) },
+            },
+          },
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label(context) {
+                  const point = context.raw;
+                  const team = point.team ?? {};
+                  const segments = [team.name ?? team.abbreviation ?? 'Team'];
+                  segments.push(`avg rest ${helpers.formatNumber(point.x, 1)} days`);
+                  segments.push(`${helpers.formatNumber(point.y, 0)} back-to-backs`);
+                  if (typeof team.totalGames === 'number') {
+                    segments.push(`${helpers.formatNumber(team.totalGames, 0)} total games`);
+                  }
+                  return segments.join(' · ');
+                },
+              },
+            },
+          },
+        },
+      };
+    },
+  },
+  {
+    element: document.querySelector('[data-chart="global-showcase-timeline"]'),
+    async createConfig() {
+      const data = await scheduleDataPromise;
+      const specialGames = Array.isArray(data?.specialGames) ? data.specialGames : [];
+      if (!specialGames.length) return null;
+
+      const monthBuckets = new Map();
+      specialGames.forEach((game) => {
+        const date = new Date(game.date);
+        if (Number.isNaN(date.getTime())) return;
+        const key = `${date.getUTCFullYear()}-${date.getUTCMonth()}`;
+        if (!monthBuckets.has(key)) {
+          monthBuckets.set(key, { global: 0, cup: 0, marquee: 0 });
+        }
+        const bucket = monthBuckets.get(key);
+        if (game.label === 'Emirates NBA Cup') {
+          bucket.cup += 1;
+        } else if (
+          game.subtype === 'Global Games' ||
+          game.label?.includes('Paris') ||
+          game.label?.includes('Mexico City') ||
+          game.label?.includes('Abu Dhabi')
+        ) {
+          bucket.global += 1;
+        } else if (game.label === 'NBA Finals') {
+          bucket.marquee += 1;
+        } else {
+          bucket.marquee += 1;
+        }
+      });
+
+      if (!monthBuckets.size) return null;
+
+      const sortedKeys = Array.from(monthBuckets.keys()).sort((a, b) => {
+        const [yearA, monthA] = a.split('-').map(Number);
+        const [yearB, monthB] = b.split('-').map(Number);
+        return yearA !== yearB ? yearA - yearB : monthA - monthB;
+      });
+
+      const monthFormatter = new Intl.DateTimeFormat('en-US', { month: 'short' });
+      const labels = sortedKeys.map((key) => {
+        const [year, month] = key.split('-').map(Number);
+        return monthFormatter.format(new Date(year, month, 1));
+      });
+
+      const orderedBuckets = sortedKeys.map((key) => monthBuckets.get(key));
+
+      const datasets = [
+        {
+          label: 'Global showcases',
+          data: orderedBuckets.map((bucket) => bucket.global ?? 0),
+          borderColor: palette.sky,
+          backgroundColor: 'rgba(31, 123, 255, 0.26)',
+          tension: 0.3,
+          fill: true,
+        },
+        {
+          label: 'Cup action',
+          data: orderedBuckets.map((bucket) => bucket.cup ?? 0),
+          borderColor: palette.gold,
+          backgroundColor: 'rgba(244, 181, 63, 0.24)',
+          tension: 0.3,
+          fill: true,
+        },
+        {
+          label: 'Finale spotlight',
+          data: orderedBuckets.map((bucket) => bucket.marquee ?? 0),
+          borderColor: palette.coral,
+          backgroundColor: 'rgba(239, 61, 91, 0.18)',
+          tension: 0.3,
+          fill: true,
+        },
+      ];
+
+      return {
+        type: 'line',
+        data: { labels, datasets },
+        options: {
+          stacked: false,
+          layout: { padding: { top: 6, right: 16, bottom: 8, left: 8 } },
+          interaction: { mode: 'index', intersect: false },
+          plugins: {
+            legend: { position: 'top', labels: { usePointStyle: true } },
+            tooltip: {
+              callbacks: {
+                title(context) {
+                  return context[0]?.label ?? '';
+                },
+                label(context) {
+                  return `${context.dataset.label}: ${helpers.formatNumber(context.parsed.y, 0)} events`;
+                },
+              },
+            },
+          },
+          scales: {
+            x: { grid: { display: false } },
+            y: {
+              beginAtZero: true,
+              grid: { color: 'rgba(11, 37, 69, 0.08)' },
+              ticks: { callback: (value) => helpers.formatNumber(value, 0) },
             },
           },
         },
@@ -423,6 +688,68 @@ registerCharts([
               ticks: { callback: (value) => helpers.formatNumber(value, 0) },
             },
             y: { grid: { display: false } },
+          },
+        },
+      };
+    },
+  },
+  {
+    element: document.querySelector('[data-chart="clutch-accuracy"]'),
+    async createConfig() {
+      const data = await highlightDataPromise;
+      const composite = Array.isArray(data?.clutchComposite) ? data.clutchComposite : [];
+      if (!composite.length) return null;
+
+      const points = composite.map((entry) => ({
+        x: entry.index ?? 0,
+        y: typeof entry.trueShooting === 'number' ? entry.trueShooting * 100 : null,
+        label: [entry.player, entry.team].filter(Boolean).join(' · '),
+      }));
+
+      const filtered = points.filter((point) => point.y !== null);
+      if (!filtered.length) return null;
+
+      const leader = filtered.reduce((best, point) => (point.x > (best?.x ?? -Infinity) ? point : best), null);
+
+      return {
+        type: 'scatter',
+        data: {
+          datasets: [
+            {
+              label: 'Clutch performers',
+              data: filtered,
+              pointBackgroundColor: filtered.map((point) => (point === leader ? palette.coral : palette.teal)),
+              pointRadius: 6,
+              pointHoverRadius: 8,
+            },
+          ],
+        },
+        options: {
+          layout: { padding: { top: 6, right: 16, bottom: 8, left: 8 } },
+          scales: {
+            x: {
+              title: { display: true, text: 'Composite index' },
+              grid: { color: 'rgba(11, 37, 69, 0.08)' },
+              ticks: { callback: (value) => helpers.formatNumber(value, 0) },
+            },
+            y: {
+              title: { display: true, text: 'True shooting %' },
+              grid: { color: 'rgba(11, 37, 69, 0.08)' },
+              ticks: { callback: (value) => `${helpers.formatNumber(value, 0)}%` },
+              suggestedMin: 45,
+              suggestedMax: 80,
+            },
+          },
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label(context) {
+                  const point = context.raw;
+                  return `${point.label}: index ${helpers.formatNumber(point.x, 0)} · TS ${helpers.formatNumber(point.y, 1)}%`;
+                },
+              },
+            },
           },
         },
       };
@@ -509,230 +836,6 @@ function populateClutchInsights(data) {
   setStat('stat-clutch-leader-ts', leader?.trueShooting, (value) => `${helpers.formatNumber(value * 100, 1)}%`);
 }
 
-function formatMatchup(event, teamMap) {
-  const home = teamMap.get(event.hometeamId);
-  const away = teamMap.get(event.awayteamId);
-  if (home && away) {
-    const homeLabel = home.abbreviation ?? home.name;
-    const awayLabel = away.abbreviation ?? away.name;
-    return `${awayLabel} at ${homeLabel}`;
-  }
-  return '';
-}
-
-function formatLocation(event) {
-  const parts = [];
-  if (event.arena) parts.push(event.arena);
-  const city = [event.city, event.state].filter(Boolean).join(', ');
-  if (city) parts.push(city);
-  return parts.join(' · ');
-}
-
-function buildEventCopy(event, teamMap) {
-  const matchup = formatMatchup(event, teamMap);
-  const location = formatLocation(event);
-  if (event.subLabel === 'NBA Abu Dhabi Game') {
-    return {
-      headline: 'Global preseason lift-off',
-      detail: [matchup, location].filter(Boolean).join(' · ') || location,
-    };
-  }
-  if (event.label === 'NBA Mexico City Game') {
-    return {
-      headline: 'Mexico City global showcase',
-      detail: [matchup, location].filter(Boolean).join(' · ') || location,
-    };
-  }
-  if (event.label === 'Emirates NBA Cup' && event.subLabel === 'Championship') {
-    return {
-      headline: 'Cup championship night in Las Vegas',
-      detail: location || 'Neutral-site finale crowns the field.',
-    };
-  }
-  if (event.label === 'Emirates NBA Cup') {
-    const detailParts = [];
-    if (matchup) detailParts.push(matchup);
-    if (event.subLabel) detailParts.push(event.subLabel);
-    return {
-      headline: 'Cup group play tips off',
-      detail: detailParts.join(' · ') || location,
-    };
-  }
-  if (event.label === 'NBA Paris Game') {
-    return {
-      headline: 'Paris matinee shifts the spotlight',
-      detail: [matchup, location].filter(Boolean).join(' · ') || location,
-    };
-  }
-  if (event.label === 'NBA Finals') {
-    const detailParts = [];
-    if (matchup) detailParts.push(matchup);
-    if (event.subLabel) detailParts.push(event.subLabel);
-    if (event.seriesText) detailParts.push(event.seriesText);
-    return {
-      headline: 'Finals stage set',
-      detail: detailParts.join(' · ') || location,
-    };
-  }
-  const fallbackDetail = [matchup, location].filter(Boolean).join(' · ');
-  return {
-    headline: event.subLabel ? `${event.label} · ${event.subLabel}` : event.label,
-    detail: fallbackDetail,
-  };
-}
-
-function renderBackToBackList(data) {
-  const list = document.querySelector('[data-back-to-back-list]');
-  if (!list) return;
-  list.innerHTML = '';
-  const teams = Array.isArray(data?.backToBackLeaders) ? data.backToBackLeaders : [];
-  const leaders = helpers.rankAndSlice(teams, 5, (entry) => entry.backToBacks ?? 0);
-  if (!leaders.length) {
-    const placeholder = document.createElement('li');
-    placeholder.className = 'rest-list__placeholder';
-    placeholder.textContent = 'Back-to-back insights unavailable.';
-    list.appendChild(placeholder);
-    return;
-  }
-
-  leaders.forEach((team, index) => {
-    const item = document.createElement('li');
-    item.className = 'rest-list__item';
-
-    const rank = document.createElement('span');
-    rank.className = 'rest-list__rank';
-    rank.textContent = String(index + 1);
-
-    const content = document.createElement('div');
-    content.className = 'rest-list__content';
-
-    const teamLabel = team.name ?? team.abbreviation ?? 'NBA';
-    const name = document.createElement('p');
-    name.className = 'rest-list__team';
-    name.textContent = teamLabel;
-    const identity = document.createElement('div');
-    identity.className = 'rest-list__identity';
-    identity.appendChild(createTeamLogo(teamLabel, 'team-logo team-logo--small'));
-    identity.appendChild(name);
-
-    const meta = document.createElement('p');
-    meta.className = 'rest-list__meta';
-    const rest = typeof team.averageRestDays === 'number' ? helpers.formatNumber(team.averageRestDays, 1) : null;
-    meta.textContent = rest
-      ? `${helpers.formatNumber(team.backToBacks ?? 0, 0)} back-to-backs · avg rest ${rest} days`
-      : `${helpers.formatNumber(team.backToBacks ?? 0, 0)} back-to-backs`;
-
-    const notes = document.createElement('p');
-    notes.className = 'rest-list__notes';
-    const longestRoad =
-      typeof team.longestRoadTrip === 'number'
-        ? `${helpers.formatNumber(team.longestRoadTrip ?? 0, 0)}-game road swing`
-        : null;
-    const longestHome =
-      typeof team.longestHomeStand === 'number'
-        ? `${helpers.formatNumber(team.longestHomeStand ?? 0, 0)}-game home stand`
-        : null;
-    const noteParts = [];
-    if (longestRoad) noteParts.push(`Longest road: ${longestRoad}`);
-    if (longestHome) noteParts.push(`Longest home: ${longestHome}`);
-    notes.textContent = noteParts.join(' · ');
-
-    content.append(identity, meta);
-    if (noteParts.length) {
-      content.append(notes);
-    }
-
-    item.append(rank, content);
-    list.append(item);
-  });
-}
-
-function renderTimeline(data) {
-  const list = document.querySelector('[data-special-games]');
-  if (!list) return;
-  list.innerHTML = '';
-
-  const specialGames = Array.isArray(data?.specialGames) ? data.specialGames : [];
-  if (!specialGames.length) {
-    const placeholder = document.createElement('li');
-    placeholder.className = 'timeline__placeholder';
-    placeholder.textContent = 'Special event timeline unavailable.';
-    list.appendChild(placeholder);
-    return;
-  }
-
-  const sorted = [...specialGames].sort((a, b) => new Date(a.date) - new Date(b.date));
-  const selectors = [
-    (games) => games.find((game) => game.subLabel === 'NBA Abu Dhabi Game'),
-    (games) => games.find((game) => game.label === 'NBA Mexico City Game'),
-    (games) => games.find((game) => game.label === 'Emirates NBA Cup' && game.subtype === 'in-season'),
-    (games) => games.find((game) => game.label === 'Emirates NBA Cup' && game.subLabel === 'Championship'),
-    (games) => games.find((game) => game.label === 'NBA Paris Game'),
-    (games) => {
-      const finals = games.filter((game) => game.label === 'NBA Finals');
-      finals.sort((a, b) => new Date(a.date) - new Date(b.date));
-      return finals[0];
-    },
-  ];
-
-  const highlights = [];
-  const usedKeys = new Set();
-  selectors.forEach((select) => {
-    const event = select(sorted);
-    if (event) {
-      const key = `${event.label}-${event.subLabel ?? ''}-${event.date}`;
-      if (!usedKeys.has(key)) {
-        usedKeys.add(key);
-        highlights.push(event);
-      }
-    }
-  });
-
-  if (!highlights.length) {
-    const placeholder = document.createElement('li');
-    placeholder.className = 'timeline__placeholder';
-    placeholder.textContent = 'Special event timeline unavailable.';
-    list.appendChild(placeholder);
-    return;
-  }
-
-  const formatter = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric' });
-  const teamMap = new Map((Array.isArray(data?.teams) ? data.teams : []).map((team) => [team.teamId, team]));
-
-  highlights
-    .sort((a, b) => new Date(a.date) - new Date(b.date))
-    .forEach((event) => {
-      const item = document.createElement('li');
-      item.className = 'timeline__item';
-
-      const dateEl = document.createElement('time');
-      dateEl.className = 'timeline__date';
-      dateEl.dateTime = event.date ?? '';
-      try {
-        dateEl.textContent = formatter.format(new Date(event.date));
-      } catch (error) {
-        dateEl.textContent = event.date ?? '';
-      }
-
-      const { headline, detail } = buildEventCopy(event, teamMap);
-
-      const headlineEl = document.createElement('p');
-      headlineEl.className = 'timeline__headline';
-      headlineEl.textContent = headline;
-
-      item.append(dateEl, headlineEl);
-
-      if (detail) {
-        const detailEl = document.createElement('p');
-        detailEl.className = 'timeline__detail';
-        detailEl.textContent = detail;
-        item.append(detailEl);
-      }
-
-      list.append(item);
-    });
-}
-
 function populateCallouts(data) {
   const totals = data?.totals ?? {};
   const restSummary = data?.restSummary ?? {};
@@ -756,98 +859,12 @@ function populateCallouts(data) {
   setStat('monthly-peak-games', peakMonth?.regularSeason, (value) => helpers.formatNumber(value, 0));
 }
 
-function populateLoadHighlights(data) {
-  const teams = Array.isArray(data?.teams) ? data.teams : [];
-  if (!teams.length) {
-    setStat('stat-marathon-teams', null);
-    setStat('stat-max-games-team', null);
-    setStat('stat-max-games', null);
-    setStat('stat-b2b-leader-count', null);
-    setStat('stat-b2b-leader-team', null);
-    setStat('stat-longest-road', null);
-    setStat('stat-longest-home', null);
-    return;
-  }
-
-  const marathonTeams = teams.filter((team) => (team.totalGames ?? 0) >= 95);
-  const maxGamesTeam = teams.reduce((best, team) => (team.totalGames > (best?.totalGames ?? -Infinity) ? team : best), null);
-  const longestRoad = teams.reduce(
-    (best, team) => (team.longestRoadTrip > (best?.longestRoadTrip ?? -Infinity) ? team : best),
-    null
-  );
-  const longestHome = teams.reduce(
-    (best, team) => (team.longestHomeStand > (best?.longestHomeStand ?? -Infinity) ? team : best),
-    null
-  );
-
-  const b2bLeaders = Array.isArray(data?.backToBackLeaders) ? data.backToBackLeaders : [];
-  const topBackToBack = helpers.rankAndSlice(b2bLeaders, 1, (entry) => entry.backToBacks ?? 0)[0];
-
-  setStat('stat-marathon-teams', marathonTeams.length, (value) => helpers.formatNumber(value, 0));
-  setStat('stat-max-games-team', maxGamesTeam?.name, (value) => value);
-  setStat('stat-max-games', maxGamesTeam?.totalGames, (value) => `${helpers.formatNumber(value, 0)} games`);
-  setStat('stat-b2b-leader-count', topBackToBack?.backToBacks, (value) => helpers.formatNumber(value, 0));
-  setStat('stat-b2b-leader-team', topBackToBack?.name ?? topBackToBack?.abbreviation, (value) => value);
-
-  const longestRoadLabel = longestRoad
-    ? `${helpers.formatNumber(longestRoad.longestRoadTrip ?? 0, 0)} (${longestRoad.abbreviation ?? longestRoad.name})`
-    : null;
-  const longestHomeLabel = longestHome
-    ? `${helpers.formatNumber(longestHome.longestHomeStand ?? 0, 0)} (${longestHome.abbreviation ?? longestHome.name})`
-    : null;
-
-  setStat('stat-longest-road', longestRoadLabel, (value) => value);
-  setStat('stat-longest-home', longestHomeLabel, (value) => value);
-}
-
-function populateRestFooter(data) {
-  const footer = document.querySelector('[data-rest-footer]');
-  if (!footer) return;
-  const restSummary = data?.restSummary ?? {};
-  const restBuckets = Array.isArray(data?.restBuckets) ? data.restBuckets : [];
-  const totalIntervals = restSummary.totalIntervals ?? restBuckets.reduce((sum, bucket) => sum + (bucket.intervals ?? 0), 0);
-  const zeroIntervals = restBuckets.find((bucket) => bucket.label === '0 days')?.intervals ?? 0;
-  if (!totalIntervals) {
-    footer.textContent = 'Rest distribution data unavailable.';
-    return;
-  }
-  const share = (zeroIntervals / totalIntervals) * 100;
-  footer.textContent = `Zero-rest swings accounted for ${helpers.formatNumber(share, 1)}% of ${helpers.formatNumber(
-    totalIntervals,
-    0
-  )} tracked intervals.`;
-}
-
 scheduleDataPromise
   .then((data) => {
     populateCallouts(data);
-    renderBackToBackList(data);
-    renderTimeline(data);
-    populateLoadHighlights(data);
-    populateRestFooter(data);
   })
   .catch((error) => {
     console.error('Unable to hydrate season rewind view', error);
-    const backToBackList = document.querySelector('[data-back-to-back-list]');
-    if (backToBackList) {
-      backToBackList.innerHTML = '';
-      const placeholder = document.createElement('li');
-      placeholder.className = 'rest-list__placeholder';
-      placeholder.textContent = 'Season rewind data unavailable.';
-      backToBackList.appendChild(placeholder);
-    }
-    const timeline = document.querySelector('[data-special-games]');
-    if (timeline) {
-      timeline.innerHTML = '';
-      const placeholder = document.createElement('li');
-      placeholder.className = 'timeline__placeholder';
-      placeholder.textContent = 'Special event timeline unavailable.';
-      timeline.appendChild(placeholder);
-    }
-    const footer = document.querySelector('[data-rest-footer]');
-    if (footer) {
-      footer.textContent = 'Rest distribution data unavailable.';
-    }
   });
 
 highlightDataPromise
