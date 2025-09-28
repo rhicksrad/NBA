@@ -1198,6 +1198,13 @@ function initPlayerAtlas() {
         }
         searchInput.disabled = true;
         setClearVisibility(false);
+      } else {
+        const pendingQuery = searchInput.value.trim();
+        if (pendingQuery) {
+          renderResults(pendingQuery);
+        } else {
+          resetStatusMessages();
+        }
       }
     } catch (err) {
       console.error(err);
