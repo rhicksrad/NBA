@@ -480,7 +480,8 @@ function renderPreseasonTour(openersData) {
         const matchupLabel = [displayHome?.name, displayRoad?.name].filter(Boolean).join(' vs. ');
 
         if (hasPreview) {
-          card.href = `previews/preseason-${game.gameId}.html`;
+          const previewId = String(game.gameId || '').toLowerCase();
+          card.href = `previews/preseason-${previewId}.html`;
           card.setAttribute(
             'aria-label',
             `${matchupLabel || 'Preseason opener'} preseason opener preview`,
@@ -543,7 +544,7 @@ function renderPreseasonTour(openersData) {
         note.className = 'tour-board__note';
         const label = (game.label ?? '').trim();
         const labelText = label ? label : 'Preseason opener';
-        note.textContent = `${labelText} · Preview hub coming soon.`;
+        note.textContent = labelText;
 
         const venue = document.createElement('p');
         venue.className = 'tour-board__meta';
