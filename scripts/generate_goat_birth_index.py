@@ -173,16 +173,20 @@ TEAM_NAME_OVERRIDES: Dict[str, str] = {
     "CAP": "Capital Bullets",
     "CIN": "Cincinnati Royals",
     "KCO": "Kansas City-Omaha Kings",
+    "KC": "Kansas City Kings",
     "NEO": "New Orleans/Oklahoma City Hornets",
     "NOH": "New Orleans Hornets",
     "NOK": "New Orleans/Oklahoma City Hornets",
     "PHW": "Philadelphia Warriors",
     "SAS": "San Antonio Spurs",
+    "SD": "San Diego Rockets",
     "SFW": "San Francisco Warriors",
+    "SF": "San Francisco Warriors",
     "SDC": "San Diego Clippers",
     "SEA": "Seattle SuperSonics",
     "STL": "St. Louis Hawks",
     "VAN": "Vancouver Grizzlies",
+    "NJ": "New Jersey Nets",
 }
 
 
@@ -454,29 +458,54 @@ def build_player_records() -> List[dict]:
     birth_lookup.update(manual_overrides)
     team_lookup = load_team_directory()
 
-    enriched = []
+    combined: dict[str, dict] = {}
+
+    for key, system_player in system_lookup.items():
+        combined[key] = system_player.copy()
+
     for player in curated_players:
         name = player.get("name")
         if not name:
             continue
         key = normalize_name(name)
+        base = combined.get(key, {}).copy()
+        merged = base.copy()
+        merged.update(player)
+
+        if not merged.get("personId"):
+            merged["personId"] = base.get("personId")
+        if not merged.get("resume"):
+            merged["resume"] = base.get("resume")
+        if not merged.get("franchises"):
+            merged["franchises"] = base.get("franchises")
+        if not merged.get("tier"):
+            merged["tier"] = base.get("tier")
+        combined[key] = merged
+
+    enriched: list[dict] = []
+    for key, player in combined.items():
+        name = player.get("name")
+        if not name:
+            continue
         birth = birth_lookup.get(key)
         if not birth:
             continue
 
-        system_player = system_lookup.get(key, {})
+        goat_score = player.get("goatScore")
+        if goat_score is None:
+            continue
 
-        franchise_codes = player.get("franchises") or system_player.get("franchises") or []
-        franchises = [team_lookup.get(code, code) for code in franchise_codes if code]
+        franchises_raw = player.get("franchises") or []
+        franchises = [team_lookup.get(code, code) for code in franchises_raw if code]
 
         enriched.append(
             {
-                "personId": system_player.get("personId"),
+                "personId": player.get("personId"),
                 "name": name,
-                "rank": player.get("rank") or system_player.get("rank"),
-                "goatScore": player.get("goatScore") or system_player.get("goatScore"),
-                "tier": player.get("tier") or system_player.get("tier"),
-                "resume": system_player.get("resume") or player.get("resume"),
+                "rank": player.get("rank"),
+                "goatScore": goat_score,
+                "tier": player.get("tier"),
+                "resume": player.get("resume"),
                 "franchises": franchises,
                 "birthCity": birth.city,
                 "birthState": birth.state,
@@ -484,6 +513,10 @@ def build_player_records() -> List[dict]:
                 "birthCountryCode": birth.country_code,
             }
         )
+
+    enriched.sort(key=lambda item: (-(item.get("goatScore") or 0), item.get("name") or ""))
+    for index, record in enumerate(enriched, start=1):
+        record["rank"] = index
     return enriched
 
 
