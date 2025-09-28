@@ -9,6 +9,21 @@ const palette = {
   navy: '#0b2545',
 };
 
+const scheduleLabelColors = [
+  '#1156d6',
+  '#1f6bd4',
+  '#2f8ded',
+  '#40a5ff',
+  '#2fb4c8',
+  '#3fcebd',
+  '#f4b53f',
+  '#f78c3f',
+  '#ef3d5b',
+  '#c13d6a',
+  '#8457d8',
+  '#3f4d88',
+];
+
 const scheduleDataPromise = fetch('data/season_24_25_schedule.json').then((response) => {
   if (!response.ok) {
     throw new Error(`Failed to load schedule data: ${response.status}`);
@@ -369,8 +384,6 @@ registerCharts([
       if (!breakdown.length) return null;
 
       const total = breakdown.reduce((sum, entry) => sum + (entry.games ?? 0), 0);
-      const colors = [palette.royal, palette.gold, palette.sky, palette.teal, palette.coral];
-
       return {
         type: 'polarArea',
         data: {
@@ -378,7 +391,7 @@ registerCharts([
           datasets: [
             {
               data: breakdown.map((entry) => entry.games ?? 0),
-              backgroundColor: breakdown.map((_, index) => colors[index % colors.length]),
+              backgroundColor: breakdown.map((_, index) => scheduleLabelColors[index % scheduleLabelColors.length]),
             },
           ],
         },
