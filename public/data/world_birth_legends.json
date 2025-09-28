@@ -1,0 +1,195 @@
+{
+  "generatedAt": "2025-09-28T02:25:00Z",
+  "countries": [
+    {
+      "country": "US",
+      "countryName": "United States",
+      "player": "LeBron James",
+      "birthCity": "Akron, Ohio",
+      "headline": "4\u00d7 MVP \u2022 4\u00d7 Finals MVP",
+      "notableTeams": [
+        "Cleveland Cavaliers",
+        "Miami Heat",
+        "Los Angeles Lakers"
+      ]
+    },
+    {
+      "country": "CA",
+      "countryName": "Canada",
+      "player": "Steve Nash",
+      "birthCity": "Johannesburg, South Africa",
+      "headline": "2\u00d7 MVP \u2022 8\u00d7 All-Star",
+      "notableTeams": [
+        "Phoenix Suns",
+        "Dallas Mavericks"
+      ]
+    },
+    {
+      "country": "ES",
+      "countryName": "Spain",
+      "player": "Pau Gasol",
+      "birthCity": "Barcelona, Spain",
+      "headline": "2\u00d7 NBA champion \u2022 6\u00d7 All-Star",
+      "notableTeams": [
+        "Los Angeles Lakers",
+        "Memphis Grizzlies"
+      ]
+    },
+    {
+      "country": "FR",
+      "countryName": "France",
+      "player": "Tony Parker",
+      "birthCity": "Bruges, Belgium",
+      "headline": "4\u00d7 NBA champion \u2022 2007 Finals MVP",
+      "notableTeams": [
+        "San Antonio Spurs"
+      ]
+    },
+    {
+      "country": "GR",
+      "countryName": "Greece",
+      "player": "Giannis Antetokounmpo",
+      "birthCity": "Athens, Greece",
+      "headline": "2\u00d7 MVP \u2022 2021 Finals MVP",
+      "notableTeams": [
+        "Milwaukee Bucks"
+      ]
+    },
+    {
+      "country": "RS",
+      "countryName": "Serbia",
+      "player": "Nikola Joki\u0107",
+      "birthCity": "Sombor, Serbia",
+      "headline": "3\u00d7 MVP \u2022 2023 Finals MVP",
+      "notableTeams": [
+        "Denver Nuggets"
+      ]
+    },
+    {
+      "country": "SI",
+      "countryName": "Slovenia",
+      "player": "Luka Don\u010di\u0107",
+      "birthCity": "Ljubljana, Slovenia",
+      "headline": "5\u00d7 All-Star \u2022 2024 scoring champion",
+      "notableTeams": [
+        "Dallas Mavericks"
+      ]
+    },
+    {
+      "country": "CM",
+      "countryName": "Cameroon",
+      "player": "Joel Embiid",
+      "birthCity": "Yaound\u00e9, Cameroon",
+      "headline": "2023 MVP \u2022 7\u00d7 All-Star",
+      "notableTeams": [
+        "Philadelphia 76ers"
+      ]
+    },
+    {
+      "country": "AU",
+      "countryName": "Australia",
+      "player": "Andrew Bogut",
+      "birthCity": "Melbourne, Australia",
+      "headline": "2005 No. 1 pick \u2022 2015 NBA champion",
+      "notableTeams": [
+        "Milwaukee Bucks",
+        "Golden State Warriors"
+      ]
+    },
+    {
+      "country": "AR",
+      "countryName": "Argentina",
+      "player": "Manu Gin\u00f3bili",
+      "birthCity": "Bah\u00eda Blanca, Argentina",
+      "headline": "4\u00d7 NBA champion \u2022 Hall of Famer",
+      "notableTeams": [
+        "San Antonio Spurs"
+      ]
+    },
+    {
+      "country": "BR",
+      "countryName": "Brazil",
+      "player": "Leandro Barbosa",
+      "birthCity": "S\u00e3o Paulo, Brazil",
+      "headline": "2015 NBA champion \u2022 2007 Sixth Man of the Year",
+      "notableTeams": [
+        "Phoenix Suns",
+        "Golden State Warriors"
+      ]
+    },
+    {
+      "country": "DE",
+      "countryName": "Germany",
+      "player": "Dirk Nowitzki",
+      "birthCity": "W\u00fcrzburg, Germany",
+      "headline": "2007 MVP \u2022 2011 Finals MVP",
+      "notableTeams": [
+        "Dallas Mavericks"
+      ]
+    },
+    {
+      "country": "LT",
+      "countryName": "Lithuania",
+      "player": "Arvydas Sabonis",
+      "birthCity": "Kaunas, Lithuania",
+      "headline": "Hall of Famer \u2022 6\u00d7 EuroLeague champion",
+      "notableTeams": [
+        "Portland Trail Blazers"
+      ]
+    },
+    {
+      "country": "HR",
+      "countryName": "Croatia",
+      "player": "Dra\u017een Petrovi\u0107",
+      "birthCity": "\u0160ibenik, Croatia",
+      "headline": "Hall of Famer \u2022 2\u00d7 All-NBA Third Team",
+      "notableTeams": [
+        "Portland Trail Blazers",
+        "New Jersey Nets"
+      ]
+    },
+    {
+      "country": "CN",
+      "countryName": "China",
+      "player": "Yao Ming",
+      "birthCity": "Shanghai, China",
+      "headline": "8\u00d7 All-Star \u2022 Hall of Famer",
+      "notableTeams": [
+        "Houston Rockets"
+      ]
+    },
+    {
+      "country": "NG",
+      "countryName": "Nigeria",
+      "player": "Hakeem Olajuwon",
+      "birthCity": "Lagos, Nigeria",
+      "headline": "1994 MVP \u2022 2\u00d7 Finals MVP",
+      "notableTeams": [
+        "Houston Rockets"
+      ]
+    },
+    {
+      "country": "LV",
+      "countryName": "Latvia",
+      "player": "Kristaps Porzi\u0146\u0123is",
+      "birthCity": "Liep\u0101ja, Latvia",
+      "headline": "2020 All-Star \u2022 2016 All-Rookie First Team",
+      "notableTeams": [
+        "New York Knicks",
+        "Dallas Mavericks",
+        "Boston Celtics"
+      ]
+    },
+    {
+      "country": "DO",
+      "countryName": "Dominican Republic",
+      "player": "Al Horford",
+      "birthCity": "Puerto Plata, Dominican Republic",
+      "headline": "5\u00d7 All-Star \u2022 2022 East champion anchor",
+      "notableTeams": [
+        "Atlanta Hawks",
+        "Boston Celtics"
+      ]
+    }
+  ]
+}

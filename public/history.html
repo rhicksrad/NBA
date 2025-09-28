@@ -54,10 +54,17 @@
 
           <div class="history-mosaic history-mosaic--wide history-mosaic--atlas">
             <figure class="viz-card viz-card--inline viz-card--atlas-map" data-state-map>
-              <header class="viz-card__title">Best NBA star born in each state</header>
+              <header class="viz-card__title viz-card__title--atlas">
+                <span data-atlas-title>Best NBA star born in each state</span>
+                <button type="button" class="atlas-mode-toggle" data-atlas-toggle>
+                  Explore international mode
+                </button>
+              </header>
               <div class="state-map" data-state-map-tiles></div>
               <figcaption class="viz-card__caption">
-                Select a tile to spotlight the most decorated NBA player born in that state.
+                <span data-atlas-caption>
+                  Select a tile to spotlight the most decorated NBA player born in that state.
+                </span>
               </figcaption>
             </figure>
 
