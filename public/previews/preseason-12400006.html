@@ -6,94 +6,67 @@
     <title>Preseason Preview: New York Knicks at Charlotte Hornets</title>
     <link rel="stylesheet" href="../styles/hub.css" />
     <style>
+      :root {
+        --preview-tint: rgba(0, 107, 182, 0.08);
+        --visual-tint: rgba(29, 17, 96, 0.08);
+      }
+
       body {
         display: flex;
-        align-items: center;
         justify-content: center;
-        padding: 3rem 1.5rem 4rem;
+        align-items: flex-start;
+        padding: clamp(1.5rem, 4vw, 3rem);
+        background: color-mix(in srgb, var(--surface) 90%, rgba(17, 86, 214, 0.04) 10%);
       }
 
       .preview-shell {
-        width: min(960px, 100%);
-        background: color-mix(in srgb, var(--surface) 75%, rgba(0, 107, 182, 0.08) 25%);
-        border-radius: var(--radius-lg);
-        border: 1px solid color-mix(in srgb, var(--royal) 12%, transparent);
+        width: min(1180px, 100%);
+        display: grid;
+        gap: clamp(1.5rem, 3vw, 2.5rem);
+        grid-template-areas: "visuals" "preview" "footer";
+        background: color-mix(in srgb, var(--surface) 75%, var(--preview-tint) 25%);
+        border-radius: var(--radius-xl);
+        border: 1px solid color-mix(in srgb, var(--royal) 15%, transparent);
         box-shadow: var(--shadow-soft);
-        padding: clamp(2.25rem, 5vw, 3rem);
-        display: grid;
-        gap: clamp(1.25rem, 2vw, 1.75rem);
+        padding: clamp(1.75rem, 3vw, 2.5rem);
       }
 
-      header {
+      .visuals {
+        grid-area: visuals;
         display: grid;
-        gap: 0.5rem;
-        text-align: left;
+        gap: clamp(1rem, 3vw, 1.75rem);
+        background: color-mix(in srgb, var(--surface-alt) 72%, var(--visual-tint) 28%);
+        border-radius: var(--radius-lg);
+        border: 1px solid color-mix(in srgb, var(--border) 60%, transparent);
+        padding: clamp(1.5rem, 4vw, 2.75rem);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
       }
 
-      header h1 {
+      .visuals > h2 {
         margin: 0;
-        font-size: clamp(1.9rem, 4vw, 2.4rem);
+        font-size: clamp(1.4rem, 4vw, 1.9rem);
         color: var(--navy);
-      }
-
-      header time {
-        font-weight: 600;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        color: rgba(0, 107, 182, 0.75);
-        font-size: 0.8rem;
-      }
-
-      .chip {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        padding: 0.35rem 0.85rem;
-        border-radius: 999px;
-        background: rgba(0, 107, 182, 0.12);
-        color: #006bb6;
-        font-weight: 600;
-        text-transform: uppercase;
-        font-size: 0.7rem;
-        letter-spacing: 0.08em;
-        width: fit-content;
-      }
-
-      .story {
-        display: grid;
-        gap: 0.75rem;
-      }
-
-      .story h2 {
-        margin: 0;
-        font-size: 1.2rem;
-        color: var(--navy);
-      }
-
-      .story ul {
-        margin: 0;
-        padding-left: 1.2rem;
-        color: var(--text-subtle);
       }
 
       .chart-grid {
         display: grid;
-        gap: 1rem;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: clamp(1.1rem, 3vw, 1.8rem);
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       }
 
       .chart-card {
-        background: color-mix(in srgb, var(--surface-alt) 82%, rgba(29, 17, 96, 0.08) 18%);
-        border: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
-        border-radius: var(--radius-md);
-        padding: 1.1rem;
+        background: color-mix(in srgb, var(--surface-alt) 82%, var(--preview-tint) 18%);
+        border: 1px solid color-mix(in srgb, var(--border) 65%, transparent);
+        border-radius: var(--radius-lg);
+        padding: clamp(1.25rem, 3vw, 1.75rem);
         display: grid;
-        gap: 0.65rem;
+        gap: 0.75rem;
+        box-shadow: var(--shadow-subtle);
       }
 
       .chart-card h3 {
         margin: 0;
-        font-size: 1rem;
+        font-size: clamp(1.05rem, 2vw, 1.2rem);
         color: var(--navy);
       }
 
@@ -103,7 +76,65 @@
         color: var(--text-subtle);
       }
 
+      .preview-copy {
+        grid-area: preview;
+        display: grid;
+        gap: clamp(1rem, 2.5vw, 1.5rem);
+      }
+
+      .preview-copy header {
+        display: grid;
+        gap: 0.4rem;
+      }
+
+      .preview-copy h1 {
+        margin: 0;
+        font-size: clamp(1.8rem, 3.5vw, 2.3rem);
+        color: var(--navy);
+      }
+
+      .preview-copy time {
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: rgba(17, 86, 214, 0.72);
+        font-size: 0.78rem;
+      }
+
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.32rem 0.85rem;
+        border-radius: 999px;
+        background: rgba(17, 86, 214, 0.12);
+        color: var(--royal);
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.68rem;
+        letter-spacing: 0.08em;
+        width: fit-content;
+      }
+
+      .story {
+        display: grid;
+        gap: 0.65rem;
+      }
+
+      .story h2 {
+        margin: 0;
+        font-size: 1.15rem;
+        color: var(--navy);
+      }
+
+      .story ul {
+        margin: 0;
+        padding-left: 1.15rem;
+        color: var(--text-subtle);
+      }
+
       footer {
+        grid-area: footer;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -119,52 +150,54 @@
     <script src="../vendor/chart.umd.js" defer></script>
   </head>
   <body>
-    <main class="preview-shell">
-      <header>
-        <span class="chip">Preseason preview</span>
-        <time datetime="2024-10-06T17:00:00+00:00">Sunday, October 06, 2024 — 17:00 UTC</time>
-        <h1>New York Knicks at Charlotte Hornets</h1>
-        <p><strong>Spectrum Center · Charlotte, NC</strong> · Preseason opener</p>
-        <p class="lead">Tom Thibodeau’s deep rotation meets Charles Lee’s debut in Charlotte, with both benches prioritising reps for young guards and new arrivals.</p>
-      </header>
-
-      <section class="story">
-        <h2>Why it matters in October</h2>
-        <p>New York arrives with Mikal Bridges in tow but will keep its primary starters on short stints. The staff is dialled in on Miles “Deuce” McBride’s on-ball creation, rookie guard Tyler Kolek’s command of second-unit sets, and how Precious Achiuwa looks after a summer of skill work.</p>
-        <p>Charlotte’s Charles Lee is rolling out a modernised offense built around LaMelo Ball and Brandon Miller. Expect Ball to play the first quarter before giving way to rookie forward Tidjane Salaun and sophomore guard Nick Smith Jr. Mark Williams returns after missing most of last year and will be monitored closely.</p>
-        <p>The Hornets are emphasising tempo and length, while the Knicks want to see if their revamped spacing with Donte DiVincenzo and Kolek translates to cleaner drive-and-kick reads. Conditioning and chemistry are the watchwords.</p>
-        <ul>
-          <li>How quickly does Salaun acclimate to NBA physicality against New York’s veteran forwards?</li>
-          <li>Can McBride maintain pressure as a lead guard while sharing the floor with Bridges?</li>
-          <li>Does Mark Williams’ timing on the glass look sharp after a long layoff?</li>
-        </ul>
-      </section>
-
+        <main class="preview-shell">
       <section class="visuals">
-        <h2>Preseason scouting dashboard</h2>
-        <div class="chart-grid">
-          <figure class="chart-card">
-            <h3>Projected evaluation minutes</h3>
-            <canvas id="rotationChart"></canvas>
-            <p>Estimated minutes earmarked for developmental priorities during Charlotte’s opener.</p>
-          </figure>
-          <figure class="chart-card">
-            <h3>Skill focus for guards/wings</h3>
-            <canvas id="developmentChart"></canvas>
-            <p>Coaching emphasis (0-10 scale) for emerging perimeter players on each roster.</p>
-          </figure>
-          <figure class="chart-card">
-            <h3>Availability snapshot</h3>
-            <canvas id="healthChart"></canvas>
-            <p>Roster allocation across full-go groups, monitored workloads, and rehab assignments.</p>
-          </figure>
-        </div>
-      </section>
+              <h2>Preseason scouting dashboard</h2>
+              <div class="chart-grid">
+                <figure class="chart-card">
+                  <h3>Projected evaluation minutes</h3>
+                  <canvas id="rotationChart"></canvas>
+                  <p>Estimated minutes earmarked for developmental priorities during Charlotte’s opener.</p>
+                </figure>
+                <figure class="chart-card">
+                  <h3>Skill focus for guards/wings</h3>
+                  <canvas id="developmentChart"></canvas>
+                  <p>Coaching emphasis (0-10 scale) for emerging perimeter players on each roster.</p>
+                </figure>
+                <figure class="chart-card">
+                  <h3>Availability snapshot</h3>
+                  <canvas id="healthChart"></canvas>
+                  <p>Roster allocation across full-go groups, monitored workloads, and rehab assignments.</p>
+                </figure>
+              </div>
+            </section>
+
+      <article class="preview-copy">
+        <header>
+                <span class="chip">Preseason preview</span>
+                <time datetime="2024-10-06T17:00:00+00:00">Sunday, October 06, 2024 — 17:00 UTC</time>
+                <h1>New York Knicks at Charlotte Hornets</h1>
+                <p><strong>Spectrum Center · Charlotte, NC</strong> · Preseason opener</p>
+                <p class="lead">Tom Thibodeau’s deep rotation meets Charles Lee’s debut in Charlotte, with both benches prioritising reps for young guards and new arrivals.</p>
+              </header>
+
+        <section class="story">
+                <h2>Why it matters in October</h2>
+                <p>New York arrives with Mikal Bridges in tow but will keep its primary starters on short stints. The staff is dialled in on Miles “Deuce” McBride’s on-ball creation, rookie guard Tyler Kolek’s command of second-unit sets, and how Precious Achiuwa looks after a summer of skill work.</p>
+                <p>Charlotte’s Charles Lee is rolling out a modernised offense built around LaMelo Ball and Brandon Miller. Expect Ball to play the first quarter before giving way to rookie forward Tidjane Salaun and sophomore guard Nick Smith Jr. Mark Williams returns after missing most of last year and will be monitored closely.</p>
+                <p>The Hornets are emphasising tempo and length, while the Knicks want to see if their revamped spacing with Donte DiVincenzo and Kolek translates to cleaner drive-and-kick reads. Conditioning and chemistry are the watchwords.</p>
+                <ul>
+                  <li>How quickly does Salaun acclimate to NBA physicality against New York’s veteran forwards?</li>
+                  <li>Can McBride maintain pressure as a lead guard while sharing the floor with Bridges?</li>
+                  <li>Does Mark Williams’ timing on the glass look sharp after a long layoff?</li>
+                </ul>
+              </section>
+      </article>
 
       <footer>
-        <span>Data: training camp reports and performance staff updates through September 28.</span>
-        <a href="../index.html">← Back to preseason hub</a>
-      </footer>
+              <span>Data: training camp reports and performance staff updates through September 28.</span>
+              <a href="../index.html">← Back to preseason hub</a>
+            </footer>
     </main>
 
     <script defer>

@@ -6,94 +6,67 @@
     <title>Preseason Preview: Memphis Grizzlies at Dallas Mavericks</title>
     <link rel="stylesheet" href="../styles/hub.css" />
     <style>
+      :root {
+        --preview-tint: rgba(18, 23, 63, 0.08);
+        --visual-tint: rgba(0, 83, 188, 0.08);
+      }
+
       body {
         display: flex;
-        align-items: center;
         justify-content: center;
-        padding: 3rem 1.5rem 4rem;
+        align-items: flex-start;
+        padding: clamp(1.5rem, 4vw, 3rem);
+        background: color-mix(in srgb, var(--surface) 90%, rgba(17, 86, 214, 0.04) 10%);
       }
 
       .preview-shell {
-        width: min(960px, 100%);
-        background: color-mix(in srgb, var(--surface) 75%, rgba(18, 23, 63, 0.08) 25%);
-        border-radius: var(--radius-lg);
-        border: 1px solid color-mix(in srgb, var(--royal) 12%, transparent);
+        width: min(1180px, 100%);
+        display: grid;
+        gap: clamp(1.5rem, 3vw, 2.5rem);
+        grid-template-areas: "visuals" "preview" "footer";
+        background: color-mix(in srgb, var(--surface) 75%, var(--preview-tint) 25%);
+        border-radius: var(--radius-xl);
+        border: 1px solid color-mix(in srgb, var(--royal) 15%, transparent);
         box-shadow: var(--shadow-soft);
-        padding: clamp(2.25rem, 5vw, 3rem);
-        display: grid;
-        gap: clamp(1.25rem, 2vw, 1.75rem);
+        padding: clamp(1.75rem, 3vw, 2.5rem);
       }
 
-      header {
+      .visuals {
+        grid-area: visuals;
         display: grid;
-        gap: 0.5rem;
-        text-align: left;
+        gap: clamp(1rem, 3vw, 1.75rem);
+        background: color-mix(in srgb, var(--surface-alt) 72%, var(--visual-tint) 28%);
+        border-radius: var(--radius-lg);
+        border: 1px solid color-mix(in srgb, var(--border) 60%, transparent);
+        padding: clamp(1.5rem, 4vw, 2.75rem);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
       }
 
-      header h1 {
+      .visuals > h2 {
         margin: 0;
-        font-size: clamp(1.9rem, 4vw, 2.4rem);
+        font-size: clamp(1.4rem, 4vw, 1.9rem);
         color: var(--navy);
-      }
-
-      header time {
-        font-weight: 600;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        color: rgba(18, 23, 63, 0.75);
-        font-size: 0.8rem;
-      }
-
-      .chip {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        padding: 0.35rem 0.85rem;
-        border-radius: 999px;
-        background: rgba(18, 23, 63, 0.12);
-        color: #12173f;
-        font-weight: 600;
-        text-transform: uppercase;
-        font-size: 0.7rem;
-        letter-spacing: 0.08em;
-        width: fit-content;
-      }
-
-      .story {
-        display: grid;
-        gap: 0.75rem;
-      }
-
-      .story h2 {
-        margin: 0;
-        font-size: 1.2rem;
-        color: var(--navy);
-      }
-
-      .story ul {
-        margin: 0;
-        padding-left: 1.2rem;
-        color: var(--text-subtle);
       }
 
       .chart-grid {
         display: grid;
-        gap: 1rem;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: clamp(1.1rem, 3vw, 1.8rem);
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       }
 
       .chart-card {
-        background: color-mix(in srgb, var(--surface-alt) 82%, rgba(0, 83, 188, 0.08) 18%);
-        border: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
-        border-radius: var(--radius-md);
-        padding: 1.1rem;
+        background: color-mix(in srgb, var(--surface-alt) 82%, var(--preview-tint) 18%);
+        border: 1px solid color-mix(in srgb, var(--border) 65%, transparent);
+        border-radius: var(--radius-lg);
+        padding: clamp(1.25rem, 3vw, 1.75rem);
         display: grid;
-        gap: 0.65rem;
+        gap: 0.75rem;
+        box-shadow: var(--shadow-subtle);
       }
 
       .chart-card h3 {
         margin: 0;
-        font-size: 1rem;
+        font-size: clamp(1.05rem, 2vw, 1.2rem);
         color: var(--navy);
       }
 
@@ -103,7 +76,65 @@
         color: var(--text-subtle);
       }
 
+      .preview-copy {
+        grid-area: preview;
+        display: grid;
+        gap: clamp(1rem, 2.5vw, 1.5rem);
+      }
+
+      .preview-copy header {
+        display: grid;
+        gap: 0.4rem;
+      }
+
+      .preview-copy h1 {
+        margin: 0;
+        font-size: clamp(1.8rem, 3.5vw, 2.3rem);
+        color: var(--navy);
+      }
+
+      .preview-copy time {
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: rgba(17, 86, 214, 0.72);
+        font-size: 0.78rem;
+      }
+
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.32rem 0.85rem;
+        border-radius: 999px;
+        background: rgba(17, 86, 214, 0.12);
+        color: var(--royal);
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.68rem;
+        letter-spacing: 0.08em;
+        width: fit-content;
+      }
+
+      .story {
+        display: grid;
+        gap: 0.65rem;
+      }
+
+      .story h2 {
+        margin: 0;
+        font-size: 1.15rem;
+        color: var(--navy);
+      }
+
+      .story ul {
+        margin: 0;
+        padding-left: 1.15rem;
+        color: var(--text-subtle);
+      }
+
       footer {
+        grid-area: footer;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -119,52 +150,54 @@
     <script src="../vendor/chart.umd.js" defer></script>
   </head>
   <body>
-    <main class="preview-shell">
-      <header>
-        <span class="chip">Preseason preview</span>
-        <time datetime="2024-10-07T23:30:00+00:00">Monday, October 07, 2024 — 23:30 UTC</time>
-        <h1>Memphis Grizzlies at Dallas Mavericks</h1>
-        <p><strong>American Airlines Center · Dallas, TX</strong> · Preseason opener</p>
-        <p class="lead">Memphis unveils an updated frontline while Dallas monitors how its young wings complement Luka Dončić and Kyrie Irving.</p>
-      </header>
-
-      <section class="story">
-        <h2>Why it matters in October</h2>
-        <p>The Grizzlies are prioritising frontcourt answers after last season’s injury crunch. Rookie center Zach Edey will split the backup five minutes with GG Jackson II sliding between the 3 and 4, and coach Taylor Jenkins wants to see Marcus Smart and Desmond Bane in shorter bursts alongside new addition De’Anthony Melton.</p>
-        <p>Dallas has targeted more size and defense on the wing. Dereck Lively II and Daniel Gafford will rotate at center, but the focus is on whether Josh Green and Olivier-Maxence Prosper can provide enough two-way production to reduce the load on Dončić and Irving. Rookie guard AJ Johnson is slated for extended second-half run.</p>
-        <p>Ja Morant (shoulder rehab) is still limited to non-contact work and remains out, while Brandon Clarke returns on a moderate minutes plan. Dallas has a full roster, though Dončić’s workload will be kept light after Olympic play.</p>
-        <ul>
-          <li>Can Edey hold up in space against Dallas’ spread pick-and-roll attack?</li>
-          <li>How do the Mavericks stagger Lively and Gafford without sacrificing pace?</li>
-          <li>Does GG Jackson’s shot selection show progress after a promising summer league?</li>
-        </ul>
-      </section>
-
+        <main class="preview-shell">
       <section class="visuals">
-        <h2>Preseason scouting dashboard</h2>
-        <div class="chart-grid">
-          <figure class="chart-card">
-            <h3>Projected evaluation minutes</h3>
-            <canvas id="rotationChart"></canvas>
-            <p>Estimated minutes earmarked for developmental priorities in Dallas.</p>
-          </figure>
-          <figure class="chart-card">
-            <h3>Skill focus for rotation hopefuls</h3>
-            <canvas id="developmentChart"></canvas>
-            <p>Coaching emphasis (0-10 scale) for players battling for rotation spots.</p>
-          </figure>
-          <figure class="chart-card">
-            <h3>Availability snapshot</h3>
-            <canvas id="healthChart"></canvas>
-            <p>Roster allocation across full-go groups, monitored workloads, and rehab assignments.</p>
-          </figure>
-        </div>
-      </section>
+              <h2>Preseason scouting dashboard</h2>
+              <div class="chart-grid">
+                <figure class="chart-card">
+                  <h3>Projected evaluation minutes</h3>
+                  <canvas id="rotationChart"></canvas>
+                  <p>Estimated minutes earmarked for developmental priorities in Dallas.</p>
+                </figure>
+                <figure class="chart-card">
+                  <h3>Skill focus for rotation hopefuls</h3>
+                  <canvas id="developmentChart"></canvas>
+                  <p>Coaching emphasis (0-10 scale) for players battling for rotation spots.</p>
+                </figure>
+                <figure class="chart-card">
+                  <h3>Availability snapshot</h3>
+                  <canvas id="healthChart"></canvas>
+                  <p>Roster allocation across full-go groups, monitored workloads, and rehab assignments.</p>
+                </figure>
+              </div>
+            </section>
+
+      <article class="preview-copy">
+        <header>
+                <span class="chip">Preseason preview</span>
+                <time datetime="2024-10-07T23:30:00+00:00">Monday, October 07, 2024 — 23:30 UTC</time>
+                <h1>Memphis Grizzlies at Dallas Mavericks</h1>
+                <p><strong>American Airlines Center · Dallas, TX</strong> · Preseason opener</p>
+                <p class="lead">Memphis unveils an updated frontline while Dallas monitors how its young wings complement Luka Dončić and Kyrie Irving.</p>
+              </header>
+
+        <section class="story">
+                <h2>Why it matters in October</h2>
+                <p>The Grizzlies are prioritising frontcourt answers after last season’s injury crunch. Rookie center Zach Edey will split the backup five minutes with GG Jackson II sliding between the 3 and 4, and coach Taylor Jenkins wants to see Marcus Smart and Desmond Bane in shorter bursts alongside new addition De’Anthony Melton.</p>
+                <p>Dallas has targeted more size and defense on the wing. Dereck Lively II and Daniel Gafford will rotate at center, but the focus is on whether Josh Green and Olivier-Maxence Prosper can provide enough two-way production to reduce the load on Dončić and Irving. Rookie guard AJ Johnson is slated for extended second-half run.</p>
+                <p>Ja Morant (shoulder rehab) is still limited to non-contact work and remains out, while Brandon Clarke returns on a moderate minutes plan. Dallas has a full roster, though Dončić’s workload will be kept light after Olympic play.</p>
+                <ul>
+                  <li>Can Edey hold up in space against Dallas’ spread pick-and-roll attack?</li>
+                  <li>How do the Mavericks stagger Lively and Gafford without sacrificing pace?</li>
+                  <li>Does GG Jackson’s shot selection show progress after a promising summer league?</li>
+                </ul>
+              </section>
+      </article>
 
       <footer>
-        <span>Data: team health reports and camp plans updated September 29.</span>
-        <a href="../index.html">← Back to preseason hub</a>
-      </footer>
+              <span>Data: team health reports and camp plans updated September 29.</span>
+              <a href="../index.html">← Back to preseason hub</a>
+            </footer>
     </main>
 
     <script defer>
