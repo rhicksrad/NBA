@@ -4057,11 +4057,16 @@ section h2 { margin-top: 0; font-size: clamp(1.35rem, 3vw, 1.8rem); letter-spaci
   color: color-mix(in srgb, var(--text-subtle) 78%, var(--navy) 22%);
 }
 .player-atlas__teams-tree {
-  display: grid;
+  display: flex;
+  flex-direction: column;
   gap: 0.55rem;
   max-height: clamp(16rem, 48vh, 22rem);
   overflow-y: auto;
   padding-right: 0.25rem;
+}
+
+.player-atlas__teams-tree > * {
+  flex: 0 0 auto;
 }
 .player-atlas__teams-tree:focus-visible { outline: none; }
 .player-atlas__team {
