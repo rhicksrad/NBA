@@ -1,0 +1,297 @@
+import type { RosterTeam, RostersDoc } from "../../types/ball";
+
+type AppState = {
+  doc: RostersDoc | null;
+  loading: boolean;
+  error: string | null;
+  searchTerm: string;
+  teamFilter: string;
+  anchorApplied: boolean;
+};
+
+const app = document.getElementById("players-app");
+
+if (!app) {
+  throw new Error("Missing #players-app container");
+}
+
+const params = new URLSearchParams(window.location.search);
+const initialTeam = (params.get("team") ?? "").toUpperCase();
+const initialSearch = params.get("search") ?? "";
+
+const state: AppState = {
+  doc: null,
+  loading: true,
+  error: null,
+  searchTerm: initialSearch,
+  teamFilter: initialTeam,
+  anchorApplied: false,
+};
+
+function escapeHtml(value: string): string {
+  return value.replace(/[&<>"']/g, (char) => {
+    switch (char) {
+      case "&":
+        return "&amp;";
+      case "<":
+        return "&lt;";
+      case ">":
+        return "&gt;";
+      case '"':
+        return "&quot;";
+      case "'":
+        return "&#39;";
+      default:
+        return char;
+    }
+  });
+}
+
+function formatRelativeTime(iso: string): string {
+  const timestamp = Date.parse(iso);
+  if (Number.isNaN(timestamp)) {
+    return iso;
+  }
+
+  const now = Date.now();
+  const diffSeconds = Math.round((timestamp - now) / 1000);
+  const divisions: Array<{ amount: number; unit: Intl.RelativeTimeFormatUnit }> = [
+    { amount: 60, unit: "second" },
+    { amount: 60, unit: "minute" },
+    { amount: 24, unit: "hour" },
+    { amount: 7, unit: "day" },
+    { amount: 4.34524, unit: "week" },
+    { amount: 12, unit: "month" },
+    { amount: Number.POSITIVE_INFINITY, unit: "year" },
+  ];
+
+  const formatter = new Intl.RelativeTimeFormat("en", { numeric: "auto" });
+  let duration = diffSeconds;
+  for (const division of divisions) {
+    if (Math.abs(duration) < division.amount) {
+      return formatter.format(Math.round(duration), division.unit);
+    }
+    duration /= division.amount;
+  }
+  return formatter.format(Math.round(duration), "year");
+}
+
+function matchesSearch(player: RosterTeam["roster"][number], query: string): boolean {
+  if (!query) {
+    return true;
+  }
+  const lower = query.toLowerCase();
+  const name = `${player.first_name} ${player.last_name}`.toLowerCase();
+  const jersey = player.jersey_number ? `#${player.jersey_number}`.toLowerCase() : "";
+  return name.includes(lower) || jersey.includes(lower);
+}
+
+function updateUrl(paramsToSet: Record<string, string | null>) {
+  const url = new URL(window.location.href);
+  Object.entries(paramsToSet).forEach(([key, value]) => {
+    if (value && value.length) {
+      url.searchParams.set(key, value);
+    } else {
+      url.searchParams.delete(key);
+    }
+  });
+  window.history.replaceState({}, "", url.toString());
+}
+
+function renderLoading() {
+  app.innerHTML = `
+    <div class="roster-status">
+      <p>Loading active rosters…</p>
+    </div>
+  `;
+}
+
+function renderError(message: string) {
+  app.innerHTML = `
+    <div class="roster-status roster-status--error">
+      <p>${escapeHtml(message)}</p>
+      <button type="button" class="roster-button" data-roster-retry>Retry</button>
+    </div>
+  `;
+  const retry = app.querySelector<HTMLButtonElement>("[data-roster-retry]");
+  if (retry) {
+    retry.addEventListener("click", () => fetchDoc(true));
+  }
+}
+
+function renderDoc(doc: RostersDoc) {
+  const teams = [...doc.teams].sort((a, b) => a.abbreviation.localeCompare(b.abbreviation));
+  const selectedTeam = state.teamFilter;
+  if (selectedTeam && !teams.some((team) => team.abbreviation === selectedTeam)) {
+    state.teamFilter = "";
+    updateUrl({ team: null });
+  }
+  const effectiveTeam = state.teamFilter;
+  const visibleTeams = teams.filter((team) => !effectiveTeam || team.abbreviation === effectiveTeam);
+  const teamOptions = ["", ...teams.map((team) => team.abbreviation)];
+
+  const hasTeams = teams.length > 0;
+  const lastUpdatedText = hasTeams
+    ? formatRelativeTime(doc.fetched_at)
+    : "not yet available";
+  const timestampTitle = hasTeams
+    ? new Date(doc.fetched_at).toLocaleString()
+    : "No roster snapshot cached yet";
+
+  const headerHtml = `
+    <div class="roster-controls">
+      <div class="roster-controls__filters">
+        <label class="roster-controls__field">
+          <span class="roster-controls__label">Search</span>
+          <input
+            id="roster-search"
+            class="roster-input"
+            type="search"
+            placeholder="Search by name or jersey"
+            value="${escapeHtml(state.searchTerm)}"
+            autocomplete="off"
+          />
+        </label>
+        <label class="roster-controls__field">
+          <span class="roster-controls__label">Team</span>
+          <select id="roster-team" class="roster-select">
+            ${teamOptions
+              .map((code) => {
+                const label = code || "All teams";
+                const selected = code === effectiveTeam ? "selected" : "";
+                return `<option value="${code}">${label}</option>`;
+              })
+              .join("")}
+          </select>
+        </label>
+      </div>
+      <div class="roster-controls__meta">
+        <small title="${timestampTitle}">
+          Last updated: ${lastUpdatedText} • Source: BallDontLie
+        </small>
+        <button type="button" class="roster-button" data-roster-refresh>Refresh</button>
+      </div>
+    </div>
+  `;
+
+  const sections = visibleTeams
+    .map((team) => {
+      const players = team.roster.filter((player) => matchesSearch(player, state.searchTerm));
+      const items = players
+        .map((player) => {
+          const jersey = player.jersey_number ? `#${player.jersey_number}` : "";
+          const pieces = [player.position ?? "", jersey].filter(Boolean).join(" · ");
+          const meta = [player.height ?? "", player.weight ? `${player.weight} lb` : ""]
+            .filter(Boolean)
+            .join(" • ");
+          return `
+            <li class="roster-player">
+              <span class="roster-player__name">${escapeHtml(`${player.first_name} ${player.last_name}`)}</span>
+              ${pieces ? `<span class="roster-player__role">${escapeHtml(pieces)}</span>` : ""}
+              ${meta ? `<span class="roster-player__meta">${escapeHtml(meta)}</span>` : ""}
+            </li>
+          `;
+        })
+        .join("");
+
+      const emptyMessage = players.length ? "" : `<li class="roster-player roster-player--empty">No players match this filter.</li>`;
+
+      return `
+        <section class="roster-team" data-team-anchor="${team.abbreviation}">
+          <header class="roster-team__header">
+            <h3 id="team-${team.abbreviation}">${team.abbreviation}</h3>
+            <p>${escapeHtml(team.full_name)} · ${players.length} players</p>
+          </header>
+          <ul class="roster-list">
+            ${items || emptyMessage}
+          </ul>
+        </section>
+      `;
+    })
+    .join("");
+
+  let noTeamsMessage = "";
+  if (!hasTeams) {
+    noTeamsMessage = `<div class="roster-status roster-status--empty"><p>Rosters are not cached yet. Use Refresh to try again.</p></div>`;
+  } else if (!visibleTeams.length) {
+    noTeamsMessage = `<div class="roster-status roster-status--empty"><p>No teams match the current filter.</p></div>`;
+  }
+
+  app.innerHTML = `${headerHtml}<div class="roster-teams">${sections}${noTeamsMessage}</div>`;
+
+  const searchInput = document.getElementById("roster-search") as HTMLInputElement | null;
+  const teamSelect = document.getElementById("roster-team") as HTMLSelectElement | null;
+  const refreshButton = app.querySelector<HTMLButtonElement>("[data-roster-refresh]");
+
+  if (searchInput) {
+    searchInput.addEventListener("input", (event) => {
+      const value = (event.target as HTMLInputElement).value;
+      state.searchTerm = value;
+      updateUrl({ search: value });
+      render();
+    });
+  }
+
+  if (teamSelect) {
+    teamSelect.addEventListener("change", (event) => {
+      const value = (event.target as HTMLSelectElement).value.toUpperCase();
+      state.teamFilter = value;
+      state.anchorApplied = !value;
+      updateUrl({ team: value });
+      render();
+    });
+  }
+
+  if (refreshButton) {
+    refreshButton.addEventListener("click", () => fetchDoc(true));
+  }
+
+  if (!state.anchorApplied && state.teamFilter) {
+    const anchor = app.querySelector(`[data-team-anchor="${state.teamFilter}"]`);
+    if (anchor) {
+      anchor.scrollIntoView({ behavior: "smooth", block: "start" });
+      state.anchorApplied = true;
+    }
+  }
+}
+
+function render() {
+  if (state.loading) {
+    renderLoading();
+    return;
+  }
+  if (state.error) {
+    renderError(state.error);
+    return;
+  }
+  if (state.doc) {
+    renderDoc(state.doc);
+  }
+}
+
+async function fetchDoc(cacheBust = false) {
+  state.loading = true;
+  state.error = null;
+  render();
+  const baseUrl = "/data/rosters.json";
+  const url = cacheBust ? `${baseUrl}?cb=${Date.now()}` : baseUrl;
+  try {
+    const response = await fetch(url, { cache: "no-store" });
+    if (!response.ok) {
+      throw new Error(`Request failed with status ${response.status}`);
+    }
+    const json = (await response.json()) as RostersDoc;
+    if (!json || !Array.isArray(json.teams)) {
+      throw new Error("Malformed roster payload");
+    }
+    state.doc = json;
+    state.loading = false;
+    render();
+  } catch (error) {
+    state.loading = false;
+    state.error = error instanceof Error ? error.message : "Unable to load rosters.";
+    render();
+  }
+}
+
+fetchDoc();
