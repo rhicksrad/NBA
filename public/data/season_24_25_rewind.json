@@ -32,22 +32,26 @@
     }
   },
   "thunder": {
-    "wins": [
-      {"season": "2020-21", "wins": 22},
-      {"season": "2021-22", "wins": 24},
-      {"season": "2022-23", "wins": 40},
-      {"season": "2023-24", "wins": 57},
-      {"season": "2024-25", "wins": 61}
+    "monthlyWins": [
+      {"month": "Oct", "wins": 5},
+      {"month": "Nov", "wins": 11},
+      {"month": "Dec", "wins": 10},
+      {"month": "Jan", "wins": 12},
+      {"month": "Feb", "wins": 9},
+      {"month": "Mar", "wins": 8},
+      {"month": "Apr", "wins": 6}
     ],
     "netRating": 6.9,
     "clutchWins": 27
   },
-  "leaguePace": [
-    {"season": "2020-21", "pace": 100.4},
-    {"season": "2021-22", "pace": 99.6},
-    {"season": "2022-23", "pace": 100.2},
-    {"season": "2023-24", "pace": 99.5},
-    {"season": "2024-25", "pace": 99.2}
+  "leaguePaceMonthly": [
+    {"month": "Oct", "pace": 100},
+    {"month": "Nov", "pace": 99.5},
+    {"month": "Dec", "pace": 99.1},
+    {"month": "Jan", "pace": 98.9},
+    {"month": "Feb", "pace": 99},
+    {"month": "Mar", "pace": 99.3},
+    {"month": "Apr", "pace": 98.8}
   ],
   "clutchComposite": [
     {"player": "S. Gilgeous-Alexander", "team": "OKC", "index": 134, "trueShooting": 0.67},
