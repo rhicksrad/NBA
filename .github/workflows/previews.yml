@@ -7,43 +7,64 @@ on:
   schedule:
     - cron: "27 7 * * *"
 
+permissions:
+  contents: write
+  pull-requests: write
+
 jobs:
   build-previews:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: "pnpm"
+          cache: pnpm
+
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
           version: 9.1.0
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+
       - name: Stamp date
         id: metadata
         run: echo "date=$(date -u +'%Y-%m-%d')" >> "$GITHUB_OUTPUT"
+
       - name: Generate previews
         run: pnpm previews
+
       - name: Detect changes
+        id: changes
+        shell: bash
         run: |
-          git diff --quiet || echo "changes" > /tmp/changed
-      - name: Configure git
-        if: ${{ hashFiles('/tmp/changed') != '' }}
+          if git diff --quiet; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Configure git and push branch
+        if: steps.changes.outputs.changed == 'true'
         run: |
           git config user.name "automation"
           git config user.email "actions@users.noreply.github.com"
           DATE='${{ steps.metadata.outputs.date }}'
-          git checkout -B chore/auto-previews-${{ github.run_id }}
+          git checkout -B "chore/auto-previews-${{ github.run_id }}"
           git add -A
           git commit -m "chore(previews): refresh canonical data and regenerate previews for ${DATE}"
           git push -u origin HEAD
+
       - name: Open pull request
-        if: ${{ hashFiles('/tmp/changed') != '' }}
+        if: steps.changes.outputs.changed == 'true'
         uses: peter-evans/create-pull-request@v6
         with:
           title: "Auto refresh previews ${{ steps.metadata.outputs.date }}"
