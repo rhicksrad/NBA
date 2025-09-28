@@ -33,6 +33,13 @@
 - **Outputs:** `public/data/players_overview.json`, `public/data/historic_games.json`, `public/data/team_performance.json`, `public/data/player_leaders.json`, and `public/data/player_season_insights.json`.
 - **Why it matters:** Keeps the browser payload tiny while ensuring the MVP reflects every dataset shipped with the repository.
 
+### Team profile snapshot (map experience)
+
+- **Description:** All-time franchise dashboards backing the map interaction on `public/teams.html`, including wins, losses, and twelve per-game benchmarks.
+- **How to regenerate:** Run `python scripts/build_team_profiles.py`. The helper reuses `TeamHistories.csv` for active franchise IDs and streams `TeamStatistics.zip` to compute all-time averages.
+- **Outputs:** `public/data/team_profiles.json`.
+- **Why it matters:** Ensures the team explorer always reflects the fullest historical sample available instead of a small seasonal slice.
+
 ### Phase 1 — Data plumbing pipeline
 
 - **Description:** Integrates official league roster feeds, standardizes historical CSV tables, and normalizes `personId` references across datasets.
