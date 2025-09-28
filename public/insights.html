@@ -28,25 +28,29 @@
         </div>
         <div class="hero hero--lab">
           <div class="hero__intro">
-            <span class="eyebrow">Insights Lab Observatory</span>
-            <h1>Immersive analytics prototypes in active rotation</h1>
+            <span class="eyebrow">Insights Lab Reset</span>
+            <h1>The place where we test data insights</h1>
+            <p class="hero__lead">
+              Playful prototypes built to answer the NBA's strangest questions with numbers, storytelling, and just enough
+              skepticism to keep us honest.
+            </p>
           </div>
           <dl class="hero-metrics hero-metrics--lab">
             <div class="hero-metrics__item">
-              <dt>Active experiments</dt>
-              <dd data-metric="experiments">--</dd>
+              <dt>Temperature swing effect</dt>
+              <dd data-metric="temp-impact-hero">--</dd>
             </div>
             <div class="hero-metrics__item">
-              <dt>Avg. launch readiness</dt>
-              <dd data-metric="readiness">--</dd>
+              <dt>Nightlife penalty</dt>
+              <dd data-metric="nightlife-gap-hero">--</dd>
             </div>
             <div class="hero-metrics__item">
-              <dt>Collaboration nodes</dt>
-              <dd data-metric="collaboration">--</dd>
+              <dt>Mascot edge</dt>
+              <dd data-metric="mascot-edge-hero">--</dd>
             </div>
             <div class="hero-metrics__item">
-              <dt>Next sync countdown</dt>
-              <dd data-metric="sync">--</dd>
+              <dt>Games studied</dt>
+              <dd data-metric="sample-size">--</dd>
             </div>
           </dl>
         </div>
@@ -56,137 +60,46 @@
         <section class="lab-grid">
           <article class="lab-module lab-module--wide" data-chart-wrapper>
             <header class="lab-module__header">
-              <h2>Release velocity constellations</h2>
+              <h2>Does weather affect scoring?</h2>
               <div class="lab-module__meta">
-                <span class="lab-chip">Highlights per sprint</span>
-                <span class="lab-chip lab-chip--accent" data-metric="velocity">--</span>
+                <span class="lab-chip">Average points by outdoor temperature</span>
+                <span class="lab-chip lab-chip--accent" data-metric="temp-impact-detail">--</span>
               </div>
             </header>
             <div class="viz-canvas">
-              <canvas id="release-velocity" data-chart-ratio="0.55"></canvas>
-            </div>
-          </article>
-
-          <article class="lab-module" data-chart-wrapper>
-            <header class="lab-module__header">
-              <h2>Status orbit</h2>
-              <div class="lab-module__meta">
-                <span class="lab-chip">Stage energy</span>
-                <span class="lab-chip lab-chip--accent" data-metric="status">--</span>
-              </div>
-            </header>
-            <div class="viz-canvas">
-              <canvas id="status-orbit" data-chart-ratio="0.8"></canvas>
-            </div>
-          </article>
-
-          <article class="lab-module" data-chart-wrapper>
-            <header class="lab-module__header">
-              <h2>Readiness radar</h2>
-              <div class="lab-module__meta">
-                <span class="lab-chip">Checklist peaks</span>
-                <span class="lab-chip lab-chip--accent" data-metric="readiness-max">--</span>
-              </div>
-            </header>
-            <div class="viz-canvas">
-              <canvas id="readiness-radar" data-chart-ratio="0.85"></canvas>
-            </div>
-          </article>
-
-          <article class="lab-module" data-chart-wrapper>
-            <header class="lab-module__header">
-              <h2>Launch gauge</h2>
-              <div class="lab-module__meta">
-                <span class="lab-chip">Average completion</span>
-                <span class="lab-chip lab-chip--accent" data-metric="readiness-avg">--</span>
-              </div>
-            </header>
-            <div class="viz-canvas">
-              <canvas id="readiness-gauge" data-chart-ratio="1"></canvas>
+              <canvas id="weather-scoring" data-chart-ratio="0.55"></canvas>
             </div>
           </article>
 
           <article class="lab-module lab-module--tall" data-chart-wrapper>
             <header class="lab-module__header">
-              <h2>Experiment swarm</h2>
+              <h2>Do road teams slump near nightlife?</h2>
               <div class="lab-module__meta">
-                <span class="lab-chip">Momentum map</span>
-                <span class="lab-chip lab-chip--accent" data-metric="experiment-horizon">--</span>
+                <span class="lab-chip">Road win rate vs. strip club density</span>
+                <span class="lab-chip lab-chip--accent" data-metric="nightlife-gap-detail">--</span>
               </div>
             </header>
             <div class="viz-canvas">
-              <canvas id="experiment-swarm" data-chart-ratio="0.75"></canvas>
+              <canvas id="nightlife-road" data-chart-ratio="0.8"></canvas>
             </div>
           </article>
 
           <article class="lab-module lab-module--tall" data-chart-wrapper>
             <header class="lab-module__header">
-              <h2>Progression ladder</h2>
+              <h2>Mascot strength: dogs vs. cats</h2>
               <div class="lab-module__meta">
-                <span class="lab-chip">Deepest stage</span>
-                <span class="lab-chip lab-chip--accent" data-metric="experiment-progress">--</span>
+                <span class="lab-chip">Win share battle</span>
+                <span class="lab-chip lab-chip--accent" data-metric="mascot-edge-detail">--</span>
               </div>
             </header>
             <div class="viz-canvas">
-              <canvas id="experiment-ladder" data-chart-ratio="0.8"></canvas>
-            </div>
-          </article>
-
-          <article class="lab-module" data-chart-wrapper>
-            <header class="lab-module__header">
-              <h2>Objective ribbon</h2>
-              <div class="lab-module__meta">
-                <span class="lab-chip">Cumulative briefs</span>
-                <span class="lab-chip lab-chip--accent" data-metric="objective-total">--</span>
-              </div>
-            </header>
-            <div class="viz-canvas">
-              <canvas id="objective-ribbon" data-chart-ratio="0.6"></canvas>
-            </div>
-          </article>
-
-          <article class="lab-module" data-chart-wrapper>
-            <header class="lab-module__header">
-              <h2>Agenda orbit</h2>
-              <div class="lab-module__meta">
-                <span class="lab-chip">Focus weight</span>
-                <span class="lab-chip lab-chip--accent" data-metric="agenda-span">--</span>
-              </div>
-            </header>
-            <div class="viz-canvas">
-              <canvas id="agenda-orbit" data-chart-ratio="1"></canvas>
-            </div>
-          </article>
-
-          <article class="lab-module" data-chart-wrapper>
-            <header class="lab-module__header">
-              <h2>Channel lattice</h2>
-              <div class="lab-module__meta">
-                <span class="lab-chip">Signal density</span>
-                <span class="lab-chip lab-chip--accent" data-metric="channel-count">--</span>
-              </div>
-            </header>
-            <div class="viz-canvas viz-canvas--grid">
-              <canvas id="channel-grid" data-chart-ratio="0.75"></canvas>
-            </div>
-          </article>
-
-          <article class="lab-module" data-chart-wrapper>
-            <header class="lab-module__header">
-              <h2>Contributor bloom</h2>
-              <div class="lab-module__meta">
-                <span class="lab-chip">Lead bandwidth</span>
-                <span class="lab-chip lab-chip--accent" data-metric="contributor-count">--</span>
-              </div>
-            </header>
-            <div class="viz-canvas">
-              <canvas id="contributor-radial" data-chart-ratio="0.85"></canvas>
+              <canvas id="mascot-strength" data-chart-ratio="0.8"></canvas>
             </div>
           </article>
         </section>
       </main>
 
-      <footer class="page-footer">Ideas incubated here will power the next wave of NBA experiences.</footer>
+      <footer class="page-footer">This is where hunches meet datasets &mdash; and occasionally become headlines.</footer>
     </div>
     <script src="vendor/chart.umd.js" defer></script>
     <script type="module" src="scripts/insights.js"></script>
