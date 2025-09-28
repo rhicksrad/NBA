@@ -719,13 +719,13 @@ function extractPersonIdFromProfile(player) {
   if (!player) return null;
   const rawId = typeof player.id === 'string' ? player.id : null;
   if (rawId) {
-    const match = rawId.match(/(\d{6,})$/);
+    const match = rawId.match(/(\d{4,})$/);
     if (match) {
       return match[1];
     }
   }
   if (Array.isArray(player.keywords)) {
-    const keywordId = player.keywords.find((keyword) => /^(\d{6,})$/.test(keyword));
+    const keywordId = player.keywords.find((keyword) => /^(\d{4,})$/.test(keyword));
     if (keywordId) {
       return keywordId;
     }
@@ -750,19 +750,51 @@ function computeRecentGoatScore(components) {
 }
 
 function buildGoatScoreLookup(source) {
-  const lookup = new Map();
   const entries = Array.isArray(source?.players) ? source.players : [];
-  entries.forEach((player) => {
-    if (!player || player.status !== 'Active' || !player.personId) {
-      return;
+  const records = entries
+    .map((player) => {
+      if (!player || !player.personId) {
+        return null;
+      }
+      const historical = Number.isFinite(player.goatScore) ? player.goatScore : null;
+      const historicalRank = Number.isFinite(player.rank) ? player.rank : null;
+      const recent = computeRecentGoatScore(player.goatComponents);
+      return {
+        personId: player.personId,
+        historical,
+        historicalRank,
+        recent,
+        recentRank: null,
+      };
+    })
+    .filter(Boolean);
+
+  const rankedRecent = records
+    .filter((entry) => Number.isFinite(entry.recent))
+    .sort((a, b) => b.recent - a.recent);
+
+  let previousScore = null;
+  let previousRank = 0;
+  rankedRecent.forEach((entry, index) => {
+    if (previousScore !== null && entry.recent === previousScore) {
+      entry.recentRank = previousRank;
+    } else {
+      entry.recentRank = index + 1;
+      previousScore = entry.recent;
+      previousRank = entry.recentRank;
     }
-    const historical = Number.isFinite(player.goatScore) ? player.goatScore : null;
-    const recent = computeRecentGoatScore(player.goatComponents);
-    lookup.set(player.personId, {
-      historical,
-      recent,
+  });
+
+  const lookup = new Map();
+  records.forEach((entry) => {
+    lookup.set(entry.personId, {
+      historical: entry.historical,
+      historicalRank: entry.historicalRank,
+      recent: entry.recent,
+      recentRank: entry.recentRank,
     });
   });
+
   return lookup;
 }
 
@@ -781,8 +813,12 @@ function initPlayerAtlas() {
   const profile = atlas.querySelector('[data-player-profile]');
   const nameEl = atlas.querySelector('[data-player-name]');
   const metaEl = atlas.querySelector('[data-player-meta]');
-  const goatRecentEl = atlas.querySelector('[data-player-goat-recent]');
-  const goatHistoricEl = atlas.querySelector('[data-player-goat-historic]');
+  const goatRecentContainer = atlas.querySelector('[data-player-goat-recent]');
+  const goatHistoricContainer = atlas.querySelector('[data-player-goat-historic]');
+  const goatRecentValueEl = atlas.querySelector('[data-player-goat-recent-score]');
+  const goatRecentRankEl = atlas.querySelector('[data-player-goat-recent-rank]');
+  const goatHistoricValueEl = atlas.querySelector('[data-player-goat-historic-score]');
+  const goatHistoricRankEl = atlas.querySelector('[data-player-goat-historic-rank]');
   const bioEl = atlas.querySelector('[data-player-bio]');
   const archetypeEl = atlas.querySelector('[data-player-archetype]');
   const vitalsEl = atlas.querySelector('[data-player-vitals]');
@@ -797,8 +833,12 @@ function initPlayerAtlas() {
     !profile ||
     !nameEl ||
     !metaEl ||
-    !goatRecentEl ||
-    !goatHistoricEl ||
+    !goatRecentContainer ||
+    !goatHistoricContainer ||
+    !goatRecentValueEl ||
+    !goatRecentRankEl ||
+    !goatHistoricValueEl ||
+    !goatHistoricRankEl ||
     !bioEl ||
     !archetypeEl
   ) {
@@ -813,7 +853,33 @@ function initPlayerAtlas() {
   let hasError = false;
   let goatLookup = new Map();
   const defaultEmptyText = empty?.textContent?.trim() ?? '';
-  const formatGoatValue = (value) => (Number.isFinite(value) ? helpers.formatNumber(value, 1) : '—');
+  const formatGoatNumber = (value) => (Number.isFinite(value) ? helpers.formatNumber(value, 1) : '—');
+  const formatGoatRank = (rank) => `No. ${Number.isFinite(rank) ? helpers.formatNumber(rank, 0) : '—'}`;
+  const describeGoatScore = (value, rank) => {
+    const parts = [];
+    parts.push(
+      Number.isFinite(value)
+        ? `${helpers.formatNumber(value, 1)} GOAT points`
+        : 'GOAT score unavailable'
+    );
+    parts.push(
+      Number.isFinite(rank)
+        ? `Ranked No. ${helpers.formatNumber(rank, 0)}`
+        : 'ranking unavailable'
+    );
+    return parts.join(' · ');
+  };
+  const renderGoatScore = (container, valueEl, rankEl, value, rank, label) => {
+    if (valueEl) {
+      valueEl.textContent = formatGoatNumber(value);
+    }
+    if (rankEl) {
+      rankEl.textContent = formatGoatRank(rank);
+    }
+    if (container && label) {
+      container.setAttribute('aria-label', `${label}: ${describeGoatScore(value, rank)}`);
+    }
+  };
 
   const setClearVisibility = (value) => {
     if (!clearButton) return;
@@ -1067,17 +1133,30 @@ function initPlayerAtlas() {
     nameEl.textContent = player.name;
     metaEl.textContent = renderMeta(player);
     const goatScores = player?.goatScores;
-    if (goatRecentEl) {
-      const recentValue = Number.isFinite(goatScores?.recent) ? goatScores.recent : null;
-      goatRecentEl.textContent = formatGoatValue(recentValue);
-    }
-    if (goatHistoricEl) {
-      const fallbackHistorical = Number.isFinite(player?.goatScore) ? player.goatScore : null;
-      const historicValue = Number.isFinite(goatScores?.historical)
-        ? goatScores.historical
-        : fallbackHistorical;
-      goatHistoricEl.textContent = formatGoatValue(historicValue);
-    }
+    const recentValue = Number.isFinite(goatScores?.recent) ? goatScores.recent : null;
+    const recentRank = Number.isFinite(goatScores?.recentRank) ? goatScores.recentRank : null;
+    renderGoatScore(
+      goatRecentContainer,
+      goatRecentValueEl,
+      goatRecentRankEl,
+      recentValue,
+      recentRank,
+      'GOAT score over the last three seasons'
+    );
+
+    const fallbackHistorical = Number.isFinite(player?.goatScore) ? player.goatScore : null;
+    const historicValue = Number.isFinite(goatScores?.historical)
+      ? goatScores.historical
+      : fallbackHistorical;
+    const historicRank = Number.isFinite(goatScores?.historicalRank) ? goatScores.historicalRank : null;
+    renderGoatScore(
+      goatHistoricContainer,
+      goatHistoricValueEl,
+      goatHistoricRankEl,
+      historicValue,
+      historicRank,
+      'Career GOAT score'
+    );
     bioEl.textContent = player?.bio || '';
     archetypeEl.textContent = player?.archetype || '—';
     if (vitalsEl) {

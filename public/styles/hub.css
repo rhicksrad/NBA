@@ -4077,9 +4077,21 @@ section h2 { margin-top: 0; font-size: clamp(1.35rem, 3vw, 1.8rem); letter-spaci
   justify-items: end;
 }
 .player-card__goat-value {
+  display: grid;
+  gap: 0.15rem;
+  justify-items: end;
+}
+.player-card__goat-number {
   font-size: clamp(1.5rem, 3vw, 1.9rem);
   font-weight: 700;
   color: color-mix(in srgb, var(--royal) 65%, var(--navy) 35%);
+}
+.player-card__goat-rank {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--text-subtle) 60%, var(--navy) 40%);
 }
 .player-card__goat-context {
   font-size: 0.78rem;
