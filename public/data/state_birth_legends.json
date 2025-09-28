@@ -1,0 +1,550 @@
+{
+  "generatedAt": "2025-09-28T02:10:21.087940Z",
+  "states": [
+    {
+      "state": "AL",
+      "stateName": "Alabama",
+      "player": "Charles Barkley",
+      "birthCity": "Leeds",
+      "headline": "1993 MVP \u2022 11\u00d7 All-Star",
+      "notableTeams": [
+        "Philadelphia 76ers",
+        "Phoenix Suns",
+        "Houston Rockets"
+      ]
+    },
+    {
+      "state": "AK",
+      "stateName": "Alaska",
+      "player": "Carlos Boozer",
+      "birthCity": "Juneau",
+      "headline": "2\u00d7 All-Star \u2022 2008 Olympic gold medalist",
+      "notableTeams": [
+        "Utah Jazz",
+        "Chicago Bulls"
+      ]
+    },
+    {
+      "state": "AZ",
+      "stateName": "Arizona",
+      "player": "Sean Elliott",
+      "birthCity": "Tucson",
+      "headline": "1999 NBA champion \u2022 2\u00d7 All-Star",
+      "notableTeams": [
+        "San Antonio Spurs"
+      ]
+    },
+    {
+      "state": "AR",
+      "stateName": "Arkansas",
+      "player": "Scottie Pippen",
+      "birthCity": "Hamburg",
+      "headline": "6\u00d7 NBA champion \u2022 Hall of Famer",
+      "notableTeams": [
+        "Chicago Bulls",
+        "Portland Trail Blazers"
+      ]
+    },
+    {
+      "state": "CA",
+      "stateName": "California",
+      "player": "Kawhi Leonard",
+      "birthCity": "Riverside",
+      "headline": "2\u00d7 Finals MVP \u2022 2\u00d7 Defensive Player of the Year",
+      "notableTeams": [
+        "San Antonio Spurs",
+        "Toronto Raptors",
+        "Los Angeles Clippers"
+      ]
+    },
+    {
+      "state": "CO",
+      "stateName": "Colorado",
+      "player": "Chauncey Billups",
+      "birthCity": "Denver",
+      "headline": "2004 Finals MVP \u2022 5\u00d7 All-Star",
+      "notableTeams": [
+        "Detroit Pistons",
+        "Denver Nuggets"
+      ]
+    },
+    {
+      "state": "CT",
+      "stateName": "Connecticut",
+      "player": "Calvin Murphy",
+      "birthCity": "Norwalk",
+      "headline": "1979 All-Star \u2022 Hall of Famer",
+      "notableTeams": [
+        "Houston Rockets"
+      ]
+    },
+    {
+      "state": "DE",
+      "stateName": "Delaware",
+      "player": "Walt Hazzard",
+      "birthCity": "Wilmington",
+      "headline": "1964 Olympic gold \u2022 1968 All-Star",
+      "notableTeams": [
+        "Los Angeles Lakers",
+        "Seattle SuperSonics"
+      ]
+    },
+    {
+      "state": "DC",
+      "stateName": "District of Columbia",
+      "player": "Kevin Durant",
+      "birthCity": "Washington",
+      "headline": "2014 MVP \u2022 2\u00d7 Finals MVP",
+      "notableTeams": [
+        "Oklahoma City Thunder",
+        "Golden State Warriors",
+        "Phoenix Suns"
+      ]
+    },
+    {
+      "state": "FL",
+      "stateName": "Florida",
+      "player": "Vince Carter",
+      "birthCity": "Daytona Beach",
+      "headline": "8\u00d7 All-Star \u2022 1999 Rookie of the Year",
+      "notableTeams": [
+        "Toronto Raptors",
+        "New Jersey Nets"
+      ]
+    },
+    {
+      "state": "GA",
+      "stateName": "Georgia",
+      "player": "Dwight Howard",
+      "birthCity": "Atlanta",
+      "headline": "3\u00d7 Defensive Player of the Year \u2022 8\u00d7 All-Star",
+      "notableTeams": [
+        "Orlando Magic",
+        "Los Angeles Lakers"
+      ]
+    },
+    {
+      "state": "HI",
+      "stateName": "Hawaii",
+      "player": "Cedric Ceballos",
+      "birthCity": "Maui",
+      "headline": "1995 All-Star \u2022 Slam Dunk champion",
+      "notableTeams": [
+        "Phoenix Suns",
+        "Los Angeles Lakers"
+      ]
+    },
+    {
+      "state": "ID",
+      "stateName": "Idaho",
+      "player": "Luke Ridnour",
+      "birthCity": "Coeur d'Alene",
+      "headline": "2005 All-Rookie Team point guard",
+      "notableTeams": [
+        "Seattle SuperSonics",
+        "Milwaukee Bucks"
+      ]
+    },
+    {
+      "state": "IL",
+      "stateName": "Illinois",
+      "player": "Dwyane Wade",
+      "birthCity": "Chicago",
+      "headline": "3\u00d7 NBA champion \u2022 13\u00d7 All-Star",
+      "notableTeams": [
+        "Miami Heat",
+        "Chicago Bulls"
+      ]
+    },
+    {
+      "state": "IN",
+      "stateName": "Indiana",
+      "player": "Larry Bird",
+      "birthCity": "West Baden Springs",
+      "headline": "3\u00d7 MVP \u2022 12\u00d7 All-Star",
+      "notableTeams": [
+        "Boston Celtics"
+      ]
+    },
+    {
+      "state": "IA",
+      "stateName": "Iowa",
+      "player": "Harrison Barnes",
+      "birthCity": "Ames",
+      "headline": "2015 NBA champion \u2022 Olympic gold medalist",
+      "notableTeams": [
+        "Golden State Warriors",
+        "Sacramento Kings"
+      ]
+    },
+    {
+      "state": "KS",
+      "stateName": "Kansas",
+      "player": "Alvan Adams",
+      "birthCity": "Lawrence",
+      "headline": "1976 Rookie of the Year \u2022 All-Star",
+      "notableTeams": [
+        "Phoenix Suns"
+      ]
+    },
+    {
+      "state": "KY",
+      "stateName": "Kentucky",
+      "player": "Wes Unseld",
+      "birthCity": "Louisville",
+      "headline": "1969 MVP & Rookie of the Year",
+      "notableTeams": [
+        "Washington Bullets"
+      ]
+    },
+    {
+      "state": "LA",
+      "stateName": "Louisiana",
+      "player": "Karl Malone",
+      "birthCity": "Summerfield",
+      "headline": "2\u00d7 MVP \u2022 14\u00d7 All-Star",
+      "notableTeams": [
+        "Utah Jazz"
+      ]
+    },
+    {
+      "state": "ME",
+      "stateName": "Maine",
+      "player": "Duncan Robinson",
+      "birthCity": "York",
+      "headline": "Heat sharpshooter with multiple 200+ three-point seasons",
+      "notableTeams": [
+        "Miami Heat"
+      ]
+    },
+    {
+      "state": "MD",
+      "stateName": "Maryland",
+      "player": "Victor Oladipo",
+      "birthCity": "Silver Spring",
+      "headline": "2\u00d7 All-Star \u2022 2018 steals leader",
+      "notableTeams": [
+        "Indiana Pacers",
+        "Orlando Magic"
+      ]
+    },
+    {
+      "state": "MA",
+      "stateName": "Massachusetts",
+      "player": "Bill Laimbeer",
+      "birthCity": "Boston",
+      "headline": "2\u00d7 NBA champion \u2022 4\u00d7 All-Star",
+      "notableTeams": [
+        "Detroit Pistons"
+      ]
+    },
+    {
+      "state": "MI",
+      "stateName": "Michigan",
+      "player": "Magic Johnson",
+      "birthCity": "Lansing",
+      "headline": "5\u00d7 NBA champion \u2022 3\u00d7 MVP",
+      "notableTeams": [
+        "Los Angeles Lakers"
+      ]
+    },
+    {
+      "state": "MN",
+      "stateName": "Minnesota",
+      "player": "Kevin McHale",
+      "birthCity": "Hibbing",
+      "headline": "3\u00d7 NBA champion \u2022 Hall of Famer",
+      "notableTeams": [
+        "Boston Celtics"
+      ]
+    },
+    {
+      "state": "MS",
+      "stateName": "Mississippi",
+      "player": "Spencer Haywood",
+      "birthCity": "Silver City",
+      "headline": "1970 scoring champ \u2022 Hall of Famer",
+      "notableTeams": [
+        "Seattle SuperSonics",
+        "New York Knicks"
+      ]
+    },
+    {
+      "state": "MO",
+      "stateName": "Missouri",
+      "player": "Jayson Tatum",
+      "birthCity": "St. Louis",
+      "headline": "Multiple All-NBA first team selections",
+      "notableTeams": [
+        "Boston Celtics"
+      ]
+    },
+    {
+      "state": "MT",
+      "stateName": "Montana",
+      "player": "Phil Jackson",
+      "birthCity": "Deer Lodge",
+      "headline": "2\u00d7 NBA champion forward \u2022 11\u00d7 title-winning coach",
+      "notableTeams": [
+        "New York Knicks",
+        "Chicago Bulls"
+      ]
+    },
+    {
+      "state": "NE",
+      "stateName": "Nebraska",
+      "player": "Bob Boozer",
+      "birthCity": "Omaha",
+      "headline": "1968 All-Star \u2022 Olympic gold medalist",
+      "notableTeams": [
+        "Cincinnati Royals",
+        "Chicago Bulls"
+      ]
+    },
+    {
+      "state": "NV",
+      "stateName": "Nevada",
+      "player": "Greg Anthony",
+      "birthCity": "Las Vegas",
+      "headline": "1990 NCAA champion floor general",
+      "notableTeams": [
+        "New York Knicks",
+        "Portland Trail Blazers"
+      ]
+    },
+    {
+      "state": "NH",
+      "stateName": "New Hampshire",
+      "player": "Matt Bonner",
+      "birthCity": "Concord",
+      "headline": "2\u00d7 NBA champion stretch big",
+      "notableTeams": [
+        "San Antonio Spurs",
+        "Toronto Raptors"
+      ]
+    },
+    {
+      "state": "NJ",
+      "stateName": "New Jersey",
+      "player": "Shaquille O'Neal",
+      "birthCity": "Newark",
+      "headline": "4\u00d7 NBA champion \u2022 2000 MVP",
+      "notableTeams": [
+        "Los Angeles Lakers",
+        "Miami Heat"
+      ]
+    },
+    {
+      "state": "NM",
+      "stateName": "New Mexico",
+      "player": "Bill Bridges",
+      "birthCity": "Hobbs",
+      "headline": "3\u00d7 All-Star \u2022 1975 NBA champion",
+      "notableTeams": [
+        "St. Louis/Atlanta Hawks",
+        "Los Angeles Lakers"
+      ]
+    },
+    {
+      "state": "NY",
+      "stateName": "New York",
+      "player": "Michael Jordan",
+      "birthCity": "Brooklyn",
+      "headline": "6\u00d7 NBA champion \u2022 5\u00d7 MVP",
+      "notableTeams": [
+        "Chicago Bulls"
+      ]
+    },
+    {
+      "state": "NC",
+      "stateName": "North Carolina",
+      "player": "Chris Paul",
+      "birthCity": "Winston-Salem",
+      "headline": "12\u00d7 All-Star \u2022 6\u00d7 steals leader",
+      "notableTeams": [
+        "New Orleans Hornets",
+        "Phoenix Suns"
+      ]
+    },
+    {
+      "state": "ND",
+      "stateName": "North Dakota",
+      "player": "Doug McDermott",
+      "birthCity": "Grand Forks",
+      "headline": "2014 National Player of the Year \u2022 NBA sharpshooter",
+      "notableTeams": [
+        "Indiana Pacers",
+        "San Antonio Spurs"
+      ]
+    },
+    {
+      "state": "OH",
+      "stateName": "Ohio",
+      "player": "LeBron James",
+      "birthCity": "Akron",
+      "headline": "4\u00d7 NBA champion \u2022 4\u00d7 MVP",
+      "notableTeams": [
+        "Cleveland Cavaliers",
+        "Los Angeles Lakers"
+      ]
+    },
+    {
+      "state": "OK",
+      "stateName": "Oklahoma",
+      "player": "Blake Griffin",
+      "birthCity": "Oklahoma City",
+      "headline": "6\u00d7 All-Star \u2022 2011 Rookie of the Year",
+      "notableTeams": [
+        "Los Angeles Clippers",
+        "Detroit Pistons"
+      ]
+    },
+    {
+      "state": "OR",
+      "stateName": "Oregon",
+      "player": "Danny Ainge",
+      "birthCity": "Eugene",
+      "headline": "2\u00d7 NBA champion guard",
+      "notableTeams": [
+        "Boston Celtics"
+      ]
+    },
+    {
+      "state": "PA",
+      "stateName": "Pennsylvania",
+      "player": "Kobe Bryant",
+      "birthCity": "Philadelphia",
+      "headline": "5\u00d7 NBA champion \u2022 2008 MVP",
+      "notableTeams": [
+        "Los Angeles Lakers"
+      ]
+    },
+    {
+      "state": "RI",
+      "stateName": "Rhode Island",
+      "player": "Marvin Barnes",
+      "birthCity": "Providence",
+      "headline": "1975 ABA Rookie of the Year",
+      "notableTeams": [
+        "Spirit of St. Louis",
+        "Detroit Pistons"
+      ]
+    },
+    {
+      "state": "SC",
+      "stateName": "South Carolina",
+      "player": "Kevin Garnett",
+      "birthCity": "Greenville",
+      "headline": "2004 MVP \u2022 15\u00d7 All-Star",
+      "notableTeams": [
+        "Minnesota Timberwolves",
+        "Boston Celtics"
+      ]
+    },
+    {
+      "state": "SD",
+      "stateName": "South Dakota",
+      "player": "Mike Miller",
+      "birthCity": "Mitchell",
+      "headline": "2001 Rookie of the Year \u2022 2\u00d7 champion",
+      "notableTeams": [
+        "Memphis Grizzlies",
+        "Miami Heat"
+      ]
+    },
+    {
+      "state": "TN",
+      "stateName": "Tennessee",
+      "player": "Penny Hardaway",
+      "birthCity": "Memphis",
+      "headline": "4\u00d7 All-Star \u2022 2\u00d7 All-NBA First Team",
+      "notableTeams": [
+        "Orlando Magic",
+        "Phoenix Suns"
+      ]
+    },
+    {
+      "state": "TX",
+      "stateName": "Texas",
+      "player": "LaMarcus Aldridge",
+      "birthCity": "Dallas",
+      "headline": "7\u00d7 All-Star \u2022 5\u00d7 All-NBA",
+      "notableTeams": [
+        "Portland Trail Blazers",
+        "San Antonio Spurs"
+      ]
+    },
+    {
+      "state": "UT",
+      "stateName": "Utah",
+      "player": "Tom Chambers",
+      "birthCity": "Ogden",
+      "headline": "4\u00d7 All-Star \u2022 1987 All-Star Game MVP",
+      "notableTeams": [
+        "Seattle SuperSonics",
+        "Phoenix Suns"
+      ]
+    },
+    {
+      "state": "VT",
+      "stateName": "Vermont",
+      "player": null,
+      "birthCity": null,
+      "headline": "Still awaiting its first NBA alumnus",
+      "notableTeams": []
+    },
+    {
+      "state": "VA",
+      "stateName": "Virginia",
+      "player": "Allen Iverson",
+      "birthCity": "Hampton",
+      "headline": "2001 MVP \u2022 11\u00d7 All-Star",
+      "notableTeams": [
+        "Philadelphia 76ers",
+        "Denver Nuggets"
+      ]
+    },
+    {
+      "state": "WA",
+      "stateName": "Washington",
+      "player": "John Stockton",
+      "birthCity": "Spokane",
+      "headline": "All-time assists & steals leader",
+      "notableTeams": [
+        "Utah Jazz"
+      ]
+    },
+    {
+      "state": "WV",
+      "stateName": "West Virginia",
+      "player": "Jerry West",
+      "birthCity": "Chelyan",
+      "headline": "14\u00d7 All-Star \u2022 NBA logo inspiration",
+      "notableTeams": [
+        "Los Angeles Lakers"
+      ]
+    },
+    {
+      "state": "WI",
+      "stateName": "Wisconsin",
+      "player": "Latrell Sprewell",
+      "birthCity": "Milwaukee",
+      "headline": "4\u00d7 All-Star swingman",
+      "notableTeams": [
+        "Golden State Warriors",
+        "New York Knicks"
+      ]
+    },
+    {
+      "state": "WY",
+      "stateName": "Wyoming",
+      "player": "James Johnson",
+      "birthCity": "Cheyenne",
+      "headline": "Versatile forward and 2011 NBA champion",
+      "notableTeams": [
+        "Miami Heat",
+        "Toronto Raptors"
+      ]
+    }
+  ]
+}

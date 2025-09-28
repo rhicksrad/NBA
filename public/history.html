@@ -55,7 +55,7 @@
       <main>
         <section class="history-section">
           <div class="history-section__header">
-            <h2>Timeline atlas</h2>
+            <h2>Legends atlas</h2>
             <div class="history-badges">
               <span class="history-badge">
                 <span class="history-badge__label">Active franchises</span>
@@ -72,49 +72,41 @@
             </div>
           </div>
 
-          <div class="history-mosaic history-mosaic--wide">
-            <figure class="viz-card viz-card--inline" data-chart-wrapper>
-              <header class="viz-card__title">Games logged by decade</header>
+          <div class="history-mosaic history-mosaic--wide history-mosaic--atlas">
+            <figure class="viz-card viz-card--inline viz-card--wide" data-chart-wrapper>
+              <header class="viz-card__title">Average points per game by season</header>
               <div class="viz-canvas">
-                <canvas data-chart="games-by-decade" aria-describedby="games-by-decade-caption"></canvas>
+                <canvas data-chart="scoring-averages" aria-describedby="scoring-averages-caption"></canvas>
               </div>
-              <figcaption id="games-by-decade-caption" class="viz-card__caption">
-                A filled spline highlights how the archive scales from the BAA launch through today's slate.
+              <figcaption id="scoring-averages-caption" class="viz-card__caption">
+                Line traces highlight how regular season and postseason scoring pace has ebbed and surged across every logged season.
+              </figcaption>
+            </figure>
+
+            <figure class="viz-card viz-card--inline viz-card--tall" data-state-map>
+              <header class="viz-card__title">Best NBA star born in each state</header>
+              <div class="state-map" data-state-map-tiles></div>
+              <figcaption class="viz-card__caption">
+                Select a tile to spotlight the most decorated NBA player born in that state.
               </figcaption>
             </figure>
 
             <figure class="viz-card viz-card--inline" data-chart-wrapper>
-              <header class="viz-card__title">Season logging velocity</header>
+              <header class="viz-card__title">Highest scoring seasons on record</header>
               <div class="viz-canvas">
-                <canvas data-chart="season-velocity" data-chart-ratio="0.62" aria-describedby="season-velocity-caption"></canvas>
+                <canvas data-chart="scoring-leaders" aria-describedby="scoring-leaders-caption"></canvas>
               </div>
-              <figcaption id="season-velocity-caption" class="viz-card__caption">
-                Each season's captured games stream across the decades to show spikes in schedule density.
+              <figcaption id="scoring-leaders-caption" class="viz-card__caption">
+                The loudest combined point totals underscore when pace and shot-making pushed games to all-time highs.
               </figcaption>
-            </figure>
-
-            <figure class="viz-card viz-card--inline" data-chart-wrapper>
-              <header class="viz-card__title">Cumulative archive build</header>
-              <div class="viz-canvas">
-                <canvas data-chart="cumulative-games" data-chart-ratio="0.62" aria-describedby="cumulative-games-caption"></canvas>
-              </div>
-              <figcaption id="cumulative-games-caption" class="viz-card__caption">
-                An ascending ribbon quantifies how quickly total logged contests approach the modern era.</figcaption>
-            </figure>
-
-            <figure class="viz-card viz-card--inline" data-chart-wrapper>
-              <header class="viz-card__title">Expansion fingerprint</header>
-              <div class="viz-canvas">
-                <canvas data-chart="franchise-radar" data-chart-ratio="0.75" aria-describedby="franchise-radar-caption"></canvas>
-              </div>
-              <figcaption id="franchise-radar-caption" class="viz-card__caption">
-                A radial map compares franchise arrivals by decade to spotlight expansion surges.</figcaption>
             </figure>
           </div>
 
           <aside class="timeline-panel">
-            <h3>Expansion timeline</h3>
-            <ol class="timeline" data-history="expansion-timeline"></ol>
+            <h3>State spotlight</h3>
+            <div class="state-spotlight" data-state-spotlight>
+              <p class="state-spotlight__placeholder">Select a state tile to meet its headline legend.</p>
+            </div>
           </aside>
         </section>
 

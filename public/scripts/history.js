@@ -39,6 +39,65 @@ const summaryEls = {
   seasonCount: document.querySelector('[data-history="season-count"]'),
 };
 
+const atlasEls = {
+  map: document.querySelector('[data-state-map-tiles]'),
+  spotlight: document.querySelector('[data-state-spotlight]'),
+};
+
+const tileCoordinates = {
+  AL: { col: 6, row: 5 },
+  AK: { col: 1, row: 6 },
+  AZ: { col: 1, row: 4 },
+  AR: { col: 5, row: 4 },
+  CA: { col: 1, row: 3 },
+  CO: { col: 3, row: 4 },
+  CT: { col: 11, row: 2 },
+  DC: { col: 10, row: 4 },
+  DE: { col: 10, row: 3 },
+  FL: { col: 8, row: 5 },
+  GA: { col: 9, row: 4 },
+  HI: { col: 9, row: 6 },
+  IA: { col: 4, row: 2 },
+  ID: { col: 2, row: 2 },
+  IL: { col: 5, row: 2 },
+  IN: { col: 6, row: 2 },
+  KS: { col: 4, row: 4 },
+  KY: { col: 6, row: 3 },
+  LA: { col: 4, row: 5 },
+  MA: { col: 11, row: 3 },
+  MD: { col: 9, row: 3 },
+  ME: { col: 10, row: 1 },
+  MI: { col: 6, row: 1 },
+  MN: { col: 4, row: 1 },
+  MO: { col: 5, row: 3 },
+  MS: { col: 5, row: 5 },
+  MT: { col: 2, row: 1 },
+  NC: { col: 7, row: 4 },
+  ND: { col: 3, row: 1 },
+  NE: { col: 4, row: 3 },
+  NH: { col: 9, row: 1 },
+  NJ: { col: 10, row: 2 },
+  NM: { col: 1, row: 5 },
+  NV: { col: 2, row: 3 },
+  NY: { col: 9, row: 2 },
+  OH: { col: 7, row: 2 },
+  OK: { col: 2, row: 5 },
+  OR: { col: 1, row: 2 },
+  PA: { col: 8, row: 2 },
+  RI: { col: 12, row: 2 },
+  SC: { col: 8, row: 4 },
+  SD: { col: 3, row: 2 },
+  TN: { col: 6, row: 4 },
+  TX: { col: 3, row: 5 },
+  UT: { col: 2, row: 4 },
+  VA: { col: 8, row: 3 },
+  VT: { col: 8, row: 1 },
+  WA: { col: 1, row: 1 },
+  WI: { col: 5, row: 1 },
+  WV: { col: 7, row: 3 },
+  WY: { col: 3, row: 3 },
+};
+
 function parseDate(value) {
   if (!value) return null;
   const normalized = value.includes('T') ? value : value.replace(' ', 'T');
@@ -63,6 +122,119 @@ function setText(target, text) {
     return;
   }
   target.textContent = text;
+}
+
+function renderStateSpotlight(entry) {
+  if (!atlasEls.spotlight) return;
+  atlasEls.spotlight.innerHTML = '';
+
+  if (!entry) {
+    const placeholder = document.createElement('p');
+    placeholder.className = 'state-spotlight__placeholder';
+    placeholder.textContent = 'Select a state tile to meet its headline legend.';
+    atlasEls.spotlight.append(placeholder);
+    return;
+  }
+
+  const heading = document.createElement('span');
+  heading.className = 'state-spotlight__state';
+  heading.textContent = `${entry.stateName ?? entry.state ?? ''}`;
+
+  const playerLine = document.createElement('p');
+  if (entry.player) {
+    playerLine.className = 'state-spotlight__player';
+    playerLine.textContent = entry.player;
+  } else {
+    playerLine.className = 'state-spotlight__empty';
+    playerLine.textContent = entry.headline || 'No NBA alumni recorded yet.';
+  }
+
+  atlasEls.spotlight.append(heading, playerLine);
+
+  if (entry.birthCity) {
+    const locale = document.createElement('p');
+    locale.className = 'state-spotlight__meta';
+    locale.textContent = `Born in ${entry.birthCity}`;
+    atlasEls.spotlight.append(locale);
+  }
+
+  if (entry.headline && entry.player) {
+    const headline = document.createElement('p');
+    headline.className = 'state-spotlight__headline';
+    headline.textContent = entry.headline;
+    atlasEls.spotlight.append(headline);
+  }
+
+  if (Array.isArray(entry.notableTeams) && entry.notableTeams.length) {
+    const list = document.createElement('ul');
+    list.className = 'state-spotlight__teams';
+    entry.notableTeams.forEach((team) => {
+      const item = document.createElement('li');
+      item.className = 'state-spotlight__team';
+      item.textContent = team;
+      list.append(item);
+    });
+    atlasEls.spotlight.append(list);
+  }
+}
+
+function renderStateAtlas(atlas) {
+  if (!atlasEls.map) return;
+  const entries = Array.isArray(atlas?.states) ? atlas.states : [];
+  atlasEls.map.innerHTML = '';
+
+  let activeTile = null;
+  let defaultSelection = null;
+
+  entries.forEach((entry) => {
+    const coords = tileCoordinates[entry.state];
+    if (!coords) return;
+    const tile = document.createElement('button');
+    tile.type = 'button';
+    tile.className = 'state-tile';
+    if (entry.player) {
+      tile.setAttribute('aria-pressed', 'false');
+    } else {
+      tile.classList.add('state-tile--empty');
+    }
+    tile.textContent = entry.state;
+    tile.style.gridColumn = coords.col;
+    tile.style.gridRow = coords.row;
+    tile.title = entry.player
+      ? `${entry.player} — ${entry.headline ?? ''}`.trim()
+      : `${entry.stateName ?? entry.state}: ${entry.headline ?? 'No NBA alumni yet'}`;
+
+    if (entry.player) {
+      tile.addEventListener('click', () => {
+        if (activeTile === tile) return;
+        if (activeTile) {
+          activeTile.classList.remove('state-tile--selected');
+          activeTile.setAttribute('aria-pressed', 'false');
+        }
+        activeTile = tile;
+        tile.classList.add('state-tile--selected');
+        tile.setAttribute('aria-pressed', 'true');
+        renderStateSpotlight(entry);
+      });
+      if (!defaultSelection) {
+        defaultSelection = { entry, tile };
+      }
+    } else {
+      tile.addEventListener('click', () => {
+        renderStateSpotlight(entry);
+      });
+    }
+
+    atlasEls.map.append(tile);
+  });
+
+  if (defaultSelection) {
+    defaultSelection.tile.classList.add('state-tile--selected');
+    defaultSelection.tile.setAttribute('aria-pressed', 'true');
+    renderStateSpotlight(defaultSelection.entry);
+  } else if (atlasEls.spotlight) {
+    renderStateSpotlight(null);
+  }
 }
 
 function formatTeamName(team) {
@@ -110,8 +282,10 @@ function updateEraSummary(history) {
 }
 
 function populateExpansionTimeline(franchises) {
-  if (!summaryEls.expansionTimeline) return;
-  summaryEls.expansionTimeline.innerHTML = '';
+  const timelineRoot = summaryEls.expansionTimeline;
+  if (timelineRoot) {
+    timelineRoot.innerHTML = '';
+  }
   const decadeEntries = Array.isArray(franchises?.decades) ? franchises.decades : [];
   const teams = Array.isArray(franchises?.activeFranchises) ? franchises.activeFranchises : [];
 
@@ -131,27 +305,29 @@ function populateExpansionTimeline(franchises) {
         .filter((team) => Math.floor(team.seasonFounded / 10) * 10 === entry.decade)
         .sort((a, b) => a.seasonFounded - b.seasonFounded);
       const sampleNames = additions.slice(0, 3).map((team) => team.name);
-      const item = document.createElement('li');
-      item.className = 'timeline__item';
+      if (timelineRoot) {
+        const item = document.createElement('li');
+        item.className = 'timeline__item';
 
-      const header = document.createElement('div');
-      header.className = 'timeline__header';
-      const year = document.createElement('span');
-      year.className = 'timeline__year';
-      year.textContent = `${entry.decade}s`;
-      const count = document.createElement('span');
-      count.className = 'timeline__count';
-      count.textContent = `${entry.total} additions`;
-      header.append(year, count);
+        const header = document.createElement('div');
+        header.className = 'timeline__header';
+        const year = document.createElement('span');
+        year.className = 'timeline__year';
+        year.textContent = `${entry.decade}s`;
+        const count = document.createElement('span');
+        count.className = 'timeline__count';
+        count.textContent = `${entry.total} additions`;
+        header.append(year, count);
 
-      const detail = document.createElement('p');
-      detail.className = 'timeline__detail';
-      detail.textContent = sampleNames.length
-        ? `Key arrivals: ${sampleNames.join(', ')}${additions.length > sampleNames.length ? '…' : ''}`
-        : 'Active rosters stabilized this decade.';
+        const detail = document.createElement('p');
+        detail.className = 'timeline__detail';
+        detail.textContent = sampleNames.length
+          ? `Key arrivals: ${sampleNames.join(', ')}${additions.length > sampleNames.length ? '…' : ''}`
+          : 'Active rosters stabilized this decade.';
 
-      item.append(header, detail);
-      summaryEls.expansionTimeline.append(item);
+        item.append(header, detail);
+        timelineRoot.append(item);
+      }
 
       if (entry.total > peakTotal) {
         peakTotal = entry.total;
@@ -230,10 +406,11 @@ function updateArchiveFacts(history, audit) {
 
 async function bootstrap() {
   try {
-    const [history, franchises, audit] = await Promise.all([
+    const [history, franchises, audit, atlas] = await Promise.all([
       fetch('data/historic_games.json').then((response) => (response.ok ? response.json() : null)),
       fetch('data/active_franchises.json').then((response) => (response.ok ? response.json() : null)),
       fetch('data/historical_audit.json').then((response) => (response.ok ? response.json() : null)),
+      fetch('data/state_birth_legends.json').then((response) => (response.ok ? response.json() : null)),
     ]);
 
     if (history) {
@@ -249,6 +426,12 @@ async function bootstrap() {
     if (history && audit) {
       updateArchiveFacts(history, audit);
     }
+
+    if (atlas) {
+      renderStateAtlas(atlas);
+    } else if (atlasEls.spotlight) {
+      renderStateSpotlight(null);
+    }
   } catch (error) {
     console.error('Failed to initialise history page', error);
   }
@@ -256,13 +439,14 @@ async function bootstrap() {
 
 registerCharts([
   {
-    element: document.querySelector('[data-chart="games-by-decade"]'),
-    source: 'data/historic_games.json',
-    async createConfig(data) {
-      const series = Array.isArray(data?.gamesByDecade) ? data.gamesByDecade : [];
-      if (!series.length) return null;
-      const labels = series.map((item) => item.decade);
-      const values = series.map((item) => item.games);
+    element: document.querySelector('[data-chart="scoring-averages"]'),
+    source: 'data/history_scoring_trends.json',
+    async createConfig(data, helpers) {
+      const seasons = Array.isArray(data?.seasons) ? data.seasons : [];
+      if (!seasons.length) return null;
+      const labels = seasons.map((season) => `${season.season}-${String(season.season + 1).slice(-2)}`);
+      const regular = seasons.map((season) => season.regularSeasonAverage ?? null);
+      const playoffs = seasons.map((season) => season.playoffAverage ?? null);
 
       return {
         type: 'line',
@@ -270,39 +454,107 @@ registerCharts([
           labels,
           datasets: [
             {
-              label: 'Games logged',
-              data: values,
+              label: 'Regular season',
+              data: regular,
               borderColor: palette.royal,
               backgroundColor: palette.teal,
               borderWidth: 2,
               fill: true,
-              tension: 0.3,
-              pointRadius: 3,
+              pointRadius: 0,
+              tension: 0.25,
+            },
+            {
+              label: 'Playoffs',
+              data: playoffs,
+              borderColor: palette.gold,
+              backgroundColor: 'rgba(244, 181, 63, 0.18)',
+              borderWidth: 2,
+              fill: false,
+              pointRadius: 0,
+              tension: 0.25,
             },
           ],
         },
         options: {
+          interaction: { mode: 'index', intersect: false },
           layout: { padding: 8 },
           plugins: {
-            legend: { display: false },
+            legend: { position: 'top', align: 'start' },
             tooltip: {
               callbacks: {
                 label(context) {
-                  return `${context.parsed.y.toLocaleString()} games`;
+                  return `${context.dataset.label}: ${helpers.formatNumber(context.parsed.y, 1)} points`;
                 },
               },
             },
           },
           scales: {
             x: {
-              grid: { color: 'rgba(11, 37, 69, 0.08)' },
+              grid: { color: 'rgba(11, 37, 69, 0.06)' },
+              ticks: { maxTicksLimit: 10 },
             },
             y: {
+              beginAtZero: false,
+              grid: { color: 'rgba(11, 37, 69, 0.08)' },
+              ticks: {
+                callback: (value) => `${helpers.formatNumber(value, 0)} pts`,
+              },
+            },
+          },
+        },
+      };
+    },
+  },
+  {
+    element: document.querySelector('[data-chart="scoring-leaders"]'),
+    source: 'data/history_scoring_trends.json',
+    async createConfig(data, helpers) {
+      const seasons = Array.isArray(data?.seasons) ? data.seasons : [];
+      if (!seasons.length) return null;
+      const ranked = seasons
+        .filter((season) => typeof season.averagePoints === 'number')
+        .sort((a, b) => b.averagePoints - a.averagePoints)
+        .slice(0, 8);
+      if (!ranked.length) return null;
+
+      const labels = ranked.map((season) => `${season.season}-${String(season.season + 1).slice(-2)}`);
+      const totals = ranked.map((season) => season.averagePoints);
+
+      return {
+        type: 'bar',
+        data: {
+          labels,
+          datasets: [
+            {
+              label: 'Avg combined points per game',
+              data: totals,
+              backgroundColor: palette.sky,
+            },
+          ],
+        },
+        options: {
+          indexAxis: 'y',
+          layout: { padding: { top: 8, right: 12, bottom: 8, left: 12 } },
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label(context) {
+                  return `${helpers.formatNumber(context.parsed.x, 2)} points per game`;
+                },
+              },
+            },
+          },
+          scales: {
+            x: {
               beginAtZero: true,
               grid: { color: 'rgba(11, 37, 69, 0.08)' },
               ticks: {
-                callback: (value) => numberFormatter.format(value),
+                callback: (value) => `${helpers.formatNumber(value, 0)} pts`,
               },
+            },
+            y: {
+              grid: { display: false },
             },
           },
         },
@@ -402,198 +654,6 @@ registerCharts([
             },
             y: {
               grid: { display: false },
-            },
-          },
-        },
-      };
-    },
-  },
-  {
-    element: document.querySelector('[data-chart="season-velocity"]'),
-    source: 'data/historical_audit.json',
-    async createConfig(data, helpers) {
-      const seasons = Array.isArray(data?.games?.seasonBreakdown) ? data.games.seasonBreakdown : [];
-      if (!seasons.length) return null;
-      const labels = seasons.map(([season]) => season);
-      const values = seasons.map(([, games]) => games);
-
-      return {
-        type: 'line',
-        data: {
-          labels,
-          datasets: [
-            {
-              label: 'Games logged',
-              data: values,
-              borderColor: palette.sky,
-              borderWidth: 2,
-              fill: true,
-              tension: 0.35,
-              pointRadius: 0,
-              backgroundColor(context) {
-                const { chart } = context;
-                const { ctx, chartArea } = chart;
-                if (!chartArea) return 'rgba(31, 123, 255, 0.22)';
-                const gradient = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
-                gradient.addColorStop(0, 'rgba(31, 123, 255, 0.3)');
-                gradient.addColorStop(1, 'rgba(31, 123, 255, 0)');
-                return gradient;
-              },
-            },
-          ],
-        },
-        options: {
-          layout: { padding: 8 },
-          plugins: {
-            legend: { display: false },
-            tooltip: {
-              callbacks: {
-                label(context) {
-                  return `${helpers.formatNumber(context.parsed.y, 0)} logged games`;
-                },
-              },
-            },
-          },
-          scales: {
-            x: {
-              grid: { color: 'rgba(11, 37, 69, 0.05)' },
-              ticks: {
-                maxTicksLimit: 8,
-              },
-            },
-            y: {
-              beginAtZero: true,
-              grid: { color: 'rgba(11, 37, 69, 0.08)' },
-              ticks: {
-                callback: (value) => helpers.formatNumber(value, 0),
-              },
-            },
-          },
-        },
-      };
-    },
-  },
-  {
-    element: document.querySelector('[data-chart="cumulative-games"]'),
-    source: 'data/historical_audit.json',
-    async createConfig(data, helpers) {
-      const seasons = Array.isArray(data?.games?.seasonBreakdown) ? data.games.seasonBreakdown : [];
-      if (!seasons.length) return null;
-      const labels = seasons.map(([season]) => season);
-      const cumulative = [];
-      let running = 0;
-      seasons.forEach(([, games]) => {
-        running += games;
-        cumulative.push(running);
-      });
-
-      return {
-        type: 'line',
-        data: {
-          labels,
-          datasets: [
-            {
-              label: 'Cumulative games',
-              data: cumulative,
-              borderColor: palette.royal,
-              borderWidth: 2,
-              fill: true,
-              pointRadius: 0,
-              tension: 0.25,
-              backgroundColor(context) {
-                const { chart } = context;
-                const { ctx, chartArea } = chart;
-                if (!chartArea) return 'rgba(17, 86, 214, 0.18)';
-                const gradient = ctx.createLinearGradient(chartArea.left, chartArea.top, chartArea.left, chartArea.bottom);
-                gradient.addColorStop(0, 'rgba(17, 86, 214, 0.26)');
-                gradient.addColorStop(1, 'rgba(17, 86, 214, 0)');
-                return gradient;
-              },
-            },
-          ],
-        },
-        options: {
-          layout: { padding: 8 },
-          plugins: {
-            legend: { display: false },
-            tooltip: {
-              callbacks: {
-                label(context) {
-                  return `${helpers.formatNumber(context.parsed.y, 0)} games indexed`;
-                },
-              },
-            },
-          },
-          scales: {
-            x: {
-              grid: { color: 'rgba(11, 37, 69, 0.05)' },
-              ticks: {
-                maxTicksLimit: 8,
-              },
-            },
-            y: {
-              beginAtZero: true,
-              grid: { color: 'rgba(11, 37, 69, 0.08)' },
-              ticks: {
-                callback: (value) => helpers.formatNumber(value, 0),
-              },
-            },
-          },
-        },
-      };
-    },
-  },
-  {
-    element: document.querySelector('[data-chart="franchise-radar"]'),
-    source: 'data/active_franchises.json',
-    async createConfig(data, helpers) {
-      const entries = Array.isArray(data?.decades) ? data.decades.filter((entry) => Number.isFinite(entry?.decade)) : [];
-      if (!entries.length) return null;
-      const labels = entries.map((entry) => `${entry.decade}s`);
-      const values = entries.map((entry) => entry.total ?? 0);
-
-      return {
-        type: 'radar',
-        data: {
-          labels,
-          datasets: [
-            {
-              label: 'Franchise arrivals',
-              data: values,
-              backgroundColor: 'rgba(244, 181, 63, 0.28)',
-              borderColor: palette.gold,
-              borderWidth: 2,
-              pointBackgroundColor: palette.gold,
-              pointRadius: 3,
-            },
-          ],
-        },
-        options: {
-          elements: {
-            line: { borderJoinStyle: 'round' },
-          },
-          scales: {
-            r: {
-              angleLines: { color: 'rgba(11, 37, 69, 0.1)' },
-              grid: { color: 'rgba(11, 37, 69, 0.08)' },
-              ticks: {
-                showLabelBackdrop: false,
-                stepSize: 2,
-                callback: (value) => (value ? helpers.formatNumber(value, 0) : ''),
-              },
-              pointLabels: {
-                font: { size: 11 },
-              },
-            },
-          },
-          plugins: {
-            legend: { display: false },
-            tooltip: {
-              callbacks: {
-                label(context) {
-                  return `${helpers.formatNumber(context.parsed.r, 0)} franchises added`;
-                },
-              },
             },
           },
         },
@@ -945,4 +1005,5 @@ registerCharts([
   },
 ]);
 
+renderStateSpotlight(null);
 bootstrap();
