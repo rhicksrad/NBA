@@ -1108,9 +1108,18 @@ a.tour-board__link:hover {
 .tour-board__matchup {
   display: inline-flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 0.45rem;
   font-size: 0.88rem;
   color: color-mix(in srgb, var(--text-subtle) 85%, var(--text-strong) 15%);
+}
+
+.tour-board__matchup-divider {
+  font-weight: 700;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--text-subtle) 65%, var(--text-strong) 35%);
 }
 
 .tour-board__opponent {
