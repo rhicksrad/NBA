@@ -4,8 +4,8 @@
   "type": "module",
   "version": "0.1.0",
   "scripts": {
-    "build:data": "tsx scripts/data/build_canonical.ts",
-    "gen:previews": "tsx scripts/generate/previews.ts",
+    "build:data": "tsx scripts/data/build_canonical.ts && tsx scripts/data/build_preseason_schedule.ts",
+    "gen:previews": "tsx scripts/generate/preseason_previews.ts && tsx scripts/generate/previews.ts",
     "validate:previews": "tsx scripts/validate/previews_staleness.ts && tsx scripts/validate/links.ts",
     "previews": "pnpm build:data && pnpm gen:previews && pnpm validate:previews",
     "test": "vitest run"
