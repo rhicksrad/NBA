@@ -33,6 +33,21 @@
       </header>
 
       <main class="players-lab">
+        <section class="players-lab__section players-lab__section--rosters">
+          <header class="players-lab__section-header">
+            <h2>Live roster tracker</h2>
+            <p class="players-lab__lede">
+              Scan every active roster in the league with data piped directly from the BallDontLie API. Filters update instantly
+              so you can zero in on a specific franchise or jersey.
+            </p>
+          </header>
+          <div id="players-app" class="roster-app">
+            <div class="roster-status">
+              <p>Loading active rosters…</p>
+            </div>
+          </div>
+        </section>
+
         <section class="players-lab__section player-atlas" data-player-profiles>
           <header class="players-lab__section-header">
             <h2>Player scouting atlas</h2>
@@ -324,5 +339,6 @@
     </div>
     <script src="vendor/chart.umd.js" defer></script>
     <script type="module" src="scripts/players.js"></script>
+    <script type="module" src="/assets/js/players.js"></script>
   </body>
 </html>

@@ -11,6 +11,6 @@
     "types": ["node"],
     "allowImportingTsExtensions": true
   },
-  "include": ["scripts/**/*.ts", "content/**/*.ts", "scripts/tests/**/*.ts"],
+  "include": ["scripts/**/*.ts", "content/**/*.ts", "scripts/tests/**/*.ts", "assets/**/*.ts", "types/**/*.ts"],
   "exclude": ["node_modules", "dist"]
 }

@@ -4,11 +4,18 @@
   "type": "module",
   "version": "0.1.0",
   "packageManager": "pnpm@9.1.0",
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
+    "build": "esbuild components/main.ts --bundle --format=esm --target=es2019 --minify --outfile=assets/js/main.tmp.js && node scripts/finalize-hash.js && node scripts/build-players.js",
     "build:data": "tsx scripts/data/build_canonical.ts && tsx scripts/data/build_preseason_schedule.ts",
     "gen:previews": "tsx scripts/generate/preseason_previews.ts && tsx scripts/generate/previews.ts",
     "validate:previews": "tsx scripts/validate/previews_staleness.ts && tsx scripts/validate/links.ts",
     "previews": "pnpm build:data && pnpm gen:previews && pnpm validate:previews",
+    "fetch:rosters": "tsx scripts/fetch_rosters.ts",
+    "predeploy": "pnpm fetch:rosters",
+    "deploy": "echo 'static site build only'",
     "test": "vitest run"
   },
   "dependencies": {
@@ -18,8 +25,10 @@
   "devDependencies": {
     "@types/cheerio": "0.22.35",
     "@types/node": "20.12.7",
-    "tsx": "4.7.1",
+    "esbuild": "^0.23.0",
+    "tsx": "^4.19.0",
     "typescript": "5.4.5",
-    "vitest": "1.4.0"
+    "vitest": "1.4.0",
+    "zod": "^3.23.8"
   }
 }
