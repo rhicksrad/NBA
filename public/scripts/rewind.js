@@ -253,12 +253,17 @@ registerCharts([
     element: document.querySelector('[data-chart="thunder-wins"]'),
     async createConfig() {
       const data = await highlightDataPromise;
-      const wins = Array.isArray(data?.thunder?.wins) ? data.thunder.wins : [];
+      const wins = Array.isArray(data?.thunder?.monthlyWins) ? data.thunder.monthlyWins : [];
       if (!wins.length) return null;
 
-      const labels = wins.map((entry) => entry.season ?? '');
+      const labels = wins.map((entry) => entry.month ?? '');
       const totals = wins.map((entry) => entry.wins ?? 0);
-      const highlightIndex = totals.length - 1;
+      let highlightIndex = 0;
+      totals.forEach((value, index) => {
+        if (value > (totals[highlightIndex] ?? -Infinity)) {
+          highlightIndex = index;
+        }
+      });
 
       return {
         type: 'bar',
@@ -266,7 +271,7 @@ registerCharts([
           labels,
           datasets: [
             {
-              label: 'Wins',
+              label: 'Monthly wins',
               data: totals,
               backgroundColor: totals.map((_, index) => (index === highlightIndex ? palette.coral : palette.royal)),
               borderRadius: 10,
@@ -302,10 +307,10 @@ registerCharts([
     element: document.querySelector('[data-chart="league-pace"]'),
     async createConfig() {
       const data = await highlightDataPromise;
-      const series = Array.isArray(data?.leaguePace) ? data.leaguePace : [];
+      const series = Array.isArray(data?.leaguePaceMonthly) ? data.leaguePaceMonthly : [];
       if (!series.length) return null;
 
-      const labels = series.map((entry) => entry.season ?? '');
+      const labels = series.map((entry) => entry.month ?? '');
       const values = series.map((entry) => entry.pace ?? 0);
 
       return {
@@ -930,31 +935,52 @@ function populateHighlightPanels(data) {
   }
 
   const thunder = data?.thunder ?? {};
-  const thunderWins = Array.isArray(thunder.wins) ? thunder.wins : [];
-  const latest = thunderWins[thunderWins.length - 1];
-  const previous = thunderWins[thunderWins.length - 2];
+  const thunderWins = Array.isArray(thunder.monthlyWins) ? thunder.monthlyWins : [];
   setStat('stat-thunder-net-rating', thunder.netRating, (value) => formatSigned(value, 1));
-  const delta = latest && previous ? (latest.wins ?? 0) - (previous.wins ?? 0) : null;
-  setStat('stat-thunder-win-delta', delta, (value) => formatSigned(value, 0, ' wins'));
+  if (thunderWins.length) {
+    const peak = thunderWins.reduce(
+      (best, entry) => ((entry.wins ?? -Infinity) > (best?.wins ?? -Infinity) ? entry : best),
+      null
+    );
+    const lull = thunderWins.reduce(
+      (worst, entry) => ((entry.wins ?? Infinity) < (worst?.wins ?? Infinity) ? entry : worst),
+      null
+    );
+    const delta = peak && lull ? (peak.wins ?? 0) - (lull.wins ?? 0) : null;
+    setStat('stat-thunder-win-delta', delta, (value) => formatSigned(value, 0, ' wins'));
+  } else {
+    setStat('stat-thunder-win-delta', null);
+  }
   setStat('stat-thunder-clutch', thunder.clutchWins, (value) => `${helpers.formatNumber(value, 0)} clutch wins`);
 
-  const paceSeries = Array.isArray(data?.leaguePace) ? data.leaguePace : [];
-  const current = paceSeries[paceSeries.length - 1];
-  const baseline = paceSeries[0];
-  const high = paceSeries.reduce(
-    (best, entry) => ((entry.pace ?? -Infinity) > (best?.pace ?? -Infinity) ? entry : best),
-    null
-  );
-  const low = paceSeries.reduce(
-    (best, entry) => ((entry.pace ?? Infinity) < (best?.pace ?? Infinity) ? entry : best),
-    null
-  );
-  setStat('stat-pace-current', current?.pace, (value) => helpers.formatNumber(value, 1));
-  const shift = current && baseline ? ((current.pace - baseline.pace) / baseline.pace) * 100 : null;
-  setStat('stat-pace-shift', shift, (value) => formatSigned(value, 1, '%'));
-  const drop = current && high ? high.pace - current.pace : null;
-  setStat('stat-pace-drop', drop, (value) => `${helpers.formatNumber(value, 1)} possessions`);
-  setStat('stat-pace-low-season', low?.season, (value) => value);
+  const paceSeries = Array.isArray(data?.leaguePaceMonthly) ? data.leaguePaceMonthly : [];
+  if (paceSeries.length) {
+    const totalPace = paceSeries.reduce((sum, entry) => sum + (entry.pace ?? 0), 0);
+    const averagePace = totalPace / paceSeries.length;
+    setStat('stat-pace-current', averagePace, (value) => helpers.formatNumber(value, 1));
+
+    const first = paceSeries[0];
+    const last = paceSeries[paceSeries.length - 1];
+    const shift = first && last ? (last.pace ?? 0) - (first.pace ?? 0) : null;
+    setStat('stat-pace-shift', shift, (value) => formatSigned(value, 1));
+
+    const peak = paceSeries.reduce(
+      (best, entry) => ((entry.pace ?? -Infinity) > (best?.pace ?? -Infinity) ? entry : best),
+      null
+    );
+    const low = paceSeries.reduce(
+      (worst, entry) => ((entry.pace ?? Infinity) < (worst?.pace ?? Infinity) ? entry : worst),
+      null
+    );
+    const drop = peak && low ? (peak.pace ?? 0) - (low.pace ?? 0) : null;
+    setStat('stat-pace-drop', drop, (value) => `${helpers.formatNumber(value, 1)} possessions`);
+    setStat('stat-pace-low-season', low?.month, (value) => value);
+  } else {
+    setStat('stat-pace-current', null);
+    setStat('stat-pace-shift', null);
+    setStat('stat-pace-drop', null);
+    setStat('stat-pace-low-season', null);
+  }
 }
 
 function populateClutchInsights(data) {
