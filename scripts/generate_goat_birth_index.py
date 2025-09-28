@@ -176,6 +176,9 @@ TEAM_NAME_OVERRIDES: Dict[str, str] = {
     "NEO": "New Orleans/Oklahoma City Hornets",
     "NOH": "New Orleans Hornets",
     "NOK": "New Orleans/Oklahoma City Hornets",
+    "PHW": "Philadelphia Warriors",
+    "SAS": "San Antonio Spurs",
+    "SFW": "San Francisco Warriors",
     "SDC": "San Diego Clippers",
     "SEA": "Seattle SuperSonics",
     "STL": "St. Louis Hawks",
@@ -419,9 +422,32 @@ def load_team_directory() -> Dict[str, str]:
     return mapping
 
 
+def _load_goat_index_players() -> list[dict]:
+    path = PUBLIC_DATA_DIR / "goat_index.json"
+    with path.open("r", encoding="utf-8") as f:
+        payload = json.load(f)
+    players = payload.get("players", [])
+    if not isinstance(players, list):
+        return []
+    return players
+
+
+def _load_goat_system_lookup() -> dict[str, dict]:
+    path = PUBLIC_DATA_DIR / "goat_system.json"
+    try:
+        with path.open("r", encoding="utf-8") as f:
+            payload = json.load(f)
+    except FileNotFoundError:
+        return {}
+    players = payload.get("players", [])
+    if not isinstance(players, list):
+        return {}
+    return {normalize_name(player.get("name", "")): player for player in players if player.get("name")}
+
+
 def build_player_records() -> List[dict]:
-    with (PUBLIC_DATA_DIR / "goat_system.json").open("r", encoding="utf-8") as f:
-        players = json.load(f)["players"]
+    curated_players = _load_goat_index_players()
+    system_lookup = _load_goat_system_lookup()
 
     birth_lookup = load_birth_lookup()
     manual_overrides = load_manual_overrides()
@@ -429,20 +455,28 @@ def build_player_records() -> List[dict]:
     team_lookup = load_team_directory()
 
     enriched = []
-    for player in players:
-        key = normalize_name(player["name"])
+    for player in curated_players:
+        name = player.get("name")
+        if not name:
+            continue
+        key = normalize_name(name)
         birth = birth_lookup.get(key)
         if not birth:
             continue
-        franchises = [team_lookup.get(code, code) for code in player.get("franchises", [])]
+
+        system_player = system_lookup.get(key, {})
+
+        franchise_codes = player.get("franchises") or system_player.get("franchises") or []
+        franchises = [team_lookup.get(code, code) for code in franchise_codes if code]
+
         enriched.append(
             {
-                "personId": player.get("personId"),
-                "name": player.get("name"),
-                "rank": player.get("rank"),
-                "goatScore": player.get("goatScore"),
-                "tier": player.get("tier"),
-                "resume": player.get("resume"),
+                "personId": system_player.get("personId"),
+                "name": name,
+                "rank": player.get("rank") or system_player.get("rank"),
+                "goatScore": player.get("goatScore") or system_player.get("goatScore"),
+                "tier": player.get("tier") or system_player.get("tier"),
+                "resume": system_player.get("resume") or player.get("resume"),
                 "franchises": franchises,
                 "birthCity": birth.city,
                 "birthState": birth.state,
