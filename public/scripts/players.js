@@ -223,7 +223,9 @@ registerCharts([
     element: document.querySelector('[data-chart="country-spectrum"]'),
     source: 'data/players_overview.json',
     async createConfig(data) {
-      const countries = helpers.rankAndSlice(Array.isArray(data?.countries) ? data.countries : [], 7, (item) => item.players);
+      const allCountries = Array.isArray(data?.countries) ? data.countries : [];
+      const international = allCountries.filter((entry) => (entry?.country || '').toLowerCase() !== 'usa');
+      const countries = helpers.rankAndSlice(international, 7, (item) => item.players);
       if (!countries.length) return null;
 
       return {
