@@ -37,13 +37,21 @@
           <div class="team-explorer__intro">
             <span class="eyebrow">Conference geography</span>
             <h2>Explore every franchise through a living map.</h2>
-            <p>
-              Pins are color coded by conference and expand into a live dashboard with scoring, efficiency, and
-              depth insights pulled from the league archive (1946-2025).
+            <p data-team-mode-copy>
+              Pins are color coded by conference and expand into a live dashboard with scoring, efficiency, and depth
+              insights pulled from the league archive (1946-2025).
             </p>
             <div class="team-explorer__legend">
               <span class="legend-chip legend-chip--east">Eastern Conference</span>
               <span class="legend-chip legend-chip--west">Western Conference</span>
+            </div>
+            <div class="team-mode-toggle" data-team-mode>
+              <button class="team-mode-toggle__button" type="button" data-mode="active" aria-pressed="true">
+                Active franchises
+              </button>
+              <button class="team-mode-toggle__button" type="button" data-mode="inactive" aria-pressed="false">
+                Inactive franchises
+              </button>
             </div>
           </div>
 
@@ -85,8 +93,8 @@
         <section class="franchise-footprint" data-footprint>
           <div class="franchise-footprint__intro">
             <span class="eyebrow">Franchise Footprint</span>
-            <h2>Ranking every active team by footprint strength.</h2>
-            <p>
+            <h2 data-footprint-title>Ranking every active team by footprint strength.</h2>
+            <p data-footprint-description>
               We blended results, efficiency, and rotational depth to surface how each club's on-court identity
               resonates across the league in 2024-25. Explore the full ladder below, then dig into the numbers that
               power every badge.
