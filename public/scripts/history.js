@@ -15,6 +15,10 @@ const percentFormatter = new Intl.NumberFormat('en-US', {
   minimumFractionDigits: 1,
   maximumFractionDigits: 1,
 });
+const scoreFormatter = new Intl.NumberFormat('en-US', {
+  minimumFractionDigits: 1,
+  maximumFractionDigits: 1,
+});
 const dateFormatter = new Intl.DateTimeFormat('en-US', {
   month: 'short',
   day: 'numeric',
@@ -238,10 +242,13 @@ function renderAtlasSpotlight(entry, config = activeAtlasConfig) {
   heading.className = 'state-spotlight__state';
   heading.textContent = `${entry[modeConfig.entryName] ?? entry[modeConfig.entryId] ?? ''}`;
 
+  const topPlayers = Array.isArray(entry.topPlayers) ? entry.topPlayers.filter((player) => player && player.name) : [];
+  const spotlightPlayer = topPlayers[0];
+
   const playerLine = document.createElement('p');
-  if (entry.player) {
+  if (spotlightPlayer?.name || entry.player) {
     playerLine.className = 'state-spotlight__player';
-    playerLine.textContent = entry.player;
+    playerLine.textContent = spotlightPlayer?.name || entry.player;
   } else {
     playerLine.className = 'state-spotlight__empty';
     playerLine.textContent = entry.headline || modeConfig.emptyHeadline;
@@ -249,30 +256,116 @@ function renderAtlasSpotlight(entry, config = activeAtlasConfig) {
 
   atlasEls.spotlight.append(heading, playerLine);
 
-  if (entry.birthCity) {
+  const formatLocation = (player) => {
+    if (!player) return '';
+    const city = player.birthCity || '';
+    const state = player.birthState || '';
+    const country = player.birthCountry || '';
+    if (modeConfig.id === 'domestic') {
+      if (city && state) return `${city}, ${state}`;
+      if (city) return city;
+      if (state) return state;
+      return '';
+    }
+    if (city && country) return `${city}, ${country}`;
+    return country || city;
+  };
+
+  const spotlightLocation = formatLocation(spotlightPlayer) || entry.birthCity;
+  if (spotlightLocation) {
     const locale = document.createElement('p');
     locale.className = 'state-spotlight__meta';
-    locale.textContent = `Born in ${entry.birthCity}`;
+    locale.textContent = `Born in ${spotlightLocation}`;
     atlasEls.spotlight.append(locale);
   }
 
-  if (entry.headline && entry.player) {
+  const spotlightHeadline = spotlightPlayer?.resume || entry.headline;
+  if (spotlightHeadline && (spotlightPlayer?.name || entry.player)) {
     const headline = document.createElement('p');
     headline.className = 'state-spotlight__headline';
-    headline.textContent = entry.headline;
+    headline.textContent = spotlightHeadline;
     atlasEls.spotlight.append(headline);
   }
 
-  if (Array.isArray(entry.notableTeams) && entry.notableTeams.length) {
+  const spotlightTeams = spotlightPlayer?.franchises || entry.notableTeams;
+  if (Array.isArray(spotlightTeams) && spotlightTeams.length) {
     const list = document.createElement('ul');
     list.className = 'state-spotlight__teams';
-    entry.notableTeams.forEach((team) => {
+    spotlightTeams.forEach((team) => {
+      if (!team) return;
       const item = document.createElement('li');
       item.className = 'state-spotlight__team';
       item.textContent = team;
       list.append(item);
     });
-    atlasEls.spotlight.append(list);
+    if (list.children.length) {
+      atlasEls.spotlight.append(list);
+    }
+  }
+
+  if (topPlayers.length) {
+    const ranking = document.createElement('ol');
+    ranking.className = 'state-spotlight__ranking';
+    topPlayers.slice(0, 10).forEach((player, index) => {
+      const item = document.createElement('li');
+      item.className = 'state-spotlight__ranking-item';
+
+      const ordinal = document.createElement('span');
+      ordinal.className = 'state-spotlight__ranking-ordinal';
+      ordinal.textContent = `#${index + 1}`;
+
+      const body = document.createElement('div');
+      body.className = 'state-spotlight__ranking-body';
+
+      const nameLine = document.createElement('p');
+      nameLine.className = 'state-spotlight__ranking-name';
+      nameLine.textContent = player.name || 'Unnamed legend';
+      body.append(nameLine);
+
+      const detailParts = [];
+      if (typeof player.rank === 'number') {
+        detailParts.push(`GOAT No. ${player.rank}`);
+      }
+      if (typeof player.goatScore === 'number') {
+        detailParts.push(`${scoreFormatter.format(player.goatScore)} GOAT score`);
+      }
+      const birthplace = formatLocation(player);
+      if (birthplace) {
+        detailParts.push(`Born in ${birthplace}`);
+      }
+      if (detailParts.length) {
+        const detailLine = document.createElement('p');
+        detailLine.className = 'state-spotlight__ranking-meta';
+        detailLine.textContent = detailParts.join(' • ');
+        body.append(detailLine);
+      }
+
+      if (Array.isArray(player.franchises) && player.franchises.length) {
+        const teamList = document.createElement('ul');
+        teamList.className = 'state-spotlight__teams state-spotlight__teams--compact';
+        player.franchises.slice(0, 4).forEach((team) => {
+          if (!team) return;
+          const teamItem = document.createElement('li');
+          teamItem.className = 'state-spotlight__team';
+          teamItem.textContent = team;
+          teamList.append(teamItem);
+        });
+        if (teamList.children.length) {
+          body.append(teamList);
+        }
+      }
+
+      if (player.resume && index < 3) {
+        const resume = document.createElement('p');
+        resume.className = 'state-spotlight__ranking-resume';
+        resume.textContent = player.resume;
+        body.append(resume);
+      }
+
+      item.append(ordinal, body);
+      ranking.append(item);
+    });
+    atlasEls.spotlight.append(ranking);
   }
 }
 
