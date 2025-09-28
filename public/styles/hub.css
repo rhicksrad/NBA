@@ -934,6 +934,33 @@ a:hover, a:focus { color: var(--sky); }
   color: var(--text-subtle);
 }
 
+.hero-panel__viz {
+  position: relative;
+  margin-top: 0.3rem;
+  padding: 0.6rem 0.5rem 0.4rem;
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, rgba(17, 86, 214, 0.1) 30%, rgba(255, 255, 255, 0.92) 70%);
+  border: 1px solid color-mix(in srgb, var(--border) 55%, transparent);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  min-height: 160px;
+}
+
+.hero-panel__viz canvas {
+  width: 100%;
+  height: 100%;
+}
+
+.hero-panel__viz--timeline { min-height: 180px; }
+.hero-panel__viz--bar { min-height: 160px; }
+.hero-panel__viz--line { min-height: 150px; }
+
+.hero-panel__caption {
+  margin: 0.35rem 0 0;
+  font-size: 0.78rem;
+  line-height: 1.4;
+  color: color-mix(in srgb, var(--text-subtle) 85%, var(--navy) 15%);
+}
+
 .hero-panel time {
   font-weight: inherit;
   color: inherit;

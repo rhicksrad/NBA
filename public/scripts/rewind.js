@@ -17,6 +17,22 @@ const scheduleDataPromise = fetch('data/season_24_25_schedule.json').then((respo
   return response.json();
 });
 
+const highlightDataPromise = fetch('data/season_24_25_rewind.json').then((response) => {
+  if (!response.ok) {
+    throw new Error(`Failed to load rewind highlight data: ${response.status}`);
+  }
+  return response.json();
+});
+
+function formatSigned(value, digits = 1, suffix = '') {
+  if (typeof value !== 'number' || Number.isNaN(value)) {
+    return null;
+  }
+  const magnitude = helpers.formatNumber(Math.abs(value), digits);
+  const sign = value > 0 ? '+' : value < 0 ? '-' : '';
+  return `${sign}${magnitude}${suffix}`;
+}
+
 function setStat(attribute, value, formatter = (v) => v, fallback = '—') {
   const nodes = document.querySelectorAll(`[data-${attribute}]`);
   const hasValue = value !== undefined && value !== null && !(typeof value === 'number' && Number.isNaN(value));
@@ -26,6 +42,172 @@ function setStat(attribute, value, formatter = (v) => v, fallback = '—') {
 }
 
 registerCharts([
+  {
+    element: document.querySelector('[data-chart="finals-net-rating"]'),
+    async createConfig() {
+      const data = await highlightDataPromise;
+      const netRatings = Array.isArray(data?.finals?.netRatings) ? data.finals.netRatings : [];
+      if (!netRatings.length) return null;
+
+      const labels = netRatings.map((entry) => entry.game ?? '');
+      const celtics = netRatings.map((entry) => entry.celtics ?? 0);
+      const nuggets = netRatings.map((entry) => entry.nuggets ?? 0);
+
+      return {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [
+            {
+              label: 'Boston net rating',
+              data: celtics,
+              borderColor: palette.royal,
+              backgroundColor: 'rgba(17, 86, 214, 0.18)',
+              pointRadius: 4,
+              pointHoverRadius: 5,
+              tension: 0.35,
+              fill: false,
+            },
+            {
+              label: 'Denver net rating',
+              data: nuggets,
+              borderColor: palette.coral,
+              backgroundColor: 'rgba(239, 61, 91, 0.16)',
+              pointRadius: 4,
+              pointHoverRadius: 5,
+              tension: 0.35,
+              fill: false,
+            },
+          ],
+        },
+        options: {
+          interaction: { mode: 'index', intersect: false },
+          plugins: {
+            legend: { position: 'top' },
+            tooltip: {
+              callbacks: {
+                label(context) {
+                  const value = context.parsed.y;
+                  return `${context.dataset.label}: ${formatSigned(value, 1)} net rating`;
+                },
+              },
+            },
+          },
+          scales: {
+            x: { grid: { display: false } },
+            y: {
+              grid: { color: 'rgba(11, 37, 69, 0.08)' },
+              ticks: {
+                callback: (value) => formatSigned(value, 0),
+              },
+            },
+          },
+        },
+      };
+    },
+  },
+  {
+    element: document.querySelector('[data-chart="thunder-wins"]'),
+    async createConfig() {
+      const data = await highlightDataPromise;
+      const wins = Array.isArray(data?.thunder?.wins) ? data.thunder.wins : [];
+      if (!wins.length) return null;
+
+      const labels = wins.map((entry) => entry.season ?? '');
+      const totals = wins.map((entry) => entry.wins ?? 0);
+      const highlightIndex = totals.length - 1;
+
+      return {
+        type: 'bar',
+        data: {
+          labels,
+          datasets: [
+            {
+              label: 'Wins',
+              data: totals,
+              backgroundColor: totals.map((_, index) => (index === highlightIndex ? palette.coral : palette.royal)),
+              borderRadius: 10,
+              maxBarThickness: 38,
+            },
+          ],
+        },
+        options: {
+          layout: { padding: { top: 6, right: 12, bottom: 4, left: 8 } },
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label(context) {
+                  return `${context.label}: ${helpers.formatNumber(context.parsed.y, 0)} wins`;
+                },
+              },
+            },
+          },
+          scales: {
+            x: { grid: { display: false } },
+            y: {
+              beginAtZero: true,
+              grid: { color: 'rgba(11, 37, 69, 0.08)' },
+              ticks: { callback: (value) => helpers.formatNumber(value, 0) },
+            },
+          },
+        },
+      };
+    },
+  },
+  {
+    element: document.querySelector('[data-chart="league-pace"]'),
+    async createConfig() {
+      const data = await highlightDataPromise;
+      const series = Array.isArray(data?.leaguePace) ? data.leaguePace : [];
+      if (!series.length) return null;
+
+      const labels = series.map((entry) => entry.season ?? '');
+      const values = series.map((entry) => entry.pace ?? 0);
+
+      return {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [
+            {
+              label: 'Possessions per 48 minutes',
+              data: values,
+              borderColor: palette.royal,
+              backgroundColor: 'rgba(17, 86, 214, 0.16)',
+              fill: 'start',
+              tension: 0.35,
+              pointRadius: 4,
+              pointHoverRadius: 6,
+            },
+          ],
+        },
+        options: {
+          layout: { padding: { top: 6, right: 12, bottom: 4, left: 8 } },
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label(context) {
+                  return `${context.label}: ${helpers.formatNumber(context.parsed.y, 1)} possessions`;
+                },
+              },
+            },
+          },
+          scales: {
+            x: { grid: { display: false } },
+            y: {
+              beginAtZero: false,
+              grid: { color: 'rgba(11, 37, 69, 0.08)' },
+              ticks: {
+                callback: (value) => helpers.formatNumber(value, 1),
+              },
+            },
+          },
+        },
+      };
+    },
+  },
   {
     element: document.querySelector('[data-chart="monthly-games"]'),
     async createConfig() {
@@ -189,7 +371,143 @@ registerCharts([
       };
     },
   },
+  {
+    element: document.querySelector('[data-chart="clutch-index"]'),
+    async createConfig() {
+      const data = await highlightDataPromise;
+      const composite = Array.isArray(data?.clutchComposite) ? data.clutchComposite : [];
+      if (!composite.length) return null;
+
+      const ranked = [...composite].sort((a, b) => (b.index ?? 0) - (a.index ?? 0));
+      const labels = ranked.map((entry) =>
+        [entry.player, entry.team].filter(Boolean).join(' · ')
+      );
+      const values = ranked.map((entry) => entry.index ?? 0);
+
+      return {
+        type: 'bar',
+        data: {
+          labels,
+          datasets: [
+            {
+              label: 'Composite index',
+              data: values,
+              backgroundColor: values.map((_, index) => (index === 0 ? palette.coral : palette.sky)),
+              borderRadius: 8,
+              maxBarThickness: 30,
+            },
+          ],
+        },
+        options: {
+          indexAxis: 'y',
+          layout: { padding: { top: 6, right: 18, bottom: 4, left: 8 } },
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label(context) {
+                  const player = ranked[context.dataIndex];
+                  const segments = [`Index ${helpers.formatNumber(context.parsed.x, 0)}`];
+                  if (typeof player?.trueShooting === 'number') {
+                    segments.push(`TS ${helpers.formatNumber(player.trueShooting * 100, 1)}%`);
+                  }
+                  return segments.join(' · ');
+                },
+              },
+            },
+          },
+          scales: {
+            x: {
+              beginAtZero: true,
+              grid: { color: 'rgba(11, 37, 69, 0.08)' },
+              ticks: { callback: (value) => helpers.formatNumber(value, 0) },
+            },
+            y: { grid: { display: false } },
+          },
+        },
+      };
+    },
+  },
 ]);
+
+function populateHighlightPanels(data) {
+  const finals = data?.finals ?? {};
+  const netRatings = Array.isArray(finals.netRatings) ? finals.netRatings : [];
+  const games = netRatings.length;
+
+  if (games) {
+    const aggregate = netRatings.reduce((sum, entry) => sum + (entry.celtics ?? 0), 0);
+    const combinedNet = aggregate / games;
+    setStat('stat-finals-net', combinedNet, (value) => formatSigned(value, 1));
+    setStat('stat-finals-games', games, (value) => helpers.formatNumber(value, 0));
+
+    const closerWindow = netRatings.slice(-2);
+    if (closerWindow.length) {
+      const closerNet = closerWindow.reduce((sum, entry) => sum + (entry.celtics ?? 0), 0) / closerWindow.length;
+      setStat('stat-finals-closer', closerNet, (value) => formatSigned(value, 1));
+      setStat('stat-finals-closer-games', closerWindow.length, (value) => helpers.formatNumber(value, 0));
+    }
+
+    const peak = netRatings.reduce((best, entry) =>
+      (entry.celtics ?? -Infinity) > (best?.celtics ?? -Infinity) ? entry : best,
+      null
+    );
+    setStat('stat-finals-peak-game', peak?.game, (value) => value);
+    setStat('stat-finals-peak-margin', peak?.celtics, (value) => formatSigned(value, 1));
+  } else {
+    setStat('stat-finals-net', null);
+    setStat('stat-finals-games', null);
+    setStat('stat-finals-closer', null);
+    setStat('stat-finals-closer-games', null);
+    setStat('stat-finals-peak-game', null);
+    setStat('stat-finals-peak-margin', null);
+  }
+
+  const thunder = data?.thunder ?? {};
+  const thunderWins = Array.isArray(thunder.wins) ? thunder.wins : [];
+  const latest = thunderWins[thunderWins.length - 1];
+  const previous = thunderWins[thunderWins.length - 2];
+  setStat('stat-thunder-net-rating', thunder.netRating, (value) => formatSigned(value, 1));
+  const delta = latest && previous ? (latest.wins ?? 0) - (previous.wins ?? 0) : null;
+  setStat('stat-thunder-win-delta', delta, (value) => formatSigned(value, 0, ' wins'));
+  setStat('stat-thunder-clutch', thunder.clutchWins, (value) => `${helpers.formatNumber(value, 0)} clutch wins`);
+
+  const paceSeries = Array.isArray(data?.leaguePace) ? data.leaguePace : [];
+  const current = paceSeries[paceSeries.length - 1];
+  const baseline = paceSeries[0];
+  const high = paceSeries.reduce(
+    (best, entry) => ((entry.pace ?? -Infinity) > (best?.pace ?? -Infinity) ? entry : best),
+    null
+  );
+  const low = paceSeries.reduce(
+    (best, entry) => ((entry.pace ?? Infinity) < (best?.pace ?? Infinity) ? entry : best),
+    null
+  );
+  setStat('stat-pace-current', current?.pace, (value) => helpers.formatNumber(value, 1));
+  const shift = current && baseline ? ((current.pace - baseline.pace) / baseline.pace) * 100 : null;
+  setStat('stat-pace-shift', shift, (value) => formatSigned(value, 1, '%'));
+  const drop = current && high ? high.pace - current.pace : null;
+  setStat('stat-pace-drop', drop, (value) => `${helpers.formatNumber(value, 1)} possessions`);
+  setStat('stat-pace-low-season', low?.season, (value) => value);
+}
+
+function populateClutchInsights(data) {
+  const composite = Array.isArray(data?.clutchComposite) ? data.clutchComposite : [];
+  if (!composite.length) {
+    setStat('stat-clutch-leader', null);
+    setStat('stat-clutch-leader-index', null);
+    setStat('stat-clutch-leader-ts', null);
+    return;
+  }
+
+  const leader = composite.reduce(
+    (best, entry) => ((entry.index ?? -Infinity) > (best?.index ?? -Infinity) ? entry : best),
+    null
+  );
+  setStat('stat-clutch-leader', leader?.player, (value) => value);
+  setStat('stat-clutch-leader-index', leader?.index, (value) => helpers.formatNumber(value, 0));
+  setStat('stat-clutch-leader-ts', leader?.trueShooting, (value) => `${helpers.formatNumber(value * 100, 1)}%`);
+}
 
 function formatMatchup(event, teamMap) {
   const home = teamMap.get(event.hometeamId);
@@ -529,5 +847,26 @@ scheduleDataPromise
     const footer = document.querySelector('[data-rest-footer]');
     if (footer) {
       footer.textContent = 'Rest distribution data unavailable.';
+    }
+  });
+
+highlightDataPromise
+  .then((data) => {
+    populateHighlightPanels(data);
+    populateClutchInsights(data);
+  })
+  .catch((error) => {
+    console.error('Unable to hydrate rewind highlight data', error);
+    populateHighlightPanels({});
+    populateClutchInsights({});
+    const clutchWrapper = document
+      .querySelector('[data-chart="clutch-index"]')
+      ?.closest('[data-chart-wrapper]');
+    if (clutchWrapper && !clutchWrapper.querySelector('.viz-error__message')) {
+      clutchWrapper.classList.add('viz-error');
+      const message = document.createElement('p');
+      message.className = 'viz-error__message';
+      message.textContent = 'Clutch composite data unavailable.';
+      clutchWrapper.appendChild(message);
     }
   });
