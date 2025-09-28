@@ -18,10 +18,10 @@ jobs:
         with:
           node-version: 20
           cache: "pnpm"
-      - name: Enable corepack
-        run: corepack enable
-      - name: Use pnpm 9
-        run: corepack prepare pnpm@9.1.0 --activate
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.1.0
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
       - name: Stamp date
