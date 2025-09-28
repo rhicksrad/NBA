@@ -38,28 +38,57 @@
             <article class="hero-panel hero-panel--primary">
               <span class="hero-panel__eyebrow">Finals snapshot</span>
               <h2 class="hero-panel__headline">Boston 4 – Denver 2</h2>
-              <p class="hero-panel__meta">Combined net rating: +7.8 across 6 games</p>
+              <p class="hero-panel__meta">
+                Combined net rating: <span data-stat-finals-net>—</span> across
+                <span data-stat-finals-games>—</span> games
+              </p>
               <p class="hero-panel__detail">
-                Boston's adaptive switching schemes finally cooled Denver's two-man game while Jrue
-                Holiday's late-clock control became the margin.
+                Closing burst delivered <span data-stat-finals-closer>—</span> net rating over the
+                final <span data-stat-finals-closer-games>—</span> tilts.
+              </p>
+              <div class="hero-panel__viz hero-panel__viz--timeline" data-chart-wrapper>
+                <canvas data-chart="finals-net-rating" aria-describedby="finals-net-rating-caption"></canvas>
+              </div>
+              <p id="finals-net-rating-caption" class="hero-panel__caption">
+                Markers chart each game's net rating swing; the largest spike hit
+                <span data-stat-finals-peak-game>—</span> at
+                <span data-stat-finals-peak-margin>—</span>.
               </p>
             </article>
             <article class="hero-panel hero-panel--event">
               <span class="hero-panel__eyebrow">Breakout storyline</span>
               <h2 class="hero-panel__headline">Thunder reach 58 wins</h2>
-              <p class="hero-panel__meta">#2 seed in the West · +5.4 net rating</p>
+              <p class="hero-panel__meta">
+                #2 seed in the West · <span data-stat-thunder-net-rating>—</span> net rating
+              </p>
               <p class="hero-panel__detail">
-                Shai Gilgeous-Alexander's MVP push paired with Jalen Williams' two-way leap elevated
-                Oklahoma City into true-contender discourse.
+                The win curve climbed <span data-stat-thunder-win-delta>—</span> year-over-year while
+                <span data-stat-thunder-clutch>—</span> clutch victories held seed equity.
+              </p>
+              <div class="hero-panel__viz hero-panel__viz--bar" data-chart-wrapper>
+                <canvas data-chart="thunder-wins" aria-describedby="thunder-wins-caption"></canvas>
+              </div>
+              <p id="thunder-wins-caption" class="hero-panel__caption">
+                Bars compare each season since 2020-21, spotlighting the 58-win crest.
               </p>
             </article>
             <article class="hero-panel hero-panel--event">
               <span class="hero-panel__eyebrow">Emerging trend</span>
               <h2 class="hero-panel__headline">Pace stabilizes at 99.2</h2>
-              <p class="hero-panel__meta">Second consecutive season of tempo correction</p>
+              <p class="hero-panel__meta">
+                League pace: <span data-stat-pace-current>—</span> possessions ·
+                <span data-stat-pace-shift>—</span> vs 2020-21
+              </p>
               <p class="hero-panel__detail">
-                Coaches countered transition-hunting with shorter rotations and positional size,
-                sharpening half-court execution league-wide.
+                Coaching counters trimmed <span data-stat-pace-drop>—</span> possessions from the
+                five-year high while sharpening half-court execution.
+              </p>
+              <div class="hero-panel__viz hero-panel__viz--line" data-chart-wrapper>
+                <canvas data-chart="league-pace" aria-describedby="league-pace-caption"></canvas>
+              </div>
+              <p id="league-pace-caption" class="hero-panel__caption">
+                Line trace covers the past five seasons; <span data-stat-pace-low-season>—</span>
+                marks the slowest tempo in the sample.
               </p>
             </article>
           </div>
@@ -224,15 +253,13 @@
           </div>
           <figure class="viz-card viz-card--inline viz-card--rewind">
             <header class="viz-card__title">Clutch time composite</header>
-            <div class="viz-canvas">
-              <p class="viz-placeholder">
-                2024-25 crunch-time efficiency index will render here with interactive filters in the
-                live build.
-              </p>
+            <div class="viz-canvas" data-chart-wrapper>
+              <canvas data-chart="clutch-index" aria-describedby="clutch-index-caption"></canvas>
             </div>
-            <figcaption class="viz-card__caption">
-              Weighted clutch scoring + stop rate packaged into a modular graphic for future live
-              dashboards.
+            <figcaption id="clutch-index-caption" class="viz-card__caption">
+              Composite blends usage-weighted scoring and stops; <span data-stat-clutch-leader>—</span>
+              leads at <span data-stat-clutch-leader-index>—</span> with
+              <span data-stat-clutch-leader-ts>—</span> true shooting.
             </figcaption>
           </figure>
         </section>
