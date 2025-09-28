@@ -1,0 +1,51 @@
+name: Previews pipeline
+
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: "27 7 * * *"
+
+jobs:
+  build-previews:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "pnpm"
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+          run_install: true
+      - name: Stamp date
+        id: metadata
+        run: echo "date=$(date -u +'%Y-%m-%d')" >> "$GITHUB_OUTPUT"
+      - name: Generate previews
+        run: pnpm previews
+      - name: Detect changes
+        run: |
+          git diff --quiet || echo "changes" > /tmp/changed
+      - name: Configure git
+        if: ${{ hashFiles('/tmp/changed') != '' }}
+        run: |
+          git config user.name "automation"
+          git config user.email "actions@users.noreply.github.com"
+          DATE='${{ steps.metadata.outputs.date }}'
+          git checkout -B chore/auto-previews-${{ github.run_id }}
+          git add -A
+          git commit -m "chore(previews): refresh canonical data and regenerate previews for ${DATE}"
+          git push -u origin HEAD
+      - name: Open pull request
+        if: ${{ hashFiles('/tmp/changed') != '' }}
+        uses: peter-evans/create-pull-request@v6
+        with:
+          title: "Auto refresh previews ${{ steps.metadata.outputs.date }}"
+          branch: "chore/auto-previews-${{ github.run_id }}"
+          base: "main"
+          body: "Auto generated previews. Fails CI if stale names are detected."

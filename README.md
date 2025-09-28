@@ -3,6 +3,22 @@
 ## Web experience overview
 - `public/index.html` delivers the NBA Intelligence Hub — a single-page experience that combines the cinematic landing story with interactive dashboards for franchises, schedules, players, and historical leaders.
 
+## Previews pipeline (2025-26 preseason)
+- **Description:** Deterministic TypeScript pipeline that assembles canonical roster data, renders Markdown previews, and posts a conviction-board ranking for every franchise.
+- **Quickstart:**
+  1. Install Node 20 and pnpm 9.
+  2. Run `pnpm install` once to sync dependencies.
+  3. Generate everything with `pnpm previews` (wraps `build:data`, `gen:previews`, and `validate:previews`).
+- **Outputs:**
+  - Canonical JSON under `data/2025-26/canonical/`
+  - Generated previews in `site/previews/`
+  - Updated `site/index.html` linking to the conviction board.
+- **Troubleshooting:**
+  - If a preview references the wrong player, edit `data/2025-26/manual/overrides.yaml` and rerun `pnpm previews` — never hand-edit the Markdown.
+  - The staleness validator fails CI when a preview mentions a player who is not on that team’s canonical roster. Fix the data and regenerate instead of bypassing the check.
+  - Network fetches will gracefully fall back to historical rosters; overrides can be used to patch missing players or coaches.
+- **Automation:** `.github/workflows/previews.yml` refreshes the data nightly, regenerates previews, and opens a PR when diffs exist.
+
 ## Data dictionary conventions
 - **Types.** Unless noted otherwise, `int` columns are whole numbers, `float` columns may contain decimal precision, `string` columns are UTF-8 text, `date` columns follow ISO-8601 (`YYYY-MM-DD` or `YYYY-MM-DD hh:mm:ss`), and `enum` columns contain a constrained vocabulary (often booleans expressed as `True`/`False` or `0`/`1`).
 - **Nulls.** Missing values are stored as blank strings; numeric columns with blanks should be interpreted as `NA`.
