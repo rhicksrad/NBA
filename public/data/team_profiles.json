@@ -1,6 +1,6 @@
 {
   "season": "1946-2025",
-  "generatedAt": "2025-09-28T03:10:53.006831+00:00",
+  "generatedAt": "2025-09-28T03:45:07.297959+00:00",
   "teams": [
     {
       "abbreviation": "ATL",
@@ -26,7 +26,11 @@
       },
       "gamesSampled": 6434,
       "wins": 3148,
-      "losses": 3286
+      "losses": 3286,
+      "legacy": {
+        "titles": 1,
+        "hallOfFamers": 13
+      }
     },
     {
       "abbreviation": "BOS",
@@ -52,7 +56,11 @@
       },
       "gamesSampled": 6856,
       "wins": 4091,
-      "losses": 2765
+      "losses": 2765,
+      "legacy": {
+        "titles": 18,
+        "hallOfFamers": 41
+      }
     },
     {
       "abbreviation": "BKN",
@@ -78,7 +86,11 @@
       },
       "gamesSampled": 4231,
       "wins": 1801,
-      "losses": 2430
+      "losses": 2430,
+      "legacy": {
+        "titles": 0,
+        "hallOfFamers": 6
+      }
     },
     {
       "abbreviation": "CHA",
@@ -104,7 +116,11 @@
       },
       "gamesSampled": 2985,
       "wins": 1261,
-      "losses": 1724
+      "losses": 1724,
+      "legacy": {
+        "titles": 0,
+        "hallOfFamers": 1
+      }
     },
     {
       "abbreviation": "CHI",
@@ -130,7 +146,11 @@
       },
       "gamesSampled": 5245,
       "wins": 2686,
-      "losses": 2559
+      "losses": 2559,
+      "legacy": {
+        "titles": 6,
+        "hallOfFamers": 10
+      }
     },
     {
       "abbreviation": "CLE",
@@ -156,7 +176,11 @@
       },
       "gamesSampled": 4805,
       "wins": 2277,
-      "losses": 2528
+      "losses": 2528,
+      "legacy": {
+        "titles": 1,
+        "hallOfFamers": 7
+      }
     },
     {
       "abbreviation": "DAL",
@@ -182,7 +206,11 @@
       },
       "gamesSampled": 4001,
       "wins": 2017,
-      "losses": 1984
+      "losses": 1984,
+      "legacy": {
+        "titles": 1,
+        "hallOfFamers": 6
+      }
     },
     {
       "abbreviation": "DEN",
@@ -208,7 +236,11 @@
       },
       "gamesSampled": 4333,
       "wins": 2187,
-      "losses": 2146
+      "losses": 2146,
+      "legacy": {
+        "titles": 1,
+        "hallOfFamers": 7
+      }
     },
     {
       "abbreviation": "DET",
@@ -234,7 +266,11 @@
       },
       "gamesSampled": 6461,
       "wins": 3051,
-      "losses": 3410
+      "losses": 3410,
+      "legacy": {
+        "titles": 3,
+        "hallOfFamers": 16
+      }
     },
     {
       "abbreviation": "GSW",
@@ -260,7 +296,11 @@
       },
       "gamesSampled": 6474,
       "wins": 3179,
-      "losses": 3295
+      "losses": 3295,
+      "legacy": {
+        "titles": 7,
+        "hallOfFamers": 32
+      }
     },
     {
       "abbreviation": "HOU",
@@ -286,7 +326,11 @@
       },
       "gamesSampled": 5136,
       "wins": 2656,
-      "losses": 2480
+      "losses": 2480,
+      "legacy": {
+        "titles": 2,
+        "hallOfFamers": 14
+      }
     },
     {
       "abbreviation": "IND",
@@ -312,7 +356,11 @@
       },
       "gamesSampled": 4355,
       "wins": 2181,
-      "losses": 2174
+      "losses": 2174,
+      "legacy": {
+        "titles": 0,
+        "hallOfFamers": 9
+      }
     },
     {
       "abbreviation": "LAC",
@@ -338,7 +386,11 @@
       },
       "gamesSampled": 4720,
       "wins": 2018,
-      "losses": 2702
+      "losses": 2702,
+      "legacy": {
+        "titles": 0,
+        "hallOfFamers": 2
+      }
     },
     {
       "abbreviation": "LAL",
@@ -364,7 +416,11 @@
       },
       "gamesSampled": 6870,
       "wins": 4020,
-      "losses": 2850
+      "losses": 2850,
+      "legacy": {
+        "titles": 17,
+        "hallOfFamers": 36
+      }
     },
     {
       "abbreviation": "MEM",
@@ -390,7 +446,11 @@
       },
       "gamesSampled": 2622,
       "wins": 1152,
-      "losses": 1470
+      "losses": 1470,
+      "legacy": {
+        "titles": 0,
+        "hallOfFamers": 1
+      }
     },
     {
       "abbreviation": "MIA",
@@ -416,7 +476,11 @@
       },
       "gamesSampled": 3400,
       "wins": 1787,
-      "losses": 1613
+      "losses": 1613,
+      "legacy": {
+        "titles": 3,
+        "hallOfFamers": 6
+      }
     },
     {
       "abbreviation": "MIL",
@@ -442,7 +506,11 @@
       },
       "gamesSampled": 5047,
       "wins": 2635,
-      "losses": 2412
+      "losses": 2412,
+      "legacy": {
+        "titles": 2,
+        "hallOfFamers": 12
+      }
     },
     {
       "abbreviation": "MIN",
@@ -468,7 +536,11 @@
       },
       "gamesSampled": 3091,
       "wins": 1304,
-      "losses": 1787
+      "losses": 1787,
+      "legacy": {
+        "titles": 0,
+        "hallOfFamers": 1
+      }
     },
     {
       "abbreviation": "NOP",
@@ -494,7 +566,11 @@
       },
       "gamesSampled": 2034,
       "wins": 935,
-      "losses": 1099
+      "losses": 1099,
+      "legacy": {
+        "titles": 0,
+        "hallOfFamers": 0
+      }
     },
     {
       "abbreviation": "NYK",
@@ -520,7 +596,11 @@
       },
       "gamesSampled": 6500,
       "wins": 3152,
-      "losses": 3348
+      "losses": 3348,
+      "legacy": {
+        "titles": 2,
+        "hallOfFamers": 20
+      }
     },
     {
       "abbreviation": "OKC",
@@ -546,7 +626,11 @@
       },
       "gamesSampled": 5163,
       "wins": 2776,
-      "losses": 2387
+      "losses": 2387,
+      "legacy": {
+        "titles": 1,
+        "hallOfFamers": 10
+      }
     },
     {
       "abbreviation": "ORL",
@@ -572,7 +656,11 @@
       },
       "gamesSampled": 3153,
       "wins": 1490,
-      "losses": 1663
+      "losses": 1663,
+      "legacy": {
+        "titles": 0,
+        "hallOfFamers": 3
+      }
     },
     {
       "abbreviation": "PHI",
@@ -598,7 +686,11 @@
       },
       "gamesSampled": 6526,
       "wins": 3359,
-      "losses": 3167
+      "losses": 3167,
+      "legacy": {
+        "titles": 3,
+        "hallOfFamers": 18
+      }
     },
     {
       "abbreviation": "PHX",
@@ -624,7 +716,11 @@
       },
       "gamesSampled": 5047,
       "wins": 2688,
-      "losses": 2359
+      "losses": 2359,
+      "legacy": {
+        "titles": 0,
+        "hallOfFamers": 7
+      }
     },
     {
       "abbreviation": "POR",
@@ -650,7 +746,11 @@
       },
       "gamesSampled": 4838,
       "wins": 2497,
-      "losses": 2341
+      "losses": 2341,
+      "legacy": {
+        "titles": 1,
+        "hallOfFamers": 6
+      }
     },
     {
       "abbreviation": "SAC",
@@ -676,7 +776,11 @@
       },
       "gamesSampled": 6280,
       "wins": 2831,
-      "losses": 3449
+      "losses": 3449,
+      "legacy": {
+        "titles": 1,
+        "hallOfFamers": 13
+      }
     },
     {
       "abbreviation": "SAS",
@@ -728,7 +832,11 @@
       },
       "gamesSampled": 2632,
       "wins": 1255,
-      "losses": 1377
+      "losses": 1377,
+      "legacy": {
+        "titles": 1,
+        "hallOfFamers": 2
+      }
     },
     {
       "abbreviation": "UTA",
@@ -754,7 +862,11 @@
       },
       "gamesSampled": 4526,
       "wins": 2394,
-      "losses": 2132
+      "losses": 2132,
+      "legacy": {
+        "titles": 0,
+        "hallOfFamers": 5
+      }
     },
     {
       "abbreviation": "WAS",
@@ -780,7 +892,11 @@
       },
       "gamesSampled": 5528,
       "wins": 2441,
-      "losses": 3087
+      "losses": 3087,
+      "legacy": {
+        "titles": 1,
+        "hallOfFamers": 9
+      }
     }
   ]
 }

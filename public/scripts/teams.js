@@ -85,15 +85,28 @@ const METRIC_CONFIG = [
   },
 ];
 
-const FOOTPRINT_METRICS = [
-  { key: 'winPct', weight: 0.38, label: 'Win percentage' },
-  { key: 'netMargin', weight: 0.24, label: 'Net margin per game' },
-  { key: 'fieldGoalPct', weight: 0.1, label: 'Field goal accuracy' },
-  { key: 'threePointPct', weight: 0.08, label: 'Three-point accuracy' },
-  { key: 'rebounds', weight: 0.06, label: 'Rebounding control' },
-  { key: 'assists', weight: 0.06, label: 'Playmaking volume' },
-  { key: 'benchPoints', weight: 0.04, label: 'Bench scoring punch' },
-  { key: 'turnovers', weight: 0.04, label: 'Turnover minimization', inverse: true },
+const LEGACY_METRICS = [
+  {
+    key: 'titles',
+    weight: 0.45,
+    label: 'Championship banners',
+    description: 'NBA titles secured across the franchise timeline.',
+    valueAccessor: (team) => team?.legacy?.titles,
+  },
+  {
+    key: 'hallOfFamers',
+    weight: 0.35,
+    label: 'Hall of Fame alumni',
+    description: 'Hall of Fame players who suited up for the franchise.',
+    valueAccessor: (team) => team?.legacy?.hallOfFamers,
+  },
+  {
+    key: 'winPct',
+    weight: 0.2,
+    label: 'All-time win rate',
+    description: 'Regular-season winning percentage across the full archive.',
+    valueAccessor: (team) => team?.metrics?.winPct,
+  },
 ];
 
 const mapCanvas = document.querySelector('[data-map-canvas]');
@@ -113,6 +126,7 @@ const footprintMethodology = document.querySelector('[data-footprint-methodology
 let markerButtons = [];
 let activeTeamId = null;
 let metricExtents = {};
+let legacyExtents = {};
 let teamLookup = new Map();
 
 function projectCoordinates(latitude, longitude) {
@@ -288,6 +302,10 @@ function describeFootprintSignal(key, rawValue) {
   switch (key) {
     case 'winPct':
       return `${(rawValue * 100).toFixed(1)}% win rate`;
+    case 'titles':
+      return `${rawValue} title${rawValue === 1 ? '' : 's'}`;
+    case 'hallOfFamers':
+      return `${rawValue} Hall of Famer${rawValue === 1 ? '' : 's'}`;
     case 'netMargin':
       return `${rawValue >= 0 ? '+' : ''}${rawValue.toFixed(1)} net margin`;
     case 'fieldGoalPct':
@@ -312,10 +330,13 @@ function computeFootprintScores(teams) {
     .map((team) => {
       const metrics = team?.metrics ?? {};
       let score = 0;
-      const contributions = FOOTPRINT_METRICS.map((config) => {
-        const value = metrics?.[config.key];
-        const extent = metricExtents?.[config.key];
-        const normalised = normaliseValue(value ?? 0, extent ?? { min: 0, max: 1 }, Boolean(config.inverse));
+      const contributions = LEGACY_METRICS.map((config) => {
+        const rawValue = config.valueAccessor ? config.valueAccessor(team) : null;
+        const value = Number.isFinite(rawValue) ? rawValue : null;
+        const extent = legacyExtents?.[config.key];
+        const normalised = Number.isFinite(value)
+          ? normaliseValue(value, extent ?? { min: 0, max: 1 }, Boolean(config.inverse))
+          : 0;
         const weighted = normalised * config.weight;
         score += weighted;
         return { ...config, value, weighted };
@@ -351,12 +372,19 @@ function renderFootprintRankings(teams) {
 
   ranked.forEach((team, index) => {
     const metrics = team?.metrics ?? {};
+    const legacy = team?.legacy ?? {};
     const metaParts = [];
     if (team?.conference) {
       metaParts.push(`${team.conference} Conference`);
     }
     if (Number.isFinite(metrics.winPct)) {
       metaParts.push(`${(metrics.winPct * 100).toFixed(1)}% win rate`);
+    }
+    if (Number.isFinite(legacy.titles)) {
+      metaParts.push(`${legacy.titles} title${legacy.titles === 1 ? '' : 's'}`);
+    }
+    if (Number.isFinite(legacy.hallOfFamers) && legacy.hallOfFamers > 0) {
+      metaParts.push(`${legacy.hallOfFamers} Hall of Famer${legacy.hallOfFamers === 1 ? '' : 's'}`);
     }
     if (Number.isFinite(team?.gamesSampled)) {
       metaParts.push(`${team.gamesSampled.toLocaleString()} games sampled`);
@@ -390,17 +418,19 @@ function renderFootprintMethodology(seasonLabel) {
   if (!footprintMethodology) {
     return;
   }
-  const bullets = FOOTPRINT_METRICS.map((metric) => `<li><strong>${Math.round(metric.weight * 100)}%</strong> ${metric.label}</li>`)
+  const bullets = LEGACY_METRICS.map(
+    (metric) => `<li><strong>${Math.round(metric.weight * 100)}%</strong> ${metric.label}</li>`,
+  )
     .join('');
-  const seasonText = seasonLabel ? ` across the ${seasonLabel} archive` : '';
+  const seasonText = seasonLabel ? ` through the ${seasonLabel} record books` : '';
   footprintMethodology.innerHTML = `
     <p>
-      Franchise Footprint scores normalise each signal to a league-wide 0-100 scale${seasonText}, flip turnover impact so
-      careful teams are rewarded, then blend the results using the weighted recipe below. The composite number highlights
-      clubs that combine winning margins with sustainable efficiency and depth scoring.
+      Franchise Footprint scores normalise each legacy signal to a league-wide 0-100 scale${seasonText}, then blend the
+      results using the weighted recipe below. The composite number now spotlights franchises that pair trophy cases,
+      Hall of Fame representation, and sustained winning across eras.
     </p>
     <ul>${bullets}</ul>
-    <p>Weights are recalibrated each refresh to ensure the ladder reflects the current competitive landscape.</p>
+    <p>This historical view keeps weights fixed so the rankings emphasise enduring impact rather than short-term swings.</p>
   `;
 }
 
@@ -634,6 +664,25 @@ function computeExtents(teams) {
   }, {});
 }
 
+function computeLegacyExtents(teams) {
+  legacyExtents = LEGACY_METRICS.reduce((acc, metric) => {
+    const values = teams
+      .map((team) => (metric.valueAccessor ? metric.valueAccessor(team) : null))
+      .filter((value) => Number.isFinite(value));
+    if (!values.length) {
+      acc[metric.key] = { min: 0, max: 1, values: [] };
+      return acc;
+    }
+    const sorted = [...values].sort((a, b) => a - b);
+    acc[metric.key] = {
+      min: sorted[0],
+      max: sorted[sorted.length - 1],
+      values: sorted,
+    };
+    return acc;
+  }, {});
+}
+
 function injectMap(svgMarkup) {
   if (!mapCanvas) return;
   const sanitized = svgMarkup.replace(/ns0:/g, '');
@@ -673,6 +722,7 @@ async function initialise() {
     });
 
     computeExtents(teams);
+    computeLegacyExtents(teams);
     injectMap(svgMarkup);
     renderDivisionOverlays(teams);
     buildMarkers(teams);
