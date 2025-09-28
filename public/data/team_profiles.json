@@ -806,7 +806,11 @@
       },
       "gamesSampled": 86,
       "wins": 36,
-      "losses": 50
+      "losses": 50,
+      "legacy": {
+        "titles": 5,
+        "hallOfFamers": 8
+      }
     },
     {
       "abbreviation": "TOR",
