@@ -7,11 +7,16 @@ import csv
 import json
 import math
 import re
+import socket
 import unicodedata
+import warnings
 from dataclasses import dataclass
 from datetime import datetime, timezone
+from html.parser import HTMLParser
 from pathlib import Path
 from typing import Any
+from urllib.error import HTTPError, URLError
+from urllib.request import Request, urlopen
 
 try:
     from scripts.build_insights import iter_player_statistics_rows
@@ -31,6 +36,8 @@ DEFAULT_BIRTHPLACE_FILES = [
     ROOT / "data" / "nba_birthplaces.csv",
     ROOT / "data" / "nba_draft_birthplaces.csv",
 ]
+
+ACTIVE_SEASON_END_YEAR = 2026
 
 RECENT_SEASON_START = 2022
 RECENT_SEASON_SPAN = 3  # 2022-23 through 2024-25
@@ -104,6 +111,45 @@ METRICS_CATALOG = [
 
 POSITION_NAMES = {"G": "guard", "F": "forward", "C": "center"}
 
+TEAM_METADATA = [
+    {"team_id": "1610612737", "tricode": "ATL"},
+    {"team_id": "1610612738", "tricode": "BOS"},
+    {"team_id": "1610612751", "tricode": "BKN"},
+    {"team_id": "1610612766", "tricode": "CHA"},
+    {"team_id": "1610612741", "tricode": "CHI"},
+    {"team_id": "1610612739", "tricode": "CLE"},
+    {"team_id": "1610612742", "tricode": "DAL"},
+    {"team_id": "1610612743", "tricode": "DEN"},
+    {"team_id": "1610612765", "tricode": "DET"},
+    {"team_id": "1610612744", "tricode": "GSW"},
+    {"team_id": "1610612745", "tricode": "HOU"},
+    {"team_id": "1610612754", "tricode": "IND"},
+    {"team_id": "1610612746", "tricode": "LAC"},
+    {"team_id": "1610612747", "tricode": "LAL"},
+    {"team_id": "1610612763", "tricode": "MEM"},
+    {"team_id": "1610612748", "tricode": "MIA"},
+    {"team_id": "1610612749", "tricode": "MIL"},
+    {"team_id": "1610612750", "tricode": "MIN"},
+    {"team_id": "1610612740", "tricode": "NOP"},
+    {"team_id": "1610612752", "tricode": "NYK"},
+    {"team_id": "1610612760", "tricode": "OKC"},
+    {"team_id": "1610612753", "tricode": "ORL"},
+    {"team_id": "1610612755", "tricode": "PHI"},
+    {"team_id": "1610612756", "tricode": "PHX"},
+    {"team_id": "1610612757", "tricode": "POR"},
+    {"team_id": "1610612758", "tricode": "SAC"},
+    {"team_id": "1610612759", "tricode": "SAS"},
+    {"team_id": "1610612761", "tricode": "TOR"},
+    {"team_id": "1610612762", "tricode": "UTA"},
+    {"team_id": "1610612764", "tricode": "WAS"},
+]
+
+
+def _default_season_end_year() -> int:
+    """Return the default Basketball-Reference season end year."""
+
+    return ACTIVE_SEASON_END_YEAR
+
 
 @dataclass
 class ActivePlayer:
@@ -123,6 +169,93 @@ class ActivePlayer:
 class RosterRow:
     person_id: str
     payload: dict[str, Any]
+
+
+@dataclass
+class BbrRosterEntry:
+    name: str
+    position: str | None = None
+
+
+class _RosterTableParser(HTMLParser):
+    """Minimal HTML parser for Basketball-Reference roster tables."""
+
+    def __init__(self) -> None:
+        super().__init__()
+        self._in_roster = False
+        self._in_tbody = False
+        self._current_field: str | None = None
+        self._skip_row = False
+        self._current_name: list[str] = []
+        self._current_position: list[str] = []
+        self.entries: list[BbrRosterEntry] = []
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        attributes = dict(attrs)
+        if tag == "table" and attributes.get("id") == "roster":
+            self._in_roster = True
+        elif not self._in_roster:
+            return
+        elif tag == "tbody":
+            self._in_tbody = True
+        elif not self._in_tbody:
+            return
+        elif tag == "tr":
+            class_attr = attributes.get("class") or ""
+            if "thead" in class_attr.split():
+                self._skip_row = True
+            else:
+                self._skip_row = False
+                self._current_name = []
+                self._current_position = []
+        elif self._skip_row:
+            return
+        elif tag in {"th", "td"}:
+            data_stat = attributes.get("data-stat")
+            if data_stat == "player":
+                self._current_field = "name"
+            elif data_stat == "pos":
+                self._current_field = "position"
+            else:
+                self._current_field = None
+        elif tag == "a" and self._current_field == "name":
+            # Keep capturing the player name inside anchor tags.
+            return
+
+    def handle_endtag(self, tag: str) -> None:
+        if tag == "table" and self._in_roster:
+            self._in_roster = False
+            self._in_tbody = False
+            self._skip_row = False
+            self._current_field = None
+        elif not self._in_roster:
+            return
+        elif tag == "tbody":
+            self._in_tbody = False
+            self._skip_row = False
+            self._current_field = None
+        elif not self._in_tbody:
+            return
+        elif tag == "tr":
+            if not self._skip_row and self._current_name:
+                name = "".join(self._current_name).strip()
+                position = "".join(self._current_position).strip() or None
+                if name:
+                    self.entries.append(BbrRosterEntry(name=name, position=position))
+            self._skip_row = False
+            self._current_field = None
+            self._current_name = []
+            self._current_position = []
+        elif tag in {"th", "td"}:
+            self._current_field = None
+
+    def handle_data(self, data: str) -> None:
+        if not self._in_roster or not self._in_tbody or self._skip_row or not self._current_field:
+            return
+        if self._current_field == "name":
+            self._current_name.append(data)
+        elif self._current_field == "position":
+            self._current_position.append(data)
 
 
 def _slugify(value: str | None) -> str:
@@ -304,7 +437,7 @@ def _build_keywords(
     return sorted(keywords)
 
 
-def _load_active_players(path: Path) -> list[ActivePlayer]:
+def _load_reference_roster(path: Path) -> list[ActivePlayer]:
     data = json.loads(path.read_text(encoding="utf-8"))
     players: list[ActivePlayer] = []
     for entry in data:
@@ -326,6 +459,123 @@ def _load_active_players(path: Path) -> list[ActivePlayer]:
             )
         )
     return players
+
+
+def _fetch_bbr_team_roster(tricode: str, season_end_year: int) -> list[BbrRosterEntry]:
+    url = f"https://www.basketball-reference.com/teams/{tricode}/{season_end_year}.html"
+    request = Request(url, headers={"User-Agent": "Mozilla/5.0"})
+    with urlopen(request, timeout=20) as response:  # nosec: B113 - trusted domain
+        html = response.read().decode("utf-8", errors="replace")
+    parser = _RosterTableParser()
+    parser.feed(html)
+    return parser.entries
+
+
+def _build_name_index(roster_lookup: dict[str, RosterRow]) -> dict[str, list[RosterRow]]:
+    index: dict[str, list[RosterRow]] = {}
+    for row in roster_lookup.values():
+        first = (row.payload.get("firstName") or "").strip()
+        last = (row.payload.get("lastName") or "").strip()
+        name = f"{first} {last}".strip()
+        if not name:
+            continue
+        key = _normalize_name_key(name)
+        index.setdefault(key, []).append(row)
+    return index
+
+
+def _best_roster_row(candidates: list[RosterRow]) -> RosterRow | None:
+    if not candidates:
+        return None
+
+    def sort_key(row: RosterRow) -> tuple[int, int]:
+        draft = _parse_int(row.payload.get("draftYear")) or 0
+        try:
+            person = int(row.person_id)
+        except ValueError:
+            person = 0
+        return (draft, person)
+
+    return max(candidates, key=sort_key)
+
+
+def _resolve_active_player(
+    name: str,
+    roster_index: dict[str, list[RosterRow]],
+    fallback_index: dict[str, list[ActivePlayer]] | None,
+) -> tuple[str, str, str] | None:
+    key = _normalize_name_key(name)
+    if fallback_index and key in fallback_index:
+        for candidate in fallback_index[key]:
+            if candidate.person_id:
+                return candidate.person_id, candidate.first_name, candidate.last_name
+
+    candidates = roster_index.get(key)
+    row = _best_roster_row(candidates or [])
+    if not row or not row.person_id:
+        return None
+
+    first_name = (row.payload.get("firstName") or "").strip()
+    last_name = (row.payload.get("lastName") or "").strip()
+    if not first_name or not last_name:
+        parts = name.split()
+        if parts:
+            first_name = first_name or parts[0]
+            last_name = last_name or " ".join(parts[1:])
+    return row.person_id, first_name, last_name
+
+
+def _fetch_active_players_from_bbr(
+    roster_lookup: dict[str, RosterRow],
+    *,
+    season_end_year: int,
+    fallback_players: list[ActivePlayer] | None = None,
+) -> list[ActivePlayer]:
+    roster_index = _build_name_index(roster_lookup)
+    fallback_index: dict[str, list[ActivePlayer]] = {}
+    if fallback_players:
+        for player in fallback_players:
+            fallback_index.setdefault(_normalize_name_key(player.full_name), []).append(player)
+
+    active_players: dict[str, ActivePlayer] = {}
+    missing: list[str] = []
+
+    for meta in TEAM_METADATA:
+        tricode = meta["tricode"]
+        team_id = meta["team_id"]
+        try:
+            roster = _fetch_bbr_team_roster(tricode, season_end_year)
+        except (HTTPError, URLError, TimeoutError, socket.timeout) as exc:
+            raise RuntimeError(f"Failed to fetch roster for {tricode}: {exc}") from exc
+
+        for entry in roster:
+            resolved = _resolve_active_player(entry.name, roster_index, fallback_index or None)
+            if not resolved:
+                missing.append(f"{entry.name} ({tricode})")
+                continue
+            person_id, first_name, last_name = resolved
+            active_players[person_id] = ActivePlayer(
+                person_id=person_id,
+                first_name=first_name,
+                last_name=last_name,
+                team_id=team_id,
+                team_tricode=tricode,
+            )
+
+    if missing:
+        warnings.warn(
+            "Unable to map some Basketball-Reference roster entries to Players.csv identifiers: "
+            + ", ".join(missing),
+            RuntimeWarning,
+            stacklevel=2,
+        )
+
+    if fallback_players:
+        for player in fallback_players:
+            if player.person_id not in active_players and player.team_id == "0":
+                active_players[player.person_id] = player
+
+    return sorted(active_players.values(), key=lambda p: (p.team_id, p.last_name, p.first_name))
 
 
 def _load_roster(path: Path) -> dict[str, RosterRow]:
@@ -574,9 +824,38 @@ def build_player_profiles(
     team_histories: Path = DEFAULT_TEAM_HISTORIES,
     birthplace_files: list[Path] = DEFAULT_BIRTHPLACE_FILES,
     goat_system: Path = DEFAULT_GOAT_SYSTEM,
+    season_end_year: int | None = None,
 ) -> dict[str, Any]:
-    players = _load_active_players(active_roster)
     roster_lookup = _load_roster(players_csv)
+    fallback_players: list[ActivePlayer] = []
+    if active_roster and active_roster.exists():
+        try:
+            fallback_players = _load_reference_roster(active_roster)
+        except (OSError, json.JSONDecodeError) as exc:
+            warnings.warn(
+                f"Failed to read fallback roster reference at {active_roster}: {exc}",
+                RuntimeWarning,
+                stacklevel=2,
+            )
+
+    season_year = season_end_year or _default_season_end_year()
+    try:
+        players = _fetch_active_players_from_bbr(
+            roster_lookup,
+            season_end_year=season_year,
+            fallback_players=fallback_players or None,
+        )
+    except RuntimeError as exc:
+        if fallback_players:
+            warnings.warn(
+                f"Falling back to local roster reference after Basketball-Reference fetch failure: {exc}",
+                RuntimeWarning,
+                stacklevel=2,
+            )
+            players = fallback_players
+        else:
+            raise
+
     teams = _load_team_lookup(team_histories)
     birthplaces = _load_birthplaces(birthplace_files)
     goat_by_id, goat_by_name = _load_goat_scores(goat_system)
@@ -689,11 +968,17 @@ def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         "--active-roster",
         type=Path,
         default=DEFAULT_ACTIVE_ROSTER,
-        help="Path to the canonical 2025-26 roster reference file.",
+        help="Optional fallback roster reference JSON used if live Basketball-Reference fetch fails.",
     )
     parser.add_argument("--players-csv", type=Path, default=DEFAULT_PLAYERS_CSV, help="Path to Players.csv metadata table.")
     parser.add_argument("--team-histories", type=Path, default=DEFAULT_TEAM_HISTORIES, help="Path to TeamHistories.csv for franchise metadata.")
     parser.add_argument("--goat-system", type=Path, default=DEFAULT_GOAT_SYSTEM, help="Path to GOAT system rankings feed.")
+    parser.add_argument(
+        "--season-end-year",
+        type=int,
+        default=_default_season_end_year(),
+        help="Season end year used for Basketball-Reference roster pages (for example 2026 for the 2025-26 season).",
+    )
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT, help="Destination for the generated player_profiles.json file.")
     return parser.parse_args(argv)
 
@@ -705,6 +990,7 @@ def main(argv: list[str] | None = None) -> None:
         players_csv=args.players_csv,
         team_histories=args.team_histories,
         goat_system=args.goat_system,
+        season_end_year=args.season_end_year,
     )
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
