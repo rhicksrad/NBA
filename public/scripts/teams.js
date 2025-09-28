@@ -1,5 +1,6 @@
 const MAP_WIDTH = 960;
 const MAP_HEIGHT = 600;
+const SVG_NS = 'http://www.w3.org/2000/svg';
 const LAT_RANGE = [24, 50];
 const LON_RANGE = [-125, -66];
 const CONFERENCE_CLASSES = {
@@ -105,6 +106,150 @@ function projectCoordinates(latitude, longitude) {
   const x = ((longitude - LON_RANGE[0]) / (LON_RANGE[1] - LON_RANGE[0])) * MAP_WIDTH;
   const y = ((LAT_RANGE[1] - latitude) / (LAT_RANGE[1] - LAT_RANGE[0])) * MAP_HEIGHT;
   return { x, y };
+}
+
+function slugify(value) {
+  return value
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
+function computeConvexHull(points) {
+  if (!Array.isArray(points) || points.length <= 2) {
+    return Array.isArray(points) ? [...points] : [];
+  }
+
+  const sorted = [...points].sort((a, b) => (a.x === b.x ? a.y - b.y : a.x - b.x));
+  const cross = (origin, a, b) => (a.x - origin.x) * (b.y - origin.y) - (a.y - origin.y) * (b.x - origin.x);
+
+  const lower = [];
+  for (const point of sorted) {
+    while (lower.length >= 2 && cross(lower[lower.length - 2], lower[lower.length - 1], point) <= 0) {
+      lower.pop();
+    }
+    lower.push(point);
+  }
+
+  const upper = [];
+  for (let i = sorted.length - 1; i >= 0; i -= 1) {
+    const point = sorted[i];
+    while (upper.length >= 2 && cross(upper[upper.length - 2], upper[upper.length - 1], point) <= 0) {
+      upper.pop();
+    }
+    upper.push(point);
+  }
+
+  lower.pop();
+  upper.pop();
+  return lower.concat(upper);
+}
+
+function computePolygonCentroid(points) {
+  if (!points.length) {
+    return { x: 0, y: 0 };
+  }
+
+  let area = 0;
+  let centroidX = 0;
+  let centroidY = 0;
+  for (let i = 0; i < points.length; i += 1) {
+    const current = points[i];
+    const next = points[(i + 1) % points.length];
+    const cross = current.x * next.y - next.x * current.y;
+    area += cross;
+    centroidX += (current.x + next.x) * cross;
+    centroidY += (current.y + next.y) * cross;
+  }
+
+  area *= 0.5;
+  if (Math.abs(area) < 1e-5) {
+    const fallback = points.reduce(
+      (acc, point) => ({ x: acc.x + point.x, y: acc.y + point.y }),
+      { x: 0, y: 0 },
+    );
+    return {
+      x: fallback.x / points.length,
+      y: fallback.y / points.length,
+    };
+  }
+
+  return {
+    x: centroidX / (6 * area),
+    y: centroidY / (6 * area),
+  };
+}
+
+function renderDivisionOverlays(teams) {
+  if (!mapCanvas || !Array.isArray(teams)) return;
+
+  const existingOverlay = mapCanvas.querySelector('.team-map__overlay');
+  if (existingOverlay) {
+    existingOverlay.remove();
+  }
+
+  const divisionGroups = teams.reduce((acc, team) => {
+    const division = team?.division;
+    if (!division) {
+      return acc;
+    }
+    const { latitude, longitude } = team;
+    if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) {
+      return acc;
+    }
+    const { x, y } = projectCoordinates(latitude, longitude);
+    if (!acc.has(division)) {
+      acc.set(division, {
+        conference: team.conference,
+        points: [],
+      });
+    }
+    const group = acc.get(division);
+    group.points.push({ x, y });
+    if (!group.conference && team.conference) {
+      group.conference = team.conference;
+    }
+    return acc;
+  }, new Map());
+
+  if (!divisionGroups.size) {
+    return;
+  }
+
+  const overlay = document.createElementNS(SVG_NS, 'svg');
+  overlay.classList.add('team-map__overlay');
+  overlay.setAttribute('viewBox', `0 0 ${MAP_WIDTH} ${MAP_HEIGHT}`);
+  overlay.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+  overlay.setAttribute('aria-hidden', 'true');
+  overlay.setAttribute('focusable', 'false');
+
+  divisionGroups.forEach((group, division) => {
+    if (!group?.points?.length) {
+      return;
+    }
+    const hull = computeConvexHull(group.points);
+    if (hull.length < 3) {
+      return;
+    }
+    const polygon = document.createElementNS(SVG_NS, 'polygon');
+    polygon.setAttribute('points', hull.map((point) => `${point.x},${point.y}`).join(' '));
+    const conferenceClass = CONFERENCE_CLASSES[group.conference] ?? 'east';
+    const divisionSlug = slugify(division);
+    polygon.setAttribute('class', `team-division team-division--${conferenceClass} team-division--${divisionSlug}`);
+    overlay.append(polygon);
+
+    const centroid = computePolygonCentroid(hull);
+    const label = document.createElementNS(SVG_NS, 'text');
+    label.textContent = `${division} Division`;
+    label.setAttribute('class', 'team-division__label');
+    label.setAttribute('x', centroid.x.toFixed(1));
+    label.setAttribute('y', centroid.y.toFixed(1));
+    overlay.append(label);
+  });
+
+  if (overlay.childNodes.length) {
+    mapCanvas.append(overlay);
+  }
 }
 
 function normaliseValue(value, { min, max }, inverse = false) {
@@ -309,6 +454,7 @@ async function initialise() {
 
     computeExtents(teams);
     injectMap(svgMarkup);
+    renderDivisionOverlays(teams);
     buildMarkers(teams);
 
     if (detailPanel) {
