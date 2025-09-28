@@ -110,11 +110,15 @@ def _ensure_output_dir() -> None:
     PUBLIC_DATA_DIR.mkdir(parents=True, exist_ok=True)
 
 
-def _write_json(filename: str, payload: dict) -> None:
+def _write_json(filename: str, payload: dict, *, indent: int | None = 2) -> None:
     _ensure_output_dir()
     path = PUBLIC_DATA_DIR / filename
     with path.open("w", encoding="utf-8") as f:
-        json.dump(payload, f, indent=2, ensure_ascii=False)
+        if indent is None:
+            json.dump(payload, f, ensure_ascii=False, separators=(",", ":"))
+        else:
+            json.dump(payload, f, indent=indent, ensure_ascii=False)
+        f.write("\n")
 
 
 def _push_top(collection: list[tuple[float, dict]], key: float, item: dict, *, size: int) -> None:
@@ -138,6 +142,65 @@ def _push_top(collection: list[tuple[float, dict]], key: float, item: dict, *, s
 
 def _sorted_heap(heap: list[tuple[float, dict]], *, reverse: bool = True) -> list[dict]:
     return [item for _, item in sorted(heap, key=lambda pair: pair[0], reverse=reverse)]
+
+
+def _load_player_directory() -> dict[str, dict[str, object]]:
+    """Load player metadata from ``Players.csv`` keyed by ``personId``."""
+
+    path = ROOT / "Players.csv"
+    directory: dict[str, dict[str, object]] = {}
+    with path.open(newline="", encoding="utf-8") as csvfile:
+        reader = csv.DictReader(csvfile)
+        for row in reader:
+            person_id = (row.get("personId") or "").strip()
+            if not person_id:
+                continue
+
+            country = PLAYER_COUNTRY_OVERRIDES.get(person_id, (row.get("country") or "").strip())
+            directory[person_id] = {
+                "personId": person_id,
+                "firstName": (row.get("firstName") or "").strip(),
+                "lastName": (row.get("lastName") or "").strip(),
+                "country": country,
+                "height": _to_float(row.get("height")),
+                "weight": _to_float(row.get("bodyWeight")),
+                "guard": _to_bool(row.get("guard")),
+                "forward": _to_bool(row.get("forward")),
+                "center": _to_bool(row.get("center")),
+                "draftYear": _to_int(row.get("draftYear")),
+                "draftNumber": _to_int(row.get("draftNumber")),
+            }
+    return directory
+
+
+def _load_franchise_lookup() -> dict[str, str]:
+    """Map ``"City Team"`` names to franchise abbreviations."""
+
+    mapping: dict[str, str] = {}
+    path = ROOT / "TeamHistories.csv"
+    if not path.exists():
+        return mapping
+
+    with path.open(newline="", encoding="utf-8") as csvfile:
+        reader = csv.DictReader(csvfile)
+        for row in reader:
+            city = (row.get("teamCity") or "").strip()
+            name = (row.get("teamName") or "").strip()
+            abbrev = (row.get("teamAbbrev") or "").strip()
+            if not (city or name):
+                continue
+            key = f"{city} {name}".strip()
+            if not key:
+                continue
+            if abbrev:
+                mapping.setdefault(key, abbrev)
+    return mapping
+
+
+def _scale_component(value: float, ceiling: float, weight: float) -> float:
+    if ceiling <= 0:
+        return 0.0
+    return round((value / ceiling) * weight, 2)
 
 
 class PlayerStatisticsStreamError(RuntimeError):
@@ -982,12 +1045,368 @@ def build_player_season_insights_snapshot() -> None:
 # ---------------------------------------------------------------------------
 
 
+def build_goat_system_snapshot() -> None:
+    """Generate a GOAT ranking row for every known player."""
+
+    player_directory = _load_player_directory()
+    franchise_lookup = _load_franchise_lookup()
+
+    career_totals: dict[str, dict[str, object]] = {}
+    earliest_season: int | None = None
+    latest_season: int | None = None
+
+    for row in iter_player_statistics_rows():
+        person_id = (row.get("personId") or "").strip()
+        if not person_id:
+            continue
+
+        season_year = _year_from_date(row.get("gameDate"))
+        if season_year is not None:
+            if earliest_season is None or season_year < earliest_season:
+                earliest_season = season_year
+            if latest_season is None or season_year > latest_season:
+                latest_season = season_year
+
+        totals = career_totals.setdefault(
+            person_id,
+            {
+                "personId": person_id,
+                "games": 0,
+                "points": 0.0,
+                "assists": 0.0,
+                "rebounds": 0.0,
+                "minutes": 0.0,
+                "steals": 0.0,
+                "blocks": 0.0,
+                "wins": 0,
+                "losses": 0,
+                "playoffGames": 0,
+                "playoffWins": 0,
+                "finalsGames": 0,
+                "teams": set(),
+                "firstSeason": season_year,
+                "lastSeason": season_year,
+            },
+        )
+
+        totals["games"] = int(totals.get("games", 0)) + 1
+        points = _to_float(row.get("points")) or 0.0
+        assists = _to_float(row.get("assists")) or 0.0
+        rebounds = _to_float(row.get("reboundsTotal")) or 0.0
+        minutes = _to_float(row.get("numMinutes")) or 0.0
+        steals = _to_float(row.get("steals")) or 0.0
+        blocks = _to_float(row.get("blocks")) or 0.0
+
+        totals["points"] = float(totals.get("points", 0.0)) + points
+        totals["assists"] = float(totals.get("assists", 0.0)) + assists
+        totals["rebounds"] = float(totals.get("rebounds", 0.0)) + rebounds
+        totals["minutes"] = float(totals.get("minutes", 0.0)) + minutes
+        totals["steals"] = float(totals.get("steals", 0.0)) + steals
+        totals["blocks"] = float(totals.get("blocks", 0.0)) + blocks
+
+        win_flag = (row.get("win") or "").strip() == "1"
+        if win_flag:
+            totals["wins"] = int(totals.get("wins", 0)) + 1
+        else:
+            totals["losses"] = int(totals.get("losses", 0)) + 1
+
+        game_type = (row.get("gameType") or "").strip().lower()
+        if game_type == "playoffs":
+            totals["playoffGames"] = int(totals.get("playoffGames", 0)) + 1
+            if win_flag:
+                totals["playoffWins"] = int(totals.get("playoffWins", 0)) + 1
+
+        game_label = (row.get("gameLabel") or "").strip().lower()
+        if "final" in game_label:
+            totals["finalsGames"] = int(totals.get("finalsGames", 0)) + 1
+
+        team_name = f"{(row.get('playerteamCity') or '').strip()} {(row.get('playerteamName') or '').strip()}".strip()
+        if team_name:
+            totals.setdefault("teams", set()).add(team_name)
+
+        if season_year is not None:
+            if totals.get("firstSeason") is None or (
+                isinstance(totals.get("firstSeason"), int) and season_year < totals["firstSeason"]
+            ):
+                totals["firstSeason"] = season_year
+            if totals.get("lastSeason") is None or (
+                isinstance(totals.get("lastSeason"), int) and season_year > totals["lastSeason"]
+            ):
+                totals["lastSeason"] = season_year
+
+    weights = {
+        "impact": 35.0,
+        "stage": 20.0,
+        "longevity": 22.0,
+        "versatility": 15.0,
+        "culture": 8.0,
+    }
+
+    all_ids = set(player_directory.keys()) | set(career_totals.keys())
+
+    raw_metrics: dict[str, dict[str, float]] = {}
+    ceilings = {key: 0.0 for key in weights}
+
+    for person_id in all_ids:
+        meta = player_directory.get(
+            person_id,
+            {
+                "personId": person_id,
+                "firstName": "",
+                "lastName": "",
+                "country": "",
+                "guard": False,
+                "forward": False,
+                "center": False,
+                "draftYear": None,
+                "draftNumber": None,
+            },
+        )
+        totals = career_totals.get(
+            person_id,
+            {
+                "games": 0,
+                "points": 0.0,
+                "assists": 0.0,
+                "rebounds": 0.0,
+                "minutes": 0.0,
+                "steals": 0.0,
+                "blocks": 0.0,
+                "wins": 0,
+                "losses": 0,
+                "playoffGames": 0,
+                "playoffWins": 0,
+                "finalsGames": 0,
+                "teams": set(),
+                "firstSeason": meta.get("draftYear"),
+                "lastSeason": meta.get("draftYear"),
+            },
+        )
+
+        games = int(totals.get("games", 0))
+        wins = int(totals.get("wins", 0))
+        playoff_games = int(totals.get("playoffGames", 0))
+        playoff_wins = int(totals.get("playoffWins", 0))
+        minutes = float(totals.get("minutes", 0.0))
+        points = float(totals.get("points", 0.0))
+        assists = float(totals.get("assists", 0.0))
+        rebounds = float(totals.get("rebounds", 0.0))
+        steals = float(totals.get("steals", 0.0))
+        blocks = float(totals.get("blocks", 0.0))
+
+        production = 0.0
+        if games:
+            production = (points + 1.25 * assists + 1.1 * rebounds + 1.5 * (steals + blocks)) / games
+        impact_metric = production * (0.6 + (minutes / games if games else 0.0))
+
+        stage_metric = playoff_wins * 2.0 + playoff_games * 0.6 + int(totals.get("finalsGames", 0)) * 1.2 + wins * 0.05
+
+        longevity_metric = minutes + games * 6.0
+
+        positions_count = sum(1 for flag in (meta.get("guard"), meta.get("forward"), meta.get("center")) if flag)
+        teams_count = len(totals.get("teams", set()))
+        per_game_assists = assists / games if games else 0.0
+        per_game_rebounds = rebounds / games if games else 0.0
+        per_game_stocks = (steals + blocks) / games if games else 0.0
+        versatility_metric = (
+            positions_count * 40.0
+            + teams_count * 12.0
+            + per_game_assists * 18.0
+            + per_game_rebounds * 12.0
+            + per_game_stocks * 14.0
+        )
+
+        win_pct = wins / games if games else 0.0
+        playoff_win_pct = playoff_wins / playoff_games if playoff_games else 0.0
+        international_bonus = 0.0
+        country = (meta.get("country") or "").lower()
+        if country and country not in {"usa", "united states", "united states of america"}:
+            international_bonus = 12.0
+
+        draft_number = meta.get("draftNumber")
+        draft_bonus = 0.0
+        if isinstance(draft_number, int) and draft_number > 0:
+            draft_bonus = max(0.0, 30 - draft_number) * 0.5
+
+        culture_metric = win_pct * 60.0 + playoff_win_pct * 25.0 + int(totals.get("finalsGames", 0)) * 3.0
+        culture_metric += international_bonus + draft_bonus + teams_count * 1.5
+
+        raw_metrics[person_id] = {
+            "impact": impact_metric,
+            "stage": stage_metric,
+            "longevity": longevity_metric,
+            "versatility": versatility_metric,
+            "culture": culture_metric,
+            "games": games,
+            "wins": wins,
+            "playoffGames": playoff_games,
+            "playoffWins": playoff_wins,
+            "winPct": win_pct,
+            "playoffWinPct": playoff_win_pct,
+            "firstSeason": totals.get("firstSeason"),
+            "lastSeason": totals.get("lastSeason"),
+            "points": points,
+            "assists": assists,
+            "rebounds": rebounds,
+            "teams": totals.get("teams", set()),
+            "meta": meta,
+        }
+
+        for key in weights:
+            ceilings[key] = max(ceilings[key], raw_metrics[person_id][key])
+
+    players_payload: list[dict[str, object]] = []
+
+    for person_id in all_ids:
+        metrics = raw_metrics[person_id]
+        meta = metrics["meta"]
+        components = {key: _scale_component(metrics[key], ceilings[key], weights[key]) for key in weights}
+        goat_score = round(sum(components.values()), 1)
+
+        first_name = (meta.get("firstName") or "").strip()
+        last_name = (meta.get("lastName") or "").strip()
+        display_name = f"{first_name} {last_name}".strip() or person_id
+
+        first_season = metrics.get("firstSeason")
+        last_season = metrics.get("lastSeason")
+        if first_season is None and isinstance(meta.get("draftYear"), int):
+            first_season = meta.get("draftYear")
+        if last_season is None and isinstance(meta.get("draftYear"), int):
+            last_season = meta.get("draftYear")
+
+        career_span = "—"
+        if isinstance(first_season, int) and isinstance(last_season, int):
+            career_span = f"{first_season}-{last_season}"
+
+        prime_window = None
+        if isinstance(first_season, int) and isinstance(last_season, int):
+            prime_start = max(first_season, last_season - 4)
+            prime_window = f"{prime_start}-{last_season}"
+
+        franchises = sorted(
+            {
+                franchise_lookup.get(team, team.split(" ")[-1] if team else "")
+                for team in metrics.get("teams", set())
+                if team
+            }
+        )
+
+        games = metrics["games"]
+        wins = metrics["wins"]
+        playoff_games = metrics["playoffGames"]
+        playoff_wins = metrics["playoffWins"]
+
+        if games:
+            resume = (
+                f"{round(metrics['points']):,} pts · {round(metrics['assists']):,} ast · "
+                f"{round(metrics['rebounds']):,} reb in {games:,} games"
+            )
+        else:
+            resume = "Awaiting NBA impact"
+
+        if last_season and isinstance(last_season, int) and last_season >= (datetime.now().year - 1):
+            status = "Active"
+        elif games:
+            status = "Legend"
+        else:
+            status = "Prospect"
+
+        if goat_score >= 90:
+            tier = "Pantheon"
+        elif goat_score >= 75:
+            tier = "Inner Circle"
+        elif goat_score >= 60:
+            tier = "All-Time Great"
+        elif goat_score >= 45:
+            tier = "Hall of Fame"
+        elif goat_score >= 30:
+            tier = "All-Star"
+        elif goat_score >= 15:
+            tier = "Starter"
+        elif goat_score >= 5:
+            tier = "Rotation"
+        else:
+            tier = "Reserve"
+
+        players_payload.append(
+            {
+                "personId": person_id,
+                "rank": 0,
+                "name": display_name,
+                "goatScore": goat_score,
+                "tier": tier,
+                "status": status,
+                "careerSpan": career_span,
+                "primeWindow": prime_window,
+                "delta": 0.0,
+                "franchises": franchises,
+                "resume": resume,
+                "goatComponents": components,
+                "winPct": round(metrics["winPct"], 3) if games else 0.0,
+                "playoffWinPct": round(metrics["playoffWinPct"], 3) if playoff_games else 0.0,
+            }
+        )
+
+    players_payload.sort(key=lambda item: item["goatScore"], reverse=True)
+    for index, record in enumerate(players_payload, start=1):
+        record["rank"] = index
+
+    weights_payload = [
+        {
+            "key": "impact",
+            "label": "Prime Impact (RAPM/BPM proxy)",
+            "weight": 0.35,
+            "description": "Blends production, playmaking, and defensive stocks per possession.",
+        },
+        {
+            "key": "stage",
+            "label": "Stage Dominance",
+            "weight": 0.2,
+            "description": "Captures playoff volume, wins, and finals presence.",
+        },
+        {
+            "key": "longevity",
+            "label": "Longevity & Availability",
+            "weight": 0.22,
+            "description": "Rewards durable minutes and sustained contribution.",
+        },
+        {
+            "key": "versatility",
+            "label": "Versatility & Scalability",
+            "weight": 0.15,
+            "description": "Highlights positional flexibility and all-around skills.",
+        },
+        {
+            "key": "culture",
+            "label": "Cultural Capital",
+            "weight": 0.08,
+            "description": "Accounts for win equity, international impact, and draft pedigree.",
+        },
+    ]
+
+    payload = {
+        "generatedAt": _timestamp(),
+        "weights": weights_payload,
+        "coverage": {
+            "players": len(players_payload),
+            "seasonRange": {"start": earliest_season, "end": latest_season},
+        },
+        "players": players_payload,
+    }
+
+    _write_json("goat_system.json", payload, indent=None)
+
+
+# ---------------------------------------------------------------------------
+
+
 def main() -> None:
     build_players_overview()
     build_games_snapshot()
     build_team_performance_snapshot()
     build_player_leaders_snapshot()
     build_player_season_insights_snapshot()
+    build_goat_system_snapshot()
 
 
 if __name__ == "__main__":
