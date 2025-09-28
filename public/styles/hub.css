@@ -118,6 +118,20 @@ a:hover, a:focus { color: var(--sky); }
   gap: 0.75rem;
 }
 
+.injury-grid__divider {
+  border: 0;
+  border-top: 1px solid color-mix(in srgb, var(--royal) 16%, transparent);
+  margin: 0.2rem 0;
+}
+
+.injury-grid__section-title {
+  margin: 0.15rem 0 0;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-subtle);
+}
+
 .injury-grid__placeholder,
 .tempo-gauge__placeholder,
 .spacing-lab__placeholder {
@@ -136,6 +150,11 @@ a:hover, a:focus { color: var(--sky); }
   padding: 0.85rem 1rem;
   display: grid;
   gap: 0.6rem;
+}
+
+.injury-card--season {
+  border-style: dashed;
+  background: color-mix(in srgb, var(--surface) 82%, rgba(239, 61, 91, 0.1) 18%);
 }
 
 .injury-card__header {
@@ -193,6 +212,11 @@ a:hover, a:focus { color: var(--sky); }
 .injury-card__status--caution {
   background: color-mix(in srgb, var(--red) 32%, transparent);
   color: var(--red);
+}
+
+.injury-card__status--season {
+  background: color-mix(in srgb, var(--navy) 26%, transparent);
+  color: var(--navy);
 }
 
 .injury-card__metrics {

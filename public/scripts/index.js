@@ -198,6 +198,42 @@ const injuryAvailabilityPulse = [
   },
 ];
 
+const seasonEndingAbsences = [
+  {
+    team: 'Chicago Bulls',
+    player: 'Lonzo Ball',
+    role: 'G · Connector guard',
+    statusLabel: 'Season shutdown',
+    statusLevel: 'season',
+    injury: 'Left knee cartilage transplant follow-up',
+    timeline: 'Out for 2024-25 · Next medical review Sept 2025',
+    impact: 'Chicago leans on Coby White-led playmaking committee.',
+    note: "Ball's third knee procedure keeps him on a strength-and-mobility rebuild with no contact work cleared yet.",
+  },
+  {
+    team: 'Houston Rockets',
+    player: 'Steven Adams',
+    role: 'C · Interior anchor',
+    statusLabel: 'Season shutdown',
+    statusLevel: 'season',
+    injury: 'Right knee PCL reconstruction',
+    timeline: 'Targeting 2025 preseason return',
+    impact: 'Houston will ride Alperen Şengün and small-ball looks at the five.',
+    note: 'Multiple swelling setbacks led Houston to hold Adams out all season while focusing on long-term stability work.',
+  },
+  {
+    team: 'Portland Trail Blazers',
+    player: 'Robert Williams III',
+    role: 'C · Rim protector',
+    statusLabel: 'Season shutdown',
+    statusLevel: 'season',
+    injury: 'Ligament repair on right knee',
+    timeline: 'Re-evaluation slated for late summer 2025',
+    impact: 'Portland elevates Deandre Ayton and Jabari Walker in the rotation.',
+    note: 'The Blazers opted for a year-long ramp to rebuild strength and avoid another setback after November surgery.',
+  },
+];
+
 const projectedTempoLeaders = [
   {
     team: 'Indiana Pacers',
@@ -895,70 +931,69 @@ function renderInjuryPulse() {
 
   container.innerHTML = '';
 
-  if (!injuryAvailabilityPulse.length) {
-    const placeholder = document.createElement('p');
-    placeholder.className = 'injury-grid__placeholder';
-    placeholder.textContent = 'Injury board updates once medical reports finalize.';
-    container.appendChild(placeholder);
-  } else {
-    injuryAvailabilityPulse.forEach((entry) => {
-      const card = document.createElement('article');
-      card.className = 'injury-card';
+  const createInjuryCard = (entry, { hideReadiness = false, variant } = {}) => {
+    const card = document.createElement('article');
+    card.className = 'injury-card';
+    if (variant) {
+      card.classList.add(`injury-card--${variant}`);
+    }
 
-      const header = document.createElement('header');
-      header.className = 'injury-card__header';
+    const header = document.createElement('header');
+    header.className = 'injury-card__header';
 
-      const identity = document.createElement('div');
-      identity.className = 'injury-card__identity';
-      identity.appendChild(createTeamLogo(entry.team, 'team-logo team-logo--small'));
+    const identity = document.createElement('div');
+    identity.className = 'injury-card__identity';
+    identity.appendChild(createTeamLogo(entry.team, 'team-logo team-logo--small'));
 
-      const label = document.createElement('div');
-      label.className = 'injury-card__label';
-      const name = document.createElement('strong');
-      name.textContent = entry.player;
-      label.appendChild(name);
-      if (entry.role) {
-        const role = document.createElement('span');
-        role.textContent = entry.role;
-        label.appendChild(role);
-      }
-      identity.appendChild(label);
-      header.appendChild(identity);
+    const label = document.createElement('div');
+    label.className = 'injury-card__label';
+    const name = document.createElement('strong');
+    name.textContent = entry.player;
+    label.appendChild(name);
+    if (entry.role) {
+      const role = document.createElement('span');
+      role.textContent = entry.role;
+      label.appendChild(role);
+    }
+    identity.appendChild(label);
+    header.appendChild(identity);
 
-      if (entry.statusLabel) {
-        const status = document.createElement('span');
-        const level = entry.statusLevel === 'ready' || entry.statusLevel === 'monitor' || entry.statusLevel === 'caution'
-          ? entry.statusLevel
-          : 'monitor';
-        status.className = `injury-card__status injury-card__status--${level}`;
-        status.textContent = entry.statusLabel;
-        header.appendChild(status);
-      }
+    if (entry.statusLabel) {
+      const status = document.createElement('span');
+      const allowedStatuses = new Set(['ready', 'monitor', 'caution', 'season']);
+      const level = allowedStatuses.has(entry.statusLevel) ? entry.statusLevel : 'monitor';
+      status.className = `injury-card__status injury-card__status--${level}`;
+      status.textContent = entry.statusLabel;
+      header.appendChild(status);
+    }
 
-      card.appendChild(header);
+    card.appendChild(header);
 
-      const metrics = document.createElement('dl');
-      metrics.className = 'injury-card__metrics';
+    const metrics = document.createElement('dl');
+    metrics.className = 'injury-card__metrics';
 
-      const addMetric = (labelText, valueText) => {
-        if (!labelText || !valueText) return;
-        const row = document.createElement('div');
-        row.className = 'injury-card__metric';
-        const term = document.createElement('dt');
-        term.textContent = labelText;
-        const detail = document.createElement('dd');
-        detail.textContent = valueText;
-        row.append(term, detail);
-        metrics.appendChild(row);
-      };
+    const addMetric = (labelText, valueText) => {
+      if (!labelText || !valueText) return;
+      const row = document.createElement('div');
+      row.className = 'injury-card__metric';
+      const term = document.createElement('dt');
+      term.textContent = labelText;
+      const detail = document.createElement('dd');
+      detail.textContent = valueText;
+      row.append(term, detail);
+      metrics.appendChild(row);
+    };
 
-      addMetric('Timeline', entry.timeline);
-      addMetric('Impact', entry.impact);
+    addMetric('Timeline', entry.timeline);
+    addMetric('Impact', entry.impact);
+    addMetric('Injury', entry.injury);
+    addMetric('Return plan', entry.returnPlan);
 
-      if (metrics.childElementCount) {
-        card.appendChild(metrics);
-      }
+    if (metrics.childElementCount) {
+      card.appendChild(metrics);
+    }
 
+    if (!hideReadiness) {
       const readiness = clampPercent(entry.readiness);
       const readinessBar = document.createElement('div');
       readinessBar.className = 'injury-card__readiness';
@@ -969,20 +1004,54 @@ function renderInjuryPulse() {
       readinessLabel.className = 'injury-card__readiness-label';
       readinessLabel.textContent = `Readiness index: ${helpers.formatNumber(readiness, 0)} / 100`;
       card.appendChild(readinessLabel);
+    }
 
-      if (entry.note) {
-        const note = document.createElement('p');
-        note.className = 'injury-card__note';
-        note.textContent = entry.note;
-        card.appendChild(note);
+    if (entry.note) {
+      const note = document.createElement('p');
+      note.className = 'injury-card__note';
+      note.textContent = entry.note;
+      card.appendChild(note);
+    }
+
+    return card;
+  };
+
+  const hasActiveEntries = Array.isArray(injuryAvailabilityPulse) && injuryAvailabilityPulse.length > 0;
+  const hasSeasonLongEntries = Array.isArray(seasonEndingAbsences) && seasonEndingAbsences.length > 0;
+
+  if (!hasActiveEntries && !hasSeasonLongEntries) {
+    const placeholder = document.createElement('p');
+    placeholder.className = 'injury-grid__placeholder';
+    placeholder.textContent = 'Injury board updates once medical reports finalize.';
+    container.appendChild(placeholder);
+  } else {
+    if (hasActiveEntries) {
+      injuryAvailabilityPulse.forEach((entry) => {
+        container.appendChild(createInjuryCard(entry));
+      });
+    }
+
+    if (hasSeasonLongEntries) {
+      if (hasActiveEntries) {
+        const divider = document.createElement('div');
+        divider.className = 'injury-grid__divider';
+        container.appendChild(divider);
       }
 
-      container.appendChild(card);
-    });
+      const heading = document.createElement('h4');
+      heading.className = 'injury-grid__section-title';
+      heading.textContent = 'Season-long absences';
+      container.appendChild(heading);
+
+      seasonEndingAbsences.forEach((entry) => {
+        container.appendChild(createInjuryCard(entry, { hideReadiness: true, variant: 'season' }));
+      });
+    }
   }
 
   if (footnote) {
-    footnote.textContent = 'Readiness index blends ramp-up participation, travel tolerance, and medical reports—100 signals full go.';
+    footnote.textContent =
+      'Readiness index blends ramp-up participation, travel tolerance, and medical reports—100 signals full go. Season-long absences spotlight players ruled out through 2024-25 and the rehab logic behind each shutdown.';
   }
 }
 
