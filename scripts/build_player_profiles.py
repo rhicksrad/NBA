@@ -13,6 +13,14 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+try:
+    from scripts.build_insights import iter_player_statistics_rows
+except ModuleNotFoundError:  # pragma: no cover - fallback for direct execution
+    import sys
+
+    sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+    from scripts.build_insights import iter_player_statistics_rows  # type: ignore
+
 ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_ACTIVE_ROSTER = ROOT / "data" / "active_players.json"
 DEFAULT_PLAYERS_CSV = ROOT / "Players.csv"
@@ -23,6 +31,13 @@ DEFAULT_BIRTHPLACE_FILES = [
     ROOT / "data" / "nba_birthplaces.csv",
     ROOT / "data" / "nba_draft_birthplaces.csv",
 ]
+
+RECENT_SEASON_START = 2022
+RECENT_SEASON_SPAN = 3  # 2022-23 through 2024-25
+RECENT_SEASON_YEARS = {
+    RECENT_SEASON_START + offset for offset in range(RECENT_SEASON_SPAN)
+}
+RECENT_SEASON_MAX_GAMES = 82 * RECENT_SEASON_SPAN
 
 METRICS_CATALOG = [
     {
@@ -397,6 +412,148 @@ def _load_goat_scores(path: Path) -> tuple[dict[str, dict[str, Any]], dict[str, 
     return by_id, by_name
 
 
+def _parse_game_date(value: str | None) -> datetime | None:
+    if not value:
+        return None
+    text = value.strip()
+    if not text:
+        return None
+    try:
+        return datetime.fromisoformat(text)
+    except ValueError:
+        pass
+    for fmt in ("%Y-%m-%d %H:%M", "%Y-%m-%d"):
+        try:
+            return datetime.strptime(text, fmt)
+        except ValueError:
+            continue
+    return None
+
+
+def _season_year_from_date(value: str | None) -> int | None:
+    parsed = _parse_game_date(value)
+    if not parsed:
+        return None
+    anchor_year = parsed.year
+    if parsed.month >= 7:
+        return anchor_year
+    return anchor_year - 1
+
+
+def _compute_recent_goat_scores(active_ids: set[str]) -> dict[str, dict[str, Any]]:
+    """Aggregate last-three-season GOAT scores for the provided players."""
+
+    if not active_ids:
+        return {}
+
+    aggregates: dict[str, dict[str, Any]] = {
+        person_id: {
+            "games": 0,
+            "wins": 0,
+            "minutes": 0.0,
+            "points": 0.0,
+            "assists": 0.0,
+            "rebounds": 0.0,
+            "steals": 0.0,
+            "blocks": 0.0,
+            "plus_minus": 0.0,
+            "seasons": set(),
+        }
+        for person_id in active_ids
+    }
+
+    for row in iter_player_statistics_rows():
+        person_id = (row.get("personId") or "").strip()
+        if person_id not in aggregates:
+            continue
+        season_year = _season_year_from_date(row.get("gameDate"))
+        if season_year not in RECENT_SEASON_YEARS:
+            continue
+
+        minutes = _parse_float(row.get("numMinutes")) or 0.0
+        # Ignore box score stubs with no recorded run.
+        if minutes <= 0:
+            continue
+
+        bucket = aggregates[person_id]
+        bucket["games"] += 1
+        if (row.get("win") or "").strip() == "1":
+            bucket["wins"] += 1
+        bucket["minutes"] += minutes
+        bucket["points"] += _parse_float(row.get("points")) or 0.0
+        bucket["assists"] += _parse_float(row.get("assists")) or 0.0
+        bucket["rebounds"] += _parse_float(row.get("reboundsTotal")) or 0.0
+        bucket["steals"] += _parse_float(row.get("steals")) or 0.0
+        bucket["blocks"] += _parse_float(row.get("blocks")) or 0.0
+        bucket["plus_minus"] += _parse_float(row.get("plusMinusPoints")) or 0.0
+        bucket["seasons"].add(season_year)
+
+    raw_values: list[float] = []
+    for bucket in aggregates.values():
+        minutes = bucket["minutes"]
+        if minutes <= 0:
+            bucket["raw"] = 0.0
+            raw_values.append(0.0)
+            continue
+
+        per36_points = (bucket["points"] / minutes) * 36.0 if minutes else 0.0
+        per36_assists = (bucket["assists"] / minutes) * 36.0 if minutes else 0.0
+        per36_rebounds = (bucket["rebounds"] / minutes) * 36.0 if minutes else 0.0
+        per36_stocks = ((bucket["steals"] + bucket["blocks"]) / minutes) * 36.0 if minutes else 0.0
+
+        availability = min(bucket["games"] / RECENT_SEASON_MAX_GAMES, 1.0)
+        win_pct = (bucket["wins"] / bucket["games"]) if bucket["games"] else 0.0
+        plus_minus = (bucket["plus_minus"] / bucket["games"]) if bucket["games"] else 0.0
+
+        impact = max(
+            per36_points
+            + 1.6 * per36_assists
+            + 1.1 * per36_rebounds
+            + 3.0 * per36_stocks,
+            0.0,
+        )
+
+        raw_score = impact * availability
+        if win_pct > 0:
+            raw_score += win_pct * 18.0
+        if plus_minus > 0:
+            raw_score += plus_minus * 0.4
+
+        bucket["raw"] = max(raw_score, 0.0)
+        raw_values.append(bucket["raw"])
+
+    if not raw_values:
+        return {person_id: {"score": None, "rank": None} for person_id in active_ids}
+
+    min_raw = min(raw_values)
+    max_raw = max(raw_values)
+    span = max_raw - min_raw
+    rankings: dict[str, int] = {}
+    sorted_entries = sorted(
+        aggregates.items(), key=lambda item: item[1]["raw"], reverse=True
+    )
+    for index, (person_id, _bucket) in enumerate(sorted_entries):
+        rankings[person_id] = index + 1
+
+    recent_scores: dict[str, dict[str, Any]] = {}
+    for person_id, bucket in aggregates.items():
+        raw = bucket["raw"]
+        if span <= 0:
+            score = 0.0
+        else:
+            normalized = (raw - min_raw) / span
+            clamped = min(max(normalized, 0.0), 1.0)
+            score = round(clamped * 100.0, 1)
+        recent_scores[person_id] = {
+            "score": score,
+            "rank": rankings.get(person_id),
+            "games": bucket["games"],
+            "seasons": sorted(bucket["seasons"]),
+        }
+
+    return recent_scores
+
+
 def build_player_profiles(
     *,
     active_roster: Path = DEFAULT_ACTIVE_ROSTER,
@@ -410,6 +567,7 @@ def build_player_profiles(
     teams = _load_team_lookup(team_histories)
     birthplaces = _load_birthplaces(birthplace_files)
     goat_by_id, goat_by_name = _load_goat_scores(goat_system)
+    recent_goat = _compute_recent_goat_scores({player.person_id for player in players})
 
     profiles: list[dict[str, Any]] = []
     for player in players:
@@ -472,28 +630,36 @@ def build_player_profiles(
 
         keywords = sorted(keywords)
 
-        profiles.append(
-            {
-                "id": player_id,
-                "name": name,
-                "team": team_meta.get("full") or "Free Agent",
-                "position": position_display,
-                "height": height,
-                "weight": weight,
-                "born": born,
-                "origin": origin,
-                "draft": draft,
-                "era": era,
-                "archetype": archetype,
-                "goatScore": goat_score,
-                "goatRank": goat_rank,
-                "goatTier": goat_tier,
-                "goatResume": goat_resume,
-                "bio": bio,
-                "keywords": keywords,
-                "metrics": {},
-            }
-        )
+        recent_meta = recent_goat.get(player.person_id, {})
+        profile: dict[str, Any] = {
+            "id": player_id,
+            "name": name,
+            "team": team_meta.get("full") or "Free Agent",
+            "position": position_display,
+            "height": height,
+            "weight": weight,
+            "born": born,
+            "origin": origin,
+            "draft": draft,
+            "era": era,
+            "archetype": archetype,
+            "goatScore": goat_score,
+            "goatRank": goat_rank,
+            "goatTier": goat_tier,
+            "goatResume": goat_resume,
+            "bio": bio,
+            "keywords": keywords,
+            "metrics": {},
+        }
+
+        recent_score = recent_meta.get("score") if isinstance(recent_meta, dict) else None
+        recent_rank = recent_meta.get("rank") if isinstance(recent_meta, dict) else None
+        if recent_score is not None:
+            profile["goatRecentScore"] = recent_score
+        if recent_rank is not None:
+            profile["goatRecentRank"] = recent_rank
+
+        profiles.append(profile)
 
     profiles.sort(key=lambda item: item["name"].lower())
     payload = {
