@@ -981,7 +981,7 @@ section {
 
 .spotlight-itinerary {
   display: grid;
-  gap: clamp(1.8rem, 4vw, 2.4rem);
+  gap: clamp(1.4rem, 3vw, 1.8rem);
   background:
     linear-gradient(165deg, rgba(17, 86, 214, 0.14), rgba(244, 181, 63, 0.12)),
     var(--surface);
@@ -990,7 +990,7 @@ section {
 
 .spotlight-itinerary__lead {
   display: grid;
-  gap: 0.8rem;
+  gap: 0.6rem;
   text-align: center;
 }
 
@@ -998,133 +998,156 @@ section {
   margin-inline: auto;
 }
 
+
 .tour-board {
   display: grid;
-  gap: clamp(1.4rem, 3vw, 2rem);
+  gap: clamp(1.2rem, 3vw, 1.6rem);
 }
 
-.tour-board__grid {
-  display: grid;
-  gap: clamp(1rem, 2.5vw, 1.4rem);
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-}
-
-.tour-board__placeholder {
+.tour-board__list {
+  list-style: none;
   margin: 0;
-  grid-column: 1 / -1;
-  text-align: center;
-  padding: 1.6rem 1.2rem;
-  border-radius: var(--radius-lg);
-  border: 1px dashed color-mix(in srgb, var(--royal) 25%, transparent);
-  background: color-mix(in srgb, rgba(17, 86, 214, 0.12) 55%, rgba(255, 255, 255, 0.9) 45%);
-  color: var(--text-subtle);
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
 }
 
-.tour-card {
-  display: grid;
-  gap: 0.6rem;
-  padding: 1.1rem 1.2rem;
-  border-radius: var(--radius-lg);
-  border: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
+.tour-board__item {
+  display: flex;
+}
+
+.tour-board__link {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.6rem 0.85rem;
+  border-radius: var(--radius-md);
+  border: 1px solid color-mix(in srgb, var(--royal) 18%, transparent);
   background:
-    linear-gradient(150deg, rgba(17, 86, 214, 0.12), rgba(244, 181, 63, 0.08)),
-    color-mix(in srgb, rgba(255, 255, 255, 0.95) 70%, rgba(242, 246, 255, 0.92) 30%);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65);
+    linear-gradient(135deg, rgba(17, 86, 214, 0.1), rgba(244, 181, 63, 0.08)),
+    color-mix(in srgb, rgba(255, 255, 255, 0.96) 70%, rgba(242, 246, 255, 0.92) 30%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6), 0 12px 20px rgba(11, 37, 69, 0.12);
   text-decoration: none;
   color: inherit;
-  transition: transform 160ms ease, box-shadow 160ms ease;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
 }
 
-.tour-card:focus-visible,
-.tour-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 18px 30px rgba(11, 37, 69, 0.18);
+a.tour-board__link:focus-visible,
+a.tour-board__link:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 26px rgba(11, 37, 69, 0.16);
 }
 
-.tour-card__date {
+.tour-board__marker {
+  flex: 0 0 auto;
+  display: grid;
+  gap: 0.35rem;
+  min-width: 70px;
+  align-content: start;
+}
+
+.tour-board__date {
   display: inline-flex;
   width: fit-content;
   align-items: center;
   justify-content: center;
-  padding: 0.32rem 0.65rem;
+  padding: 0.28rem 0.55rem;
   border-radius: 999px;
-  font-size: 0.72rem;
-  letter-spacing: 0.09em;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   font-weight: 700;
   color: rgba(17, 86, 214, 0.82);
-  background: color-mix(in srgb, rgba(17, 86, 214, 0.16) 60%, rgba(255, 255, 255, 0.9) 40%);
+  background: color-mix(in srgb, rgba(17, 86, 214, 0.16) 58%, rgba(255, 255, 255, 0.9) 42%);
 }
 
-.tour-card__team {
-  margin: 0;
-  font-size: 1.05rem;
-  font-weight: 800;
-  color: var(--navy);
-}
-
-.tour-card__identity {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.7rem;
-}
-
-.tour-card__matchup {
-  margin: 0;
-  font-size: 0.92rem;
-  color: var(--text-subtle);
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-}
-
-.tour-card__opponent {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
-  font-weight: 600;
-  color: inherit;
-}
-
-.tour-card__meta {
-  margin: 0;
-  font-size: 0.85rem;
-  color: rgba(11, 37, 69, 0.7);
-}
-
-.tour-card__tag {
+.tour-board__tag {
   width: fit-content;
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
-  padding: 0.28rem 0.55rem;
+  gap: 0.3rem;
+  padding: 0.2rem 0.5rem;
   border-radius: 0.65rem;
   background: color-mix(in srgb, rgba(239, 61, 91, 0.12) 55%, rgba(17, 86, 214, 0.12) 45%);
-  font-size: 0.68rem;
+  font-size: 0.66rem;
   letter-spacing: 0.08em;
   font-weight: 700;
   text-transform: uppercase;
   color: var(--royal);
 }
 
-.tour-card__note {
+.tour-board__body {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: grid;
+  gap: 0.3rem;
+}
+
+.tour-board__identity {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.tour-board__team {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.tour-board__team-name {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--navy);
+}
+
+.tour-board__matchup {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.88rem;
+  color: color-mix(in srgb, var(--text-subtle) 85%, var(--text-strong) 15%);
+}
+
+.tour-board__opponent {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 600;
+  color: inherit;
+}
+
+.tour-board__note {
+  margin: 0;
+  font-size: 0.8rem;
+  color: color-mix(in srgb, var(--text-subtle) 82%, var(--text-strong) 18%);
+}
+
+.tour-board__meta {
   margin: 0;
   font-size: 0.82rem;
-  color: rgba(11, 37, 69, 0.62);
+  color: rgba(11, 37, 69, 0.68);
+}
+
+.tour-board__placeholder {
+  margin: 0;
+  padding: 1.1rem 0.9rem;
+  border-radius: var(--radius-md);
+  border: 1px dashed color-mix(in srgb, var(--royal) 24%, transparent);
+  background: color-mix(in srgb, rgba(17, 86, 214, 0.12) 55%, rgba(255, 255, 255, 0.9) 45%);
+  color: var(--text-subtle);
+  text-align: center;
 }
 
 .tour-board__footnote {
   margin: 0;
   font-size: 0.85rem;
   color: var(--text-subtle);
-  text-align: center;
-}
-
-@media (min-width: 960px) {
-  .tour-card {
-    padding: 1.35rem 1.5rem;
-  }
+  text-align: left;
 }
 
 section h2 { margin-top: 0; font-size: clamp(1.35rem, 3vw, 1.8rem); letter-spacing: 0.01em; color: var(--navy); }

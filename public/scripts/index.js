@@ -386,9 +386,9 @@ function formatTourVenue(entry) {
 }
 
 function renderPreseasonTour(openersData) {
-  const grid = document.querySelector('[data-tour-grid]');
+  const list = document.querySelector('[data-tour-list]');
   const footnote = document.querySelector('[data-tour-footnote]');
-  if (!grid && !footnote) {
+  if (!list && !footnote) {
     return;
   }
 
@@ -408,18 +408,21 @@ function renderPreseasonTour(openersData) {
     return (a?.teamName ?? '').localeCompare(b?.teamName ?? '');
   });
 
-  if (grid) {
-    grid.innerHTML = '';
+  if (list) {
+    list.innerHTML = '';
     if (!games.length) {
-      const placeholder = document.createElement('p');
+      const placeholder = document.createElement('li');
       placeholder.className = 'tour-board__placeholder';
       placeholder.textContent = 'Preseason openers will populate once the league finalizes exhibition dates.';
-      grid.appendChild(placeholder);
+      list.appendChild(placeholder);
     } else {
       games.forEach((game) => {
         const hasPreview = Boolean(game?.gameId);
-        const card = document.createElement(hasPreview ? 'a' : 'article');
-        card.className = 'tour-card';
+        const item = document.createElement('li');
+        item.className = 'tour-board__item';
+
+        const card = document.createElement(hasPreview ? 'a' : 'div');
+        card.className = 'tour-board__link';
         const teamLabel = game.teamName ?? 'Preseason opener';
         const opponentLabel = game.opponentName ?? 'TBD opponent';
         const homeAway = game.homeAway === 'home' ? 'home' : game.homeAway === 'away' ? 'away' : null;
@@ -434,7 +437,7 @@ function renderPreseasonTour(openersData) {
         }
 
         const date = document.createElement('time');
-        date.className = 'tour-card__date';
+        date.className = 'tour-board__date';
         if (game.date) {
           date.dateTime = game.date;
           date.textContent = formatDateLabel(game.date, { month: 'short', day: 'numeric' });
@@ -442,19 +445,32 @@ function renderPreseasonTour(openersData) {
           date.textContent = 'TBD';
         }
 
-        const identity = document.createElement('div');
-        identity.className = 'tour-card__identity';
-        identity.appendChild(createTeamLogo(teamLabel, 'team-logo team-logo--medium'));
-        const teamName = document.createElement('h3');
-        teamName.className = 'tour-card__team';
-        teamName.textContent = teamLabel;
-        identity.appendChild(teamName);
+        const marker = document.createElement('div');
+        marker.className = 'tour-board__marker';
+        marker.appendChild(date);
 
-        const matchup = document.createElement('p');
-        matchup.className = 'tour-card__matchup';
+        const tag = document.createElement('span');
+        tag.className = 'tour-board__tag';
+        tag.textContent = homeAway === 'home' ? 'Home start' : homeAway === 'away' ? 'Road opener' : 'Tip-off pending';
+        marker.appendChild(tag);
+
+        const identity = document.createElement('div');
+        identity.className = 'tour-board__identity';
+
+        const team = document.createElement('div');
+        team.className = 'tour-board__team';
+        team.appendChild(createTeamLogo(teamLabel, 'team-logo team-logo--small'));
+        const teamName = document.createElement('h3');
+        teamName.className = 'tour-board__team-name';
+        teamName.textContent = teamLabel;
+        team.appendChild(teamName);
+        identity.appendChild(team);
+
+        const matchup = document.createElement('div');
+        matchup.className = 'tour-board__matchup';
         if (game.opponentName) {
           const opponent = document.createElement('span');
-          opponent.className = 'tour-card__opponent';
+          opponent.className = 'tour-board__opponent';
           opponent.appendChild(createTeamLogo(game.opponentName, 'team-logo team-logo--tiny'));
           const opponentLabel = document.createElement('span');
           opponentLabel.textContent = `${matchupGlyph} ${game.opponentName}`;
@@ -464,22 +480,27 @@ function renderPreseasonTour(openersData) {
           matchup.textContent = 'Opponent TBA';
         }
 
-        const tag = document.createElement('span');
-        tag.className = 'tour-card__tag';
-        tag.textContent = homeAway === 'home' ? 'Home start' : homeAway === 'away' ? 'Road opener' : 'Tip-off pending';
+        identity.appendChild(matchup);
 
-        const venue = document.createElement('p');
-        venue.className = 'tour-card__meta';
-        venue.textContent = formatTourVenue(game);
+        const body = document.createElement('div');
+        body.className = 'tour-board__body';
+        body.appendChild(identity);
 
         const note = document.createElement('p');
-        note.className = 'tour-card__note';
+        note.className = 'tour-board__note';
         const label = (game?.label ?? '').trim();
         const labelText = label ? label : 'Preseason opener';
         note.textContent = `${labelText} · Preview hub coming soon.`;
 
-        card.append(date, identity, matchup, tag, venue, note);
-        grid.appendChild(card);
+        const venue = document.createElement('p');
+        venue.className = 'tour-board__meta';
+        venue.textContent = formatTourVenue(game);
+
+        body.append(note, venue);
+
+        card.append(marker, body);
+        item.appendChild(card);
+        list.appendChild(item);
       });
     }
   }
@@ -498,7 +519,7 @@ function renderPreseasonTour(openersData) {
             timeZoneName: 'short',
           }).format(updatedRaw)
         : 'recently';
-      footnote.textContent = `${total} preseason openers logged — data refreshed ${updated}. Tap any card to explore its preview capsule.`;
+      footnote.textContent = `${total} preseason openers logged — data refreshed ${updated}. Tap any row to explore its preview capsule.`;
     } else {
       footnote.textContent = 'Preseason openers populate after the league locks each exhibition tip.';
     }
