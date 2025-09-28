@@ -1,5 +1,6 @@
 const SVG_NS = 'http://www.w3.org/2000/svg';
 const PAN_ZOOM_CONTROLLERS = new WeakMap();
+const PAN_START_THRESHOLD = 6;
 
 const USA_INSET_CONFIG = [
   {
@@ -169,6 +170,7 @@ function createPanZoomController(container, baseOptions = {}) {
     baseHeight: 0,
     pointerId: null,
     pointerStart: null,
+    isPanning: false,
     resizeObserver: null,
   };
 
@@ -266,7 +268,7 @@ function createPanZoomController(container, baseOptions = {}) {
     if (!container.contains(event.target)) {
       return;
     }
-    if (event.target instanceof HTMLElement) {
+    if (event.target instanceof Element) {
       const interactive = event.target.closest(
         'button, a, input, select, textarea, [data-panzoom-ignore]',
       );
@@ -284,8 +286,7 @@ function createPanZoomController(container, baseOptions = {}) {
       originX: state.x,
       originY: state.y,
     };
-    container.setPointerCapture(event.pointerId);
-    container.classList.add('map-panzoom--panning');
+    state.isPanning = false;
   }
 
   function handlePointerMove(event) {
@@ -294,6 +295,21 @@ function createPanZoomController(container, baseOptions = {}) {
     }
     const dx = event.clientX - state.pointerStart.x;
     const dy = event.clientY - state.pointerStart.y;
+    if (!state.isPanning) {
+      const distance = Math.hypot(dx, dy);
+      if (distance < PAN_START_THRESHOLD) {
+        return;
+      }
+      state.isPanning = true;
+      if (container.setPointerCapture) {
+        try {
+          container.setPointerCapture(event.pointerId);
+        } catch (error) {
+          console.warn('Failed to capture pointer for pan/zoom surface.', error);
+        }
+      }
+      container.classList.add('map-panzoom--panning');
+    }
     state.x = state.pointerStart.originX + dx;
     state.y = state.pointerStart.originY + dy;
     clampTranslation();
@@ -304,12 +320,13 @@ function createPanZoomController(container, baseOptions = {}) {
     if (state.pointerId !== event.pointerId) {
       return;
     }
-    if (container.hasPointerCapture && container.hasPointerCapture(event.pointerId)) {
+    if (state.isPanning && container.hasPointerCapture && container.hasPointerCapture(event.pointerId)) {
       container.releasePointerCapture(event.pointerId);
     }
     container.classList.remove('map-panzoom--panning');
     state.pointerId = null;
     state.pointerStart = null;
+    state.isPanning = false;
   }
 
   function ensureControls() {

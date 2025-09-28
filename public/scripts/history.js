@@ -47,6 +47,7 @@ const summaryEls = {
 const atlasEls = {
   map: document.querySelector('[data-state-map-tiles]'),
   spotlight: document.querySelector('[data-state-spotlight]'),
+  spotlightHeading: document.querySelector('[data-spotlight-heading]'),
   title: document.querySelector('[data-atlas-title]'),
   caption: document.querySelector('[data-atlas-caption]'),
   modeToggle: document.querySelector('[data-atlas-toggle]'),
@@ -132,6 +133,7 @@ const atlasModes = {
     source: 'data/state_birth_legends.json',
     switchLabel: 'Explore international mode',
     switchAriaLabel: 'Switch to international legends view',
+    spotlightHeading: 'State spotlight',
     getName(id) {
       return stateNames[id] || id;
     },
@@ -151,6 +153,7 @@ const atlasModes = {
     source: 'data/world_birth_legends.json',
     switchLabel: 'Return to United States map',
     switchAriaLabel: 'Return to the United States legends map',
+    spotlightHeading: 'Country spotlight',
     getName(id, _entry, shape) {
       return (shape?.dataset?.name ?? '').trim() || id;
     },
@@ -380,6 +383,9 @@ function setAtlasCopy(config) {
   }
   if (atlasEls.caption) {
     atlasEls.caption.textContent = config.caption;
+  }
+  if (atlasEls.spotlightHeading && config.spotlightHeading) {
+    atlasEls.spotlightHeading.textContent = config.spotlightHeading;
   }
   if (atlasEls.modeToggle) {
     atlasEls.modeToggle.textContent = config.switchLabel;
