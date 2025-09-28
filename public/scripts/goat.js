@@ -840,7 +840,12 @@ async function init() {
                 tooltip: {
                   callbacks: {
                     label(context) {
-                      return `${context.label}: ${context.parsed}`;
+                      const parsedValue =
+                        typeof context.parsed === 'number' ? context.parsed : context.parsed?.r;
+                      if (typeof parsedValue === 'number' && !Number.isNaN(parsedValue)) {
+                        return `${context.label}: ${parsedValue}`;
+                      }
+                      return context.label ?? '';
                     },
                   },
                 },
