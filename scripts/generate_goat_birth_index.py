@@ -7,6 +7,7 @@ import json
 from collections import defaultdict
 from dataclasses import dataclass
 from datetime import UTC, datetime
+from math import inf, isfinite
 from pathlib import Path
 from typing import Dict, Iterable, List, Optional
 
@@ -449,6 +450,25 @@ def _load_goat_system_lookup() -> dict[str, dict]:
     return {normalize_name(player.get("name", "")): player for player in players if player.get("name")}
 
 
+def _is_valid_score(value: object) -> bool:
+    if isinstance(value, (int, float)) and isfinite(value):
+        return True
+    return False
+
+
+def _normalise_score(value: object) -> float:
+    if isinstance(value, bool):
+        # bool is a subclass of int but we never expect it here
+        return float(value)
+    if isinstance(value, (int, float)):
+        return float(value)
+    try:
+        parsed = float(value)  # type: ignore[arg-type]
+    except (TypeError, ValueError):
+        return float("nan")
+    return parsed
+
+
 def build_player_records() -> List[dict]:
     curated_players = _load_goat_index_players()
     system_lookup = _load_goat_system_lookup()
@@ -491,8 +511,9 @@ def build_player_records() -> List[dict]:
         if not birth:
             continue
 
-        goat_score = player.get("goatScore")
-        if goat_score is None:
+        goat_score_raw = player.get("goatScore")
+        goat_score = _normalise_score(goat_score_raw)
+        if not _is_valid_score(goat_score):
             continue
 
         franchises_raw = player.get("franchises") or []
@@ -503,7 +524,7 @@ def build_player_records() -> List[dict]:
                 "personId": player.get("personId"),
                 "name": name,
                 "rank": player.get("rank"),
-                "goatScore": goat_score,
+                "goatScore": round(goat_score, 1),
                 "tier": player.get("tier"),
                 "resume": player.get("resume"),
                 "franchises": franchises,
@@ -514,13 +535,50 @@ def build_player_records() -> List[dict]:
             }
         )
 
-    enriched.sort(key=lambda item: (-(item.get("goatScore") or 0), item.get("name") or ""))
+    def sort_key(item: dict) -> tuple:
+        score = item.get("goatScore")
+        return (-(score if isinstance(score, (int, float)) else 0), item.get("name") or "")
+
+    enriched.sort(key=sort_key)
     for index, record in enumerate(enriched, start=1):
         record["rank"] = index
     return enriched
 
 
 def group_top_players(players: Iterable[dict]) -> tuple[list[dict], list[dict]]:
+    def sort_group(entries: Iterable[dict]) -> list[dict]:
+        scored: list[tuple[float, dict]] = []
+        for entry in entries:
+            score = _normalise_score(entry.get("goatScore"))
+            if not _is_valid_score(score):
+                continue
+            scored.append((round(score, 1), entry))
+        scored.sort(
+            key=lambda pair: (
+                -pair[0],
+                pair[1].get("rank") if isinstance(pair[1].get("rank"), (int, float)) else inf,
+                pair[1].get("name") or "",
+            )
+        )
+        serialised: list[dict] = []
+        for ordinal, (score, entry) in enumerate(scored[:10], start=1):
+            payload = {
+                "personId": entry.get("personId"),
+                "name": entry.get("name"),
+                "rank": entry.get("rank"),
+                "goatScore": score,
+                "tier": entry.get("tier"),
+                "resume": entry.get("resume"),
+                "franchises": [team for team in (entry.get("franchises") or []) if team],
+                "birthCity": entry.get("birthCity"),
+                "birthState": entry.get("birthState"),
+                "birthCountry": entry.get("birthCountry"),
+                "birthCountryCode": entry.get("birthCountryCode"),
+            }
+            payload["groupRank"] = ordinal
+            serialised.append(payload)
+        return serialised
+
     state_groups: Dict[str, List[dict]] = defaultdict(list)
     country_groups: Dict[str, List[dict]] = defaultdict(list)
     for player in players:
@@ -533,16 +591,16 @@ def group_top_players(players: Iterable[dict]) -> tuple[list[dict], list[dict]]:
 
     states_payload = []
     for state, entries in state_groups.items():
-        sorted_entries = sorted(entries, key=lambda p: p.get("rank", 9999))
-        top = sorted_entries[:10]
+        top = sort_group(entries)
+        headline_player = top[0] if top else None
         states_payload.append(
             {
                 "state": state,
                 "stateName": US_STATE_NAMES.get(state, state),
-                "player": top[0]["name"] if top else None,
-                "birthCity": top[0].get("birthCity") if top else None,
-                "headline": top[0].get("resume") if top else None,
-                "notableTeams": [team for team in top[0].get("franchises", []) if team] if top else [],
+                "player": headline_player.get("name") if headline_player else None,
+                "birthCity": headline_player.get("birthCity") if headline_player else None,
+                "headline": headline_player.get("resume") if headline_player else None,
+                "notableTeams": headline_player.get("franchises", []) if headline_player else [],
                 "topPlayers": top,
             }
         )
@@ -551,8 +609,8 @@ def group_top_players(players: Iterable[dict]) -> tuple[list[dict], list[dict]]:
 
     countries_payload = []
     for code, entries in country_groups.items():
-        sorted_entries = sorted(entries, key=lambda p: p.get("rank", 9999))
-        top = sorted_entries[:10]
+        top = sort_group(entries)
+        headline_player = top[0] if top else None
         try:
             country_name = pycountry.countries.lookup(code).name
         except LookupError:
@@ -561,10 +619,10 @@ def group_top_players(players: Iterable[dict]) -> tuple[list[dict], list[dict]]:
             {
                 "country": code,
                 "countryName": country_name,
-                "player": top[0]["name"] if top else None,
-                "birthCity": top[0].get("birthCity") if top else None,
-                "headline": top[0].get("resume") if top else None,
-                "notableTeams": [team for team in top[0].get("franchises", []) if team] if top else [],
+                "player": headline_player.get("name") if headline_player else None,
+                "birthCity": headline_player.get("birthCity") if headline_player else None,
+                "headline": headline_player.get("resume") if headline_player else None,
+                "notableTeams": headline_player.get("franchises", []) if headline_player else [],
                 "topPlayers": top,
             }
         )
