@@ -2388,13 +2388,13 @@ section h2 { margin-top: 0; font-size: clamp(1.35rem, 3vw, 1.8rem); letter-spaci
   display: block;
   width: 100% !important;
   max-width: 100%;
-  height: auto !important;
+  height: auto;
 }
 .viz-card canvas {
   display: block;
   width: 100% !important;
   max-width: 100%;
-  height: auto !important;
+  height: auto;
   max-height: 100%;
 }
 .viz-placeholder {
