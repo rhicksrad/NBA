@@ -665,3 +665,470 @@ registerCharts([
     },
   },
 ]);
+
+function formatPercentile(value) {
+  if (!Number.isFinite(value)) {
+    return '—';
+  }
+  const rounded = Math.max(0, Math.min(100, Math.round(value)));
+  const teens = rounded % 100;
+  if (teens >= 11 && teens <= 13) {
+    return `${rounded}th`;
+  }
+  const last = rounded % 10;
+  if (last === 1) return `${rounded}st`;
+  if (last === 2) return `${rounded}nd`;
+  if (last === 3) return `${rounded}rd`;
+  return `${rounded}th`;
+}
+
+function simplifyText(value) {
+  if (!value) return '';
+  return value
+    .toString()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .trim();
+}
+
+function buildPlayerTokens(player) {
+  const tokens = new Set();
+  const push = (text) => {
+    const simplified = simplifyText(text);
+    if (!simplified) return;
+    tokens.add(simplified);
+    simplified
+      .split(/\s+/)
+      .filter(Boolean)
+      .forEach((part) => tokens.add(part));
+  };
+  push(player?.name);
+  push(player?.team);
+  push(player?.position);
+  push(player?.era);
+  push(player?.origin);
+  push(player?.archetype);
+  if (Array.isArray(player?.keywords)) {
+    player.keywords.forEach(push);
+  }
+  return Array.from(tokens);
+}
+
+function initPlayerAtlas() {
+  const atlas = document.querySelector('[data-player-profiles]');
+  if (!atlas) {
+    return;
+  }
+
+  const searchInput = atlas.querySelector('[data-player-search]');
+  const clearButton = atlas.querySelector('[data-player-clear]');
+  const resultsList = atlas.querySelector('[data-player-results]');
+  const hint = atlas.querySelector('[data-player-hint]');
+  const empty = atlas.querySelector('[data-player-empty]');
+  const error = atlas.querySelector('[data-player-error]');
+  const profile = atlas.querySelector('[data-player-profile]');
+  const nameEl = atlas.querySelector('[data-player-name]');
+  const metaEl = atlas.querySelector('[data-player-meta]');
+  const goatEl = atlas.querySelector('[data-player-goat]');
+  const bioEl = atlas.querySelector('[data-player-bio]');
+  const archetypeEl = atlas.querySelector('[data-player-archetype]');
+  const vitalsEl = atlas.querySelector('[data-player-vitals]');
+  const originEl = atlas.querySelector('[data-player-origin]');
+  const draftEl = atlas.querySelector('[data-player-draft]');
+  const metricsContainer = atlas.querySelector('[data-player-metrics]');
+  const metricsEmpty = atlas.querySelector('[data-player-metrics-empty]');
+
+  if (!searchInput || !resultsList || !profile || !nameEl || !metaEl || !goatEl || !bioEl || !archetypeEl) {
+    return;
+  }
+
+  let catalog = [];
+  let players = [];
+  let matches = [];
+  let activeIndex = -1;
+  let isLoaded = false;
+  let hasError = false;
+  const defaultEmptyText = empty?.textContent?.trim() ?? '';
+
+  const setClearVisibility = (value) => {
+    if (!clearButton) return;
+    clearButton.hidden = !value;
+  };
+
+  const setResultsVisibility = (isVisible) => {
+    resultsList.hidden = !isVisible;
+    searchInput.setAttribute('aria-expanded', isVisible ? 'true' : 'false');
+    if (!isVisible) {
+      searchInput.removeAttribute('aria-activedescendant');
+    }
+  };
+
+  const resetStatusMessages = () => {
+    if (hint) hint.hidden = false;
+    if (empty) empty.hidden = true;
+    if (error) error.hidden = true;
+  };
+
+  const renderMeta = (player) => {
+    const parts = [];
+    if (player?.position) parts.push(player.position);
+    if (player?.team) parts.push(player.team);
+    if (player?.era) parts.push(`${player.era} era`);
+    return parts.join(' · ');
+  };
+
+  const renderVitals = (player) => {
+    const vitals = [];
+    if (player?.height) vitals.push(player.height);
+    if (player?.weight) vitals.push(player.weight);
+    return vitals.join(' • ');
+  };
+
+  const updateActiveOption = () => {
+    const buttons = resultsList.querySelectorAll('[data-player-id]');
+    buttons.forEach((button, index) => {
+      const isActive = index === activeIndex;
+      button.classList.toggle('is-active', isActive);
+      button.setAttribute('aria-selected', isActive ? 'true' : 'false');
+      if (isActive) {
+        searchInput.setAttribute('aria-activedescendant', button.id);
+        button.scrollIntoView({ block: 'nearest' });
+      }
+    });
+    if (!buttons.length || activeIndex < 0) {
+      searchInput.removeAttribute('aria-activedescendant');
+    }
+  };
+
+  const renderResults = (query) => {
+    const trimmed = query.trim();
+    setClearVisibility(trimmed.length > 0);
+    if (!trimmed) {
+      matches = [];
+      activeIndex = -1;
+      resultsList.innerHTML = '';
+      setResultsVisibility(false);
+      resetStatusMessages();
+      searchInput.removeAttribute('aria-activedescendant');
+      return;
+    }
+
+    if (!isLoaded && !hasError) {
+      matches = [];
+      activeIndex = -1;
+      setResultsVisibility(false);
+      if (hint) hint.hidden = true;
+      if (empty) {
+        empty.hidden = false;
+        empty.textContent = 'Loading player atlas…';
+      }
+      return;
+    }
+
+    const normalized = simplifyText(trimmed);
+    const terms = normalized.split(/\s+/).filter(Boolean);
+
+    const found = players
+      .map((player) => {
+        let score = 0;
+        if (player.nameToken?.startsWith(normalized)) {
+          score += 6;
+        }
+        if (player.nameToken === normalized) {
+          score += 12;
+        }
+        terms.forEach((term) => {
+          player.searchTokens.forEach((token) => {
+            if (token === term) {
+              score += 5;
+            } else if (token.startsWith(term)) {
+              score += 3;
+            } else if (token.includes(term)) {
+              score += 1;
+            }
+          });
+        });
+        return { player, score };
+      })
+      .filter((entry) => entry.score > 0)
+      .sort((a, b) => {
+        if (b.score !== a.score) return b.score - a.score;
+        return a.player.name.localeCompare(b.player.name);
+      })
+      .slice(0, 8)
+      .map((entry) => entry.player);
+
+    matches = found;
+    resultsList.innerHTML = '';
+
+    if (!matches.length) {
+      activeIndex = -1;
+      setResultsVisibility(false);
+      if (hint) hint.hidden = true;
+      if (empty) {
+        empty.hidden = false;
+        empty.textContent = defaultEmptyText;
+      }
+      searchInput.removeAttribute('aria-activedescendant');
+      return;
+    }
+
+    if (hint) hint.hidden = true;
+    if (empty) empty.hidden = true;
+    activeIndex = 0;
+
+    matches.forEach((player) => {
+      const item = document.createElement('li');
+      const optionId = `player-atlas-option-${player.id}`;
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.id = optionId;
+      button.className = 'player-atlas__result';
+      button.dataset.playerId = player.id;
+      button.setAttribute('role', 'option');
+
+      const name = document.createElement('span');
+      name.className = 'player-atlas__result-name';
+      name.textContent = player.name;
+
+      const meta = document.createElement('span');
+      meta.className = 'player-atlas__result-meta';
+      const metaText = [player.team, player.era ? `${player.era} era` : null].filter(Boolean).join(' • ');
+      if (metaText) {
+        meta.textContent = metaText;
+      }
+
+      button.append(name);
+      if (metaText) {
+        button.append(meta);
+      }
+      item.append(button);
+      resultsList.append(item);
+    });
+
+    setResultsVisibility(true);
+    updateActiveOption();
+  };
+
+  const renderMetrics = (player) => {
+    if (!metricsContainer) return;
+    metricsContainer.innerHTML = '';
+    let hasMetric = false;
+
+    catalog.forEach((metric) => {
+      const wrapper = document.createElement('figure');
+      wrapper.className = 'player-metric';
+
+      const header = document.createElement('header');
+      header.className = 'player-metric__header';
+
+      const label = document.createElement('span');
+      label.className = 'player-metric__label';
+      label.textContent = metric.label;
+
+      const valueEl = document.createElement('span');
+      valueEl.className = 'player-metric__value';
+
+      const percentile = Number(player?.metrics?.[metric.id]?.value);
+      const hasValue = Number.isFinite(percentile);
+      if (hasValue) {
+        const formatted = formatPercentile(percentile);
+        const suffix = document.createElement('span');
+        suffix.textContent = 'percentile';
+        valueEl.append(formatted, suffix);
+        hasMetric = true;
+      } else {
+        valueEl.textContent = '—';
+      }
+
+      header.append(label, valueEl);
+
+      const meter = document.createElement('div');
+      meter.className = 'player-metric__meter';
+      if (hasValue) {
+        const fill = document.createElement('span');
+        fill.style.setProperty('--fill', `${Math.max(0, Math.min(100, Math.round(percentile)))}%`);
+        meter.appendChild(fill);
+        meter.setAttribute('role', 'img');
+        meter.setAttribute('aria-label', `${metric.label}: ${formatPercentile(percentile)} percentile`);
+      } else {
+        meter.classList.add('player-metric__meter--empty');
+        meter.setAttribute('role', 'img');
+        meter.setAttribute('aria-label', `${metric.label}: percentile unavailable`);
+      }
+
+      const description = document.createElement('p');
+      description.className = 'player-metric__description';
+      const note = player?.metrics?.[metric.id]?.note;
+      description.textContent = note || metric.description;
+
+      wrapper.append(header, meter, description);
+      metricsContainer.appendChild(wrapper);
+    });
+
+    if (metricsEmpty) {
+      metricsEmpty.hidden = hasMetric;
+    }
+  };
+
+  const selectPlayer = (player) => {
+    if (!player) return;
+    searchInput.value = player.name;
+    setClearVisibility(true);
+    matches = [];
+    activeIndex = -1;
+    resultsList.innerHTML = '';
+    setResultsVisibility(false);
+    if (hint) hint.hidden = true;
+    if (empty) empty.hidden = true;
+
+    profile.hidden = false;
+    profile.dataset.playerId = player.id;
+    nameEl.textContent = player.name;
+    metaEl.textContent = renderMeta(player);
+    goatEl.textContent = Number.isFinite(player?.goatScore)
+      ? helpers.formatNumber(player.goatScore, 1)
+      : '—';
+    bioEl.textContent = player?.bio || '';
+    archetypeEl.textContent = player?.archetype || '—';
+    if (vitalsEl) {
+      const vitals = renderVitals(player);
+      vitalsEl.textContent = vitals || '—';
+    }
+    if (originEl) {
+      originEl.textContent = player?.origin || player?.born || '—';
+    }
+    if (draftEl) {
+      draftEl.textContent = player?.draft || '—';
+    }
+
+    renderMetrics(player);
+    if (metricsContainer && metricsContainer.children.length) {
+      metricsContainer.scrollTop = 0;
+    }
+    profile.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  const handleInput = (event) => {
+    renderResults(event.target.value || '');
+  };
+
+  const handleKeydown = (event) => {
+    if (!matches.length) {
+      if (event.key === 'Escape' && searchInput.value) {
+        searchInput.value = '';
+        renderResults('');
+      }
+      return;
+    }
+
+    if (event.key === 'ArrowDown') {
+      event.preventDefault();
+      activeIndex = (activeIndex + 1) % matches.length;
+      updateActiveOption();
+    } else if (event.key === 'ArrowUp') {
+      event.preventDefault();
+      activeIndex = (activeIndex - 1 + matches.length) % matches.length;
+      updateActiveOption();
+    } else if (event.key === 'Enter') {
+      event.preventDefault();
+      if (activeIndex >= 0 && matches[activeIndex]) {
+        selectPlayer(matches[activeIndex]);
+      }
+    } else if (event.key === 'Escape') {
+      event.preventDefault();
+      setResultsVisibility(false);
+      matches = [];
+      activeIndex = -1;
+      resultsList.innerHTML = '';
+      searchInput.removeAttribute('aria-activedescendant');
+    }
+  };
+
+  const handleResultsClick = (event) => {
+    const button = event.target.closest('[data-player-id]');
+    if (!button) return;
+    const playerId = button.dataset.playerId;
+    const player = players.find((item) => item.id === playerId);
+    selectPlayer(player);
+  };
+
+  const handleClear = () => {
+    searchInput.value = '';
+    searchInput.focus();
+    setClearVisibility(false);
+    renderResults('');
+  };
+
+  const hydrate = async () => {
+    try {
+      const response = await fetch('data/player_profiles.json');
+      if (!response.ok) {
+        throw new Error(`Failed to load player profiles: ${response.status}`);
+      }
+      const data = await response.json();
+      catalog = Array.isArray(data?.metrics) ? data.metrics : [];
+      const roster = Array.isArray(data?.players) ? data.players : [];
+      players = roster.map((player) => ({
+        ...player,
+        searchTokens: buildPlayerTokens(player),
+        nameToken: simplifyText(player?.name),
+      }));
+      isLoaded = true;
+      hasError = false;
+      if (empty) {
+        empty.textContent = defaultEmptyText;
+      }
+      if (!players.length) {
+        if (hint) hint.hidden = true;
+        if (empty) {
+          empty.hidden = false;
+          empty.textContent = 'Player profiles are temporarily unavailable.';
+        }
+        searchInput.disabled = true;
+        setClearVisibility(false);
+      }
+    } catch (err) {
+      console.error(err);
+      hasError = true;
+      if (error) {
+        error.hidden = false;
+        error.textContent = 'Unable to load the scouting atlas right now. Please refresh the page to try again.';
+      }
+      if (hint) hint.hidden = true;
+      searchInput.disabled = true;
+      setClearVisibility(false);
+    }
+  };
+
+  hydrate();
+
+  searchInput.addEventListener('input', handleInput);
+  searchInput.addEventListener('focus', () => {
+    if (searchInput.value.trim()) {
+      renderResults(searchInput.value);
+    }
+  });
+  searchInput.addEventListener('keydown', handleKeydown);
+
+  if (resultsList) {
+    resultsList.addEventListener('mousedown', (event) => {
+      // Prevent the input from losing focus before click handlers run.
+      event.preventDefault();
+    });
+    resultsList.addEventListener('click', handleResultsClick);
+  }
+
+  if (clearButton) {
+    clearButton.addEventListener('click', handleClear);
+  }
+
+  document.addEventListener('click', (event) => {
+    if (!atlas.contains(event.target)) {
+      setResultsVisibility(false);
+    }
+  });
+}
+
+initPlayerAtlas();
