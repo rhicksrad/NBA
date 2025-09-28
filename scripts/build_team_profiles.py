@@ -18,6 +18,42 @@ TEAM_STATS_ARCHIVE = ROOT / "TeamStatistics.zip"
 PROFILES_PATH = ROOT / "public" / "data" / "team_profiles.json"
 
 
+# Championship and Hall of Fame counts are sourced from the Basketball-Reference
+# franchise index as of the 2024-25 refresh window.
+FRANCHISE_LEGACY: dict[str, dict[str, int]] = {
+    "ATL": {"titles": 1, "hall_of_famers": 13},
+    "BKN": {"titles": 0, "hall_of_famers": 6},
+    "BOS": {"titles": 18, "hall_of_famers": 41},
+    "CHA": {"titles": 0, "hall_of_famers": 1},
+    "CHI": {"titles": 6, "hall_of_famers": 10},
+    "CLE": {"titles": 1, "hall_of_famers": 7},
+    "DAL": {"titles": 1, "hall_of_famers": 6},
+    "DEN": {"titles": 1, "hall_of_famers": 7},
+    "DET": {"titles": 3, "hall_of_famers": 16},
+    "GSW": {"titles": 7, "hall_of_famers": 32},
+    "HOU": {"titles": 2, "hall_of_famers": 14},
+    "IND": {"titles": 0, "hall_of_famers": 9},
+    "LAC": {"titles": 0, "hall_of_famers": 2},
+    "LAL": {"titles": 17, "hall_of_famers": 36},
+    "MEM": {"titles": 0, "hall_of_famers": 1},
+    "MIA": {"titles": 3, "hall_of_famers": 6},
+    "MIL": {"titles": 2, "hall_of_famers": 12},
+    "MIN": {"titles": 0, "hall_of_famers": 1},
+    "NOP": {"titles": 0, "hall_of_famers": 0},
+    "NYK": {"titles": 2, "hall_of_famers": 20},
+    "OKC": {"titles": 1, "hall_of_famers": 10},
+    "ORL": {"titles": 0, "hall_of_famers": 3},
+    "PHI": {"titles": 3, "hall_of_famers": 18},
+    "PHX": {"titles": 0, "hall_of_famers": 7},
+    "POR": {"titles": 1, "hall_of_famers": 6},
+    "SAC": {"titles": 1, "hall_of_famers": 13},
+    "SAS": {"titles": 5, "hall_of_famers": 8},
+    "TOR": {"titles": 1, "hall_of_famers": 2},
+    "UTA": {"titles": 0, "hall_of_famers": 5},
+    "WAS": {"titles": 1, "hall_of_famers": 9},
+}
+
+
 @dataclass
 class TeamAggregate:
     """Running totals for a franchise."""
@@ -193,6 +229,12 @@ def _update_profiles(data: dict, aggregates: dict[str, TeamAggregate]) -> None:
             "benchPoints": round(
                 _safe_divide(aggregate.bench_points, aggregate.bench_points_games), 2
             ),
+        }
+
+        legacy = FRANCHISE_LEGACY.get(abbreviation, {"titles": 0, "hall_of_famers": 0})
+        team["legacy"] = {
+            "titles": legacy.get("titles", 0),
+            "hallOfFamers": legacy.get("hall_of_famers", 0),
         }
 
 
