@@ -2988,6 +2988,11 @@ section h2 { margin-top: 0; font-size: clamp(1.35rem, 3vw, 1.8rem); letter-spaci
   list-style: none;
 }
 
+.state-spotlight__teams--compact {
+  gap: 0.25rem;
+  margin-top: 0.15rem;
+}
+
 .state-spotlight__team {
   padding: 0.25rem 0.65rem;
   border-radius: 999px;
@@ -3001,6 +3006,53 @@ section h2 { margin-top: 0; font-size: clamp(1.35rem, 3vw, 1.8rem); letter-spaci
 .state-spotlight__empty {
   margin: 0;
   font-size: 0.95rem;
+  color: var(--text-subtle);
+}
+
+.state-spotlight__ranking {
+  display: grid;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.state-spotlight__ranking-item {
+  display: flex;
+  gap: 0.65rem;
+  align-items: flex-start;
+}
+
+.state-spotlight__ranking-ordinal {
+  min-width: 2.5rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--royal);
+}
+
+.state-spotlight__ranking-body {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.state-spotlight__ranking-name {
+  margin: 0;
+  font-size: clamp(1.05rem, 2vw, 1.25rem);
+  font-weight: 700;
+  color: var(--navy);
+}
+
+.state-spotlight__ranking-meta {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--text-subtle);
+}
+
+.state-spotlight__ranking-resume {
+  margin: 0;
+  font-size: 0.85rem;
   color: var(--text-subtle);
 }
 
