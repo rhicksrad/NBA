@@ -1,0 +1,24 @@
+{
+  "name": "nba-previews",
+  "private": true,
+  "type": "module",
+  "version": "0.1.0",
+  "scripts": {
+    "build:data": "tsx scripts/data/build_canonical.ts",
+    "gen:previews": "tsx scripts/generate/previews.ts",
+    "validate:previews": "tsx scripts/validate/previews_staleness.ts && tsx scripts/validate/links.ts",
+    "previews": "pnpm build:data && pnpm gen:previews && pnpm validate:previews",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "cheerio": "1.0.0-rc.12",
+    "yaml": "2.4.1"
+  },
+  "devDependencies": {
+    "@types/cheerio": "0.22.35",
+    "@types/node": "20.12.7",
+    "tsx": "4.7.1",
+    "typescript": "5.4.5",
+    "vitest": "1.4.0"
+  }
+}

@@ -1,0 +1,24 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`rankTeams > produces a deterministic ranking snapshot 1`] = `
+[
+  {
+    "rank": 1,
+    "score": 0.733808,
+    "statusLine": "Uptrend | Staff intact | Added ball handling | Health risk: low",
+    "tricode": "AAA",
+  },
+  {
+    "rank": 2,
+    "score": 0.581442,
+    "statusLine": "Rebuild | Staff intact | Banking on internal growth | Health risk: low",
+    "tricode": "CCC",
+  },
+  {
+    "rank": 3,
+    "score": 0.567404,
+    "statusLine": "Holding | New coach | Added ball handling | Health risk: medium",
+    "tricode": "BBB",
+  },
+]
+`;
