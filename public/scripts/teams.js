@@ -85,6 +85,17 @@ const METRIC_CONFIG = [
   },
 ];
 
+const FOOTPRINT_METRICS = [
+  { key: 'winPct', weight: 0.38, label: 'Win percentage' },
+  { key: 'netMargin', weight: 0.24, label: 'Net margin per game' },
+  { key: 'fieldGoalPct', weight: 0.1, label: 'Field goal accuracy' },
+  { key: 'threePointPct', weight: 0.08, label: 'Three-point accuracy' },
+  { key: 'rebounds', weight: 0.06, label: 'Rebounding control' },
+  { key: 'assists', weight: 0.06, label: 'Playmaking volume' },
+  { key: 'benchPoints', weight: 0.04, label: 'Bench scoring punch' },
+  { key: 'turnovers', weight: 0.04, label: 'Turnover minimization', inverse: true },
+];
+
 const mapCanvas = document.querySelector('[data-map-canvas]');
 const detailPanel = document.querySelector('[data-team-panel]');
 const detailPlaceholder = document.querySelector('[data-team-placeholder]');
@@ -96,6 +107,8 @@ const detailGames = document.querySelector('[data-team-games]');
 const detailRecord = document.querySelector('[data-team-record]');
 const detailNet = document.querySelector('[data-team-net]');
 const detailVisuals = document.querySelector('[data-team-visuals]');
+const footprintList = document.querySelector('[data-footprint-list]');
+const footprintMethodology = document.querySelector('[data-footprint-methodology]');
 
 let markerButtons = [];
 let activeTeamId = null;
@@ -259,6 +272,136 @@ function normaliseValue(value, { min, max }, inverse = false) {
   const clamped = (value - min) / (max - min);
   const ratio = Math.min(1, Math.max(0, clamped));
   return inverse ? 1 - ratio : ratio;
+}
+
+function formatFootprintScore(score) {
+  if (!Number.isFinite(score)) {
+    return '—';
+  }
+  return (score * 100).toFixed(1);
+}
+
+function describeFootprintSignal(key, rawValue) {
+  if (!Number.isFinite(rawValue)) {
+    return null;
+  }
+  switch (key) {
+    case 'winPct':
+      return `${(rawValue * 100).toFixed(1)}% win rate`;
+    case 'netMargin':
+      return `${rawValue >= 0 ? '+' : ''}${rawValue.toFixed(1)} net margin`;
+    case 'fieldGoalPct':
+      return `${(rawValue * 100).toFixed(1)}% FG`; 
+    case 'threePointPct':
+      return `${(rawValue * 100).toFixed(1)}% 3P`;
+    case 'rebounds':
+      return `${rawValue.toFixed(1)} REB`;
+    case 'assists':
+      return `${rawValue.toFixed(1)} AST`;
+    case 'benchPoints':
+      return `${rawValue.toFixed(1)} bench pts`;
+    case 'turnovers':
+      return `${rawValue.toFixed(1)} TOV`;
+    default:
+      return null;
+  }
+}
+
+function computeFootprintScores(teams) {
+  return teams
+    .map((team) => {
+      const metrics = team?.metrics ?? {};
+      let score = 0;
+      const contributions = FOOTPRINT_METRICS.map((config) => {
+        const value = metrics?.[config.key];
+        const extent = metricExtents?.[config.key];
+        const normalised = normaliseValue(value ?? 0, extent ?? { min: 0, max: 1 }, Boolean(config.inverse));
+        const weighted = normalised * config.weight;
+        score += weighted;
+        return { ...config, value, weighted };
+      }).sort((a, b) => b.weighted - a.weighted);
+      return { ...team, footprintScore: score, footprintContributions: contributions };
+    })
+    .sort((a, b) => (Number.isFinite(b.footprintScore) ? b.footprintScore : -1) - (Number.isFinite(a.footprintScore) ? a.footprintScore : -1));
+}
+
+function renderFootprintRankings(teams) {
+  if (!footprintList) {
+    return;
+  }
+
+  const ranked = computeFootprintScores(teams);
+  footprintList.innerHTML = '';
+
+  if (!ranked.length) {
+    const placeholder = document.createElement('li');
+    placeholder.className = 'franchise-footprint__item';
+    placeholder.innerHTML = `
+      <span class="franchise-footprint__rank">—</span>
+      <div class="franchise-footprint__body">
+        <div class="franchise-footprint__heading">
+          <strong>Franchise rankings will update soon</strong>
+        </div>
+        <span class="franchise-footprint__meta">We were unable to load active team data for this refresh.</span>
+      </div>
+    `;
+    footprintList.append(placeholder);
+    return;
+  }
+
+  ranked.forEach((team, index) => {
+    const metrics = team?.metrics ?? {};
+    const metaParts = [];
+    if (team?.conference) {
+      metaParts.push(`${team.conference} Conference`);
+    }
+    if (Number.isFinite(metrics.winPct)) {
+      metaParts.push(`${(metrics.winPct * 100).toFixed(1)}% win rate`);
+    }
+    if (Number.isFinite(team?.gamesSampled)) {
+      metaParts.push(`${team.gamesSampled.toLocaleString()} games sampled`);
+    }
+    const topSignals = (team.footprintContributions ?? [])
+      .map((entry) => describeFootprintSignal(entry.key, entry.value))
+      .filter(Boolean)
+      .slice(0, 3);
+    const signalsText = topSignals.join(' • ');
+
+    const item = document.createElement('li');
+    item.className = 'franchise-footprint__item';
+    item.innerHTML = `
+      <span class="franchise-footprint__rank">${index + 1}</span>
+      <div class="franchise-footprint__body">
+        <div class="franchise-footprint__heading">
+          <strong>${team?.name ?? team?.abbreviation ?? 'Team'}</strong>
+          <span class="franchise-footprint__score" aria-label="Franchise Footprint composite score">${formatFootprintScore(
+            team.footprintScore,
+          )}</span>
+        </div>
+        ${metaParts.length ? `<span class="franchise-footprint__meta">${metaParts.join(' • ')}</span>` : ''}
+        ${signalsText ? `<span class="franchise-footprint__signals">Key drivers: ${signalsText}</span>` : ''}
+      </div>
+    `;
+    footprintList.append(item);
+  });
+}
+
+function renderFootprintMethodology(seasonLabel) {
+  if (!footprintMethodology) {
+    return;
+  }
+  const bullets = FOOTPRINT_METRICS.map((metric) => `<li><strong>${Math.round(metric.weight * 100)}%</strong> ${metric.label}</li>`)
+    .join('');
+  const seasonText = seasonLabel ? ` across the ${seasonLabel} archive` : '';
+  footprintMethodology.innerHTML = `
+    <p>
+      Franchise Footprint scores normalise each signal to a league-wide 0-100 scale${seasonText}, flip turnover impact so
+      careful teams are rewarded, then blend the results using the weighted recipe below. The composite number highlights
+      clubs that combine winning margins with sustainable efficiency and depth scoring.
+    </p>
+    <ul>${bullets}</ul>
+    <p>Weights are recalibrated each refresh to ensure the ladder reflects the current competitive landscape.</p>
+  `;
 }
 
 function upperBound(values, target) {
@@ -533,6 +676,8 @@ async function initialise() {
     injectMap(svgMarkup);
     renderDivisionOverlays(teams);
     buildMarkers(teams);
+    renderFootprintRankings(teams);
+    renderFootprintMethodology(profileData?.season);
 
     if (detailPanel) {
       detailPanel.setAttribute('aria-busy', 'false');
@@ -544,6 +689,7 @@ async function initialise() {
     if (detailPanel) {
       detailPanel.setAttribute('aria-busy', 'false');
     }
+    renderFootprintRankings([]);
     console.error('Failed to initialise team explorer', error);
   }
 }
