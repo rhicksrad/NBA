@@ -4081,33 +4081,69 @@ section h2 { margin-top: 0; font-size: clamp(1.35rem, 3vw, 1.8rem); letter-spaci
   color: color-mix(in srgb, var(--text-subtle) 78%, var(--navy) 22%);
 }
 .player-metric {
+  position: relative;
   border-radius: var(--radius-md);
-  border: 1px solid color-mix(in srgb, var(--border) 68%, transparent);
-  background: color-mix(in srgb, rgba(255, 255, 255, 0.9) 70%, rgba(242, 246, 255, 0.86) 30%);
+  border: 1px solid color-mix(in srgb, var(--border) 62%, transparent);
+  background:
+    linear-gradient(160deg, rgba(17, 86, 214, 0.06), rgba(244, 181, 63, 0.04)),
+    color-mix(in srgb, rgba(255, 255, 255, 0.92) 70%, rgba(242, 246, 255, 0.9) 30%);
   display: grid;
-  gap: 0.55rem;
-  padding: 0.85rem 1rem;
-  box-shadow: 0 12px 24px rgba(11, 37, 69, 0.08);
+  gap: 0.75rem;
+  padding: 1rem 1.1rem 1.15rem;
+  box-shadow: 0 16px 30px rgba(11, 37, 69, 0.12);
+  overflow: hidden;
+}
+.player-metric::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: color-mix(in srgb, var(--border) 70%, transparent);
 }
 .player-metric__header {
+  position: relative;
+  z-index: 1;
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: 0.5rem;
+  gap: 0.75rem;
 }
-.player-metric__label { font-weight: 600; font-size: 0.95rem; color: var(--navy); }
+.player-metric__label {
+  font-weight: 600;
+  font-size: 1rem;
+  color: color-mix(in srgb, var(--navy) 88%, var(--royal) 12%);
+}
 .player-metric__value {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
   font-weight: 700;
   font-size: 1.05rem;
-  color: color-mix(in srgb, var(--royal) 70%, var(--navy) 30%);
+  color: color-mix(in srgb, var(--royal) 68%, var(--navy) 32%);
 }
-.player-metric__value span { font-size: 0.75rem; font-weight: 600; margin-left: 0.2rem; color: color-mix(in srgb, var(--text-subtle) 80%, var(--navy) 20%); }
+.player-metric__value-number {
+  font-size: clamp(1.1rem, 2.6vw, 1.35rem);
+  line-height: 1;
+}
+.player-metric__value-suffix {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: color-mix(in srgb, var(--text-subtle) 78%, var(--navy) 22%);
+}
+.player-metric__value--empty {
+  color: color-mix(in srgb, var(--text-subtle) 76%, var(--navy) 24%);
+}
 .player-metric__meter {
   position: relative;
-  height: 8px;
+  height: 10px;
   border-radius: 999px;
-  background: color-mix(in srgb, rgba(17, 86, 214, 0.08) 60%, rgba(244, 181, 63, 0.08) 40%);
+  background: color-mix(in srgb, rgba(17, 86, 214, 0.08) 50%, rgba(244, 181, 63, 0.08) 50%);
   overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--border) 65%, transparent);
 }
 .player-metric__meter span {
   position: absolute;
@@ -4115,14 +4151,71 @@ section h2 { margin-top: 0; font-size: clamp(1.35rem, 3vw, 1.8rem); letter-spaci
   border-radius: inherit;
   background: linear-gradient(135deg, var(--royal), var(--sky));
   width: var(--fill, 0%);
-  transition: width 0.4s ease;
+  min-width: 6%;
+  transition: width 0.45s ease;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.25);
+}
+.player-metric__meter--empty {
+  border-style: dashed;
+  background: color-mix(in srgb, rgba(66, 82, 108, 0.12) 70%, transparent);
 }
 .player-metric__meter--empty span { display: none; }
 .player-metric__description {
   margin: 0;
-  font-size: 0.88rem;
-  line-height: 1.45;
+  font-size: 0.9rem;
+  line-height: 1.55;
   color: color-mix(in srgb, var(--text-subtle) 82%, var(--navy) 18%);
+}
+.player-metric--tier-elite::before {
+  background: linear-gradient(90deg, var(--royal), var(--sky));
+}
+.player-metric--tier-strong::before {
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--gold) 72%, var(--royal) 28%),
+    color-mix(in srgb, var(--royal) 35%, var(--sky) 65%)
+  );
+}
+.player-metric--tier-watch::before {
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--red) 70%, var(--royal) 30%),
+    color-mix(in srgb, var(--gold) 55%, var(--red) 45%)
+  );
+}
+.player-metric--empty::before {
+  background: color-mix(in srgb, var(--border) 68%, transparent);
+}
+.player-metric--tier-elite .player-metric__value-number {
+  color: color-mix(in srgb, var(--royal) 75%, var(--sky) 25%);
+}
+.player-metric--tier-strong .player-metric__value-number {
+  color: color-mix(in srgb, var(--gold) 68%, var(--navy) 32%);
+}
+.player-metric--tier-watch .player-metric__value-number {
+  color: color-mix(in srgb, var(--red) 68%, var(--navy) 32%);
+}
+.player-metric--empty .player-metric__value-number {
+  color: color-mix(in srgb, var(--text-subtle) 75%, var(--navy) 25%);
+}
+.player-metric--tier-strong .player-metric__meter span {
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--gold) 65%, var(--royal) 35%),
+    color-mix(in srgb, var(--gold) 45%, var(--sand-deep) 55%)
+  );
+}
+.player-metric--tier-watch .player-metric__meter span {
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--red) 68%, var(--royal) 32%),
+    color-mix(in srgb, var(--gold) 55%, var(--red) 45%)
+  );
+}
+.player-metric--empty .player-metric__meter { border-style: dashed; }
+.player-metric--empty .player-metric__description {
+  color: color-mix(in srgb, var(--text-subtle) 78%, var(--navy) 22%);
+  font-style: italic;
 }
 
 @media (max-width: 1080px) {
