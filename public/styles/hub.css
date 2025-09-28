@@ -3495,12 +3495,33 @@ section h2 { margin-top: 0; font-size: clamp(1.35rem, 3vw, 1.8rem); letter-spaci
   gap: 0.8rem;
 }
 
+.team-visual__heading {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  align-items: flex-start;
+  flex: 1;
+}
+
 .team-visual__label {
   font-size: 0.85rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   font-weight: 700;
   color: rgba(17, 86, 214, 0.75);
+}
+
+.team-visual__percentile {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: color-mix(in srgb, var(--royal) 90%, white 10%);
+  background: color-mix(in srgb, rgba(17, 86, 214, 0.12) 70%, rgba(255, 255, 255, 0.95) 30%);
+  padding: 0.25rem 0.5rem;
+  border-radius: 999px;
+  text-transform: none;
 }
 
 .team-visual__value {

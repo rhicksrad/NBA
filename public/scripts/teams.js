@@ -261,6 +261,76 @@ function normaliseValue(value, { min, max }, inverse = false) {
   return inverse ? 1 - ratio : ratio;
 }
 
+function upperBound(values, target) {
+  let low = 0;
+  let high = values.length;
+  while (low < high) {
+    const mid = Math.floor((low + high) / 2);
+    if (values[mid] <= target) {
+      low = mid + 1;
+    } else {
+      high = mid;
+    }
+  }
+  return low;
+}
+
+function lowerBound(values, target) {
+  let low = 0;
+  let high = values.length;
+  while (low < high) {
+    const mid = Math.floor((low + high) / 2);
+    if (values[mid] < target) {
+      low = mid + 1;
+    } else {
+      high = mid;
+    }
+  }
+  return low;
+}
+
+function computePercentile(value, extent, inverse = false) {
+  const values = extent?.values;
+  if (!Number.isFinite(value) || !Array.isArray(values) || !values.length) {
+    return null;
+  }
+  const size = values.length;
+  if (inverse) {
+    const index = lowerBound(values, value);
+    const count = size - index;
+    const percentile = count / size;
+    return Math.min(1, Math.max(0, percentile));
+  }
+  const rank = upperBound(values, value);
+  const percentile = rank / size;
+  return Math.min(1, Math.max(0, percentile));
+}
+
+function formatOrdinal(value) {
+  const remainder100 = value % 100;
+  if (remainder100 >= 11 && remainder100 <= 13) {
+    return `${value}th`;
+  }
+  switch (value % 10) {
+    case 1:
+      return `${value}st`;
+    case 2:
+      return `${value}nd`;
+    case 3:
+      return `${value}rd`;
+    default:
+      return `${value}th`;
+  }
+}
+
+function formatPercentileRank(percentile) {
+  if (percentile === null) {
+    return '';
+  }
+  const percentage = Math.min(100, Math.max(0, Math.round(percentile * 100)));
+  return `${formatOrdinal(percentage)} percentile`;
+}
+
 function clearActiveMarker() {
   markerButtons.forEach((button) => button.classList.remove('team-marker--active'));
 }
@@ -324,11 +394,16 @@ function renderDetail(team) {
       }
       const extent = metricExtents[metric.key];
       const progress = normaliseValue(value, extent ?? { min: 0, max: 1 }, Boolean(metric.inverse));
+      const percentile = computePercentile(value, extent, Boolean(metric.inverse));
+      const percentileLabel = formatPercentileRank(percentile);
       const card = document.createElement('article');
       card.className = 'team-visual';
       card.innerHTML = `
         <header class="team-visual__header">
-          <span class="team-visual__label">${metric.label}</span>
+          <div class="team-visual__heading">
+            <span class="team-visual__label">${metric.label}</span>
+            ${percentileLabel ? `<span class="team-visual__percentile" title="Percentile rank across the league">${percentileLabel}</span>` : ''}
+          </div>
           <strong class="team-visual__value">${metric.format(value)}</strong>
         </header>
         <p class="team-visual__description">${metric.description}</p>
@@ -403,12 +478,14 @@ function computeExtents(teams) {
       .map((team) => team.metrics?.[metric.key])
       .filter((value) => Number.isFinite(value));
     if (!values.length) {
-      acc[metric.key] = { min: 0, max: 1 };
+      acc[metric.key] = { min: 0, max: 1, values: [] };
       return acc;
     }
+    const sorted = [...values].sort((a, b) => a - b);
     acc[metric.key] = {
-      min: Math.min(...values),
-      max: Math.max(...values),
+      min: sorted[0],
+      max: sorted[sorted.length - 1],
+      values: sorted,
     };
     return acc;
   }, {});
