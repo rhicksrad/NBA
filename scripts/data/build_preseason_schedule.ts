@@ -27,6 +27,27 @@ interface RawCoverage {
   radio?: unknown;
 }
 
+interface RawStorylineItem {
+  title?: unknown;
+  paragraphs?: unknown;
+  bullets?: unknown;
+}
+
+interface RawStorylines {
+  heading?: unknown;
+  introParagraphs?: unknown;
+  items?: unknown;
+}
+
+interface RawPreview {
+  summaryTagline?: unknown;
+  matchupSnapshotItems?: unknown;
+  storylines?: unknown;
+  narrativeHeading?: unknown;
+  narrativeQuestions?: unknown;
+  closingNote?: unknown;
+}
+
 interface RawGame {
   id?: unknown;
   tipoff?: unknown;
@@ -37,6 +58,7 @@ interface RawGame {
   away?: unknown;
   home?: unknown;
   coverage?: unknown;
+  preview?: unknown;
 }
 
 interface ScheduleParticipant {
@@ -69,12 +91,34 @@ interface PreseasonGame {
   away: ScheduleParticipant;
   home: ScheduleParticipant;
   coverage?: ScheduleCoverage;
+  preview?: PreseasonPreviewOverride;
 }
 
 interface PreseasonSchedule {
   season: string;
   generatedAt: string;
   games: PreseasonGame[];
+}
+
+interface StorylineItemOverride {
+  title?: string;
+  paragraphs?: string[];
+  bullets?: string[];
+}
+
+interface StorylinesOverride {
+  heading?: string;
+  introParagraphs?: string[];
+  items?: StorylineItemOverride[];
+}
+
+interface PreseasonPreviewOverride {
+  summaryTagline?: string;
+  matchupSnapshotItems?: string[];
+  storylines?: StorylinesOverride;
+  narrativeHeading?: string;
+  narrativeQuestions?: string[];
+  closingNote?: string;
 }
 
 function ensureString(value: unknown): string | undefined {
@@ -162,6 +206,84 @@ function normalizeCoverage(raw: unknown): ScheduleCoverage | undefined {
   return { tv, radio };
 }
 
+function normalizeStorylineItem(raw: unknown): StorylineItemOverride | undefined {
+  if (!raw || typeof raw !== "object") {
+    return undefined;
+  }
+  const source = raw as RawStorylineItem;
+  const title = ensureString(source.title);
+  const paragraphs = ensureStringArray(source.paragraphs) ?? [];
+  const bullets = ensureStringArray(source.bullets) ?? [];
+
+  if (!title && paragraphs.length === 0 && bullets.length === 0) {
+    return undefined;
+  }
+
+  return {
+    title,
+    paragraphs: paragraphs.length ? paragraphs : undefined,
+    bullets: bullets.length ? bullets : undefined,
+  };
+}
+
+function normalizeStorylines(raw: unknown): StorylinesOverride | undefined {
+  if (!raw || typeof raw !== "object") {
+    return undefined;
+  }
+
+  const source = raw as RawStorylines;
+  const heading = ensureString(source.heading);
+  const introParagraphs = ensureStringArray(source.introParagraphs);
+  const itemsRaw = Array.isArray(source.items) ? source.items : [];
+  const items = itemsRaw
+    .map((item) => normalizeStorylineItem(item))
+    .filter((item): item is StorylineItemOverride => Boolean(item));
+
+  if (!heading && !introParagraphs && items.length === 0) {
+    return undefined;
+  }
+
+  return {
+    heading,
+    introParagraphs: introParagraphs && introParagraphs.length > 0 ? introParagraphs : undefined,
+    items: items.length > 0 ? items : undefined,
+  };
+}
+
+function normalizePreview(raw: unknown): PreseasonPreviewOverride | undefined {
+  if (!raw || typeof raw !== "object") {
+    return undefined;
+  }
+
+  const source = raw as RawPreview;
+  const summaryTagline = ensureString(source.summaryTagline);
+  const matchupSnapshotItems = ensureStringArray(source.matchupSnapshotItems);
+  const storylines = normalizeStorylines(source.storylines);
+  const narrativeHeading = ensureString(source.narrativeHeading);
+  const narrativeQuestions = ensureStringArray(source.narrativeQuestions);
+  const closingNote = ensureString(source.closingNote);
+
+  if (
+    !summaryTagline &&
+    !matchupSnapshotItems &&
+    !storylines &&
+    !narrativeHeading &&
+    !narrativeQuestions &&
+    !closingNote
+  ) {
+    return undefined;
+  }
+
+  return {
+    summaryTagline,
+    matchupSnapshotItems,
+    storylines,
+    narrativeHeading,
+    narrativeQuestions,
+    closingNote,
+  };
+}
+
 function normalizeGame(raw: RawGame): PreseasonGame {
   const id = ensureString(raw.id);
   if (!id) {
@@ -182,6 +304,7 @@ function normalizeGame(raw: RawGame): PreseasonGame {
   const away = normalizeParticipant(raw.away, "away");
   const home = normalizeParticipant(raw.home, "home");
   const coverage = normalizeCoverage(raw.coverage);
+  const preview = normalizePreview(raw.preview);
 
   return {
     id,
@@ -193,6 +316,7 @@ function normalizeGame(raw: RawGame): PreseasonGame {
     away,
     home,
     coverage,
+    preview,
   };
 }
 

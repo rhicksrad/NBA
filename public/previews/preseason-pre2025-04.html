@@ -122,8 +122,9 @@
       }
 
       .preview-summary__list {
-        margin: 0;
-        padding-left: 1.1rem;
+        margin: 0.35rem 0 0 0;
+        padding: 0;
+        list-style: none;
         display: grid;
         gap: 0.45rem;
         font-size: 0.95rem;
@@ -132,6 +133,16 @@
 
       .preview-summary__list li {
         margin: 0;
+        padding-left: 1.1rem;
+        position: relative;
+      }
+
+      .preview-summary__list li::before {
+        content: "•";
+        position: absolute;
+        left: 0;
+        color: var(--royal);
+        font-weight: 700;
       }
 
       .preview-body {
@@ -185,6 +196,11 @@
         color: var(--text-subtle);
       }
 
+      .preview-story__lead + .preview-story__paragraph,
+      .preview-story__paragraph + .preview-story__paragraph {
+        margin-top: 0.75rem;
+      }
+
       .preview-story__list {
         list-style: none;
         margin: 0;
@@ -211,6 +227,83 @@
         border-radius: 50%;
         background: linear-gradient(135deg, rgba(17, 86, 214, 0.9), rgba(244, 181, 63, 0.85));
         box-shadow: 0 0 0 4px color-mix(in srgb, rgba(17, 86, 214, 0.12) 60%, rgba(255, 255, 255, 0.9) 40%);
+      }
+
+      .preview-story__list--numbered {
+        counter-reset: storyline;
+        gap: 1.2rem;
+      }
+
+      .preview-story__list--numbered li {
+        padding-left: 2.6rem;
+        font-weight: 400;
+      }
+
+      .preview-story__list--numbered li::before {
+        counter-increment: storyline;
+        content: counter(storyline);
+        display: grid;
+        place-items: center;
+        width: 1.6rem;
+        height: 1.6rem;
+        border-radius: 999px;
+        background: linear-gradient(135deg, rgba(17, 86, 214, 0.95), rgba(239, 61, 91, 0.9));
+        color: #fff;
+        font-weight: 700;
+        top: 0;
+        box-shadow: 0 0 0 4px color-mix(in srgb, rgba(17, 86, 214, 0.12) 60%, rgba(255, 255, 255, 0.9) 40%);
+      }
+
+      .preview-story__item-title {
+        margin: 0;
+        font-size: 1.08rem;
+        color: var(--navy);
+      }
+
+      .preview-story__item-title + .preview-story__lead,
+      .preview-story__item-title + .preview-story__paragraph {
+        margin-top: 0.55rem;
+      }
+
+      .preview-story__item-bullets {
+        margin: 0.75rem 0 0 0;
+        padding-left: 1.2rem;
+        display: grid;
+        gap: 0.4rem;
+        color: var(--text-subtle);
+        list-style: disc;
+      }
+
+      .preview-story__item-bullets li {
+        margin: 0;
+        padding: 0;
+        position: static;
+        font-weight: 500;
+        color: var(--text-subtle);
+      }
+
+      .preview-story__item-bullets li::before {
+        content: none;
+      }
+
+      .preview-story__narratives {
+        margin-top: 1.5rem;
+        display: grid;
+        gap: 0.75rem;
+      }
+
+      .preview-story__narratives h3 {
+        margin: 0;
+        font-size: 0.9rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: color-mix(in srgb, var(--navy) 70%, rgba(14, 34, 68, 0.4) 30%);
+      }
+
+      .preview-story__note {
+        margin: 1.4rem 0 0 0;
+        color: var(--text-subtle);
+        font-style: italic;
       }
 
       .preview-visuals {
@@ -313,6 +406,7 @@
         <div class="preview-summary__grid">
           <section class="preview-summary__card">
             <h2>Matchup snapshot</h2>
+
             <p>New York Knicks vs. Philadelphia 76ers</p>
             <p>Preseason · NBA Abu Dhabi Game</p>
           </section>
@@ -322,10 +416,12 @@
       </section>
 
       <div class="preview-body">
+
         <article class="preview-story preview-card preview-card--story">
           <h2>Camp storylines to monitor</h2>
-          <p class="preview-story__lead">New York Knicks face the 76ers at Etihad Arena · Abu Dhabi, United Arab Emirates, opening the 2025-26 preseason with the NBA Abu Dhabi Game showcase designed to stress-test training camp priorities.</p>
-        <p class="preview-story__paragraph">New York’s staff expects to spotlight rotation hopefuls and sharpen conditioning, while Philadelphia focuses on lineup chemistry in front of a neutral crowd. Both clubs are using this window to evaluate how younger pieces complement their established cores.</p>
+<p class="preview-story__lead">New York Knicks face the 76ers at Etihad Arena · Abu Dhabi, United Arab Emirates, opening the 2025-26 preseason with the NBA Abu Dhabi Game showcase designed to stress-test training camp priorities.</p>
+          <p class="preview-story__paragraph">New York’s staff expects to spotlight rotation hopefuls and sharpen conditioning, while Philadelphia focuses on lineup chemistry in front of a neutral crowd. Both clubs are using this window to evaluate how younger pieces complement their established cores.</p>
+
           <ul class="preview-story__list">
             <li>Which emerging contributor helps New York Knicks turn preseason reps into regular-season trust?</li>
             <li>How do Philadelphia 76ers balance veteran rhythm with developmental minutes during the NBA Abu Dhabi Game showcase?</li>
