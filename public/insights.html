@@ -26,88 +26,169 @@
             <a href="about.html">About</a>
           </nav>
         </div>
-        <div class="hero">
-          <span class="eyebrow">R&amp;D</span>
-          <h1>Prototype, test, and launch new NBA analytics experiences.</h1>
-          <p>
-            The Insights Lab is the sandbox for everything experimental—from early wireframes to
-            fully instrumented data stories. Every visualization begins here.
-          </p>
+        <div class="hero hero--lab">
+          <div class="hero__intro">
+            <span class="eyebrow">Insights Lab Observatory</span>
+            <h1>Immersive analytics prototypes in active rotation</h1>
+          </div>
+          <dl class="hero-metrics hero-metrics--lab">
+            <div class="hero-metrics__item">
+              <dt>Active experiments</dt>
+              <dd data-metric="experiments">--</dd>
+            </div>
+            <div class="hero-metrics__item">
+              <dt>Avg. launch readiness</dt>
+              <dd data-metric="readiness">--</dd>
+            </div>
+            <div class="hero-metrics__item">
+              <dt>Collaboration nodes</dt>
+              <dd data-metric="collaboration">--</dd>
+            </div>
+            <div class="hero-metrics__item">
+              <dt>Next sync countdown</dt>
+              <dd data-metric="sync">--</dd>
+            </div>
+          </dl>
         </div>
       </header>
 
-      <main>
-        <section>
-          <h2>Changelog</h2>
-          <p class="lead">
-            Keep track of weekly experiments, pipeline upgrades, and deployed visualizations. This log
-            will sync with release notes once automation is in place.
-          </p>
-          <div class="changelog" data-changelog aria-live="polite">
-            <p class="changelog__placeholder">Loading weekly experiments…</p>
-          </div>
-        </section>
-
-        <section>
-          <h2>Phase 3 — Storytelling release</h2>
-          <p class="lead">
-            Follow guided walkthroughs that pair headline metrics with the editorial context needed to
-            brief stakeholders on what changed and why it matters.
-          </p>
-          <div class="story-walkthrough" data-storyboard>
-            <aside class="story-walkthrough__sidebar">
-              <div class="story-meta" data-story-meta>
-                <p class="story-meta__placeholder">Loading release details…</p>
+      <main class="lab-content">
+        <section class="lab-grid">
+          <article class="lab-module lab-module--wide" data-chart-wrapper>
+            <header class="lab-module__header">
+              <h2>Release velocity constellations</h2>
+              <div class="lab-module__meta">
+                <span class="lab-chip">Highlights per sprint</span>
+                <span class="lab-chip lab-chip--accent" data-metric="velocity">--</span>
               </div>
-              <div class="release-tracker" data-release-tracker aria-live="polite">
-                <p class="release-tracker__placeholder">Loading release checklist…</p>
-              </div>
-              <nav
-                class="story-steps"
-                data-story-nav
-                role="tablist"
-                aria-label="Narrative walkthroughs"
-              ></nav>
-            </aside>
-            <article
-              class="story-panel"
-              data-story-content
-              aria-live="polite"
-            >
-              <p class="story-panel__placeholder">Loading narrative walkthroughs…</p>
-            </article>
-          </div>
-        </section>
-
-        <section>
-          <h2>Experiment backlog</h2>
-          <div class="card-grid" data-experiments aria-live="polite">
-            <article class="card card--placeholder">Loading lab experiments…</article>
-          </div>
-        </section>
-
-        <section>
-          <h2>Collaboration corner</h2>
-          <div class="grid-two">
-            <div class="chart-placeholder">Embed Loom walkthroughs and design prototypes here</div>
-            <div class="subsection">
-              <h3>How to contribute</h3>
-              <p>
-                Fork the repo, explore sample data inside the <code>public/data</code> directory, and
-                submit proposals for new modules. The lab champions iterative feedback and co-creation
-                across analysts, designers, and engineers.
-              </p>
-              <div class="badge-list" data-collaboration-tags></div>
-              <div class="collaboration-details" data-collaboration aria-live="polite">
-                <p class="collaboration-details__placeholder">Coordinating upcoming sync details…</p>
-              </div>
+            </header>
+            <div class="viz-canvas">
+              <canvas id="release-velocity" data-chart-ratio="0.55"></canvas>
             </div>
-          </div>
+          </article>
+
+          <article class="lab-module" data-chart-wrapper>
+            <header class="lab-module__header">
+              <h2>Status orbit</h2>
+              <div class="lab-module__meta">
+                <span class="lab-chip">Stage energy</span>
+                <span class="lab-chip lab-chip--accent" data-metric="status">--</span>
+              </div>
+            </header>
+            <div class="viz-canvas">
+              <canvas id="status-orbit" data-chart-ratio="0.8"></canvas>
+            </div>
+          </article>
+
+          <article class="lab-module" data-chart-wrapper>
+            <header class="lab-module__header">
+              <h2>Readiness radar</h2>
+              <div class="lab-module__meta">
+                <span class="lab-chip">Checklist peaks</span>
+                <span class="lab-chip lab-chip--accent" data-metric="readiness-max">--</span>
+              </div>
+            </header>
+            <div class="viz-canvas">
+              <canvas id="readiness-radar" data-chart-ratio="0.85"></canvas>
+            </div>
+          </article>
+
+          <article class="lab-module" data-chart-wrapper>
+            <header class="lab-module__header">
+              <h2>Launch gauge</h2>
+              <div class="lab-module__meta">
+                <span class="lab-chip">Average completion</span>
+                <span class="lab-chip lab-chip--accent" data-metric="readiness-avg">--</span>
+              </div>
+            </header>
+            <div class="viz-canvas">
+              <canvas id="readiness-gauge" data-chart-ratio="1"></canvas>
+            </div>
+          </article>
+
+          <article class="lab-module lab-module--tall" data-chart-wrapper>
+            <header class="lab-module__header">
+              <h2>Experiment swarm</h2>
+              <div class="lab-module__meta">
+                <span class="lab-chip">Momentum map</span>
+                <span class="lab-chip lab-chip--accent" data-metric="experiment-horizon">--</span>
+              </div>
+            </header>
+            <div class="viz-canvas">
+              <canvas id="experiment-swarm" data-chart-ratio="0.75"></canvas>
+            </div>
+          </article>
+
+          <article class="lab-module lab-module--tall" data-chart-wrapper>
+            <header class="lab-module__header">
+              <h2>Progression ladder</h2>
+              <div class="lab-module__meta">
+                <span class="lab-chip">Deepest stage</span>
+                <span class="lab-chip lab-chip--accent" data-metric="experiment-progress">--</span>
+              </div>
+            </header>
+            <div class="viz-canvas">
+              <canvas id="experiment-ladder" data-chart-ratio="0.8"></canvas>
+            </div>
+          </article>
+
+          <article class="lab-module" data-chart-wrapper>
+            <header class="lab-module__header">
+              <h2>Objective ribbon</h2>
+              <div class="lab-module__meta">
+                <span class="lab-chip">Cumulative briefs</span>
+                <span class="lab-chip lab-chip--accent" data-metric="objective-total">--</span>
+              </div>
+            </header>
+            <div class="viz-canvas">
+              <canvas id="objective-ribbon" data-chart-ratio="0.6"></canvas>
+            </div>
+          </article>
+
+          <article class="lab-module" data-chart-wrapper>
+            <header class="lab-module__header">
+              <h2>Agenda orbit</h2>
+              <div class="lab-module__meta">
+                <span class="lab-chip">Focus weight</span>
+                <span class="lab-chip lab-chip--accent" data-metric="agenda-span">--</span>
+              </div>
+            </header>
+            <div class="viz-canvas">
+              <canvas id="agenda-orbit" data-chart-ratio="1"></canvas>
+            </div>
+          </article>
+
+          <article class="lab-module" data-chart-wrapper>
+            <header class="lab-module__header">
+              <h2>Channel lattice</h2>
+              <div class="lab-module__meta">
+                <span class="lab-chip">Signal density</span>
+                <span class="lab-chip lab-chip--accent" data-metric="channel-count">--</span>
+              </div>
+            </header>
+            <div class="viz-canvas viz-canvas--grid">
+              <canvas id="channel-grid" data-chart-ratio="0.75"></canvas>
+            </div>
+          </article>
+
+          <article class="lab-module" data-chart-wrapper>
+            <header class="lab-module__header">
+              <h2>Contributor bloom</h2>
+              <div class="lab-module__meta">
+                <span class="lab-chip">Lead bandwidth</span>
+                <span class="lab-chip lab-chip--accent" data-metric="contributor-count">--</span>
+              </div>
+            </header>
+            <div class="viz-canvas">
+              <canvas id="contributor-radial" data-chart-ratio="0.85"></canvas>
+            </div>
+          </article>
         </section>
       </main>
 
       <footer class="page-footer">Ideas incubated here will power the next wave of NBA experiences.</footer>
     </div>
+    <script src="vendor/chart.umd.js" defer></script>
     <script type="module" src="scripts/insights.js"></script>
   </body>
 </html>
