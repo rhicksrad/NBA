@@ -60,6 +60,46 @@ function updateHero(data) {
   setMetric('close-share', closeText);
   setMetric('close-share-detail', closeText);
 
+  const catsWins = data?.mascotShowdown?.summary?.catsWins;
+  const catsLosses = data?.mascotShowdown?.summary?.catsLosses;
+  const catsWinPct = data?.mascotShowdown?.summary?.catsWinPct;
+  const dogsWins = data?.mascotShowdown?.summary?.dogsWins;
+  let ledgerText = null;
+  if (Number.isFinite(catsWins) && Number.isFinite(catsLosses) && Number.isFinite(catsWinPct)) {
+    const base = `Cats ${helpers.formatNumber(catsWins, 0)}-${helpers.formatNumber(catsLosses, 0)} (${helpers.formatNumber(
+      catsWinPct * 100,
+      1,
+    )}% win)`;
+    if (Number.isFinite(dogsWins)) {
+      const margin = dogsWins - catsWins;
+      const leader = margin === 0
+        ? 'Ledger tied'
+        : margin > 0
+          ? `Dogs +${helpers.formatNumber(Math.abs(margin), 0)} wins`
+          : `Cats +${helpers.formatNumber(Math.abs(margin), 0)} wins`;
+      ledgerText = `${base} · ${leader}`;
+    } else {
+      ledgerText = base;
+    }
+  }
+  setMetric('mascot-ledger', ledgerText);
+
+  const catTeams = Array.isArray(data?.mascotShowdown?.catBreakdown) ? data.mascotShowdown.catBreakdown : [];
+  const dogTeams = Array.isArray(data?.mascotShowdown?.dogBreakdown) ? data.mascotShowdown.dogBreakdown : [];
+  const bestCat = [...catTeams]
+    .filter((entry) => Number.isFinite(entry?.winPct) && Number.isFinite(entry?.wins) && Number.isFinite(entry?.losses))
+    .sort((a, b) => (b.winPct ?? 0) - (a.winPct ?? 0))[0];
+  const bestDog = [...dogTeams]
+    .filter((entry) => Number.isFinite(entry?.winPct) && Number.isFinite(entry?.wins) && Number.isFinite(entry?.losses))
+    .sort((a, b) => (b.winPct ?? 0) - (a.winPct ?? 0))[0];
+  const leaderText = bestCat && bestDog
+    ? `Top cat: ${bestCat.team} (${helpers.formatNumber(bestCat.winPct * 100, 1)}% vs dogs) · Top dog: ${bestDog.team} (${helpers.formatNumber(
+        bestDog.winPct * 100,
+        1,
+      )}% vs cats)`
+    : null;
+  setMetric('mascot-leaders', leaderText);
+
   const sampleSize = data?.sampleSize;
   setMetric('sample-size', Number.isFinite(sampleSize) ? `${helpers.formatNumber(sampleSize, 0)} games` : null);
 
@@ -328,6 +368,110 @@ function buildOvertimeChart(dataRef) {
   };
 }
 
+function buildMascotShowdownChart(dataRef) {
+  const trends = Array.isArray(dataRef?.mascotShowdown?.seasonTrends) ? dataRef.mascotShowdown.seasonTrends : [];
+  if (!trends.length) {
+    return fallbackConfig('Mascot showdown history unavailable');
+  }
+
+  const labels = trends.map((entry) => {
+    if (!Number.isFinite(entry?.season)) {
+      return 'Season';
+    }
+    const next = ((entry.season ?? 0) + 1).toString().slice(-2).padStart(2, '0');
+    return `${entry.season}-${next}`;
+  });
+  const catPct = trends.map((entry) => (Number.isFinite(entry?.catWinPct) ? entry.catWinPct * 100 : null));
+  const dogPct = trends.map((entry) => (Number.isFinite(entry?.dogWinPct) ? entry.dogWinPct * 100 : null));
+  const games = trends.map((entry) => (Number.isFinite(entry?.games) ? entry.games : null));
+
+  return {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        {
+          type: 'bar',
+          label: 'Games played',
+          data: games,
+          backgroundColor: 'rgba(17, 86, 214, 0.18)',
+          borderRadius: 18,
+          maxBarThickness: 28,
+          yAxisID: 'games',
+        },
+        {
+          type: 'line',
+          label: 'Cat win %',
+          data: catPct,
+          borderColor: '#ef3d5b',
+          backgroundColor: 'rgba(239, 61, 91, 0.18)',
+          borderWidth: 2,
+          pointRadius: 0,
+          tension: 0.25,
+          fill: 'origin',
+          yAxisID: 'pct',
+        },
+        {
+          type: 'line',
+          label: 'Dog win %',
+          data: dogPct,
+          borderColor: '#0b2545',
+          backgroundColor: 'rgba(11, 37, 69, 0.16)',
+          borderWidth: 2,
+          pointRadius: 0,
+          tension: 0.25,
+          fill: false,
+          yAxisID: 'pct',
+        },
+      ],
+    },
+    options: {
+      maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      scales: {
+        pct: {
+          beginAtZero: true,
+          suggestedMax: 100,
+          title: { display: true, text: 'Win percentage' },
+          ticks: { callback: (value) => `${helpers.formatNumber(value, 0)}%` },
+          grid: { color: 'rgba(11, 37, 69, 0.12)' },
+        },
+        games: {
+          position: 'right',
+          title: { display: true, text: 'Matchups per season' },
+          grid: { drawOnChartArea: false },
+        },
+        x: {
+          ticks: { maxRotation: 0, autoSkip: true, maxTicksLimit: 12 },
+          grid: { color: 'rgba(17, 86, 214, 0.05)' },
+        },
+      },
+      plugins: {
+        tooltip: {
+          callbacks: {
+            title(context) {
+              const item = context?.[0];
+              const label = item?.label ?? '';
+              const season = trends?.[item?.dataIndex ?? -1]?.season;
+              if (!Number.isFinite(season)) {
+                return label;
+              }
+              const endYear = season + 1;
+              return `${season}-${endYear}`;
+            },
+            label(context) {
+              if (context.dataset.type === 'bar') {
+                return `Games: ${helpers.formatNumber(context.parsed.y, 0)}`;
+              }
+              return `${context.dataset.label}: ${helpers.formatNumber(context.parsed.y, 1)}%`;
+            },
+          },
+        },
+      },
+    },
+  };
+}
+
 function buildThreePointTrendChart(dataRef) {
   const seasons = Array.isArray(dataRef?.threePointTrend?.seasons) ? dataRef.threePointTrend.seasons : [];
   if (!seasons.length) {
@@ -405,6 +549,7 @@ async function bootstrap() {
     { element: '#rest-impact', source: DATA_URL, createConfig: () => buildRestImpactChart(data) },
     { element: '#close-margins', source: DATA_URL, createConfig: () => buildCloseMarginsChart(data) },
     { element: '#overtime-breakdown', source: DATA_URL, createConfig: () => buildOvertimeChart(data) },
+    { element: '#mascot-showdown', source: DATA_URL, createConfig: () => buildMascotShowdownChart(data) },
     { element: '#three-point-trend', source: DATA_URL, createConfig: () => buildThreePointTrendChart(data) },
   ]);
 }
