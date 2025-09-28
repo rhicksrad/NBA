@@ -582,7 +582,7 @@ function renderVisualsSection(
     return "";
   }
   return `
-        <section class="preview-visuals">
+        <section class="preview-visuals preview-card preview-card--visuals">
           <div class="preview-visuals__header">
             <h2>Signature visual read</h2>
             <p>
@@ -623,7 +623,7 @@ function renderGamePage(
 
   const coverageSection = hasCoverage
     ? `
-          <section class="preview-meta__section">
+          <section class="preview-summary__card">
             <h2>Coverage</h2>
             ${game.coverage?.tv?.length ? `<p><strong>TV:</strong> ${game.coverage.tv.join(", ")}</p>` : ""}
             ${game.coverage?.radio?.length ? `<p><strong>Radio:</strong> ${game.coverage.radio.join(", ")}</p>` : ""}
@@ -633,14 +633,21 @@ function renderGamePage(
 
   const notesSection = notes.length
     ? `
-          <section class="preview-meta__section">
+          <section class="preview-summary__card">
             <h2>Notes</h2>
-            <ul>
+            <ul class="preview-summary__list">
               ${notes.map((note) => `<li>${note}</li>`).join("\n              ")}
             </ul>
           </section>
         `
     : "";
+
+  const storyParagraphs = story
+    .map((paragraph, index) => {
+      const className = index === 0 ? "preview-story__lead" : "preview-story__paragraph";
+      return `<p class="${className}">${paragraph}</p>`;
+    })
+    .join("\n        ");
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -655,100 +662,231 @@ function renderGamePage(
         padding: clamp(1.5rem, 4vw, 3rem);
         display: flex;
         justify-content: center;
-        background: color-mix(in srgb, var(--surface) 92%, rgba(14, 34, 68, 0.06) 8%);
+        background:
+          linear-gradient(155deg, rgba(17, 86, 214, 0.12), rgba(239, 61, 91, 0.08)),
+          color-mix(in srgb, var(--surface) 88%, rgba(14, 34, 68, 0.08) 12%);
       }
 
       .preview-shell {
-        width: min(1100px, 100%);
+        width: min(1150px, 100%);
         display: grid;
-        gap: clamp(1.5rem, 3vw, 2.5rem);
-        background: color-mix(in srgb, var(--surface) 80%, rgba(14, 34, 68, 0.05) 20%);
+        gap: clamp(1.5rem, 3vw, 2.75rem);
+        background: color-mix(in srgb, rgba(255, 255, 255, 0.94) 72%, rgba(242, 246, 255, 0.92) 28%);
         border-radius: var(--radius-xl);
-        border: 1px solid color-mix(in srgb, var(--royal) 18%, transparent);
-        padding: clamp(1.75rem, 3vw, 2.5rem);
+        border: 1px solid color-mix(in srgb, var(--royal) 16%, transparent);
+        padding: clamp(1.85rem, 3.4vw, 2.9rem);
         box-shadow: var(--shadow-soft);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .preview-shell::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          160deg,
+          rgba(17, 86, 214, 0.14),
+          rgba(244, 181, 63, 0.12) 55%,
+          rgba(239, 61, 91, 0.1)
+        );
+        opacity: 0.55;
+        pointer-events: none;
+      }
+
+      .preview-shell > * {
+        position: relative;
       }
 
       .preview-header {
         display: grid;
-        gap: 0.75rem;
+        gap: 0.65rem;
       }
 
       .preview-header time {
         font-weight: 600;
-        color: color-mix(in srgb, var(--navy) 80%, rgba(14, 34, 68, 0.4) 20%);
+        color: color-mix(in srgb, var(--navy) 78%, rgba(14, 34, 68, 0.42) 22%);
       }
 
-      .chip {
-        display: inline-block;
-        padding: 0.25rem 0.6rem;
-        border-radius: 999px;
-        background: rgba(14, 34, 68, 0.08);
-        color: rgba(14, 34, 68, 0.88);
-        font-size: 0.75rem;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        font-weight: 600;
-      }
-
-      .preview-meta {
-        display: grid;
-        gap: 1.5rem;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      }
-
-      .preview-meta__section {
-        display: grid;
-        gap: 0.4rem;
-      }
-
-      .preview-meta__section h2 {
+      .preview-header p {
         margin: 0;
-        font-size: 0.95rem;
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
-        color: rgba(14, 34, 68, 0.72);
+        color: var(--text-subtle);
       }
 
-      .preview-meta__section p,
-      .preview-meta__section ul {
+      .preview-header h1 {
+        margin: 0;
+        font-size: clamp(2rem, 4.8vw, 2.65rem);
+        color: var(--navy);
+      }
+
+      .preview-summary {
+        display: grid;
+        gap: clamp(1rem, 2.6vw, 1.6rem);
+      }
+
+      .preview-summary__header {
+        display: grid;
+        gap: 0.35rem;
+      }
+
+      .preview-summary__title {
+        margin: 0;
+        font-size: 0.82rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: color-mix(in srgb, var(--navy) 70%, rgba(14, 34, 68, 0.4) 30%);
+      }
+
+      .preview-summary__tagline {
         margin: 0;
         font-size: 0.95rem;
         color: var(--text-subtle);
-        padding-left: 1rem;
+        max-width: 56ch;
       }
 
-      .preview-story {
+      .preview-summary__grid {
         display: grid;
-        gap: 1.25rem;
+        gap: clamp(1rem, 3vw, 1.6rem);
+        grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      }
+
+      .preview-summary__card {
+        display: grid;
+        gap: 0.6rem;
+        padding: clamp(1rem, 2.6vw, 1.4rem);
+        border-radius: var(--radius-lg);
+        border: 1px solid color-mix(in srgb, var(--royal) 14%, transparent);
+        background: color-mix(in srgb, rgba(255, 255, 255, 0.92) 68%, rgba(242, 246, 255, 0.88) 32%);
+        box-shadow: var(--shadow-soft);
+      }
+
+      .preview-summary__card h2 {
+        margin: 0;
+        font-size: 1rem;
+        color: var(--navy);
+      }
+
+      .preview-summary__card p {
+        margin: 0;
+        font-size: 0.95rem;
+        color: var(--text-subtle);
+      }
+
+      .preview-summary__list {
+        margin: 0;
+        padding-left: 1.1rem;
+        display: grid;
+        gap: 0.45rem;
+        font-size: 0.95rem;
+        color: var(--text-subtle);
+      }
+
+      .preview-summary__list li {
+        margin: 0;
+      }
+
+      .preview-body {
+        display: grid;
+        gap: clamp(1.2rem, 3vw, 1.9rem);
+      }
+
+      @media (min-width: 960px) {
+        .preview-body {
+          grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+          align-items: start;
+        }
+      }
+
+      .preview-card {
+        display: grid;
+        gap: clamp(0.85rem, 2.4vw, 1.4rem);
+        padding: clamp(1.2rem, 2.8vw, 1.85rem);
+        border-radius: var(--radius-lg);
+        border: 1px solid color-mix(in srgb, var(--royal) 16%, transparent);
+        background: color-mix(in srgb, rgba(255, 255, 255, 0.94) 70%, rgba(242, 246, 255, 0.9) 30%);
+        box-shadow: var(--shadow-soft);
+      }
+
+      .preview-card--story {
+        background:
+          linear-gradient(155deg, rgba(17, 86, 214, 0.12), rgba(244, 181, 63, 0.08)),
+          color-mix(in srgb, rgba(255, 255, 255, 0.93) 68%, rgba(242, 246, 255, 0.9) 32%);
+      }
+
+      .preview-card--visuals {
+        background:
+          linear-gradient(150deg, rgba(17, 86, 214, 0.09), rgba(239, 61, 91, 0.07)),
+          color-mix(in srgb, rgba(255, 255, 255, 0.93) 66%, rgba(242, 246, 255, 0.92) 34%);
       }
 
       .preview-story h2 {
         margin: 0;
+        font-size: 1.35rem;
+        color: var(--navy);
       }
 
-      .preview-story ul {
+      .preview-story__lead {
         margin: 0;
-        padding-left: 1.1rem;
+        font-size: 1.05rem;
+        color: var(--text-strong);
       }
 
-      .preview-story li {
-        margin-bottom: 0.5rem;
+      .preview-story__paragraph {
+        margin: 0;
+        color: var(--text-subtle);
+      }
+
+      .preview-story__list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: grid;
+        gap: 0.65rem;
+      }
+
+      .preview-story__list li {
+        margin: 0;
+        position: relative;
+        padding-left: 1.6rem;
+        font-weight: 600;
+        color: var(--text-strong);
+      }
+
+      .preview-story__list li::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0.35rem;
+        width: 0.7rem;
+        height: 0.7rem;
+        border-radius: 50%;
+        background: linear-gradient(135deg, rgba(17, 86, 214, 0.9), rgba(244, 181, 63, 0.85));
+        box-shadow: 0 0 0 4px color-mix(in srgb, rgba(17, 86, 214, 0.12) 60%, rgba(255, 255, 255, 0.9) 40%);
       }
 
       .preview-visuals {
         display: grid;
-        gap: 1.25rem;
+        gap: clamp(1rem, 2.8vw, 1.6rem);
       }
 
       .preview-visuals__header {
         display: grid;
-        gap: 0.4rem;
+        gap: 0.5rem;
+      }
+
+      .preview-visuals__header h2 {
+        margin: 0;
+      }
+
+      .preview-visuals__header p {
+        margin: 0;
+        color: var(--text-subtle);
+        font-size: 0.95rem;
       }
 
       .preview-visuals__grid {
         display: grid;
-        gap: clamp(1rem, 3vw, 1.5rem);
+        gap: clamp(1rem, 3vw, 1.6rem);
       }
 
       @media (min-width: 900px) {
@@ -772,7 +910,8 @@ function renderGamePage(
 
       .preview-visuals__team-header h3 {
         margin: 0;
-        font-size: 1.2rem;
+        font-size: 1.15rem;
+        color: var(--navy);
       }
 
       .preview-visuals__chip {
@@ -798,6 +937,7 @@ function renderGamePage(
       footer a {
         color: var(--royal);
         text-decoration: none;
+        font-weight: 600;
       }
 
       footer a:hover {
@@ -816,25 +956,33 @@ function renderGamePage(
         ${game.subLabel ? `<p class="lead">${game.subLabel}</p>` : ""}
       </header>
 
-      <section class="preview-meta">
-        <section class="preview-meta__section">
-          <h2>Matchup snapshot</h2>
-          <p>${away.displayName} vs. ${home.displayName}</p>
-          <p>${labelLine(game)}</p>
-        </section>
-        ${coverageSection}
-        ${notesSection}
+      <section class="preview-summary">
+        <header class="preview-summary__header">
+          <h2 class="preview-summary__title">Game essentials</h2>
+          <p class="preview-summary__tagline">Key context before rotations start moving.</p>
+        </header>
+        <div class="preview-summary__grid">
+          <section class="preview-summary__card">
+            <h2>Matchup snapshot</h2>
+            <p>${away.displayName} vs. ${home.displayName}</p>
+            <p>${labelLine(game)}</p>
+          </section>
+          ${coverageSection}
+          ${notesSection}
+        </div>
       </section>
 
-      <article class="preview-story">
-        <h2>Camp storylines to monitor</h2>
-        ${story.map((paragraph) => `<p>${paragraph}</p>`).join("\n        ")}
-        <ul>
-          ${bullets.map((bullet) => `<li>${bullet}</li>`).join("\n          ")}
-        </ul>
-      </article>
+      <div class="preview-body">
+        <article class="preview-story preview-card preview-card--story">
+          <h2>Camp storylines to monitor</h2>
+          ${storyParagraphs}
+          <ul class="preview-story__list">
+            ${bullets.map((bullet) => `<li>${bullet}</li>`).join("\n            ")}
+          </ul>
+        </article>
 
-      ${visualsSection}
+        ${visualsSection}
+      </div>
 
       <footer>
         <span>Season context: ${SEASON} preseason schedule.</span>
