@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Preseason Preview: International Showcase at Utah Jazz</title>
+    <link rel="stylesheet" href="../styles/hub.css" />
+    <style>
+      :root {
+        --preview-tint: rgba(0, 71, 27, 0.1);
+        --visual-tint: rgba(0, 71, 27, 0.08);
+      }
+
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        padding: clamp(1.5rem, 4vw, 3rem);
+        background: color-mix(in srgb, var(--surface) 90%, rgba(0, 71, 27, 0.04) 10%);
+      }
+
+      .preview-shell {
+        width: min(1180px, 100%);
+        display: grid;
+        gap: clamp(1.5rem, 3vw, 2.5rem);
+        grid-template-areas: "visuals" "preview" "footer";
+        background: color-mix(in srgb, var(--surface) 75%, var(--preview-tint) 25%);
+        border-radius: var(--radius-xl);
+        border: 1px solid color-mix(in srgb, var(--royal) 15%, transparent);
+        box-shadow: var(--shadow-soft);
+        padding: clamp(1.75rem, 3vw, 2.5rem);
+      }
+
+      .visuals {
+        grid-area: visuals;
+        display: grid;
+        gap: clamp(1rem, 3vw, 1.75rem);
+        background: color-mix(in srgb, var(--surface-alt) 72%, var(--visual-tint) 28%);
+        border-radius: var(--radius-lg);
+        border: 1px solid color-mix(in srgb, var(--border) 60%, transparent);
+        padding: clamp(1.5rem, 4vw, 2.75rem);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
+      }
+
+      .visuals > h2 {
+        margin: 0;
+        font-size: clamp(1.4rem, 4vw, 1.9rem);
+        color: var(--navy);
+      }
+
+      .team-visuals {
+        display: grid;
+        gap: clamp(1.4rem, 3vw, 2rem);
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      }
+
+      .team-panel {
+        display: grid;
+        gap: clamp(1rem, 2.5vw, 1.5rem);
+        padding: clamp(1.25rem, 3vw, 1.75rem);
+        border-radius: var(--radius-lg);
+        background: color-mix(in srgb, var(--surface-alt) 78%, var(--preview-tint) 22%);
+        border: 1px solid color-mix(in srgb, var(--border) 58%, transparent);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.32);
+      }
+
+      .team-panel header {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+      }
+
+      .team-panel h3 {
+        margin: 0;
+        font-size: clamp(1.15rem, 3vw, 1.45rem);
+        color: var(--navy);
+      }
+
+      .team-panel .meta {
+        font-size: 0.78rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        font-weight: 600;
+        color: rgba(0, 71, 27, 0.72);
+      }
+
+      .chart-grid {
+        display: grid;
+        gap: clamp(1.1rem, 3vw, 1.8rem);
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      }
+
+      .chart-card {
+        background: color-mix(in srgb, var(--surface-alt) 82%, var(--preview-tint) 18%);
+        border: 1px solid color-mix(in srgb, var(--border) 65%, transparent);
+        border-radius: var(--radius-lg);
+        padding: clamp(1.25rem, 3vw, 1.75rem);
+        display: grid;
+        gap: 0.75rem;
+        box-shadow: var(--shadow-subtle);
+      }
+
+      .chart-card h3 {
+        margin: 0;
+        font-size: clamp(1.05rem, 2vw, 1.2rem);
+        color: var(--navy);
+      }
+
+      .chart-card p {
+        margin: 0;
+        font-size: 0.85rem;
+        color: var(--text-subtle);
+      }
+
+      .chart-card__canvas {
+        position: relative;
+        border-radius: var(--radius-md);
+        background: color-mix(in srgb, var(--surface-alt) 88%, var(--preview-tint) 12%);
+        border: 1px solid color-mix(in srgb, var(--border) 55%, transparent);
+        min-height: clamp(220px, 30vw, 260px);
+        display: flex;
+        align-items: stretch;
+        overflow: hidden;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.48);
+      }
+
+      .chart-card__canvas canvas {
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+
+      .preview-copy {
+        grid-area: preview;
+        display: grid;
+        gap: clamp(1rem, 2.5vw, 1.5rem);
+      }
+
+      .preview-copy header {
+        display: grid;
+        gap: 0.4rem;
+      }
+
+      .preview-copy h1 {
+        margin: 0;
+        font-size: clamp(1.8rem, 3.5vw, 2.3rem);
+        color: var(--navy);
+      }
+
+      .preview-copy time {
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: rgba(0, 71, 27, 0.72);
+        font-size: 0.78rem;
+      }
+
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.32rem 0.85rem;
+        border-radius: 999px;
+        background: rgba(0, 71, 27, 0.12);
+        color: #00471b;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.68rem;
+        letter-spacing: 0.08em;
+        width: fit-content;
+      }
+
+      .story {
+        display: grid;
+        gap: 0.65rem;
+      }
+
+      .story h2 {
+        margin: 0;
+        font-size: 1.15rem;
+        color: var(--navy);
+      }
+
+      .story ul {
+        margin: 0;
+        padding-left: 1.15rem;
+        color: var(--text-subtle);
+      }
+
+      footer {
+        grid-area: footer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+
+      footer a {
+        text-decoration: none;
+        font-weight: 600;
+      }
+    </style>
+    <script src="../vendor/chart.umd.js" defer></script>
+    <script src="../scripts/preseason-dashboards.js" defer></script>
+    <script src="../scripts/preseason-preview.js" defer></script>
+  </head>
+  <body data-preview-id="preseason-12400002">
+    <main class="preview-shell">
+      <section class="visuals">
+        <h2>Preseason scouting dashboard</h2>
+        <div class="team-visuals">
+          <div class="team-panel" data-team="international-showcase">
+            <header>
+              <h3>International Showcase camp lab</h3>
+              <span class="meta">Traveling select team</span>
+            </header>
+            <div class="chart-grid">
+              <figure class="chart-card">
+                <h3>Rotation bandwidth</h3>
+                <canvas id="international-showcase-rotation"></canvas>
+                <p>Projected minute curve for the global select roster as it tests spacing and pace adjustments on NBA floors.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Skill scaffolding radar</h3>
+                <canvas id="international-showcase-skill-spider"></canvas>
+                <p>Developmental emphasis versus current readiness for a roster balancing Euro-style movement with NBA tempo.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Shot diet vs. league</h3>
+                <canvas id="international-showcase-shot-zones"></canvas>
+                <p>How the Showcase group expects to generate attempts compared with a typical NBA distribution.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Practice tempo log</h3>
+                <canvas id="international-showcase-tempo-curve"></canvas>
+                <p>Chronicle of training tempo and special-situation installs as the tour stop transitions from Europe to Salt Lake City.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Pairing synergy map</h3>
+                <canvas id="international-showcase-synergy-matrix"></canvas>
+                <p>Pace and coverage sync readings for Showcase combinations eager to impress scouts.</p>
+              </figure>
+            </div>
+          </div>
+          <div class="team-panel" data-team="utah-jazz">
+            <header>
+              <h3>Utah Jazz data lab</h3>
+              <span class="meta">Lineup calibration</span>
+            </header>
+            <div class="chart-grid">
+              <figure class="chart-card">
+                <h3>Rotation bandwidth</h3>
+                <canvas id="utah-jazz-rotation"></canvas>
+                <p>Minute allocations Will Hardy wants for Utah’s young guard/wing core as it opens the preseason.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Skill scaffolding radar</h3>
+                <canvas id="utah-jazz-skill-spider"></canvas>
+                <p>Blueprint versus readiness metrics for Jazz prospects learning to share initiator duties.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Shot diet vs. league</h3>
+                <canvas id="utah-jazz-shot-zones"></canvas>
+                <p>Where Utah anticipates its preseason attempts to originate compared with the league baseline mix.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Practice tempo log</h3>
+                <canvas id="utah-jazz-tempo-curve"></canvas>
+                <p>Five-session tempo tracker capturing how the Jazz blend conditioning runs with situational work.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Pairing synergy map</h3>
+                <canvas id="utah-jazz-synergy-matrix"></canvas>
+                <p>Tempo and coverage sync indices for Utah combinations pushing for early minutes.</p>
+              </figure>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <article class="preview-copy">
+        <header>
+          <span class="chip">Preseason preview</span>
+          <time datetime="2024-10-04T21:00:00+00:00">Friday, October 04, 2024 — 21:00 UTC</time>
+          <h1>International Showcase at Utah Jazz</h1>
+          <p><strong>Delta Center · Salt Lake City, UT</strong> · Preseason opener</p>
+          <p class="lead">Utah’s opening night doubles as a measuring stick for a global select squad that has been barnstorming North America in search of NBA reps.</p>
+        </header>
+
+        <section class="story">
+          <h2>Why it matters in October</h2>
+          <p>The traveling Showcase group has been emphasizing tempo the entire tour; Tremont Waters is steering two-guard looks that free Luke Travers to attack mismatches on the wing. Staffers want to see whether Bruno Caboclo and Khalifa Diop can anchor drop coverage without fouling once NBA officiating tightens.</p>
+          <p>For the Jazz, Keyonte George and rookie Cody Williams headline the developmental checklist. Utah is testing jumbo switch groups with Taylor Hendricks and Walker Kessler, while Brice Sensabaugh’s shooting gravity is being mapped against second-unit ball-handling duties.</p>
+          <p>Utah’s analytics group will also scrutinize transition organization—last season’s Achilles’ heel. Expect early minutes for Collin Sexton to set the pace before giving way to long looks at the Jazz’s wing depth.</p>
+          <ul>
+            <li>Can the Showcase roster keep turnover counts down against Utah’s length when the Jazz toggle between switch and drop?</li>
+            <li>How comfortable does Cody Williams look toggling between spot-up and on-ball reps within Utah’s second unit?</li>
+            <li>Does Walker Kessler’s rim deterrence hold up without unnecessary contests that lead to foul trouble?</li>
+          </ul>
+        </section>
+      </article>
+
+      <footer>
+        <span>Data: team camp reports and internal tracking as of September 28.</span>
+        <a href="../index.html">← Back to preseason hub</a>
+      </footer>
+    </main>
+  </body>
+</html>

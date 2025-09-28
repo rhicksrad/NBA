@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Preseason Preview: Portland Trail Blazers at Los Angeles Clippers</title>
+    <link rel="stylesheet" href="../styles/hub.css" />
+    <style>
+      :root {
+        --preview-tint: rgba(29, 66, 138, 0.12);
+        --visual-tint: rgba(29, 66, 138, 0.08);
+      }
+
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        padding: clamp(1.5rem, 4vw, 3rem);
+        background: color-mix(in srgb, var(--surface) 90%, rgba(29, 66, 138, 0.04) 10%);
+      }
+
+      .preview-shell {
+        width: min(1180px, 100%);
+        display: grid;
+        gap: clamp(1.5rem, 3vw, 2.5rem);
+        grid-template-areas: "visuals" "preview" "footer";
+        background: color-mix(in srgb, var(--surface) 75%, var(--preview-tint) 25%);
+        border-radius: var(--radius-xl);
+        border: 1px solid color-mix(in srgb, var(--royal) 15%, transparent);
+        box-shadow: var(--shadow-soft);
+        padding: clamp(1.75rem, 3vw, 2.5rem);
+      }
+
+      .visuals {
+        grid-area: visuals;
+        display: grid;
+        gap: clamp(1rem, 3vw, 1.75rem);
+        background: color-mix(in srgb, var(--surface-alt) 72%, var(--visual-tint) 28%);
+        border-radius: var(--radius-lg);
+        border: 1px solid color-mix(in srgb, var(--border) 60%, transparent);
+        padding: clamp(1.5rem, 4vw, 2.75rem);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
+      }
+
+      .visuals > h2 {
+        margin: 0;
+        font-size: clamp(1.4rem, 4vw, 1.9rem);
+        color: var(--navy);
+      }
+
+      .team-visuals {
+        display: grid;
+        gap: clamp(1.4rem, 3vw, 2rem);
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      }
+
+      .team-panel {
+        display: grid;
+        gap: clamp(1rem, 2.5vw, 1.5rem);
+        padding: clamp(1.25rem, 3vw, 1.75rem);
+        border-radius: var(--radius-lg);
+        background: color-mix(in srgb, var(--surface-alt) 78%, var(--preview-tint) 22%);
+        border: 1px solid color-mix(in srgb, var(--border) 58%, transparent);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.32);
+      }
+
+      .team-panel header {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+      }
+
+      .team-panel h3 {
+        margin: 0;
+        font-size: clamp(1.15rem, 3vw, 1.45rem);
+        color: var(--navy);
+      }
+
+      .team-panel .meta {
+        font-size: 0.78rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        font-weight: 600;
+        color: rgba(29, 66, 138, 0.74);
+      }
+
+      .chart-grid {
+        display: grid;
+        gap: clamp(1.1rem, 3vw, 1.8rem);
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      }
+
+      .chart-card {
+        background: color-mix(in srgb, var(--surface-alt) 82%, var(--preview-tint) 18%);
+        border: 1px solid color-mix(in srgb, var(--border) 65%, transparent);
+        border-radius: var(--radius-lg);
+        padding: clamp(1.25rem, 3vw, 1.75rem);
+        display: grid;
+        gap: 0.75rem;
+        box-shadow: var(--shadow-subtle);
+      }
+
+      .chart-card h3 {
+        margin: 0;
+        font-size: clamp(1.05rem, 2vw, 1.2rem);
+        color: var(--navy);
+      }
+
+      .chart-card p {
+        margin: 0;
+        font-size: 0.85rem;
+        color: var(--text-subtle);
+      }
+
+      .chart-card__canvas {
+        position: relative;
+        border-radius: var(--radius-md);
+        background: color-mix(in srgb, var(--surface-alt) 88%, var(--preview-tint) 12%);
+        border: 1px solid color-mix(in srgb, var(--border) 55%, transparent);
+        min-height: clamp(220px, 30vw, 260px);
+        display: flex;
+        align-items: stretch;
+        overflow: hidden;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.48);
+      }
+
+      .chart-card__canvas canvas {
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+
+      .preview-copy {
+        grid-area: preview;
+        display: grid;
+        gap: clamp(1rem, 2.5vw, 1.5rem);
+      }
+
+      .preview-copy header {
+        display: grid;
+        gap: 0.4rem;
+      }
+
+      .preview-copy h1 {
+        margin: 0;
+        font-size: clamp(1.8rem, 3.5vw, 2.3rem);
+        color: var(--navy);
+      }
+
+      .preview-copy time {
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: rgba(29, 66, 138, 0.78);
+        font-size: 0.78rem;
+      }
+
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.32rem 0.85rem;
+        border-radius: 999px;
+        background: rgba(29, 66, 138, 0.16);
+        color: #1d428a;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.68rem;
+        letter-spacing: 0.08em;
+        width: fit-content;
+      }
+
+      .story {
+        display: grid;
+        gap: 0.65rem;
+      }
+
+      .story h2 {
+        margin: 0;
+        font-size: 1.15rem;
+        color: var(--navy);
+      }
+
+      .story ul {
+        margin: 0;
+        padding-left: 1.15rem;
+        color: var(--text-subtle);
+      }
+
+      footer {
+        grid-area: footer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+
+      footer a {
+        text-decoration: none;
+        font-weight: 600;
+      }
+    </style>
+    <script src="../vendor/chart.umd.js" defer></script>
+    <script src="../scripts/preseason-dashboards.js" defer></script>
+    <script src="../scripts/preseason-preview.js" defer></script>
+  </head>
+  <body data-preview-id="preseason-12400035">
+    <main class="preview-shell">
+      <section class="visuals">
+        <h2>Preseason scouting dashboard</h2>
+        <div class="team-visuals">
+          <div class="team-panel" data-team="portland-trail-blazers">
+            <header>
+              <h3>Portland Trail Blazers data lab</h3>
+              <span class="meta">Guard runway</span>
+            </header>
+            <div class="chart-grid">
+              <figure class="chart-card">
+                <h3>Rotation bandwidth</h3>
+                <canvas id="portland-trail-blazers-rotation"></canvas>
+                <p>Minute curve Chauncey Billups plans for Scoot Henderson and Anfernee Simons as they share initiator duties.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Skill scaffolding radar</h3>
+                <canvas id="portland-trail-blazers-skill-spider"></canvas>
+                <p>Readiness versus developmental goals for Portland’s young core as Shaedon Sharpe and Jabari Walker expand roles.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Shot diet vs. league</h3>
+                <canvas id="portland-trail-blazers-shot-zones"></canvas>
+                <p>Where the Blazers expect to create offense as Scoot drives paint touches and Duop Reath spaces to three.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Practice tempo log</h3>
+                <canvas id="portland-trail-blazers-tempo-curve"></canvas>
+                <p>Pace tracker showing how Portland balances developmental reps with half-court execution.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Pairing synergy map</h3>
+                <canvas id="portland-trail-blazers-synergy-matrix"></canvas>
+                <p>Tempo and coverage sync indicators for Blazer combinations focused on playmaking growth.</p>
+              </figure>
+            </div>
+          </div>
+          <div class="team-panel" data-team="los-angeles-clippers">
+            <header>
+              <h3>Los Angeles Clippers data lab</h3>
+              <span class="meta">Star integration</span>
+            </header>
+            <div class="chart-grid">
+              <figure class="chart-card">
+                <h3>Rotation bandwidth</h3>
+                <canvas id="los-angeles-clippers-rotation"></canvas>
+                <p>Minute targets Tyronn Lue set for James Harden, Kawhi Leonard, and Paul George as they test new spacing combinations.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Skill scaffolding radar</h3>
+                <canvas id="los-angeles-clippers-skill-spider"></canvas>
+                <p>Readiness scores for Los Angeles’ top trio as they chase better ball movement and tempo resilience.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Shot diet vs. league</h3>
+                <canvas id="los-angeles-clippers-shot-zones"></canvas>
+                <p>How the Clippers expect to weaponize Harden-George pick-and-rolls and Leonard mid-post touches.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Practice tempo log</h3>
+                <canvas id="los-angeles-clippers-tempo-curve"></canvas>
+                <p>Tempo log from Seattle practices tracking how the Clippers toggle between half-court sets and transition pushes.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Pairing synergy map</h3>
+                <canvas id="los-angeles-clippers-synergy-matrix"></canvas>
+                <p>Pace and coverage sync readings for Clippers lineups featuring Harden orchestrating with big wings.</p>
+              </figure>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <article class="preview-copy">
+        <header>
+          <span class="chip">Preseason preview</span>
+          <time datetime="2024-10-11T22:30:00+00:00">Friday, October 11, 2024 — 22:30 UTC</time>
+          <h1>Portland Trail Blazers at Los Angeles Clippers</h1>
+          <p><strong>Climate Pledge Arena · Seattle, WA</strong> · Preseason opener</p>
+          <p class="lead">Seattle’s preseason stage features Portland’s youth movement against a Clippers core intent on refining star synergy.</p>
+        </header>
+
+        <section class="story">
+          <h2>Why it matters in October</h2>
+          <p>Portland wants Scoot Henderson to run the show with Anfernee Simons spotting up more often. Shaedon Sharpe and Jabari Walker will test lineup versatility while Duop Reath stretches opposing bigs beyond the arc.</p>
+          <p>The Clippers expect to play their stars in short bursts, prioritizing new Harden-Leonard actions and Paul George’s off-ball movement. Kobe Brown and Ivica Zubac provide stability while Los Angeles measures conditioning.</p>
+          <p>Both sides are eyeing defensive habits. Portland needs better containment at the point of attack, while the Clippers are monitoring pick-and-roll coverage after adding more switchable forwards.</p>
+          <ul>
+            <li>Can Scoot Henderson control pace without being baited into turnovers by Los Angeles’ veterans?</li>
+            <li>How sharp do Harden and Leonard look running two-man actions after limited offseason reps together?</li>
+            <li>Does Portland’s young frontcourt hold up on the glass against Zubac and the Clippers’ size?</li>
+          </ul>
+        </section>
+      </article>
+
+      <footer>
+        <span>Data: team camp reports and internal tracking as of October 4.</span>
+        <a href="../index.html">← Back to preseason hub</a>
+      </footer>
+    </main>
+  </body>
+</html>

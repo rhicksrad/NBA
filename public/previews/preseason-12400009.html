@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Preseason Preview: Phoenix Suns at Los Angeles Lakers</title>
+    <link rel="stylesheet" href="../styles/hub.css" />
+    <style>
+      :root {
+        --preview-tint: rgba(229, 96, 32, 0.12);
+        --visual-tint: rgba(229, 96, 32, 0.08);
+      }
+
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        padding: clamp(1.5rem, 4vw, 3rem);
+        background: color-mix(in srgb, var(--surface) 90%, rgba(229, 96, 32, 0.04) 10%);
+      }
+
+      .preview-shell {
+        width: min(1180px, 100%);
+        display: grid;
+        gap: clamp(1.5rem, 3vw, 2.5rem);
+        grid-template-areas: "visuals" "preview" "footer";
+        background: color-mix(in srgb, var(--surface) 75%, var(--preview-tint) 25%);
+        border-radius: var(--radius-xl);
+        border: 1px solid color-mix(in srgb, var(--royal) 15%, transparent);
+        box-shadow: var(--shadow-soft);
+        padding: clamp(1.75rem, 3vw, 2.5rem);
+      }
+
+      .visuals {
+        grid-area: visuals;
+        display: grid;
+        gap: clamp(1rem, 3vw, 1.75rem);
+        background: color-mix(in srgb, var(--surface-alt) 72%, var(--visual-tint) 28%);
+        border-radius: var(--radius-lg);
+        border: 1px solid color-mix(in srgb, var(--border) 60%, transparent);
+        padding: clamp(1.5rem, 4vw, 2.75rem);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
+      }
+
+      .visuals > h2 {
+        margin: 0;
+        font-size: clamp(1.4rem, 4vw, 1.9rem);
+        color: var(--navy);
+      }
+
+      .team-visuals {
+        display: grid;
+        gap: clamp(1.4rem, 3vw, 2rem);
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      }
+
+      .team-panel {
+        display: grid;
+        gap: clamp(1rem, 2.5vw, 1.5rem);
+        padding: clamp(1.25rem, 3vw, 1.75rem);
+        border-radius: var(--radius-lg);
+        background: color-mix(in srgb, var(--surface-alt) 78%, var(--preview-tint) 22%);
+        border: 1px solid color-mix(in srgb, var(--border) 58%, transparent);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.32);
+      }
+
+      .team-panel header {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+      }
+
+      .team-panel h3 {
+        margin: 0;
+        font-size: clamp(1.15rem, 3vw, 1.45rem);
+        color: var(--navy);
+      }
+
+      .team-panel .meta {
+        font-size: 0.78rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        font-weight: 600;
+        color: rgba(229, 96, 32, 0.72);
+      }
+
+      .chart-grid {
+        display: grid;
+        gap: clamp(1.1rem, 3vw, 1.8rem);
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      }
+
+      .chart-card {
+        background: color-mix(in srgb, var(--surface-alt) 82%, var(--preview-tint) 18%);
+        border: 1px solid color-mix(in srgb, var(--border) 65%, transparent);
+        border-radius: var(--radius-lg);
+        padding: clamp(1.25rem, 3vw, 1.75rem);
+        display: grid;
+        gap: 0.75rem;
+        box-shadow: var(--shadow-subtle);
+      }
+
+      .chart-card h3 {
+        margin: 0;
+        font-size: clamp(1.05rem, 2vw, 1.2rem);
+        color: var(--navy);
+      }
+
+      .chart-card p {
+        margin: 0;
+        font-size: 0.85rem;
+        color: var(--text-subtle);
+      }
+
+      .chart-card__canvas {
+        position: relative;
+        border-radius: var(--radius-md);
+        background: color-mix(in srgb, var(--surface-alt) 88%, var(--preview-tint) 12%);
+        border: 1px solid color-mix(in srgb, var(--border) 55%, transparent);
+        min-height: clamp(220px, 30vw, 260px);
+        display: flex;
+        align-items: stretch;
+        overflow: hidden;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.48);
+      }
+
+      .chart-card__canvas canvas {
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+
+      .preview-copy {
+        grid-area: preview;
+        display: grid;
+        gap: clamp(1rem, 2.5vw, 1.5rem);
+      }
+
+      .preview-copy header {
+        display: grid;
+        gap: 0.4rem;
+      }
+
+      .preview-copy h1 {
+        margin: 0;
+        font-size: clamp(1.8rem, 3.5vw, 2.3rem);
+        color: var(--navy);
+      }
+
+      .preview-copy time {
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: rgba(229, 96, 32, 0.78);
+        font-size: 0.78rem;
+      }
+
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.32rem 0.85rem;
+        border-radius: 999px;
+        background: rgba(229, 96, 32, 0.14);
+        color: #e56020;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.68rem;
+        letter-spacing: 0.08em;
+        width: fit-content;
+      }
+
+      .story {
+        display: grid;
+        gap: 0.65rem;
+      }
+
+      .story h2 {
+        margin: 0;
+        font-size: 1.15rem;
+        color: var(--navy);
+      }
+
+      .story ul {
+        margin: 0;
+        padding-left: 1.15rem;
+        color: var(--text-subtle);
+      }
+
+      footer {
+        grid-area: footer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+
+      footer a {
+        text-decoration: none;
+        font-weight: 600;
+      }
+    </style>
+    <script src="../vendor/chart.umd.js" defer></script>
+    <script src="../scripts/preseason-dashboards.js" defer></script>
+    <script src="../scripts/preseason-preview.js" defer></script>
+  </head>
+  <body data-preview-id="preseason-12400009">
+    <main class="preview-shell">
+      <section class="visuals">
+        <h2>Preseason scouting dashboard</h2>
+        <div class="team-visuals">
+          <div class="team-panel" data-team="phoenix-suns">
+            <header>
+              <h3>Phoenix Suns data lab</h3>
+              <span class="meta">Bench recalibration</span>
+            </header>
+            <div class="chart-grid">
+              <figure class="chart-card">
+                <h3>Rotation bandwidth</h3>
+                <canvas id="phoenix-suns-rotation"></canvas>
+                <p>Minute band the Suns want to hit for their revamped bench wings while Booker and Durant ramp up separately.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Skill scaffolding radar</h3>
+                <canvas id="phoenix-suns-skill-spider"></canvas>
+                <p>Blueprint versus readiness for Phoenix role players asked to toggle between spot-up spacing and secondary creation.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Shot diet vs. league</h3>
+                <canvas id="phoenix-suns-shot-zones"></canvas>
+                <p>Expected shot mix for Phoenix in Palm Desert as the staff leans into more corner three volume.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Practice tempo log</h3>
+                <canvas id="phoenix-suns-tempo-curve"></canvas>
+                <p>Tracking tempo sessions and special-situation work as the Suns emphasize early-clock threes.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Pairing synergy map</h3>
+                <canvas id="phoenix-suns-synergy-matrix"></canvas>
+                <p>Tempo/coverage sync readings for Suns reserve combinations searching for trust alongside the stars.</p>
+              </figure>
+            </div>
+          </div>
+          <div class="team-panel" data-team="los-angeles-lakers">
+            <header>
+              <h3>Los Angeles Lakers data lab</h3>
+              <span class="meta">Rhythm calibration</span>
+            </header>
+            <div class="chart-grid">
+              <figure class="chart-card">
+                <h3>Rotation bandwidth</h3>
+                <canvas id="los-angeles-lakers-rotation"></canvas>
+                <p>Minute distribution JJ Redick wants for his guard-heavy bench as stars take light shifts in the desert.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Skill scaffolding radar</h3>
+                <canvas id="los-angeles-lakers-skill-spider"></canvas>
+                <p>Comparison between the Lakers’ developmental roadmap and the current readiness of their new-look reserve backcourt.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Shot diet vs. league</h3>
+                <canvas id="los-angeles-lakers-shot-zones"></canvas>
+                <p>How Los Angeles plans to create shots with Dalton Knecht and Spencer Dinwiddie orchestrating second units.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Practice tempo log</h3>
+                <canvas id="los-angeles-lakers-tempo-curve"></canvas>
+                <p>Tempo tracking for Redick’s motion offense installs during a condensed Palm Desert schedule.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Pairing synergy map</h3>
+                <canvas id="los-angeles-lakers-synergy-matrix"></canvas>
+                <p>Pace and coverage sync indices for Los Angeles pairings expected to flank James and Davis later in the week.</p>
+              </figure>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <article class="preview-copy">
+        <header>
+          <span class="chip">Preseason preview</span>
+          <time datetime="2024-10-06T21:30:00+00:00">Sunday, October 06, 2024 — 21:30 UTC</time>
+          <h1>Phoenix Suns at Los Angeles Lakers</h1>
+          <p><strong>Acrisure Arena · Palm Desert, CA</strong> · Preseason opener</p>
+          <p class="lead">The desert showcase delivers a first look at Frank Vogel’s second-unit tweaks against JJ Redick’s motion-heavy Lakers blueprint.</p>
+        </header>
+
+        <section class="story">
+          <h2>Why it matters in October</h2>
+          <p>Phoenix is treating this swing as a chemistry lab for the role players expected to spell Devin Booker and Kevin Durant. Grayson Allen, Royce O’Neale, and Bol Bol will play extended minutes to sharpen the Suns’ spacing and backline length—two priorities after last year’s postseason exit.</p>
+          <p>Los Angeles wants to stress-test Dalton Knecht and Bronny James in real NBA pace. Spencer Dinwiddie will orchestrate early lineups while LeBron James and Anthony Davis take short shifts aimed at rhythm, not volume. Expect a heavy diet of staggered actions designed to create automatic reads for Knecht on the move.</p>
+          <p>Both staffs have circled transition defense as the night’s deciding variable. The Lakers struggled to corral live-ball turnovers last season, and the Suns believe Saben Lee’s pace can tilt the court if Phoenix wins the turnover margin.</p>
+          <ul>
+            <li>Do the Suns’ reserve lineups generate corner three volume without sacrificing defensive rebounding?</li>
+            <li>How comfortable is Dalton Knecht defending Phoenix’s switch-hunting wings in space?</li>
+            <li>Can Bronny James steady the second unit’s tempo while sharing the floor with Dinwiddie?</li>
+          </ul>
+        </section>
+      </article>
+
+      <footer>
+        <span>Data: team camp reports and internal tracking as of September 29.</span>
+        <a href="../index.html">← Back to preseason hub</a>
+      </footer>
+    </main>
+  </body>
+</html>
