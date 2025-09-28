@@ -30,10 +30,41 @@
           <div class="hero__intro">
             <span class="eyebrow">GOAT Index Debut</span>
             <h1>The all-time race through the General Overall Attribute Total.</h1>
-            <p class="hero__lede">
-              GOAT blends peak impact, stage dominance, longevity, versatility, and cultural capital into a single rating so we
-              can map the pantheon and spotlight who is charging up the mountain next.
-            </p>
+            <div class="hero__metrics" role="list">
+              <article class="hero-metric" role="listitem">
+                <header class="hero-metric__header">
+                  <span class="hero-metric__label">Pantheon saturation</span>
+                  <span class="hero-metric__value" data-hero-saturation-value>—</span>
+                </header>
+                <div class="viz-card viz-card--compact" data-chart-wrapper>
+                  <div class="viz-canvas">
+                    <canvas data-chart="goat-saturation-gauge" data-chart-ratio="0.7" aria-label="Average GOAT score gauge"></canvas>
+                  </div>
+                </div>
+              </article>
+              <article class="hero-metric" role="listitem">
+                <header class="hero-metric__header">
+                  <span class="hero-metric__label">Active dynasty share</span>
+                  <span class="hero-metric__value" data-hero-active-value>—</span>
+                </header>
+                <div class="viz-card viz-card--compact" data-chart-wrapper>
+                  <div class="viz-canvas">
+                    <canvas data-chart="goat-active-gauge" data-chart-ratio="0.7" aria-label="Active players gauge"></canvas>
+                  </div>
+                </div>
+              </article>
+              <article class="hero-metric" role="listitem">
+                <header class="hero-metric__header">
+                  <span class="hero-metric__label">Orbit jumpers</span>
+                  <span class="hero-metric__value" data-hero-orbit-value>—</span>
+                </header>
+                <div class="viz-card viz-card--compact" data-chart-wrapper>
+                  <div class="viz-canvas">
+                    <canvas data-chart="goat-multi-franchise-gauge" data-chart-ratio="0.7" aria-label="Multi-franchise gauge"></canvas>
+                  </div>
+                </div>
+              </article>
+            </div>
             <div class="cta-group" role="group" aria-label="Primary actions">
               <a class="cta cta--primary" href="#goat-board">See the leaderboard</a>
               <a class="cta cta--ghost" href="#goat-method">Understand the formula</a>
@@ -56,28 +87,31 @@
         <section id="goat-method" class="goat-methodology">
           <div class="section-header">
             <h2>How the General Overall Attribute Total is built</h2>
-            <p class="lead">
-              Inspired by the lessons of PER, EPM, and championship equity models, the GOAT Index weights five dimensions that
-              explain how players bend winning across eras.
-            </p>
           </div>
-          <div class="goat-methodology__grid" data-weight-list>
-            <article class="goat-weight-card">
-              <header>
-                <span class="goat-weight-label">Loading components…</span>
-              </header>
-              <p class="goat-weight-copy">The weighting profile is on its way.</p>
-            </article>
+          <div class="goat-methodology__layout">
+            <figure class="viz-card" data-chart-wrapper>
+              <header class="viz-card__title">Weight blueprint</header>
+              <div class="viz-canvas">
+                <canvas data-chart="goat-weight-donut" aria-label="GOAT component weighting"></canvas>
+              </div>
+              <figcaption class="viz-card__caption">Component weight, expressed in percentage of the total GOAT equation.</figcaption>
+            </figure>
+            <div class="goat-methodology__grid" data-weight-list>
+              <article class="goat-weight-card">
+                <header>
+                  <span class="goat-weight-label">Loading components…</span>
+                  <span class="goat-weight-chip">—</span>
+                </header>
+                <div class="goat-weight-meter" aria-hidden="true"><span style="width: 0%"></span></div>
+                <p class="goat-weight-copy">The weighting profile is on its way.</p>
+              </article>
+            </div>
           </div>
         </section>
 
         <section id="goat-board" class="goat-leaderboard">
           <div class="section-header">
             <h2>Pantheon leaderboard</h2>
-            <p class="lead">
-              Rankings refresh monthly using rolling play-by-play impact data, postseason equity share, and cultural resonance
-              signals.
-            </p>
           </div>
           <div class="goat-leaderboard__layout">
             <div class="goat-table-wrapper">
@@ -117,30 +151,79 @@
 
         <section class="goat-visuals">
           <div class="section-header">
-            <h2>Score distribution</h2>
-            <p class="lead">A barline view shows how tightly packed the modern pantheon has become.</p>
+            <h2>Pantheon lab</h2>
           </div>
-          <figure class="viz-card viz-card--inline" data-chart-wrapper>
-            <header class="viz-card__title">Top GOAT scores</header>
-            <div class="viz-canvas">
-              <canvas data-chart="goat-top-bar" aria-describedby="goat-chart-caption"></canvas>
-            </div>
-            <figcaption id="goat-chart-caption" class="viz-card__caption">
-              GOAT points aggregate weighted impact, stage, longevity, versatility, and cultural capital on a 0-100 scale.
-            </figcaption>
-          </figure>
-        </section>
-
-        <section class="goat-risers">
-          <div class="section-header">
-            <h2>Who is rising?</h2>
-            <p class="lead">Movement scores combine year-over-year GOAT deltas with projected sustainability markers.</p>
-          </div>
-          <div class="goat-risers__grid" data-goat-risers>
-            <article class="goat-riser-card">
-              <h3>Tracking signals…</h3>
-              <p>The next generation will surface here when the data loads.</p>
-            </article>
+          <div class="goat-visuals__grid">
+            <figure class="viz-card viz-card--inline" data-chart-wrapper>
+              <header class="viz-card__title">Top GOAT scores</header>
+              <div class="viz-canvas">
+                <canvas data-chart="goat-top-bar" aria-label="Top GOAT scores"></canvas>
+              </div>
+              <figcaption class="viz-card__caption">Leading scores across the active pantheon cohort.</figcaption>
+            </figure>
+            <figure class="viz-card viz-card--inline" data-chart-wrapper>
+              <header class="viz-card__title">Component fingerprint</header>
+              <div class="viz-canvas">
+                <canvas data-chart="goat-component-radar" aria-label="Component radar comparison"></canvas>
+              </div>
+              <figcaption class="viz-card__caption">Radar overlays for the top trio across the five GOAT pillars.</figcaption>
+            </figure>
+            <figure class="viz-card viz-card--inline" data-chart-wrapper>
+              <header class="viz-card__title">Impact vs longevity</header>
+              <div class="viz-canvas">
+                <canvas data-chart="goat-impact-longevity" aria-label="Impact versus longevity scatter"></canvas>
+              </div>
+              <figcaption class="viz-card__caption">Scatter comparing prime impact scores against longevity credits.</figcaption>
+            </figure>
+            <figure class="viz-card viz-card--inline" data-chart-wrapper>
+              <header class="viz-card__title">Stage vs culture resonance</header>
+              <div class="viz-canvas">
+                <canvas data-chart="goat-stage-culture" aria-label="Stage dominance and cultural capital bubble chart"></canvas>
+              </div>
+              <figcaption class="viz-card__caption">Bubble size tracks GOAT value while plotting stage dominance and cultural reach.</figcaption>
+            </figure>
+            <figure class="viz-card viz-card--inline" data-chart-wrapper>
+              <header class="viz-card__title">Twelve-month motion</header>
+              <div class="viz-canvas">
+                <canvas data-chart="goat-delta-bars" aria-label="Twelve month GOAT delta chart"></canvas>
+              </div>
+              <figcaption class="viz-card__caption">Horizontal bars highlight players with the strongest year-over-year swings.</figcaption>
+            </figure>
+            <figure class="viz-card viz-card--inline" data-chart-wrapper>
+              <header class="viz-card__title">Pantheon decades</header>
+              <div class="viz-canvas">
+                <canvas data-chart="goat-decade-curve" aria-label="Pantheon presence by debut decade"></canvas>
+              </div>
+              <figcaption class="viz-card__caption">Line slope reveals when legends first entered the league.</figcaption>
+            </figure>
+            <figure class="viz-card viz-card--inline" data-chart-wrapper>
+              <header class="viz-card__title">Franchise constellations</header>
+              <div class="viz-canvas">
+                <canvas data-chart="goat-franchise-polar" aria-label="Franchise concentration polar chart"></canvas>
+              </div>
+              <figcaption class="viz-card__caption">Polar area map of teams with multiple GOAT contenders.</figcaption>
+            </figure>
+            <figure class="viz-card viz-card--inline" data-chart-wrapper>
+              <header class="viz-card__title">Versatility ribbons</header>
+              <div class="viz-canvas">
+                <canvas data-chart="goat-versatility-stream" aria-label="Versatility distribution chart"></canvas>
+              </div>
+              <figcaption class="viz-card__caption">Smoothed density of versatility scores across the index.</figcaption>
+            </figure>
+            <figure class="viz-card viz-card--inline" data-chart-wrapper>
+              <header class="viz-card__title">Tier signal wheel</header>
+              <div class="viz-canvas">
+                <canvas data-chart="goat-tier-wheel" aria-label="Tier share wheel"></canvas>
+              </div>
+              <figcaption class="viz-card__caption">Polar segmentation by current tier labels.</figcaption>
+            </figure>
+            <figure class="viz-card viz-card--inline" data-chart-wrapper>
+              <header class="viz-card__title">Era delta scatter</header>
+              <div class="viz-canvas">
+                <canvas data-chart="goat-era-delta" aria-label="Era delta scatter"></canvas>
+              </div>
+              <figcaption class="viz-card__caption">Positioning of GOAT deltas relative to debut eras.</figcaption>
+            </figure>
           </div>
         </section>
       </main>

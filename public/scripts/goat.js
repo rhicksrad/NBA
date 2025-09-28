@@ -5,7 +5,49 @@ const palette = {
   sky: 'rgba(31, 123, 255, 0.75)',
   gold: '#f4b53f',
   navy: '#0b2545',
+  coral: '#ef3d5b',
+  teal: '#12b886',
+  lilac: '#8f6efc',
 };
+
+const componentPalette = ['#1156d6', '#1f7bff', '#12b886', '#ef3d5b', '#f4b53f'];
+
+const heroStats = {
+  averageGoat: 0,
+  activeShare: 0,
+  multiFranchiseShare: 0,
+  multiFranchiseCount: 0,
+};
+
+const gaugeLabelPlugin = {
+  id: 'gaugeLabel',
+  beforeDraw(chart, _args, opts) {
+    if (!opts || !opts.valueText) {
+      return;
+    }
+    const meta = chart.getDatasetMeta(0);
+    if (!meta?.data?.length) {
+      return;
+    }
+    const { x, y } = meta.data[0].tooltipPosition();
+    const ctx = chart.ctx;
+    ctx.save();
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillStyle = opts.valueColor ?? palette.navy;
+    ctx.font = `700 ${opts.valueSize ?? 16}px "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif`;
+    ctx.fillText(opts.valueText, x, y - 6);
+    if (opts.labelText) {
+      ctx.font = `600 ${opts.labelSize ?? 11}px "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif`;
+      ctx.fillStyle = opts.labelColor ?? 'rgba(11, 37, 69, 0.68)';
+      ctx.fillText(opts.labelText, x, y + 12);
+    }
+    ctx.restore();
+  },
+};
+
+const GAUGE_ROTATION = (-135 / 180) * Math.PI;
+const GAUGE_CIRCUMFERENCE = (270 / 180) * Math.PI;
 
 async function loadGoatData() {
   const response = await fetch('data/goat_index.json');
@@ -45,11 +87,17 @@ function buildWeightCards(weights) {
 
     header.append(label, chip);
 
+    const meter = document.createElement('div');
+    meter.className = 'goat-weight-meter';
+    const meterFill = document.createElement('span');
+    meterFill.style.width = `${Math.min(100, Math.max(0, weight.weight * 100))}%`;
+    meter.appendChild(meterFill);
+
     const description = document.createElement('p');
     description.className = 'goat-weight-copy';
     description.textContent = weight.description;
 
-    card.append(header, description);
+    card.append(header, meter, description);
     container.appendChild(card);
   });
 }
@@ -194,7 +242,10 @@ function selectPlayer(player, weights = []) {
     resume.textContent = player.resume ?? '';
   }
   if (footer) {
-    footer.textContent = `Current tier: ${player.tier ?? '—'} · GOAT ${helpers.formatNumber(player.goatScore, 1)} (${player.status ?? 'Unknown'})`;
+    footer.textContent = `Current tier: ${player.tier ?? '—'} · GOAT ${helpers.formatNumber(
+      player.goatScore,
+      1,
+    )} (${player.status ?? 'Unknown'})`;
   }
 
   renderComponents(player, weights);
@@ -224,30 +275,41 @@ function wireInteractions(players, weights) {
   });
 }
 
-function buildRisers(risers) {
-  const container = document.querySelector('[data-goat-risers]');
-  if (!container) return;
+function updateHeroMetrics(players) {
+  if (!players.length) {
+    return;
+  }
+  const totalScore = players.reduce((sum, player) => sum + (Number.isFinite(player.goatScore) ? player.goatScore : 0), 0);
+  const average = totalScore / players.length;
+  const activeCount = players.filter((player) => (player.status ?? '').toLowerCase() === 'active').length;
+  const multiFranchise = players.filter((player) => Array.isArray(player.franchises) && player.franchises.length >= 3);
 
-  container.innerHTML = '';
+  heroStats.averageGoat = average;
+  heroStats.activeShare = players.length ? activeCount / players.length : 0;
+  heroStats.multiFranchiseShare = players.length ? multiFranchise.length / players.length : 0;
+  heroStats.multiFranchiseCount = multiFranchise.length;
 
-  risers.forEach((riser) => {
-    const card = document.createElement('article');
-    card.className = 'goat-riser-card';
+  const saturationValue = document.querySelector('[data-hero-saturation-value]');
+  if (saturationValue) {
+    saturationValue.textContent = helpers.formatNumber(heroStats.averageGoat, 1);
+  }
+  const activeValue = document.querySelector('[data-hero-active-value]');
+  if (activeValue) {
+    activeValue.textContent = `${helpers.formatNumber(heroStats.activeShare * 100, 0)}%`;
+  }
+  const orbitValue = document.querySelector('[data-hero-orbit-value]');
+  if (orbitValue) {
+    orbitValue.textContent = `${helpers.formatNumber(heroStats.multiFranchiseShare * 100, 0)}%`;
+  }
+}
 
-    const title = document.createElement('h3');
-    title.textContent = riser.name;
-
-    const subtitle = document.createElement('p');
-    subtitle.className = 'goat-riser-meta';
-    const rankPart = typeof riser.currentRank === 'number' ? `Rank #${riser.currentRank}` : 'Not yet ranked';
-    subtitle.textContent = `${rankPart} · Δ ${formatDelta(riser.delta)} (${riser.trajectory ?? '—'})`;
-
-    const signal = document.createElement('p');
-    signal.textContent = riser.signal;
-
-    card.append(title, subtitle, signal);
-    container.appendChild(card);
-  });
+function getStartYear(player) {
+  const match = /^\s*(\d{4})/.exec(player.careerSpan ?? '');
+  if (!match) {
+    return null;
+  }
+  const year = Number.parseInt(match[1], 10);
+  return Number.isFinite(year) ? year : null;
 }
 
 async function init() {
@@ -255,7 +317,6 @@ async function init() {
     const data = await loadGoatData();
     const weights = Array.isArray(data?.weights) ? data.weights : [];
     const players = Array.isArray(data?.players) ? data.players : [];
-    const risers = Array.isArray(data?.rising) ? data.rising : [];
 
     if (weights.length) {
       buildWeightCards(weights);
@@ -263,12 +324,189 @@ async function init() {
     if (players.length) {
       buildLeaderboard(players, weights);
       wireInteractions(players, weights);
-    }
-    if (risers.length) {
-      buildRisers(risers);
+      updateHeroMetrics(players);
     }
 
-    registerCharts([
+    const gaugeDefinitions = [
+      {
+        element: document.querySelector('[data-chart="goat-saturation-gauge"]'),
+        source: 'data/goat_index.json',
+        async createConfig(source) {
+          const playersSource = Array.isArray(source?.players) ? source.players : [];
+          if (!playersSource.length) return null;
+          const average = playersSource.reduce(
+            (sum, player) => sum + (Number.isFinite(player.goatScore) ? player.goatScore : 0),
+            0,
+          ) / playersSource.length;
+          const safeAverage = Math.max(0, Math.min(100, average));
+          return {
+            type: 'doughnut',
+            data: {
+              labels: ['Average GOAT', 'Headroom'],
+              datasets: [
+                {
+                  data: [safeAverage, Math.max(0, 100 - safeAverage)],
+                  backgroundColor: [palette.royal, 'rgba(17, 86, 214, 0.12)'],
+                  borderWidth: 0,
+                  hoverOffset: 0,
+                },
+              ],
+            },
+            options: {
+              cutout: '68%',
+              rotation: GAUGE_ROTATION,
+              circumference: GAUGE_CIRCUMFERENCE,
+              plugins: {
+                legend: { display: false },
+                tooltip: {
+                  callbacks: {
+                    label(context) {
+                      return `${context.label}: ${helpers.formatNumber(context.parsed, 1)} GOAT`;
+                    },
+                  },
+                },
+                gaugeLabel: {
+                  valueText: helpers.formatNumber(safeAverage, 1),
+                  labelText: 'Avg GOAT',
+                },
+              },
+            },
+            plugins: [gaugeLabelPlugin],
+          };
+        },
+      },
+      {
+        element: document.querySelector('[data-chart="goat-active-gauge"]'),
+        source: 'data/goat_index.json',
+        async createConfig(source) {
+          const playersSource = Array.isArray(source?.players) ? source.players : [];
+          if (!playersSource.length) return null;
+          const activeCount = playersSource.filter(
+            (player) => (player.status ?? '').toLowerCase() === 'active',
+          ).length;
+          const share = playersSource.length ? activeCount / playersSource.length : 0;
+          const percent = Math.max(0, Math.min(100, share * 100));
+          return {
+            type: 'doughnut',
+            data: {
+              labels: ['Active pantheon', 'Legends'],
+              datasets: [
+                {
+                  data: [percent, Math.max(0, 100 - percent)],
+                  backgroundColor: ['rgba(18, 184, 134, 0.9)', 'rgba(18, 184, 134, 0.12)'],
+                  borderWidth: 0,
+                  hoverOffset: 0,
+                },
+              ],
+            },
+            options: {
+              cutout: '68%',
+              rotation: GAUGE_ROTATION,
+              circumference: GAUGE_CIRCUMFERENCE,
+              plugins: {
+                legend: { display: false },
+                tooltip: {
+                  callbacks: {
+                    label(context) {
+                      return `${context.label}: ${helpers.formatNumber(context.parsed, 0)}%`;
+                    },
+                  },
+                },
+                gaugeLabel: {
+                  valueText: `${helpers.formatNumber(percent, 0)}%`,
+                  labelText: 'Active share',
+                },
+              },
+            },
+            plugins: [gaugeLabelPlugin],
+          };
+        },
+      },
+      {
+        element: document.querySelector('[data-chart="goat-multi-franchise-gauge"]'),
+        source: 'data/goat_index.json',
+        async createConfig(source) {
+          const playersSource = Array.isArray(source?.players) ? source.players : [];
+          if (!playersSource.length) return null;
+          const orbitPlayers = playersSource.filter(
+            (player) => Array.isArray(player.franchises) && player.franchises.length >= 3,
+          );
+          const share = playersSource.length ? orbitPlayers.length / playersSource.length : 0;
+          const percent = Math.max(0, Math.min(100, share * 100));
+          return {
+            type: 'doughnut',
+            data: {
+              labels: ['3+ franchises', 'Single orbit'],
+              datasets: [
+                {
+                  data: [percent, Math.max(0, 100 - percent)],
+                  backgroundColor: ['rgba(239, 61, 91, 0.9)', 'rgba(239, 61, 91, 0.12)'],
+                  borderWidth: 0,
+                  hoverOffset: 0,
+                },
+              ],
+            },
+            options: {
+              cutout: '68%',
+              rotation: GAUGE_ROTATION,
+              circumference: GAUGE_CIRCUMFERENCE,
+              plugins: {
+                legend: { display: false },
+                tooltip: {
+                  callbacks: {
+                    label(context) {
+                      return `${context.label}: ${helpers.formatNumber(context.parsed, 0)}%`;
+                    },
+                  },
+                },
+                gaugeLabel: {
+                  valueText: helpers.formatNumber(orbitPlayers.length, 0),
+                  labelText: 'Orbit icons',
+                },
+              },
+            },
+            plugins: [gaugeLabelPlugin],
+          };
+        },
+      },
+    ];
+
+    const chartDefinitions = [
+      ...gaugeDefinitions,
+      {
+        element: document.querySelector('[data-chart="goat-weight-donut"]'),
+        source: 'data/goat_index.json',
+        async createConfig(source) {
+          const weightsSource = Array.isArray(source?.weights) ? source.weights : [];
+          if (!weightsSource.length) return null;
+          return {
+            type: 'doughnut',
+            data: {
+              labels: weightsSource.map((weight) => weight.label),
+              datasets: [
+                {
+                  data: weightsSource.map((weight) => weight.weight * 100),
+                  backgroundColor: componentPalette,
+                  borderWidth: 0,
+                },
+              ],
+            },
+            options: {
+              cutout: '55%',
+              plugins: {
+                legend: { position: 'bottom', labels: { boxWidth: 12 } },
+                tooltip: {
+                  callbacks: {
+                    label(context) {
+                      return `${context.label}: ${helpers.formatNumber(context.parsed, 0)}%`;
+                    },
+                  },
+                },
+              },
+            },
+          };
+        },
+      },
       {
         element: document.querySelector('[data-chart="goat-top-bar"]'),
         source: 'data/goat_index.json',
@@ -318,7 +556,439 @@ async function init() {
           };
         },
       },
-    ]);
+      {
+        element: document.querySelector('[data-chart="goat-component-radar"]'),
+        source: 'data/goat_index.json',
+        async createConfig(source) {
+          const weightsSource = Array.isArray(source?.weights) ? source.weights : [];
+          const playersSource = Array.isArray(source?.players)
+            ? source.players.slice().sort((a, b) => a.rank - b.rank).slice(0, 3)
+            : [];
+          if (!playersSource.length || !weightsSource.length) return null;
+          const labels = weightsSource.map((weight) => weight.label ?? weight.key);
+          const datasets = playersSource.map((player, index) => {
+            const color = [palette.royal, palette.coral, palette.teal][index % 3];
+            return {
+              label: player.name,
+              data: weightsSource.map((weight) => player.goatComponents?.[weight.key] ?? 0),
+              borderColor: color,
+              backgroundColor: `${color}29`,
+              pointBackgroundColor: color,
+              pointRadius: 3,
+            };
+          });
+          return {
+            type: 'radar',
+            data: { labels, datasets },
+            options: {
+              plugins: { legend: { position: 'top' } },
+              scales: {
+                r: {
+                  suggestedMin: 0,
+                  suggestedMax: 40,
+                  angleLines: { color: 'rgba(11, 37, 69, 0.08)' },
+                  grid: { color: 'rgba(11, 37, 69, 0.1)' },
+                  ticks: { display: false },
+                },
+              },
+            },
+          };
+        },
+      },
+      {
+        element: document.querySelector('[data-chart="goat-impact-longevity"]'),
+        source: 'data/goat_index.json',
+        async createConfig(source) {
+          const playersSource = Array.isArray(source?.players) ? source.players : [];
+          if (!playersSource.length) return null;
+          const dataset = playersSource
+            .filter((player) => player.goatComponents)
+            .map((player) => ({
+              x: player.goatComponents.impact ?? 0,
+              y: player.goatComponents.longevity ?? 0,
+              goatScore: player.goatScore ?? 0,
+              name: player.name,
+              tier: player.tier ?? 'Unknown',
+            }));
+          return {
+            type: 'scatter',
+            data: {
+              datasets: [
+                {
+                  label: 'Players',
+                  data: dataset,
+                  backgroundColor: 'rgba(17, 86, 214, 0.35)',
+                  borderColor: palette.royal,
+                  borderWidth: 1,
+                  pointRadius(context) {
+                    const value = context?.raw?.goatScore ?? 0;
+                    return Math.max(4, value / 6);
+                  },
+                },
+              ],
+            },
+            options: {
+              parsing: false,
+              plugins: {
+                legend: { display: false },
+                tooltip: {
+                  callbacks: {
+                    label(context) {
+                      const raw = context.raw;
+                      return `${raw.name}: Impact ${helpers.formatNumber(raw.x, 1)}, Longevity ${helpers.formatNumber(
+                        raw.y,
+                        1,
+                      )}`;
+                    },
+                  },
+                },
+              },
+              scales: {
+                x: {
+                  title: { display: true, text: 'Prime impact' },
+                  grid: { color: 'rgba(11, 37, 69, 0.08)' },
+                },
+                y: {
+                  title: { display: true, text: 'Longevity credit' },
+                  grid: { color: 'rgba(11, 37, 69, 0.08)' },
+                },
+              },
+            },
+          };
+        },
+      },
+      {
+        element: document.querySelector('[data-chart="goat-stage-culture"]'),
+        source: 'data/goat_index.json',
+        async createConfig(source) {
+          const playersSource = Array.isArray(source?.players) ? source.players : [];
+          if (!playersSource.length) return null;
+          const dataset = playersSource
+            .filter((player) => player.goatComponents)
+            .map((player) => ({
+              x: player.goatComponents.stage ?? 0,
+              y: player.goatComponents.culture ?? 0,
+              r: Math.max(6, (player.goatScore ?? 0) * 0.25),
+              name: player.name,
+              status: player.status ?? 'Unknown',
+            }));
+          return {
+            type: 'bubble',
+            data: {
+              datasets: [
+                {
+                  label: 'Stage vs culture',
+                  data: dataset,
+                  backgroundColor: 'rgba(239, 61, 91, 0.32)',
+                  borderColor: palette.coral,
+                  borderWidth: 1,
+                },
+              ],
+            },
+            options: {
+              parsing: false,
+              plugins: {
+                legend: { display: false },
+                tooltip: {
+                  callbacks: {
+                    label(context) {
+                      const raw = context.raw;
+                      return `${raw.name}: Stage ${helpers.formatNumber(raw.x, 1)}, Culture ${helpers.formatNumber(
+                        raw.y,
+                        1,
+                      )}`;
+                    },
+                  },
+                },
+              },
+              scales: {
+                x: {
+                  title: { display: true, text: 'Stage dominance' },
+                  grid: { color: 'rgba(11, 37, 69, 0.08)' },
+                },
+                y: {
+                  title: { display: true, text: 'Cultural capital' },
+                  grid: { color: 'rgba(11, 37, 69, 0.08)' },
+                },
+              },
+            },
+          };
+        },
+      },
+      {
+        element: document.querySelector('[data-chart="goat-delta-bars"]'),
+        source: 'data/goat_index.json',
+        async createConfig(source) {
+          const playersSource = Array.isArray(source?.players) ? source.players : [];
+          const deltaSeries = playersSource
+            .filter((player) => typeof player.delta === 'number')
+            .sort((a, b) => Math.abs(b.delta) - Math.abs(a.delta))
+            .slice(0, 10);
+          if (!deltaSeries.length) return null;
+          const colors = deltaSeries.map((player) =>
+            player.delta > 0 ? 'rgba(18, 184, 134, 0.85)' : player.delta < 0 ? 'rgba(239, 61, 91, 0.85)' : palette.gold,
+          );
+          return {
+            type: 'bar',
+            data: {
+              labels: deltaSeries.map((player) => player.name),
+              datasets: [
+                {
+                  label: 'Δ 12 mo.',
+                  data: deltaSeries.map((player) => player.delta ?? 0),
+                  backgroundColor: colors,
+                },
+              ],
+            },
+            options: {
+              indexAxis: 'y',
+              plugins: {
+                legend: { display: false },
+                tooltip: {
+                  callbacks: {
+                    label(context) {
+                      return `${context.label}: ${formatDelta(context.parsed.x)} GOAT`;
+                    },
+                  },
+                },
+              },
+              scales: {
+                x: {
+                  grid: { color: 'rgba(11, 37, 69, 0.08)' },
+                  title: { display: true, text: '12-month delta' },
+                },
+                y: {
+                  grid: { display: false },
+                },
+              },
+            },
+          };
+        },
+      },
+      {
+        element: document.querySelector('[data-chart="goat-decade-curve"]'),
+        source: 'data/goat_index.json',
+        async createConfig(source) {
+          const playersSource = Array.isArray(source?.players) ? source.players : [];
+          const decadeMap = new Map();
+          playersSource.forEach((player) => {
+            const year = getStartYear(player);
+            if (!year) return;
+            const decade = Math.floor(year / 10) * 10;
+            decadeMap.set(decade, (decadeMap.get(decade) ?? 0) + 1);
+          });
+          const entries = Array.from(decadeMap.entries()).sort((a, b) => a[0] - b[0]);
+          if (!entries.length) return null;
+          return {
+            type: 'line',
+            data: {
+              labels: entries.map(([decade]) => `${decade}s`),
+              datasets: [
+                {
+                  label: 'Debut cohort',
+                  data: entries.map(([, count]) => count),
+                  tension: 0.35,
+                  fill: 'origin',
+                  backgroundColor: 'rgba(17, 86, 214, 0.18)',
+                  borderColor: palette.royal,
+                  pointRadius: 3,
+                },
+              ],
+            },
+            options: {
+              plugins: { legend: { display: false } },
+              scales: {
+                x: { grid: { display: false } },
+                y: {
+                  beginAtZero: true,
+                  grid: { color: 'rgba(11, 37, 69, 0.08)' },
+                  ticks: { precision: 0 },
+                },
+              },
+            },
+          };
+        },
+      },
+      {
+        element: document.querySelector('[data-chart="goat-franchise-polar"]'),
+        source: 'data/goat_index.json',
+        async createConfig(source) {
+          const playersSource = Array.isArray(source?.players) ? source.players : [];
+          const franchiseCounts = new Map();
+          playersSource.forEach((player) => {
+            (player.franchises ?? []).forEach((franchise) => {
+              franchiseCounts.set(franchise, (franchiseCounts.get(franchise) ?? 0) + 1);
+            });
+          });
+          const entries = Array.from(franchiseCounts.entries()).sort((a, b) => b[1] - a[1]).slice(0, 12);
+          if (!entries.length) return null;
+          return {
+            type: 'polarArea',
+            data: {
+              labels: entries.map(([team]) => team),
+              datasets: [
+                {
+                  data: entries.map(([, count]) => count),
+                  backgroundColor: entries.map((_, index) => componentPalette[index % componentPalette.length]),
+                  borderWidth: 0,
+                },
+              ],
+            },
+            options: {
+              plugins: {
+                legend: { position: 'right' },
+                tooltip: {
+                  callbacks: {
+                    label(context) {
+                      return `${context.label}: ${context.parsed}`;
+                    },
+                  },
+                },
+              },
+            },
+          };
+        },
+      },
+      {
+        element: document.querySelector('[data-chart="goat-versatility-stream"]'),
+        source: 'data/goat_index.json',
+        async createConfig(source) {
+          const playersSource = Array.isArray(source?.players) ? source.players : [];
+          const values = playersSource
+            .map((player) => player.goatComponents?.versatility)
+            .filter((value) => typeof value === 'number' && !Number.isNaN(value))
+            .sort((a, b) => b - a);
+          if (!values.length) return null;
+          const labels = values.map((_, index) => `#${index + 1}`);
+          return {
+            type: 'line',
+            data: {
+              labels,
+              datasets: [
+                {
+                  label: 'Versatility score',
+                  data: values,
+                  fill: 'origin',
+                  tension: 0.38,
+                  backgroundColor: 'rgba(143, 110, 252, 0.18)',
+                  borderColor: palette.lilac,
+                  pointRadius: 0,
+                },
+              ],
+            },
+            options: {
+              plugins: { legend: { display: false } },
+              scales: {
+                x: { display: false },
+                y: {
+                  grid: { color: 'rgba(11, 37, 69, 0.08)' },
+                  suggestedMin: Math.max(0, Math.min(...values) - 2),
+                },
+              },
+            },
+          };
+        },
+      },
+      {
+        element: document.querySelector('[data-chart="goat-tier-wheel"]'),
+        source: 'data/goat_index.json',
+        async createConfig(source) {
+          const playersSource = Array.isArray(source?.players) ? source.players : [];
+          if (!playersSource.length) return null;
+          const tierCounts = playersSource.reduce((map, player) => {
+            const tier = player.tier ?? 'Unlisted';
+            map.set(tier, (map.get(tier) ?? 0) + 1);
+            return map;
+          }, new Map());
+          const entries = Array.from(tierCounts.entries()).sort((a, b) => b[1] - a[1]);
+          return {
+            type: 'doughnut',
+            data: {
+              labels: entries.map(([tier]) => tier),
+              datasets: [
+                {
+                  data: entries.map(([, count]) => count),
+                  backgroundColor: entries.map((_, index) => componentPalette[index % componentPalette.length]),
+                  borderWidth: 0,
+                },
+              ],
+            },
+            options: {
+              cutout: '50%',
+              plugins: {
+                legend: { position: 'bottom' },
+                tooltip: {
+                  callbacks: {
+                    label(context) {
+                      return `${context.label}: ${context.parsed}`;
+                    },
+                  },
+                },
+              },
+            },
+          };
+        },
+      },
+      {
+        element: document.querySelector('[data-chart="goat-era-delta"]'),
+        source: 'data/goat_index.json',
+        async createConfig(source) {
+          const playersSource = Array.isArray(source?.players) ? source.players : [];
+          const dataset = playersSource
+            .map((player) => ({
+              x: getStartYear(player),
+              y: typeof player.delta === 'number' ? player.delta : null,
+              name: player.name,
+              tier: player.tier ?? 'Unknown',
+            }))
+            .filter((item) => Number.isFinite(item.x) && typeof item.y === 'number');
+          if (!dataset.length) return null;
+          return {
+            type: 'scatter',
+            data: {
+              datasets: [
+                {
+                  label: 'Era deltas',
+                  data: dataset,
+                  backgroundColor: 'rgba(244, 181, 63, 0.32)',
+                  borderColor: palette.gold,
+                  borderWidth: 1,
+                  pointRadius: 5,
+                },
+              ],
+            },
+            options: {
+              parsing: false,
+              plugins: {
+                legend: { display: false },
+                tooltip: {
+                  callbacks: {
+                    label(context) {
+                      const raw = context.raw;
+                      return `${raw.name}: ${raw.x} debut, Δ ${formatDelta(raw.y)}`;
+                    },
+                  },
+                },
+              },
+              scales: {
+                x: {
+                  type: 'linear',
+                  title: { display: true, text: 'Debut year' },
+                  grid: { color: 'rgba(11, 37, 69, 0.08)' },
+                  ticks: { stepSize: 5 },
+                },
+                y: {
+                  title: { display: true, text: '12-month GOAT delta' },
+                  grid: { color: 'rgba(11, 37, 69, 0.08)' },
+                },
+              },
+            },
+          };
+        },
+      },
+    ];
+
+    registerCharts(chartDefinitions);
   } catch (error) {
     console.error(error);
   }
