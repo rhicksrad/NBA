@@ -22,8 +22,10 @@ const SITE_DIR = path.join(ROOT, "site");
 const PREVIEW_DIR = path.join(SITE_DIR, "previews");
 const STYLES_DIR = path.join(SITE_DIR, "styles");
 const PUBLIC_DIR = path.join(ROOT, "public");
+const PUBLIC_DATA_DIR = path.join(PUBLIC_DIR, "data");
 const HUB_STYLE_SOURCE = path.join(PUBLIC_DIR, "styles/hub.css");
 const HUB_STYLE_TARGET = path.join(STYLES_DIR, "hub.css");
+const PRESEASON_DATA_PATH = path.join(PUBLIC_DATA_DIR, "preseason_team_previews.json");
 
 interface NavigationPaths {
   hub: string;
@@ -121,6 +123,23 @@ interface RenderShellOptions {
   activeNav: ActiveNav;
   navPaths: NavigationPaths;
   body: string;
+}
+
+interface TeamPreviewDatasetEntry extends TeamPreviewContent {
+  tricode: string;
+  market: string;
+  name: string;
+  ranking: {
+    score: number;
+    rank: number;
+    statusLine: string;
+  } | null;
+}
+
+interface TeamPreviewDataset {
+  season: string;
+  generatedAt: string;
+  previews: TeamPreviewDatasetEntry[];
 }
 
 function renderShell({ title, description, activeNav, navPaths, body }: RenderShellOptions): string {
@@ -292,6 +311,7 @@ ${paragraphs}
 export async function generatePreviews(): Promise<void> {
   await ensureSiteDirs();
   await copySharedAssets();
+  await mkdir(PUBLIC_DATA_DIR, { recursive: true });
 
   const teams = await loadJson<TeamRecord[]>("teams.json");
   const players = await loadJson<PlayerRecord[]>("players.json");
@@ -306,6 +326,10 @@ export async function generatePreviews(): Promise<void> {
     rankings,
   };
 
+  const rankingLookup = new Map(rankings.map((entry) => [entry.tricode, entry]));
+  const generatedAt = new Date().toISOString();
+  const previewEntries: TeamPreviewDatasetEntry[] = [];
+
   for (const team of teams) {
     const markdown = renderTeamPreview(team, context);
     const previewContent = buildTeamPreviewContent(team, context);
@@ -314,6 +338,20 @@ export async function generatePreviews(): Promise<void> {
     await writeFile(markdownPath, `${markdown}\n`, "utf8");
     const html = renderTeamPage(team, previewContent);
     await writeFile(htmlPath, `${html}\n`, "utf8");
+    const ranking = rankingLookup.get(team.tricode) ?? null;
+    previewEntries.push({
+      tricode: team.tricode,
+      market: team.market,
+      name: team.name,
+      ...previewContent,
+      ranking: ranking
+        ? {
+            score: ranking.score,
+            rank: ranking.rank,
+            statusLine: ranking.statusLine,
+          }
+        : null,
+    });
   }
 
   const boardHtml = renderConvictionBoard(rankings, teams);
@@ -321,6 +359,13 @@ export async function generatePreviews(): Promise<void> {
 
   const indexHtml = renderIndex(rankings, teams);
   await writeFile(path.join(SITE_DIR, "index.html"), `${indexHtml}\n`, "utf8");
+
+  const previewDataset: TeamPreviewDataset = {
+    season: SEASON,
+    generatedAt,
+    previews: previewEntries,
+  };
+  await writeFile(PRESEASON_DATA_PATH, `${JSON.stringify(previewDataset, null, 2)}\n`, "utf8");
 }
 
 async function run(): Promise<void> {

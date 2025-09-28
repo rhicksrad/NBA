@@ -1,4 +1,5 @@
 import { registerCharts, helpers } from './hub-charts.js';
+import { enablePanZoom, enhanceUsaInsets } from './map-utils.js';
 import { createTeamLogo } from './team-logos.js';
 
 const palette = {
@@ -314,6 +315,19 @@ async function fetchJsonSafe(url) {
   }
 }
 
+async function fetchTextSafe(url) {
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`Failed to load ${url}: ${response.status}`);
+    }
+    return await response.text();
+  } catch (error) {
+    console.warn('Unable to fetch text asset', url, error);
+    return null;
+  }
+}
+
 function safeText(target, value) {
   const node = typeof target === 'string' ? document.querySelector(target) : target;
   if (node && typeof value !== 'undefined' && value !== null) {
@@ -336,6 +350,277 @@ function formatDateLabel(dateString, options = { month: 'short', day: 'numeric' 
     return '';
   }
   return new Intl.DateTimeFormat('en-US', options).format(date);
+}
+
+const MAP_WIDTH = 960;
+const MAP_HEIGHT = 600;
+const LAT_RANGE = [24, 50];
+const LON_RANGE = [-125, -66];
+const CONFERENCE_CLASSES = { East: 'east', West: 'west' };
+const CONFERENCE_LABELS = { East: 'Eastern Conference', West: 'Western Conference' };
+
+const preseasonMapCanvas = document.querySelector('[data-preseason-map]');
+const preseasonPanel = document.querySelector('[data-preseason-panel]');
+const preseasonPlaceholder = document.querySelector('[data-preseason-placeholder]');
+const preseasonCard = document.querySelector('[data-preseason-card]');
+const preseasonHeading = document.querySelector('[data-preseason-heading]');
+const preseasonConference = document.querySelector('[data-preseason-conference]');
+const preseasonStatus = document.querySelector('[data-preseason-status]');
+const preseasonScoreline = document.querySelector('[data-preseason-scoreline]');
+const preseasonIntro = document.querySelector('[data-preseason-intro]');
+const preseasonCore = document.querySelector('[data-preseason-core]');
+const preseasonRisk = document.querySelector('[data-preseason-risk]');
+const preseasonSwing = document.querySelector('[data-preseason-swing]');
+const preseasonSeason = document.querySelector('[data-preseason-season]');
+const preseasonLink = document.querySelector('[data-preseason-link]');
+
+let preseasonMapViewport = null;
+let preseasonMarkers = [];
+let preseasonTeamLookup = new Map();
+let preseasonPreviewLookup = new Map();
+
+function projectPreseasonCoordinates(latitude, longitude) {
+  const x = ((longitude - LON_RANGE[0]) / (LON_RANGE[1] - LON_RANGE[0])) * MAP_WIDTH;
+  const y = ((LAT_RANGE[1] - latitude) / (LAT_RANGE[1] - LAT_RANGE[0])) * MAP_HEIGHT;
+  return { x, y };
+}
+
+function clearElement(element) {
+  if (!element) return;
+  while (element.firstChild) {
+    element.removeChild(element.firstChild);
+  }
+}
+
+function formatConferenceLabel(value) {
+  return CONFERENCE_LABELS[value] ?? '';
+}
+
+function setPreseasonPanelState(selected) {
+  if (!preseasonPanel) return;
+  if (selected) {
+    preseasonPanel.setAttribute('data-state', 'active');
+    if (preseasonPlaceholder) {
+      preseasonPlaceholder.hidden = true;
+    }
+    if (preseasonCard) {
+      preseasonCard.hidden = false;
+    }
+  } else {
+    preseasonPanel.setAttribute('data-state', 'idle');
+    if (preseasonPlaceholder) {
+      preseasonPlaceholder.hidden = false;
+    }
+    if (preseasonCard) {
+      preseasonCard.hidden = true;
+    }
+  }
+}
+
+function activatePreseasonMarker(tricode) {
+  preseasonMarkers.forEach((marker) => {
+    if (marker.dataset.team === tricode) {
+      marker.classList.add('team-marker--active');
+    } else {
+      marker.classList.remove('team-marker--active');
+    }
+  });
+}
+
+function renderPreseasonDetail(team, preview) {
+  if (!team || !preview) {
+    setPreseasonPanelState(false);
+    return;
+  }
+
+  setPreseasonPanelState(true);
+
+  if (preseasonHeading) {
+    preseasonHeading.textContent = preview.heading ?? team.name ?? 'Team';
+  }
+
+  if (preseasonConference) {
+    const conferenceLabel = formatConferenceLabel(team.conference);
+    preseasonConference.textContent = conferenceLabel;
+    preseasonConference.hidden = !conferenceLabel;
+  }
+
+  if (preseasonStatus) {
+    const status = preview.ranking?.statusLine ?? '';
+    preseasonStatus.textContent = status;
+    preseasonStatus.hidden = !status;
+  }
+
+  if (preseasonScoreline) {
+    const hasRanking =
+      preview.ranking &&
+      Number.isFinite(preview.ranking.rank) &&
+      Number.isFinite(preview.ranking.score);
+    if (hasRanking) {
+      const formattedScore = preview.ranking.score.toFixed(3);
+      preseasonScoreline.textContent = `#${preview.ranking.rank} · Conviction score ${formattedScore}`;
+      preseasonScoreline.hidden = false;
+    } else {
+      preseasonScoreline.textContent = '';
+      preseasonScoreline.hidden = true;
+    }
+  }
+
+  if (preseasonIntro) {
+    clearElement(preseasonIntro);
+    const paragraphs = Array.isArray(preview.introParagraphs) ? preview.introParagraphs : [];
+    paragraphs.forEach((paragraph) => {
+      const p = document.createElement('p');
+      p.textContent = paragraph;
+      preseasonIntro.appendChild(p);
+    });
+  }
+
+  if (preseasonCore) {
+    preseasonCore.textContent = preview.coreStrength ?? '';
+  }
+
+  if (preseasonRisk) {
+    preseasonRisk.textContent = preview.primaryRisk ?? '';
+  }
+
+  if (preseasonSwing) {
+    preseasonSwing.textContent = preview.swingFactor ?? '';
+  }
+
+  if (preseasonSeason) {
+    const label = preview.seasonLabel ? `${preview.seasonLabel} preseason outlook` : 'Preseason outlook';
+    preseasonSeason.textContent = `${label} layered on the 2024-25 baseline.`;
+  }
+
+  if (preseasonLink) {
+    const target = preview.tricode ?? team.abbreviation;
+    preseasonLink.href = target ? `../site/previews/${target}.html` : '#';
+    preseasonLink.setAttribute('aria-label', `Open full preseason outlook for ${preview.heading ?? team.name ?? 'team'}`);
+  }
+}
+
+function handlePreseasonMarkerClick(event) {
+  const button = event.currentTarget;
+  if (!(button instanceof HTMLElement)) {
+    return;
+  }
+  const tricode = button.dataset.team;
+  if (!tricode) {
+    return;
+  }
+  const team = preseasonTeamLookup.get(tricode);
+  const preview = preseasonPreviewLookup.get(tricode);
+  activatePreseasonMarker(tricode);
+  renderPreseasonDetail(team, preview);
+}
+
+function buildPreseasonMarkers(teams) {
+  if (!preseasonMapCanvas || !preseasonMapViewport) {
+    return;
+  }
+
+  const existingLayers = preseasonMapViewport.querySelectorAll('.team-map__markers');
+  existingLayers.forEach((layer) => layer.remove());
+
+  const markerLayer = document.createElement('div');
+  markerLayer.className = 'team-map__markers';
+  preseasonMapViewport.append(markerLayer);
+
+  preseasonMarkers = teams
+    .filter((team) => preseasonPreviewLookup.has(team.abbreviation))
+    .map((team) => {
+      const { latitude, longitude, abbreviation, conference, name } = team;
+      const { x, y } = projectPreseasonCoordinates(latitude, longitude);
+      const button = document.createElement('button');
+      button.type = 'button';
+      const markerTheme = CONFERENCE_CLASSES[conference] ?? 'east';
+      button.className = `team-marker team-marker--${markerTheme}`;
+      button.style.setProperty('--marker-x', `${(x / MAP_WIDTH) * 100}%`);
+      button.style.setProperty('--marker-y', `${(y / MAP_HEIGHT) * 100}%`);
+      button.dataset.team = abbreviation;
+      const ariaLabel = [name, formatConferenceLabel(conference)].filter(Boolean).join(', ');
+      if (ariaLabel) {
+        button.setAttribute('aria-label', ariaLabel);
+      }
+      button.innerHTML = `
+        <span class="team-marker__dot" aria-hidden="true"></span>
+        <span class="team-marker__label">${abbreviation}</span>
+      `;
+      button.addEventListener('click', handlePreseasonMarkerClick);
+      markerLayer.append(button);
+      return button;
+    });
+}
+
+function injectPreseasonMap(svgMarkup) {
+  if (!preseasonMapCanvas) {
+    return;
+  }
+
+  const sanitized = svgMarkup.replace(/ns0:/g, '');
+  preseasonMapCanvas.innerHTML = `<div class="team-map__viewport"><div class="team-map__stage">${sanitized}</div></div>`;
+  preseasonMapViewport = preseasonMapCanvas.querySelector('.team-map__viewport');
+  const svg = preseasonMapCanvas.querySelector('svg');
+  if (svg) {
+    svg.classList.add('team-map__svg');
+    svg.setAttribute('focusable', 'false');
+    svg.setAttribute('aria-hidden', 'true');
+    enhanceUsaInsets(svg);
+  }
+  if (preseasonMapViewport) {
+    enablePanZoom(preseasonMapCanvas, preseasonMapViewport, { maxScale: 5.5, zoomStep: 0.35 });
+  }
+}
+
+async function renderPreseasonMap() {
+  if (!preseasonMapCanvas) {
+    return;
+  }
+
+  if (preseasonPanel) {
+    preseasonPanel.setAttribute('aria-busy', 'true');
+  }
+
+  try {
+    const [svgMarkup, teamProfiles, previewData] = await Promise.all([
+      fetchTextSafe('vendor/us-states.svg'),
+      fetchJsonSafe('data/team_profiles.json'),
+      fetchJsonSafe('data/preseason_team_previews.json'),
+    ]);
+
+    if (!svgMarkup || !teamProfiles || !previewData) {
+      throw new Error('Missing preseason map assets');
+    }
+
+    const teams = Array.isArray(teamProfiles?.teams) ? teamProfiles.teams : [];
+    const previews = Array.isArray(previewData?.previews) ? previewData.previews : [];
+
+    if (!teams.length || !previews.length) {
+      throw new Error('Incomplete preseason datasets');
+    }
+
+    preseasonTeamLookup = new Map(teams.map((team) => [team.abbreviation, team]));
+    preseasonPreviewLookup = new Map(previews.map((entry) => [entry.tricode, entry]));
+
+    injectPreseasonMap(svgMarkup);
+    buildPreseasonMarkers(teams);
+    setPreseasonPanelState(false);
+  } catch (error) {
+    console.error('Unable to render preseason map', error);
+    if (preseasonMapCanvas) {
+      preseasonMapCanvas.innerHTML =
+        '<p class="team-map__error">Unable to load the preseason map right now. Please refresh to try again.</p>';
+    }
+    if (preseasonPlaceholder) {
+      preseasonPlaceholder.innerHTML =
+        '<p class="preseason-map__error">We couldn\'t load the preseason capsules. Try refreshing the page.</p>';
+    }
+  } finally {
+    if (preseasonPanel) {
+      preseasonPanel.setAttribute('aria-busy', 'false');
+    }
+  }
 }
 
 function hydrateHero(teamData) {
@@ -1416,6 +1701,8 @@ async function bootstrap() {
       },
     },
   ]);
+
+  renderPreseasonMap();
 
   const [scheduleData, teamData, storyData, preseasonOpeners] = await Promise.all([
     fetchJsonSafe(scheduleSource),
