@@ -13,155 +13,154 @@ const preseasonPowerIndex = [
   {
     team: 'Boston Celtics',
     tier: 'Title favorite',
-    note: 'The defending champs return their entire playoff rotation, Kristaps Porzingis is back in five-on-five work, and the Jrue Holiday-Derrick White backcourt remains the best perimeter deterrent in the league.',
-  },
-  {
-    team: 'Oklahoma City Thunder',
-    tier: 'Title favorite',
-    note: 'Shai Gilgeous-Alexander and Jalen Williams headline a deep core reinforced by Isaiah Hartenstein and Alex Caruso, with Chet Holmgren’s added muscle fueling a top-three defensive projection.',
+    note: 'Boston brings back the Jayson Tatum-Jaylen Brown core, Kristaps Porzingis is entering camp healthy, and the group that dominated the efficiency tables last season stays intact for another title charge.',
   },
   {
     team: 'Denver Nuggets',
     tier: 'Title favorite',
-    note: 'Nikola Jokic, Jamal Murray, and Aaron Gordon remain the steadiest trio in basketball, while Christian Braun and Peyton Watson are ready for expanded roles after a summer of shooting growth.',
+    note: 'Nikola Jokic and Jamal Murray remain the model of continuity, Aaron Gordon and Michael Porter Jr. supply two-way balance, and a deeper bench keeps Denver tracking toward the West’s No. 1 seed.',
+  },
+  {
+    team: 'Oklahoma City Thunder',
+    tier: 'Title favorite',
+    note: 'Shai Gilgeous-Alexander, Jalen Williams, and Chet Holmgren enter their primes together, the Thunder kept their length-heavy rotation intact, and improved late-game execution has them eyeing the summit.',
   },
   {
     team: 'Philadelphia 76ers',
     tier: 'Title hopeful',
-    note: 'Joel Embiid is scrimmaging without restrictions, Paul George enters Year 2 of the partnership, and Tyrese Maxey’s extension keeps the offense humming around a deeper wing room.',
+    note: 'Joel Embiid is cleared for full-contact work, Tyrese Maxey continues to climb, and a summer spent stockpiling switchable wings gives Philly flexibility the East’s elite respect.',
   },
   {
     team: 'Minnesota Timberwolves',
     tier: 'Title hopeful',
-    note: 'Anthony Edwards took another leap with Team USA reps, Rudy Gobert and Karl-Anthony Towns reported fully healthy, and Monte Morris re-signed to steady the bench units.',
+    note: 'Anthony Edwards enters 2025-26 as a bona fide superstar, Rudy Gobert and Karl-Anthony Towns anchor an elite defense, and the Wolves invested in ball-handling depth to steady playoff minutes.',
   },
   {
     team: 'New York Knicks',
     tier: 'Title hopeful',
-    note: 'Jalen Brunson, Mikal Bridges, and OG Anunoby enjoy rare continuity, Julius Randle completed full-contact work after spring shoulder surgery, and Mitchell Robinson is out of minutes restrictions.',
-  },
-  {
-    team: 'Dallas Mavericks',
-    tier: 'Contender',
-    note: 'A full offseason together gives Luka Dončić and Kyrie Irving a polished attack, Klay Thompson’s gravity stretches the floor, and Dereck Lively II is cleared after his postseason neck scare.',
+    note: 'Jalen Brunson now flanks Mikal Bridges and OG Anunoby for an elite two-way perimeter trio, Julius Randle returns from shoulder rehab, and Tom Thibodeau’s rotation continuity keeps the floor high.',
   },
   {
     team: 'Milwaukee Bucks',
     tier: 'Contender',
-    note: 'Giannis Antetokounmpo and Damian Lillard finally logged an uninterrupted summer under Doc Rivers, Khris Middleton wrapped ankle stabilization work, and Brook Lopez still anchors the drop coverage.',
+    note: 'Giannis Antetokounmpo and Damian Lillard enter their second season together with a full summer of rhythm, Khris Middleton is moving freely again, and Doc Rivers tightened the defensive coverages.',
+  },
+  {
+    team: 'Dallas Mavericks',
+    tier: 'Contender',
+    note: 'Luka Dončić and Kyrie Irving are coming off another deep postseason push, Dereck Lively II is fully ramped up after the spring scare, and added length on the wings shores up the switching schemes.',
   },
   {
     team: 'Phoenix Suns',
     tier: 'Contender',
-    note: 'Mike Budenholzer’s first camp blends new motion principles with the Durant-Booker-Beal trio, and Jusuf Nurkić’s trimmed frame plus veteran guard Delon Wright add needed defensive competence.',
-  },
-  {
-    team: 'Cleveland Cavaliers',
-    tier: 'High-ceiling playoff',
-    note: 'Kenny Atkinson’s pace-and-space principles unlocked Donovan Mitchell and a stronger Evan Mobley, while Darius Garland is fully over the back tightness that ended his spring.',
+    note: 'Kevin Durant, Devin Booker, and Bradley Beal stay intact while Mike Budenholzer layers in more motion, and a refreshed supporting cast aims to keep defensive intensity from slipping.',
   },
   {
     team: 'Memphis Grizzlies',
     tier: 'High-ceiling playoff',
-    note: 'Ja Morant and Desmond Bane enter camp without restrictions, Jaren Jackson Jr. avoided Team USA wear-and-tear, and GG Jackson’s emergence bolsters the wing rotation.',
+    note: 'Ja Morant, Desmond Bane, and Jaren Jackson Jr. finally get a full runway together, Marcus Smart resumes his stopper role, and the wing depth looks sturdier with GG Jackson’s emergence.',
+  },
+  {
+    team: 'Cleveland Cavaliers',
+    tier: 'High-ceiling playoff',
+    note: 'Kenny Atkinson’s spacing-first system juiced Cleveland’s offense, Donovan Mitchell recommitted to the project, and a stronger Evan Mobley gives them top-five defensive ambition.',
+  },
+  {
+    team: 'Sacramento Kings',
+    tier: 'High-ceiling playoff',
+    note: 'De’Aaron Fox pushes pace, Domantas Sabonis still orchestrates from the elbows, and Keegan Murray’s growth into a secondary creator keeps Sacramento firmly in the West’s upper middle.',
   },
   {
     team: 'Orlando Magic',
-    tier: 'High-ceiling playoff',
-    note: 'Year two with Kentavious Caldwell-Pope has Orlando’s spacing in a better place, Paolo Banchero sharpened his pull-up game, and Jalen Suggs remains the point-of-attack tone setter.',
-  },
-  {
-    team: 'New Orleans Pelicans',
     tier: 'Playoff lock',
-    note: 'Zion Williamson arrived in top conditioning, Brandon Ingram bought into a quicker tempo under James Borrego, and Dejounte Murray gives the half court a stabilizing lead guard.',
+    note: 'Paolo Banchero and Franz Wagner headline a top-five defense, the Magic added more shooting around their young core, and year-three continuity under Jamahl Mosley keeps their climb steady.',
   },
   {
     team: 'Los Angeles Lakers',
     tier: 'Playoff lock',
-    note: 'LeBron James and Anthony Davis reported with clean medicals, Austin Reaves’ playmaking bump continues under JJ Redick, and Gabe Vincent plus Jarred Vanderbilt are healthy depth pieces again.',
+    note: 'LeBron James and Anthony Davis open camp without restrictions, JJ Redick’s staff emphasizes tempo and shooting, and Austin Reaves plus Rui Hachimura give Los Angeles reliable support.',
   },
   {
     team: 'Miami Heat',
     tier: 'Playoff lock',
-    note: 'Jimmy Butler’s knee responded to platelet therapy, Bam Adebayo anchors an elite defense, and Terry Rozier is out of the back brace that limited him last spring.',
-  },
-  {
-    team: 'Sacramento Kings',
-    tier: 'Playoff lock',
-    note: 'De’Aaron Fox and Domantas Sabonis remain the engine while DeMar DeRozan offers a late-clock option and Keegan Murray’s expanded handle shows up in camp scrimmages.',
+    note: 'Jimmy Butler’s postseason workload prompted an early rest plan, Bam Adebayo anchors elite coverages, and the Heat reinforced their backcourt with steady shooting to keep the offense functional.',
   },
   {
     team: 'Indiana Pacers',
     tier: 'Playoff mix',
-    note: 'Tyrese Haliburton is moving freely after a cautious hamstring ramp-up, Pascal Siakam re-signed long term, and Myles Turner avoided the back spasms that flared up in April.',
+    note: 'Tyrese Haliburton is fully past the hamstring issues that lingered into May, Pascal Siakam is locked in long term, and Indiana’s bench units finally have the size to survive tougher playoff minutes.',
+  },
+  {
+    team: 'New Orleans Pelicans',
+    tier: 'Playoff mix',
+    note: 'Zion Williamson reported in peak conditioning, Brandon Ingram is healthy after last spring’s knee flare-up, and a reworked guard room shores up the half-court decision making.',
   },
   {
     team: 'Golden State Warriors',
     tier: 'Playoff mix',
-    note: 'Stephen Curry enters camp healthy, Draymond Green addressed his calf issues early, and Buddy Hield’s quick-trigger shooting alongside an expanded Jonathan Kuminga role keeps the offense alive.',
+    note: 'Stephen Curry remains a top-tier engine, Draymond Green is coming off a full offseason of conditioning, and the Warriors are leaning harder into Jonathan Kuminga and Moses Moody development.',
   },
   {
     team: 'Houston Rockets',
     tier: 'Play-in hunt',
-    note: 'Ime Udoka leans on a healthy Alperen Şengün and Cam Whitmore, Dillon Brooks is back from his ankle sprain, and top pick Nikola Topic targets a midseason debut after knee rehab.',
+    note: 'Alperen Şengün and Jalen Green continue to drive Ime Udoka’s offense, Amen Thompson’s defense popped in year two, and veteran stabilizers keep Houston targeting a top-six breakthrough.',
   },
   {
     team: 'Atlanta Hawks',
     tier: 'Play-in hunt',
-    note: 'Trae Young remains the offensive hub despite quiet trade chatter, Jalen Johnson is cleared after wrist surgery, and rookie Zaccharie Risacher gives Quin Snyder a rangy wing.',
+    note: 'Trae Young and Jalen Johnson headline a retooled transition attack, Clint Capela is healthy after a postseason scare, and top pick Zaccharie Risacher injects needed size on the wing.',
   },
   {
     team: 'Los Angeles Clippers',
     tier: 'Play-in hunt',
-    note: 'Kawhi Leonard and James Harden are on tailored workloads, Ivica Zubac is fully recovered from his knee scope, and Terance Mann plus new signee Derrick Jones Jr. soak up the forward minutes.',
+    note: 'Kawhi Leonard and James Harden are on managed workloads but available, Russell Westbrook shifted into an energy bench role, and Tyronn Lue leans on length to keep the defense afloat.',
   },
   {
     team: 'Utah Jazz',
     tier: 'Play-in swing',
-    note: 'Utah kept Lauri Markkanen through the summer, Walker Kessler’s conditioning work shows in camp, and Keyonte George runs the offense while rookie Cody Williams learns on the wing.',
+    note: 'Lauri Markkanen remains the centerpiece, Walker Kessler’s summer with Team USA sharpened his timing, and Keyonte George’s growth as a lead guard gives Utah a higher offensive ceiling.',
   },
   {
     team: 'San Antonio Spurs',
     tier: 'Play-in swing',
-    note: 'Victor Wembanyama now pairs with veteran point guard Chris Paul, Devin Vassell is healthy after April knee soreness, and rookie wing Ron Holland embraces a switchable role.',
-  },
-  {
-    team: 'Brooklyn Nets',
-    tier: 'Rebuild watch',
-    note: 'Post-Mikal Bridges, Cam Thomas and Noah Clowney headline the scoring core while coach Jordi Fernández empowers rookie guard Reed Sheppard to push tempo.',
-  },
-  {
-    team: 'Chicago Bulls',
-    tier: 'Rebuild watch',
-    note: 'Chicago turned fully toward development—Coby White runs the offense, Josh Giddey handles secondary creation, and first-round guard Isaiah Collier gets early second-unit reps.',
+    note: 'Victor Wembanyama returns with added strength and playmaking reps, Devin Vassell is healthy again, and the Spurs supplemented the backcourt with veteran steadiness to guide the young core.',
   },
   {
     team: 'Toronto Raptors',
     tier: 'Rebuild watch',
-    note: 'Scottie Barnes owns the offense with RJ Barrett and Immanuel Quickley, while 2025 lottery pick Ace Bailey stretches the frontcourt and Jakob Poeltl is back from his hand fracture.',
+    note: 'Scottie Barnes continues his point-forward evolution, RJ Barrett and Immanuel Quickley provide reliable creation, and a youth-heavy frontcourt keeps development the top priority.',
+  },
+  {
+    team: 'Chicago Bulls',
+    tier: 'Rebuild watch',
+    note: 'Coby White holds the keys after his breakout, Josh Giddey gives them another jumbo ball handler, and younger wings are ticketed for rotation minutes as the Bulls embrace patience.',
   },
   {
     team: 'Detroit Pistons',
     tier: 'Growth track',
-    note: 'Cade Cunningham’s extension brings stability, Ausar Thompson added strength to guard fours, and veterans Tobias Harris and Malik Beasley provide the shooting Charles Lee demands.',
-  },
-  {
-    team: 'Portland Trail Blazers',
-    tier: 'Growth track',
-    note: 'Scoot Henderson and Shaedon Sharpe are both full go, Donovan Clingan anchors the paint, and Malcolm Brogdon remains a steady mentor while trade calls simmer.',
+    note: 'Cade Cunningham’s extension is done, Jalen Duren enters camp fully healthy, and veteran shooting support aims to open the floor for their athletic wings.',
   },
   {
     team: 'Charlotte Hornets',
     tier: 'Growth track',
-    note: 'Year two under Charles Lee leans on a healthy LaMelo Ball, Brandon Miller’s usage bump, and Mark Williams finally cleared for full-contact drills.',
+    note: 'LaMelo Ball is finally out of a boot, Brandon Miller’s usage tick keeps climbing, and Charles Lee is preaching tempo while Mark Williams and Grant Williams anchor the interior.',
+  },
+  {
+    team: 'Portland Trail Blazers',
+    tier: 'Growth track',
+    note: 'Scoot Henderson and Shaedon Sharpe are healthy after a cautious finish, rookie center Donovan Clingan brings rim protection, and the Blazers continue prioritizing long-term reps.',
   },
   {
     team: 'Washington Wizards',
-    tier: 'Growth track',
-    note: 'Alex Sarr, Bilal Coulibaly, and Jordan Poole headline a patient rebuild, with Tyus Jones mentoring rookie floor general Ja’Kobe Walter while minutes go to development.',
+    tier: 'Development runway',
+    note: 'Alex Sarr, Bilal Coulibaly, and Deni Avdija headline a long-term project, Jordan Poole takes on veteran scorer duties, and Washington is committed to giving Ja’Kobe Walter real usage.',
+  },
+  {
+    team: 'Brooklyn Nets',
+    tier: 'Development runway',
+    note: 'With Mikal Bridges moved for future assets, Cam Thomas, Nic Claxton, and Dariq Whitehead get extended opportunities while a young coaching staff resets the identity.',
   },
 ];
-
 const injuryAvailabilityPulse = [
   {
     team: 'Philadelphia 76ers',
