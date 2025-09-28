@@ -132,6 +132,134 @@ window.preseasonDashboards = {
       }
     ]
   },
+  "preseason-12400002": {
+    teams: [
+      {
+        name: "International Showcase",
+        slug: "international-showcase",
+        colors: {
+          primary: "#00529B",
+          secondary: "#F2A900",
+          tertiary: "#F5F5F5"
+        },
+        rotation: {
+          labels: [
+            "Tremont Waters",
+            "Luke Travers",
+            "Nigel Hayes-Davis",
+            "Bruno Caboclo",
+            "Khalifa Diop"
+          ],
+          data: [23, 21, 19, 18, 16]
+        },
+        skill: {
+          labels: [
+            "Advantage creation",
+            "Spacing gravity",
+            "Defensive disruption",
+            "Playmaking vision",
+            "Tempo pressure"
+          ],
+          training: [7, 6, 7, 6, 8],
+          readiness: [6, 6, 7, 5, 7]
+        },
+        shotProfile: {
+          labels: [
+            "Rim attacks",
+            "Paint floaters",
+            "Mid-post isolations",
+            "Corner threes",
+            "Above-the-break threes"
+          ],
+          team: [26, 15, 17, 21, 21],
+          league: [24, 14, 16, 18, 28]
+        },
+        tempo: {
+          labels: [
+            "Arrival day",
+            "Closed scrimmage",
+            "Open scrimmage",
+            "Special situations",
+            "Shootaround"
+          ],
+          tempo: [71, 74, 76, 72, 70],
+          specials: [20, 26, 30, 32, 26]
+        },
+        synergy: {
+          points: [
+            { label: "Waters pace push", x: 104, y: 78, r: 13 },
+            { label: "Travers wing size", x: 96, y: 82, r: 12 },
+            { label: "Hayes-Davis switches", x: 98, y: 76, r: 11 },
+            { label: "Caboclo rim deterrence", x: 92, y: 80, r: 10 }
+          ],
+          xLabel: "Tempo index (possessions per 48)",
+          yLabel: "Coverage sync score"
+        }
+      },
+      {
+        name: "Utah Jazz",
+        slug: "utah-jazz",
+        colors: {
+          primary: "#002B5C",
+          secondary: "#00471B",
+          tertiary: "#F9A01B"
+        },
+        rotation: {
+          labels: [
+            "Keyonte George",
+            "Cody Williams",
+            "Taylor Hendricks",
+            "Walker Kessler",
+            "Brice Sensabaugh"
+          ],
+          data: [22, 20, 18, 18, 16]
+        },
+        skill: {
+          labels: [
+            "Advantage creation",
+            "Spacing gravity",
+            "Defensive disruption",
+            "Playmaking vision",
+            "Tempo pressure"
+          ],
+          training: [7, 7, 8, 6, 6],
+          readiness: [6, 6, 7, 6, 6]
+        },
+        shotProfile: {
+          labels: [
+            "Rim attacks",
+            "Paint floaters",
+            "Mid-post isolations",
+            "Corner threes",
+            "Above-the-break threes"
+          ],
+          team: [28, 13, 15, 20, 24],
+          league: [24, 14, 16, 18, 28]
+        },
+        tempo: {
+          labels: [
+            "Arrival day",
+            "Closed scrimmage",
+            "Open scrimmage",
+            "Special situations",
+            "Shootaround"
+          ],
+          tempo: [68, 72, 74, 71, 69],
+          specials: [22, 28, 34, 32, 28]
+        },
+        synergy: {
+          points: [
+            { label: "George downhill reads", x: 102, y: 80, r: 13 },
+            { label: "Hendricks weak-side pop", x: 96, y: 84, r: 12 },
+            { label: "Kessler drop anchor", x: 90, y: 88, r: 11 },
+            { label: "Sensabaugh scoring punch", x: 98, y: 76, r: 10 }
+          ],
+          xLabel: "Tempo index (possessions per 48)",
+          yLabel: "Coverage sync score"
+        }
+      }
+    ]
+  },
   "preseason-12400003": {
     teams: [
       {
@@ -772,6 +900,134 @@ window.preseasonDashboards = {
       }
     ]
   },
+  "preseason-12400009": {
+    teams: [
+      {
+        name: "Phoenix Suns",
+        slug: "phoenix-suns",
+        colors: {
+          primary: "#1D1160",
+          secondary: "#E56020",
+          tertiary: "#F9A01B"
+        },
+        rotation: {
+          labels: [
+            "Grayson Allen",
+            "Royce O'Neale",
+            "Bol Bol",
+            "Damion Lee",
+            "Saben Lee"
+          ],
+          data: [22, 20, 18, 16, 14]
+        },
+        skill: {
+          labels: [
+            "Advantage creation",
+            "Spacing gravity",
+            "Defensive disruption",
+            "Playmaking vision",
+            "Tempo pressure"
+          ],
+          training: [7, 8, 6, 6, 7],
+          readiness: [7, 7, 6, 6, 6]
+        },
+        shotProfile: {
+          labels: [
+            "Rim attacks",
+            "Paint floaters",
+            "Mid-post isolations",
+            "Corner threes",
+            "Above-the-break threes"
+          ],
+          team: [24, 12, 18, 22, 24],
+          league: [24, 14, 16, 18, 28]
+        },
+        tempo: {
+          labels: [
+            "Arrival day",
+            "Closed scrimmage",
+            "Open scrimmage",
+            "Special situations",
+            "Shootaround"
+          ],
+          tempo: [69, 73, 75, 71, 69],
+          specials: [22, 28, 32, 34, 28]
+        },
+        synergy: {
+          points: [
+            { label: "Allen relocation", x: 100, y: 82, r: 13 },
+            { label: "O'Neale switchability", x: 96, y: 86, r: 12 },
+            { label: "Bol weak-side reach", x: 98, y: 78, r: 11 },
+            { label: "Saben Lee pace", x: 104, y: 74, r: 10 }
+          ],
+          xLabel: "Tempo index (possessions per 48)",
+          yLabel: "Coverage sync score"
+        }
+      },
+      {
+        name: "Los Angeles Lakers",
+        slug: "los-angeles-lakers",
+        colors: {
+          primary: "#552583",
+          secondary: "#FDB927",
+          tertiary: "#000000"
+        },
+        rotation: {
+          labels: [
+            "Dalton Knecht",
+            "Spencer Dinwiddie",
+            "Max Christie",
+            "Bronny James",
+            "Jaxson Hayes"
+          ],
+          data: [20, 18, 18, 16, 16]
+        },
+        skill: {
+          labels: [
+            "Advantage creation",
+            "Spacing gravity",
+            "Defensive disruption",
+            "Playmaking vision",
+            "Tempo pressure"
+          ],
+          training: [7, 7, 6, 7, 6],
+          readiness: [6, 7, 6, 6, 6]
+        },
+        shotProfile: {
+          labels: [
+            "Rim attacks",
+            "Paint floaters",
+            "Mid-post isolations",
+            "Corner threes",
+            "Above-the-break threes"
+          ],
+          team: [25, 12, 14, 21, 28],
+          league: [24, 14, 16, 18, 28]
+        },
+        tempo: {
+          labels: [
+            "Arrival day",
+            "Closed scrimmage",
+            "Open scrimmage",
+            "Special situations",
+            "Shootaround"
+          ],
+          tempo: [68, 72, 74, 71, 69],
+          specials: [20, 26, 32, 34, 30]
+        },
+        synergy: {
+          points: [
+            { label: "Knecht movement shooting", x: 98, y: 80, r: 13 },
+            { label: "Dinwiddie control", x: 94, y: 82, r: 12 },
+            { label: "Christie stopper reps", x: 96, y: 86, r: 11 },
+            { label: "Bronny pace table", x: 100, y: 78, r: 10 }
+          ],
+          xLabel: "Tempo index (possessions per 48)",
+          yLabel: "Coverage sync score"
+        }
+      }
+    ]
+  },
   "preseason-12400010": {
     teams: [
       {
@@ -893,6 +1149,134 @@ window.preseasonDashboards = {
             { label: "Ingram midrange", x: 96, y: 84, r: 12 },
             { label: "Murphy spacers", x: 98, y: 80, r: 11 },
             { label: "Daniels defense", x: 94, y: 88, r: 13 }
+          ],
+          xLabel: "Tempo index (possessions per 48)",
+          yLabel: "Coverage sync score"
+        }
+      }
+    ]
+  },
+  "preseason-12400011": {
+    teams: [
+      {
+        name: "International Showcase",
+        slug: "international-showcase",
+        colors: {
+          primary: "#00529B",
+          secondary: "#F2A900",
+          tertiary: "#F5F5F5"
+        },
+        rotation: {
+          labels: [
+            "Tremont Waters",
+            "Luke Travers",
+            "Nigel Hayes-Davis",
+            "Bruno Caboclo",
+            "Khalifa Diop"
+          ],
+          data: [23, 21, 19, 18, 16]
+        },
+        skill: {
+          labels: [
+            "Advantage creation",
+            "Spacing gravity",
+            "Defensive disruption",
+            "Playmaking vision",
+            "Tempo pressure"
+          ],
+          training: [7, 6, 7, 6, 8],
+          readiness: [6, 6, 7, 5, 7]
+        },
+        shotProfile: {
+          labels: [
+            "Rim attacks",
+            "Paint floaters",
+            "Mid-post isolations",
+            "Corner threes",
+            "Above-the-break threes"
+          ],
+          team: [26, 15, 17, 21, 21],
+          league: [24, 14, 16, 18, 28]
+        },
+        tempo: {
+          labels: [
+            "Arrival day",
+            "Closed scrimmage",
+            "Open scrimmage",
+            "Special situations",
+            "Shootaround"
+          ],
+          tempo: [71, 74, 76, 72, 70],
+          specials: [20, 26, 30, 32, 26]
+        },
+        synergy: {
+          points: [
+            { label: "Waters pace push", x: 104, y: 78, r: 13 },
+            { label: "Travers wing size", x: 96, y: 82, r: 12 },
+            { label: "Hayes-Davis switches", x: 98, y: 76, r: 11 },
+            { label: "Caboclo rim deterrence", x: 92, y: 80, r: 10 }
+          ],
+          xLabel: "Tempo index (possessions per 48)",
+          yLabel: "Coverage sync score"
+        }
+      },
+      {
+        name: "Philadelphia 76ers",
+        slug: "philadelphia-76ers",
+        colors: {
+          primary: "#006BB6",
+          secondary: "#ED174C",
+          tertiary: "#002B5C"
+        },
+        rotation: {
+          labels: [
+            "Tyrese Maxey",
+            "Jared McCain",
+            "Kelly Oubre Jr.",
+            "Ricky Council IV",
+            "Paul Reed"
+          ],
+          data: [22, 20, 18, 16, 16]
+        },
+        skill: {
+          labels: [
+            "Advantage creation",
+            "Spacing gravity",
+            "Defensive disruption",
+            "Playmaking vision",
+            "Tempo pressure"
+          ],
+          training: [8, 7, 7, 7, 6],
+          readiness: [7, 7, 7, 6, 6]
+        },
+        shotProfile: {
+          labels: [
+            "Rim attacks",
+            "Paint floaters",
+            "Mid-post isolations",
+            "Corner threes",
+            "Above-the-break threes"
+          ],
+          team: [27, 12, 14, 21, 26],
+          league: [24, 14, 16, 18, 28]
+        },
+        tempo: {
+          labels: [
+            "Arrival day",
+            "Closed scrimmage",
+            "Open scrimmage",
+            "Special situations",
+            "Shootaround"
+          ],
+          tempo: [68, 72, 74, 71, 69],
+          specials: [22, 28, 34, 32, 30]
+        },
+        synergy: {
+          points: [
+            { label: "Maxey burst", x: 104, y: 82, r: 13 },
+            { label: "Oubre cutting", x: 98, y: 78, r: 11 },
+            { label: "McCain spacing", x: 96, y: 84, r: 12 },
+            { label: "Reed short roll", x: 92, y: 86, r: 11 }
           ],
           xLabel: "Tempo index (possessions per 48)",
           yLabel: "Coverage sync score"
@@ -1156,6 +1540,262 @@ window.preseasonDashboards = {
       }
     ]
   },
+  "preseason-12400014": {
+    teams: [
+      {
+        name: "Houston Rockets",
+        slug: "houston-rockets",
+        colors: {
+          primary: "#CE1141",
+          secondary: "#000000",
+          tertiary: "#C4CED4"
+        },
+        rotation: {
+          labels: [
+            "Amen Thompson",
+            "Cam Whitmore",
+            "Jalen Green",
+            "Tari Eason",
+            "Steven Adams"
+          ],
+          data: [22, 20, 18, 18, 16]
+        },
+        skill: {
+          labels: [
+            "Advantage creation",
+            "Spacing gravity",
+            "Defensive disruption",
+            "Playmaking vision",
+            "Tempo pressure"
+          ],
+          training: [8, 7, 8, 6, 6],
+          readiness: [7, 6, 7, 6, 6]
+        },
+        shotProfile: {
+          labels: [
+            "Rim attacks",
+            "Paint floaters",
+            "Mid-post isolations",
+            "Corner threes",
+            "Above-the-break threes"
+          ],
+          team: [27, 13, 15, 22, 23],
+          league: [24, 14, 16, 18, 28]
+        },
+        tempo: {
+          labels: [
+            "Arrival day",
+            "Closed scrimmage",
+            "Open scrimmage",
+            "Special situations",
+            "Shootaround"
+          ],
+          tempo: [70, 74, 76, 72, 70],
+          specials: [24, 28, 34, 36, 30]
+        },
+        synergy: {
+          points: [
+            { label: "Amen downhill pressure", x: 106, y: 78, r: 13 },
+            { label: "Whitmore power wings", x: 100, y: 82, r: 12 },
+            { label: "Eason disruption", x: 98, y: 88, r: 11 },
+            { label: "Adams screening hub", x: 92, y: 84, r: 10 }
+          ],
+          xLabel: "Tempo index (possessions per 48)",
+          yLabel: "Coverage sync score"
+        }
+      },
+      {
+        name: "Utah Jazz",
+        slug: "utah-jazz",
+        colors: {
+          primary: "#002B5C",
+          secondary: "#00471B",
+          tertiary: "#F9A01B"
+        },
+        rotation: {
+          labels: [
+            "Keyonte George",
+            "Cody Williams",
+            "Taylor Hendricks",
+            "Walker Kessler",
+            "Brice Sensabaugh"
+          ],
+          data: [22, 20, 18, 18, 16]
+        },
+        skill: {
+          labels: [
+            "Advantage creation",
+            "Spacing gravity",
+            "Defensive disruption",
+            "Playmaking vision",
+            "Tempo pressure"
+          ],
+          training: [7, 7, 8, 6, 6],
+          readiness: [6, 6, 7, 6, 6]
+        },
+        shotProfile: {
+          labels: [
+            "Rim attacks",
+            "Paint floaters",
+            "Mid-post isolations",
+            "Corner threes",
+            "Above-the-break threes"
+          ],
+          team: [28, 13, 15, 20, 24],
+          league: [24, 14, 16, 18, 28]
+        },
+        tempo: {
+          labels: [
+            "Arrival day",
+            "Closed scrimmage",
+            "Open scrimmage",
+            "Special situations",
+            "Shootaround"
+          ],
+          tempo: [68, 72, 74, 71, 69],
+          specials: [22, 28, 34, 32, 28]
+        },
+        synergy: {
+          points: [
+            { label: "George downhill reads", x: 102, y: 80, r: 13 },
+            { label: "Hendricks weak-side pop", x: 96, y: 84, r: 12 },
+            { label: "Kessler drop anchor", x: 90, y: 88, r: 11 },
+            { label: "Sensabaugh scoring punch", x: 98, y: 76, r: 10 }
+          ],
+          xLabel: "Tempo index (possessions per 48)",
+          yLabel: "Coverage sync score"
+        }
+      }
+    ]
+  },
+  "preseason-12400015": {
+    teams: [
+      {
+        name: "Miami Heat",
+        slug: "miami-heat",
+        colors: {
+          primary: "#98002E",
+          secondary: "#000000",
+          tertiary: "#F9A01B"
+        },
+        rotation: {
+          labels: [
+            "Tyler Herro",
+            "Jaime Jaquez Jr.",
+            "Nikola Jović",
+            "Thomas Bryant",
+            "Alondes Williams"
+          ],
+          data: [22, 20, 18, 16, 15]
+        },
+        skill: {
+          labels: [
+            "Advantage creation",
+            "Spacing gravity",
+            "Defensive disruption",
+            "Playmaking vision",
+            "Tempo pressure"
+          ],
+          training: [8, 7, 7, 6, 6],
+          readiness: [7, 7, 7, 6, 6]
+        },
+        shotProfile: {
+          labels: [
+            "Rim attacks",
+            "Paint floaters",
+            "Mid-post isolations",
+            "Corner threes",
+            "Above-the-break threes"
+          ],
+          team: [24, 12, 16, 22, 26],
+          league: [24, 14, 16, 18, 28]
+        },
+        tempo: {
+          labels: [
+            "Arrival day",
+            "Closed scrimmage",
+            "Open scrimmage",
+            "Special situations",
+            "Shootaround"
+          ],
+          tempo: [68, 72, 74, 70, 69],
+          specials: [20, 26, 32, 34, 28]
+        },
+        synergy: {
+          points: [
+            { label: "Herro trigger sets", x: 100, y: 82, r: 13 },
+            { label: "Jaquez connective", x: 96, y: 84, r: 12 },
+            { label: "Jović point forward", x: 98, y: 78, r: 11 },
+            { label: "Bryant paint seals", x: 92, y: 80, r: 10 }
+          ],
+          xLabel: "Tempo index (possessions per 48)",
+          yLabel: "Coverage sync score"
+        }
+      },
+      {
+        name: "Charlotte Hornets",
+        slug: "charlotte-hornets",
+        colors: {
+          primary: "#1D1160",
+          secondary: "#00788C",
+          tertiary: "#A1A1A4"
+        },
+        rotation: {
+          labels: [
+            "Brandon Miller",
+            "LaMelo Ball",
+            "Grant Williams",
+            "Nick Smith Jr.",
+            "JT Thor"
+          ],
+          data: [24, 20, 18, 16, 14]
+        },
+        skill: {
+          labels: [
+            "Advantage creation",
+            "Spacing gravity",
+            "Defensive disruption",
+            "Playmaking vision",
+            "Tempo pressure"
+          ],
+          training: [8, 7, 6, 8, 7],
+          readiness: [7, 7, 6, 7, 6]
+        },
+        shotProfile: {
+          labels: [
+            "Rim attacks",
+            "Paint floaters",
+            "Mid-post isolations",
+            "Corner threes",
+            "Above-the-break threes"
+          ],
+          team: [27, 12, 13, 22, 26],
+          league: [24, 14, 16, 18, 28]
+        },
+        tempo: {
+          labels: [
+            "Arrival day",
+            "Closed scrimmage",
+            "Open scrimmage",
+            "Special situations",
+            "Shootaround"
+          ],
+          tempo: [70, 74, 75, 72, 71],
+          specials: [20, 26, 32, 34, 28]
+        },
+        synergy: {
+          points: [
+            { label: "Ball + Miller creation", x: 104, y: 80, r: 14 },
+            { label: "Grant Williams switches", x: 94, y: 82, r: 12 },
+            { label: "Nick Smith pace", x: 102, y: 74, r: 11 },
+            { label: "Thor weak-side length", x: 96, y: 78, r: 10 }
+          ],
+          xLabel: "Tempo index (possessions per 48)",
+          yLabel: "Coverage sync score"
+        }
+      }
+    ]
+  },
   "preseason-12400016": {
     teams: [
       {
@@ -1405,6 +2045,390 @@ window.preseasonDashboards = {
             { label: "Johnson slashing", x: 104, y: 80, r: 12 },
             { label: "Bogdanovic spacing", x: 98, y: 78, r: 11 },
             { label: "Okongwu rim deterrence", x: 96, y: 86, r: 13 }
+          ],
+          xLabel: "Tempo index (possessions per 48)",
+          yLabel: "Coverage sync score"
+        }
+      }
+    ]
+  },
+  "preseason-12400019": {
+    teams: [
+      {
+        name: "Brooklyn Nets",
+        slug: "brooklyn-nets",
+        colors: {
+          primary: "#000000",
+          secondary: "#FFFFFF",
+          tertiary: "#006BB6"
+        },
+        rotation: {
+          labels: [
+            "Mikal Bridges",
+            "Dennis Schröder",
+            "Cam Thomas",
+            "Noah Clowney",
+            "Day'Ron Sharpe"
+          ],
+          data: [22, 20, 18, 16, 16]
+        },
+        skill: {
+          labels: [
+            "Advantage creation",
+            "Spacing gravity",
+            "Defensive disruption",
+            "Playmaking vision",
+            "Tempo pressure"
+          ],
+          training: [7, 7, 8, 6, 6],
+          readiness: [7, 6, 7, 6, 6]
+        },
+        shotProfile: {
+          labels: [
+            "Rim attacks",
+            "Paint floaters",
+            "Mid-post isolations",
+            "Corner threes",
+            "Above-the-break threes"
+          ],
+          team: [24, 12, 16, 20, 28],
+          league: [24, 14, 16, 18, 28]
+        },
+        tempo: {
+          labels: [
+            "Arrival day",
+            "Closed scrimmage",
+            "Open scrimmage",
+            "Special situations",
+            "Shootaround"
+          ],
+          tempo: [68, 72, 75, 70, 69],
+          specials: [22, 28, 32, 34, 28]
+        },
+        synergy: {
+          points: [
+            { label: "Bridges primary reps", x: 96, y: 84, r: 13 },
+            { label: "Schröder tempo", x: 100, y: 78, r: 12 },
+            { label: "Thomas scoring burst", x: 104, y: 74, r: 11 },
+            { label: "Clowney weak-side rim", x: 94, y: 82, r: 10 }
+          ],
+          xLabel: "Tempo index (possessions per 48)",
+          yLabel: "Coverage sync score"
+        }
+      },
+      {
+        name: "Los Angeles Clippers",
+        slug: "los-angeles-clippers",
+        colors: {
+          primary: "#1D428A",
+          secondary: "#C8102E",
+          tertiary: "#BEC0C2"
+        },
+        rotation: {
+          labels: [
+            "Terance Mann",
+            "Norman Powell",
+            "Bones Hyland",
+            "Brandon Boston Jr.",
+            "Moussa Diabaté"
+          ],
+          data: [22, 20, 18, 16, 14]
+        },
+        skill: {
+          labels: [
+            "Advantage creation",
+            "Spacing gravity",
+            "Defensive disruption",
+            "Playmaking vision",
+            "Tempo pressure"
+          ],
+          training: [7, 7, 7, 6, 6],
+          readiness: [7, 7, 7, 6, 6]
+        },
+        shotProfile: {
+          labels: [
+            "Rim attacks",
+            "Paint floaters",
+            "Mid-post isolations",
+            "Corner threes",
+            "Above-the-break threes"
+          ],
+          team: [22, 14, 18, 20, 26],
+          league: [24, 14, 16, 18, 28]
+        },
+        tempo: {
+          labels: [
+            "Arrival day",
+            "Closed scrimmage",
+            "Open scrimmage",
+            "Special situations",
+            "Shootaround"
+          ],
+          tempo: [66, 70, 72, 69, 68],
+          specials: [18, 24, 32, 34, 28]
+        },
+        synergy: {
+          points: [
+            { label: "Mann drive game", x: 96, y: 84, r: 13 },
+            { label: "Hyland pace", x: 102, y: 78, r: 12 },
+            { label: "Brown spacing", x: 94, y: 80, r: 11 },
+            { label: "Diabaté rim seals", x: 90, y: 76, r: 10 }
+          ],
+          xLabel: "Tempo index (possessions per 48)",
+          yLabel: "Coverage sync score"
+        }
+      }
+    ]
+  },
+  "preseason-12400023": {
+    teams: [
+      {
+        name: "Sacramento Kings",
+        slug: "sacramento-kings",
+        colors: {
+          primary: "#5A2D81",
+          secondary: "#63727A",
+          tertiary: "#000000"
+        },
+        rotation: {
+          labels: [
+            "Domantas Sabonis",
+            "De'Aaron Fox",
+            "Keegan Murray",
+            "Malik Monk",
+            "Sasha Vezenkov"
+          ],
+          data: [22, 20, 18, 18, 16]
+        },
+        skill: {
+          labels: [
+            "Advantage creation",
+            "Spacing gravity",
+            "Defensive disruption",
+            "Playmaking vision",
+            "Tempo pressure"
+          ],
+          training: [8, 8, 6, 9, 8],
+          readiness: [8, 8, 6, 8, 7]
+        },
+        shotProfile: {
+          labels: [
+            "Rim attacks",
+            "Paint floaters",
+            "Mid-post isolations",
+            "Corner threes",
+            "Above-the-break threes"
+          ],
+          team: [26, 12, 14, 24, 24],
+          league: [24, 14, 16, 18, 28]
+        },
+        tempo: {
+          labels: [
+            "Arrival day",
+            "Closed scrimmage",
+            "Open scrimmage",
+            "Special situations",
+            "Shootaround"
+          ],
+          tempo: [70, 74, 76, 72, 70],
+          specials: [22, 28, 34, 36, 32]
+        },
+        synergy: {
+          points: [
+            { label: "Fox + Sabonis dribble handoffs", x: 104, y: 86, r: 14 },
+            { label: "Murray movement shooting", x: 98, y: 82, r: 12 },
+            { label: "Monk bench ignition", x: 102, y: 78, r: 11 },
+            { label: "Vezenkov pick-and-pop", x: 96, y: 80, r: 10 }
+          ],
+          xLabel: "Tempo index (possessions per 48)",
+          yLabel: "Coverage sync score"
+        }
+      },
+      {
+        name: "Golden State Warriors",
+        slug: "golden-state-warriors",
+        colors: {
+          primary: "#1D428A",
+          secondary: "#FFC72C",
+          tertiary: "#26282A"
+        },
+        rotation: {
+          labels: [
+            "Stephen Curry",
+            "Klay Thompson",
+            "Jonathan Kuminga",
+            "Brandin Podziemski",
+            "Trayce Jackson-Davis"
+          ],
+          data: [18, 18, 20, 18, 16]
+        },
+        skill: {
+          labels: [
+            "Advantage creation",
+            "Spacing gravity",
+            "Defensive disruption",
+            "Playmaking vision",
+            "Tempo pressure"
+          ],
+          training: [9, 9, 7, 8, 7],
+          readiness: [9, 8, 7, 8, 7]
+        },
+        shotProfile: {
+          labels: [
+            "Rim attacks",
+            "Paint floaters",
+            "Mid-post isolations",
+            "Corner threes",
+            "Above-the-break threes"
+          ],
+          team: [24, 10, 12, 22, 32],
+          league: [24, 14, 16, 18, 28]
+        },
+        tempo: {
+          labels: [
+            "Arrival day",
+            "Closed scrimmage",
+            "Open scrimmage",
+            "Special situations",
+            "Shootaround"
+          ],
+          tempo: [72, 76, 78, 74, 72],
+          specials: [20, 26, 32, 34, 30]
+        },
+        synergy: {
+          points: [
+            { label: "Curry-Draymond cadence", x: 106, y: 88, r: 14 },
+            { label: "Kuminga rim attacks", x: 104, y: 80, r: 12 },
+            { label: "Podziemski connective", x: 100, y: 82, r: 11 },
+            { label: "TJD short roll reads", x: 96, y: 78, r: 10 }
+          ],
+          xLabel: "Tempo index (possessions per 48)",
+          yLabel: "Coverage sync score"
+        }
+      }
+    ]
+  },
+  "preseason-12400035": {
+    teams: [
+      {
+        name: "Los Angeles Clippers",
+        slug: "los-angeles-clippers",
+        colors: {
+          primary: "#1D428A",
+          secondary: "#C8102E",
+          tertiary: "#BEC0C2"
+        },
+        rotation: {
+          labels: [
+            "James Harden",
+            "Paul George",
+            "Kawhi Leonard",
+            "Kobe Brown",
+            "Ivica Zubac"
+          ],
+          data: [18, 18, 18, 16, 16]
+        },
+        skill: {
+          labels: [
+            "Advantage creation",
+            "Spacing gravity",
+            "Defensive disruption",
+            "Playmaking vision",
+            "Tempo pressure"
+          ],
+          training: [8, 8, 7, 8, 7],
+          readiness: [7, 8, 7, 8, 7]
+        },
+        shotProfile: {
+          labels: [
+            "Rim attacks",
+            "Paint floaters",
+            "Mid-post isolations",
+            "Corner threes",
+            "Above-the-break threes"
+          ],
+          team: [24, 12, 16, 22, 26],
+          league: [24, 14, 16, 18, 28]
+        },
+        tempo: {
+          labels: [
+            "Arrival day",
+            "Closed scrimmage",
+            "Open scrimmage",
+            "Special situations",
+            "Shootaround"
+          ],
+          tempo: [66, 70, 72, 69, 68],
+          specials: [18, 24, 32, 34, 28]
+        },
+        synergy: {
+          points: [
+            { label: "Harden orchestrating", x: 96, y: 86, r: 13 },
+            { label: "PG pull-up fire", x: 100, y: 84, r: 12 },
+            { label: "Kawhi mid-post", x: 94, y: 88, r: 12 },
+            { label: "Zubac rim control", x: 90, y: 82, r: 11 }
+          ],
+          xLabel: "Tempo index (possessions per 48)",
+          yLabel: "Coverage sync score"
+        }
+      },
+      {
+        name: "Portland Trail Blazers",
+        slug: "portland-trail-blazers",
+        colors: {
+          primary: "#E03A3E",
+          secondary: "#000000",
+          tertiary: "#B6BFBF"
+        },
+        rotation: {
+          labels: [
+            "Scoot Henderson",
+            "Anfernee Simons",
+            "Shaedon Sharpe",
+            "Jabari Walker",
+            "Duop Reath"
+          ],
+          data: [22, 20, 18, 16, 16]
+        },
+        skill: {
+          labels: [
+            "Advantage creation",
+            "Spacing gravity",
+            "Defensive disruption",
+            "Playmaking vision",
+            "Tempo pressure"
+          ],
+          training: [8, 8, 7, 7, 7],
+          readiness: [7, 7, 6, 6, 6]
+        },
+        shotProfile: {
+          labels: [
+            "Rim attacks",
+            "Paint floaters",
+            "Mid-post isolations",
+            "Corner threes",
+            "Above-the-break threes"
+          ],
+          team: [28, 12, 14, 20, 26],
+          league: [24, 14, 16, 18, 28]
+        },
+        tempo: {
+          labels: [
+            "Arrival day",
+            "Closed scrimmage",
+            "Open scrimmage",
+            "Special situations",
+            "Shootaround"
+          ],
+          tempo: [72, 76, 78, 74, 72],
+          specials: [22, 28, 34, 36, 32]
+        },
+        synergy: {
+          points: [
+            { label: "Scoot downhill", x: 108, y: 80, r: 13 },
+            { label: "Simons scoring", x: 104, y: 78, r: 12 },
+            { label: "Sharpe aerial threats", x: 102, y: 82, r: 11 },
+            { label: "Reath pick-and-pop", x: 96, y: 76, r: 10 }
           ],
           xLabel: "Tempo index (possessions per 48)",
           yLabel: "Coverage sync score"
