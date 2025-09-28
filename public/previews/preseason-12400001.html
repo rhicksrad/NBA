@@ -48,6 +48,44 @@
         color: var(--navy);
       }
 
+      .team-visuals {
+        display: grid;
+        gap: clamp(1.4rem, 3vw, 2rem);
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      }
+
+      .team-panel {
+        display: grid;
+        gap: clamp(1rem, 2.5vw, 1.5rem);
+        padding: clamp(1.25rem, 3vw, 1.75rem);
+        border-radius: var(--radius-lg);
+        background: color-mix(in srgb, var(--surface-alt) 78%, var(--preview-tint) 22%);
+        border: 1px solid color-mix(in srgb, var(--border) 58%, transparent);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.32);
+      }
+
+      .team-panel header {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+      }
+
+      .team-panel h3 {
+        margin: 0;
+        font-size: clamp(1.15rem, 3vw, 1.45rem);
+        color: var(--navy);
+      }
+
+      .team-panel .meta {
+        font-size: 0.78rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        font-weight: 600;
+        color: rgba(17, 86, 214, 0.7);
+      }
+
       .chart-grid {
         display: grid;
         gap: clamp(1.1rem, 3vw, 1.8rem);
@@ -74,6 +112,11 @@
         margin: 0;
         font-size: 0.85rem;
         color: var(--text-subtle);
+      }
+
+      .chart-card canvas {
+        width: 100%;
+        height: clamp(220px, 30vw, 270px);
       }
 
       .preview-copy {
@@ -148,29 +191,82 @@
       }
     </style>
     <script src="../vendor/chart.umd.js" defer></script>
+    <script src="../scripts/preseason-dashboards.js" defer></script>
+    <script src="../scripts/preseason-preview.js" defer></script>
   </head>
-  <body>
-        <main class="preview-shell">
+  <body data-preview-id="preseason-12400001">
+    <main class="preview-shell">
       <section class="visuals">
-              <h2>Preseason scouting dashboard</h2>
-              <div class="chart-grid">
-                <figure class="chart-card">
-                  <h3>Projected evaluation minutes</h3>
-                  <canvas id="rotationChart"></canvas>
-                  <p>Estimated minutes the coaching staffs want to log for their developmental priorities in Abu Dhabi.</p>
-                </figure>
-                <figure class="chart-card">
-                  <h3>Skill focus for young wings</h3>
-                  <canvas id="developmentChart"></canvas>
-                  <p>Coaches’ emphasis areas (0-10 scale) for Boston and Denver wings fighting for rotation trust.</p>
-                </figure>
-                <figure class="chart-card">
-                  <h3>Availability snapshot</h3>
-                  <canvas id="healthChart"></canvas>
-                  <p>Breakdown of the roster groups: cleared for full minutes, monitored workloads, or limited to rehab work.</p>
-                </figure>
-              </div>
-            </section>
+        <h2>Preseason scouting dashboard</h2>
+        <div class="team-visuals">
+          <div class="team-panel" data-team="boston-celtics">
+            <header>
+              <h3>Boston Celtics data lab</h3>
+              <span class="meta">Bench acceleration focus</span>
+            </header>
+            <div class="chart-grid">
+              <figure class="chart-card">
+                <h3>Rotation bandwidth</h3>
+                <canvas id="boston-celtics-rotation"></canvas>
+                <p>Minute allocations the staff wants to log for Abu Dhabi reps, highlighting how Boston’s reserve wings scale up.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Skill scaffolding radar</h3>
+                <canvas id="boston-celtics-skill-spider"></canvas>
+                <p>Comparison between the coaching blueprint and current readiness for Boston’s developmental priorities.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Shot diet vs. league</h3>
+                <canvas id="boston-celtics-shot-zones"></canvas>
+                <p>Where the Celtics expect their preseason attempts to come from compared to a league baseline mix.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Practice tempo log</h3>
+                <canvas id="boston-celtics-tempo-curve"></canvas>
+                <p>Five-session chronicle of tempo sessions versus special-situation installs leading into the opener.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Pairing synergy map</h3>
+                <canvas id="boston-celtics-synergy-matrix"></canvas>
+                <p>Tempo and coverage sync indices for Boston combinations expected to share long stretches.</p>
+              </figure>
+            </div>
+          </div>
+          <div class="team-panel" data-team="denver-nuggets">
+            <header>
+              <h3>Denver Nuggets data lab</h3>
+              <span class="meta">Development runway</span>
+            </header>
+            <div class="chart-grid">
+              <figure class="chart-card">
+                <h3>Rotation bandwidth</h3>
+                <canvas id="denver-nuggets-rotation"></canvas>
+                <p>Targeted minutes for Denver’s rising contributors as they search for the next wave of support players.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Skill scaffolding radar</h3>
+                <canvas id="denver-nuggets-skill-spider"></canvas>
+                <p>Skill priorities outlined by the staff against current camp readiness readings for the Nuggets.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Shot diet vs. league</h3>
+                <canvas id="denver-nuggets-shot-zones"></canvas>
+                <p>Projected shot profile for Denver’s preseason lineups juxtaposed with a league-average distribution.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Practice tempo log</h3>
+                <canvas id="denver-nuggets-tempo-curve"></canvas>
+                <p>How tempo drills and special-situation work have been balanced in camp before the Abu Dhabi showcase.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Pairing synergy map</h3>
+                <canvas id="denver-nuggets-synergy-matrix"></canvas>
+                <p>Pace and defensive sync scores for Denver combinations auditioning for higher-leverage minutes.</p>
+              </figure>
+            </div>
+          </div>
+        </div>
+      </section>
 
       <article class="preview-copy">
         <header>
@@ -200,133 +296,5 @@
             </footer>
     </main>
 
-    <script defer>
-      const palette = {
-        celtics: "#007A33",
-        nuggets: "#0E2240",
-        accent: "#FDB927",
-        neutral: "#7f8ea3"
-      };
-
-      window.addEventListener("DOMContentLoaded", () => {
-        const rotationCtx = document.getElementById("rotationChart");
-        const developmentCtx = document.getElementById("developmentChart");
-        const healthCtx = document.getElementById("healthChart");
-
-        new Chart(rotationCtx, {
-          type: "bar",
-          data: {
-            labels: [
-              "Jordan Walsh (BOS)",
-              "Baylor Scheierman (BOS)",
-              "Neemias Queta (BOS)",
-              "Julian Strawther (DEN)",
-              "Peyton Watson (DEN)",
-              "DaRon Holmes II (DEN)"
-            ],
-            datasets: [
-              {
-                label: "Target minutes",
-                data: [22, 20, 16, 21, 18, 17],
-                backgroundColor: [
-                  palette.celtics,
-                  palette.celtics,
-                  palette.celtics,
-                  palette.nuggets,
-                  palette.nuggets,
-                  palette.nuggets
-                ],
-                borderRadius: 6
-              }
-            ]
-          },
-          options: {
-            responsive: true,
-            scales: {
-              y: {
-                beginAtZero: true,
-                max: 24,
-                ticks: { stepSize: 4, color: palette.neutral },
-                grid: { color: "rgba(15, 35, 64, 0.08)" }
-              },
-              x: {
-                ticks: { color: palette.neutral },
-                grid: { display: false }
-              }
-            },
-            plugins: {
-              legend: { display: false }
-            }
-          }
-        });
-
-        new Chart(developmentCtx, {
-          type: "radar",
-          data: {
-            labels: ["On-ball reps", "Spacing volume", "Defensive activity", "Playmaking", "Transition pace"],
-            datasets: [
-              {
-                label: "Jordan Walsh",
-                data: [7, 5, 9, 6, 8],
-                borderColor: palette.celtics,
-                backgroundColor: "rgba(0, 122, 51, 0.25)",
-                pointBackgroundColor: palette.celtics
-              },
-              {
-                label: "Baylor Scheierman",
-                data: [5, 9, 6, 7, 6],
-                borderColor: palette.accent,
-                backgroundColor: "rgba(253, 185, 39, 0.2)",
-                pointBackgroundColor: palette.accent
-              },
-              {
-                label: "Julian Strawther",
-                data: [6, 8, 7, 5, 7],
-                borderColor: palette.nuggets,
-                backgroundColor: "rgba(14, 34, 64, 0.25)",
-                pointBackgroundColor: palette.nuggets
-              }
-            ]
-          },
-          options: {
-            responsive: true,
-            scales: {
-              r: {
-                suggestedMin: 0,
-                suggestedMax: 10,
-                ticks: { display: false },
-                grid: { color: "rgba(15, 35, 64, 0.08)" },
-                angleLines: { color: "rgba(15, 35, 64, 0.08)" },
-                pointLabels: { color: palette.neutral }
-              }
-            }
-          }
-        });
-
-        new Chart(healthCtx, {
-          type: "doughnut",
-          data: {
-            labels: ["Cleared for full run", "Monitored workload", "Rehab group"],
-            datasets: [
-              {
-                data: [9, 4, 2],
-                backgroundColor: [palette.celtics, palette.accent, palette.nuggets],
-                borderWidth: 0
-              }
-            ]
-          },
-          options: {
-            responsive: true,
-            cutout: "62%",
-            plugins: {
-              legend: {
-                position: "bottom",
-                labels: { color: palette.neutral }
-              }
-            }
-          }
-        });
-      });
-    </script>
   </body>
 </html>

@@ -47,6 +47,44 @@
         font-size: clamp(1.4rem, 4vw, 1.9rem);
         color: var(--navy);
       }
+      .team-visuals {
+        display: grid;
+        gap: clamp(1.4rem, 3vw, 2rem);
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      }
+
+      .team-panel {
+        display: grid;
+        gap: clamp(1rem, 2.5vw, 1.5rem);
+        padding: clamp(1.25rem, 3vw, 1.75rem);
+        border-radius: var(--radius-lg);
+        background: color-mix(in srgb, var(--surface-alt) 78%, var(--preview-tint) 22%);
+        border: 1px solid color-mix(in srgb, var(--border) 58%, transparent);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.32);
+      }
+
+      .team-panel header {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+      }
+
+      .team-panel h3 {
+        margin: 0;
+        font-size: clamp(1.15rem, 3vw, 1.45rem);
+        color: var(--navy);
+      }
+
+      .team-panel .meta {
+        font-size: 0.78rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        font-weight: 600;
+        color: rgba(17, 86, 214, 0.7);
+      }
+
 
       .chart-grid {
         display: grid;
@@ -75,6 +113,11 @@
         font-size: 0.85rem;
         color: var(--text-subtle);
       }
+      .chart-card canvas {
+        width: 100%;
+        height: clamp(220px, 30vw, 270px);
+      }
+
 
       .preview-copy {
         grid-area: preview;
@@ -148,29 +191,82 @@
       }
     </style>
     <script src="../vendor/chart.umd.js" defer></script>
+    <script src="../scripts/preseason-dashboards.js" defer></script>
+    <script src="../scripts/preseason-preview.js" defer></script>
   </head>
-  <body>
+  <body data-preview-id="preseason-12400012">
         <main class="preview-shell">
-      <section class="visuals">
-              <h2>Preseason scouting dashboard</h2>
-              <div class="chart-grid">
-                <figure class="chart-card">
-                  <h3>Projected evaluation minutes</h3>
-                  <canvas id="rotationChart"></canvas>
-                  <p>Estimated minutes earmarked for developmental priorities in Dallas.</p>
-                </figure>
-                <figure class="chart-card">
-                  <h3>Skill focus for rotation hopefuls</h3>
-                  <canvas id="developmentChart"></canvas>
-                  <p>Coaching emphasis (0-10 scale) for players battling for rotation spots.</p>
-                </figure>
-                <figure class="chart-card">
-                  <h3>Availability snapshot</h3>
-                  <canvas id="healthChart"></canvas>
-                  <p>Roster allocation across full-go groups, monitored workloads, and rehab assignments.</p>
-                </figure>
-              </div>
-            </section>
+            <section class="visuals">
+        <h2>Preseason scouting dashboard</h2>
+        <div class="team-visuals">
+          <div class="team-panel" data-team="memphis-grizzlies">
+            <header>
+              <h3>Memphis Grizzlies data lab</h3>
+              <span class="meta">Athletic depth push</span>
+            </header>
+            <div class="chart-grid">
+              <figure class="chart-card">
+                <h3>Rotation bandwidth</h3>
+                <canvas id="memphis-grizzlies-rotation"></canvas>
+                <p>Minute allocations the staff wants to log for the Memphis Grizzlies preseason reps, highlighting priority combinations.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Skill scaffolding radar</h3>
+                <canvas id="memphis-grizzlies-skill-spider"></canvas>
+                <p>Comparison between the coaching blueprint and current readiness for the Memphis Grizzlies developmental priorities.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Shot diet vs. league</h3>
+                <canvas id="memphis-grizzlies-shot-zones"></canvas>
+                <p>Where the Memphis Grizzlies expect preseason attempts to originate relative to a league baseline mix.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Practice tempo log</h3>
+                <canvas id="memphis-grizzlies-tempo-curve"></canvas>
+                <p>Five-session chronicle of tempo sessions versus special-situation installs leading into the opener.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Pairing synergy map</h3>
+                <canvas id="memphis-grizzlies-synergy-matrix"></canvas>
+                <p>Tempo and coverage sync indices for Memphis Grizzlies combinations expected to share long stretches.</p>
+              </figure>
+            </div>
+          </div>
+          <div class="team-panel" data-team="dallas-mavericks">
+            <header>
+              <h3>Dallas Mavericks data lab</h3>
+              <span class="meta">Dual-star balance</span>
+            </header>
+            <div class="chart-grid">
+              <figure class="chart-card">
+                <h3>Rotation bandwidth</h3>
+                <canvas id="dallas-mavericks-rotation"></canvas>
+                <p>Minute allocations the staff wants to log for the Dallas Mavericks preseason reps, highlighting priority combinations.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Skill scaffolding radar</h3>
+                <canvas id="dallas-mavericks-skill-spider"></canvas>
+                <p>Comparison between the coaching blueprint and current readiness for the Dallas Mavericks developmental priorities.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Shot diet vs. league</h3>
+                <canvas id="dallas-mavericks-shot-zones"></canvas>
+                <p>Where the Dallas Mavericks expect preseason attempts to originate relative to a league baseline mix.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Practice tempo log</h3>
+                <canvas id="dallas-mavericks-tempo-curve"></canvas>
+                <p>Five-session chronicle of tempo sessions versus special-situation installs leading into the opener.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Pairing synergy map</h3>
+                <canvas id="dallas-mavericks-synergy-matrix"></canvas>
+                <p>Tempo and coverage sync indices for Dallas Mavericks combinations expected to share long stretches.</p>
+              </figure>
+            </div>
+          </div>
+        </div>
+      </section>
 
       <article class="preview-copy">
         <header>
@@ -200,134 +296,5 @@
             </footer>
     </main>
 
-    <script defer>
-      const palette = {
-        grizzlies: "#12173F",
-        slate: "#5D76A9",
-        mavs: "#0053BC",
-        frost: "#B8C4CA",
-        neutral: "#7f8ea3"
-      };
-
-      window.addEventListener("DOMContentLoaded", () => {
-        const rotationCtx = document.getElementById("rotationChart");
-        const developmentCtx = document.getElementById("developmentChart");
-        const healthCtx = document.getElementById("healthChart");
-
-        new Chart(rotationCtx, {
-          type: "bar",
-          data: {
-            labels: [
-              "GG Jackson II (MEM)",
-              "Zach Edey (MEM)",
-              "De'Anthony Melton (MEM)",
-              "Josh Green (DAL)",
-              "O-Max Prosper (DAL)",
-              "AJ Johnson (DAL)"
-            ],
-            datasets: [
-              {
-                label: "Target minutes",
-                data: [22, 18, 17, 20, 18, 16],
-                backgroundColor: [
-                  palette.grizzlies,
-                  palette.slate,
-                  palette.grizzlies,
-                  palette.mavs,
-                  palette.frost,
-                  palette.mavs
-                ],
-                borderRadius: 6
-              }
-            ]
-          },
-          options: {
-            responsive: true,
-            scales: {
-              y: {
-                beginAtZero: true,
-                max: 24,
-                ticks: { stepSize: 4, color: palette.neutral },
-                grid: { color: "rgba(18, 23, 63, 0.1)" }
-              },
-              x: {
-                ticks: { color: palette.neutral },
-                grid: { display: false }
-              }
-            },
-            plugins: {
-              legend: { display: false }
-            }
-          }
-        });
-
-        new Chart(developmentCtx, {
-          type: "radar",
-          data: {
-            labels: ["Rim protection", "Perimeter defense", "Playmaking", "Shooting", "Transition"],
-            datasets: [
-              {
-                label: "Zach Edey",
-                data: [8, 5, 4, 6, 5],
-                borderColor: palette.slate,
-                backgroundColor: "rgba(93, 118, 169, 0.25)",
-                pointBackgroundColor: palette.slate
-              },
-              {
-                label: "Josh Green",
-                data: [6, 8, 6, 7, 8],
-                borderColor: palette.mavs,
-                backgroundColor: "rgba(0, 83, 188, 0.25)",
-                pointBackgroundColor: palette.mavs
-              },
-              {
-                label: "GG Jackson II",
-                data: [5, 6, 5, 8, 7],
-                borderColor: palette.grizzlies,
-                backgroundColor: "rgba(18, 23, 63, 0.25)",
-                pointBackgroundColor: palette.grizzlies
-              }
-            ]
-          },
-          options: {
-            responsive: true,
-            scales: {
-              r: {
-                suggestedMin: 0,
-                suggestedMax: 10,
-                ticks: { display: false },
-                grid: { color: "rgba(18, 23, 63, 0.12)" },
-                angleLines: { color: "rgba(18, 23, 63, 0.12)" },
-                pointLabels: { color: palette.neutral }
-              }
-            }
-          }
-        });
-
-        new Chart(healthCtx, {
-          type: "doughnut",
-          data: {
-            labels: ["Cleared for full run", "Monitored workload", "Rehab group"],
-            datasets: [
-              {
-                data: [10, 5, 2],
-                backgroundColor: [palette.mavs, palette.grizzlies, palette.frost],
-                borderWidth: 0
-              }
-            ]
-          },
-          options: {
-            responsive: true,
-            cutout: "62%",
-            plugins: {
-              legend: {
-                position: "bottom",
-                labels: { color: palette.neutral }
-              }
-            }
-          }
-        });
-      });
-    </script>
   </body>
 </html>

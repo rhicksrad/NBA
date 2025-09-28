@@ -47,6 +47,44 @@
         font-size: clamp(1.4rem, 4vw, 1.9rem);
         color: var(--navy);
       }
+      .team-visuals {
+        display: grid;
+        gap: clamp(1.4rem, 3vw, 2rem);
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      }
+
+      .team-panel {
+        display: grid;
+        gap: clamp(1rem, 2.5vw, 1.5rem);
+        padding: clamp(1.25rem, 3vw, 1.75rem);
+        border-radius: var(--radius-lg);
+        background: color-mix(in srgb, var(--surface-alt) 78%, var(--preview-tint) 22%);
+        border: 1px solid color-mix(in srgb, var(--border) 58%, transparent);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.32);
+      }
+
+      .team-panel header {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+      }
+
+      .team-panel h3 {
+        margin: 0;
+        font-size: clamp(1.15rem, 3vw, 1.45rem);
+        color: var(--navy);
+      }
+
+      .team-panel .meta {
+        font-size: 0.78rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        font-weight: 600;
+        color: rgba(17, 86, 214, 0.7);
+      }
+
 
       .chart-grid {
         display: grid;
@@ -75,6 +113,11 @@
         font-size: 0.85rem;
         color: var(--text-subtle);
       }
+      .chart-card canvas {
+        width: 100%;
+        height: clamp(220px, 30vw, 270px);
+      }
+
 
       .preview-copy {
         grid-area: preview;
@@ -148,29 +191,82 @@
       }
     </style>
     <script src="../vendor/chart.umd.js" defer></script>
+    <script src="../scripts/preseason-dashboards.js" defer></script>
+    <script src="../scripts/preseason-preview.js" defer></script>
   </head>
-  <body>
+  <body data-preview-id="preseason-12400008">
         <main class="preview-shell">
-      <section class="visuals">
-              <h2>Preseason scouting dashboard</h2>
-              <div class="chart-grid">
-                <figure class="chart-card">
-                  <h3>Projected evaluation minutes</h3>
-                  <canvas id="rotationChart"></canvas>
-                  <p>Estimated minutes earmarked for developmental priorities during Detroit’s opener.</p>
-                </figure>
-                <figure class="chart-card">
-                  <h3>Skill focus for guard/wing development</h3>
-                  <canvas id="developmentChart"></canvas>
-                  <p>Coaching emphasis (0-10 scale) for players trying to secure rotation roles this fall.</p>
-                </figure>
-                <figure class="chart-card">
-                  <h3>Availability snapshot</h3>
-                  <canvas id="healthChart"></canvas>
-                  <p>Roster allocation across full-go groups, monitored workloads, and rehab assignments.</p>
-                </figure>
-              </div>
-            </section>
+            <section class="visuals">
+        <h2>Preseason scouting dashboard</h2>
+        <div class="team-visuals">
+          <div class="team-panel" data-team="milwaukee-bucks">
+            <header>
+              <h3>Milwaukee Bucks data lab</h3>
+              <span class="meta">Perimeter containment</span>
+            </header>
+            <div class="chart-grid">
+              <figure class="chart-card">
+                <h3>Rotation bandwidth</h3>
+                <canvas id="milwaukee-bucks-rotation"></canvas>
+                <p>Minute allocations the staff wants to log for the Milwaukee Bucks preseason reps, highlighting priority combinations.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Skill scaffolding radar</h3>
+                <canvas id="milwaukee-bucks-skill-spider"></canvas>
+                <p>Comparison between the coaching blueprint and current readiness for the Milwaukee Bucks developmental priorities.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Shot diet vs. league</h3>
+                <canvas id="milwaukee-bucks-shot-zones"></canvas>
+                <p>Where the Milwaukee Bucks expect preseason attempts to originate relative to a league baseline mix.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Practice tempo log</h3>
+                <canvas id="milwaukee-bucks-tempo-curve"></canvas>
+                <p>Five-session chronicle of tempo sessions versus special-situation installs leading into the opener.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Pairing synergy map</h3>
+                <canvas id="milwaukee-bucks-synergy-matrix"></canvas>
+                <p>Tempo and coverage sync indices for Milwaukee Bucks combinations expected to share long stretches.</p>
+              </figure>
+            </div>
+          </div>
+          <div class="team-panel" data-team="detroit-pistons">
+            <header>
+              <h3>Detroit Pistons data lab</h3>
+              <span class="meta">Young core ignition</span>
+            </header>
+            <div class="chart-grid">
+              <figure class="chart-card">
+                <h3>Rotation bandwidth</h3>
+                <canvas id="detroit-pistons-rotation"></canvas>
+                <p>Minute allocations the staff wants to log for the Detroit Pistons preseason reps, highlighting priority combinations.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Skill scaffolding radar</h3>
+                <canvas id="detroit-pistons-skill-spider"></canvas>
+                <p>Comparison between the coaching blueprint and current readiness for the Detroit Pistons developmental priorities.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Shot diet vs. league</h3>
+                <canvas id="detroit-pistons-shot-zones"></canvas>
+                <p>Where the Detroit Pistons expect preseason attempts to originate relative to a league baseline mix.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Practice tempo log</h3>
+                <canvas id="detroit-pistons-tempo-curve"></canvas>
+                <p>Five-session chronicle of tempo sessions versus special-situation installs leading into the opener.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Pairing synergy map</h3>
+                <canvas id="detroit-pistons-synergy-matrix"></canvas>
+                <p>Tempo and coverage sync indices for Detroit Pistons combinations expected to share long stretches.</p>
+              </figure>
+            </div>
+          </div>
+        </div>
+      </section>
 
       <article class="preview-copy">
         <header>
@@ -200,134 +296,5 @@
             </footer>
     </main>
 
-    <script defer>
-      const palette = {
-        bucks: "#00471B",
-        cream: "#EEE1C6",
-        pistonsRed: "#C8102E",
-        pistonsBlue: "#006BB6",
-        neutral: "#7f8ea3"
-      };
-
-      window.addEventListener("DOMContentLoaded", () => {
-        const rotationCtx = document.getElementById("rotationChart");
-        const developmentCtx = document.getElementById("developmentChart");
-        const healthCtx = document.getElementById("healthChart");
-
-        new Chart(rotationCtx, {
-          type: "bar",
-          data: {
-            labels: [
-              "Andre Jackson Jr. (MIL)",
-              "MarJon Beauchamp (MIL)",
-              "Delon Wright (MIL)",
-              "Jaden Ivey (DET)",
-              "Ausar Thompson (DET)",
-              "Marcus Sasser (DET)"
-            ],
-            datasets: [
-              {
-                label: "Target minutes",
-                data: [21, 19, 17, 22, 20, 16],
-                backgroundColor: [
-                  palette.bucks,
-                  palette.cream,
-                  palette.bucks,
-                  palette.pistonsRed,
-                  palette.pistonsBlue,
-                  palette.pistonsRed
-                ],
-                borderRadius: 6
-              }
-            ]
-          },
-          options: {
-            responsive: true,
-            scales: {
-              y: {
-                beginAtZero: true,
-                max: 24,
-                ticks: { stepSize: 4, color: palette.neutral },
-                grid: { color: "rgba(0, 71, 27, 0.1)" }
-              },
-              x: {
-                ticks: { color: palette.neutral },
-                grid: { display: false }
-              }
-            },
-            plugins: {
-              legend: { display: false }
-            }
-          }
-        });
-
-        new Chart(developmentCtx, {
-          type: "radar",
-          data: {
-            labels: ["Point-of-attack defense", "Catch-and-shoot", "Secondary playmaking", "Transition pace", "Rebounding"],
-            datasets: [
-              {
-                label: "Andre Jackson Jr.",
-                data: [9, 5, 6, 8, 7],
-                borderColor: palette.bucks,
-                backgroundColor: "rgba(0, 71, 27, 0.25)",
-                pointBackgroundColor: palette.bucks
-              },
-              {
-                label: "MarJon Beauchamp",
-                data: [7, 7, 5, 7, 6],
-                borderColor: palette.cream,
-                backgroundColor: "rgba(238, 225, 198, 0.3)",
-                pointBackgroundColor: palette.cream
-              },
-              {
-                label: "Ausar Thompson",
-                data: [8, 6, 6, 9, 8],
-                borderColor: palette.pistonsBlue,
-                backgroundColor: "rgba(0, 107, 182, 0.25)",
-                pointBackgroundColor: palette.pistonsBlue
-              }
-            ]
-          },
-          options: {
-            responsive: true,
-            scales: {
-              r: {
-                suggestedMin: 0,
-                suggestedMax: 10,
-                ticks: { display: false },
-                grid: { color: "rgba(0, 71, 27, 0.12)" },
-                angleLines: { color: "rgba(0, 71, 27, 0.12)" },
-                pointLabels: { color: palette.neutral }
-              }
-            }
-          }
-        });
-
-        new Chart(healthCtx, {
-          type: "doughnut",
-          data: {
-            labels: ["Cleared for full run", "Monitored workload", "Rehab group"],
-            datasets: [
-              {
-                data: [12, 3, 1],
-                backgroundColor: [palette.pistonsBlue, palette.bucks, palette.cream],
-                borderWidth: 0
-              }
-            ]
-          },
-          options: {
-            responsive: true,
-            cutout: "62%",
-            plugins: {
-              legend: {
-                position: "bottom",
-                labels: { color: palette.neutral }
-              }
-            }
-          }
-        });
-      });
-    </script>
   </body>
 </html>

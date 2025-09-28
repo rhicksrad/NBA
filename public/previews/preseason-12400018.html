@@ -47,6 +47,44 @@
         font-size: clamp(1.4rem, 4vw, 1.9rem);
         color: var(--navy);
       }
+      .team-visuals {
+        display: grid;
+        gap: clamp(1.4rem, 3vw, 2rem);
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      }
+
+      .team-panel {
+        display: grid;
+        gap: clamp(1rem, 2.5vw, 1.5rem);
+        padding: clamp(1.25rem, 3vw, 1.75rem);
+        border-radius: var(--radius-lg);
+        background: color-mix(in srgb, var(--surface-alt) 78%, var(--preview-tint) 22%);
+        border: 1px solid color-mix(in srgb, var(--border) 58%, transparent);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.32);
+      }
+
+      .team-panel header {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+      }
+
+      .team-panel h3 {
+        margin: 0;
+        font-size: clamp(1.15rem, 3vw, 1.45rem);
+        color: var(--navy);
+      }
+
+      .team-panel .meta {
+        font-size: 0.78rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        font-weight: 600;
+        color: rgba(17, 86, 214, 0.7);
+      }
+
 
       .chart-grid {
         display: grid;
@@ -75,6 +113,11 @@
         font-size: 0.85rem;
         color: var(--text-subtle);
       }
+      .chart-card canvas {
+        width: 100%;
+        height: clamp(220px, 30vw, 270px);
+      }
+
 
       .preview-copy {
         grid-area: preview;
@@ -148,29 +191,82 @@
       }
     </style>
     <script src="../vendor/chart.umd.js" defer></script>
+    <script src="../scripts/preseason-dashboards.js" defer></script>
+    <script src="../scripts/preseason-preview.js" defer></script>
   </head>
-  <body>
+  <body data-preview-id="preseason-12400018">
         <main class="preview-shell">
-      <section class="visuals">
-              <h2>Preseason scouting dashboard</h2>
-              <div class="chart-grid">
-                <figure class="chart-card">
-                  <h3>Projected evaluation minutes</h3>
-                  <canvas id="rotationChart"></canvas>
-                  <p>Estimated minutes earmarked for developmental priorities in Atlanta.</p>
-                </figure>
-                <figure class="chart-card">
-                  <h3>Skill focus for wings/forwards</h3>
-                  <canvas id="developmentChart"></canvas>
-                  <p>Coaching emphasis (0-10 scale) for versatile forwards in this matchup.</p>
-                </figure>
-                <figure class="chart-card">
-                  <h3>Availability snapshot</h3>
-                  <canvas id="healthChart"></canvas>
-                  <p>Roster allocation across full-go groups, monitored workloads, and rehab assignments.</p>
-                </figure>
-              </div>
-            </section>
+            <section class="visuals">
+        <h2>Preseason scouting dashboard</h2>
+        <div class="team-visuals">
+          <div class="team-panel" data-team="indiana-pacers">
+            <header>
+              <h3>Indiana Pacers data lab</h3>
+              <span class="meta">Throttle mapping</span>
+            </header>
+            <div class="chart-grid">
+              <figure class="chart-card">
+                <h3>Rotation bandwidth</h3>
+                <canvas id="indiana-pacers-rotation"></canvas>
+                <p>Minute allocations the staff wants to log for the Indiana Pacers preseason reps, highlighting priority combinations.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Skill scaffolding radar</h3>
+                <canvas id="indiana-pacers-skill-spider"></canvas>
+                <p>Comparison between the coaching blueprint and current readiness for the Indiana Pacers developmental priorities.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Shot diet vs. league</h3>
+                <canvas id="indiana-pacers-shot-zones"></canvas>
+                <p>Where the Indiana Pacers expect preseason attempts to originate relative to a league baseline mix.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Practice tempo log</h3>
+                <canvas id="indiana-pacers-tempo-curve"></canvas>
+                <p>Five-session chronicle of tempo sessions versus special-situation installs leading into the opener.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Pairing synergy map</h3>
+                <canvas id="indiana-pacers-synergy-matrix"></canvas>
+                <p>Tempo and coverage sync indices for Indiana Pacers combinations expected to share long stretches.</p>
+              </figure>
+            </div>
+          </div>
+          <div class="team-panel" data-team="atlanta-hawks">
+            <header>
+              <h3>Atlanta Hawks data lab</h3>
+              <span class="meta">Pace-and-space tune-up</span>
+            </header>
+            <div class="chart-grid">
+              <figure class="chart-card">
+                <h3>Rotation bandwidth</h3>
+                <canvas id="atlanta-hawks-rotation"></canvas>
+                <p>Minute allocations the staff wants to log for the Atlanta Hawks preseason reps, highlighting priority combinations.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Skill scaffolding radar</h3>
+                <canvas id="atlanta-hawks-skill-spider"></canvas>
+                <p>Comparison between the coaching blueprint and current readiness for the Atlanta Hawks developmental priorities.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Shot diet vs. league</h3>
+                <canvas id="atlanta-hawks-shot-zones"></canvas>
+                <p>Where the Atlanta Hawks expect preseason attempts to originate relative to a league baseline mix.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Practice tempo log</h3>
+                <canvas id="atlanta-hawks-tempo-curve"></canvas>
+                <p>Five-session chronicle of tempo sessions versus special-situation installs leading into the opener.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Pairing synergy map</h3>
+                <canvas id="atlanta-hawks-synergy-matrix"></canvas>
+                <p>Tempo and coverage sync indices for Atlanta Hawks combinations expected to share long stretches.</p>
+              </figure>
+            </div>
+          </div>
+        </div>
+      </section>
 
       <article class="preview-copy">
         <header>
@@ -200,134 +296,5 @@
             </footer>
     </main>
 
-    <script defer>
-      const palette = {
-        pacers: "#002D62",
-        gold: "#FDBB30",
-        hawks: "#C8102E",
-        ink: "#000000",
-        neutral: "#7f8ea3"
-      };
-
-      window.addEventListener("DOMContentLoaded", () => {
-        const rotationCtx = document.getElementById("rotationChart");
-        const developmentCtx = document.getElementById("developmentChart");
-        const healthCtx = document.getElementById("healthChart");
-
-        new Chart(rotationCtx, {
-          type: "bar",
-          data: {
-            labels: [
-              "Andrew Nembhard (IND)",
-              "Ben Sheppard (IND)",
-              "Jarace Walker (IND)",
-              "Zaccharie Risacher (ATL)",
-              "Kobe Bufkin (ATL)",
-              "AJ Griffin (ATL)"
-            ],
-            datasets: [
-              {
-                label: "Target minutes",
-                data: [21, 18, 17, 22, 18, 16],
-                backgroundColor: [
-                  palette.pacers,
-                  palette.gold,
-                  palette.pacers,
-                  palette.hawks,
-                  palette.ink,
-                  palette.hawks
-                ],
-                borderRadius: 6
-              }
-            ]
-          },
-          options: {
-            responsive: true,
-            scales: {
-              y: {
-                beginAtZero: true,
-                max: 24,
-                ticks: { stepSize: 4, color: palette.neutral },
-                grid: { color: "rgba(0, 45, 98, 0.12)" }
-              },
-              x: {
-                ticks: { color: palette.neutral },
-                grid: { display: false }
-              }
-            },
-            plugins: {
-              legend: { display: false }
-            }
-          }
-        });
-
-        new Chart(developmentCtx, {
-          type: "radar",
-          data: {
-            labels: ["Catch-and-shoot", "Defensive versatility", "Playmaking", "Transition pace", "Physicality"],
-            datasets: [
-              {
-                label: "Jarace Walker",
-                data: [6, 8, 6, 7, 8],
-                borderColor: palette.pacers,
-                backgroundColor: "rgba(0, 45, 98, 0.25)",
-                pointBackgroundColor: palette.pacers
-              },
-              {
-                label: "Zaccharie Risacher",
-                data: [7, 7, 5, 8, 6],
-                borderColor: palette.hawks,
-                backgroundColor: "rgba(200, 16, 46, 0.25)",
-                pointBackgroundColor: palette.hawks
-              },
-              {
-                label: "AJ Griffin",
-                data: [8, 6, 5, 6, 5],
-                borderColor: palette.ink,
-                backgroundColor: "rgba(0, 0, 0, 0.2)",
-                pointBackgroundColor: palette.ink
-              }
-            ]
-          },
-          options: {
-            responsive: true,
-            scales: {
-              r: {
-                suggestedMin: 0,
-                suggestedMax: 10,
-                ticks: { display: false },
-                grid: { color: "rgba(200, 16, 46, 0.12)" },
-                angleLines: { color: "rgba(200, 16, 46, 0.12)" },
-                pointLabels: { color: palette.neutral }
-              }
-            }
-          }
-        });
-
-        new Chart(healthCtx, {
-          type: "doughnut",
-          data: {
-            labels: ["Cleared for full run", "Monitored workload", "Rehab group"],
-            datasets: [
-              {
-                data: [11, 4, 1],
-                backgroundColor: [palette.pacers, palette.hawks, palette.gold],
-                borderWidth: 0
-              }
-            ]
-          },
-          options: {
-            responsive: true,
-            cutout: "62%",
-            plugins: {
-              legend: {
-                position: "bottom",
-                labels: { color: palette.neutral }
-              }
-            }
-          }
-        });
-      });
-    </script>
   </body>
 </html>

@@ -47,6 +47,44 @@
         font-size: clamp(1.4rem, 4vw, 1.9rem);
         color: var(--navy);
       }
+      .team-visuals {
+        display: grid;
+        gap: clamp(1.4rem, 3vw, 2rem);
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      }
+
+      .team-panel {
+        display: grid;
+        gap: clamp(1rem, 2.5vw, 1.5rem);
+        padding: clamp(1.25rem, 3vw, 1.75rem);
+        border-radius: var(--radius-lg);
+        background: color-mix(in srgb, var(--surface-alt) 78%, var(--preview-tint) 22%);
+        border: 1px solid color-mix(in srgb, var(--border) 58%, transparent);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.32);
+      }
+
+      .team-panel header {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+      }
+
+      .team-panel h3 {
+        margin: 0;
+        font-size: clamp(1.15rem, 3vw, 1.45rem);
+        color: var(--navy);
+      }
+
+      .team-panel .meta {
+        font-size: 0.78rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        font-weight: 600;
+        color: rgba(17, 86, 214, 0.7);
+      }
+
 
       .chart-grid {
         display: grid;
@@ -75,6 +113,11 @@
         font-size: 0.85rem;
         color: var(--text-subtle);
       }
+      .chart-card canvas {
+        width: 100%;
+        height: clamp(220px, 30vw, 270px);
+      }
+
 
       .preview-copy {
         grid-area: preview;
@@ -148,29 +191,82 @@
       }
     </style>
     <script src="../vendor/chart.umd.js" defer></script>
+    <script src="../scripts/preseason-dashboards.js" defer></script>
+    <script src="../scripts/preseason-preview.js" defer></script>
   </head>
-  <body>
+  <body data-preview-id="preseason-12400013">
         <main class="preview-shell">
-      <section class="visuals">
-              <h2>Preseason scouting dashboard</h2>
-              <div class="chart-grid">
-                <figure class="chart-card">
-                  <h3>Projected evaluation minutes</h3>
-                  <canvas id="rotationChart"></canvas>
-                  <p>Estimated minutes earmarked for developmental priorities in San Antonio.</p>
-                </figure>
-                <figure class="chart-card">
-                  <h3>Skill focus for ball-handlers</h3>
-                  <canvas id="developmentChart"></canvas>
-                  <p>Coaching emphasis (0-10 scale) for guards and wings seeking rotation roles.</p>
-                </figure>
-                <figure class="chart-card">
-                  <h3>Availability snapshot</h3>
-                  <canvas id="healthChart"></canvas>
-                  <p>Roster allocation across full-go groups, monitored workloads, and rehab assignments.</p>
-                </figure>
-              </div>
-            </section>
+            <section class="visuals">
+        <h2>Preseason scouting dashboard</h2>
+        <div class="team-visuals">
+          <div class="team-panel" data-team="oklahoma-city-thunder">
+            <header>
+              <h3>Oklahoma City Thunder data lab</h3>
+              <span class="meta">Frictionless pace</span>
+            </header>
+            <div class="chart-grid">
+              <figure class="chart-card">
+                <h3>Rotation bandwidth</h3>
+                <canvas id="oklahoma-city-thunder-rotation"></canvas>
+                <p>Minute allocations the staff wants to log for the Oklahoma City Thunder preseason reps, highlighting priority combinations.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Skill scaffolding radar</h3>
+                <canvas id="oklahoma-city-thunder-skill-spider"></canvas>
+                <p>Comparison between the coaching blueprint and current readiness for the Oklahoma City Thunder developmental priorities.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Shot diet vs. league</h3>
+                <canvas id="oklahoma-city-thunder-shot-zones"></canvas>
+                <p>Where the Oklahoma City Thunder expect preseason attempts to originate relative to a league baseline mix.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Practice tempo log</h3>
+                <canvas id="oklahoma-city-thunder-tempo-curve"></canvas>
+                <p>Five-session chronicle of tempo sessions versus special-situation installs leading into the opener.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Pairing synergy map</h3>
+                <canvas id="oklahoma-city-thunder-synergy-matrix"></canvas>
+                <p>Tempo and coverage sync indices for Oklahoma City Thunder combinations expected to share long stretches.</p>
+              </figure>
+            </div>
+          </div>
+          <div class="team-panel" data-team="san-antonio-spurs">
+            <header>
+              <h3>San Antonio Spurs data lab</h3>
+              <span class="meta">Length laboratory</span>
+            </header>
+            <div class="chart-grid">
+              <figure class="chart-card">
+                <h3>Rotation bandwidth</h3>
+                <canvas id="san-antonio-spurs-rotation"></canvas>
+                <p>Minute allocations the staff wants to log for the San Antonio Spurs preseason reps, highlighting priority combinations.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Skill scaffolding radar</h3>
+                <canvas id="san-antonio-spurs-skill-spider"></canvas>
+                <p>Comparison between the coaching blueprint and current readiness for the San Antonio Spurs developmental priorities.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Shot diet vs. league</h3>
+                <canvas id="san-antonio-spurs-shot-zones"></canvas>
+                <p>Where the San Antonio Spurs expect preseason attempts to originate relative to a league baseline mix.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Practice tempo log</h3>
+                <canvas id="san-antonio-spurs-tempo-curve"></canvas>
+                <p>Five-session chronicle of tempo sessions versus special-situation installs leading into the opener.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Pairing synergy map</h3>
+                <canvas id="san-antonio-spurs-synergy-matrix"></canvas>
+                <p>Tempo and coverage sync indices for San Antonio Spurs combinations expected to share long stretches.</p>
+              </figure>
+            </div>
+          </div>
+        </div>
+      </section>
 
       <article class="preview-copy">
         <header>
@@ -200,134 +296,5 @@
             </footer>
     </main>
 
-    <script defer>
-      const palette = {
-        thunder: "#007AC1",
-        sunrise: "#F05133",
-        spurs: "#C4CED4",
-        charcoal: "#1C1C1C",
-        neutral: "#7f8ea3"
-      };
-
-      window.addEventListener("DOMContentLoaded", () => {
-        const rotationCtx = document.getElementById("rotationChart");
-        const developmentCtx = document.getElementById("developmentChart");
-        const healthCtx = document.getElementById("healthChart");
-
-        new Chart(rotationCtx, {
-          type: "bar",
-          data: {
-            labels: [
-              "Cason Wallace (OKC)",
-              "Alex Caruso (OKC)",
-              "Bobi Klintman (OKC)",
-              "Stephon Castle (SAS)",
-              "Malaki Branham (SAS)",
-              "Victor Wembanyama (SAS)"
-            ],
-            datasets: [
-              {
-                label: "Target minutes",
-                data: [20, 18, 16, 21, 18, 15],
-                backgroundColor: [
-                  palette.thunder,
-                  palette.sunrise,
-                  palette.thunder,
-                  palette.spurs,
-                  palette.charcoal,
-                  palette.spurs
-                ],
-                borderRadius: 6
-              }
-            ]
-          },
-          options: {
-            responsive: true,
-            scales: {
-              y: {
-                beginAtZero: true,
-                max: 24,
-                ticks: { stepSize: 4, color: palette.neutral },
-                grid: { color: "rgba(0, 122, 193, 0.12)" }
-              },
-              x: {
-                ticks: { color: palette.neutral },
-                grid: { display: false }
-              }
-            },
-            plugins: {
-              legend: { display: false }
-            }
-          }
-        });
-
-        new Chart(developmentCtx, {
-          type: "radar",
-          data: {
-            labels: ["Point-of-attack defense", "Playmaking", "Catch-and-shoot", "Transition pace", "Screen navigation"],
-            datasets: [
-              {
-                label: "Cason Wallace",
-                data: [9, 6, 7, 8, 8],
-                borderColor: palette.thunder,
-                backgroundColor: "rgba(0, 122, 193, 0.25)",
-                pointBackgroundColor: palette.thunder
-              },
-              {
-                label: "Alex Caruso",
-                data: [10, 6, 7, 7, 9],
-                borderColor: palette.sunrise,
-                backgroundColor: "rgba(240, 81, 51, 0.25)",
-                pointBackgroundColor: palette.sunrise
-              },
-              {
-                label: "Stephon Castle",
-                data: [7, 8, 6, 7, 7],
-                borderColor: palette.spurs,
-                backgroundColor: "rgba(196, 206, 212, 0.25)",
-                pointBackgroundColor: palette.spurs
-              }
-            ]
-          },
-          options: {
-            responsive: true,
-            scales: {
-              r: {
-                suggestedMin: 0,
-                suggestedMax: 10,
-                ticks: { display: false },
-                grid: { color: "rgba(196, 206, 212, 0.12)" },
-                angleLines: { color: "rgba(196, 206, 212, 0.12)" },
-                pointLabels: { color: palette.neutral }
-              }
-            }
-          }
-        });
-
-        new Chart(healthCtx, {
-          type: "doughnut",
-          data: {
-            labels: ["Cleared for full run", "Monitored workload", "Rehab group"],
-            datasets: [
-              {
-                data: [11, 4, 1],
-                backgroundColor: [palette.thunder, palette.spurs, palette.charcoal],
-                borderWidth: 0
-              }
-            ]
-          },
-          options: {
-            responsive: true,
-            cutout: "62%",
-            plugins: {
-              legend: {
-                position: "bottom",
-                labels: { color: palette.neutral }
-              }
-            }
-          }
-        });
-      });
-    </script>
   </body>
 </html>

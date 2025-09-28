@@ -48,6 +48,44 @@
         color: var(--navy);
       }
 
+      .team-visuals {
+        display: grid;
+        gap: clamp(1.4rem, 3vw, 2rem);
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      }
+
+      .team-panel {
+        display: grid;
+        gap: clamp(1rem, 2.5vw, 1.5rem);
+        padding: clamp(1.25rem, 3vw, 1.75rem);
+        border-radius: var(--radius-lg);
+        background: color-mix(in srgb, var(--surface-alt) 78%, var(--preview-tint) 22%);
+        border: 1px solid color-mix(in srgb, var(--border) 58%, transparent);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.32);
+      }
+
+      .team-panel header {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+      }
+
+      .team-panel h3 {
+        margin: 0;
+        font-size: clamp(1.15rem, 3vw, 1.45rem);
+        color: var(--navy);
+      }
+
+      .team-panel .meta {
+        font-size: 0.78rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        font-weight: 600;
+        color: rgba(17, 86, 214, 0.7);
+      }
+
       .chart-grid {
         display: grid;
         gap: clamp(1.1rem, 3vw, 1.8rem);
@@ -74,6 +112,11 @@
         margin: 0;
         font-size: 0.85rem;
         color: var(--text-subtle);
+      }
+
+      .chart-card canvas {
+        width: 100%;
+        height: clamp(220px, 30vw, 270px);
       }
 
       .preview-copy {
@@ -148,29 +191,82 @@
       }
     </style>
     <script src="../vendor/chart.umd.js" defer></script>
+    <script src="../scripts/preseason-dashboards.js" defer></script>
+    <script src="../scripts/preseason-preview.js" defer></script>
   </head>
-  <body>
-        <main class="preview-shell">
+  <body data-preview-id="preseason-12400003">
+    <main class="preview-shell">
       <section class="visuals">
-              <h2>Preseason scouting dashboard</h2>
-              <div class="chart-grid">
-                <figure class="chart-card">
-                  <h3>Projected evaluation minutes</h3>
-                  <canvas id="rotationChart"></canvas>
-                  <p>Estimated minutes earmarked for developmental priorities in the Palm Desert opener.</p>
-                </figure>
-                <figure class="chart-card">
-                  <h3>Skill focus for young guards/wings</h3>
-                  <canvas id="developmentChart"></canvas>
-                  <p>Emphasis areas (0-10 scale) for prospects chasing rotation trust under Finch and Redick.</p>
-                </figure>
-                <figure class="chart-card">
-                  <h3>Availability snapshot</h3>
-                  <canvas id="healthChart"></canvas>
-                  <p>Allocation of the travel roster between full go, monitored workloads, and rehab assignments.</p>
-                </figure>
-              </div>
-            </section>
+        <h2>Preseason scouting dashboard</h2>
+        <div class="team-visuals">
+          <div class="team-panel" data-team="minnesota-timberwolves">
+            <header>
+              <h3>Minnesota Timberwolves data lab</h3>
+              <span class="meta">Lineup elasticity</span>
+            </header>
+            <div class="chart-grid">
+              <figure class="chart-card">
+                <h3>Rotation bandwidth</h3>
+                <canvas id="minnesota-timberwolves-rotation"></canvas>
+                <p>Minute allocations the staff wants to log for Minnesota’s preseason reps, highlighting priority combinations.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Skill scaffolding radar</h3>
+                <canvas id="minnesota-timberwolves-skill-spider"></canvas>
+                <p>Comparison between the coaching blueprint and current readiness for Minnesota’s developmental priorities.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Shot diet vs. league</h3>
+                <canvas id="minnesota-timberwolves-shot-zones"></canvas>
+                <p>Where the Timberwolves expect preseason attempts to originate relative to a league baseline mix.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Practice tempo log</h3>
+                <canvas id="minnesota-timberwolves-tempo-curve"></canvas>
+                <p>Five-session chronicle of tempo work versus special-situation installs heading into Palm Desert.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Pairing synergy map</h3>
+                <canvas id="minnesota-timberwolves-synergy-matrix"></canvas>
+                <p>Tempo and coverage sync indices for Minnesota groupings vying for expanded trust.</p>
+              </figure>
+            </div>
+          </div>
+          <div class="team-panel" data-team="los-angeles-lakers">
+            <header>
+              <h3>Los Angeles Lakers data lab</h3>
+              <span class="meta">Rhythm calibration</span>
+            </header>
+            <div class="chart-grid">
+              <figure class="chart-card">
+                <h3>Rotation bandwidth</h3>
+                <canvas id="los-angeles-lakers-rotation"></canvas>
+                <p>Minute allocations mapped for the Lakers’ preseason lineups as Redick balances vets and youth.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Skill scaffolding radar</h3>
+                <canvas id="los-angeles-lakers-skill-spider"></canvas>
+                <p>Blueprint versus readiness metrics for the Lakers’ developmental points of emphasis this week.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Shot diet vs. league</h3>
+                <canvas id="los-angeles-lakers-shot-zones"></canvas>
+                <p>How Los Angeles expects to space the floor in preseason action compared with a league-average mix.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Practice tempo log</h3>
+                <canvas id="los-angeles-lakers-tempo-curve"></canvas>
+                <p>Tracking tempo sessions and special-situation installs as the Lakers implement new concepts.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Pairing synergy map</h3>
+                <canvas id="los-angeles-lakers-synergy-matrix"></canvas>
+                <p>Pace and coverage sync readings for Los Angeles combinations expected to share key minutes.</p>
+              </figure>
+            </div>
+          </div>
+        </div>
+      </section>
 
       <article class="preview-copy">
         <header>
@@ -200,134 +296,5 @@
             </footer>
     </main>
 
-    <script defer>
-      const palette = {
-        lakers: "#552583",
-        sunshine: "#FDB927",
-        wolves: "#0C2340",
-        accent: "#78BE20",
-        neutral: "#7f8ea3"
-      };
-
-      window.addEventListener("DOMContentLoaded", () => {
-        const rotationCtx = document.getElementById("rotationChart");
-        const developmentCtx = document.getElementById("developmentChart");
-        const healthCtx = document.getElementById("healthChart");
-
-        new Chart(rotationCtx, {
-          type: "bar",
-          data: {
-            labels: [
-              "Dalton Knecht (LAL)",
-              "Bronny James (LAL)",
-              "Rui Hachimura (LAL)",
-              "Rob Dillingham (MIN)",
-              "Leonard Miller (MIN)",
-              "Josh Minott (MIN)"
-            ],
-            datasets: [
-              {
-                label: "Target minutes",
-                data: [21, 18, 16, 22, 19, 15],
-                backgroundColor: [
-                  palette.lakers,
-                  palette.sunshine,
-                  palette.lakers,
-                  palette.wolves,
-                  palette.accent,
-                  palette.wolves
-                ],
-                borderRadius: 6
-              }
-            ]
-          },
-          options: {
-            responsive: true,
-            scales: {
-              y: {
-                beginAtZero: true,
-                max: 24,
-                ticks: { stepSize: 4, color: palette.neutral },
-                grid: { color: "rgba(12, 35, 64, 0.1)" }
-              },
-              x: {
-                ticks: { color: palette.neutral },
-                grid: { display: false }
-              }
-            },
-            plugins: {
-              legend: { display: false }
-            }
-          }
-        });
-
-        new Chart(developmentCtx, {
-          type: "radar",
-          data: {
-            labels: ["Pick-and-roll craft", "Catch-and-shoot", "Defensive versatility", "Playmaking", "Transition pace"],
-            datasets: [
-              {
-                label: "Dalton Knecht",
-                data: [6, 9, 5, 6, 7],
-                borderColor: palette.sunshine,
-                backgroundColor: "rgba(253, 185, 39, 0.22)",
-                pointBackgroundColor: palette.sunshine
-              },
-              {
-                label: "Bronny James",
-                data: [5, 7, 8, 6, 7],
-                borderColor: palette.lakers,
-                backgroundColor: "rgba(85, 37, 131, 0.25)",
-                pointBackgroundColor: palette.lakers
-              },
-              {
-                label: "Rob Dillingham",
-                data: [8, 6, 5, 7, 9],
-                borderColor: palette.accent,
-                backgroundColor: "rgba(120, 190, 32, 0.25)",
-                pointBackgroundColor: palette.accent
-              }
-            ]
-          },
-          options: {
-            responsive: true,
-            scales: {
-              r: {
-                suggestedMin: 0,
-                suggestedMax: 10,
-                ticks: { display: false },
-                grid: { color: "rgba(12, 35, 64, 0.1)" },
-                angleLines: { color: "rgba(12, 35, 64, 0.1)" },
-                pointLabels: { color: palette.neutral }
-              }
-            }
-          }
-        });
-
-        new Chart(healthCtx, {
-          type: "doughnut",
-          data: {
-            labels: ["Cleared for full run", "Monitored workload", "Rehab group"],
-            datasets: [
-              {
-                data: [10, 5, 1],
-                backgroundColor: [palette.accent, palette.lakers, palette.wolves],
-                borderWidth: 0
-              }
-            ]
-          },
-          options: {
-            responsive: true,
-            cutout: "62%",
-            plugins: {
-              legend: {
-                position: "bottom",
-                labels: { color: palette.neutral }
-              }
-            }
-          }
-        });
-      });
-    </script>
   </body>
 </html>

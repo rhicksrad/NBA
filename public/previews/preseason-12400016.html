@@ -47,6 +47,44 @@
         font-size: clamp(1.4rem, 4vw, 1.9rem);
         color: var(--navy);
       }
+      .team-visuals {
+        display: grid;
+        gap: clamp(1.4rem, 3vw, 2rem);
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      }
+
+      .team-panel {
+        display: grid;
+        gap: clamp(1rem, 2.5vw, 1.5rem);
+        padding: clamp(1.25rem, 3vw, 1.75rem);
+        border-radius: var(--radius-lg);
+        background: color-mix(in srgb, var(--surface-alt) 78%, var(--preview-tint) 22%);
+        border: 1px solid color-mix(in srgb, var(--border) 58%, transparent);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.32);
+      }
+
+      .team-panel header {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+      }
+
+      .team-panel h3 {
+        margin: 0;
+        font-size: clamp(1.15rem, 3vw, 1.45rem);
+        color: var(--navy);
+      }
+
+      .team-panel .meta {
+        font-size: 0.78rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        font-weight: 600;
+        color: rgba(17, 86, 214, 0.7);
+      }
+
 
       .chart-grid {
         display: grid;
@@ -75,6 +113,11 @@
         font-size: 0.85rem;
         color: var(--text-subtle);
       }
+      .chart-card canvas {
+        width: 100%;
+        height: clamp(220px, 30vw, 270px);
+      }
+
 
       .preview-copy {
         grid-area: preview;
@@ -148,29 +191,82 @@
       }
     </style>
     <script src="../vendor/chart.umd.js" defer></script>
+    <script src="../scripts/preseason-dashboards.js" defer></script>
+    <script src="../scripts/preseason-preview.js" defer></script>
   </head>
-  <body>
+  <body data-preview-id="preseason-12400016">
         <main class="preview-shell">
-      <section class="visuals">
-              <h2>Preseason scouting dashboard</h2>
-              <div class="chart-grid">
-                <figure class="chart-card">
-                  <h3>Projected evaluation minutes</h3>
-                  <canvas id="rotationChart"></canvas>
-                  <p>Estimated minutes earmarked for developmental priorities in Cleveland.</p>
-                </figure>
-                <figure class="chart-card">
-                  <h3>Skill focus for perimeter pieces</h3>
-                  <canvas id="developmentChart"></canvas>
-                  <p>Coaching emphasis (0-10 scale) for guards and wings chasing rotation certainty.</p>
-                </figure>
-                <figure class="chart-card">
-                  <h3>Availability snapshot</h3>
-                  <canvas id="healthChart"></canvas>
-                  <p>Roster allocation across full-go groups, monitored workloads, and rehab assignments.</p>
-                </figure>
-              </div>
-            </section>
+            <section class="visuals">
+        <h2>Preseason scouting dashboard</h2>
+        <div class="team-visuals">
+          <div class="team-panel" data-team="chicago-bulls">
+            <header>
+              <h3>Chicago Bulls data lab</h3>
+              <span class="meta">Half-court variability</span>
+            </header>
+            <div class="chart-grid">
+              <figure class="chart-card">
+                <h3>Rotation bandwidth</h3>
+                <canvas id="chicago-bulls-rotation"></canvas>
+                <p>Minute allocations the staff wants to log for the Chicago Bulls preseason reps, highlighting priority combinations.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Skill scaffolding radar</h3>
+                <canvas id="chicago-bulls-skill-spider"></canvas>
+                <p>Comparison between the coaching blueprint and current readiness for the Chicago Bulls developmental priorities.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Shot diet vs. league</h3>
+                <canvas id="chicago-bulls-shot-zones"></canvas>
+                <p>Where the Chicago Bulls expect preseason attempts to originate relative to a league baseline mix.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Practice tempo log</h3>
+                <canvas id="chicago-bulls-tempo-curve"></canvas>
+                <p>Five-session chronicle of tempo sessions versus special-situation installs leading into the opener.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Pairing synergy map</h3>
+                <canvas id="chicago-bulls-synergy-matrix"></canvas>
+                <p>Tempo and coverage sync indices for Chicago Bulls combinations expected to share long stretches.</p>
+              </figure>
+            </div>
+          </div>
+          <div class="team-panel" data-team="cleveland-cavaliers">
+            <header>
+              <h3>Cleveland Cavaliers data lab</h3>
+              <span class="meta">Defensive shell sync</span>
+            </header>
+            <div class="chart-grid">
+              <figure class="chart-card">
+                <h3>Rotation bandwidth</h3>
+                <canvas id="cleveland-cavaliers-rotation"></canvas>
+                <p>Minute allocations the staff wants to log for the Cleveland Cavaliers preseason reps, highlighting priority combinations.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Skill scaffolding radar</h3>
+                <canvas id="cleveland-cavaliers-skill-spider"></canvas>
+                <p>Comparison between the coaching blueprint and current readiness for the Cleveland Cavaliers developmental priorities.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Shot diet vs. league</h3>
+                <canvas id="cleveland-cavaliers-shot-zones"></canvas>
+                <p>Where the Cleveland Cavaliers expect preseason attempts to originate relative to a league baseline mix.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Practice tempo log</h3>
+                <canvas id="cleveland-cavaliers-tempo-curve"></canvas>
+                <p>Five-session chronicle of tempo sessions versus special-situation installs leading into the opener.</p>
+              </figure>
+              <figure class="chart-card">
+                <h3>Pairing synergy map</h3>
+                <canvas id="cleveland-cavaliers-synergy-matrix"></canvas>
+                <p>Tempo and coverage sync indices for Cleveland Cavaliers combinations expected to share long stretches.</p>
+              </figure>
+            </div>
+          </div>
+        </div>
+      </section>
 
       <article class="preview-copy">
         <header>
@@ -200,134 +296,5 @@
             </footer>
     </main>
 
-    <script defer>
-      const palette = {
-        bulls: "#CE1141",
-        black: "#000000",
-        cavs: "#6F263D",
-        gold: "#FDBB30",
-        neutral: "#7f8ea3"
-      };
-
-      window.addEventListener("DOMContentLoaded", () => {
-        const rotationCtx = document.getElementById("rotationChart");
-        const developmentCtx = document.getElementById("developmentChart");
-        const healthCtx = document.getElementById("healthChart");
-
-        new Chart(rotationCtx, {
-          type: "bar",
-          data: {
-            labels: [
-              "Josh Giddey (CHI)",
-              "Coby White (CHI)",
-              "Terrence Shannon Jr. (CHI)",
-              "Caris LeVert (CLE)",
-              "Jaylon Tyson (CLE)",
-              "Emoni Bates (CLE)"
-            ],
-            datasets: [
-              {
-                label: "Target minutes",
-                data: [21, 20, 16, 20, 18, 17],
-                backgroundColor: [
-                  palette.bulls,
-                  palette.black,
-                  palette.bulls,
-                  palette.cavs,
-                  palette.gold,
-                  palette.cavs
-                ],
-                borderRadius: 6
-              }
-            ]
-          },
-          options: {
-            responsive: true,
-            scales: {
-              y: {
-                beginAtZero: true,
-                max: 24,
-                ticks: { stepSize: 4, color: palette.neutral },
-                grid: { color: "rgba(206, 17, 65, 0.12)" }
-              },
-              x: {
-                ticks: { color: palette.neutral },
-                grid: { display: false }
-              }
-            },
-            plugins: {
-              legend: { display: false }
-            }
-          }
-        });
-
-        new Chart(developmentCtx, {
-          type: "radar",
-          data: {
-            labels: ["Playmaking", "Catch-and-shoot", "Defensive versatility", "Transition pace", "Physicality"],
-            datasets: [
-              {
-                label: "Josh Giddey",
-                data: [9, 6, 6, 7, 6],
-                borderColor: palette.bulls,
-                backgroundColor: "rgba(206, 17, 65, 0.25)",
-                pointBackgroundColor: palette.bulls
-              },
-              {
-                label: "Coby White",
-                data: [6, 8, 5, 7, 6],
-                borderColor: palette.black,
-                backgroundColor: "rgba(0, 0, 0, 0.2)",
-                pointBackgroundColor: palette.black
-              },
-              {
-                label: "Jaylon Tyson",
-                data: [6, 7, 7, 6, 7],
-                borderColor: palette.cavs,
-                backgroundColor: "rgba(111, 38, 61, 0.25)",
-                pointBackgroundColor: palette.cavs
-              }
-            ]
-          },
-          options: {
-            responsive: true,
-            scales: {
-              r: {
-                suggestedMin: 0,
-                suggestedMax: 10,
-                ticks: { display: false },
-                grid: { color: "rgba(111, 38, 61, 0.12)" },
-                angleLines: { color: "rgba(111, 38, 61, 0.12)" },
-                pointLabels: { color: palette.neutral }
-              }
-            }
-          }
-        });
-
-        new Chart(healthCtx, {
-          type: "doughnut",
-          data: {
-            labels: ["Cleared for full run", "Monitored workload", "Rehab group"],
-            datasets: [
-              {
-                data: [10, 5, 2],
-                backgroundColor: [palette.cavs, palette.bulls, palette.gold],
-                borderWidth: 0
-              }
-            ]
-          },
-          options: {
-            responsive: true,
-            cutout: "62%",
-            plugins: {
-              legend: {
-                position: "bottom",
-                labels: { color: palette.neutral }
-              }
-            }
-          }
-        });
-      });
-    </script>
   </body>
 </html>
