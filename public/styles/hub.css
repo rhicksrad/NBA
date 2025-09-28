@@ -3926,6 +3926,8 @@ section h2 { margin-top: 0; font-size: clamp(1.35rem, 3vw, 1.8rem); letter-spaci
   align-items: start;
 }
 .player-atlas__search {
+  grid-column: 1;
+  grid-row: 1;
   position: relative;
   display: grid;
   gap: 0.65rem;
@@ -4033,7 +4035,108 @@ section h2 { margin-top: 0; font-size: clamp(1.35rem, 3vw, 1.8rem); letter-spaci
   color: color-mix(in srgb, var(--text-subtle) 82%, var(--navy) 18%);
 }
 .player-atlas__error { color: color-mix(in srgb, var(--red) 65%, var(--navy) 35%); }
+.player-atlas__teams {
+  grid-column: 1;
+  grid-row: 2;
+  display: grid;
+  gap: 0.65rem;
+  margin-top: -0.35rem;
+  padding-top: 0.9rem;
+  border-top: 1px solid color-mix(in srgb, var(--border) 65%, transparent);
+}
+.player-atlas__teams[hidden] { display: none; }
+.player-atlas__teams-title {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--navy);
+}
+.player-atlas__teams-copy {
+  margin: 0;
+  font-size: 0.85rem;
+  color: color-mix(in srgb, var(--text-subtle) 78%, var(--navy) 22%);
+}
+.player-atlas__teams-tree {
+  display: grid;
+  gap: 0.55rem;
+  max-height: clamp(16rem, 48vh, 22rem);
+  overflow-y: auto;
+  padding-right: 0.25rem;
+}
+.player-atlas__teams-tree:focus-visible { outline: none; }
+.player-atlas__team {
+  border-radius: var(--radius-md);
+  border: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
+  background: color-mix(in srgb, rgba(255, 255, 255, 0.95) 70%, rgba(242, 246, 255, 0.88) 30%);
+  box-shadow: var(--shadow-soft);
+  overflow: hidden;
+}
+.player-atlas__team-summary {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.75rem 0.9rem;
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--navy);
+}
+.player-atlas__team-summary::-webkit-details-marker,
+.player-atlas__team-summary::marker {
+  display: none;
+}
+.player-atlas__team-name { font-size: 0.92rem; }
+.player-atlas__team-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2ch;
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, rgba(17, 86, 214, 0.16) 60%, rgba(244, 181, 63, 0.2) 40%);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: color-mix(in srgb, var(--royal) 68%, var(--navy) 32%);
+}
+.player-atlas__team[open] .player-atlas__team-summary {
+  background: linear-gradient(135deg, rgba(17, 86, 214, 0.15), rgba(244, 181, 63, 0.12));
+}
+.player-atlas__team-roster {
+  margin: 0;
+  padding: 0 0 0.75rem;
+  list-style: none;
+  display: grid;
+}
+.player-atlas__team-entry { margin: 0; }
+.player-atlas__team-player {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  padding: 0.65rem 1rem 0.6rem;
+  display: grid;
+  gap: 0.2rem;
+  font: inherit;
+  color: var(--navy);
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+.player-atlas__team-player:hover,
+.player-atlas__team-player:focus-visible,
+.player-atlas__team-player.is-active {
+  background: linear-gradient(135deg, rgba(17, 86, 214, 0.16), rgba(244, 181, 63, 0.14));
+  color: var(--navy);
+}
+.player-atlas__team-player:focus-visible { outline: none; }
+.player-atlas__team-player-name { font-weight: 600; font-size: 0.9rem; }
+.player-atlas__team-player-meta {
+  font-size: 0.78rem;
+  color: color-mix(in srgb, var(--text-subtle) 78%, var(--navy) 22%);
+}
 .player-card {
+  grid-column: 2;
+  grid-row: 1 / span 2;
   border-radius: var(--radius-lg);
   border: 1px solid color-mix(in srgb, var(--royal) 18%, transparent);
   background:
@@ -4284,6 +4387,15 @@ section h2 { margin-top: 0; font-size: clamp(1.35rem, 3vw, 1.8rem); letter-spaci
 
 @media (max-width: 1080px) {
   .player-atlas__layout { grid-template-columns: minmax(0, 1fr); }
+  .player-atlas__search,
+  .player-atlas__teams,
+  .player-card {
+    grid-column: 1;
+    grid-row: auto;
+  }
+  .player-atlas__teams {
+    border-top-color: color-mix(in srgb, var(--border) 52%, transparent);
+  }
 }
 
 @media (max-width: 640px) {

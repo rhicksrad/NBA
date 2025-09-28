@@ -1312,6 +1312,8 @@ function initPlayerAtlas() {
   const vitalsEl = atlas.querySelector('[data-player-vitals]');
   const originEl = atlas.querySelector('[data-player-origin]');
   const draftEl = atlas.querySelector('[data-player-draft]');
+  const teamBrowser = atlas.querySelector('[data-player-teams]');
+  const teamTree = atlas.querySelector('[data-player-team-tree]');
   const metricsContainer = atlas.querySelector('[data-player-metrics]');
   const metricsEmpty = atlas.querySelector('[data-player-metrics-empty]');
   const recentLeaderboard = document.querySelector('[data-recent-leaderboard]');
@@ -1338,6 +1340,8 @@ function initPlayerAtlas() {
   let players = [];
   let catalog = [];
   let matches = [];
+  let activePlayerId = null;
+  let teamButtons = [];
   let activeIndex = -1;
   let isLoaded = false;
   let hasError = false;
@@ -1405,6 +1409,121 @@ function initPlayerAtlas() {
     if (player?.height) vitals.push(player.height);
     if (player?.weight) vitals.push(player.weight);
     return vitals.join(' • ');
+  };
+
+  const highlightTeamPlayer = (playerId) => {
+    if (!teamTree) return;
+    if (!teamButtons.length) {
+      teamButtons = Array.from(teamTree.querySelectorAll('[data-player-id]'));
+    }
+    let activeButton = null;
+    teamButtons.forEach((button) => {
+      const isActive = Boolean(playerId) && button.dataset.playerId === playerId;
+      button.classList.toggle('is-active', isActive);
+      if (isActive) {
+        activeButton = button;
+      }
+    });
+    if (activeButton) {
+      const parentSection = activeButton.closest('details');
+      if (parentSection && !parentSection.open) {
+        parentSection.open = true;
+      }
+      activeButton.scrollIntoView({ block: 'nearest' });
+    }
+  };
+
+  const renderTeamBrowser = (roster) => {
+    if (!teamTree) return;
+    teamTree.innerHTML = '';
+    teamButtons = [];
+
+    if (!Array.isArray(roster) || roster.length === 0) {
+      if (teamBrowser) {
+        teamBrowser.hidden = true;
+      }
+      return;
+    }
+
+    const fallbackTeam = 'Unaffiliated pool';
+    const groups = new Map();
+
+    roster.forEach((player) => {
+      const teamName = player?.team?.trim() || fallbackTeam;
+      if (!groups.has(teamName)) {
+        groups.set(teamName, []);
+      }
+      groups.get(teamName).push(player);
+    });
+
+    const sortedTeams = Array.from(groups.entries()).sort((a, b) => a[0].localeCompare(b[0]));
+    const fragment = document.createDocumentFragment();
+
+    sortedTeams.forEach(([teamName, members]) => {
+      const panel = document.createElement('details');
+      panel.className = 'player-atlas__team';
+      panel.dataset.team = teamName;
+
+      const summary = document.createElement('summary');
+      summary.className = 'player-atlas__team-summary';
+
+      const title = document.createElement('span');
+      title.className = 'player-atlas__team-name';
+      title.textContent = teamName;
+
+      const count = document.createElement('span');
+      count.className = 'player-atlas__team-count';
+      count.textContent = `${members.length}`;
+      count.setAttribute('aria-label', `${members.length} ${members.length === 1 ? 'player' : 'players'}`);
+
+      summary.append(title, count);
+      panel.append(summary);
+
+      const list = document.createElement('ul');
+      list.className = 'player-atlas__team-roster';
+
+      members
+        .slice()
+        .sort((a, b) => a.name.localeCompare(b.name))
+        .forEach((player) => {
+          const item = document.createElement('li');
+          item.className = 'player-atlas__team-entry';
+
+          const button = document.createElement('button');
+          button.type = 'button';
+          button.className = 'player-atlas__team-player';
+          button.dataset.playerId = player.id;
+
+          const name = document.createElement('span');
+          name.className = 'player-atlas__team-player-name';
+          name.textContent = player.name;
+
+          button.append(name);
+
+          const metaBits = [player.position, player.era ? `${player.era} era` : null].filter(Boolean);
+          if (metaBits.length) {
+            const meta = document.createElement('span');
+            meta.className = 'player-atlas__team-player-meta';
+            meta.textContent = metaBits.join(' • ');
+            button.append(meta);
+          }
+
+          item.append(button);
+          list.append(item);
+        });
+
+      panel.append(list);
+      fragment.append(panel);
+    });
+
+    teamTree.append(fragment);
+    teamButtons = Array.from(teamTree.querySelectorAll('[data-player-id]'));
+    if (teamBrowser) {
+      teamBrowser.hidden = false;
+    }
+    if (activePlayerId) {
+      highlightTeamPlayer(activePlayerId);
+    }
   };
 
   const updateActiveOption = () => {
@@ -1622,6 +1741,8 @@ function initPlayerAtlas() {
 
     profile.hidden = false;
     profile.dataset.playerId = player.id;
+    activePlayerId = player.id;
+    highlightTeamPlayer(activePlayerId);
     nameEl.textContent = player.name;
     metaEl.textContent = renderMeta(player);
     const goatScores = player?.goatScores;
@@ -1733,6 +1854,19 @@ function initPlayerAtlas() {
     selectPlayer(player);
   };
 
+  const handleTeamClick = (event) => {
+    const button = event.target.closest('[data-player-id]');
+    if (!button || !teamTree?.contains(button)) {
+      return;
+    }
+    const playerId = button.dataset.playerId;
+    if (!playerId) return;
+    const player = players.find((item) => item.id === playerId);
+    if (player) {
+      selectPlayer(player);
+    }
+  };
+
   const handleClear = () => {
     searchInput.value = '';
     searchInput.focus();
@@ -1838,6 +1972,7 @@ function initPlayerAtlas() {
         }
         return enriched;
       });
+      renderTeamBrowser(players);
       isLoaded = true;
       hasError = false;
       if (empty) {
@@ -1889,6 +2024,10 @@ function initPlayerAtlas() {
       event.preventDefault();
     });
     resultsList.addEventListener('click', handleResultsClick);
+  }
+
+  if (teamTree) {
+    teamTree.addEventListener('click', handleTeamClick);
   }
 
   if (clearButton) {
