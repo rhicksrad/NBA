@@ -122,8 +122,9 @@
       }
 
       .preview-summary__list {
-        margin: 0;
-        padding-left: 1.1rem;
+        margin: 0.35rem 0 0 0;
+        padding: 0;
+        list-style: none;
         display: grid;
         gap: 0.45rem;
         font-size: 0.95rem;
@@ -132,6 +133,16 @@
 
       .preview-summary__list li {
         margin: 0;
+        padding-left: 1.1rem;
+        position: relative;
+      }
+
+      .preview-summary__list li::before {
+        content: "•";
+        position: absolute;
+        left: 0;
+        color: var(--royal);
+        font-weight: 700;
       }
 
       .preview-body {
@@ -185,6 +196,11 @@
         color: var(--text-subtle);
       }
 
+      .preview-story__lead + .preview-story__paragraph,
+      .preview-story__paragraph + .preview-story__paragraph {
+        margin-top: 0.75rem;
+      }
+
       .preview-story__list {
         list-style: none;
         margin: 0;
@@ -211,6 +227,83 @@
         border-radius: 50%;
         background: linear-gradient(135deg, rgba(17, 86, 214, 0.9), rgba(244, 181, 63, 0.85));
         box-shadow: 0 0 0 4px color-mix(in srgb, rgba(17, 86, 214, 0.12) 60%, rgba(255, 255, 255, 0.9) 40%);
+      }
+
+      .preview-story__list--numbered {
+        counter-reset: storyline;
+        gap: 1.2rem;
+      }
+
+      .preview-story__list--numbered li {
+        padding-left: 2.6rem;
+        font-weight: 400;
+      }
+
+      .preview-story__list--numbered li::before {
+        counter-increment: storyline;
+        content: counter(storyline);
+        display: grid;
+        place-items: center;
+        width: 1.6rem;
+        height: 1.6rem;
+        border-radius: 999px;
+        background: linear-gradient(135deg, rgba(17, 86, 214, 0.95), rgba(239, 61, 91, 0.9));
+        color: #fff;
+        font-weight: 700;
+        top: 0;
+        box-shadow: 0 0 0 4px color-mix(in srgb, rgba(17, 86, 214, 0.12) 60%, rgba(255, 255, 255, 0.9) 40%);
+      }
+
+      .preview-story__item-title {
+        margin: 0;
+        font-size: 1.08rem;
+        color: var(--navy);
+      }
+
+      .preview-story__item-title + .preview-story__lead,
+      .preview-story__item-title + .preview-story__paragraph {
+        margin-top: 0.55rem;
+      }
+
+      .preview-story__item-bullets {
+        margin: 0.75rem 0 0 0;
+        padding-left: 1.2rem;
+        display: grid;
+        gap: 0.4rem;
+        color: var(--text-subtle);
+        list-style: disc;
+      }
+
+      .preview-story__item-bullets li {
+        margin: 0;
+        padding: 0;
+        position: static;
+        font-weight: 500;
+        color: var(--text-subtle);
+      }
+
+      .preview-story__item-bullets li::before {
+        content: none;
+      }
+
+      .preview-story__narratives {
+        margin-top: 1.5rem;
+        display: grid;
+        gap: 0.75rem;
+      }
+
+      .preview-story__narratives h3 {
+        margin: 0;
+        font-size: 0.9rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: color-mix(in srgb, var(--navy) 70%, rgba(14, 34, 68, 0.4) 30%);
+      }
+
+      .preview-story__note {
+        margin: 1.4rem 0 0 0;
+        color: var(--text-subtle);
+        font-style: italic;
       }
 
       .preview-visuals {
@@ -308,13 +401,17 @@
       <section class="preview-summary">
         <header class="preview-summary__header">
           <h2 class="preview-summary__title">Game essentials</h2>
-          <p class="preview-summary__tagline">Key context before rotations start moving.</p>
+          <p class="preview-summary__tagline">A high-profile warmup, but a meaningful stress test. As training camp shifts toward real minutes, this matchup offers early clues about rotations, health, and identity.</p>
         </header>
         <div class="preview-summary__grid">
           <section class="preview-summary__card">
             <h2>Matchup snapshot</h2>
-            <p>Philadelphia 76ers vs. New York Knicks</p>
-            <p>Preseason · NBA Abu Dhabi Game</p>
+
+            <ul class="preview-summary__list">
+              <li>Philadelphia 76ers vs. New York Knicks</li>
+              <li>Preseason Game (Abu Dhabi Showcase)</li>
+              <li>Context: Both teams enter trying to stabilize around core stars (or recovering ones), while coaxing out contributions from young or peripheral players in a low-stakes but spotlighted setting.</li>
+            </ul>
           </section>
           
           
@@ -322,15 +419,52 @@
       </section>
 
       <div class="preview-body">
+
         <article class="preview-story preview-card preview-card--story">
           <h2>Camp storylines to monitor</h2>
-          <p class="preview-story__lead">Philadelphia 76ers face the Knicks at Etihad Arena · Abu Dhabi, United Arab Emirates, opening the 2025-26 preseason with the NBA Abu Dhabi Game showcase designed to stress-test training camp priorities.</p>
-        <p class="preview-story__paragraph">Philadelphia’s staff expects to spotlight rotation hopefuls and sharpen conditioning, while New York focuses on lineup chemistry in front of a neutral crowd. Both clubs are using this window to evaluate how younger pieces complement their established cores.</p>
+
+          <ol class="preview-story__list preview-story__list--numbered">
+
+            <li>
+<h3 class="preview-story__item-title">Injury Watch & Star Availability</h3>
+            <p class="preview-story__lead">The biggest uncertainty centers on Joel Embiid and Paul George, both recovering from knee procedures. Neither has a firm return date. Their participation—or lack thereof—will heavily shape how seriously Philadelphia runs its benchmark sets and allowable mistakes in Abu Dhabi.</p>
+            <p class="preview-story__paragraph">Meanwhile, Philadelphia’s guard Jared McCain suffered a UCL tear in his thumb during an offseason session and is unlikely to be active.</p>
+            </li>
+
+            <li>
+<h3 class="preview-story__item-title">New Regime, New Vision (Knicks)</h3>
+            <p class="preview-story__paragraph">This Abu Dhabi game marks the first real taste of Mike Brown’s system on an international stage. Brown has made no secret of his intention to push more 3-point volume (if they’re the “right” shots) and create better spacing via ball movement.</p>
+            <p class="preview-story__paragraph">The challenge: blending veteran roles (Jalen Brunson, Karl-Anthony Towns) with developmental minutes—especially when you want rhythm and chemistry, not chaos.</p>
+            </li>
+
+            <li>
+<h3 class="preview-story__item-title">Deep Cuts in Philly’s Rotation Hunt</h3>
+            <p class="preview-story__paragraph">Philadelphia’s staff will want to explore how young and bench-level pieces hold up. With injuries clouding the availability of stars, the spotlight falls on names like VJ Edgecombe (rookie, Baylor) and backup wings/forwards trying to break in.</p>
+            <p class="preview-story__paragraph">Because the Sixers’ prior season (24–58) was marred by instability, fans and analysts will look at who emerges worthy of consistent minutes.</p>
+            </li>
+
+            <li>
+<h3 class="preview-story__item-title">Chemistry vs. Minutes Apportionment</h3>
+            <p class="preview-story__paragraph">Do these teams treat Abu Dhabi like a sandbox or a proving ground?</p>
+            <p class="preview-story__paragraph">Which team shows a more coherent identity by quarter four? Which bench units look sturdier? These will define judgments beyond just who wins the points.</p>
+            
+            <ul class="preview-story__item-bullets">
+              <li>Philadelphia may lean more toward intentional sets, tracking spacing and rotations with an eye toward the regular season.</li>
+              <li>New York might prioritize teaching the new system live—even if that means short bursts, line-shuffling, or experimental small-ball stints.</li>
+            </ul>
+            </li>
+          </ol>
+
+          <div class="preview-story__narratives">
+            <h3>Narrative Questions to Watch</h3>
+
           <ul class="preview-story__list">
-            <li>Which emerging contributor helps Philadelphia 76ers turn preseason reps into regular-season trust?</li>
-            <li>How do New York Knicks balance veteran rhythm with developmental minutes during the NBA Abu Dhabi Game showcase?</li>
-            <li>Which camp emphasis becomes a lasting talking point for both benches?</li>
+            <li>Which emerging contributor earns preseason trust that carries into October?</li>
+            <li>How aggressively does the Knicks rotation tilt toward youth vs. veteran structure?</li>
+            <li>Does a particular interior matchup or small-ball look become a lasting point of conversation?</li>
           </ul>
+          </div>
+          <p class="preview-story__note">If you like, I can also produce a “Key Matchups & X-Factors” section (player vs. player, positional battles) and a projected “dress rehearsal” lineup. Do you want me to build that?</p>
         </article>
 
         

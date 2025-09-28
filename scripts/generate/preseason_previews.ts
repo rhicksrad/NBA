@@ -40,12 +40,34 @@ interface PreseasonGame {
   away: ScheduleParticipant;
   home: ScheduleParticipant;
   coverage?: ScheduleCoverage;
+  preview?: PreseasonPreviewOverride;
 }
 
 interface PreseasonSchedule {
   season: string;
   generatedAt: string;
   games: PreseasonGame[];
+}
+
+interface StorylineItemOverride {
+  title?: string;
+  paragraphs?: string[];
+  bullets?: string[];
+}
+
+interface StorylinesOverride {
+  heading?: string;
+  introParagraphs?: string[];
+  items?: StorylineItemOverride[];
+}
+
+interface PreseasonPreviewOverride {
+  summaryTagline?: string;
+  matchupSnapshotItems?: string[];
+  storylines?: StorylinesOverride;
+  narrativeHeading?: string;
+  narrativeQuestions?: string[];
+  closingNote?: string;
 }
 
 interface TeamContext {
@@ -492,6 +514,113 @@ function buildStoryBullets(game: PreseasonGame, away: TeamContext, home: TeamCon
   ];
 }
 
+function renderNarrativeQuestions(questions: string[], heading?: string): string {
+  if (!questions.length) {
+    return "";
+  }
+  const listMarkup = `
+          <ul class="preview-story__list">
+            ${questions.map((question) => `<li>${question}</li>`).join("\n            ")}
+          </ul>`;
+  if (!heading) {
+    return listMarkup;
+  }
+  return `
+          <div class="preview-story__narratives">
+            <h3>${heading}</h3>
+${listMarkup}
+          </div>`;
+}
+
+function renderStorylineItem(item: StorylineItemOverride, isFirst: boolean): string {
+  const blocks: string[] = [];
+  if (item.title) {
+    blocks.push(`<h3 class="preview-story__item-title">${item.title}</h3>`);
+  }
+  const paragraphs = item.paragraphs ?? [];
+  paragraphs.forEach((paragraph, index) => {
+    const className = isFirst && index === 0 ? "preview-story__lead" : "preview-story__paragraph";
+    blocks.push(`<p class="${className}">${paragraph}</p>`);
+  });
+  if (item.bullets?.length) {
+    blocks.push(`
+            <ul class="preview-story__item-bullets">
+              ${item.bullets.map((bullet) => `<li>${bullet}</li>`).join("\n              ")}
+            </ul>`);
+  }
+  if (!blocks.length) {
+    return "";
+  }
+  return `
+            <li>
+${blocks.join("\n            ")}
+            </li>`;
+}
+
+function renderStorySection(
+  game: PreseasonGame,
+  away: TeamContext,
+  home: TeamContext,
+  venueLine: string
+): string {
+  const override = game.preview?.storylines;
+  const narrativeQuestions = game.preview?.narrativeQuestions ?? buildStoryBullets(game, away, home);
+  const closingNote = game.preview?.closingNote;
+  const heading = override?.heading ?? "Camp storylines to monitor";
+
+  if (override && (override.introParagraphs?.length || override.items?.length)) {
+    const introParagraphs = override.introParagraphs ?? [];
+    const introMarkup = introParagraphs
+      .map((paragraph, index) => {
+        const className = index === 0 ? "preview-story__lead" : "preview-story__paragraph";
+        return `<p class="${className}">${paragraph}</p>`;
+      })
+      .join("\n          ");
+    const items = override.items ?? [];
+    const renderedItems = items
+      .map((item, index) => renderStorylineItem(item, index === 0 && introParagraphs.length === 0))
+      .filter((markup) => markup.length > 0);
+    const itemsMarkup = renderedItems.length
+      ? `
+          <ol class="preview-story__list preview-story__list--numbered">
+${renderedItems.join("\n")}
+          </ol>`
+      : "";
+    const narrativeHeading = game.preview?.narrativeHeading ?? "Narrative questions to watch";
+    const narrativesMarkup = narrativeQuestions.length
+      ? renderNarrativeQuestions(narrativeQuestions, narrativeHeading)
+      : "";
+    const noteMarkup = closingNote ? `\n          <p class="preview-story__note">${closingNote}</p>` : "";
+    const segments = [introMarkup, itemsMarkup, narrativesMarkup].filter(
+      (segment) => segment && segment.trim().length > 0
+    );
+    return `
+        <article class="preview-story preview-card preview-card--story">
+          <h2>${heading}</h2>
+${segments.join("\n")}${noteMarkup}
+        </article>`;
+  }
+
+  const storyParagraphs = buildStoryParagraphs(game, away, home, venueLine)
+    .map((paragraph, index) => {
+      const className = index === 0 ? "preview-story__lead" : "preview-story__paragraph";
+      return `<p class="${className}">${paragraph}</p>`;
+    })
+    .join("\n          ");
+  const narrativesMarkup = narrativeQuestions.length
+    ? renderNarrativeQuestions(narrativeQuestions, game.preview?.narrativeHeading)
+    : "";
+  const noteMarkup = closingNote ? `\n          <p class="preview-story__note">${closingNote}</p>` : "";
+  const segments = [storyParagraphs, narrativesMarkup].filter(
+    (segment) => segment && segment.trim().length > 0
+  );
+  return `
+        <article class="preview-story preview-card preview-card--story">
+          <h2>${heading}</h2>
+${segments.join("\n")}${noteMarkup}
+        </article>`;
+}
+
 function hasVisualMetrics(team: TeamContext): boolean {
   return SIGNATURE_VISUALS.some((config) => {
     const value = team.metrics?.[config.key];
@@ -615,8 +744,10 @@ function renderGamePage(
   const etString = formatDateTime(game.tipoff, "America/New_York");
   const utcString = formatDateTime(game.tipoff, "UTC");
   const neutralNote = neutralSuffix(game.venue, game.notes);
-  const story = buildStoryParagraphs(game, away, home, venueLine);
-  const bullets = buildStoryBullets(game, away, home);
+  const summaryTagline =
+    game.preview?.summaryTagline ?? "Key context before rotations start moving.";
+  const matchupSnapshotItems = game.preview?.matchupSnapshotItems;
+  const storySection = renderStorySection(game, away, home, venueLine);
   const notes = game.notes.filter((note) => !note.toLowerCase().includes("neutral"));
   const hasCoverage = Boolean(game.coverage?.tv?.length || game.coverage?.radio?.length);
   const visualsSection = renderVisualsSection(away, home, metricExtents);
@@ -642,12 +773,14 @@ function renderGamePage(
         `
     : "";
 
-  const storyParagraphs = story
-    .map((paragraph, index) => {
-      const className = index === 0 ? "preview-story__lead" : "preview-story__paragraph";
-      return `<p class="${className}">${paragraph}</p>`;
-    })
-    .join("\n        ");
+  const matchupSnapshot = matchupSnapshotItems?.length
+    ? `
+            <ul class="preview-summary__list">
+              ${matchupSnapshotItems.map((item) => `<li>${item}</li>`).join("\n              ")}
+            </ul>`
+    : `
+            <p>${away.displayName} vs. ${home.displayName}</p>
+            <p>${labelLine(game)}</p>`;
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -773,8 +906,9 @@ function renderGamePage(
       }
 
       .preview-summary__list {
-        margin: 0;
-        padding-left: 1.1rem;
+        margin: 0.35rem 0 0 0;
+        padding: 0;
+        list-style: none;
         display: grid;
         gap: 0.45rem;
         font-size: 0.95rem;
@@ -783,6 +917,16 @@ function renderGamePage(
 
       .preview-summary__list li {
         margin: 0;
+        padding-left: 1.1rem;
+        position: relative;
+      }
+
+      .preview-summary__list li::before {
+        content: "•";
+        position: absolute;
+        left: 0;
+        color: var(--royal);
+        font-weight: 700;
       }
 
       .preview-body {
@@ -836,6 +980,11 @@ function renderGamePage(
         color: var(--text-subtle);
       }
 
+      .preview-story__lead + .preview-story__paragraph,
+      .preview-story__paragraph + .preview-story__paragraph {
+        margin-top: 0.75rem;
+      }
+
       .preview-story__list {
         list-style: none;
         margin: 0;
@@ -862,6 +1011,83 @@ function renderGamePage(
         border-radius: 50%;
         background: linear-gradient(135deg, rgba(17, 86, 214, 0.9), rgba(244, 181, 63, 0.85));
         box-shadow: 0 0 0 4px color-mix(in srgb, rgba(17, 86, 214, 0.12) 60%, rgba(255, 255, 255, 0.9) 40%);
+      }
+
+      .preview-story__list--numbered {
+        counter-reset: storyline;
+        gap: 1.2rem;
+      }
+
+      .preview-story__list--numbered li {
+        padding-left: 2.6rem;
+        font-weight: 400;
+      }
+
+      .preview-story__list--numbered li::before {
+        counter-increment: storyline;
+        content: counter(storyline);
+        display: grid;
+        place-items: center;
+        width: 1.6rem;
+        height: 1.6rem;
+        border-radius: 999px;
+        background: linear-gradient(135deg, rgba(17, 86, 214, 0.95), rgba(239, 61, 91, 0.9));
+        color: #fff;
+        font-weight: 700;
+        top: 0;
+        box-shadow: 0 0 0 4px color-mix(in srgb, rgba(17, 86, 214, 0.12) 60%, rgba(255, 255, 255, 0.9) 40%);
+      }
+
+      .preview-story__item-title {
+        margin: 0;
+        font-size: 1.08rem;
+        color: var(--navy);
+      }
+
+      .preview-story__item-title + .preview-story__lead,
+      .preview-story__item-title + .preview-story__paragraph {
+        margin-top: 0.55rem;
+      }
+
+      .preview-story__item-bullets {
+        margin: 0.75rem 0 0 0;
+        padding-left: 1.2rem;
+        display: grid;
+        gap: 0.4rem;
+        color: var(--text-subtle);
+        list-style: disc;
+      }
+
+      .preview-story__item-bullets li {
+        margin: 0;
+        padding: 0;
+        position: static;
+        font-weight: 500;
+        color: var(--text-subtle);
+      }
+
+      .preview-story__item-bullets li::before {
+        content: none;
+      }
+
+      .preview-story__narratives {
+        margin-top: 1.5rem;
+        display: grid;
+        gap: 0.75rem;
+      }
+
+      .preview-story__narratives h3 {
+        margin: 0;
+        font-size: 0.9rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: color-mix(in srgb, var(--navy) 70%, rgba(14, 34, 68, 0.4) 30%);
+      }
+
+      .preview-story__note {
+        margin: 1.4rem 0 0 0;
+        color: var(--text-subtle);
+        font-style: italic;
       }
 
       .preview-visuals {
@@ -959,13 +1185,12 @@ function renderGamePage(
       <section class="preview-summary">
         <header class="preview-summary__header">
           <h2 class="preview-summary__title">Game essentials</h2>
-          <p class="preview-summary__tagline">Key context before rotations start moving.</p>
+          <p class="preview-summary__tagline">${summaryTagline}</p>
         </header>
         <div class="preview-summary__grid">
           <section class="preview-summary__card">
             <h2>Matchup snapshot</h2>
-            <p>${away.displayName} vs. ${home.displayName}</p>
-            <p>${labelLine(game)}</p>
+${matchupSnapshot}
           </section>
           ${coverageSection}
           ${notesSection}
@@ -973,13 +1198,7 @@ function renderGamePage(
       </section>
 
       <div class="preview-body">
-        <article class="preview-story preview-card preview-card--story">
-          <h2>Camp storylines to monitor</h2>
-          ${storyParagraphs}
-          <ul class="preview-story__list">
-            ${bullets.map((bullet) => `<li>${bullet}</li>`).join("\n            ")}
-          </ul>
-        </article>
+${storySection}
 
         ${visualsSection}
       </div>
