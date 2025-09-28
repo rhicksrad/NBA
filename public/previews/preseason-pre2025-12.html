@@ -92,6 +92,56 @@
         margin-bottom: 0.5rem;
       }
 
+      .preview-visuals {
+        display: grid;
+        gap: 1.25rem;
+      }
+
+      .preview-visuals__header {
+        display: grid;
+        gap: 0.4rem;
+      }
+
+      .preview-visuals__grid {
+        display: grid;
+        gap: clamp(1rem, 3vw, 1.5rem);
+      }
+
+      @media (min-width: 900px) {
+        .preview-visuals__grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      .preview-visuals__team {
+        display: grid;
+        gap: 0.9rem;
+      }
+
+      .preview-visuals__team-header {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+      }
+
+      .preview-visuals__team-header h3 {
+        margin: 0;
+        font-size: 1.2rem;
+      }
+
+      .preview-visuals__chip {
+        font-size: 0.7rem;
+        letter-spacing: 0.08em;
+      }
+
+      .preview-visuals__empty {
+        margin: 0;
+        font-size: 0.95rem;
+        color: var(--text-subtle);
+      }
+
       footer {
         display: flex;
         justify-content: space-between;
@@ -142,6 +192,664 @@
           <li>Which camp emphasis becomes a lasting talking point for both benches?</li>
         </ul>
       </article>
+
+      
+        <section class="preview-visuals">
+          <div class="preview-visuals__header">
+            <h2>Signature visual read</h2>
+            <p>
+              Twelve precanned visuals benchmark each rotation using the completed 2024-25 campaign so
+              coaches can steer the 2025-26 preseason focus.
+            </p>
+          </div>
+          <div class="preview-visuals__grid">
+            
+        <article class="preview-visuals__team">
+          <header class="preview-visuals__team-header">
+            <h3>Atlanta Hawks</h3>
+            <span class="chip preview-visuals__chip">NBA</span>
+          </header>
+          <div class="team-detail__visuals">
+            
+            <article class="team-visual">
+              <header class="team-visual__header">
+                <div class="team-visual__heading">
+                  <span class="team-visual__label">Win percentage</span>
+                  <span class="team-visual__percentile" title="Percentile rank across the league">50th percentile</span>
+                </div>
+                <strong class="team-visual__value">48.9%</strong>
+              </header>
+              <p class="team-visual__description">Share of games won across the tracked 2024-25 sample.</p>
+              <div class="team-visual__meter" role="presentation">
+                <div class="team-visual__meter-track"></div>
+                <div class="team-visual__meter-fill" style="--fill:39.7%"></div>
+              </div>
+              <dl class="team-visual__range">
+                <div>
+                  <dt>League low</dt>
+                  <dd>41.9%</dd>
+                </div>
+                <div>
+                  <dt>League high</dt>
+                  <dd>59.7%</dd>
+                </div>
+              </dl>
+            </article>
+          
+            
+            <article class="team-visual">
+              <header class="team-visual__header">
+                <div class="team-visual__heading">
+                  <span class="team-visual__label">Points for</span>
+                  <span class="team-visual__percentile" title="Percentile rank across the league">47th percentile</span>
+                </div>
+                <strong class="team-visual__value">103.4</strong>
+              </header>
+              <p class="team-visual__description">Average points scored per game.</p>
+              <div class="team-visual__meter" role="presentation">
+                <div class="team-visual__meter-track"></div>
+                <div class="team-visual__meter-fill" style="--fill:29.5%"></div>
+              </div>
+              <dl class="team-visual__range">
+                <div>
+                  <dt>League low</dt>
+                  <dd>99.5</dd>
+                </div>
+                <div>
+                  <dt>League high</dt>
+                  <dd>112.7</dd>
+                </div>
+              </dl>
+            </article>
+          
+            
+            <article class="team-visual">
+              <header class="team-visual__header">
+                <div class="team-visual__heading">
+                  <span class="team-visual__label">Points allowed</span>
+                  <span class="team-visual__percentile" title="Percentile rank across the league">50th percentile</span>
+                </div>
+                <strong class="team-visual__value">103.9</strong>
+              </header>
+              <p class="team-visual__description">Average points conceded per game.</p>
+              <div class="team-visual__meter" role="presentation">
+                <div class="team-visual__meter-track"></div>
+                <div class="team-visual__meter-fill" style="--fill:69.2%"></div>
+              </div>
+              <dl class="team-visual__range">
+                <div>
+                  <dt>League low</dt>
+                  <dd>98.9</dd>
+                </div>
+                <div>
+                  <dt>League high</dt>
+                  <dd>115.2</dd>
+                </div>
+              </dl>
+            </article>
+          
+            
+            <article class="team-visual">
+              <header class="team-visual__header">
+                <div class="team-visual__heading">
+                  <span class="team-visual__label">Net margin</span>
+                  <span class="team-visual__percentile" title="Percentile rank across the league">43rd percentile</span>
+                </div>
+                <strong class="team-visual__value">-0.6</strong>
+              </header>
+              <p class="team-visual__description">Average scoring differential versus opponents.</p>
+              <div class="team-visual__meter" role="presentation">
+                <div class="team-visual__meter-track"></div>
+                <div class="team-visual__meter-fill" style="--fill:37.1%"></div>
+              </div>
+              <dl class="team-visual__range">
+                <div>
+                  <dt>League low</dt>
+                  <dd>-2.7</dd>
+                </div>
+                <div>
+                  <dt>League high</dt>
+                  <dd>+3.0</dd>
+                </div>
+              </dl>
+            </article>
+          
+            
+            <article class="team-visual">
+              <header class="team-visual__header">
+                <div class="team-visual__heading">
+                  <span class="team-visual__label">Field goal accuracy</span>
+                  <span class="team-visual__percentile" title="Percentile rank across the league">27th percentile</span>
+                </div>
+                <strong class="team-visual__value">45.6%</strong>
+              </header>
+              <p class="team-visual__description">Overall shooting efficiency from the floor.</p>
+              <div class="team-visual__meter" role="presentation">
+                <div class="team-visual__meter-track"></div>
+                <div class="team-visual__meter-fill" style="--fill:21.2%"></div>
+              </div>
+              <dl class="team-visual__range">
+                <div>
+                  <dt>League low</dt>
+                  <dd>45.1%</dd>
+                </div>
+                <div>
+                  <dt>League high</dt>
+                  <dd>47.5%</dd>
+                </div>
+              </dl>
+            </article>
+          
+            
+            <article class="team-visual">
+              <header class="team-visual__header">
+                <div class="team-visual__heading">
+                  <span class="team-visual__label">Three-point accuracy</span>
+                  <span class="team-visual__percentile" title="Percentile rank across the league">47th percentile</span>
+                </div>
+                <strong class="team-visual__value">35.7%</strong>
+              </header>
+              <p class="team-visual__description">Conversion rate on perimeter attempts.</p>
+              <div class="team-visual__meter" role="presentation">
+                <div class="team-visual__meter-track"></div>
+                <div class="team-visual__meter-fill" style="--fill:48.6%"></div>
+              </div>
+              <dl class="team-visual__range">
+                <div>
+                  <dt>League low</dt>
+                  <dd>34.7%</dd>
+                </div>
+                <div>
+                  <dt>League high</dt>
+                  <dd>36.7%</dd>
+                </div>
+              </dl>
+            </article>
+          
+            
+            <article class="team-visual">
+              <header class="team-visual__header">
+                <div class="team-visual__heading">
+                  <span class="team-visual__label">Rebounds</span>
+                  <span class="team-visual__percentile" title="Percentile rank across the league">27th percentile</span>
+                </div>
+                <strong class="team-visual__value">26.9</strong>
+              </header>
+              <p class="team-visual__description">Average total rebounds secured per night.</p>
+              <div class="team-visual__meter" role="presentation">
+                <div class="team-visual__meter-track"></div>
+                <div class="team-visual__meter-fill" style="--fill:8.3%"></div>
+              </div>
+              <dl class="team-visual__range">
+                <div>
+                  <dt>League low</dt>
+                  <dd>25.4</dd>
+                </div>
+                <div>
+                  <dt>League high</dt>
+                  <dd>43.2</dd>
+                </div>
+              </dl>
+            </article>
+          
+            
+            <article class="team-visual">
+              <header class="team-visual__header">
+                <div class="team-visual__heading">
+                  <span class="team-visual__label">Assists</span>
+                  <span class="team-visual__percentile" title="Percentile rank across the league">10th percentile</span>
+                </div>
+                <strong class="team-visual__value">13.5</strong>
+              </header>
+              <p class="team-visual__description">Average assists generated each game.</p>
+              <div class="team-visual__meter" role="presentation">
+                <div class="team-visual__meter-track"></div>
+                <div class="team-visual__meter-fill" style="--fill:1.6%"></div>
+              </div>
+              <dl class="team-visual__range">
+                <div>
+                  <dt>League low</dt>
+                  <dd>13.2</dd>
+                </div>
+                <div>
+                  <dt>League high</dt>
+                  <dd>28.4</dd>
+                </div>
+              </dl>
+            </article>
+          
+            
+            <article class="team-visual">
+              <header class="team-visual__header">
+                <div class="team-visual__heading">
+                  <span class="team-visual__label">Turnovers</span>
+                  <span class="team-visual__percentile" title="Percentile rank across the league">87th percentile</span>
+                </div>
+                <strong class="team-visual__value">8.3</strong>
+              </header>
+              <p class="team-visual__description">Average turnovers committed per outing (lower is stronger).</p>
+              <div class="team-visual__meter" role="presentation">
+                <div class="team-visual__meter-track"></div>
+                <div class="team-visual__meter-fill" style="--fill:96.2%"></div>
+              </div>
+              <dl class="team-visual__range">
+                <div>
+                  <dt>League low</dt>
+                  <dd>8.0</dd>
+                </div>
+                <div>
+                  <dt>League high</dt>
+                  <dd>14.9</dd>
+                </div>
+              </dl>
+            </article>
+          
+            
+            <article class="team-visual">
+              <header class="team-visual__header">
+                <div class="team-visual__heading">
+                  <span class="team-visual__label">Points in the paint</span>
+                  <span class="team-visual__percentile" title="Percentile rank across the league">93rd percentile</span>
+                </div>
+                <strong class="team-visual__value">54.8</strong>
+              </header>
+              <p class="team-visual__description">Interior scoring output per contest.</p>
+              <div class="team-visual__meter" role="presentation">
+                <div class="team-visual__meter-track"></div>
+                <div class="team-visual__meter-fill" style="--fill:91.8%"></div>
+              </div>
+              <dl class="team-visual__range">
+                <div>
+                  <dt>League low</dt>
+                  <dd>40.5</dd>
+                </div>
+                <div>
+                  <dt>League high</dt>
+                  <dd>56.1</dd>
+                </div>
+              </dl>
+            </article>
+          
+            
+            <article class="team-visual">
+              <header class="team-visual__header">
+                <div class="team-visual__heading">
+                  <span class="team-visual__label">Fast-break points</span>
+                  <span class="team-visual__percentile" title="Percentile rank across the league">87th percentile</span>
+                </div>
+                <strong class="team-visual__value">17.0</strong>
+              </header>
+              <p class="team-visual__description">Transition scoring per game.</p>
+              <div class="team-visual__meter" role="presentation">
+                <div class="team-visual__meter-track"></div>
+                <div class="team-visual__meter-fill" style="--fill:72.9%"></div>
+              </div>
+              <dl class="team-visual__range">
+                <div>
+                  <dt>League low</dt>
+                  <dd>12.0</dd>
+                </div>
+                <div>
+                  <dt>League high</dt>
+                  <dd>18.9</dd>
+                </div>
+              </dl>
+            </article>
+          
+            
+            <article class="team-visual">
+              <header class="team-visual__header">
+                <div class="team-visual__heading">
+                  <span class="team-visual__label">Bench points</span>
+                  <span class="team-visual__percentile" title="Percentile rank across the league">97th percentile</span>
+                </div>
+                <strong class="team-visual__value">43.9</strong>
+              </header>
+              <p class="team-visual__description">Second-unit scoring production.</p>
+              <div class="team-visual__meter" role="presentation">
+                <div class="team-visual__meter-track"></div>
+                <div class="team-visual__meter-fill" style="--fill:96.4%"></div>
+              </div>
+              <dl class="team-visual__range">
+                <div>
+                  <dt>League low</dt>
+                  <dd>22.1</dd>
+                </div>
+                <div>
+                  <dt>League high</dt>
+                  <dd>44.7</dd>
+                </div>
+              </dl>
+            </article>
+          
+          </div>
+        </article>
+      
+            
+        <article class="preview-visuals__team">
+          <header class="preview-visuals__team-header">
+            <h3>Houston Rockets</h3>
+            <span class="chip preview-visuals__chip">NBA</span>
+          </header>
+          <div class="team-detail__visuals">
+            
+            <article class="team-visual">
+              <header class="team-visual__header">
+                <div class="team-visual__heading">
+                  <span class="team-visual__label">Win percentage</span>
+                  <span class="team-visual__percentile" title="Percentile rank across the league">77th percentile</span>
+                </div>
+                <strong class="team-visual__value">51.7%</strong>
+              </header>
+              <p class="team-visual__description">Share of games won across the tracked 2024-25 sample.</p>
+              <div class="team-visual__meter" role="presentation">
+                <div class="team-visual__meter-track"></div>
+                <div class="team-visual__meter-fill" style="--fill:55.3%"></div>
+              </div>
+              <dl class="team-visual__range">
+                <div>
+                  <dt>League low</dt>
+                  <dd>41.9%</dd>
+                </div>
+                <div>
+                  <dt>League high</dt>
+                  <dd>59.7%</dd>
+                </div>
+              </dl>
+            </article>
+          
+            
+            <article class="team-visual">
+              <header class="team-visual__header">
+                <div class="team-visual__heading">
+                  <span class="team-visual__label">Points for</span>
+                  <span class="team-visual__percentile" title="Percentile rank across the league">77th percentile</span>
+                </div>
+                <strong class="team-visual__value">105.4</strong>
+              </header>
+              <p class="team-visual__description">Average points scored per game.</p>
+              <div class="team-visual__meter" role="presentation">
+                <div class="team-visual__meter-track"></div>
+                <div class="team-visual__meter-fill" style="--fill:45.0%"></div>
+              </div>
+              <dl class="team-visual__range">
+                <div>
+                  <dt>League low</dt>
+                  <dd>99.5</dd>
+                </div>
+                <div>
+                  <dt>League high</dt>
+                  <dd>112.7</dd>
+                </div>
+              </dl>
+            </article>
+          
+            
+            <article class="team-visual">
+              <header class="team-visual__header">
+                <div class="team-visual__heading">
+                  <span class="team-visual__label">Points allowed</span>
+                  <span class="team-visual__percentile" title="Percentile rank across the league">27th percentile</span>
+                </div>
+                <strong class="team-visual__value">104.8</strong>
+              </header>
+              <p class="team-visual__description">Average points conceded per game.</p>
+              <div class="team-visual__meter" role="presentation">
+                <div class="team-visual__meter-track"></div>
+                <div class="team-visual__meter-fill" style="--fill:63.6%"></div>
+              </div>
+              <dl class="team-visual__range">
+                <div>
+                  <dt>League low</dt>
+                  <dd>98.9</dd>
+                </div>
+                <div>
+                  <dt>League high</dt>
+                  <dd>115.2</dd>
+                </div>
+              </dl>
+            </article>
+          
+            
+            <article class="team-visual">
+              <header class="team-visual__header">
+                <div class="team-visual__heading">
+                  <span class="team-visual__label">Net margin</span>
+                  <span class="team-visual__percentile" title="Percentile rank across the league">80th percentile</span>
+                </div>
+                <strong class="team-visual__value">+0.6</strong>
+              </header>
+              <p class="team-visual__description">Average scoring differential versus opponents.</p>
+              <div class="team-visual__meter" role="presentation">
+                <div class="team-visual__meter-track"></div>
+                <div class="team-visual__meter-fill" style="--fill:56.9%"></div>
+              </div>
+              <dl class="team-visual__range">
+                <div>
+                  <dt>League low</dt>
+                  <dd>-2.7</dd>
+                </div>
+                <div>
+                  <dt>League high</dt>
+                  <dd>+3.0</dd>
+                </div>
+              </dl>
+            </article>
+          
+            
+            <article class="team-visual">
+              <header class="team-visual__header">
+                <div class="team-visual__heading">
+                  <span class="team-visual__label">Field goal accuracy</span>
+                  <span class="team-visual__percentile" title="Percentile rank across the league">43rd percentile</span>
+                </div>
+                <strong class="team-visual__value">46.0%</strong>
+              </header>
+              <p class="team-visual__description">Overall shooting efficiency from the floor.</p>
+              <div class="team-visual__meter" role="presentation">
+                <div class="team-visual__meter-track"></div>
+                <div class="team-visual__meter-fill" style="--fill:37.3%"></div>
+              </div>
+              <dl class="team-visual__range">
+                <div>
+                  <dt>League low</dt>
+                  <dd>45.1%</dd>
+                </div>
+                <div>
+                  <dt>League high</dt>
+                  <dd>47.5%</dd>
+                </div>
+              </dl>
+            </article>
+          
+            
+            <article class="team-visual">
+              <header class="team-visual__header">
+                <div class="team-visual__heading">
+                  <span class="team-visual__label">Three-point accuracy</span>
+                  <span class="team-visual__percentile" title="Percentile rank across the league">37th percentile</span>
+                </div>
+                <strong class="team-visual__value">35.5%</strong>
+              </header>
+              <p class="team-visual__description">Conversion rate on perimeter attempts.</p>
+              <div class="team-visual__meter" role="presentation">
+                <div class="team-visual__meter-track"></div>
+                <div class="team-visual__meter-fill" style="--fill:42.8%"></div>
+              </div>
+              <dl class="team-visual__range">
+                <div>
+                  <dt>League low</dt>
+                  <dd>34.7%</dd>
+                </div>
+                <div>
+                  <dt>League high</dt>
+                  <dd>36.7%</dd>
+                </div>
+              </dl>
+            </article>
+          
+            
+            <article class="team-visual">
+              <header class="team-visual__header">
+                <div class="team-visual__heading">
+                  <span class="team-visual__label">Rebounds</span>
+                  <span class="team-visual__percentile" title="Percentile rank across the league">47th percentile</span>
+                </div>
+                <strong class="team-visual__value">32.8</strong>
+              </header>
+              <p class="team-visual__description">Average total rebounds secured per night.</p>
+              <div class="team-visual__meter" role="presentation">
+                <div class="team-visual__meter-track"></div>
+                <div class="team-visual__meter-fill" style="--fill:41.8%"></div>
+              </div>
+              <dl class="team-visual__range">
+                <div>
+                  <dt>League low</dt>
+                  <dd>25.4</dd>
+                </div>
+                <div>
+                  <dt>League high</dt>
+                  <dd>43.2</dd>
+                </div>
+              </dl>
+            </article>
+          
+            
+            <article class="team-visual">
+              <header class="team-visual__header">
+                <div class="team-visual__heading">
+                  <span class="team-visual__label">Assists</span>
+                  <span class="team-visual__percentile" title="Percentile rank across the league">37th percentile</span>
+                </div>
+                <strong class="team-visual__value">17.1</strong>
+              </header>
+              <p class="team-visual__description">Average assists generated each game.</p>
+              <div class="team-visual__meter" role="presentation">
+                <div class="team-visual__meter-track"></div>
+                <div class="team-visual__meter-fill" style="--fill:25.8%"></div>
+              </div>
+              <dl class="team-visual__range">
+                <div>
+                  <dt>League low</dt>
+                  <dd>13.2</dd>
+                </div>
+                <div>
+                  <dt>League high</dt>
+                  <dd>28.4</dd>
+                </div>
+              </dl>
+            </article>
+          
+            
+            <article class="team-visual">
+              <header class="team-visual__header">
+                <div class="team-visual__heading">
+                  <span class="team-visual__label">Turnovers</span>
+                  <span class="team-visual__percentile" title="Percentile rank across the league">57th percentile</span>
+                </div>
+                <strong class="team-visual__value">10.8</strong>
+              </header>
+              <p class="team-visual__description">Average turnovers committed per outing (lower is stronger).</p>
+              <div class="team-visual__meter" role="presentation">
+                <div class="team-visual__meter-track"></div>
+                <div class="team-visual__meter-fill" style="--fill:59.2%"></div>
+              </div>
+              <dl class="team-visual__range">
+                <div>
+                  <dt>League low</dt>
+                  <dd>8.0</dd>
+                </div>
+                <div>
+                  <dt>League high</dt>
+                  <dd>14.9</dd>
+                </div>
+              </dl>
+            </article>
+          
+            
+            <article class="team-visual">
+              <header class="team-visual__header">
+                <div class="team-visual__heading">
+                  <span class="team-visual__label">Points in the paint</span>
+                  <span class="team-visual__percentile" title="Percentile rank across the league">80th percentile</span>
+                </div>
+                <strong class="team-visual__value">51.4</strong>
+              </header>
+              <p class="team-visual__description">Interior scoring output per contest.</p>
+              <div class="team-visual__meter" role="presentation">
+                <div class="team-visual__meter-track"></div>
+                <div class="team-visual__meter-fill" style="--fill:69.6%"></div>
+              </div>
+              <dl class="team-visual__range">
+                <div>
+                  <dt>League low</dt>
+                  <dd>40.5</dd>
+                </div>
+                <div>
+                  <dt>League high</dt>
+                  <dd>56.1</dd>
+                </div>
+              </dl>
+            </article>
+          
+            
+            <article class="team-visual">
+              <header class="team-visual__header">
+                <div class="team-visual__heading">
+                  <span class="team-visual__label">Fast-break points</span>
+                  <span class="team-visual__percentile" title="Percentile rank across the league">80th percentile</span>
+                </div>
+                <strong class="team-visual__value">16.5</strong>
+              </header>
+              <p class="team-visual__description">Transition scoring per game.</p>
+              <div class="team-visual__meter" role="presentation">
+                <div class="team-visual__meter-track"></div>
+                <div class="team-visual__meter-fill" style="--fill:65.6%"></div>
+              </div>
+              <dl class="team-visual__range">
+                <div>
+                  <dt>League low</dt>
+                  <dd>12.0</dd>
+                </div>
+                <div>
+                  <dt>League high</dt>
+                  <dd>18.9</dd>
+                </div>
+              </dl>
+            </article>
+          
+            
+            <article class="team-visual">
+              <header class="team-visual__header">
+                <div class="team-visual__heading">
+                  <span class="team-visual__label">Bench points</span>
+                  <span class="team-visual__percentile" title="Percentile rank across the league">27th percentile</span>
+                </div>
+                <strong class="team-visual__value">33.0</strong>
+              </header>
+              <p class="team-visual__description">Second-unit scoring production.</p>
+              <div class="team-visual__meter" role="presentation">
+                <div class="team-visual__meter-track"></div>
+                <div class="team-visual__meter-fill" style="--fill:48.1%"></div>
+              </div>
+              <dl class="team-visual__range">
+                <div>
+                  <dt>League low</dt>
+                  <dd>22.1</dd>
+                </div>
+                <div>
+                  <dt>League high</dt>
+                  <dd>44.7</dd>
+                </div>
+              </dl>
+            </article>
+          
+          </div>
+        </article>
+      
+          </div>
+        </section>
+      
 
       <footer>
         <span>Season context: 2025-26 preseason schedule.</span>
