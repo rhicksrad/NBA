@@ -28,82 +28,156 @@
         </div>
         <div class="hero">
           <span class="eyebrow">Player Intelligence</span>
-          <h1>Profiles, performance curves, and signature skill maps.</h1>
+          <h1>Build the NBA's most immersive player observatory.</h1>
           <p>
-            This space will evolve into a searchable atlas of every athlete in the league. Plan the
-            next wave of scouting visuals, from archetype clustering to shot quality heatmaps.
+            Welcome to the lab where biometrics, geography, and legendary performances collide.
+            Each panel below pulls from the repository's player archives and refracts them into
+            visual stories you won't find on the corporate dashboards.
           </p>
         </div>
       </header>
 
-      <main>
-        <section>
-          <h2>Player archetype explorer</h2>
-          <p class="lead">
-            Build interactive scatter plots and radar profiles that let decision makers compare
-            players across roles, pace contexts, and matchup styles.
-          </p>
-          <div class="grid-two">
+      <main class="players-lab">
+        <section class="players-lab__section">
+          <header class="players-lab__section-header">
+            <h2>Morphology lab</h2>
+            <p class="players-lab__lede">
+              Track how body types and roles stretch across eras — from the tallest towers ever
+              logged to the shape of today's positionless rotations.
+            </p>
+          </header>
+          <div class="players-lab__grid viz-grid">
             <figure class="viz-card viz-card--inline" data-chart-wrapper>
               <header class="viz-card__title">League height distribution</header>
               <div class="viz-canvas">
-                <canvas data-chart="player-heights" aria-describedby="player-heights-caption"></canvas>
+                <canvas data-chart="league-heights" aria-describedby="league-heights-caption"></canvas>
               </div>
-              <figcaption id="player-heights-caption" class="viz-card__caption">
-                A smoothed density curve of roster heights keeps archetype filters responsive while
-                honoring Phase 2 performance budgets.
+              <figcaption id="league-heights-caption" class="viz-card__caption">
+                Density curve of roster heights sourced from <code>Players.csv</code> buckets — a quick
+                way to spot outlier size archetypes.
               </figcaption>
             </figure>
-            <div class="subsection">
-              <h3>Key ingredients</h3>
-              <div class="badge-list">
-                <span class="badge">Play style vectors</span>
-                <span class="badge">Versatility index</span>
-                <span class="badge">Biomechanics data</span>
+
+            <figure class="viz-card viz-card--inline" data-chart-wrapper>
+              <header class="viz-card__title">Skyline mass bubbles</header>
+              <div class="viz-canvas">
+                <canvas data-chart="tallest-bubbles" aria-describedby="tallest-bubbles-caption"></canvas>
               </div>
-              <p>
-                Import player traits from <code>Players.csv</code> and blend with tracking metrics to
-                categorize emerging roles. Future widgets will allow filtering by age, contract
-                status, and playoff sample size.
-              </p>
-            </div>
+              <figcaption id="tallest-bubbles-caption" class="viz-card__caption">
+                Bubble chart of the league's tallest players — bubble size mirrors listed weight to
+                show which giants carried the most mass.
+              </figcaption>
+            </figure>
+
+            <figure class="viz-card viz-card--inline" data-chart-wrapper>
+              <header class="viz-card__title">Role orbit share</header>
+              <div class="viz-canvas">
+                <canvas data-chart="position-orbits" aria-describedby="position-orbits-caption"></canvas>
+              </div>
+              <figcaption id="position-orbits-caption" class="viz-card__caption">
+                Guards, forwards, and centers plotted as a radial orbit to highlight the balance of
+                skill sets across all recorded players.
+              </figcaption>
+            </figure>
           </div>
         </section>
 
-        <section>
-          <h2>Game impact timelines</h2>
-          <div class="grid-two">
-            <div class="subsection">
-              <h3>Season arcs</h3>
-              <p>
-                Plan for cumulative win probability charts and health status overlays. Give front
-                offices tools to spot breakout windows or manage workloads over 82 games.
-              </p>
-            </div>
+        <section class="players-lab__section">
+          <header class="players-lab__section-header">
+            <h2>Global &amp; collegiate pipelines</h2>
+            <p class="players-lab__lede">
+              Follow the journeys that feed the league — from international launch pads to the
+              college programs producing the deepest alumni pools.
+            </p>
+          </header>
+          <div class="players-lab__grid viz-grid">
             <figure class="viz-card viz-card--inline" data-chart-wrapper>
-              <header class="viz-card__title">Draft pipeline cadence</header>
+              <header class="viz-card__title">Global talent spectrum</header>
+              <div class="viz-canvas">
+                <canvas data-chart="country-spectrum" aria-describedby="country-spectrum-caption"></canvas>
+              </div>
+              <figcaption id="country-spectrum-caption" class="viz-card__caption">
+                Polar area bloom of the top international contributors — each petal encodes how many
+                pros hail from that nation.
+              </figcaption>
+            </figure>
+
+            <figure class="viz-card viz-card--inline" data-chart-wrapper>
+              <header class="viz-card__title">College pipeline power grid</header>
+              <div class="viz-canvas">
+                <canvas data-chart="college-pipeline" aria-describedby="college-pipeline-caption"></canvas>
+              </div>
+              <figcaption id="college-pipeline-caption" class="viz-card__caption">
+                Horizontal bar ranks for the collegiate programs that have launched the most NBA
+                talent.
+              </figcaption>
+            </figure>
+
+            <figure class="viz-card viz-card--inline" data-chart-wrapper>
+              <header class="viz-card__title">Draft cadence stream</header>
               <div class="viz-canvas">
                 <canvas data-chart="draft-timeline" aria-describedby="draft-timeline-caption"></canvas>
               </div>
               <figcaption id="draft-timeline-caption" class="viz-card__caption">
-                Decade-level draft totals are sampled evenly to highlight momentum without shipping
-                the full historical series.
+                Smoothed line of draft counts by decade — a pulse check on how the pipeline has
+                swollen and contracted over time.
               </figcaption>
             </figure>
           </div>
-          <div class="card-grid">
-            <article class="card">
-              <h3>Career compendium</h3>
-              <p>Use dynamic filters to surface comparable players based on advanced metrics.</p>
-            </article>
-            <article class="card">
-              <h3>Scouting briefs</h3>
-              <p>Create one-page exports combining film notes, lineup fits, and biometric flags.</p>
-            </article>
-            <article class="card">
-              <h3>Player availability</h3>
-              <p>Integrate schedule density and travel strain models to project rest nights.</p>
-            </article>
+        </section>
+
+        <section class="players-lab__section">
+          <header class="players-lab__section-header">
+            <h2>Momentum &amp; mythology</h2>
+            <p class="players-lab__lede">
+              Dive into production rhythms, legendary streaks, and single-game supernovas that define
+              the lore of NBA players.
+            </p>
+          </header>
+          <div class="players-lab__grid viz-grid">
+            <figure class="viz-card viz-card--inline" data-chart-wrapper>
+              <header class="viz-card__title">Scoring era waveform</header>
+              <div class="viz-canvas">
+                <canvas data-chart="season-trends" aria-describedby="season-trends-caption"></canvas>
+              </div>
+              <figcaption id="season-trends-caption" class="viz-card__caption">
+                Multi-line stream of league-wide scoring, assisting, and rebounding averages from
+                1946 onward.
+              </figcaption>
+            </figure>
+
+            <figure class="viz-card viz-card--inline" data-chart-wrapper>
+              <header class="viz-card__title">Triple-double nebula</header>
+              <div class="viz-canvas">
+                <canvas data-chart="triple-double-cloud" aria-describedby="triple-double-cloud-caption"></canvas>
+              </div>
+              <figcaption id="triple-double-cloud-caption" class="viz-card__caption">
+                Bubble timeline of career triple-double totals — bubble radius scales with how many
+                seasons featured the feat.
+              </figcaption>
+            </figure>
+
+            <figure class="viz-card viz-card--inline" data-chart-wrapper>
+              <header class="viz-card__title">Scoring supernovas</header>
+              <div class="viz-canvas">
+                <canvas data-chart="scoring-eruptions" aria-describedby="scoring-eruptions-caption"></canvas>
+              </div>
+              <figcaption id="scoring-eruptions-caption" class="viz-card__caption">
+                Scatter of the biggest single-game point totals — hover to see rebounds, assists, and
+                the minute loads required.
+              </figcaption>
+            </figure>
+
+            <figure class="viz-card viz-card--inline" data-chart-wrapper>
+              <header class="viz-card__title">Pantheon production radar</header>
+              <div class="viz-canvas">
+                <canvas data-chart="career-constellation" aria-describedby="career-constellation-caption"></canvas>
+              </div>
+              <figcaption id="career-constellation-caption" class="viz-card__caption">
+                Radar comparison for the top career scorers — normalized blend of points, assists,
+                rebounds, and win percentage.
+              </figcaption>
+            </figure>
           </div>
         </section>
       </main>
