@@ -8,6 +8,35 @@ const CONFERENCE_CLASSES = {
   West: 'west',
 };
 
+const TEAM_MODE_CONFIG = {
+  active: {
+    dataset: 'data/team_profiles.json',
+    mapCopy:
+      "Pins are color coded by conference and expand into a live dashboard with scoring, efficiency, and depth insights pulled from the league archive (1946-2025).",
+    footprintTitle: 'Ranking every active team by footprint strength.',
+    footprintDescription:
+      "We blended results, efficiency, and rotational depth to surface how each club's on-court identity resonates across the league in 2024-25. Explore the full ladder below, then dig into the numbers that power every badge.",
+    footprintEmpty: 'We were unable to load active team data for this refresh.',
+    methodologyIntro: (seasonText) =>
+      `Franchise Footprint scores normalise each legacy signal to a league-wide 0-100 scale${seasonText}, then blend the results using the weighted recipe below. The composite number now spotlights franchises that pair trophy cases, Hall of Fame representation, and sustained winning across eras.`,
+    methodologyOutro:
+      'This historical view keeps weights fixed so the rankings emphasise enduring impact rather than short-term swings.',
+  },
+  inactive: {
+    dataset: 'data/inactive_team_profiles.json',
+    mapCopy:
+      'Pins now spotlight inactive franchises from the NBA archives. Click a dormant club to surface its historical performance profile and relive defunct eras.',
+    footprintTitle: 'Ranking every inactive franchise by archive footprint.',
+    footprintDescription:
+      'We remix legacy signals to celebrate the dormant brands that still cast a shadow across the league. Compare inactive clubs on trophies, legends, and peak efficiency to see who is most ready for a revival.',
+    footprintEmpty: 'We were unable to load inactive franchise data for this refresh.',
+    methodologyIntro: (seasonText) =>
+      `Inactive franchise Footprint scores normalise each legacy marker to the vintage peer set${seasonText} before applying the same weighted recipe. The blend lets dormant clubs compete on even footing, from trophy hauls to star power.`,
+    methodologyOutro:
+      'Because the inactive set is frozen in time, the weights emphasise enduring resonance rather than contemporary results.',
+  },
+};
+
 const METRIC_CONFIG = [
   {
     key: 'winPct',
@@ -120,14 +149,22 @@ const detailGames = document.querySelector('[data-team-games]');
 const detailRecord = document.querySelector('[data-team-record]');
 const detailNet = document.querySelector('[data-team-net]');
 const detailVisuals = document.querySelector('[data-team-visuals]');
+const modeCopyElement = document.querySelector('[data-team-mode-copy]');
+const modeToggle = document.querySelector('[data-team-mode]');
+const modeToggleButtons = modeToggle ? Array.from(modeToggle.querySelectorAll('[data-mode]')) : [];
 const footprintList = document.querySelector('[data-footprint-list]');
 const footprintMethodology = document.querySelector('[data-footprint-methodology]');
+const footprintTitle = document.querySelector('[data-footprint-title]');
+const footprintDescription = document.querySelector('[data-footprint-description]');
+const footprintSection = document.querySelector('[data-footprint]');
 
 let markerButtons = [];
 let activeTeamId = null;
 let metricExtents = {};
 let legacyExtents = {};
 let teamLookup = new Map();
+const datasetStore = new Map();
+let currentMode = 'active';
 
 function projectCoordinates(latitude, longitude) {
   const x = ((longitude - LON_RANGE[0]) / (LON_RANGE[1] - LON_RANGE[0])) * MAP_WIDTH;
@@ -343,14 +380,19 @@ function computeFootprintScores(teams) {
       }).sort((a, b) => b.weighted - a.weighted);
       return { ...team, footprintScore: score, footprintContributions: contributions };
     })
-    .sort((a, b) => (Number.isFinite(b.footprintScore) ? b.footprintScore : -1) - (Number.isFinite(a.footprintScore) ? a.footprintScore : -1));
+    .sort((a, b) => {
+      const bScore = Number.isFinite(b.footprintScore) ? b.footprintScore : -1;
+      const aScore = Number.isFinite(a.footprintScore) ? a.footprintScore : -1;
+      return bScore - aScore;
+    });
 }
 
-function renderFootprintRankings(teams) {
+function renderFootprintRankings(teams, mode = 'active') {
   if (!footprintList) {
     return;
   }
 
+  const modeConfig = TEAM_MODE_CONFIG[mode] ?? TEAM_MODE_CONFIG.active;
   const ranked = computeFootprintScores(teams);
   footprintList.innerHTML = '';
 
@@ -363,7 +405,7 @@ function renderFootprintRankings(teams) {
         <div class="franchise-footprint__heading">
           <strong>Franchise rankings will update soon</strong>
         </div>
-        <span class="franchise-footprint__meta">We were unable to load active team data for this refresh.</span>
+        <span class="franchise-footprint__meta">${modeConfig.footprintEmpty}</span>
       </div>
     `;
     footprintList.append(placeholder);
@@ -388,6 +430,9 @@ function renderFootprintRankings(teams) {
     }
     if (Number.isFinite(team?.gamesSampled)) {
       metaParts.push(`${team.gamesSampled.toLocaleString()} games sampled`);
+    }
+    if (team?.era) {
+      metaParts.push(`Active ${team.era}`);
     }
     const topSignals = (team.footprintContributions ?? [])
       .map((entry) => describeFootprintSignal(entry.key, entry.value))
@@ -414,23 +459,25 @@ function renderFootprintRankings(teams) {
   });
 }
 
-function renderFootprintMethodology(seasonLabel) {
+function renderFootprintMethodology(seasonLabel, mode = 'active') {
   if (!footprintMethodology) {
     return;
   }
+  const modeConfig = TEAM_MODE_CONFIG[mode] ?? TEAM_MODE_CONFIG.active;
   const bullets = LEGACY_METRICS.map(
     (metric) => `<li><strong>${Math.round(metric.weight * 100)}%</strong> ${metric.label}</li>`,
   )
     .join('');
   const seasonText = seasonLabel ? ` through the ${seasonLabel} record books` : '';
+  const intro =
+    typeof modeConfig.methodologyIntro === 'function'
+      ? modeConfig.methodologyIntro(seasonText)
+      : modeConfig.methodologyIntro;
+  const outro = modeConfig.methodologyOutro ?? '';
   footprintMethodology.innerHTML = `
-    <p>
-      Franchise Footprint scores normalise each legacy signal to a league-wide 0-100 scale${seasonText}, then blend the
-      results using the weighted recipe below. The composite number now spotlights franchises that pair trophy cases,
-      Hall of Fame representation, and sustained winning across eras.
-    </p>
+    <p>${intro}</p>
     <ul>${bullets}</ul>
-    <p>This historical view keeps weights fixed so the rankings emphasise enduring impact rather than short-term swings.</p>
+    ${outro ? `<p>${outro}</p>` : ''}
   `;
 }
 
@@ -504,6 +551,85 @@ function formatPercentileRank(percentile) {
   return `${formatOrdinal(percentage)} percentile`;
 }
 
+function updateModeCopy(mode) {
+  const modeConfig = TEAM_MODE_CONFIG[mode] ?? TEAM_MODE_CONFIG.active;
+  if (modeCopyElement && modeConfig?.mapCopy) {
+    modeCopyElement.textContent = modeConfig.mapCopy;
+  }
+  if (footprintTitle && modeConfig?.footprintTitle) {
+    footprintTitle.textContent = modeConfig.footprintTitle;
+  }
+  if (footprintDescription && modeConfig?.footprintDescription) {
+    footprintDescription.textContent = modeConfig.footprintDescription;
+  }
+  if (footprintSection) {
+    footprintSection.dataset.mode = mode;
+  }
+}
+
+function updateModeToggleState(mode) {
+  if (!modeToggleButtons.length) {
+    return;
+  }
+  modeToggleButtons.forEach((button) => {
+    const buttonMode = button.dataset.mode;
+    const isSelected = buttonMode === mode;
+    button.setAttribute('aria-pressed', String(isSelected));
+  });
+}
+
+function configureModeToggle() {
+  if (!modeToggleButtons.length) {
+    return;
+  }
+  modeToggleButtons.forEach((button) => {
+    const buttonMode = button.dataset.mode;
+    if (!buttonMode) {
+      return;
+    }
+    const isAvailable = datasetStore.has(buttonMode);
+    button.disabled = !isAvailable;
+    if (isAvailable && !button.dataset.modeBound) {
+      button.addEventListener('click', () => {
+        if (currentMode !== buttonMode) {
+          applyMode(buttonMode);
+        }
+      });
+      button.dataset.modeBound = 'true';
+    }
+  });
+}
+
+function applyMode(mode) {
+  const dataset = datasetStore.get(mode);
+  if (!dataset) {
+    return;
+  }
+
+  currentMode = mode;
+  configureModeToggle();
+  updateModeToggleState(mode);
+  updateModeCopy(mode);
+
+  const teams = dataset.teams ?? [];
+  teamLookup = new Map();
+  teams.forEach((team) => {
+    if (team?.abbreviation) {
+      teamLookup.set(team.abbreviation, team);
+    }
+  });
+
+  computeExtents(teams);
+  computeLegacyExtents(teams);
+  renderDivisionOverlays(teams);
+  buildMarkers(teams);
+  clearActiveMarker();
+  activeTeamId = null;
+  renderDetail(null);
+  renderFootprintRankings(teams, mode);
+  renderFootprintMethodology(dataset.season, mode);
+}
+
 function clearActiveMarker() {
   markerButtons.forEach((button) => button.classList.remove('team-marker--active'));
 }
@@ -536,26 +662,49 @@ function renderDetail(team) {
     detailPanel.setAttribute('aria-busy', 'false');
   }
 
-  const { conference, city, division, name, abbreviation, metrics, gamesSampled, wins, losses } = team;
+  const { conference, city, division, name, abbreviation, metrics, gamesSampled, wins, losses, era } = team;
+  const isInactiveMode = currentMode === 'inactive';
   if (detailConference) {
-    detailConference.textContent = `${conference} Conference`;
-    detailConference.className = `team-detail__conference team-detail__conference--${CONFERENCE_CLASSES[conference] ?? 'east'}`;
+    const conferenceLabel = conference
+      ? `${conference} Conference`
+      : isInactiveMode
+        ? 'Inactive franchise'
+        : 'Conference unavailable';
+    const conferenceClass = conference
+      ? CONFERENCE_CLASSES[conference] ?? 'east'
+      : isInactiveMode
+        ? 'inactive'
+        : 'east';
+    detailConference.textContent = conferenceLabel;
+    detailConference.className = `team-detail__conference team-detail__conference--${conferenceClass}`;
   }
   if (detailName) {
     detailName.textContent = `${name} (${abbreviation})`;
   }
   if (detailMeta) {
-    detailMeta.textContent = `${city} • ${division} Division`;
+    const metaParts = [];
+    if (city) {
+      metaParts.push(city);
+    }
+    if (division) {
+      metaParts.push(`${division} Division`);
+    }
+    if (era) {
+      metaParts.push(`Active ${era}`);
+    }
+    detailMeta.textContent = metaParts.join(' • ');
   }
   if (detailGames) {
-    detailGames.textContent = gamesSampled.toLocaleString();
+    detailGames.textContent = Number.isFinite(gamesSampled) ? gamesSampled.toLocaleString() : '—';
   }
   if (detailRecord) {
-    detailRecord.textContent = `${wins}-${losses}`;
+    const recordWins = Number.isFinite(wins) ? wins : null;
+    const recordLosses = Number.isFinite(losses) ? losses : null;
+    detailRecord.textContent = recordWins !== null && recordLosses !== null ? `${recordWins}-${recordLosses}` : '—';
   }
   if (detailNet) {
-    const net = metrics?.netMargin ?? 0;
-    detailNet.textContent = `${net >= 0 ? '+' : ''}${net.toFixed(1)} per game`;
+    const net = metrics?.netMargin;
+    detailNet.textContent = Number.isFinite(net) ? `${net >= 0 ? '+' : ''}${net.toFixed(1)} per game` : '—';
   }
 
   if (detailVisuals) {
@@ -621,6 +770,9 @@ function handleMarkerClick(event) {
 function buildMarkers(teams) {
   if (!mapCanvas) return;
 
+  const existingLayers = mapCanvas.querySelectorAll('.team-map__markers');
+  existingLayers.forEach((layer) => layer.remove());
+
   const markerLayer = document.createElement('div');
   markerLayer.className = 'team-map__markers';
   mapCanvas.append(markerLayer);
@@ -630,11 +782,19 @@ function buildMarkers(teams) {
     const { x, y } = projectCoordinates(latitude, longitude);
     const button = document.createElement('button');
     button.type = 'button';
-    button.className = `team-marker team-marker--${CONFERENCE_CLASSES[conference] ?? 'east'}`;
+    const markerTheme = CONFERENCE_CLASSES[conference] ?? (currentMode === 'inactive' ? 'inactive' : 'east');
+    button.className = `team-marker team-marker--${markerTheme}`;
     button.style.setProperty('--marker-x', `${(x / MAP_WIDTH) * 100}%`);
     button.style.setProperty('--marker-y', `${(y / MAP_HEIGHT) * 100}%`);
     button.dataset.team = abbreviation;
-    button.setAttribute('aria-label', `${name} (${conference} Conference)`);
+    const ariaLabelParts = [name];
+    if (conference) {
+      ariaLabelParts.push(`${conference} Conference`);
+    }
+    if (currentMode === 'inactive') {
+      ariaLabelParts.push('inactive franchise');
+    }
+    button.setAttribute('aria-label', ariaLabelParts.join(', '));
     button.innerHTML = `
       <span class="team-marker__dot" aria-hidden="true"></span>
       <span class="team-marker__label">${abbreviation}</span>
@@ -701,33 +861,51 @@ async function initialise() {
     if (detailPanel) {
       detailPanel.setAttribute('aria-busy', 'true');
     }
-    const [svgResponse, teamsResponse] = await Promise.all([
+    const modeEntries = Object.entries(TEAM_MODE_CONFIG);
+    const responses = await Promise.all([
       fetch('vendor/us-states.svg'),
-      fetch('data/team_profiles.json'),
+      ...modeEntries.map(([, config]) => fetch(config.dataset)),
     ]);
-    if (!svgResponse.ok || !teamsResponse.ok) {
-      throw new Error('Network response was not ok');
+    const [svgResponse, ...datasetResponses] = responses;
+    if (!svgResponse.ok) {
+      throw new Error('Unable to load base map');
     }
-    const [svgMarkup, profileData] = await Promise.all([
-      svgResponse.text(),
-      teamsResponse.json(),
-    ]);
-    const teams = Array.isArray(profileData?.teams) ? profileData.teams : [];
-    if (!teams.length) {
+    const svgMarkup = await svgResponse.text();
+    injectMap(svgMarkup);
+
+    datasetStore.clear();
+    const parseTasks = datasetResponses.map(async (response, index) => {
+      const [mode, config] = modeEntries[index];
+      if (!response.ok) {
+        console.warn(`Failed to load dataset for ${mode} mode (${config.dataset})`);
+        return;
+      }
+      try {
+        const payload = await response.json();
+        const teams = Array.isArray(payload?.teams) ? payload.teams : [];
+        if (teams.length) {
+          datasetStore.set(mode, {
+            teams,
+            season: payload?.season ?? '',
+            generatedAt: payload?.generatedAt ?? '',
+          });
+        }
+      } catch (parseError) {
+        console.error(`Failed to parse dataset for ${mode} mode`, parseError);
+      }
+    });
+    await Promise.all(parseTasks);
+
+    if (!datasetStore.size) {
       throw new Error('No team data found');
     }
 
-    teams.forEach((team) => {
-      teamLookup.set(team.abbreviation, team);
-    });
+    if (!datasetStore.has(currentMode)) {
+      const firstAvailable = datasetStore.keys().next().value;
+      currentMode = firstAvailable;
+    }
 
-    computeExtents(teams);
-    computeLegacyExtents(teams);
-    injectMap(svgMarkup);
-    renderDivisionOverlays(teams);
-    buildMarkers(teams);
-    renderFootprintRankings(teams);
-    renderFootprintMethodology(profileData?.season);
+    applyMode(currentMode);
 
     if (detailPanel) {
       detailPanel.setAttribute('aria-busy', 'false');
@@ -739,7 +917,9 @@ async function initialise() {
     if (detailPanel) {
       detailPanel.setAttribute('aria-busy', 'false');
     }
-    renderFootprintRankings([]);
+    updateModeCopy(currentMode);
+    renderFootprintRankings([], currentMode);
+    renderFootprintMethodology(null, currentMode);
     console.error('Failed to initialise team explorer', error);
   }
 }
