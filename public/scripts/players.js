@@ -28,6 +28,63 @@ function createVerticalGradient(context, stops) {
   return gradient;
 }
 
+function normalizeName(value) {
+  if (typeof value !== 'string') {
+    return '';
+  }
+  return value
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim();
+}
+
+function renderRecentLeaderboard(records, listElement, placeholderElement) {
+  if (!listElement) {
+    return;
+  }
+
+  listElement.innerHTML = '';
+
+  if (!Array.isArray(records) || !records.length) {
+    listElement.hidden = true;
+    if (placeholderElement) {
+      placeholderElement.hidden = false;
+    }
+    return;
+  }
+
+  listElement.hidden = false;
+  if (placeholderElement) {
+    placeholderElement.hidden = true;
+  }
+
+  records.forEach((player) => {
+    const item = document.createElement('li');
+    item.className = 'players-rankings__item';
+
+    const rank = document.createElement('span');
+    rank.className = 'players-rankings__rank';
+    rank.textContent = Number.isFinite(player?.rank) ? player.rank : '—';
+
+    const body = document.createElement('div');
+    body.className = 'players-rankings__body';
+
+    const title = document.createElement('strong');
+    const displayName = player?.displayName || player?.name || '—';
+    const team = player?.team;
+    title.textContent = team ? `${displayName} — ${team}` : displayName;
+
+    const note = document.createElement('span');
+    note.textContent = player?.blurb || '';
+
+    body.append(title, note);
+    item.append(rank, body);
+    listElement.appendChild(item);
+  });
+}
+
 registerCharts([
   {
     element: document.querySelector('[data-chart="league-heights"]'),
@@ -733,69 +790,73 @@ function extractPersonIdFromProfile(player) {
   return null;
 }
 
-function computeRecentGoatScore(components) {
-  if (!components) return null;
-  const { impact, stage, versatility, longevity, culture } = components;
-  const values = [impact, stage, versatility, longevity, culture];
-  if (!values.every((value) => typeof value === 'number' && Number.isFinite(value))) {
-    return null;
-  }
-  const score =
-    impact * 1.35 +
-    stage * 1.25 +
-    versatility * 1.15 +
-    longevity * 0.5 +
-    culture * 0.4;
-  return Math.round(score * 10) / 10;
-}
+function buildGoatScoreLookup(indexSource, recentSource) {
+  const byId = new Map();
+  const byName = new Map();
+  const entries = new Map();
 
-function buildGoatScoreLookup(source) {
-  const entries = Array.isArray(source?.players) ? source.players : [];
-  const records = entries
-    .map((player) => {
-      if (!player || !player.personId) {
-        return null;
+  if (Array.isArray(indexSource?.players)) {
+    indexSource.players.forEach((player) => {
+      if (!player?.name) {
+        return;
       }
-      const historical = Number.isFinite(player.goatScore) ? player.goatScore : null;
-      const historicalRank = Number.isFinite(player.rank) ? player.rank : null;
-      const recent = computeRecentGoatScore(player.goatComponents);
-      return {
-        personId: player.personId,
-        historical,
-        historicalRank,
-        recent,
-        recentRank: null,
-      };
-    })
-    .filter(Boolean);
+      const nameKey = normalizeName(player.name);
+      if (!nameKey) {
+        return;
+      }
+      const entry = entries.get(nameKey) ?? { name: player.name, nameKey };
+      entry.historical = Number.isFinite(player.goatScore) ? player.goatScore : null;
+      entry.historicalRank = Number.isFinite(player.rank) ? player.rank : null;
+      entry.resume = player.resume ?? entry.resume;
+      entry.tier = player.tier ?? entry.tier;
+      entry.delta = Number.isFinite(player.delta) ? player.delta : entry.delta;
+      entry.franchises = Array.isArray(player.franchises) ? player.franchises : entry.franchises;
+      entries.set(nameKey, entry);
+    });
+  }
 
-  const rankedRecent = records
-    .filter((entry) => Number.isFinite(entry.recent))
-    .sort((a, b) => b.recent - a.recent);
+  let leaderboard = [];
+  if (Array.isArray(recentSource?.players)) {
+    leaderboard = recentSource.players
+      .map((player) => {
+        if (!player) {
+          return null;
+        }
+        const nameKey = normalizeName(player.name);
+        if (!nameKey) {
+          return null;
+        }
+        const entry = entries.get(nameKey) ?? { name: player.name, nameKey };
+        entry.personId = player.personId ?? entry.personId;
+        entry.recent = Number.isFinite(player.score) ? player.score : null;
+        entry.recentRank = Number.isFinite(player.rank) ? player.rank : null;
+        entries.set(nameKey, entry);
 
-  let previousScore = null;
-  let previousRank = 0;
-  rankedRecent.forEach((entry, index) => {
-    if (previousScore !== null && entry.recent === previousScore) {
-      entry.recentRank = previousRank;
-    } else {
-      entry.recentRank = index + 1;
-      previousScore = entry.recent;
-      previousRank = entry.recentRank;
+        return {
+          rank: Number.isFinite(player.rank) ? player.rank : null,
+          name: player.name,
+          displayName: player.displayName ?? player.name,
+          team: player.team ?? null,
+          franchise: player.franchise ?? null,
+          blurb: player.blurb ?? '',
+          score: Number.isFinite(player.score) ? player.score : null,
+          personId: player.personId ?? null,
+        };
+      })
+      .filter((player) => player && Number.isFinite(player.rank))
+      .sort((a, b) => a.rank - b.rank);
+  }
+
+  entries.forEach((entry) => {
+    if (entry.personId) {
+      byId.set(entry.personId, entry);
+    }
+    if (entry.nameKey) {
+      byName.set(entry.nameKey, entry);
     }
   });
 
-  const lookup = new Map();
-  records.forEach((entry) => {
-    lookup.set(entry.personId, {
-      historical: entry.historical,
-      historicalRank: entry.historicalRank,
-      recent: entry.recent,
-      recentRank: entry.recentRank,
-    });
-  });
-
-  return lookup;
+  return { byId, byName, recent: leaderboard };
 }
 
 function initPlayerAtlas() {
@@ -826,6 +887,8 @@ function initPlayerAtlas() {
   const draftEl = atlas.querySelector('[data-player-draft]');
   const metricsContainer = atlas.querySelector('[data-player-metrics]');
   const metricsEmpty = atlas.querySelector('[data-player-metrics-empty]');
+  const recentLeaderboard = document.querySelector('[data-recent-leaderboard]');
+  const recentPlaceholder = document.querySelector('[data-recent-placeholder]');
 
   if (
     !searchInput ||
@@ -845,13 +908,13 @@ function initPlayerAtlas() {
     return;
   }
 
-  let catalog = [];
   let players = [];
+  let catalog = [];
   let matches = [];
   let activeIndex = -1;
   let isLoaded = false;
   let hasError = false;
-  let goatLookup = new Map();
+  let goatLookup = { byId: new Map(), byName: new Map(), recent: [] };
   const defaultEmptyText = empty?.textContent?.trim() ?? '';
   const formatGoatNumber = (value) => (Number.isFinite(value) ? helpers.formatNumber(value, 1) : '—');
   const formatGoatRank = (rank) => `No. ${Number.isFinite(rank) ? helpers.formatNumber(rank, 0) : '—'}`;
@@ -1230,30 +1293,53 @@ function initPlayerAtlas() {
 
   const hydrate = async () => {
     try {
-      const [profilesResponse, goatResponse] = await Promise.all([
+      const [profilesResponse, goatIndexResponse, goatRecentResponse] = await Promise.all([
         fetch('data/player_profiles.json'),
-        fetch('data/goat_system.json').catch(() => null),
+        fetch('data/goat_index.json').catch(() => null),
+        fetch('data/goat_recent.json').catch(() => null),
       ]);
       if (!profilesResponse?.ok) {
         throw new Error(`Failed to load player profiles: ${profilesResponse?.status}`);
       }
       const data = await profilesResponse.json();
-      if (goatResponse && goatResponse.ok) {
+
+      let goatIndexData = null;
+      if (goatIndexResponse && goatIndexResponse.ok) {
         try {
-          const goatData = await goatResponse.json();
-          goatLookup = buildGoatScoreLookup(goatData);
-        } catch (goatError) {
-          console.warn('Unable to parse GOAT system data', goatError);
-          goatLookup = new Map();
+          goatIndexData = await goatIndexResponse.json();
+        } catch (goatIndexError) {
+          console.warn('Unable to parse GOAT index data', goatIndexError);
         }
-      } else {
-        goatLookup = new Map();
       }
+
+      let goatRecentData = null;
+      if (goatRecentResponse && goatRecentResponse.ok) {
+        try {
+          goatRecentData = await goatRecentResponse.json();
+        } catch (goatRecentError) {
+          console.warn('Unable to parse rolling GOAT data', goatRecentError);
+        }
+      }
+
+      goatLookup = buildGoatScoreLookup(goatIndexData, goatRecentData);
+      renderRecentLeaderboard(goatLookup.recent, recentLeaderboard, recentPlaceholder);
+
+      const resolveGoatScores = (personId, name) => {
+        if (personId && goatLookup.byId.has(personId)) {
+          return goatLookup.byId.get(personId);
+        }
+        const nameKey = normalizeName(name);
+        if (nameKey && goatLookup.byName.has(nameKey)) {
+          return goatLookup.byName.get(nameKey);
+        }
+        return null;
+      };
+
       catalog = Array.isArray(data?.metrics) ? data.metrics : [];
       const roster = Array.isArray(data?.players) ? data.players : [];
       players = roster.map((player) => {
         const personId = extractPersonIdFromProfile(player);
-        const goatScores = personId ? goatLookup.get(personId) : null;
+        const goatScores = resolveGoatScores(personId, player?.name);
         const historicalGoat = Number.isFinite(goatScores?.historical) ? goatScores.historical : player?.goatScore;
         return {
           ...player,
@@ -1288,6 +1374,7 @@ function initPlayerAtlas() {
     } catch (err) {
       console.error(err);
       hasError = true;
+      renderRecentLeaderboard([], recentLeaderboard, recentPlaceholder);
       if (error) {
         error.hidden = false;
         error.textContent = 'Unable to load the scouting atlas right now. Please refresh the page to try again.';
