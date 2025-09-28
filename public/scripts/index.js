@@ -165,7 +165,7 @@ const injuryAvailabilityPulse = [
   {
     team: 'Philadelphia 76ers',
     player: 'Joel Embiid',
-    role: 'C · MVP 2024',
+    role: 'C · MVP 2023',
     statusLabel: 'Cleared for camp',
     statusLevel: 'ready',
     readiness: 88,
