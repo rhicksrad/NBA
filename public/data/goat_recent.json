@@ -65,6 +65,16 @@
     },
     {
       "rank": 7,
+      "personId": "2544",
+      "name": "LeBron James",
+      "displayName": "LeBron James",
+      "team": "Lakers",
+      "franchise": "LAL",
+      "score": 88.7,
+      "blurb": "Year 21 and still posting All-NBA numbers: 27-8-8 pace with elite true shooting and matchup versatility."
+    },
+    {
+      "rank": 8,
       "personId": "201939",
       "name": "Stephen Curry",
       "displayName": "Stephen Curry",
@@ -74,7 +84,7 @@
       "blurb": "The original gravity well, still bending defenses with pull-up threes and movement."
     },
     {
-      "rank": 8,
+      "rank": 9,
       "personId": "203076",
       "name": "Anthony Davis",
       "displayName": "Anthony Davis",
@@ -84,7 +94,7 @@
       "blurb": "Premier rim protector posting 25/12 lines while switching across schemes."
     },
     {
-      "rank": 9,
+      "rank": 10,
       "personId": "201142",
       "name": "Kevin Durant",
       "displayName": "Kevin Durant",
@@ -92,16 +102,6 @@
       "franchise": "PHX",
       "score": 85.9,
       "blurb": "Still an elite shotmaker with 50/40/90 efficiency powering Phoenix's half-court sets."
-    },
-    {
-      "rank": 10,
-      "personId": "1626164",
-      "name": "Devin Booker",
-      "displayName": "Devin Booker",
-      "team": "Suns",
-      "franchise": "PHX",
-      "score": 84.6,
-      "blurb": "High-usage creator blending three-level scoring with a growing playmaking portfolio."
     }
   ]
 }
