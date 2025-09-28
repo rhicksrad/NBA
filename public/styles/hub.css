@@ -2610,18 +2610,18 @@ section h2 { margin-top: 0; font-size: clamp(1.35rem, 3vw, 1.8rem); letter-spaci
 
 .goat-visuals {
   display: grid;
-  gap: 1.8rem;
+  gap: 1.6rem;
   margin-block: 3rem;
 }
 
 .goat-visuals__grid {
   display: grid;
-  gap: 1.4rem;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: clamp(0.8rem, 2vw, 1.2rem);
+  grid-template-columns: repeat(auto-fit, minmax(min(340px, 100%), 1fr));
 }
 
 .viz-card--inline .viz-canvas {
-  min-height: 260px;
+  min-height: clamp(280px, 38vw, 360px);
 }
 
 @media (max-width: 720px) {
