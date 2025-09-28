@@ -2781,6 +2781,42 @@ section h2 { margin-top: 0; font-size: clamp(1.35rem, 3vw, 1.8rem); letter-spaci
   position: relative;
 }
 
+.viz-card__title--atlas {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.atlas-mode-toggle {
+  border: 1px solid color-mix(in srgb, var(--royal) 35%, transparent);
+  background: color-mix(in srgb, white 78%, var(--royal) 22%);
+  color: var(--royal);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.4rem 0.8rem;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.atlas-mode-toggle:hover,
+.atlas-mode-toggle:focus-visible {
+  outline: none;
+  transform: translateY(-1px);
+  box-shadow: 0 14px 26px rgba(17, 86, 214, 0.18);
+  background: color-mix(in srgb, white 70%, var(--royal) 30%);
+}
+
+.atlas-mode-toggle[disabled] {
+  cursor: progress;
+  opacity: 0.75;
+  box-shadow: none;
+  transform: none;
+}
+
 .viz-card--atlas-map .viz-card__title {
   font-size: clamp(1.15rem, 2.1vw, 1.35rem);
 }
@@ -2808,6 +2844,10 @@ section h2 { margin-top: 0; font-size: clamp(1.35rem, 3vw, 1.8rem); letter-spaci
   width: min(100%, 720px);
   height: auto;
   display: block;
+}
+
+.state-map__svg--world {
+  width: min(100%, 840px);
 }
 
 .state-shape {

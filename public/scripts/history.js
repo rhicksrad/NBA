@@ -42,6 +42,9 @@ const summaryEls = {
 const atlasEls = {
   map: document.querySelector('[data-state-map-tiles]'),
   spotlight: document.querySelector('[data-state-spotlight]'),
+  title: document.querySelector('[data-atlas-title]'),
+  caption: document.querySelector('[data-atlas-caption]'),
+  modeToggle: document.querySelector('[data-atlas-toggle]'),
 };
 
 const stateNames = {
@@ -99,38 +102,97 @@ const stateNames = {
   PR: 'Puerto Rico',
 };
 
-let stateMapMarkup = null;
-let activeStateShape = null;
+const mapMarkupCache = new Map();
+let activeAtlasShape = null;
+let activeAtlasConfig = null;
+let currentAtlasMode = 'domestic';
+const atlasData = { domestic: null, international: null };
 
-async function loadStateMapSvg() {
-  if (!stateMapMarkup) {
-    const response = await fetch('vendor/us-states.svg');
+const atlasModes = {
+  domestic: {
+    id: 'domestic',
+    mapAsset: 'vendor/us-states.svg',
+    sanitizeMarkup(markup) {
+      return markup.replace(/ns0:/g, '');
+    },
+    svgClasses: ['state-map__svg--usa'],
+    title: 'Best NBA star born in each state',
+    caption: 'Select a tile to spotlight the most decorated NBA player born in that state.',
+    placeholder: 'Select a state tile to meet its headline legend.',
+    emptyHeadline: 'No NBA alumni recorded yet.',
+    datasetKey: 'states',
+    entryId: 'state',
+    entryName: 'stateName',
+    shapeAttribute: 'data-state',
+    source: 'data/state_birth_legends.json',
+    switchLabel: 'Explore international mode',
+    switchAriaLabel: 'Switch to international legends view',
+    getName(id) {
+      return stateNames[id] || id;
+    },
+  },
+  international: {
+    id: 'international',
+    mapAsset: 'vendor/world-countries.svg',
+    svgClasses: ['state-map__svg--world'],
+    title: 'Best NBA star born in each country',
+    caption: 'Select a country outline to spotlight the standout NBA player born there.',
+    placeholder: 'Choose a country to spotlight its standout NBA star.',
+    emptyHeadline: 'No NBA alumni recorded yet.',
+    datasetKey: 'countries',
+    entryId: 'country',
+    entryName: 'countryName',
+    shapeAttribute: 'data-country',
+    source: 'data/world_birth_legends.json',
+    switchLabel: 'Return to United States map',
+    switchAriaLabel: 'Return to the United States legends map',
+    getName(id, _entry, shape) {
+      return (shape?.dataset?.name ?? '').trim() || id;
+    },
+  },
+};
+
+function getAtlasConfig(mode) {
+  return atlasModes[mode] ?? atlasModes.domestic;
+}
+
+async function loadAtlasSvg(config) {
+  const cacheKey = config.mapAsset;
+  if (!mapMarkupCache.has(cacheKey)) {
+    const response = await fetch(config.mapAsset);
     if (!response.ok) {
-      throw new Error('Failed to load state atlas map');
+      throw new Error(`Failed to load ${config.id} atlas map`);
     }
-    stateMapMarkup = (await response.text()).replace(/ns0:/g, '');
+    let markup = await response.text();
+    if (typeof config.sanitizeMarkup === 'function') {
+      markup = config.sanitizeMarkup(markup);
+    }
+    mapMarkupCache.set(cacheKey, markup);
   }
   const template = document.createElement('template');
-  template.innerHTML = stateMapMarkup.trim();
+  template.innerHTML = mapMarkupCache.get(cacheKey).trim();
   const svg = template.content.firstElementChild;
   if (svg) {
     svg.classList.add('state-map__svg');
+    if (Array.isArray(config.svgClasses)) {
+      config.svgClasses.forEach((className) => svg.classList.add(className));
+    }
     svg.setAttribute('focusable', 'false');
   }
   return svg;
 }
 
-function selectStateShape(shape, entry) {
-  if (activeStateShape && activeStateShape !== shape) {
-    activeStateShape.classList.remove('state-shape--selected');
-    activeStateShape.setAttribute('aria-pressed', 'false');
+function selectAtlasShape(shape, entry, config = activeAtlasConfig) {
+  if (activeAtlasShape && activeAtlasShape !== shape) {
+    activeAtlasShape.classList.remove('state-shape--selected');
+    activeAtlasShape.setAttribute('aria-pressed', 'false');
   }
-  activeStateShape = shape || null;
+  activeAtlasShape = shape || null;
   if (shape) {
     shape.classList.add('state-shape--selected');
     shape.setAttribute('aria-pressed', 'true');
   }
-  renderStateSpotlight(entry || null);
+  renderAtlasSpotlight(entry || null, config);
 }
 
 function parseDate(value) {
@@ -159,21 +221,22 @@ function setText(target, text) {
   target.textContent = text;
 }
 
-function renderStateSpotlight(entry) {
+function renderAtlasSpotlight(entry, config = activeAtlasConfig) {
   if (!atlasEls.spotlight) return;
+  const modeConfig = config || getAtlasConfig(currentAtlasMode);
   atlasEls.spotlight.innerHTML = '';
 
   if (!entry) {
     const placeholder = document.createElement('p');
     placeholder.className = 'state-spotlight__placeholder';
-    placeholder.textContent = 'Select a state tile to meet its headline legend.';
+    placeholder.textContent = modeConfig.placeholder;
     atlasEls.spotlight.append(placeholder);
     return;
   }
 
   const heading = document.createElement('span');
   heading.className = 'state-spotlight__state';
-  heading.textContent = `${entry.stateName ?? entry.state ?? ''}`;
+  heading.textContent = `${entry[modeConfig.entryName] ?? entry[modeConfig.entryId] ?? ''}`;
 
   const playerLine = document.createElement('p');
   if (entry.player) {
@@ -181,7 +244,7 @@ function renderStateSpotlight(entry) {
     playerLine.textContent = entry.player;
   } else {
     playerLine.className = 'state-spotlight__empty';
-    playerLine.textContent = entry.headline || 'No NBA alumni recorded yet.';
+    playerLine.textContent = entry.headline || modeConfig.emptyHeadline;
   }
 
   atlasEls.spotlight.append(heading, playerLine);
@@ -213,43 +276,64 @@ function renderStateSpotlight(entry) {
   }
 }
 
-async function renderStateAtlas(atlas) {
+function setAtlasCopy(config) {
+  if (atlasEls.title) {
+    atlasEls.title.textContent = config.title;
+  }
+  if (atlasEls.caption) {
+    atlasEls.caption.textContent = config.caption;
+  }
+  if (atlasEls.modeToggle) {
+    atlasEls.modeToggle.textContent = config.switchLabel;
+    atlasEls.modeToggle.setAttribute('aria-label', config.switchAriaLabel || config.switchLabel);
+  }
+}
+
+async function renderAtlas(mode, atlas) {
   if (!atlasEls.map) return;
-  const entries = Array.isArray(atlas?.states) ? atlas.states : [];
-  const entryByCode = new Map(entries.map((entry) => [entry.state, entry]));
+  const config = getAtlasConfig(mode);
+  const entries = Array.isArray(atlas?.[config.datasetKey]) ? atlas[config.datasetKey] : [];
+  const entryById = new Map(entries.map((entry) => [entry[config.entryId], entry]));
 
   let svg;
   try {
-    svg = await loadStateMapSvg();
+    svg = await loadAtlasSvg(config);
   } catch (error) {
     console.error(error);
     atlasEls.map.innerHTML = '';
-    renderStateSpotlight(null);
+    activeAtlasConfig = config;
+    renderAtlasSpotlight(null, config);
     return;
   }
 
   if (!svg) {
     atlasEls.map.innerHTML = '';
-    renderStateSpotlight(null);
+    activeAtlasConfig = config;
+    renderAtlasSpotlight(null, config);
     return;
   }
 
   atlasEls.map.innerHTML = '';
   atlasEls.map.append(svg);
+  atlasEls.map.dataset.atlasMode = mode;
 
-  activeStateShape = null;
+  activeAtlasShape = null;
+  activeAtlasConfig = config;
   let defaultSelection = null;
 
-  svg.querySelectorAll('[data-state]').forEach((shape) => {
-    const code = shape.getAttribute('data-state');
+  const shapes = svg.querySelectorAll(`[${config.shapeAttribute}]`);
+  shapes.forEach((shape) => {
+    const code = shape.getAttribute(config.shapeAttribute);
     if (!code) return;
-    const entry = entryByCode.get(code) || null;
-    const stateLabel = entry?.stateName || stateNames[code] || code;
+    const entry = entryById.get(code) || null;
+    const locationLabel = entry?.[config.entryName] || config.getName(code, entry, shape) || code;
 
     shape.removeAttribute('tabindex');
     shape.removeAttribute('role');
     shape.removeAttribute('aria-pressed');
     shape.classList.remove('state-shape--available', 'state-shape--selected', 'state-shape--empty');
+
+    const fallbackHeadline = entry?.headline || config.emptyHeadline;
 
     if (entry && entry.player) {
       shape.classList.add('state-shape--available');
@@ -257,12 +341,12 @@ async function renderStateAtlas(atlas) {
       shape.setAttribute('tabindex', '0');
       shape.setAttribute('aria-pressed', 'false');
       const detail = entry.headline ? ` — ${entry.headline}` : '';
-      shape.setAttribute('aria-label', `${stateLabel}: ${entry.player}`);
+      shape.setAttribute('aria-label', `${locationLabel}: ${entry.player}${detail}`);
       shape.setAttribute('title', `${entry.player}${detail}`);
 
       const activate = () => {
-        if (activeStateShape === shape) return;
-        selectStateShape(shape, entry);
+        if (activeAtlasShape === shape) return;
+        selectAtlasShape(shape, entry, config);
       };
 
       shape.addEventListener('click', activate);
@@ -281,32 +365,81 @@ async function renderStateAtlas(atlas) {
       shape.setAttribute('role', 'button');
       shape.setAttribute('tabindex', '0');
       shape.setAttribute('aria-pressed', 'false');
-      shape.setAttribute(
-        'aria-label',
-        `${stateLabel}: ${entry?.headline ?? 'No NBA alumni recorded yet.'}`,
-      );
-      if (entry) {
-        shape.setAttribute('title', entry.headline ?? stateLabel);
+      shape.setAttribute('aria-label', `${locationLabel}: ${fallbackHeadline}`);
+      if (entry?.headline) {
+        shape.setAttribute('title', entry.headline);
+      } else if (entry) {
+        shape.setAttribute('title', locationLabel);
       } else {
         shape.removeAttribute('title');
       }
       shape.addEventListener('click', () => {
-        selectStateShape(shape, entry);
+        selectAtlasShape(shape, entry, config);
       });
       shape.addEventListener('keydown', (event) => {
         if (event.key === 'Enter' || event.key === ' ') {
           event.preventDefault();
-          selectStateShape(shape, entry);
+          selectAtlasShape(shape, entry, config);
         }
       });
     }
   });
 
+  setAtlasCopy(config);
+
   if (defaultSelection) {
-    selectStateShape(defaultSelection.shape, defaultSelection.entry);
+    selectAtlasShape(defaultSelection.shape, defaultSelection.entry, config);
   } else {
-    selectStateShape(null, null);
+    selectAtlasShape(null, null, config);
   }
+}
+
+async function ensureAtlasData(mode) {
+  const config = getAtlasConfig(mode);
+  const cacheKey = config.id;
+  if (atlasData[cacheKey]) {
+    return atlasData[cacheKey];
+  }
+  if (!config.source && !config.datasetKey) {
+    return null;
+  }
+  if (!config.source) {
+    // fall back to already provided data (e.g., bootstrap payload)
+    return null;
+  }
+  const response = await fetch(config.source);
+  if (!response.ok) {
+    throw new Error(`Failed to load ${config.id} legends dataset`);
+  }
+  const payload = await response.json();
+  atlasData[cacheKey] = payload;
+  return payload;
+}
+
+async function activateAtlas(mode) {
+  currentAtlasMode = getAtlasConfig(mode).id;
+  let dataset = atlasData[currentAtlasMode] || null;
+  if (!dataset) {
+    try {
+      dataset = await ensureAtlasData(currentAtlasMode);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  await renderAtlas(currentAtlasMode, dataset);
+}
+
+function setupAtlasToggle() {
+  if (!atlasEls.modeToggle) return;
+  atlasEls.modeToggle.addEventListener('click', async () => {
+    const nextMode = currentAtlasMode === 'domestic' ? 'international' : 'domestic';
+    atlasEls.modeToggle.disabled = true;
+    try {
+      await activateAtlas(nextMode);
+    } finally {
+      atlasEls.modeToggle.disabled = false;
+    }
+  });
 }
 
 function formatTeamName(team) {
@@ -500,10 +633,10 @@ async function bootstrap() {
     }
 
     if (atlas) {
-      await renderStateAtlas(atlas);
-    } else if (atlasEls.spotlight) {
-      renderStateSpotlight(null);
+      atlasData.domestic = atlas;
     }
+
+    await renderAtlas('domestic', atlasData.domestic);
   } catch (error) {
     console.error('Failed to initialise history page', error);
   }
@@ -1077,5 +1210,5 @@ registerCharts([
   },
 ]);
 
-renderStateSpotlight(null);
+setupAtlasToggle();
 bootstrap();
