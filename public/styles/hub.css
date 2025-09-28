@@ -3239,6 +3239,43 @@ section h2 { margin-top: 0; font-size: clamp(1.35rem, 3vw, 1.8rem); letter-spaci
   background: linear-gradient(160deg, rgba(17, 86, 214, 0.08), rgba(244, 181, 63, 0.08));
 }
 
+.team-map__overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.team-division {
+  fill-opacity: 0.22;
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+  mix-blend-mode: multiply;
+}
+
+.team-division--east {
+  fill: color-mix(in srgb, var(--royal) 22%, transparent);
+  stroke: color-mix(in srgb, var(--royal) 45%, transparent);
+}
+
+.team-division--west {
+  fill: color-mix(in srgb, var(--red) 20%, transparent);
+  stroke: color-mix(in srgb, var(--red) 42%, transparent);
+}
+
+.team-division__label {
+  font-size: clamp(0.6rem, 1.4vw, 0.85rem);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-anchor: middle;
+  dominant-baseline: middle;
+  fill: color-mix(in srgb, var(--navy) 78%, var(--surface) 22%);
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
 .team-map__stage {
   position: absolute;
   inset: 0;
