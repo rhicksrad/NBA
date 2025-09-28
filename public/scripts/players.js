@@ -715,6 +715,57 @@ function buildPlayerTokens(player) {
   return Array.from(tokens);
 }
 
+function extractPersonIdFromProfile(player) {
+  if (!player) return null;
+  const rawId = typeof player.id === 'string' ? player.id : null;
+  if (rawId) {
+    const match = rawId.match(/(\d{6,})$/);
+    if (match) {
+      return match[1];
+    }
+  }
+  if (Array.isArray(player.keywords)) {
+    const keywordId = player.keywords.find((keyword) => /^(\d{6,})$/.test(keyword));
+    if (keywordId) {
+      return keywordId;
+    }
+  }
+  return null;
+}
+
+function computeRecentGoatScore(components) {
+  if (!components) return null;
+  const { impact, stage, versatility, longevity, culture } = components;
+  const values = [impact, stage, versatility, longevity, culture];
+  if (!values.every((value) => typeof value === 'number' && Number.isFinite(value))) {
+    return null;
+  }
+  const score =
+    impact * 1.35 +
+    stage * 1.25 +
+    versatility * 1.15 +
+    longevity * 0.5 +
+    culture * 0.4;
+  return Math.round(score * 10) / 10;
+}
+
+function buildGoatScoreLookup(source) {
+  const lookup = new Map();
+  const entries = Array.isArray(source?.players) ? source.players : [];
+  entries.forEach((player) => {
+    if (!player || player.status !== 'Active' || !player.personId) {
+      return;
+    }
+    const historical = Number.isFinite(player.goatScore) ? player.goatScore : null;
+    const recent = computeRecentGoatScore(player.goatComponents);
+    lookup.set(player.personId, {
+      historical,
+      recent,
+    });
+  });
+  return lookup;
+}
+
 function initPlayerAtlas() {
   const atlas = document.querySelector('[data-player-profiles]');
   if (!atlas) {
@@ -730,7 +781,8 @@ function initPlayerAtlas() {
   const profile = atlas.querySelector('[data-player-profile]');
   const nameEl = atlas.querySelector('[data-player-name]');
   const metaEl = atlas.querySelector('[data-player-meta]');
-  const goatEl = atlas.querySelector('[data-player-goat]');
+  const goatRecentEl = atlas.querySelector('[data-player-goat-recent]');
+  const goatHistoricEl = atlas.querySelector('[data-player-goat-historic]');
   const bioEl = atlas.querySelector('[data-player-bio]');
   const archetypeEl = atlas.querySelector('[data-player-archetype]');
   const vitalsEl = atlas.querySelector('[data-player-vitals]');
@@ -739,7 +791,17 @@ function initPlayerAtlas() {
   const metricsContainer = atlas.querySelector('[data-player-metrics]');
   const metricsEmpty = atlas.querySelector('[data-player-metrics-empty]');
 
-  if (!searchInput || !resultsList || !profile || !nameEl || !metaEl || !goatEl || !bioEl || !archetypeEl) {
+  if (
+    !searchInput ||
+    !resultsList ||
+    !profile ||
+    !nameEl ||
+    !metaEl ||
+    !goatRecentEl ||
+    !goatHistoricEl ||
+    !bioEl ||
+    !archetypeEl
+  ) {
     return;
   }
 
@@ -749,7 +811,9 @@ function initPlayerAtlas() {
   let activeIndex = -1;
   let isLoaded = false;
   let hasError = false;
+  let goatLookup = new Map();
   const defaultEmptyText = empty?.textContent?.trim() ?? '';
+  const formatGoatValue = (value) => (Number.isFinite(value) ? helpers.formatNumber(value, 1) : '—');
 
   const setClearVisibility = (value) => {
     if (!clearButton) return;
@@ -1002,9 +1066,18 @@ function initPlayerAtlas() {
     profile.dataset.playerId = player.id;
     nameEl.textContent = player.name;
     metaEl.textContent = renderMeta(player);
-    goatEl.textContent = Number.isFinite(player?.goatScore)
-      ? helpers.formatNumber(player.goatScore, 1)
-      : '—';
+    const goatScores = player?.goatScores;
+    if (goatRecentEl) {
+      const recentValue = Number.isFinite(goatScores?.recent) ? goatScores.recent : null;
+      goatRecentEl.textContent = formatGoatValue(recentValue);
+    }
+    if (goatHistoricEl) {
+      const fallbackHistorical = Number.isFinite(player?.goatScore) ? player.goatScore : null;
+      const historicValue = Number.isFinite(goatScores?.historical)
+        ? goatScores.historical
+        : fallbackHistorical;
+      goatHistoricEl.textContent = formatGoatValue(historicValue);
+    }
     bioEl.textContent = player?.bio || '';
     archetypeEl.textContent = player?.archetype || '—';
     if (vitalsEl) {
@@ -1078,18 +1151,40 @@ function initPlayerAtlas() {
 
   const hydrate = async () => {
     try {
-      const response = await fetch('data/player_profiles.json');
-      if (!response.ok) {
-        throw new Error(`Failed to load player profiles: ${response.status}`);
+      const [profilesResponse, goatResponse] = await Promise.all([
+        fetch('data/player_profiles.json'),
+        fetch('data/goat_system.json').catch(() => null),
+      ]);
+      if (!profilesResponse?.ok) {
+        throw new Error(`Failed to load player profiles: ${profilesResponse?.status}`);
       }
-      const data = await response.json();
+      const data = await profilesResponse.json();
+      if (goatResponse && goatResponse.ok) {
+        try {
+          const goatData = await goatResponse.json();
+          goatLookup = buildGoatScoreLookup(goatData);
+        } catch (goatError) {
+          console.warn('Unable to parse GOAT system data', goatError);
+          goatLookup = new Map();
+        }
+      } else {
+        goatLookup = new Map();
+      }
       catalog = Array.isArray(data?.metrics) ? data.metrics : [];
       const roster = Array.isArray(data?.players) ? data.players : [];
-      players = roster.map((player) => ({
-        ...player,
-        searchTokens: buildPlayerTokens(player),
-        nameToken: simplifyText(player?.name),
-      }));
+      players = roster.map((player) => {
+        const personId = extractPersonIdFromProfile(player);
+        const goatScores = personId ? goatLookup.get(personId) : null;
+        const historicalGoat = Number.isFinite(goatScores?.historical) ? goatScores.historical : player?.goatScore;
+        return {
+          ...player,
+          searchTokens: buildPlayerTokens(player),
+          nameToken: simplifyText(player?.name),
+          personId,
+          goatScores,
+          goatScore: Number.isFinite(historicalGoat) ? historicalGoat : player?.goatScore,
+        };
+      });
       isLoaded = true;
       hasError = false;
       if (empty) {

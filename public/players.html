@@ -89,8 +89,27 @@
                   <p class="player-card__meta" data-player-meta></p>
                 </div>
                 <div class="player-card__goat">
-                  <span class="player-card__goat-label">GOAT score</span>
-                  <span class="player-card__goat-value" data-player-goat>—</span>
+                  <span class="player-card__goat-label">GOAT scores</span>
+                  <div class="player-card__goat-grid">
+                    <div class="player-card__goat-entry">
+                      <span
+                        class="player-card__goat-value"
+                        data-player-goat-recent
+                        aria-label="GOAT score over the last three seasons"
+                        >—</span
+                      >
+                      <span class="player-card__goat-context">Last 3 seasons (2022-23 to 2024-25)</span>
+                    </div>
+                    <div class="player-card__goat-entry">
+                      <span
+                        class="player-card__goat-value"
+                        data-player-goat-historic
+                        aria-label="Career GOAT score"
+                        >—</span
+                      >
+                      <span class="player-card__goat-context">All-time GOAT resume</span>
+                    </div>
+                  </div>
                 </div>
               </header>
               <div class="player-card__body">
