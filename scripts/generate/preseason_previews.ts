@@ -57,7 +57,126 @@ interface TeamContext {
   tricode?: string;
   leagueTag?: string;
   isGuest: boolean;
+  metrics?: TeamMetrics;
 }
+
+type TeamMetricKey =
+  | "winPct"
+  | "avgPointsFor"
+  | "avgPointsAgainst"
+  | "netMargin"
+  | "fieldGoalPct"
+  | "threePointPct"
+  | "rebounds"
+  | "assists"
+  | "turnovers"
+  | "pointsInPaint"
+  | "fastBreakPoints"
+  | "benchPoints";
+
+type TeamMetrics = Partial<Record<TeamMetricKey, number>>;
+
+interface MetricConfig {
+  key: TeamMetricKey;
+  label: string;
+  description: string;
+  format: (value: number) => string;
+  inverse?: boolean;
+}
+
+interface MetricExtent {
+  min: number;
+  max: number;
+  values: number[];
+}
+
+interface TeamProfileEntry {
+  abbreviation?: string;
+  metrics?: Record<string, unknown>;
+}
+
+interface TeamProfilesPayload {
+  teams?: TeamProfileEntry[];
+}
+
+const PRIOR_SEASON = "2024-25";
+
+const SIGNATURE_VISUALS: MetricConfig[] = [
+  {
+    key: "winPct",
+    label: "Win percentage",
+    description: "Share of games won across the tracked 2024-25 sample.",
+    format: (value) => `${(value * 100).toFixed(1)}%`,
+  },
+  {
+    key: "avgPointsFor",
+    label: "Points for",
+    description: "Average points scored per game.",
+    format: (value) => value.toFixed(1),
+  },
+  {
+    key: "avgPointsAgainst",
+    label: "Points allowed",
+    description: "Average points conceded per game.",
+    format: (value) => value.toFixed(1),
+    inverse: true,
+  },
+  {
+    key: "netMargin",
+    label: "Net margin",
+    description: "Average scoring differential versus opponents.",
+    format: (value) => `${value >= 0 ? "+" : ""}${value.toFixed(1)}`,
+  },
+  {
+    key: "fieldGoalPct",
+    label: "Field goal accuracy",
+    description: "Overall shooting efficiency from the floor.",
+    format: (value) => `${(value * 100).toFixed(1)}%`,
+  },
+  {
+    key: "threePointPct",
+    label: "Three-point accuracy",
+    description: "Conversion rate on perimeter attempts.",
+    format: (value) => `${(value * 100).toFixed(1)}%`,
+  },
+  {
+    key: "rebounds",
+    label: "Rebounds",
+    description: "Average total rebounds secured per night.",
+    format: (value) => value.toFixed(1),
+  },
+  {
+    key: "assists",
+    label: "Assists",
+    description: "Average assists generated each game.",
+    format: (value) => value.toFixed(1),
+  },
+  {
+    key: "turnovers",
+    label: "Turnovers",
+    description: "Average turnovers committed per outing (lower is stronger).",
+    format: (value) => value.toFixed(1),
+    inverse: true,
+  },
+  {
+    key: "pointsInPaint",
+    label: "Points in the paint",
+    description: "Interior scoring output per contest.",
+    format: (value) => value.toFixed(1),
+  },
+  {
+    key: "fastBreakPoints",
+    label: "Fast-break points",
+    description: "Transition scoring per game.",
+    format: (value) => value.toFixed(1),
+  },
+  {
+    key: "benchPoints",
+    label: "Bench points",
+    description: "Second-unit scoring production.",
+    format: (value) => value.toFixed(1),
+  },
+];
 
 interface OpenersEntry {
   teamId: string;
@@ -112,10 +231,163 @@ function buildTeamLookup(teams: TeamRecord[]): Map<string, TeamRecord> {
   return new Map(teams.map((team) => [team.tricode.toUpperCase(), team]));
 }
 
-function describeTeam(participant: ScheduleParticipant, lookup: Map<string, TeamRecord>): TeamContext {
+function formatRangeValue(value: number | undefined, config: MetricConfig): string {
+  if (!Number.isFinite(value)) {
+    return "—";
+  }
+  return config.format(value);
+}
+
+function normaliseValue(value: number, extent: MetricExtent | undefined, inverse = false): number {
+  if (!extent || !Number.isFinite(extent.min) || !Number.isFinite(extent.max) || extent.max === extent.min) {
+    return 0.5;
+  }
+  const ratio = (value - extent.min) / (extent.max - extent.min);
+  const clamped = Math.min(1, Math.max(0, ratio));
+  return inverse ? 1 - clamped : clamped;
+}
+
+function upperBound(values: number[], target: number): number {
+  let low = 0;
+  let high = values.length;
+  while (low < high) {
+    const mid = Math.floor((low + high) / 2);
+    if (values[mid] <= target) {
+      low = mid + 1;
+    } else {
+      high = mid;
+    }
+  }
+  return low;
+}
+
+function lowerBound(values: number[], target: number): number {
+  let low = 0;
+  let high = values.length;
+  while (low < high) {
+    const mid = Math.floor((low + high) / 2);
+    if (values[mid] < target) {
+      low = mid + 1;
+    } else {
+      high = mid;
+    }
+  }
+  return low;
+}
+
+function computePercentile(value: number, extent: MetricExtent | undefined, inverse = false): number | null {
+  if (!Number.isFinite(value) || !extent || !extent.values.length) {
+    return null;
+  }
+  const values = extent.values;
+  const size = values.length;
+  if (!size) {
+    return null;
+  }
+  if (inverse) {
+    const index = lowerBound(values, value);
+    const count = size - index;
+    return Math.min(1, Math.max(0, count / size));
+  }
+  const rank = upperBound(values, value);
+  return Math.min(1, Math.max(0, rank / size));
+}
+
+function formatOrdinal(value: number): string {
+  const remainder100 = value % 100;
+  if (remainder100 >= 11 && remainder100 <= 13) {
+    return `${value}th`;
+  }
+  switch (value % 10) {
+    case 1:
+      return `${value}st`;
+    case 2:
+      return `${value}nd`;
+    case 3:
+      return `${value}rd`;
+    default:
+      return `${value}th`;
+  }
+}
+
+function formatPercentileRank(percentile: number | null): string {
+  if (percentile === null) {
+    return "";
+  }
+  const percentage = Math.round(Math.min(100, Math.max(0, percentile * 100)));
+  return `${formatOrdinal(percentage)} percentile`;
+}
+
+async function loadTeamMetrics(): Promise<{
+  lookup: Map<string, TeamMetrics>;
+  extents: Map<TeamMetricKey, MetricExtent>;
+}> {
+  const metricsLookup = new Map<string, TeamMetrics>();
+  const extentValues = new Map<TeamMetricKey, number[]>(
+    SIGNATURE_VISUALS.map((config) => [config.key, []])
+  );
+
+  try {
+    const filePath = path.join(PUBLIC_DIR, "data/team_profiles.json");
+    const raw = await readFile(filePath, "utf8");
+    const payload = JSON.parse(raw) as TeamProfilesPayload;
+    const teams = Array.isArray(payload?.teams) ? payload.teams : [];
+
+    for (const entry of teams) {
+      const abbreviation = typeof entry?.abbreviation === "string" ? entry.abbreviation.toUpperCase() : "";
+      if (!abbreviation) {
+        continue;
+      }
+
+      const sourceMetrics = entry.metrics ?? {};
+      const metrics: TeamMetrics = {};
+      let hasValue = false;
+      for (const config of SIGNATURE_VISUALS) {
+        const rawValue = sourceMetrics[config.key];
+        if (typeof rawValue === "number" && Number.isFinite(rawValue)) {
+          metrics[config.key] = rawValue;
+          const bucket = extentValues.get(config.key);
+          if (bucket) {
+            bucket.push(rawValue);
+          }
+          hasValue = true;
+        }
+      }
+
+      if (hasValue) {
+        metricsLookup.set(abbreviation, metrics);
+      }
+    }
+  } catch (error) {
+    console.warn("Unable to load team profile metrics for preseason previews.", error);
+  }
+
+  const extents = new Map<TeamMetricKey, MetricExtent>();
+  for (const config of SIGNATURE_VISUALS) {
+    const values = extentValues.get(config.key) ?? [];
+    if (!values.length) {
+      continue;
+    }
+    const sorted = [...values].sort((a, b) => a - b);
+    extents.set(config.key, {
+      min: sorted[0],
+      max: sorted[sorted.length - 1],
+      values: sorted,
+    });
+  }
+
+  return { lookup: metricsLookup, extents };
+}
+
+function describeTeam(
+  participant: ScheduleParticipant,
+  lookup: Map<string, TeamRecord>,
+  metricsLookup: Map<string, TeamMetrics>
+): TeamContext {
   if (participant.tricode) {
     const record = lookup.get(participant.tricode.toUpperCase());
     if (record) {
+      const metrics = metricsLookup.get(record.tricode.toUpperCase());
       return {
         record,
         displayName: `${record.market} ${record.name}`,
@@ -125,6 +397,7 @@ function describeTeam(participant: ScheduleParticipant, lookup: Map<string, Team
         tricode: record.tricode,
         leagueTag: "NBA",
         isGuest: false,
+        metrics,
       };
     }
   }
@@ -219,6 +492,112 @@ function buildStoryBullets(game: PreseasonGame, away: TeamContext, home: TeamCon
   ];
 }
 
+function hasVisualMetrics(team: TeamContext): boolean {
+  return SIGNATURE_VISUALS.some((config) => {
+    const value = team.metrics?.[config.key];
+    return typeof value === "number" && Number.isFinite(value);
+  });
+}
+
+function renderTeamVisualColumn(
+  team: TeamContext,
+  metricExtents: Map<TeamMetricKey, MetricExtent>
+): string {
+  const leagueLabel = team.isGuest ? team.leagueTag ?? "Guest opponent" : team.leagueTag ?? "NBA";
+  const chipHtml = leagueLabel ? `<span class="chip preview-visuals__chip">${leagueLabel}</span>` : "";
+  const cards: string[] = [];
+
+  for (const config of SIGNATURE_VISUALS) {
+    const rawValue = team.metrics?.[config.key];
+    if (typeof rawValue !== "number" || !Number.isFinite(rawValue)) {
+      continue;
+    }
+    const extent = metricExtents.get(config.key);
+    const progress = normaliseValue(rawValue, extent, Boolean(config.inverse));
+    const percentile = formatPercentileRank(computePercentile(rawValue, extent, Boolean(config.inverse)));
+    const minLabel = extent ? formatRangeValue(extent.min, config) : formatRangeValue(rawValue, config);
+    const maxLabel = extent ? formatRangeValue(extent.max, config) : formatRangeValue(rawValue, config);
+    cards.push(`
+            <article class="team-visual">
+              <header class="team-visual__header">
+                <div class="team-visual__heading">
+                  <span class="team-visual__label">${config.label}</span>
+                  ${percentile ? `<span class="team-visual__percentile" title="Percentile rank across the league">${percentile}</span>` : ""}
+                </div>
+                <strong class="team-visual__value">${config.format(rawValue)}</strong>
+              </header>
+              <p class="team-visual__description">${config.description}</p>
+              <div class="team-visual__meter" role="presentation">
+                <div class="team-visual__meter-track"></div>
+                <div class="team-visual__meter-fill" style="--fill:${(progress * 100).toFixed(1)}%"></div>
+              </div>
+              <dl class="team-visual__range">
+                <div>
+                  <dt>League low</dt>
+                  <dd>${minLabel}</dd>
+                </div>
+                <div>
+                  <dt>League high</dt>
+                  <dd>${maxLabel}</dd>
+                </div>
+              </dl>
+            </article>
+          `);
+  }
+
+  if (!cards.length) {
+    return `
+          <article class="preview-visuals__team">
+            <header class="preview-visuals__team-header">
+              <h3>${team.displayName}</h3>
+              ${chipHtml}
+            </header>
+            <p class="preview-visuals__empty">We don't have ${PRIOR_SEASON} archive visuals for this opponent.</p>
+          </article>
+        `;
+  }
+
+  return `
+        <article class="preview-visuals__team">
+          <header class="preview-visuals__team-header">
+            <h3>${team.displayName}</h3>
+            ${chipHtml}
+          </header>
+          <div class="team-detail__visuals">
+            ${cards.join("\n            ")}
+          </div>
+        </article>
+      `;
+}
+
+function renderVisualsSection(
+  away: TeamContext,
+  home: TeamContext,
+  metricExtents: Map<TeamMetricKey, MetricExtent>
+): string {
+  const awayColumn = renderTeamVisualColumn(away, metricExtents);
+  const homeColumn = renderTeamVisualColumn(home, metricExtents);
+  const showSection = hasVisualMetrics(away) || hasVisualMetrics(home);
+  if (!showSection && !awayColumn && !homeColumn) {
+    return "";
+  }
+  return `
+        <section class="preview-visuals">
+          <div class="preview-visuals__header">
+            <h2>Signature visual read</h2>
+            <p>
+              Twelve precanned visuals benchmark each rotation using the completed ${PRIOR_SEASON} campaign so
+              coaches can steer the ${SEASON} preseason focus.
+            </p>
+          </div>
+          <div class="preview-visuals__grid">
+            ${awayColumn}
+            ${homeColumn}
+          </div>
+        </section>
+      `;
+}
+
 function slugify(value: string): string {
   return value
     .toLowerCase()
@@ -226,7 +605,12 @@ function slugify(value: string): string {
     .replace(/^-+|-+$/g, "");
 }
 
-function renderGamePage(game: PreseasonGame, away: TeamContext, home: TeamContext): string {
+function renderGamePage(
+  game: PreseasonGame,
+  away: TeamContext,
+  home: TeamContext,
+  metricExtents: Map<TeamMetricKey, MetricExtent>
+): string {
   const venueLine = formatVenueLine(game.venue);
   const etString = formatDateTime(game.tipoff, "America/New_York");
   const utcString = formatDateTime(game.tipoff, "UTC");
@@ -235,6 +619,7 @@ function renderGamePage(game: PreseasonGame, away: TeamContext, home: TeamContex
   const bullets = buildStoryBullets(game, away, home);
   const notes = game.notes.filter((note) => !note.toLowerCase().includes("neutral"));
   const hasCoverage = Boolean(game.coverage?.tv?.length || game.coverage?.radio?.length);
+  const visualsSection = renderVisualsSection(away, home, metricExtents);
 
   const coverageSection = hasCoverage
     ? `
@@ -351,6 +736,56 @@ function renderGamePage(game: PreseasonGame, away: TeamContext, home: TeamContex
         margin-bottom: 0.5rem;
       }
 
+      .preview-visuals {
+        display: grid;
+        gap: 1.25rem;
+      }
+
+      .preview-visuals__header {
+        display: grid;
+        gap: 0.4rem;
+      }
+
+      .preview-visuals__grid {
+        display: grid;
+        gap: clamp(1rem, 3vw, 1.5rem);
+      }
+
+      @media (min-width: 900px) {
+        .preview-visuals__grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      .preview-visuals__team {
+        display: grid;
+        gap: 0.9rem;
+      }
+
+      .preview-visuals__team-header {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+      }
+
+      .preview-visuals__team-header h3 {
+        margin: 0;
+        font-size: 1.2rem;
+      }
+
+      .preview-visuals__chip {
+        font-size: 0.7rem;
+        letter-spacing: 0.08em;
+      }
+
+      .preview-visuals__empty {
+        margin: 0;
+        font-size: 0.95rem;
+        color: var(--text-subtle);
+      }
+
       footer {
         display: flex;
         justify-content: space-between;
@@ -398,6 +833,8 @@ function renderGamePage(game: PreseasonGame, away: TeamContext, home: TeamContex
           ${bullets.map((bullet) => `<li>${bullet}</li>`).join("\n          ")}
         </ul>
       </article>
+
+      ${visualsSection}
 
       <footer>
         <span>Season context: ${SEASON} preseason schedule.</span>
@@ -566,22 +1003,25 @@ async function writeOpeners(entries: OpenersEntry[], season: string): Promise<vo
 }
 
 async function generatePreseasonPreviews(): Promise<void> {
-  const [schedule, teams] = await Promise.all([
+  const [schedule, teams, teamMetrics] = await Promise.all([
     loadJson<PreseasonSchedule>("preseason_schedule.json"),
     loadJson<TeamRecord[]>("teams.json"),
+    loadTeamMetrics(),
   ]);
 
   await ensureOutputDirs();
   await cleanExistingPreviews();
 
   const lookup = buildTeamLookup(teams);
+  const metricsLookup = teamMetrics.lookup;
+  const metricExtents = teamMetrics.extents;
   const contextIndex = new Map<string, TeamContext>();
   const awayIndex = new Map<string, TeamContext>();
   const homeIndex = new Map<string, TeamContext>();
 
   for (const game of schedule.games) {
-    const away = describeTeam(game.away, lookup);
-    const home = describeTeam(game.home, lookup);
+    const away = describeTeam(game.away, lookup, metricsLookup);
+    const home = describeTeam(game.home, lookup, metricsLookup);
     contextIndex.set(`${game.id}-away`, away);
     contextIndex.set(`${game.id}-home`, home);
     awayIndex.set(game.id, away);
@@ -589,7 +1029,7 @@ async function generatePreseasonPreviews(): Promise<void> {
 
     const slug = slugify(game.id);
     const filePath = path.join(PREVIEWS_DIR, `preseason-${slug}.html`);
-    const html = renderGamePage(game, away, home);
+    const html = renderGamePage(game, away, home, metricExtents);
     await writeFile(filePath, `${html}\n`, "utf8");
   }
 
