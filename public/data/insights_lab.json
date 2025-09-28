@@ -1,214 +1,601 @@
 {
-  "weatherImpact": {
-    "correlation": 0.18,
-    "baseline": 216.4,
-    "sampleSize": 820,
+  "generatedAt": "2025-09-28T03:47:45.724550+00:00",
+  "sampleSize": 71879,
+  "seasonalScoring": {
+    "months": [
+      {
+        "month": "Jan",
+        "games": 12189,
+        "averagePoints": 208.71597341865618,
+        "regularSeasonAverage": 208.71597341865618,
+        "playoffAverage": null
+      },
+      {
+        "month": "Feb",
+        "games": 10543,
+        "averagePoints": 209.7161149577919,
+        "regularSeasonAverage": 209.7161149577919,
+        "playoffAverage": null
+      },
+      {
+        "month": "Mar",
+        "games": 12272,
+        "averagePoints": 209.1300521512386,
+        "regularSeasonAverage": 209.13545416492255,
+        "playoffAverage": 208.93272171253824
+      },
+      {
+        "month": "Apr",
+        "games": 7774,
+        "averagePoints": 206.43015178801133,
+        "regularSeasonAverage": 207.22632205407243,
+        "playoffAverage": 203.7800963081862
+      },
+      {
+        "month": "May",
+        "games": 2012,
+        "averagePoints": 202.14264413518887,
+        "regularSeasonAverage": 218.70391061452514,
+        "playoffAverage": 200.43732895457035
+      },
+      {
+        "month": "Jun",
+        "games": 327,
+        "averagePoints": 199.13455657492355,
+        "regularSeasonAverage": null,
+        "playoffAverage": 199.13455657492355
+      },
+      {
+        "month": "Jul",
+        "games": 49,
+        "averagePoints": 219.73469387755102,
+        "regularSeasonAverage": 244.25,
+        "playoffAverage": 223.25
+      },
+      {
+        "month": "Aug",
+        "games": 123,
+        "averagePoints": 228.47967479674796,
+        "regularSeasonAverage": 230.0625,
+        "playoffAverage": 225.0
+      },
+      {
+        "month": "Sep",
+        "games": 46,
+        "averagePoints": 213.5,
+        "regularSeasonAverage": null,
+        "playoffAverage": 212.88888888888889
+      },
+      {
+        "month": "Oct",
+        "games": 3999,
+        "averagePoints": 208.86471617904476,
+        "regularSeasonAverage": 214.957216940363,
+        "playoffAverage": 214.6
+      },
+      {
+        "month": "Nov",
+        "games": 11046,
+        "averagePoints": 207.15172913271772,
+        "regularSeasonAverage": 207.03158565446932,
+        "playoffAverage": null
+      },
+      {
+        "month": "Dec",
+        "games": 11499,
+        "averagePoints": 207.7829376467519,
+        "regularSeasonAverage": 207.77893630070972,
+        "playoffAverage": null
+      }
+    ],
+    "swing": 29.345118221824407
+  },
+  "restImpact": {
     "buckets": [
       {
-        "label": "Frigid (<35\u00b0F)",
-        "avgPoints": 208.2,
-        "games": 132
+        "label": "+2 days",
+        "games": 3130,
+        "winPct": 0.3875399361022364,
+        "pointMargin": -2.9642172523961663
       },
       {
-        "label": "Cool (35-55\u00b0F)",
-        "avgPoints": 213.6,
-        "games": 198
+        "label": "+1 day",
+        "games": 7012,
+        "winPct": 0.39289788933257275,
+        "pointMargin": -3.0782943525385056
       },
       {
-        "label": "Mild (55-70\u00b0F)",
-        "avgPoints": 218.8,
-        "games": 236
+        "label": "Even rest",
+        "games": 40842,
+        "winPct": 0.39160667939865823,
+        "pointMargin": -3.303976298907987
       },
       {
-        "label": "Warm (70-85\u00b0F)",
-        "avgPoints": 221.4,
-        "games": 176
+        "label": "-1 day",
+        "games": 10899,
+        "winPct": 0.3615928066795119,
+        "pointMargin": -4.2808514542618585
       },
       {
-        "label": "Hot (>85\u00b0F)",
-        "avgPoints": 215.7,
-        "games": 78
+        "label": "-2 days",
+        "games": 6541,
+        "winPct": 0.35499159149977066,
+        "pointMargin": -4.610151353004127
+      },
+      {
+        "label": "Back-to-back",
+        "games": 3427,
+        "winPct": 0.37817332944266124,
+        "pointMargin": -4.209804493726291
       }
-    ]
+    ],
+    "swing": 0.03790629783280208
   },
-  "sampleSize": 71879,
-  "nightlifeEffect": {
-    "tiers": [
+  "closeMargins": {
+    "distribution": [
       {
-        "label": "Sparse (0-5 venues)",
-        "winPct": 0.524,
-        "pointDiff": 2.1
+        "label": "0-2 pts",
+        "games": 7852,
+        "share": 0.1092391379957985,
+        "averageMargin": 1.5680081507896078
       },
       {
-        "label": "Moderate (6-15)",
-        "winPct": 0.508,
-        "pointDiff": 0.4
+        "label": "3-5 pts",
+        "games": 13049,
+        "share": 0.18154120118532535,
+        "averageMargin": 4.019311824660893
       },
       {
-        "label": "Heavy (16-30)",
-        "winPct": 0.493,
-        "pointDiff": -1.2
+        "label": "6-10 pts",
+        "games": 20329,
+        "share": 0.2828225211814299,
+        "averageMargin": 7.88568055487235
       },
       {
-        "label": "Very heavy (31+)",
-        "winPct": 0.471,
-        "pointDiff": -3.6
+        "label": "11-15 pts",
+        "games": 13392,
+        "share": 0.18631310953129565,
+        "averageMargin": 12.801224611708482
+      },
+      {
+        "label": "16+ pts",
+        "games": 17257,
+        "share": 0.24008403010615062,
+        "averageMargin": 22.744683316914877
       }
-    ]
+    ],
+    "closeShare": 0.29078033918112384
   },
-  "mascotStrength": {
+  "overtime": {
     "categories": [
       {
-        "label": "Dog mascots",
-        "winPct": 0.547,
-        "teams": 7,
-        "titles": 9
+        "label": "Regulation",
+        "games": 68110,
+        "share": 0.9475646572712475,
+        "roadWinPct": 0.3784025840552048
       },
       {
-        "label": "Cat mascots",
-        "winPct": 0.512,
-        "teams": 6,
-        "titles": 7
+        "label": "1 OT",
+        "games": 3251,
+        "share": 0.0452287872674912,
+        "roadWinPct": 0.4675484466318056
+      },
+      {
+        "label": "2 OT",
+        "games": 446,
+        "share": 0.006204872076684428,
+        "roadWinPct": 0.47085201793721976
+      },
+      {
+        "label": "3 OT",
+        "games": 60,
+        "share": 0.0008347361538140486,
+        "roadWinPct": 0.45
+      },
+      {
+        "label": "4+ OT",
+        "games": 12,
+        "share": 0.0001669472307628097,
+        "roadWinPct": 0.4166666666666667
       }
     ]
   },
-  "astrologyAlignment": {
-    "clusters": [
+  "threePointTrend": {
+    "seasons": [
       {
-        "label": "Fire signs (Aries/Leo/Sagittarius)",
-        "paceBoost": 2.7,
-        "vibeScore": 74,
-        "teams": 9
+        "season": 1947,
+        "threePointRate": null,
+        "teamWinPct": 0.5
       },
       {
-        "label": "Earth signs (Taurus/Virgo/Capricorn)",
-        "paceBoost": -1.9,
-        "vibeScore": 61,
-        "teams": 7
+        "season": 1948,
+        "threePointRate": 0.0,
+        "teamWinPct": 0.5
       },
       {
-        "label": "Air signs (Gemini/Libra/Aquarius)",
-        "paceBoost": 1.1,
-        "vibeScore": 69,
-        "teams": 8
+        "season": 1949,
+        "threePointRate": null,
+        "teamWinPct": 0.5
       },
       {
-        "label": "Water signs (Cancer/Scorpio/Pisces)",
-        "paceBoost": -0.6,
-        "vibeScore": 66,
-        "teams": 6
-      }
-    ]
-  },
-  "coffeeConsumption": {
-    "levels": [
-      {
-        "label": "Decaf devotees",
-        "avgSleepHours": 7.8,
-        "winPct": 0.521
+        "season": 1950,
+        "threePointRate": 0.0,
+        "teamWinPct": 0.5
       },
       {
-        "label": "One-cup traditionalists",
-        "avgSleepHours": 7.1,
-        "winPct": 0.509
+        "season": 1951,
+        "threePointRate": 0.0,
+        "teamWinPct": 0.5
       },
       {
-        "label": "Espresso loyalists",
-        "avgSleepHours": 6.5,
-        "winPct": 0.486
+        "season": 1952,
+        "threePointRate": 0.0,
+        "teamWinPct": 0.5
       },
       {
-        "label": "Cold brew experimenters",
-        "avgSleepHours": 6.2,
-        "winPct": 0.478
-      }
-    ],
-    "sampleSize": 420
-  },
-  "playlistMood": {
-    "moods": [
-      {
-        "label": "Lo-fi focus",
-        "games": 138,
-        "pointDiff": 3.2
+        "season": 1953,
+        "threePointRate": 0.0,
+        "teamWinPct": 0.5
       },
       {
-        "label": "Synthwave nostalgia",
-        "games": 112,
-        "pointDiff": 1.4
+        "season": 1954,
+        "threePointRate": 0.0,
+        "teamWinPct": 0.5
       },
       {
-        "label": "90s R&B",
-        "games": 124,
-        "pointDiff": -0.8
+        "season": 1955,
+        "threePointRate": 0.0,
+        "teamWinPct": 0.5
       },
       {
-        "label": "Podcasts only",
-        "games": 86,
-        "pointDiff": -2.5
-      }
-    ]
-  },
-  "airportDelayIndex": {
-    "ranking": [
-      {
-        "label": "Express hubs (<10 min avg delay)",
-        "delayMinutes": 7.2,
-        "winPct": 0.534
+        "season": 1956,
+        "threePointRate": 0.0,
+        "teamWinPct": 0.5
       },
       {
-        "label": "Patience required (10-20 min)",
-        "delayMinutes": 14.6,
-        "winPct": 0.506
+        "season": 1957,
+        "threePointRate": 0.0,
+        "teamWinPct": 0.5
       },
       {
-        "label": "Chronic delays (>20 min)",
-        "delayMinutes": 23.1,
-        "winPct": 0.471
-      }
-    ],
-    "note": "Based on DOT punctuality reports for charter departures."
-  },
-  "cityTransitEffect": {
-    "tiers": [
-      {
-        "label": "Subway saturation",
-        "avgTurnovers": 12.4,
-        "sampleSize": 410
+        "season": 1958,
+        "threePointRate": 0.0,
+        "teamWinPct": 0.5
       },
       {
-        "label": "Light-rail reliance",
-        "avgTurnovers": 13.1,
-        "sampleSize": 268
+        "season": 1959,
+        "threePointRate": 0.0,
+        "teamWinPct": 0.5
       },
       {
-        "label": "Carpool corridors",
-        "avgTurnovers": 14.8,
-        "sampleSize": 301
-      }
-    ]
-  },
-  "lunarPhaseEnergy": {
-    "phases": [
-      {
-        "label": "New moon",
-        "fgPct": 0.482,
-        "games": 96
+        "season": 1960,
+        "threePointRate": 0.0,
+        "teamWinPct": 0.5
       },
       {
-        "label": "Waxing half",
-        "fgPct": 0.488,
-        "games": 118
+        "season": 1961,
+        "threePointRate": 0.0,
+        "teamWinPct": 0.5
       },
       {
-        "label": "Full moon",
-        "fgPct": 0.475,
-        "games": 104
+        "season": 1962,
+        "threePointRate": 0.0,
+        "teamWinPct": 0.5
       },
       {
-        "label": "Waning crescent",
-        "fgPct": 0.469,
-        "games": 89
+        "season": 1963,
+        "threePointRate": 0.0,
+        "teamWinPct": 0.5
+      },
+      {
+        "season": 1964,
+        "threePointRate": 0.0,
+        "teamWinPct": 0.5
+      },
+      {
+        "season": 1965,
+        "threePointRate": null,
+        "teamWinPct": 0.5
+      },
+      {
+        "season": 1966,
+        "threePointRate": 0.0,
+        "teamWinPct": 0.5
+      },
+      {
+        "season": 1967,
+        "threePointRate": null,
+        "teamWinPct": 0.5
+      },
+      {
+        "season": 1968,
+        "threePointRate": null,
+        "teamWinPct": 0.5
+      },
+      {
+        "season": 1969,
+        "threePointRate": 0.0,
+        "teamWinPct": 0.5
+      },
+      {
+        "season": 1970,
+        "threePointRate": 0.0,
+        "teamWinPct": 0.5
+      },
+      {
+        "season": 1971,
+        "threePointRate": 0.0,
+        "teamWinPct": 0.5
+      },
+      {
+        "season": 1972,
+        "threePointRate": 0.0,
+        "teamWinPct": 0.5
+      },
+      {
+        "season": 1973,
+        "threePointRate": 0.0,
+        "teamWinPct": 0.5
+      },
+      {
+        "season": 1974,
+        "threePointRate": 0.0,
+        "teamWinPct": 0.5
+      },
+      {
+        "season": 1975,
+        "threePointRate": 0.0,
+        "teamWinPct": 0.5
+      },
+      {
+        "season": 1976,
+        "threePointRate": 0.0,
+        "teamWinPct": 0.5
+      },
+      {
+        "season": 1977,
+        "threePointRate": 0.0,
+        "teamWinPct": 0.5
+      },
+      {
+        "season": 1978,
+        "threePointRate": 0.0,
+        "teamWinPct": 0.5
+      },
+      {
+        "season": 1979,
+        "threePointRate": 0.0,
+        "teamWinPct": 0.5
+      },
+      {
+        "season": 1980,
+        "threePointRate": 0.018484288354898338,
+        "teamWinPct": 0.5
+      },
+      {
+        "season": 1981,
+        "threePointRate": 0.026717557251908396,
+        "teamWinPct": 0.5
+      },
+      {
+        "season": 1982,
+        "threePointRate": 0.015570014430745082,
+        "teamWinPct": 0.5
+      },
+      {
+        "season": 1983,
+        "threePointRate": 0.0026988751784740037,
+        "teamWinPct": 0.5
+      },
+      {
+        "season": 1984,
+        "threePointRate": 0.0022247866756915703,
+        "teamWinPct": 0.5
+      },
+      {
+        "season": 1985,
+        "threePointRate": 0.005860663691053755,
+        "teamWinPct": 0.5
+      },
+      {
+        "season": 1986,
+        "threePointRate": 0.038366025837774494,
+        "teamWinPct": 0.5
+      },
+      {
+        "season": 1987,
+        "threePointRate": 0.053803700777764175,
+        "teamWinPct": 0.5
+      },
+      {
+        "season": 1988,
+        "threePointRate": 0.057795811606109894,
+        "teamWinPct": 0.5
+      },
+      {
+        "season": 1989,
+        "threePointRate": 0.07588542504032321,
+        "teamWinPct": 0.5
+      },
+      {
+        "season": 1990,
+        "threePointRate": 0.07694896242288278,
+        "teamWinPct": 0.5
+      },
+      {
+        "season": 1991,
+        "threePointRate": 0.08313745078450961,
+        "teamWinPct": 0.5
+      },
+      {
+        "season": 1992,
+        "threePointRate": 0.08817942723553478,
+        "teamWinPct": 0.5
+      },
+      {
+        "season": 1993,
+        "threePointRate": 0.10500939168503098,
+        "teamWinPct": 0.5
+      },
+      {
+        "season": 1994,
+        "threePointRate": 0.11963978986067722,
+        "teamWinPct": 0.5
+      },
+      {
+        "season": 1995,
+        "threePointRate": 0.19029334891461425,
+        "teamWinPct": 0.5
+      },
+      {
+        "season": 1996,
+        "threePointRate": 0.20174875462195746,
+        "teamWinPct": 0.5
+      },
+      {
+        "season": 1997,
+        "threePointRate": 0.214053040933328,
+        "teamWinPct": 0.5
+      },
+      {
+        "season": 1998,
+        "threePointRate": 0.16099996501521838,
+        "teamWinPct": 0.5
+      },
+      {
+        "season": 1999,
+        "threePointRate": 0.16952838456295238,
+        "teamWinPct": 0.5
+      },
+      {
+        "season": 2000,
+        "threePointRate": 0.1683688766381353,
+        "teamWinPct": 0.5
+      },
+      {
+        "season": 2001,
+        "threePointRate": 0.1708969850978538,
+        "teamWinPct": 0.5
+      },
+      {
+        "season": 2002,
+        "threePointRate": 0.18295961057241164,
+        "teamWinPct": 0.5
+      },
+      {
+        "season": 2003,
+        "threePointRate": 0.1839661546522798,
+        "teamWinPct": 0.5
+      },
+      {
+        "season": 2004,
+        "threePointRate": 0.18755679763917255,
+        "teamWinPct": 0.5
+      },
+      {
+        "season": 2005,
+        "threePointRate": 0.19669469996423233,
+        "teamWinPct": 0.5
+      },
+      {
+        "season": 2006,
+        "threePointRate": 0.2023284106954151,
+        "teamWinPct": 0.5
+      },
+      {
+        "season": 2007,
+        "threePointRate": 0.21323705736591084,
+        "teamWinPct": 0.5
+      },
+      {
+        "season": 2008,
+        "threePointRate": 0.2211424974427571,
+        "teamWinPct": 0.5
+      },
+      {
+        "season": 2009,
+        "threePointRate": 0.22467819984424084,
+        "teamWinPct": 0.5
+      },
+      {
+        "season": 2010,
+        "threePointRate": 0.22297922376600582,
+        "teamWinPct": 0.5
+      },
+      {
+        "season": 2011,
+        "threePointRate": 0.22280938493013538,
+        "teamWinPct": 0.5
+      },
+      {
+        "season": 2012,
+        "threePointRate": 0.2258918104170156,
+        "teamWinPct": 0.5
+      },
+      {
+        "season": 2013,
+        "threePointRate": 0.24447870727673648,
+        "teamWinPct": 0.5
+      },
+      {
+        "season": 2014,
+        "threePointRate": 0.2608300990434985,
+        "teamWinPct": 0.5
+      },
+      {
+        "season": 2015,
+        "threePointRate": 0.27066683026100347,
+        "teamWinPct": 0.5
+      },
+      {
+        "season": 2016,
+        "threePointRate": 0.2874101110897173,
+        "teamWinPct": 0.5
+      },
+      {
+        "season": 2017,
+        "threePointRate": 0.31700035491346373,
+        "teamWinPct": 0.5
+      },
+      {
+        "season": 2018,
+        "threePointRate": 0.3387295220117306,
+        "teamWinPct": 0.5
+      },
+      {
+        "season": 2019,
+        "threePointRate": 0.3596249220625211,
+        "teamWinPct": 0.5
+      },
+      {
+        "season": 2020,
+        "threePointRate": 0.38321679842541945,
+        "teamWinPct": 0.5
+      },
+      {
+        "season": 2021,
+        "threePointRate": 0.39666395606420524,
+        "teamWinPct": 0.5
+      },
+      {
+        "season": 2022,
+        "threePointRate": 0.4005838191707651,
+        "teamWinPct": 0.5
+      },
+      {
+        "season": 2023,
+        "threePointRate": 0.3887606795639792,
+        "teamWinPct": 0.5
+      },
+      {
+        "season": 2024,
+        "threePointRate": 0.3962754138995226,
+        "teamWinPct": 0.5
+      },
+      {
+        "season": 2025,
+        "threePointRate": 0.4213877597430285,
+        "teamWinPct": 0.5
       }
     ]
   }
