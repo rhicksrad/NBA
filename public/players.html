@@ -39,6 +39,89 @@
       </header>
 
       <main class="players-lab">
+        <section class="players-lab__section player-atlas" data-player-profiles>
+          <header class="players-lab__section-header">
+            <h2>Player scouting atlas</h2>
+            <p class="players-lab__lede">
+              Search across eras to surface bespoke scouting percentiles for the game's icons. Choose a player to
+              instantly render his GOAT index snapshot, vitals, and twelve curated visual reads.
+            </p>
+          </header>
+          <div class="player-atlas__layout">
+            <div class="player-atlas__search">
+              <label class="player-atlas__label" for="player-atlas-search">Find a player</label>
+              <div class="player-atlas__searchbox">
+                <div class="player-atlas__field">
+                  <input
+                    id="player-atlas-search"
+                    class="player-atlas__input"
+                    type="search"
+                    name="player-search"
+                    placeholder="Search by name, nickname, or era (e.g. &quot;Wemby&quot;, &quot;90s&quot;)"
+                    autocomplete="off"
+                    spellcheck="false"
+                    data-player-search
+                    aria-controls="player-atlas-results"
+                    aria-expanded="false"
+                  />
+                  <button type="button" class="player-atlas__clear" data-player-clear hidden>Clear</button>
+                </div>
+                <ul
+                  id="player-atlas-results"
+                  class="player-atlas__results"
+                  role="listbox"
+                  data-player-results
+                  hidden
+                ></ul>
+              </div>
+              <p class="player-atlas__hint" data-player-hint>Start typing to explore the atlas.</p>
+              <p class="player-atlas__empty" data-player-empty hidden>
+                No players found. Try a different era, nickname, or franchise.
+              </p>
+              <p class="player-atlas__error" data-player-error hidden>
+                We couldn't load the atlas right now. Refresh to try again.
+              </p>
+            </div>
+            <article class="player-card" data-player-profile hidden aria-live="polite">
+              <header class="player-card__header">
+                <div class="player-card__identity">
+                  <h3 class="player-card__name" data-player-name></h3>
+                  <p class="player-card__meta" data-player-meta></p>
+                </div>
+                <div class="player-card__goat">
+                  <span class="player-card__goat-label">GOAT score</span>
+                  <span class="player-card__goat-value" data-player-goat>—</span>
+                </div>
+              </header>
+              <div class="player-card__body">
+                <p class="player-card__bio" data-player-bio></p>
+                <dl class="player-card__facts">
+                  <div class="player-card__fact">
+                    <dt>Archetype</dt>
+                    <dd data-player-archetype>—</dd>
+                  </div>
+                  <div class="player-card__fact">
+                    <dt>Vitals</dt>
+                    <dd data-player-vitals>—</dd>
+                  </div>
+                  <div class="player-card__fact">
+                    <dt>Origin</dt>
+                    <dd data-player-origin>—</dd>
+                  </div>
+                  <div class="player-card__fact">
+                    <dt>Draft</dt>
+                    <dd data-player-draft>—</dd>
+                  </div>
+                </dl>
+              </div>
+              <div class="player-card__visuals" data-player-metrics aria-label="Percentile visualizations"></div>
+              <p class="player-card__visuals-empty" data-player-metrics-empty hidden>
+                Percentile visuals are coming soon for this player.
+              </p>
+            </article>
+          </div>
+        </section>
+
         <section class="players-rankings">
           <div class="players-rankings__intro">
             <h2>Who's the Man Right Now?</h2>

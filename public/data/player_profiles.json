@@ -1,0 +1,337 @@
+{
+  "generatedAt": "2025-02-01T00:00:00Z",
+  "metrics": [
+    {
+      "id": "offensive-creation",
+      "label": "Offensive Creation",
+      "description": "Self-creation volume and efficiency per 75 possessions."
+    },
+    {
+      "id": "half-court-shotmaking",
+      "label": "Half-Court Shotmaking",
+      "description": "Difficulty-adjusted shot quality and accuracy in half-court sets."
+    },
+    {
+      "id": "passing-vision",
+      "label": "Passing Vision",
+      "description": "High-value assists, skip reads, and delivery creativity."
+    },
+    {
+      "id": "rim-pressure",
+      "label": "Rim Pressure",
+      "description": "Drives and paint touches turning into rim attempts and fouls."
+    },
+    {
+      "id": "rebound-dominance",
+      "label": "Rebound Dominance",
+      "description": "Share of available rebounds secured across both ends."
+    },
+    {
+      "id": "defensive-playmaking",
+      "label": "Defensive Playmaking",
+      "description": "Stocks (steals + blocks) and deflection activity that swing possessions."
+    },
+    {
+      "id": "post-efficiency",
+      "label": "Post Efficiency",
+      "description": "Post-up scoring efficiency blended with playmaking kick-outs."
+    },
+    {
+      "id": "stretch-gravity",
+      "label": "Stretch Gravity",
+      "description": "Perimeter gravity measured by defender distance and 3-point volume."
+    },
+    {
+      "id": "tempo-control",
+      "label": "Tempo Control",
+      "description": "Pace orchestration, transition effectiveness, and flow control."
+    },
+    {
+      "id": "clutch-index",
+      "label": "Clutch Index",
+      "description": "Two-way impact during the final five minutes of close games."
+    },
+    {
+      "id": "durability-index",
+      "label": "Durability Index",
+      "description": "Availability and workload sustained over the last three seasons."
+    },
+    {
+      "id": "processing-speed",
+      "label": "Processing Speed",
+      "description": "Decision-making speed versus complex defensive coverages."
+    }
+  ],
+  "players": [
+    {
+      "id": "nikola-jokic",
+      "name": "Nikola Jokić",
+      "team": "Denver Nuggets",
+      "position": "C",
+      "height": "6'11\"",
+      "weight": "284 lbs",
+      "born": "February 19, 1995 · Sombor, Serbia",
+      "origin": "Sombor, Serbia",
+      "draft": "2014 · Pick 41 (2nd round)",
+      "era": "2020s",
+      "archetype": "Point Center Conductor",
+      "goatScore": 28.7,
+      "bio": "The Nuggets' offensive brain trust who weaponizes angles, touch, and anticipation to bend defenses out of shape.",
+      "keywords": ["joker", "serbia", "denver", "center", "mvp", "playmaking big", "point center", "2020s"],
+      "metrics": {
+        "offensive-creation": { "value": 99, "note": "Orchestrates every half-court trip with elbow touches and inverted pick-and-rolls." },
+        "half-court-shotmaking": { "value": 96, "note": "Floaters and moon-ball threes punish sagging coverages at elite efficiency." },
+        "passing-vision": { "value": 100, "note": "Sees weak-side cutters a beat early with touch passes few centers even attempt." },
+        "rim-pressure": { "value": 82, "note": "Methodical drives and seals create deep paint catches without needing burst." },
+        "rebound-dominance": { "value": 95, "note": "Vacuum on the glass with secure hands that ignite hit-ahead outlets." },
+        "defensive-playmaking": { "value": 71, "note": "Uses size and anticipation to clog driving lanes and peel off tag steals." },
+        "post-efficiency": { "value": 99, "note": "Soft touch on hooks plus high-low reads make double-teams futile." },
+        "stretch-gravity": { "value": 78, "note": "Respectable trail threes keep bigs honest and open empty-side actions." },
+        "tempo-control": { "value": 94, "note": "Dictates pace with grab-and-go outlets and late-clock calm." },
+        "clutch-index": { "value": 92, "note": "Late-game two-man game chemistry with Murray punishes every coverage." },
+        "durability-index": { "value": 88, "note": "Heavy minute loads with minimal drop-off deep into spring." },
+        "processing-speed": { "value": 100, "note": "Reads layers of the defense in real time like a quarterback at the line." }
+      }
+    },
+    {
+      "id": "giannis-antetokounmpo",
+      "name": "Giannis Antetokounmpo",
+      "team": "Milwaukee Bucks",
+      "position": "F",
+      "height": "6'11\"",
+      "weight": "242 lbs",
+      "born": "December 6, 1994 · Athens, Greece",
+      "origin": "Athens, Greece",
+      "draft": "2013 · Pick 15 (1st round)",
+      "era": "2020s",
+      "archetype": "Rim Pressure Wrecking Ball",
+      "goatScore": 26.9,
+      "bio": "A downhill freight train who pairs elite rim pressure with switch-flipping defense and elastic playmaking.",
+      "keywords": ["greek freak", "milwaukee", "bucks", "forward", "giannis", "2020s", "mvp", "rim runner"],
+      "metrics": {
+        "offensive-creation": { "value": 91, "note": "Creates advantage with relentless drives that collapse entire defenses." },
+        "half-court-shotmaking": { "value": 78, "note": "Turnaround mid-post jumpers remain a go-to late-clock counter." },
+        "passing-vision": { "value": 85, "note": "Sprays to shooters once the second defender commits at the nail." },
+        "rim-pressure": { "value": 100, "note": "Lives at the restricted area with league-best force and foul drawing." },
+        "rebound-dominance": { "value": 90, "note": "Ends possessions above the crowd and immediately pushes the break." },
+        "defensive-playmaking": { "value": 95, "note": "Weak-side rotations detonate layups and fuel chase-down highlights." },
+        "post-efficiency": { "value": 84, "note": "Power spins carve deep position that few bigs can absorb." },
+        "stretch-gravity": { "value": 52, "note": "Improved corner touch keeps defenders honest but remains the swing skill." },
+        "tempo-control": { "value": 87, "note": "Transition storms and early seals change the rhythm of every game." },
+        "clutch-index": { "value": 82, "note": "Force-of-will buckets and free throws remain late-game staples." },
+        "durability-index": { "value": 86, "note": "Heavy usage seasons with only minor interruptions." },
+        "processing-speed": { "value": 84, "note": "Reads crowding defenders quicker each year to find shooters and cutters." }
+      }
+    },
+    {
+      "id": "luka-doncic",
+      "name": "Luka Dončić",
+      "team": "Dallas Mavericks",
+      "position": "G",
+      "height": "6'7\"",
+      "weight": "230 lbs",
+      "born": "February 28, 1999 · Ljubljana, Slovenia",
+      "origin": "Ljubljana, Slovenia",
+      "draft": "2018 · Pick 3 (1st round)",
+      "era": "2020s",
+      "archetype": "Heliocentric Maestro",
+      "goatScore": 27.4,
+      "bio": "Dallas' heliocentric hub who strings together step-backs, lasers, and pace manipulation to control every possession.",
+      "keywords": ["luka", "doncic", "mavericks", "slovenia", "heliocentric", "playmaker", "2020s"],
+      "metrics": {
+        "offensive-creation": { "value": 98, "note": "Lives in ball screens with counters for every coverage you can send." },
+        "half-court-shotmaking": { "value": 95, "note": "Step-back threes and post fades punish mismatches at volume." },
+        "passing-vision": { "value": 97, "note": "Left-handed lasers find weak-side shooters before the tag arrives." },
+        "rim-pressure": { "value": 86, "note": "Strong frame and deceleration craft easy finishes without elite lift." },
+        "rebound-dominance": { "value": 72, "note": "Snags defensive boards to launch instant hit-ahead dimes." },
+        "defensive-playmaking": { "value": 58, "note": "Uses size to wall up and swipe post entries when locked in." },
+        "post-efficiency": { "value": 91, "note": "Burly guard post-ups generate fouls and kick-outs on demand." },
+        "stretch-gravity": { "value": 88, "note": "High-volume step-backs warp the top of every defense." },
+        "tempo-control": { "value": 99, "note": "Manipulates pace like a veteran quarterback dictating tempo." },
+        "clutch-index": { "value": 93, "note": "Late-clock brilliance with impossible shot-making theatrics." },
+        "durability-index": { "value": 81, "note": "Carries monster usage loads while staying largely available." },
+        "processing-speed": { "value": 96, "note": "Reads the low man instantly and strings together advanced counters." }
+      }
+    },
+    {
+      "id": "stephen-curry",
+      "name": "Stephen Curry",
+      "team": "Golden State Warriors",
+      "position": "G",
+      "height": "6'3\"",
+      "weight": "185 lbs",
+      "born": "March 14, 1988 · Akron, Ohio",
+      "origin": "Charlotte, North Carolina",
+      "draft": "2009 · Pick 7 (1st round)",
+      "era": "2010s",
+      "archetype": "Gravity Engine",
+      "goatScore": 26.3,
+      "bio": "The original spacing cheat code whose shooting gravity still scripts defensive nightmares a decade later.",
+      "keywords": ["steph", "curry", "warriors", "shooter", "mvp", "dynasty", "2010s"],
+      "metrics": {
+        "offensive-creation": { "value": 94, "note": "Off-ball relocations open downhill lanes for everyone else." },
+        "half-court-shotmaking": { "value": 100, "note": "Pull-up triples from 30 feet remain the league's most efficient dagger." },
+        "passing-vision": { "value": 90, "note": "Hit-ahead reads and pocket passes punish blitzes." },
+        "rim-pressure": { "value": 74, "note": "Crafty finishes and floaters offset limited vertical pop." },
+        "rebound-dominance": { "value": 42, "note": "Guards his area and leaks out once the possession is secured." },
+        "defensive-playmaking": { "value": 68, "note": "Quick hands poke steals and take charges from rotating spots." },
+        "post-efficiency": { "value": 48, "note": "Rarely lives on the block but can punish switches with quick spins." },
+        "stretch-gravity": { "value": 100, "note": "Constant off-ball motion forces defenses to guard 35 feet of space." },
+        "tempo-control": { "value": 92, "note": "Quick-hitting threes swing momentum and pace within minutes." },
+        "clutch-index": { "value": 95, "note": "Pull-up daggers and free-throw excellence close tight games." },
+        "durability-index": { "value": 78, "note": "Workload has been managed but he still logs heavy minutes when it matters." },
+        "processing-speed": { "value": 94, "note": "Lightning processing off split actions to maintain flow." }
+      }
+    },
+    {
+      "id": "lebron-james",
+      "name": "LeBron James",
+      "team": "Los Angeles Lakers",
+      "position": "F",
+      "height": "6'9\"",
+      "weight": "250 lbs",
+      "born": "December 30, 1984 · Akron, Ohio",
+      "origin": "Akron, Ohio",
+      "draft": "2003 · Pick 1 (1st round)",
+      "era": "2000s",
+      "archetype": "Two-Way Command Center",
+      "goatScore": 30.0,
+      "bio": "Two decades in, LeBron still toggles between lead initiator and bully-ball finisher while quarterbacking defenses.",
+      "keywords": ["lebron", "james", "lakers", "goat", "akron", "2000s", "forward", "playmaker"],
+      "metrics": {
+        "offensive-creation": { "value": 97, "note": "Still slings skip passes and drives that bend entire defenses." },
+        "half-court-shotmaking": { "value": 92, "note": "Step-back threes and fadeaways supplement rim assaults." },
+        "passing-vision": { "value": 99, "note": "Manipulates weak-side tags with veteran eye control." },
+        "rim-pressure": { "value": 90, "note": "Linebacker strength continues to bully lanes and force help." },
+        "rebound-dominance": { "value": 83, "note": "Glass-clearing bursts fuel his transition quarterbacking." },
+        "defensive-playmaking": { "value": 80, "note": "Selectively springs for chase-downs and dig steals." },
+        "post-efficiency": { "value": 93, "note": "Bully-ball mid-post is still a go-to pressure release." },
+        "stretch-gravity": { "value": 76, "note": "Improved pull-up three keeps drop coverages honest." },
+        "tempo-control": { "value": 96, "note": "Master conductor toggling between fast breaks and grind-it-out sets." },
+        "clutch-index": { "value": 94, "note": "Reads late-game situations like a chess master multiple moves ahead." },
+        "durability-index": { "value": 85, "note": "Minutes moderation keeps him available deep into May." },
+        "processing-speed": { "value": 99, "note": "Autopsies defensive schemes pre-snap like few in league history." }
+      }
+    },
+    {
+      "id": "victor-wembanyama",
+      "name": "Victor Wembanyama",
+      "team": "San Antonio Spurs",
+      "position": "F/C",
+      "height": "7'4\"",
+      "weight": "230 lbs",
+      "born": "January 4, 2004 · Le Chesnay, France",
+      "origin": "Le Chesnay, France",
+      "draft": "2023 · Pick 1 (1st round)",
+      "era": "2020s",
+      "archetype": "Rim Protecting Unicorn",
+      "goatScore": 18.6,
+      "bio": "A 7-foot-4 marvel whose wingspan erases shots while his handle teases perimeter creation upside.",
+      "keywords": ["wemby", "france", "spurs", "unicorn", "rim protector", "rookie", "2020s"],
+      "metrics": {
+        "offensive-creation": { "value": 74, "note": "Face-up packages are blossoming with each month of reps." },
+        "half-court-shotmaking": { "value": 71, "note": "Fluid pull-ups and step-backs are already stretching the floor." },
+        "passing-vision": { "value": 69, "note": "Sees cutters over the top with improving timing." },
+        "rim-pressure": { "value": 88, "note": "Covers ground in two steps to finish above or through contests." },
+        "rebound-dominance": { "value": 86, "note": "Go-Go gadget arms vacuum weak-side boards." },
+        "defensive-playmaking": { "value": 99, "note": "Historic block rates while guarding in space without fouling." },
+        "post-efficiency": { "value": 77, "note": "Fadeaways and hooks are stabilizing as strength catches up." },
+        "stretch-gravity": { "value": 83, "note": "Pulls bigs to the arc, opening backdoor cuts for teammates." },
+        "tempo-control": { "value": 68, "note": "Learning to pace games but already triggers breaks with outlets." },
+        "clutch-index": { "value": 66, "note": "Flashes of takeover scoring mixed with rookie turnovers." },
+        "durability-index": { "value": 79, "note": "Managed minutes but steady availability for a giant frame." },
+        "processing-speed": { "value": 80, "note": "Adjusts coverages on the fly with impressive poise for 20 years old." }
+      }
+    },
+    {
+      "id": "anthony-davis",
+      "name": "Anthony Davis",
+      "team": "Los Angeles Lakers",
+      "position": "F/C",
+      "height": "6'10\"",
+      "weight": "253 lbs",
+      "born": "March 11, 1993 · Chicago, Illinois",
+      "origin": "Chicago, Illinois",
+      "draft": "2012 · Pick 1 (1st round)",
+      "era": "2020s",
+      "archetype": "Defensive Solar Eclipse",
+      "goatScore": 24.2,
+      "bio": "When healthy, Davis erases entire sections of the floor with his coverage range while punishing switches inside.",
+      "keywords": ["anthony davis", "ad", "lakers", "shot blocker", "kentucky", "2020s"],
+      "metrics": {
+        "offensive-creation": { "value": 82, "note": "Comfortable attacking from the elbows or short-roll pocket." },
+        "half-court-shotmaking": { "value": 79, "note": "Turnaround jumpers stabilize half-court possessions." },
+        "passing-vision": { "value": 68, "note": "Solid reads out of doubles, particularly to weak-side cutters." },
+        "rim-pressure": { "value": 91, "note": "Lob threat gravity and face-up drives force constant rotations." },
+        "rebound-dominance": { "value": 92, "note": "Elite second-jump secures extra possessions on both glass ends." },
+        "defensive-playmaking": { "value": 98, "note": "Back-line eraser who covers sideline-to-sideline in one rotation." },
+        "post-efficiency": { "value": 90, "note": "Soft touch hooks and counters punish single coverage." },
+        "stretch-gravity": { "value": 61, "note": "Pick-and-pop range is streaky but respectable above the break." },
+        "tempo-control": { "value": 76, "note": "Rim runs and trail threes keep transition tempo threatening." },
+        "clutch-index": { "value": 84, "note": "Late-game rim protection plus bailout jumpers swing series." },
+        "durability-index": { "value": 71, "note": "Availability is the lone swing factor for a perennial All-NBA talent." },
+        "processing-speed": { "value": 85, "note": "Communicates switches and rotates early as the quarterback of the defense." }
+      }
+    },
+    {
+      "id": "kevin-durant",
+      "name": "Kevin Durant",
+      "team": "Phoenix Suns",
+      "position": "F",
+      "height": "6'10\"",
+      "weight": "240 lbs",
+      "born": "September 29, 1988 · Washington, D.C.",
+      "origin": "Washington, D.C.",
+      "draft": "2007 · Pick 2 (1st round)",
+      "era": "2010s",
+      "archetype": "Scoring Savant",
+      "goatScore": 25.9,
+      "bio": "A 7-foot flamethrower whose mid-range artistry and switch-proof scoring keep him atop every scouting report.",
+      "keywords": ["kd", "durant", "phoenix", "suns", "scorer", "midrange", "2010s"],
+      "metrics": {
+        "offensive-creation": { "value": 93, "note": "Size-up pull-ups punish mismatches without needing heavy dribble volume." },
+        "half-court-shotmaking": { "value": 99, "note": "One of the greatest mid-range shot-makers ever recorded." },
+        "passing-vision": { "value": 82, "note": "Quick-hit skip passes out of doubles keep the ball humming." },
+        "rim-pressure": { "value": 79, "note": "Long strides still knife to the cup when defenders overplay." },
+        "rebound-dominance": { "value": 70, "note": "Rebounds his area and pushes with guard skills when needed." },
+        "defensive-playmaking": { "value": 76, "note": "Uses length for dig steals and weak-side shot contests." },
+        "post-efficiency": { "value": 94, "note": "High-release turnaround is unblockable from either block." },
+        "stretch-gravity": { "value": 92, "note": "Pull-up threes and trail shots demand top-lock coverage." },
+        "tempo-control": { "value": 88, "note": "Picks his spots to surge without ever feeling rushed." },
+        "clutch-index": { "value": 96, "note": "Late-clock execution remains a metronome of tough makes." },
+        "durability-index": { "value": 74, "note": "Minutes are managed but he still clears 35 a night in big moments." },
+        "processing-speed": { "value": 92, "note": "Reads double teams instantly and flows into counters." }
+      }
+    },
+    {
+      "id": "shai-gilgeous-alexander",
+      "name": "Shai Gilgeous-Alexander",
+      "team": "Oklahoma City Thunder",
+      "position": "G",
+      "height": "6'6\"",
+      "weight": "195 lbs",
+      "born": "July 12, 1998 · Toronto, Canada",
+      "origin": "Toronto, Canada",
+      "draft": "2018 · Pick 11 (1st round)",
+      "era": "2020s",
+      "archetype": "Slithery Lead Guard",
+      "goatScore": 24.6,
+      "bio": "A patient dribble artist who lives in the paint, earns free throws, and now anchors an elite defense with length.",
+      "keywords": ["shai", "sga", "thunder", "canada", "lead guard", "2020s", "all-nba"],
+      "metrics": {
+        "offensive-creation": { "value": 95, "note": "Hesitations and stride length shake even elite on-ball defenders." },
+        "half-court-shotmaking": { "value": 88, "note": "Mid-range pull-ups and step-backs are money late in clocks." },
+        "passing-vision": { "value": 86, "note": "Manipulates help to spoon-feed corner threes and dunker spot lobs." },
+        "rim-pressure": { "value": 97, "note": "Top-tier drives per game with elite foul drawing craft." },
+        "rebound-dominance": { "value": 58, "note": "Gang-rebounds when needed but mostly concedes to bigs." },
+        "defensive-playmaking": { "value": 89, "note": "Uses go-go arms to rack up steals without gambling." },
+        "post-efficiency": { "value": 64, "note": "Occasional cross-matches become easy turnaround jumpers." },
+        "stretch-gravity": { "value": 74, "note": "Respectable pull-up threat keeps drop coverages tight." },
+        "tempo-control": { "value": 90, "note": "Slows and accelerates at will, always on balance." },
+        "clutch-index": { "value": 91, "note": "Keeps composure late with foul drawing and tough mid-range makes." },
+        "durability-index": { "value": 83, "note": "High-usage engine staying on the floor for deep regular-season pushes." },
+        "processing-speed": { "value": 90, "note": "Calm reads of the back line set up quick dumps and floaters." }
+      }
+    }
+  ]
+}
