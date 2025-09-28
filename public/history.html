@@ -29,104 +29,182 @@
         <div class="hero">
           <span class="eyebrow">League Archive</span>
           <h1>Chronicle the eras that shaped today's game.</h1>
-          <p>
-            Plug into curated timelines, record books, and attendance milestones to turn archival datasets
-            into rich interactive retrospectives.
-          </p>
+          <div class="history-hero-metrics">
+            <article class="history-hero-metric history-hero-metric--primary">
+              <span class="history-hero-metric__label">Games logged</span>
+              <span class="history-hero-metric__value" data-history="total-games">--</span>
+              <span class="history-hero-metric__context">
+                <span data-history="first-game">--</span>
+                <span class="history-hero-metric__divider">to</span>
+                <span data-history="latest-game">--</span>
+              </span>
+            </article>
+            <article class="history-hero-metric">
+              <span class="history-hero-metric__label">Playoff catalog</span>
+              <span class="history-hero-metric__value" data-history="playoff-games">--</span>
+              <span class="history-hero-metric__context" data-history="playoff-share">--</span>
+            </article>
+            <article class="history-hero-metric">
+              <span class="history-hero-metric__label">Attendance record</span>
+              <span class="history-hero-metric__value history-hero-metric__value--compact" data-history="attendance-record">--</span>
+            </article>
+          </div>
         </div>
       </header>
 
       <main>
-        <section>
-          <h2>Era explorer</h2>
-          <p class="lead">
-            Trace the league's growth decade by decade and see how expansion bursts, archival coverage, and
-            postseason logs stack up across the NBA timeline.
-          </p>
-
-          <div class="summary-cards summary-cards--compact">
-            <article class="summary-card">
-              <strong>Archive breadth</strong>
-              <p>
-                <span data-history="total-games">--</span> games logged from
-                <span data-history="first-game">--</span> through <span data-history="latest-game">--</span>.
-              </p>
-            </article>
-            <article class="summary-card">
-              <strong>Postseason catalog</strong>
-              <p>
-                <span data-history="playoff-games">--</span> playoff contests, representing
-                <span data-history="playoff-share">--</span> of the archive.
-              </p>
-            </article>
-            <article class="summary-card">
-              <strong>Attendance record</strong>
-              <p data-history="attendance-record">--</p>
-            </article>
+        <section class="history-section">
+          <div class="history-section__header">
+            <h2>Timeline atlas</h2>
+            <div class="history-badges">
+              <span class="history-badge">
+                <span class="history-badge__label">Active franchises</span>
+                <span class="history-badge__value" data-history="franchise-count">--</span>
+              </span>
+              <span class="history-badge">
+                <span class="history-badge__label">Peak expansion</span>
+                <span class="history-badge__value">
+                  <span data-history="peak-expansion-decade">--</span>
+                  <span class="history-badge__divider">•</span>
+                  <span data-history="peak-expansion-total">--</span>
+                </span>
+              </span>
+            </div>
           </div>
 
-          <div class="grid-two">
+          <div class="history-mosaic history-mosaic--wide">
             <figure class="viz-card viz-card--inline" data-chart-wrapper>
               <header class="viz-card__title">Games logged by decade</header>
               <div class="viz-canvas">
                 <canvas data-chart="games-by-decade" aria-describedby="games-by-decade-caption"></canvas>
               </div>
               <figcaption id="games-by-decade-caption" class="viz-card__caption">
-                A filled line plot surfaces how the volume of tracked matchups accelerated from the early BAA
-                seasons through the modern 2020s slate.
+                A filled spline highlights how the archive scales from the BAA launch through today's slate.
               </figcaption>
             </figure>
-            <div class="subsection">
-              <h3>Expansion timeline</h3>
-              <p>
-                The franchise ledger now counts <span data-history="franchise-count">--</span> active NBA clubs. The
-                busiest era was the <span data-history="peak-expansion-decade">--</span>, which added
-                <span data-history="peak-expansion-total">--</span> teams.
-              </p>
-              <ol class="timeline" data-history="expansion-timeline"></ol>
-            </div>
+
+            <figure class="viz-card viz-card--inline" data-chart-wrapper>
+              <header class="viz-card__title">Season logging velocity</header>
+              <div class="viz-canvas">
+                <canvas data-chart="season-velocity" data-chart-ratio="0.62" aria-describedby="season-velocity-caption"></canvas>
+              </div>
+              <figcaption id="season-velocity-caption" class="viz-card__caption">
+                Each season's captured games stream across the decades to show spikes in schedule density.
+              </figcaption>
+            </figure>
+
+            <figure class="viz-card viz-card--inline" data-chart-wrapper>
+              <header class="viz-card__title">Cumulative archive build</header>
+              <div class="viz-canvas">
+                <canvas data-chart="cumulative-games" data-chart-ratio="0.62" aria-describedby="cumulative-games-caption"></canvas>
+              </div>
+              <figcaption id="cumulative-games-caption" class="viz-card__caption">
+                An ascending ribbon quantifies how quickly total logged contests approach the modern era.</figcaption>
+            </figure>
+
+            <figure class="viz-card viz-card--inline" data-chart-wrapper>
+              <header class="viz-card__title">Expansion fingerprint</header>
+              <div class="viz-canvas">
+                <canvas data-chart="franchise-radar" data-chart-ratio="0.75" aria-describedby="franchise-radar-caption"></canvas>
+              </div>
+              <figcaption id="franchise-radar-caption" class="viz-card__caption">
+                A radial map compares franchise arrivals by decade to spotlight expansion surges.</figcaption>
+            </figure>
           </div>
+
+          <aside class="timeline-panel">
+            <h3>Expansion timeline</h3>
+            <ol class="timeline" data-history="expansion-timeline"></ol>
+          </aside>
         </section>
 
-        <section>
-          <h2>Playoff retrospectives</h2>
-          <p class="lead">
-            Compare the split between regular-season grinds and postseason epics, then dive into the biggest
-            blowouts and packed houses ever captured in the game logs.
-          </p>
+        <section class="history-section">
+          <div class="history-section__header">
+            <h2>Competitive reactor</h2>
+          </div>
 
-          <div class="grid-two">
+          <div class="history-mosaic">
             <figure class="viz-card viz-card--inline" data-chart-wrapper>
               <header class="viz-card__title">Game type distribution</header>
               <div class="viz-canvas">
                 <canvas data-chart="game-type-share" aria-describedby="game-type-share-caption"></canvas>
               </div>
               <figcaption id="game-type-share-caption" class="viz-card__caption">
-                Doughnut segments show how regular season, playoffs, play-in tournaments, and showcase games
-                populate the historical record.
-              </figcaption>
+                A doughnut orbit contrasts regular season volume with postseason, play-in, and showcase slates.</figcaption>
             </figure>
+
             <figure class="viz-card viz-card--inline" data-chart-wrapper>
               <header class="viz-card__title">Largest victory margins</header>
               <div class="viz-canvas">
                 <canvas data-chart="largest-margins" aria-describedby="largest-margins-caption"></canvas>
               </div>
               <figcaption id="largest-margins-caption" class="viz-card__caption">
-                Horizontal bars spotlight the most lopsided scorelines on file, giving historians quick access
-                to blowout context.
+                Horizontal bars spotlight the most lopsided scorelines on file with total-point context overlays.</figcaption>
+            </figure>
+
+            <figure class="viz-card viz-card--inline" data-chart-wrapper>
+              <header class="viz-card__title">Scoring bursts scatterfield</header>
+              <div class="viz-canvas">
+                <canvas data-chart="scoring-bursts" aria-describedby="scoring-bursts-caption"></canvas>
+              </div>
+              <figcaption id="scoring-bursts-caption" class="viz-card__caption">
+                Bubble sizes encode attendance while plotting each 350+ point shootout by year and total points.</figcaption>
+            </figure>
+
+            <figure class="viz-card viz-card--inline" data-chart-wrapper>
+              <header class="viz-card__title">Margin vs. total matrix</header>
+              <div class="viz-canvas">
+                <canvas data-chart="margin-vs-total" aria-describedby="margin-vs-total-caption"></canvas>
+              </div>
+              <figcaption id="margin-vs-total-caption" class="viz-card__caption">
+                A scatter plot fuses blowout size and scoring output to surface extreme result combinations.</figcaption>
+            </figure>
+          </div>
+        </section>
+
+        <section class="history-section">
+          <div class="history-section__header">
+            <h2>Attendance observatory</h2>
+          </div>
+
+          <div class="history-mosaic history-mosaic--triptych">
+            <figure class="viz-card viz-card--inline" data-chart-wrapper>
+              <header class="viz-card__title">Attendance orbit</header>
+              <div class="viz-canvas">
+                <canvas data-chart="attendance-orbit" data-chart-ratio="0.8" aria-describedby="attendance-orbit-caption"></canvas>
+              </div>
+              <figcaption id="attendance-orbit-caption" class="viz-card__caption">
+                Polar wedges scale arena turnouts with a badge for the all-time record night.</figcaption>
+            </figure>
+
+            <figure class="viz-card viz-card--inline" data-chart-wrapper>
+              <header class="viz-card__title">Record scoreline stack</header>
+              <div class="viz-canvas">
+                <canvas data-chart="record-sparkline" aria-describedby="record-sparkline-caption"></canvas>
+              </div>
+              <figcaption id="record-sparkline-caption" class="viz-card__caption">
+                A vertical stack ranks the archive's highest combined totals with era-coded gradients.</figcaption>
+            </figure>
+
+            <figure class="viz-card viz-card--inline" data-chart-wrapper>
+              <header class="viz-card__title">Archive coverage gauge</header>
+              <div class="viz-canvas">
+                <canvas data-chart="archive-coverage" data-chart-ratio="0.8" aria-describedby="archive-coverage-caption"></canvas>
+              </div>
+              <figcaption id="archive-coverage-caption" class="viz-card__caption">
+                A dual-ring gauge tracks refresh cadence, seasons indexed, and total coverage span across
+                <span data-history="season-count">--</span> seasons (<span data-history="season-range">--</span>) with the
+                latest ingest on <span data-history="archive-updated">--</span>.
               </figcaption>
             </figure>
           </div>
 
-          <div class="card-grid">
-            <article class="card">
-              <h3>Scoreboard fireworks</h3>
-              <p>Highest combined point totals across the archive deliver instant storytelling starters.</p>
-              <ul class="list-grid list-grid--dense" data-history="record-games"></ul>
-            </article>
-            <article class="card">
-              <h3>Mega crowds</h3>
-              <p>Attendance giants that redefined what a sold-out arena looks like.</p>
+          <div class="history-matrix">
+            <figure class="history-table-card">
+              <header class="history-table-card__header">
+                <h3>Mega crowds ledger</h3>
+                <span class="history-table-card__meta" data-history="attendance-record">--</span>
+              </header>
               <div class="table-scroll">
                 <table class="history-table">
                   <thead>
@@ -139,25 +217,7 @@
                   <tbody data-history="attendance-body"></tbody>
                 </table>
               </div>
-            </article>
-            <article class="card">
-              <h3>Archive cadence</h3>
-              <p>Monitor refresh cycles and coverage windows for the historical ingest.</p>
-              <dl class="history-facts">
-                <div class="history-facts__row">
-                  <dt>Last refresh</dt>
-                  <dd data-history="archive-updated">--</dd>
-                </div>
-                <div class="history-facts__row">
-                  <dt>Seasons tracked</dt>
-                  <dd><span data-history="season-range">--</span> (<span data-history="season-count">--</span>)</dd>
-                </div>
-                <div class="history-facts__row">
-                  <dt>Coverage span</dt>
-                  <dd><span data-history="first-game">--</span> – <span data-history="latest-game">--</span></dd>
-                </div>
-              </dl>
-            </article>
+            </figure>
           </div>
         </section>
       </main>
