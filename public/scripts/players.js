@@ -932,14 +932,28 @@ function initPlayerAtlas() {
 
       const percentile = Number(player?.metrics?.[metric.id]?.value);
       const hasValue = Number.isFinite(percentile);
+      const clampedPercentile = hasValue ? Math.max(0, Math.min(100, Math.round(percentile))) : null;
       if (hasValue) {
         const formatted = formatPercentile(percentile);
+        const valueNumber = document.createElement('span');
+        valueNumber.className = 'player-metric__value-number';
+        valueNumber.textContent = formatted;
         const suffix = document.createElement('span');
+        suffix.className = 'player-metric__value-suffix';
         suffix.textContent = 'percentile';
-        valueEl.append(formatted, suffix);
+        valueEl.append(valueNumber, suffix);
         hasMetric = true;
+        if (clampedPercentile >= 90) {
+          wrapper.classList.add('player-metric--tier-elite');
+        } else if (clampedPercentile >= 70) {
+          wrapper.classList.add('player-metric--tier-strong');
+        } else if (clampedPercentile <= 30) {
+          wrapper.classList.add('player-metric--tier-watch');
+        }
       } else {
+        valueEl.classList.add('player-metric__value--empty');
         valueEl.textContent = '—';
+        wrapper.classList.add('player-metric--empty');
       }
 
       header.append(label, valueEl);
@@ -948,7 +962,8 @@ function initPlayerAtlas() {
       meter.className = 'player-metric__meter';
       if (hasValue) {
         const fill = document.createElement('span');
-        fill.style.setProperty('--fill', `${Math.max(0, Math.min(100, Math.round(percentile)))}%`);
+        fill.style.setProperty('--fill', `${clampedPercentile}%`);
+        fill.style.width = `${clampedPercentile}%`;
         meter.appendChild(fill);
         meter.setAttribute('role', 'img');
         meter.setAttribute('aria-label', `${metric.label}: ${formatPercentile(percentile)} percentile`);
