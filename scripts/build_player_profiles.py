@@ -22,7 +22,7 @@ except ModuleNotFoundError:  # pragma: no cover - fallback for direct execution
     from scripts.build_insights import iter_player_statistics_rows  # type: ignore
 
 ROOT = Path(__file__).resolve().parent.parent
-DEFAULT_ACTIVE_ROSTER = ROOT / "data" / "active_players.json"
+DEFAULT_ACTIVE_ROSTER = ROOT / "data" / "2025-26" / "manual" / "roster_reference.json"
 DEFAULT_PLAYERS_CSV = ROOT / "Players.csv"
 DEFAULT_TEAM_HISTORIES = ROOT / "TeamHistories.csv"
 DEFAULT_OUTPUT = ROOT / "public" / "data" / "player_profiles.json"
@@ -111,6 +111,7 @@ class ActivePlayer:
     first_name: str
     last_name: str
     team_id: str
+    team_tricode: str | None = None
 
     @property
     def full_name(self) -> str:
@@ -307,11 +308,23 @@ def _load_active_players(path: Path) -> list[ActivePlayer]:
     data = json.loads(path.read_text(encoding="utf-8"))
     players: list[ActivePlayer] = []
     for entry in data:
-        person_id = str(entry.get("playerId"))
+        raw_person_id = entry.get("playerId")
+        person_id = str(raw_person_id).strip() if raw_person_id not in (None, "") else ""
         first_name = str(entry.get("firstName") or "").strip()
         last_name = str(entry.get("lastName") or "").strip()
-        team_id = str(entry.get("teamId") or "0")
-        players.append(ActivePlayer(person_id=person_id, first_name=first_name, last_name=last_name, team_id=team_id))
+        raw_team_id = entry.get("teamId")
+        team_id = str(raw_team_id).strip() if raw_team_id not in (None, "") else "0"
+        raw_tricode = entry.get("teamTricode")
+        team_tricode = str(raw_tricode).strip() if raw_tricode not in (None, "") else None
+        players.append(
+            ActivePlayer(
+                person_id=person_id,
+                first_name=first_name,
+                last_name=last_name,
+                team_id=team_id,
+                team_tricode=team_tricode,
+            )
+        )
     return players
 
 
@@ -672,7 +685,12 @@ def build_player_profiles(
 
 def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Build the player profiles atlas payload.")
-    parser.add_argument("--active-roster", type=Path, default=DEFAULT_ACTIVE_ROSTER, help="Path to active_players.json roster feed.")
+    parser.add_argument(
+        "--active-roster",
+        type=Path,
+        default=DEFAULT_ACTIVE_ROSTER,
+        help="Path to the canonical 2025-26 roster reference file.",
+    )
     parser.add_argument("--players-csv", type=Path, default=DEFAULT_PLAYERS_CSV, help="Path to Players.csv metadata table.")
     parser.add_argument("--team-histories", type=Path, default=DEFAULT_TEAM_HISTORIES, help="Path to TeamHistories.csv for franchise metadata.")
     parser.add_argument("--goat-system", type=Path, default=DEFAULT_GOAT_SYSTEM, help="Path to GOAT system rankings feed.")

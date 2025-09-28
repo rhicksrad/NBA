@@ -27,7 +27,7 @@ import {
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../");
 const CANONICAL_DIR = path.join(ROOT, "data/2025-26/canonical");
 const OVERRIDES_PATH = path.join(ROOT, "data/2025-26/manual/overrides.yaml");
-const ACTIVE_PLAYERS_PATH = path.join(ROOT, "data/active_players.json");
+const ROSTER_REFERENCE_PATH = path.join(ROOT, "data/2025-26/manual/roster_reference.json");
 
 export interface BuildOptions {
   nbaStats?: LeagueDataSource;
@@ -189,24 +189,43 @@ async function loadOverrides(): Promise<OverridesConfig> {
 
 async function loadFallbackPlayers(): Promise<SourcePlayerRecord[]> {
   try {
-    const contents = await readFile(ACTIVE_PLAYERS_PATH, "utf8");
-    const data = JSON.parse(contents) as Array<{
-      firstName: string;
-      lastName: string;
-      playerId?: number;
-      teamId?: number;
-      pos?: string;
-    }>;
-    return data
-      .filter((entry) => entry.teamId)
-      .map((entry) => ({
-        name: `${entry.firstName} ${entry.lastName}`.trim(),
-        playerId: entry.playerId ? String(entry.playerId) : undefined,
-        position: entry.pos,
-        teamId: entry.teamId ? String(entry.teamId) : undefined,
-        teamTricode: entry.teamId ? TEAM_ID_MAP.get(String(entry.teamId)) : undefined,
-      }))
-      .filter((player) => !!player.teamTricode) as SourcePlayerRecord[];
+    const contents = await readFile(ROSTER_REFERENCE_PATH, "utf8");
+    const data = JSON.parse(contents) as Array<Record<string, unknown>>;
+
+    const fallback = data
+      .map((entry) => {
+        const rawFirst = typeof entry["firstName"] === "string" ? (entry["firstName"] as string).trim() : "";
+        const rawLast = typeof entry["lastName"] === "string" ? (entry["lastName"] as string).trim() : "";
+        const name = `${rawFirst} ${rawLast}`.trim();
+        if (!name) {
+          return undefined;
+        }
+
+        const rawPlayerId = entry["playerId"];
+        const playerId = rawPlayerId === null || rawPlayerId === undefined ? undefined : String(rawPlayerId).trim();
+        const rawTeamId = entry["teamId"];
+        const teamId = rawTeamId === null || rawTeamId === undefined ? undefined : String(rawTeamId).trim();
+        const rawTricode = entry["teamTricode"];
+        const teamTricode = rawTricode === null || rawTricode === undefined ? undefined : String(rawTricode).trim();
+        const rawPosition = entry["position"];
+        const position = rawPosition === null || rawPosition === undefined ? undefined : String(rawPosition).trim() || undefined;
+
+        const resolvedTricode = teamTricode ?? (teamId ? TEAM_ID_MAP.get(teamId) : undefined);
+        if (!resolvedTricode) {
+          return undefined;
+        }
+
+        return {
+          name,
+          playerId: playerId && playerId.length > 0 ? playerId : undefined,
+          position,
+          teamId,
+          teamTricode: resolvedTricode,
+        } satisfies SourcePlayerRecord;
+      })
+      .filter((player): player is SourcePlayerRecord => !!player);
+
+    return fallback;
   } catch (error) {
     console.warn(`Failed to load fallback players: ${(error as Error).message}`);
     return [];
