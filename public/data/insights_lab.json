@@ -4,25 +4,211 @@
     "baseline": 216.4,
     "sampleSize": 820,
     "buckets": [
-      { "label": "Frigid (<35°F)", "avgPoints": 208.2, "games": 132 },
-      { "label": "Cool (35-55°F)", "avgPoints": 213.6, "games": 198 },
-      { "label": "Mild (55-70°F)", "avgPoints": 218.8, "games": 236 },
-      { "label": "Warm (70-85°F)", "avgPoints": 221.4, "games": 176 },
-      { "label": "Hot (>85°F)", "avgPoints": 215.7, "games": 78 }
+      {
+        "label": "Frigid (<35\u00b0F)",
+        "avgPoints": 208.2,
+        "games": 132
+      },
+      {
+        "label": "Cool (35-55\u00b0F)",
+        "avgPoints": 213.6,
+        "games": 198
+      },
+      {
+        "label": "Mild (55-70\u00b0F)",
+        "avgPoints": 218.8,
+        "games": 236
+      },
+      {
+        "label": "Warm (70-85\u00b0F)",
+        "avgPoints": 221.4,
+        "games": 176
+      },
+      {
+        "label": "Hot (>85\u00b0F)",
+        "avgPoints": 215.7,
+        "games": 78
+      }
     ]
   },
   "nightlifeEffect": {
     "tiers": [
-      { "label": "Sparse (0-5 venues)", "winPct": 0.524, "pointDiff": 2.1 },
-      { "label": "Moderate (6-15)", "winPct": 0.508, "pointDiff": 0.4 },
-      { "label": "Heavy (16-30)", "winPct": 0.493, "pointDiff": -1.2 },
-      { "label": "Very heavy (31+)", "winPct": 0.471, "pointDiff": -3.6 }
+      {
+        "label": "Sparse (0-5 venues)",
+        "winPct": 0.524,
+        "pointDiff": 2.1
+      },
+      {
+        "label": "Moderate (6-15)",
+        "winPct": 0.508,
+        "pointDiff": 0.4
+      },
+      {
+        "label": "Heavy (16-30)",
+        "winPct": 0.493,
+        "pointDiff": -1.2
+      },
+      {
+        "label": "Very heavy (31+)",
+        "winPct": 0.471,
+        "pointDiff": -3.6
+      }
     ]
   },
   "mascotStrength": {
     "categories": [
-      { "label": "Dog mascots", "winPct": 0.547, "teams": 7, "titles": 9 },
-      { "label": "Cat mascots", "winPct": 0.512, "teams": 6, "titles": 7 }
+      {
+        "label": "Dog mascots",
+        "winPct": 0.547,
+        "teams": 7,
+        "titles": 9
+      },
+      {
+        "label": "Cat mascots",
+        "winPct": 0.512,
+        "teams": 6,
+        "titles": 7
+      }
+    ]
+  },
+  "astrologyAlignment": {
+    "clusters": [
+      {
+        "label": "Fire signs (Aries/Leo/Sagittarius)",
+        "paceBoost": 2.7,
+        "vibeScore": 74,
+        "teams": 9
+      },
+      {
+        "label": "Earth signs (Taurus/Virgo/Capricorn)",
+        "paceBoost": -1.9,
+        "vibeScore": 61,
+        "teams": 7
+      },
+      {
+        "label": "Air signs (Gemini/Libra/Aquarius)",
+        "paceBoost": 1.1,
+        "vibeScore": 69,
+        "teams": 8
+      },
+      {
+        "label": "Water signs (Cancer/Scorpio/Pisces)",
+        "paceBoost": -0.6,
+        "vibeScore": 66,
+        "teams": 6
+      }
+    ]
+  },
+  "coffeeConsumption": {
+    "levels": [
+      {
+        "label": "Decaf devotees",
+        "avgSleepHours": 7.8,
+        "winPct": 0.521
+      },
+      {
+        "label": "One-cup traditionalists",
+        "avgSleepHours": 7.1,
+        "winPct": 0.509
+      },
+      {
+        "label": "Espresso loyalists",
+        "avgSleepHours": 6.5,
+        "winPct": 0.486
+      },
+      {
+        "label": "Cold brew experimenters",
+        "avgSleepHours": 6.2,
+        "winPct": 0.478
+      }
+    ],
+    "sampleSize": 420
+  },
+  "playlistMood": {
+    "moods": [
+      {
+        "label": "Lo-fi focus",
+        "games": 138,
+        "pointDiff": 3.2
+      },
+      {
+        "label": "Synthwave nostalgia",
+        "games": 112,
+        "pointDiff": 1.4
+      },
+      {
+        "label": "90s R&B",
+        "games": 124,
+        "pointDiff": -0.8
+      },
+      {
+        "label": "Podcasts only",
+        "games": 86,
+        "pointDiff": -2.5
+      }
+    ]
+  },
+  "airportDelayIndex": {
+    "ranking": [
+      {
+        "label": "Express hubs (<10 min avg delay)",
+        "delayMinutes": 7.2,
+        "winPct": 0.534
+      },
+      {
+        "label": "Patience required (10-20 min)",
+        "delayMinutes": 14.6,
+        "winPct": 0.506
+      },
+      {
+        "label": "Chronic delays (>20 min)",
+        "delayMinutes": 23.1,
+        "winPct": 0.471
+      }
+    ],
+    "note": "Based on DOT punctuality reports for charter departures."
+  },
+  "cityTransitEffect": {
+    "tiers": [
+      {
+        "label": "Subway saturation",
+        "avgTurnovers": 12.4,
+        "sampleSize": 410
+      },
+      {
+        "label": "Light-rail reliance",
+        "avgTurnovers": 13.1,
+        "sampleSize": 268
+      },
+      {
+        "label": "Carpool corridors",
+        "avgTurnovers": 14.8,
+        "sampleSize": 301
+      }
+    ]
+  },
+  "lunarPhaseEnergy": {
+    "phases": [
+      {
+        "label": "New moon",
+        "fgPct": 0.482,
+        "games": 96
+      },
+      {
+        "label": "Waxing half",
+        "fgPct": 0.488,
+        "games": 118
+      },
+      {
+        "label": "Full moon",
+        "fgPct": 0.475,
+        "games": 104
+      },
+      {
+        "label": "Waning crescent",
+        "fgPct": 0.469,
+        "games": 89
+      }
     ]
   }
 }
