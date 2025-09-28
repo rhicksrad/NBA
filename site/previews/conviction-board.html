@@ -2,53 +2,245 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="2025-26 preseason conviction board derived from the 2024-25 baseline." />
     <title>2025-26 Conviction Board</title>
-    <style>
-      body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 2rem; }
-      table { border-collapse: collapse; width: 100%; }
-      th, td { border: 1px solid #ccc; padding: 0.5rem; text-align: left; }
-      th { background: #f5f5f5; }
-      caption { font-size: 1.5rem; margin-bottom: 1rem; font-weight: bold; }
-    </style>
+    <link rel="stylesheet" href="../styles/hub.css" />
+    <link rel="stylesheet" href="../styles/previews.css" />
   </head>
   <body>
-    <table>
-      <caption>2025-26 League Conviction Board</caption>
-      <thead>
-        <tr><th>Rank</th><th>Team</th><th>Score</th><th>Status</th></tr>
-      </thead>
-      <tbody>
-<tr><td>1</td><td>Boston Celtics</td><td>0.891</td><td>Uptrend | Staff intact | Banking on internal growth | Health risk: low</td></tr>
-<tr><td>2</td><td>Oklahoma City Thunder</td><td>0.799</td><td>Uptrend | Staff intact | Banking on internal growth | Health risk: low</td></tr>
-<tr><td>3</td><td>Minnesota Timberwolves</td><td>0.790</td><td>Uptrend | Staff intact | Banking on internal growth | Health risk: low</td></tr>
-<tr><td>4</td><td>Denver Nuggets</td><td>0.784</td><td>Uptrend | Staff intact | Banking on internal growth | Health risk: low</td></tr>
-<tr><td>5</td><td>New York Knicks</td><td>0.760</td><td>Uptrend | Staff intact | Banking on internal growth | Health risk: low</td></tr>
-<tr><td>6</td><td>Dallas Mavericks</td><td>0.748</td><td>Uptrend | Staff intact | Added rim protection | Health risk: low</td></tr>
-<tr><td>7</td><td>Los Angeles Clippers</td><td>0.745</td><td>Uptrend | Staff intact | Banking on internal growth | Health risk: low</td></tr>
-<tr><td>8</td><td>New Orleans Pelicans</td><td>0.739</td><td>Uptrend | Staff intact | Banking on internal growth | Health risk: low</td></tr>
-<tr><td>9</td><td>Philadelphia 76ers</td><td>0.723</td><td>Uptrend | Staff intact | Banking on internal growth | Health risk: low</td></tr>
-<tr><td>10</td><td>Cleveland Cavaliers</td><td>0.716</td><td>Uptrend | Staff intact | Banking on internal growth | Health risk: low</td></tr>
-<tr><td>11</td><td>Milwaukee Bucks</td><td>0.711</td><td>Uptrend | Staff intact | Banking on internal growth | Health risk: low</td></tr>
-<tr><td>12</td><td>Sacramento Kings</td><td>0.707</td><td>Holding | Staff intact | Banking on internal growth | Health risk: low</td></tr>
-<tr><td>13</td><td>Indiana Pacers</td><td>0.707</td><td>Holding | Staff intact | Banking on internal growth | Health risk: low</td></tr>
-<tr><td>14</td><td>Los Angeles Lakers</td><td>0.702</td><td>Holding | Staff intact | Added ball handling | Health risk: low</td></tr>
-<tr><td>15</td><td>Phoenix Suns</td><td>0.700</td><td>Holding | Staff intact | Banking on internal growth | Health risk: low</td></tr>
-<tr><td>16</td><td>Orlando Magic</td><td>0.693</td><td>Holding | Staff intact | Banking on internal growth | Health risk: low</td></tr>
-<tr><td>17</td><td>Golden State Warriors</td><td>0.677</td><td>Holding | Staff intact | Banking on internal growth | Health risk: low</td></tr>
-<tr><td>18</td><td>Miami Heat</td><td>0.673</td><td>Holding | Staff intact | Banking on internal growth | Health risk: low</td></tr>
-<tr><td>19</td><td>Houston Rockets</td><td>0.652</td><td>Holding | Staff intact | Banking on internal growth | Health risk: low</td></tr>
-<tr><td>20</td><td>Chicago Bulls</td><td>0.613</td><td>Holding | Staff intact | Banking on internal growth | Health risk: low</td></tr>
-<tr><td>21</td><td>Atlanta Hawks</td><td>0.594</td><td>Holding | Staff intact | Banking on internal growth | Health risk: low</td></tr>
-<tr><td>22</td><td>Brooklyn Nets</td><td>0.546</td><td>Rebuild | Staff intact | Banking on internal growth | Health risk: low</td></tr>
-<tr><td>23</td><td>Utah Jazz</td><td>0.512</td><td>Rebuild | Staff intact | Banking on internal growth | Health risk: low</td></tr>
-<tr><td>24</td><td>Memphis Grizzlies</td><td>0.488</td><td>Rebuild | Staff intact | Banking on internal growth | Health risk: low</td></tr>
-<tr><td>25</td><td>Toronto Raptors</td><td>0.468</td><td>Rebuild | Staff intact | Banking on internal growth | Health risk: low</td></tr>
-<tr><td>26</td><td>Portland Trail Blazers</td><td>0.421</td><td>Rebuild | Staff intact | Banking on internal growth | Health risk: low</td></tr>
-<tr><td>27</td><td>Charlotte Hornets</td><td>0.418</td><td>Rebuild | Staff intact | Banking on internal growth | Health risk: low</td></tr>
-<tr><td>28</td><td>San Antonio Spurs</td><td>0.415</td><td>Rebuild | Staff intact | Banking on internal growth | Health risk: low</td></tr>
-<tr><td>29</td><td>Washington Wizards</td><td>0.374</td><td>Rebuild | Staff intact | Banking on internal growth | Health risk: low</td></tr>
-<tr><td>30</td><td>Detroit Pistons</td><td>0.361</td><td>Rebuild | Staff intact | Banking on internal growth | Health risk: low</td></tr>
-      </tbody>
-    </table>
+    <div class="site-frame">
+
+      <header class="site-header">
+        <div class="hub-nav">
+          <a class="brand" href="../../public/index.html">
+            <span class="brand__logo" aria-hidden="true">
+  <svg class="brand__logo-icon" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" focusable="false">
+    <defs>
+      <linearGradient id="brandLogoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#1552F0" />
+        <stop offset="50%" stop-color="#2161FF" />
+        <stop offset="100%" stop-color="#E03143" />
+      </linearGradient>
+    </defs>
+    <rect x="2" y="2" width="60" height="60" rx="11" fill="url(#brandLogoGradient)" />
+    <path fill="#FFFFFF" d="M16 48V16h6.4c4.2 0 6.6 2.1 6.6 5.8 0 2.7-1.4 4.6-3.4 5.5 2.7.8 4.5 3.1 4.5 6.6 0 4.6-3 7.5-7.7 7.5H16Zm6.1-19c2.1 0 3.3-1.2 3.3-3.2 0-2-1.2-3-3.4-3H19V29h3.1Zm.4 12.4c2.4 0 3.8-1.3 3.8-3.7 0-2.4-1.5-3.7-3.9-3.7H19v7.4h3.5ZM34 48V16h6.5l5.2 20.5L50.9 16H57v32h-4.7V25.4L48.3 48h-4.4l-4-22.6V48H34Z" />
+  </svg>
+</span>
+            <span class="brand__wordmark"><span class="brand__wordmark-accent">NBA</span> Intelligence Hub</span>
+          </a>
+          <nav class="nav-links">
+            <a href="../index.html">Team previews</a>
+            <a class="active" href="conviction-board.html">Conviction board</a>
+            <a href="../../public/index.html">Back to hub</a>
+          </nav>
+        </div>
+      </header>
+      <main class="preview-page">
+        <section class="preview-hero preview-hero--board">
+          <span class="chip chip--accent">Power index</span>
+          <h1>2025-26 conviction board</h1>
+          <p class="lead">Our 2025-26 preseason ladder blends the 2024-25 production baseline with current health intel.</p>
+        </section>
+        <section class="preview-table-card">
+          <table class="preview-table">
+            <thead>
+              <tr>
+                <th scope="col">Rank</th>
+                <th scope="col">Team</th>
+                <th scope="col">Score</th>
+                <th scope="col">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="preview-table__rank">#1</td>
+                <td>Boston Celtics</td>
+                <td>0.891</td>
+                <td>Uptrend | Staff intact | Banking on internal growth | Health risk: low</td>
+              </tr>
+              <tr>
+                <td class="preview-table__rank">#2</td>
+                <td>Oklahoma City Thunder</td>
+                <td>0.799</td>
+                <td>Uptrend | Staff intact | Banking on internal growth | Health risk: low</td>
+              </tr>
+              <tr>
+                <td class="preview-table__rank">#3</td>
+                <td>Minnesota Timberwolves</td>
+                <td>0.790</td>
+                <td>Uptrend | Staff intact | Banking on internal growth | Health risk: low</td>
+              </tr>
+              <tr>
+                <td class="preview-table__rank">#4</td>
+                <td>Denver Nuggets</td>
+                <td>0.784</td>
+                <td>Uptrend | Staff intact | Banking on internal growth | Health risk: low</td>
+              </tr>
+              <tr>
+                <td class="preview-table__rank">#5</td>
+                <td>New York Knicks</td>
+                <td>0.760</td>
+                <td>Uptrend | Staff intact | Banking on internal growth | Health risk: low</td>
+              </tr>
+              <tr>
+                <td class="preview-table__rank">#6</td>
+                <td>Dallas Mavericks</td>
+                <td>0.748</td>
+                <td>Uptrend | Staff intact | Added rim protection | Health risk: low</td>
+              </tr>
+              <tr>
+                <td class="preview-table__rank">#7</td>
+                <td>Los Angeles Clippers</td>
+                <td>0.745</td>
+                <td>Uptrend | Staff intact | Banking on internal growth | Health risk: low</td>
+              </tr>
+              <tr>
+                <td class="preview-table__rank">#8</td>
+                <td>New Orleans Pelicans</td>
+                <td>0.739</td>
+                <td>Uptrend | Staff intact | Banking on internal growth | Health risk: low</td>
+              </tr>
+              <tr>
+                <td class="preview-table__rank">#9</td>
+                <td>Philadelphia 76ers</td>
+                <td>0.723</td>
+                <td>Uptrend | Staff intact | Banking on internal growth | Health risk: low</td>
+              </tr>
+              <tr>
+                <td class="preview-table__rank">#10</td>
+                <td>Cleveland Cavaliers</td>
+                <td>0.716</td>
+                <td>Uptrend | Staff intact | Banking on internal growth | Health risk: low</td>
+              </tr>
+              <tr>
+                <td class="preview-table__rank">#11</td>
+                <td>Milwaukee Bucks</td>
+                <td>0.711</td>
+                <td>Uptrend | Staff intact | Banking on internal growth | Health risk: low</td>
+              </tr>
+              <tr>
+                <td class="preview-table__rank">#12</td>
+                <td>Sacramento Kings</td>
+                <td>0.707</td>
+                <td>Holding | Staff intact | Banking on internal growth | Health risk: low</td>
+              </tr>
+              <tr>
+                <td class="preview-table__rank">#13</td>
+                <td>Indiana Pacers</td>
+                <td>0.707</td>
+                <td>Holding | Staff intact | Banking on internal growth | Health risk: low</td>
+              </tr>
+              <tr>
+                <td class="preview-table__rank">#14</td>
+                <td>Los Angeles Lakers</td>
+                <td>0.702</td>
+                <td>Holding | Staff intact | Added ball handling | Health risk: low</td>
+              </tr>
+              <tr>
+                <td class="preview-table__rank">#15</td>
+                <td>Phoenix Suns</td>
+                <td>0.700</td>
+                <td>Holding | Staff intact | Banking on internal growth | Health risk: low</td>
+              </tr>
+              <tr>
+                <td class="preview-table__rank">#16</td>
+                <td>Orlando Magic</td>
+                <td>0.693</td>
+                <td>Holding | Staff intact | Banking on internal growth | Health risk: low</td>
+              </tr>
+              <tr>
+                <td class="preview-table__rank">#17</td>
+                <td>Golden State Warriors</td>
+                <td>0.677</td>
+                <td>Holding | Staff intact | Banking on internal growth | Health risk: low</td>
+              </tr>
+              <tr>
+                <td class="preview-table__rank">#18</td>
+                <td>Miami Heat</td>
+                <td>0.673</td>
+                <td>Holding | Staff intact | Banking on internal growth | Health risk: low</td>
+              </tr>
+              <tr>
+                <td class="preview-table__rank">#19</td>
+                <td>Houston Rockets</td>
+                <td>0.652</td>
+                <td>Holding | Staff intact | Banking on internal growth | Health risk: low</td>
+              </tr>
+              <tr>
+                <td class="preview-table__rank">#20</td>
+                <td>Chicago Bulls</td>
+                <td>0.613</td>
+                <td>Holding | Staff intact | Banking on internal growth | Health risk: low</td>
+              </tr>
+              <tr>
+                <td class="preview-table__rank">#21</td>
+                <td>Atlanta Hawks</td>
+                <td>0.594</td>
+                <td>Holding | Staff intact | Banking on internal growth | Health risk: low</td>
+              </tr>
+              <tr>
+                <td class="preview-table__rank">#22</td>
+                <td>Brooklyn Nets</td>
+                <td>0.546</td>
+                <td>Rebuild | Staff intact | Banking on internal growth | Health risk: low</td>
+              </tr>
+              <tr>
+                <td class="preview-table__rank">#23</td>
+                <td>Utah Jazz</td>
+                <td>0.512</td>
+                <td>Rebuild | Staff intact | Banking on internal growth | Health risk: low</td>
+              </tr>
+              <tr>
+                <td class="preview-table__rank">#24</td>
+                <td>Memphis Grizzlies</td>
+                <td>0.488</td>
+                <td>Rebuild | Staff intact | Banking on internal growth | Health risk: low</td>
+              </tr>
+              <tr>
+                <td class="preview-table__rank">#25</td>
+                <td>Toronto Raptors</td>
+                <td>0.468</td>
+                <td>Rebuild | Staff intact | Banking on internal growth | Health risk: low</td>
+              </tr>
+              <tr>
+                <td class="preview-table__rank">#26</td>
+                <td>Portland Trail Blazers</td>
+                <td>0.421</td>
+                <td>Rebuild | Staff intact | Banking on internal growth | Health risk: low</td>
+              </tr>
+              <tr>
+                <td class="preview-table__rank">#27</td>
+                <td>Charlotte Hornets</td>
+                <td>0.418</td>
+                <td>Rebuild | Staff intact | Banking on internal growth | Health risk: low</td>
+              </tr>
+              <tr>
+                <td class="preview-table__rank">#28</td>
+                <td>San Antonio Spurs</td>
+                <td>0.415</td>
+                <td>Rebuild | Staff intact | Banking on internal growth | Health risk: low</td>
+              </tr>
+              <tr>
+                <td class="preview-table__rank">#29</td>
+                <td>Washington Wizards</td>
+                <td>0.374</td>
+                <td>Rebuild | Staff intact | Banking on internal growth | Health risk: low</td>
+              </tr>
+              <tr>
+                <td class="preview-table__rank">#30</td>
+                <td>Detroit Pistons</td>
+                <td>0.361</td>
+                <td>Rebuild | Staff intact | Banking on internal growth | Health risk: low</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="preview-table__footnote">Scores normalize to a 0–1 scale anchored to last season's results and current availability grades.</p>
+          <div class="preview-table__cta">
+            <a class="button-link" href="../index.html">← Back to team previews</a>
+          </div>
+        </section>
+      </main>
+    </div>
   </body>
 </html>

@@ -1,0 +1,268 @@
+.preview-page {
+  display: grid;
+  gap: clamp(1.5rem, 3vw, 2.6rem);
+  padding-bottom: 3rem;
+}
+
+.preview-hero {
+  display: grid;
+  gap: clamp(0.75rem, 2vw, 1.2rem);
+  padding: clamp(1.8rem, 4vw, 2.6rem);
+  border-radius: var(--radius-lg);
+  border: 1px solid color-mix(in srgb, var(--royal) 18%, transparent);
+  background:
+    linear-gradient(140deg, rgba(17, 86, 214, 0.18), rgba(244, 181, 63, 0.16)),
+    color-mix(in srgb, rgba(255, 255, 255, 0.9) 70%, rgba(242, 246, 255, 0.92) 30%);
+  box-shadow: var(--shadow-soft);
+}
+
+.preview-hero--board {
+  background:
+    linear-gradient(135deg, rgba(17, 86, 214, 0.24), rgba(239, 61, 91, 0.16)),
+    color-mix(in srgb, rgba(255, 255, 255, 0.92) 75%, rgba(242, 246, 255, 0.88) 25%);
+}
+
+.preview-hero h1 {
+  font-size: clamp(1.9rem, 4.5vw, 2.5rem);
+}
+
+.preview-hero .lead {
+  font-size: 1.05rem;
+  color: var(--text-subtle);
+  max-width: 62ch;
+}
+
+.preview-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.button-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0.48rem 1.05rem;
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-size: 0.82rem;
+  background: linear-gradient(135deg, rgba(17, 86, 214, 0.92), rgba(31, 123, 255, 0.78));
+  color: #fff;
+  box-shadow: 0 14px 26px rgba(17, 86, 214, 0.28);
+  border: 1px solid transparent;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease, color 0.18s ease;
+}
+
+.button-link:hover,
+.button-link:focus-visible {
+  transform: translateY(-1px);
+  box-shadow: 0 18px 32px rgba(17, 86, 214, 0.32);
+  outline: none;
+}
+
+.button-link--ghost {
+  background: color-mix(in srgb, var(--surface-alt) 70%, rgba(17, 86, 214, 0.1) 30%);
+  color: var(--text-strong);
+  border-color: color-mix(in srgb, var(--royal) 20%, transparent);
+  box-shadow: var(--shadow-soft);
+}
+
+.button-link--ghost:hover,
+.button-link--ghost:focus-visible {
+  background: color-mix(in srgb, var(--surface-alt) 55%, rgba(17, 86, 214, 0.18) 45%);
+  color: var(--navy);
+}
+
+.preview-cta {
+  font-size: 0.85rem;
+  padding: 0.6rem 1.35rem;
+}
+
+.preview-grid {
+  display: grid;
+  gap: clamp(1rem, 2.6vw, 1.6rem);
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.preview-card {
+  display: grid;
+  gap: 0.65rem;
+  padding: clamp(1.1rem, 2.4vw, 1.6rem);
+  border-radius: var(--radius-lg);
+  border: 1px solid color-mix(in srgb, var(--royal) 14%, transparent);
+  background: color-mix(in srgb, rgba(255, 255, 255, 0.92) 70%, rgba(242, 246, 255, 0.92) 30%);
+  box-shadow: var(--shadow-soft);
+  min-height: 230px;
+}
+
+.preview-card__header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.preview-card__rank {
+  font-weight: 700;
+  font-size: 1.2rem;
+  letter-spacing: 0.08em;
+  color: var(--royal);
+}
+
+.preview-card__header h2 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.preview-card__score {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--text-subtle);
+}
+
+.preview-card__status {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--text-subtle);
+}
+
+.preview-card__link {
+  margin-top: auto;
+}
+
+.preview-table-card {
+  display: grid;
+  gap: 1rem;
+  padding: clamp(1.4rem, 3vw, 2rem);
+  border-radius: var(--radius-lg);
+  border: 1px solid color-mix(in srgb, var(--royal) 18%, transparent);
+  background:
+    linear-gradient(150deg, rgba(17, 86, 214, 0.18), rgba(17, 86, 214, 0) 60%),
+    color-mix(in srgb, rgba(255, 255, 255, 0.92) 72%, rgba(242, 246, 255, 0.94) 28%);
+  box-shadow: var(--shadow-soft);
+}
+
+.preview-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.preview-table th,
+.preview-table td {
+  padding: 0.6rem 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid color-mix(in srgb, var(--border) 75%, transparent);
+}
+
+.preview-table thead th {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: rgba(11, 37, 69, 0.68);
+}
+
+.preview-table__rank {
+  font-weight: 700;
+  color: var(--royal);
+}
+
+.preview-table__footnote {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--text-subtle);
+}
+
+.preview-table__cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.team-preview {
+  display: grid;
+  gap: clamp(1.2rem, 2.8vw, 1.8rem);
+  padding: clamp(1.6rem, 3.2vw, 2.2rem);
+  border-radius: var(--radius-lg);
+  border: 1px solid color-mix(in srgb, var(--royal) 18%, transparent);
+  background:
+    linear-gradient(155deg, rgba(17, 86, 214, 0.16), rgba(244, 181, 63, 0.12)),
+    color-mix(in srgb, rgba(255, 255, 255, 0.92) 70%, rgba(242, 246, 255, 0.92) 30%);
+  box-shadow: var(--shadow-soft);
+}
+
+.team-preview__header {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.team-preview__header p {
+  margin: 0;
+  font-size: 1.02rem;
+  color: var(--text-subtle);
+}
+
+.team-preview__highlights {
+  display: grid;
+  gap: clamp(0.8rem, 2.4vw, 1.4rem);
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.summary-card {
+  display: grid;
+  gap: 0.45rem;
+  padding: 1rem 1.15rem;
+  border-radius: var(--radius-md);
+  border: 1px solid color-mix(in srgb, var(--royal) 16%, transparent);
+  background: color-mix(in srgb, rgba(255, 255, 255, 0.94) 68%, rgba(242, 246, 255, 0.96) 32%);
+  box-shadow: var(--shadow-soft);
+}
+
+.summary-card h2 {
+  margin: 0;
+  font-size: 0.9rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(11, 37, 69, 0.78);
+}
+
+.summary-card p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--text-subtle);
+}
+
+.team-preview__footer {
+  display: grid;
+  gap: 0.75rem;
+  border-top: 1px solid color-mix(in srgb, var(--border) 75%, transparent);
+  padding-top: 1rem;
+}
+
+.team-preview__season {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--text-subtle);
+}
+
+.team-preview__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+@media (max-width: 720px) {
+  .preview-hero,
+  .preview-table-card,
+  .team-preview {
+    padding: 1.4rem;
+  }
+
+  .preview-card {
+    min-height: auto;
+  }
+}

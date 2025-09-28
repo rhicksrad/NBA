@@ -36,11 +36,12 @@ async function validateLinks() {
 
   const teams = await loadTeams();
   for (const team of teams) {
-    const expected = `previews/${team.tricode}.md`;
-    if (!links.has(expected)) {
+    const htmlPath = `previews/${team.tricode}.html`;
+    if (!links.has(htmlPath)) {
       throw new Error(`Missing link for ${team.tricode} in index.html`);
     }
-    await ensureFile(`site/${expected}`);
+    await ensureFile(`site/${htmlPath}`);
+    await ensureFile(`site/previews/${team.tricode}.md`);
   }
 
   await ensureFile("site/previews/conviction-board.html");

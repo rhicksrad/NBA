@@ -1,5 +1,14 @@
 import { LeagueContext, TeamRecord } from "../../scripts/lib/types.js";
 
+export interface TeamPreviewContent {
+  heading: string;
+  introParagraphs: string[];
+  coreStrength: string;
+  primaryRisk: string;
+  swingFactor: string;
+  seasonLabel: string;
+}
+
 const RISK_WORDS: Record<"low" | "medium" | "high", string> = {
   low: "low",
   medium: "medium",
@@ -103,18 +112,28 @@ function corePlayers(team: TeamRecord): string {
   return `The core trio of ${formatList(core)} gives the staff a clear identity to start from.`;
 }
 
+export function buildTeamPreviewContent(team: TeamRecord, ctx: LeagueContext): TeamPreviewContent {
+  return {
+    heading: `${team.market} ${team.name}`,
+    introParagraphs: [corePlayers(team), summarizeAdditions(team), summarizeLosses(team)],
+    coreStrength: coreStrength(team),
+    primaryRisk: primaryRisk(team, ctx),
+    swingFactor: swingFactor(team),
+    seasonLabel: ctx.season,
+  };
+}
+
 export function renderTeamPreview(team: TeamRecord, ctx: LeagueContext): string {
+  const content = buildTeamPreviewContent(team, ctx);
   const lines: string[] = [];
-  lines.push(`# ${team.market} ${team.name}`);
+  lines.push(`# ${content.heading}`);
   lines.push("");
-  lines.push(corePlayers(team));
-  lines.push(summarizeAdditions(team));
-  lines.push(summarizeLosses(team));
+  lines.push(...content.introParagraphs);
   lines.push("");
-  lines.push(`**Core strength:** ${coreStrength(team)}`);
-  lines.push(`**Primary risk:** ${primaryRisk(team, ctx)}`);
-  lines.push(`**Swing factor:** ${swingFactor(team)}`);
+  lines.push(`**Core strength:** ${content.coreStrength}`);
+  lines.push(`**Primary risk:** ${content.primaryRisk}`);
+  lines.push(`**Swing factor:** ${content.swingFactor}`);
   lines.push("");
-  lines.push(`_Season: ${ctx.season}_`);
+  lines.push(`_Season: ${content.seasonLabel}_`);
   return lines.join("\n");
 }
