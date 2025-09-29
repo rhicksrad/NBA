@@ -2,7 +2,11 @@ import { readFile, writeFile, mkdir, rm } from "fs/promises";
 import path from "path";
 import { fileURLToPath, pathToFileURL } from "url";
 import { parse as parseYaml } from "yaml";
-import { fetchBallDontLieRosters, BallDontLieRosters } from "../fetch/bdl_rosters.js";
+import {
+  fetchBallDontLieRosters,
+  BallDontLieRosters,
+  MAX_TEAM_ACTIVE,
+} from "../fetch/bdl_rosters.js";
 import { fetchBbrRosters, BbrRosterResult } from "../fetch/bbr_rosters.js";
 import { fetchNbaStatsRosters } from "../fetch/nba_stats_rosters.js";
 import { SEASON } from "../lib/season.js";
@@ -30,6 +34,7 @@ const CANONICAL_DIR = path.join(ROOT, "data/2025-26/canonical");
 const OVERRIDES_PATH = path.join(ROOT, "data/2025-26/manual/overrides.yaml");
 const ROSTER_REFERENCE_PATH = path.join(ROOT, "data/2025-26/manual/roster_reference.json");
 const BREF_MISSING_PATH = path.join(ROOT, "data/2025-26/manual/bref_missing.json");
+const MIN_TEAM_ACTIVE = 10;
 
 function resolveEndYear(season: string): number {
   const [start, endFragment] = season.split("-");
@@ -69,6 +74,21 @@ export async function buildCanonicalData(options: Partial<BuildOptions> = {}): P
   ]);
 
   const ballDontLie = options.ballDontLie ?? (await fetchBallDontLieRosters());
+
+  for (const metadata of TEAM_METADATA) {
+    const team = ballDontLie.teams[metadata.tricode];
+    const rosterSize = team?.roster?.length ?? 0;
+    if (rosterSize < MIN_TEAM_ACTIVE) {
+      throw new Error(
+        `Roster too small for team ${metadata.teamId ?? metadata.tricode}: ${rosterSize}`
+      );
+    }
+    if (rosterSize > MAX_TEAM_ACTIVE) {
+      console.warn(
+        `Roster unusually large for team ${metadata.teamId ?? metadata.tricode}: ${rosterSize} (capped at ${MAX_TEAM_ACTIVE})`
+      );
+    }
+  }
 
   const seasonEndYear = resolveEndYear(SEASON);
   const useBref = process.env.USE_BREF !== "0";
@@ -125,11 +145,6 @@ export async function buildCanonicalData(options: Partial<BuildOptions> = {}): P
     overrides,
     fallbackPlayers,
   });
-
-  const total = merged.players.length;
-  if (total < 360 || total > 600) {
-    throw new Error(`League player total ${total} outside expected range`);
-  }
 
   return merged;
 }

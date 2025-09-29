@@ -44,15 +44,22 @@ export async function fetchBallDontLieRosters(): Promise<BallDontLieRosters> {
     nbaTeams.push({ meta: teamMeta, bdl: bdlTeam });
   }
 
+  // Pull active rosters using shared bdl.js helper
   const rosterMap = await getRosterMapByTeamIds(nbaTeams.map((entry) => entry.bdl.id));
+
   const teams: Record<string, SourceTeamRecord> = {};
   const players: Record<string, SourcePlayerRecord> = {};
   const teamAbbrs: string[] = [];
+  const uniquePlayerKeys = new Set<string>();
+
   let totalPlayers = 0;
 
   for (const entry of nbaTeams) {
     const { meta, bdl } = entry;
-    const roster = (rosterMap[bdl.id] ?? []).map((player) => toSourcePlayer(player, meta.teamId, meta.tricode));
+    const roster = (rosterMap[bdl.id] ?? []).map((player) =>
+      toSourcePlayer(player, meta.teamId, meta.tricode)
+    );
+
     totalPlayers += roster.length;
 
     teams[meta.tricode] = {
@@ -66,7 +73,9 @@ export async function fetchBallDontLieRosters(): Promise<BallDontLieRosters> {
     };
 
     for (const player of roster) {
-      players[player.playerId ?? player.name] = player;
+      const key = player.playerId ?? player.name;
+      players[key] = player;
+      uniquePlayerKeys.add(key);
     }
 
     teamAbbrs.push(meta.tricode);
