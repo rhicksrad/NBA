@@ -1286,11 +1286,446 @@ function buildAtlasMetrics(catalog, goatSource) {
   return { byId, byName };
 }
 
+function escapeHtml(value) {
+  if (value === null || value === undefined) {
+    return '';
+  }
+  return String(value).replace(/[&<>"']/g, (char) => {
+    switch (char) {
+      case '&':
+        return '&amp;';
+      case '<':
+        return '&lt;';
+      case '>':
+        return '&gt;';
+      case '"':
+        return '&quot;';
+      case "'":
+        return '&#39;';
+      default:
+        return char;
+    }
+  });
+}
+
+function formatRelativeTime(iso) {
+  if (!iso) {
+    return null;
+  }
+  const timestamp = Date.parse(iso);
+  if (Number.isNaN(timestamp)) {
+    return null;
+  }
+  const now = Date.now();
+  const diffSeconds = Math.round((timestamp - now) / 1000);
+  const divisions = [
+    { amount: 60, unit: 'second' },
+    { amount: 60, unit: 'minute' },
+    { amount: 24, unit: 'hour' },
+    { amount: 7, unit: 'day' },
+    { amount: 4.34524, unit: 'week' },
+    { amount: 12, unit: 'month' },
+    { amount: Number.POSITIVE_INFINITY, unit: 'year' },
+  ];
+  const formatter = new Intl.RelativeTimeFormat('en', { numeric: 'auto' });
+  let duration = diffSeconds;
+  for (const division of divisions) {
+    if (Math.abs(duration) < division.amount) {
+      return formatter.format(Math.round(duration), division.unit);
+    }
+    duration /= division.amount;
+  }
+  return formatter.format(Math.round(duration), 'year');
+}
+
+function formatBdlWeight(weight) {
+  if (weight === null || weight === undefined) {
+    return null;
+  }
+  const trimmed = String(weight).trim();
+  if (!trimmed) {
+    return null;
+  }
+  if (/^\d+(\.\d+)?$/.test(trimmed)) {
+    return `${trimmed} lb`;
+  }
+  return trimmed;
+}
+
+function buildFullName(firstName, lastName) {
+  return [firstName, lastName]
+    .filter((part) => part && String(part).trim().length)
+    .map((part) => String(part).trim())
+    .join(' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function initializeRosterApp({
+  container,
+  initialDoc = null,
+  loadDoc,
+  onDocLoaded,
+  selectPlayerByBdlId,
+  getSelectableBdlIds,
+}) {
+  if (!container) {
+    return {
+      highlight() {},
+    };
+  }
+
+  const params = new URLSearchParams(window.location.search);
+  let searchTerm = params.get('search') ?? '';
+  let teamFilter = (params.get('team') ?? '').toUpperCase();
+  let doc = initialDoc;
+  let loading = false;
+  let error = null;
+  let activeBdlId = null;
+  let lastHighlightedId = null;
+
+  const updateUrl = (updates) => {
+    const url = new URL(window.location.href);
+    Object.entries(updates).forEach(([key, value]) => {
+      if (value && value.length) {
+        url.searchParams.set(key, value);
+      } else {
+        url.searchParams.delete(key);
+      }
+    });
+    window.history.replaceState({}, '', url.toString());
+  };
+
+  const matchesSearch = (player) => {
+    if (!searchTerm) {
+      return true;
+    }
+    const lower = searchTerm.toLowerCase();
+    const fullName = buildFullName(player?.first_name, player?.last_name).toLowerCase();
+    const jersey = player?.jersey_number ? `#${player.jersey_number}`.toLowerCase() : '';
+    return fullName.includes(lower) || jersey.includes(lower);
+  };
+
+  const findTeamForBdlId = (bdlId) => {
+    if (!doc?.teams) {
+      return null;
+    }
+    const idString = String(bdlId);
+    for (const team of doc.teams) {
+      if (!Array.isArray(team?.roster)) {
+        continue;
+      }
+      const match = team.roster.find((player) => String(player?.id) === idString);
+      if (match) {
+        return team;
+      }
+    }
+    return null;
+  };
+
+  const syncActiveHighlight = (shouldScroll) => {
+    if (!activeBdlId) {
+      lastHighlightedId = null;
+    }
+    const buttons = container.querySelectorAll('[data-bdl-player-id]');
+    let scrolled = false;
+    buttons.forEach((button) => {
+      const id = button.getAttribute('data-bdl-player-id');
+      const isActive = Boolean(activeBdlId) && id === activeBdlId;
+      button.classList.toggle('is-active', isActive);
+      if (isActive && shouldScroll && !scrolled && id !== lastHighlightedId) {
+        button.scrollIntoView({ block: 'nearest' });
+        scrolled = true;
+      }
+    });
+    lastHighlightedId = activeBdlId;
+  };
+
+  const highlightRosterPlayer = (bdlId, options = {}) => {
+    const { scroll = false } = options;
+    activeBdlId = bdlId ? String(bdlId) : null;
+    syncActiveHighlight(scroll);
+  };
+
+  const handleRefresh = async () => {
+    if (loading) {
+      return;
+    }
+    if (typeof loadDoc !== 'function') {
+      error = 'Refresh is not available right now.';
+      render();
+      return;
+    }
+    loading = true;
+    error = null;
+    render();
+    try {
+      const nextDoc = await loadDoc();
+      doc = nextDoc ?? null;
+      if (typeof onDocLoaded === 'function') {
+        onDocLoaded(nextDoc ?? null);
+      }
+      loading = false;
+      error = null;
+    } catch (refreshError) {
+      console.error(refreshError);
+      loading = false;
+      error = refreshError?.message || 'Unable to refresh active rosters right now. Please try again later.';
+    }
+    render();
+  };
+
+  const handleRandom = () => {
+    if (typeof selectPlayerByBdlId !== 'function') {
+      return;
+    }
+    const selectableIds = typeof getSelectableBdlIds === 'function' ? getSelectableBdlIds() : [];
+    if (!Array.isArray(selectableIds) || !selectableIds.length) {
+      return;
+    }
+    const randomId = selectableIds[Math.floor(Math.random() * selectableIds.length)];
+    if (!randomId) {
+      return;
+    }
+    const team = findTeamForBdlId(randomId);
+    if (team?.abbreviation && team.abbreviation !== teamFilter) {
+      teamFilter = team.abbreviation;
+    }
+    if (searchTerm) {
+      searchTerm = '';
+    }
+    updateUrl({
+      team: teamFilter || null,
+      search: searchTerm || null,
+    });
+    selectPlayerByBdlId(randomId);
+    highlightRosterPlayer(randomId, { scroll: true });
+    render();
+  };
+
+  const handleContainerClick = (event) => {
+    const button = event.target.closest('[data-bdl-player-id]');
+    if (!button || !container.contains(button)) {
+      return;
+    }
+    const bdlId = button.getAttribute('data-bdl-player-id');
+    if (!bdlId) {
+      return;
+    }
+    if (typeof selectPlayerByBdlId === 'function') {
+      selectPlayerByBdlId(bdlId);
+    }
+    highlightRosterPlayer(bdlId, { scroll: false });
+  };
+
+  container.addEventListener('click', handleContainerClick);
+
+  function attachControls() {
+    const searchInput = container.querySelector('#roster-search');
+    if (searchInput) {
+      searchInput.value = searchTerm;
+      searchInput.addEventListener('input', (event) => {
+        searchTerm = event.target.value || '';
+        updateUrl({ search: searchTerm || null });
+        render();
+      });
+    }
+
+    const teamSelect = container.querySelector('#roster-team');
+    if (teamSelect) {
+      teamSelect.value = teamFilter;
+      teamSelect.addEventListener('change', (event) => {
+        const nextValue = (event.target.value || '').toUpperCase();
+        teamFilter = nextValue;
+        updateUrl({ team: teamFilter || null });
+        render();
+      });
+    }
+
+    const refreshButton = container.querySelector('[data-roster-refresh]');
+    if (refreshButton) {
+      refreshButton.addEventListener('click', handleRefresh);
+    }
+
+    const randomButton = container.querySelector('[data-roster-random]');
+    if (randomButton) {
+      randomButton.addEventListener('click', handleRandom);
+      if (typeof getSelectableBdlIds === 'function') {
+        randomButton.disabled = getSelectableBdlIds().length === 0;
+      }
+    }
+
+    const retryButton = container.querySelector('[data-roster-retry]');
+    if (retryButton) {
+      retryButton.addEventListener('click', handleRefresh);
+    }
+  }
+
+  function render() {
+    if (loading) {
+      container.innerHTML = '<div class="roster-status"><p>Refreshing active rosters…</p></div>';
+      return;
+    }
+
+    if (error) {
+      container.innerHTML = `
+        <div class="roster-status roster-status--error">
+          <p>${escapeHtml(error)}</p>
+          <button type="button" class="roster-button" data-roster-retry>Retry</button>
+        </div>
+      `;
+      attachControls();
+      return;
+    }
+
+    const teams = Array.isArray(doc?.teams) ? doc.teams.slice() : [];
+    const hasTeams = teams.length > 0;
+    const visibleTeams = teams.filter((team) => !teamFilter || team?.abbreviation === teamFilter);
+
+    const sections = visibleTeams
+      .map((team) => {
+        const roster = Array.isArray(team?.roster) ? team.roster.filter(matchesSearch) : [];
+        const items = roster
+          .map((player) => {
+            const fullName = buildFullName(player.first_name, player.last_name) || '—';
+            const jersey = player?.jersey_number ? `#${player.jersey_number}` : '';
+            const pieces = [player?.position || null, jersey || null].filter(Boolean).join(' · ');
+            const vitals = [player?.height || null, formatBdlWeight(player?.weight) || null]
+              .filter(Boolean)
+              .join(' • ');
+            const bdlId = String(player?.id);
+            return `
+              <li>
+                <button type="button" class="roster-player" data-bdl-player-id="${escapeHtml(bdlId)}">
+                  <span class="roster-player__name">${escapeHtml(fullName)}</span>
+                  ${pieces ? `<span class="roster-player__role">${escapeHtml(pieces)}</span>` : ''}
+                  ${vitals ? `<span class="roster-player__meta">${escapeHtml(vitals)}</span>` : ''}
+                </button>
+              </li>
+            `;
+          })
+          .join('');
+
+        const emptyState = roster.length
+          ? ''
+          : '<li class="roster-player roster-player--empty">No players match this filter.</li>';
+
+        const subtitleParts = [];
+        if (team?.abbreviation) {
+          subtitleParts.push(team.abbreviation);
+        }
+        if (Array.isArray(team?.roster)) {
+          subtitleParts.push(`${team.roster.length} players`);
+        }
+        const subtitle = subtitleParts.join(' • ');
+
+        const sectionTitle = team?.full_name || team?.abbreviation || 'Team';
+
+        return `
+          <section class="roster-team" data-team-anchor="${escapeHtml(team?.abbreviation ?? sectionTitle)}">
+            <header class="roster-team__header">
+              <h3>${escapeHtml(sectionTitle)}</h3>
+              <p>${escapeHtml(subtitle || '')}</p>
+            </header>
+            <ul class="roster-list">
+              ${items || emptyState}
+            </ul>
+          </section>
+        `;
+      })
+      .join('');
+
+    let noTeamsMessage = '';
+    if (!hasTeams) {
+      noTeamsMessage = '<div class="roster-status roster-status--empty"><p>Rosters are not cached yet. Use Refresh to try again.</p></div>';
+    } else if (!visibleTeams.length) {
+      noTeamsMessage = '<div class="roster-status roster-status--empty"><p>No teams match the current filter.</p></div>';
+    }
+
+    const timeTitle = doc?.fetched_at
+      ? new Date(doc.fetched_at).toLocaleString()
+      : 'No roster snapshot cached yet';
+    const relativeTime = doc?.fetched_at ? formatRelativeTime(doc.fetched_at) : null;
+    const metaParts = [];
+    metaParts.push(relativeTime ? `Last updated ${relativeTime}` : 'Last updated not yet available');
+    metaParts.push('Source: BallDontLie');
+    if (Number.isFinite(doc?.ttl_hours)) {
+      metaParts.push(`TTL ${doc.ttl_hours}h`);
+    }
+    const metaLine = metaParts.join(' • ');
+
+    const teamOptions = [''].concat(
+      teams
+        .slice()
+        .sort((a, b) => {
+          const left = a?.abbreviation || '';
+          const right = b?.abbreviation || '';
+          return left.localeCompare(right);
+        })
+        .map((team) => team?.abbreviation || ''),
+    );
+
+    const selectableIds = typeof getSelectableBdlIds === 'function' ? getSelectableBdlIds() : [];
+    const randomDisabled = !Array.isArray(selectableIds) || selectableIds.length === 0;
+
+    container.innerHTML = `
+      <div class="roster-controls">
+        <div class="roster-controls__filters">
+          <label class="roster-controls__field">
+            <span class="roster-controls__label">Search</span>
+            <input
+              id="roster-search"
+              class="roster-input"
+              type="search"
+              placeholder="Search by name or jersey"
+              value="${escapeHtml(searchTerm)}"
+              autocomplete="off"
+            />
+          </label>
+          <label class="roster-controls__field">
+            <span class="roster-controls__label">Team</span>
+            <select id="roster-team" class="roster-select">
+              ${teamOptions
+                .map((code) => {
+                  const selected = code === teamFilter ? ' selected' : '';
+                  const label = code || 'All teams';
+                  return `<option value="${escapeHtml(code)}"${selected}>${escapeHtml(label)}</option>`;
+                })
+                .join('')}
+            </select>
+          </label>
+        </div>
+        <div class="roster-controls__meta">
+          <small title="${escapeHtml(timeTitle)}">${escapeHtml(metaLine)}</small>
+          <div class="roster-controls__actions">
+            <button type="button" class="roster-button" data-roster-random${randomDisabled ? ' disabled' : ''}>Surprise me</button>
+            <button type="button" class="roster-button" data-roster-refresh>Refresh</button>
+          </div>
+        </div>
+      </div>
+      <div class="roster-teams">${sections}${noTeamsMessage}</div>
+    `;
+
+    attachControls();
+    syncActiveHighlight(false);
+  }
+
+  render();
+
+  return {
+    highlight: (bdlId, options = {}) => {
+      highlightRosterPlayer(bdlId, options);
+    },
+  };
+}
+
 function initPlayerAtlas() {
   const atlas = document.querySelector('[data-player-profiles]');
   if (!atlas) {
     return;
   }
+
+  const rosterApp = document.getElementById('players-app');
 
   const searchInput = atlas.querySelector('[data-player-search]');
   const clearButton = atlas.querySelector('[data-player-clear]');
@@ -1338,6 +1773,8 @@ function initPlayerAtlas() {
   }
 
   let players = [];
+  const playersById = new Map();
+  const playersByBdlId = new Map();
   let catalog = [];
   let matches = [];
   let activePlayerId = null;
@@ -1347,9 +1784,23 @@ function initPlayerAtlas() {
   let hasError = false;
   let goatLookup = { byId: new Map(), byName: new Map(), recent: [] };
   let atlasMetrics = { byId: new Map(), byName: new Map() };
+  let currentRostersDoc = null;
+  let rosterController = null;
   const defaultEmptyText = empty?.textContent?.trim() ?? '';
   const formatGoatNumber = (value) => (Number.isFinite(value) ? helpers.formatNumber(value, 1) : '—');
   const formatGoatRank = (rank) => `No. ${Number.isFinite(rank) ? helpers.formatNumber(rank, 0) : '—'}`;
+  const ensurePlayerSearchTokens = (player) => {
+    player.searchTokens = buildPlayerTokens(player);
+    player.nameToken = simplifyText(player?.name);
+  };
+  const rebuildPlayerIndexes = () => {
+    playersById.clear();
+    players.forEach((player) => {
+      if (player?.id) {
+        playersById.set(player.id, player);
+      }
+    });
+  };
   const describeGoatScore = (value, rank) => {
     const parts = [];
     parts.push(
@@ -1397,8 +1848,12 @@ function initPlayerAtlas() {
 
   const renderMeta = (player) => {
     const parts = [];
-    if (player?.position) parts.push(player.position);
-    if (player?.team) parts.push(player.team);
+    const position = player?.position || player?.bdl?.position;
+    const jersey = player?.jerseyNumber || player?.bdl?.jersey;
+    const teamName = player?.bdl?.teamName || player?.team;
+    if (position) parts.push(position);
+    if (jersey) parts.push(`#${jersey}`);
+    if (teamName) parts.push(teamName);
     if (player?.era) parts.push(`${player.era} era`);
     if (player?.goatTier) parts.push(`${player.goatTier} tier`);
     return parts.join(' · ');
@@ -1406,8 +1861,10 @@ function initPlayerAtlas() {
 
   const renderVitals = (player) => {
     const vitals = [];
-    if (player?.height) vitals.push(player.height);
-    if (player?.weight) vitals.push(player.weight);
+    const height = player?.height || player?.bdl?.height;
+    const weight = player?.weight || player?.bdl?.weight;
+    if (height) vitals.push(height);
+    if (weight) vitals.push(weight);
     return vitals.join(' • ');
   };
 
@@ -1500,7 +1957,13 @@ function initPlayerAtlas() {
 
           button.append(name);
 
-          const metaBits = [player.position, player.era ? `${player.era} era` : null].filter(Boolean);
+          const positionLabel = player?.position || player?.bdl?.position || null;
+          const jerseyLabel = player?.jerseyNumber || player?.bdl?.jersey || null;
+          const metaBits = [
+            positionLabel,
+            jerseyLabel ? `#${jerseyLabel}` : null,
+            player.era ? `${player.era} era` : null,
+          ].filter(Boolean);
           if (metaBits.length) {
             const meta = document.createElement('span');
             meta.className = 'player-atlas__team-player-meta';
@@ -1521,6 +1984,270 @@ function initPlayerAtlas() {
     if (teamBrowser) {
       teamBrowser.hidden = false;
     }
+    if (activePlayerId) {
+      highlightTeamPlayer(activePlayerId);
+    }
+  };
+
+  const hasRosterPayload = (doc) => {
+    if (!doc || !Array.isArray(doc?.teams)) {
+      return false;
+    }
+    return doc.teams.some((team) => Array.isArray(team?.roster) && team.roster.length > 0);
+  };
+
+  const splitFullName = (value) => {
+    const trimmed = typeof value === 'string' ? value.trim() : '';
+    if (!trimmed) {
+      return { first: '', last: '' };
+    }
+    const parts = trimmed.split(/\s+/);
+    if (parts.length === 1) {
+      return { first: parts[0], last: '' };
+    }
+    const [first, ...rest] = parts;
+    return { first, last: rest.join(' ') };
+  };
+
+  const buildRosterDocFromIndex = (indexDoc, franchisesDoc = null) => {
+    if (!indexDoc || !Array.isArray(indexDoc.players) || !indexDoc.players.length) {
+      return null;
+    }
+
+    const teamMeta = new Map();
+    if (franchisesDoc && Array.isArray(franchisesDoc.activeFranchises)) {
+      franchisesDoc.activeFranchises.forEach((team) => {
+        const abbr = typeof team?.abbreviation === 'string' ? team.abbreviation.trim().toUpperCase() : '';
+        if (!abbr) return;
+        const fullName = [team?.city, team?.name]
+          .map((token) => (typeof token === 'string' ? token.trim() : ''))
+          .filter(Boolean)
+          .join(' ');
+        const teamId = Number(team?.teamId);
+        teamMeta.set(abbr, {
+          id: Number.isFinite(teamId) ? teamId : null,
+          fullName: fullName || abbr,
+        });
+      });
+    }
+    if (!teamMeta.has('FA')) {
+      teamMeta.set('FA', { id: null, fullName: 'Free Agents' });
+    }
+
+    const buckets = new Map();
+
+    indexDoc.players.forEach((entry) => {
+      if (!entry) return;
+      const rawId = entry.id;
+      const numericId = Number(rawId);
+      const playerId = Number.isFinite(numericId) ? numericId : typeof rawId === 'string' ? rawId.trim() : null;
+      if (playerId === null || playerId === undefined || playerId === '') {
+        return;
+      }
+
+      const { first, last } = splitFullName(entry.name);
+      if (!first && !last) {
+        return;
+      }
+
+      const teamAbbrRaw = typeof entry.team_abbr === 'string' ? entry.team_abbr.trim().toUpperCase() : '';
+      const teamAbbr = teamAbbrRaw || 'FA';
+      if (!buckets.has(teamAbbr)) {
+        const meta = teamMeta.get(teamAbbr) || {};
+        buckets.set(teamAbbr, {
+          id: Number.isFinite(meta.id) ? meta.id : 0,
+          abbreviation: teamAbbr,
+          full_name: meta.fullName || (teamAbbr === 'FA' ? 'Free Agents' : teamAbbr),
+          roster: [],
+        });
+      }
+
+      buckets.get(teamAbbr).roster.push({
+        id: playerId,
+        first_name: first,
+        last_name: last,
+        position: entry?.position ?? null,
+        jersey_number: entry?.jersey ?? null,
+        height: entry?.height ?? null,
+        weight: entry?.weight ?? null,
+      });
+    });
+
+    const teams = Array.from(buckets.values())
+      .map((team) => ({
+        ...team,
+        roster: team.roster
+          .filter((member) => (member.first_name || member.last_name) && member.id !== null && member.id !== undefined)
+          .sort((a, b) => {
+            const left = `${a.last_name} ${a.first_name}`.trim().toLowerCase();
+            const right = `${b.last_name} ${b.first_name}`.trim().toLowerCase();
+            return left.localeCompare(right);
+          }),
+      }))
+      .filter((team) => team.roster.length)
+      .sort((a, b) => a.abbreviation.localeCompare(b.abbreviation));
+
+    if (!teams.length) {
+      return null;
+    }
+
+    const ttlCandidate = Number(indexDoc?.ttl_hours);
+    const resolvedTtl = Number.isFinite(ttlCandidate) && ttlCandidate > 0 ? ttlCandidate : 6;
+
+    return {
+      fetched_at: indexDoc?.fetched_at ?? new Date().toISOString(),
+      ttl_hours: resolvedTtl,
+      teams,
+    };
+  };
+
+  const resolveRosterSnapshot = async (options) => {
+    const { rostersResponse, playersIndexResponse, franchisesResponse } = options ?? {};
+
+    if (rostersResponse?.ok) {
+      try {
+        const rosterDoc = await rostersResponse.json();
+        if (hasRosterPayload(rosterDoc)) {
+          return rosterDoc;
+        }
+        console.warn('Roster snapshot missing team data; attempting index fallback.');
+      } catch (rostersError) {
+        console.warn('Unable to parse roster snapshot', rostersError);
+      }
+    } else if (rostersResponse) {
+      console.warn(`Roster snapshot request failed: ${rostersResponse.status}`);
+    }
+
+    if (playersIndexResponse?.ok) {
+      let indexDoc = null;
+      try {
+        indexDoc = await playersIndexResponse.json();
+      } catch (indexError) {
+        console.warn('Unable to parse players index snapshot', indexError);
+        indexDoc = null;
+      }
+      if (indexDoc) {
+        let franchisesDoc = null;
+        if (franchisesResponse?.ok) {
+          try {
+            franchisesDoc = await franchisesResponse.json();
+          } catch (franchiseError) {
+            console.warn('Unable to parse active franchises metadata', franchiseError);
+          }
+        }
+        const fallbackDoc = buildRosterDocFromIndex(indexDoc, franchisesDoc);
+        if (hasRosterPayload(fallbackDoc)) {
+          return fallbackDoc;
+        }
+      }
+    }
+
+    return null;
+  };
+
+  const applyBallDontLieDoc = (doc) => {
+    currentRostersDoc = doc ?? null;
+    playersByBdlId.clear();
+    if (!hasRosterPayload(doc)) {
+      renderTeamBrowser(players);
+      return;
+    }
+
+    const nameBuckets = new Map();
+    players.forEach((player) => {
+      const key = normalizeName(player?.name);
+      if (!key) {
+        return;
+      }
+      if (!nameBuckets.has(key)) {
+        nameBuckets.set(key, []);
+      }
+      nameBuckets.get(key).push(player);
+    });
+
+    const takeFromBucket = (key) => {
+      if (!key) {
+        return null;
+      }
+      const bucket = nameBuckets.get(key);
+      if (!bucket || !bucket.length) {
+        return null;
+      }
+      return bucket.shift();
+    };
+
+    doc.teams.forEach((team) => {
+      const roster = Array.isArray(team?.roster) ? team.roster : [];
+      roster.forEach((member) => {
+        const fullName = buildFullName(member?.first_name, member?.last_name);
+        const nameKey = normalizeName(fullName || '');
+        let playerRecord = takeFromBucket(nameKey);
+        if (!playerRecord) {
+          const rosterId = member?.id ?? `${team?.abbreviation ?? 'FA'}-${players.length + 1}`;
+          playerRecord = {
+            id: `bdl-${rosterId}`,
+            name: fullName || `Player ${rosterId}`,
+            team: team?.full_name || team?.abbreviation || '',
+            teamAbbr: team?.abbreviation ?? null,
+            position: member?.position ?? null,
+            jerseyNumber: member?.jersey_number ?? null,
+            height: member?.height ?? null,
+            weight: formatBdlWeight(member?.weight) ?? null,
+            era: null,
+            goatScores: null,
+            goatScore: null,
+            metrics: {},
+          };
+          ensurePlayerSearchTokens(playerRecord);
+          players.push(playerRecord);
+        }
+
+        const teamName = team?.full_name || team?.abbreviation || playerRecord.team || '';
+        const formattedWeight = formatBdlWeight(member?.weight);
+        const jerseyNumber = member?.jersey_number ?? null;
+        const heightValue = member?.height ?? null;
+        const positionValue = member?.position ?? null;
+
+        playerRecord.bdl = {
+          id: member?.id ?? playerRecord?.bdl?.id ?? null,
+          teamName,
+          teamAbbr: team?.abbreviation ?? playerRecord?.bdl?.teamAbbr ?? null,
+          position: positionValue ?? playerRecord?.bdl?.position ?? null,
+          jersey: jerseyNumber ?? playerRecord?.bdl?.jersey ?? null,
+          height: heightValue ?? playerRecord?.bdl?.height ?? null,
+          weight: formattedWeight ?? playerRecord?.bdl?.weight ?? null,
+        };
+
+        if (teamName) {
+          playerRecord.team = teamName;
+        }
+        if (team?.abbreviation) {
+          playerRecord.teamAbbr = team.abbreviation;
+        }
+        if (positionValue) {
+          playerRecord.position = positionValue;
+        }
+        if (jerseyNumber) {
+          playerRecord.jerseyNumber = jerseyNumber;
+        }
+        if (heightValue) {
+          playerRecord.height = heightValue;
+        }
+        if (formattedWeight) {
+          playerRecord.weight = formattedWeight;
+        }
+
+        ensurePlayerSearchTokens(playerRecord);
+
+        if (member?.id !== undefined && member?.id !== null) {
+          playersByBdlId.set(String(member.id), playerRecord);
+        }
+      });
+    });
+
+    players.sort((a, b) => a.name.localeCompare(b.name));
+    rebuildPlayerIndexes();
+    renderTeamBrowser(players);
     if (activePlayerId) {
       highlightTeamPlayer(activePlayerId);
     }
@@ -1743,6 +2470,10 @@ function initPlayerAtlas() {
     profile.dataset.playerId = player.id;
     activePlayerId = player.id;
     highlightTeamPlayer(activePlayerId);
+    if (rosterController && typeof rosterController.highlight === 'function') {
+      const rosterId = player?.bdl?.id !== undefined && player?.bdl?.id !== null ? String(player.bdl.id) : null;
+      rosterController.highlight(rosterId, { scroll: true });
+    }
     nameEl.textContent = player.name;
     metaEl.textContent = renderMeta(player);
     const goatScores = player?.goatScores;
@@ -1812,6 +2543,19 @@ function initPlayerAtlas() {
     profile.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
+  const selectPlayerByBdlId = (bdlId) => {
+    if (bdlId === null || bdlId === undefined) {
+      return false;
+    }
+    const key = String(bdlId);
+    const player = playersByBdlId.get(key);
+    if (player) {
+      selectPlayer(player);
+      return true;
+    }
+    return false;
+  };
+
   const handleInput = (event) => {
     renderResults(event.target.value || '');
   };
@@ -1878,11 +2622,22 @@ function initPlayerAtlas() {
 
   const hydrate = async () => {
     try {
-      const [profilesResponse, goatSystemResponse, goatIndexResponse, goatRecentResponse] = await Promise.all([
+      const [
+        profilesResponse,
+        goatSystemResponse,
+        goatIndexResponse,
+        goatRecentResponse,
+        rostersResponse,
+        playersIndexResponse,
+        franchisesResponse,
+      ] = await Promise.all([
         fetch('data/player_profiles.json'),
         fetch('data/goat_system.json').catch(() => null),
         fetch('data/goat_index.json').catch(() => null),
         fetch('data/goat_recent.json').catch(() => null),
+        fetch('data/rosters.json').catch(() => null),
+        fetch('data/players_index.json').catch(() => null),
+        fetch('data/active_franchises.json').catch(() => null),
       ]);
       if (!profilesResponse?.ok) {
         throw new Error(`Failed to load player profiles: ${profilesResponse?.status}`);
@@ -1986,12 +2741,60 @@ function initPlayerAtlas() {
         }
         return enriched;
       });
-      renderTeamBrowser(players);
+
+      rebuildPlayerIndexes();
+
+      const rostersDoc = await resolveRosterSnapshot({
+        rostersResponse,
+        playersIndexResponse,
+        franchisesResponse,
+      });
+
+      if (rostersDoc) {
+        applyBallDontLieDoc(rostersDoc);
+      } else {
+        playersByBdlId.clear();
+        renderTeamBrowser(players);
+      }
+
       isLoaded = true;
       hasError = false;
       if (empty) {
         empty.textContent = defaultEmptyText;
       }
+
+      if (rosterApp) {
+        const loadLatestRosters = async () => {
+          const cacheBust = Date.now();
+          const [nextRostersResponse, nextIndexResponse, nextFranchisesResponse] = await Promise.all([
+            fetch(`data/rosters.json?cb=${cacheBust}`).catch(() => null),
+            fetch(`data/players_index.json?cb=${cacheBust}`).catch(() => null),
+            fetch('data/active_franchises.json').catch(() => null),
+          ]);
+          const nextDoc = await resolveRosterSnapshot({
+            rostersResponse: nextRostersResponse,
+            playersIndexResponse: nextIndexResponse,
+            franchisesResponse: nextFranchisesResponse,
+          });
+          if (!nextDoc) {
+            throw new Error('Failed to refresh rosters: no snapshot available.');
+          }
+          return nextDoc;
+        };
+        rosterController = initializeRosterApp({
+          container: rosterApp,
+          initialDoc: rostersDoc,
+          loadDoc: loadLatestRosters,
+          onDocLoaded: (doc) => {
+            if (doc && Array.isArray(doc?.teams)) {
+              applyBallDontLieDoc(doc);
+            }
+          },
+          selectPlayerByBdlId,
+          getSelectableBdlIds: () => Array.from(playersByBdlId.keys()),
+        });
+      }
+
       if (!players.length) {
         if (hint) hint.hidden = true;
         if (empty) {
