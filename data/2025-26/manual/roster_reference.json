@@ -139,8 +139,8 @@
     "playerId": "1628971",
     "firstName": "Bruce",
     "lastName": "Brown",
-    "teamId": "1610612751",
-    "teamTricode": "BKN",
+    "teamId": "1610612743",
+    "teamTricode": "DEN",
     "position": null
   },
   {
@@ -227,8 +227,8 @@
     "playerId": "1628993",
     "firstName": "Alize",
     "lastName": "Johnson",
-    "teamId": "1610612751",
-    "teamTricode": "BKN",
+    "teamId": "1610612750",
+    "teamTricode": "MIN",
     "position": null
   },
   {
@@ -547,8 +547,8 @@
     "playerId": "202329",
     "firstName": "Al-Farouq",
     "lastName": "Aminu",
-    "teamId": "1610612741",
-    "teamTricode": "CHI",
+    "teamId": "1610612757",
+    "teamTricode": "POR",
     "position": null
   },
   {
@@ -627,8 +627,8 @@
     "playerId": "202066",
     "firstName": "Garrett",
     "lastName": "Temple",
-    "teamId": "1610612741",
-    "teamTricode": "CHI",
+    "teamId": "1610612761",
+    "teamTricode": "TOR",
     "position": null
   },
   {
@@ -643,8 +643,8 @@
     "playerId": "1627756",
     "firstName": "Denzel",
     "lastName": "Valentine",
-    "teamId": "1610612741",
-    "teamTricode": "CHI",
+    "teamId": "1610612762",
+    "teamTricode": "UTA",
     "position": null
   },
   {
@@ -779,8 +779,8 @@
     "playerId": "1629012",
     "firstName": "Collin",
     "lastName": "Sexton",
-    "teamId": "1610612739",
-    "teamTricode": "CLE",
+    "teamId": "1610612766",
+    "teamTricode": "CHA",
     "position": null
   },
   {
@@ -1091,8 +1091,8 @@
     "playerId": "203085",
     "firstName": "Austin",
     "lastName": "Rivers",
-    "teamId": "1610612743",
-    "teamTricode": "DEN",
+    "teamId": "1610612750",
+    "teamTricode": "MIN",
     "position": null
   },
   {
@@ -1171,8 +1171,8 @@
     "playerId": "202709",
     "firstName": "Cory",
     "lastName": "Joseph",
-    "teamId": "1610612765",
-    "teamTricode": "DET",
+    "teamId": "1610612753",
+    "teamTricode": "ORL",
     "position": null
   },
   {
@@ -1275,8 +1275,8 @@
     "playerId": "1627814",
     "firstName": "Damion",
     "lastName": "Lee",
-    "teamId": "1610612744",
-    "teamTricode": "GSW",
+    "teamId": "1610612756",
+    "teamTricode": "PHX",
     "position": null
   },
   {
@@ -1371,8 +1371,8 @@
     "playerId": "202340",
     "firstName": "Avery",
     "lastName": "Bradley",
-    "teamId": "1610612745",
-    "teamTricode": "HOU",
+    "teamId": "1610612747",
+    "teamTricode": "LAL",
     "position": null
   },
   {
@@ -1547,8 +1547,8 @@
     "playerId": "1628988",
     "firstName": "Aaron",
     "lastName": "Holiday",
-    "teamId": "1610612754",
-    "teamTricode": "IND",
+    "teamId": "1610612745",
+    "teamTricode": "HOU",
     "position": null
   },
   {
@@ -1571,8 +1571,8 @@
     "playerId": "1627747",
     "firstName": "Caris",
     "lastName": "LeVert",
-    "teamId": "1610612754",
-    "teamTricode": "IND",
+    "teamId": "1610612765",
+    "teamTricode": "DET",
     "position": null
   },
   {
@@ -1827,8 +1827,8 @@
     "playerId": "203083",
     "firstName": "Andre",
     "lastName": "Drummond",
-    "teamId": "1610612747",
-    "teamTricode": "LAL",
+    "teamId": "1610612755",
+    "teamTricode": "PHI",
     "position": null
   },
   {
@@ -1891,8 +1891,8 @@
     "playerId": "1628035",
     "firstName": "Alfonzo",
     "lastName": "McKinnie",
-    "teamId": "1610612747",
-    "teamTricode": "LAL",
+    "teamId": "1610612741",
+    "teamTricode": "CHI",
     "position": null
   },
   {
@@ -2003,8 +2003,8 @@
     "playerId": "1629001",
     "firstName": "De'Anthony",
     "lastName": "Melton",
-    "teamId": "1610612763",
-    "teamTricode": "MEM",
+    "teamId": "1610612751",
+    "teamTricode": "BKN",
     "position": null
   },
   {
@@ -2131,8 +2131,8 @@
     "playerId": "2738",
     "firstName": "Andre",
     "lastName": "Iguodala",
-    "teamId": "1610612748",
-    "teamTricode": "MIA",
+    "teamId": "1610612744",
+    "teamTricode": "GSW",
     "position": null
   },
   {
@@ -2595,8 +2595,8 @@
     "playerId": "202692",
     "firstName": "Alec",
     "lastName": "Burks",
-    "teamId": "1610612752",
-    "teamTricode": "NYK",
+    "teamId": "1610612748",
+    "teamTricode": "MIA",
     "position": null
   },
   {
@@ -2779,8 +2779,8 @@
     "playerId": "201143",
     "firstName": "Al",
     "lastName": "Horford",
-    "teamId": "1610612760",
-    "teamTricode": "OKC",
+    "teamId": "1610612738",
+    "teamTricode": "BOS",
     "position": null
   },
   {
@@ -3099,8 +3099,8 @@
     "playerId": "1627732",
     "firstName": "Ben",
     "lastName": "Simmons",
-    "teamId": "1610612755",
-    "teamTricode": "PHI",
+    "teamId": "1610612746",
+    "teamTricode": "LAC",
     "position": null
   },
   {
@@ -3115,8 +3115,8 @@
     "playerId": "201229",
     "firstName": "Anthony",
     "lastName": "Tolliver",
-    "teamId": "1610612755",
-    "teamTricode": "PHI",
+    "teamId": "1610612765",
+    "teamTricode": "DET",
     "position": null
   },
   {
@@ -3379,8 +3379,8 @@
     "playerId": "1629014",
     "firstName": "Anfernee",
     "lastName": "Simons",
-    "teamId": "1610612757",
-    "teamTricode": "POR",
+    "teamId": "1610612738",
+    "teamTricode": "BOS",
     "position": null
   },
   {
@@ -3403,8 +3403,8 @@
     "playerId": "1628368",
     "firstName": "De'Aaron",
     "lastName": "Fox",
-    "teamId": "1610612758",
-    "teamTricode": "SAC",
+    "teamId": "1610612759",
+    "teamTricode": "SAS",
     "position": null
   },
   {
@@ -3515,8 +3515,8 @@
     "playerId": "1626153",
     "firstName": "Delon",
     "lastName": "Wright",
-    "teamId": "1610612758",
-    "teamTricode": "SAC",
+    "teamId": "1610612754",
+    "teamTricode": "IND",
     "position": null
   },
   {
@@ -3531,8 +3531,8 @@
     "playerId": "201942",
     "firstName": "DeMar",
     "lastName": "DeRozan",
-    "teamId": "1610612759",
-    "teamTricode": "SAS",
+    "teamId": "1610612758",
+    "teamTricode": "SAC",
     "position": null
   },
   {
@@ -3603,8 +3603,8 @@
     "playerId": "1627749",
     "firstName": "Dejounte",
     "lastName": "Murray",
-    "teamId": "1610612759",
-    "teamTricode": "SAS",
+    "teamId": "1610612740",
+    "teamTricode": "NOP",
     "position": null
   },
   {
@@ -3659,8 +3659,8 @@
     "playerId": "203382",
     "firstName": "Aron",
     "lastName": "Baynes",
-    "teamId": "1610612761",
-    "teamTricode": "TOR",
+    "teamId": "1610612765",
+    "teamTricode": "DET",
     "position": null
   },
   {
@@ -3987,8 +3987,8 @@
     "playerId": "203458",
     "firstName": "Alex",
     "lastName": "Len",
-    "teamId": "1610612764",
-    "teamTricode": "WAS",
+    "teamId": "1610612752",
+    "teamTricode": "NYK",
     "position": null
   },
   {

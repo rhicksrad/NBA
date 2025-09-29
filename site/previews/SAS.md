@@ -1,11 +1,11 @@
 # San Antonio Spurs
 
-The core trio of Dejounte Murray, DeMar DeRozan, and Derrick White gives the staff a clear identity to start from.
+The core trio of De'Aaron Fox, Derrick White, and Devin Vassell gives the staff a clear identity to start from.
 The front office kept the core intact and will lean on internal development.
 No rotation regulars departed, so continuity remains a strength.
 
 **Core strength:** This is a developmental year, so cohesion and player growth drive the optimism.
 **Primary risk:** The margin for error is slim if the shooting variance swings the wrong way.
-**Swing factor:** Dejounte Murray maintaining two-way consistency is the swing skill.
+**Swing factor:** De'Aaron Fox maintaining two-way consistency is the swing skill.
 
 _Season: 2025-26_

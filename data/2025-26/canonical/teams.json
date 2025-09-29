@@ -13,7 +13,7 @@
         "lastName": "Bogdanovic",
         "teamId": "1610612737",
         "teamTricode": "ATL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629164",
@@ -23,7 +23,7 @@
         "lastName": "Goodwin",
         "teamId": "1610612737",
         "teamTricode": "ATL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1628981",
@@ -33,7 +33,7 @@
         "lastName": "Fernando",
         "teamId": "1610612737",
         "teamTricode": "ATL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629629",
@@ -43,7 +43,7 @@
         "lastName": "Reddish",
         "teamId": "1610612737",
         "teamTricode": "ATL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "203991",
@@ -53,7 +53,7 @@
         "lastName": "Capela",
         "teamId": "1610612737",
         "teamTricode": "ATL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "201568",
@@ -63,7 +63,7 @@
         "lastName": "Gallinari",
         "teamId": "1610612737",
         "teamTricode": "ATL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629631",
@@ -73,7 +73,7 @@
         "lastName": "Hunter",
         "teamId": "1610612737",
         "teamTricode": "ATL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1628381",
@@ -83,7 +83,7 @@
         "lastName": "Collins",
         "teamId": "1610612737",
         "teamTricode": "ATL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1628989",
@@ -93,7 +93,7 @@
         "lastName": "Huerter",
         "teamId": "1610612737",
         "teamTricode": "ATL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1627739",
@@ -103,7 +103,7 @@
         "lastName": "Dunn",
         "teamId": "1610612737",
         "teamTricode": "ATL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "101150",
@@ -113,7 +113,7 @@
         "lastName": "Williams",
         "teamId": "1610612737",
         "teamTricode": "ATL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1630233",
@@ -123,7 +123,7 @@
         "lastName": "Knight",
         "teamId": "1610612737",
         "teamTricode": "ATL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1630168",
@@ -133,7 +133,7 @@
         "lastName": "Okongwu",
         "teamId": "1610612737",
         "teamTricode": "ATL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1630219",
@@ -143,7 +143,7 @@
         "lastName": "Mays",
         "teamId": "1610612737",
         "teamTricode": "ATL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "203524",
@@ -153,7 +153,7 @@
         "lastName": "Hill",
         "teamId": "1610612737",
         "teamTricode": "ATL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "203503",
@@ -163,7 +163,7 @@
         "lastName": "Snell",
         "teamId": "1610612737",
         "teamTricode": "ATL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629027",
@@ -173,7 +173,7 @@
         "lastName": "Young",
         "teamId": "1610612737",
         "teamTricode": "ATL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       }
     ],
     "keyAdditions": [],
@@ -189,16 +189,6 @@
     "name": "Nets",
     "roster": [
       {
-        "key": "1628993",
-        "name": "Alize Johnson",
-        "playerId": "1628993",
-        "firstName": "Alize",
-        "lastName": "Johnson",
-        "teamId": "1610612751",
-        "teamTricode": "BKN",
-        "source": "fallback"
-      },
-      {
         "key": "201933",
         "name": "Blake Griffin",
         "playerId": "201933",
@@ -206,17 +196,7 @@
         "lastName": "Griffin",
         "teamId": "1610612751",
         "teamTricode": "BKN",
-        "source": "fallback"
-      },
-      {
-        "key": "1628971",
-        "name": "Bruce Brown",
-        "playerId": "1628971",
-        "firstName": "Bruce",
-        "lastName": "Brown",
-        "teamId": "1610612751",
-        "teamTricode": "BKN",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629185",
@@ -226,7 +206,17 @@
         "lastName": "Chiozza",
         "teamId": "1610612751",
         "teamTricode": "BKN",
-        "source": "fallback"
+        "source": "ball_dont_lie"
+      },
+      {
+        "key": "1629001",
+        "name": "De'Anthony Melton",
+        "playerId": "1629001",
+        "firstName": "De'Anthony",
+        "lastName": "Melton",
+        "teamId": "1610612751",
+        "teamTricode": "BKN",
+        "source": "ball_dont_lie"
       },
       {
         "key": "201599",
@@ -236,7 +226,7 @@
         "lastName": "Jordan",
         "teamId": "1610612751",
         "teamTricode": "BKN",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "201935",
@@ -246,7 +236,7 @@
         "lastName": "Harden",
         "teamId": "1610612751",
         "teamTricode": "BKN",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "201145",
@@ -256,7 +246,7 @@
         "lastName": "Green",
         "teamId": "1610612751",
         "teamTricode": "BKN",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "203925",
@@ -266,7 +256,7 @@
         "lastName": "Harris",
         "teamId": "1610612751",
         "teamTricode": "BKN",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "201142",
@@ -276,7 +266,7 @@
         "lastName": "Durant",
         "teamId": "1610612751",
         "teamTricode": "BKN",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "202681",
@@ -286,7 +276,7 @@
         "lastName": "Irving",
         "teamId": "1610612751",
         "teamTricode": "BKN",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629013",
@@ -296,7 +286,7 @@
         "lastName": "Shamet",
         "teamId": "1610612751",
         "teamTricode": "BKN",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1628455",
@@ -306,7 +296,7 @@
         "lastName": "James",
         "teamId": "1610612751",
         "teamTricode": "BKN",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629651",
@@ -316,7 +306,7 @@
         "lastName": "Claxton",
         "teamId": "1610612751",
         "teamTricode": "BKN",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629617",
@@ -326,7 +316,7 @@
         "lastName": "Perry",
         "teamId": "1610612751",
         "teamTricode": "BKN",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "203915",
@@ -336,7 +326,7 @@
         "lastName": "Dinwiddie",
         "teamId": "1610612751",
         "teamTricode": "BKN",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1627789",
@@ -346,7 +336,7 @@
         "lastName": "Luwawu-Cabarrot",
         "teamId": "1610612751",
         "teamTricode": "BKN",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "204020",
@@ -356,7 +346,7 @@
         "lastName": "Johnson",
         "teamId": "1610612751",
         "teamTricode": "BKN",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       }
     ],
     "keyAdditions": [],
@@ -379,7 +369,27 @@
         "lastName": "Nesmith",
         "teamId": "1610612738",
         "teamTricode": "BOS",
-        "source": "fallback"
+        "source": "ball_dont_lie"
+      },
+      {
+        "key": "201143",
+        "name": "Al Horford",
+        "playerId": "201143",
+        "firstName": "Al",
+        "lastName": "Horford",
+        "teamId": "1610612738",
+        "teamTricode": "BOS",
+        "source": "ball_dont_lie"
+      },
+      {
+        "key": "1629014",
+        "name": "Anfernee Simons",
+        "playerId": "1629014",
+        "firstName": "Anfernee",
+        "lastName": "Simons",
+        "teamId": "1610612738",
+        "teamTricode": "BOS",
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629035",
@@ -389,7 +399,7 @@
         "lastName": "Edwards",
         "teamId": "1610612738",
         "teamTricode": "BOS",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "203095",
@@ -399,7 +409,7 @@
         "lastName": "Fournier",
         "teamId": "1610612738",
         "teamTricode": "BOS",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629684",
@@ -409,7 +419,7 @@
         "lastName": "Williams",
         "teamId": "1610612738",
         "teamTricode": "BOS",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "203953",
@@ -419,7 +429,7 @@
         "lastName": "Parker",
         "teamId": "1610612738",
         "teamTricode": "BOS",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1627759",
@@ -429,7 +439,7 @@
         "lastName": "Brown",
         "teamId": "1610612738",
         "teamTricode": "BOS",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1628369",
@@ -439,7 +449,7 @@
         "lastName": "Tatum",
         "teamId": "1610612738",
         "teamTricode": "BOS",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "202689",
@@ -449,7 +459,7 @@
         "lastName": "Walker",
         "teamId": "1610612738",
         "teamTricode": "BOS",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1628436",
@@ -459,7 +469,7 @@
         "lastName": "Kornet",
         "teamId": "1610612738",
         "teamTricode": "BOS",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "203935",
@@ -469,7 +479,7 @@
         "lastName": "Smart",
         "teamId": "1610612738",
         "teamTricode": "BOS",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1630202",
@@ -479,7 +489,7 @@
         "lastName": "Pritchard",
         "teamId": "1610612738",
         "teamTricode": "BOS",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629057",
@@ -489,7 +499,7 @@
         "lastName": "III",
         "teamId": "1610612738",
         "teamTricode": "BOS",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629641",
@@ -499,7 +509,7 @@
         "lastName": "Langford",
         "teamId": "1610612738",
         "teamTricode": "BOS",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1628400",
@@ -509,7 +519,7 @@
         "lastName": "Ojeleye",
         "teamId": "1610612738",
         "teamTricode": "BOS",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629605",
@@ -519,7 +529,7 @@
         "lastName": "Fall",
         "teamId": "1610612738",
         "teamTricode": "BOS",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629682",
@@ -529,7 +539,7 @@
         "lastName": "Waters",
         "teamId": "1610612738",
         "teamTricode": "BOS",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "202684",
@@ -539,7 +549,7 @@
         "lastName": "Thompson",
         "teamId": "1610612738",
         "teamTricode": "BOS",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       }
     ],
     "keyAdditions": [],
@@ -562,7 +572,7 @@
         "lastName": "Biyombo",
         "teamId": "1610612766",
         "teamTricode": "CHA",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "202954",
@@ -572,7 +582,7 @@
         "lastName": "Wanamaker",
         "teamId": "1610612766",
         "teamTricode": "CHA",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1628997",
@@ -582,7 +592,7 @@
         "lastName": "Martin",
         "teamId": "1610612766",
         "teamTricode": "CHA",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1628998",
@@ -592,7 +602,7 @@
         "lastName": "Martin",
         "teamId": "1610612766",
         "teamTricode": "CHA",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "203469",
@@ -602,7 +612,17 @@
         "lastName": "Zeller",
         "teamId": "1610612766",
         "teamTricode": "CHA",
-        "source": "fallback"
+        "source": "ball_dont_lie"
+      },
+      {
+        "key": "1629012",
+        "name": "Collin Sexton",
+        "playerId": "1629012",
+        "firstName": "Collin",
+        "lastName": "Sexton",
+        "teamId": "1610612766",
+        "teamTricode": "CHA",
+        "source": "ball_dont_lie"
       },
       {
         "key": "1628984",
@@ -612,7 +632,7 @@
         "lastName": "Graham",
         "teamId": "1610612766",
         "teamTricode": "CHA",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "202330",
@@ -622,7 +642,7 @@
         "lastName": "Hayward",
         "teamId": "1610612766",
         "teamTricode": "CHA",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1630203",
@@ -632,7 +652,7 @@
         "lastName": "Riller",
         "teamId": "1610612766",
         "teamTricode": "CHA",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629667",
@@ -642,7 +662,7 @@
         "lastName": "McDaniels",
         "teamId": "1610612766",
         "teamTricode": "CHA",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1630163",
@@ -652,7 +672,7 @@
         "lastName": "Ball",
         "teamId": "1610612766",
         "teamTricode": "CHA",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1628370",
@@ -662,7 +682,7 @@
         "lastName": "Monk",
         "teamId": "1610612766",
         "teamTricode": "CHA",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1628970",
@@ -672,7 +692,7 @@
         "lastName": "Bridges",
         "teamId": "1610612766",
         "teamTricode": "CHA",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1630268",
@@ -682,7 +702,7 @@
         "lastName": "Darling",
         "teamId": "1610612766",
         "teamTricode": "CHA",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1630208",
@@ -692,7 +712,7 @@
         "lastName": "Richards",
         "teamId": "1610612766",
         "teamTricode": "CHA",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629023",
@@ -702,7 +722,7 @@
         "lastName": "Washington",
         "teamId": "1610612766",
         "teamTricode": "CHA",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1626179",
@@ -712,7 +732,7 @@
         "lastName": "Rozier",
         "teamId": "1610612766",
         "teamTricode": "CHA",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1630176",
@@ -722,7 +742,7 @@
         "lastName": "Jr.",
         "teamId": "1610612766",
         "teamTricode": "CHA",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       }
     ],
     "keyAdditions": [],
@@ -745,17 +765,17 @@
         "lastName": "Mokoka",
         "teamId": "1610612741",
         "teamTricode": "CHI",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
-        "key": "202329",
-        "name": "Al-Farouq Aminu",
-        "playerId": "202329",
-        "firstName": "Al-Farouq",
-        "lastName": "Aminu",
+        "key": "1628035",
+        "name": "Alfonzo McKinnie",
+        "playerId": "1628035",
+        "firstName": "Alfonzo",
+        "lastName": "McKinnie",
         "teamId": "1610612741",
         "teamTricode": "CHI",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629632",
@@ -765,7 +785,7 @@
         "lastName": "White",
         "teamId": "1610612741",
         "teamTricode": "CHI",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1626245",
@@ -775,7 +795,7 @@
         "lastName": "Felicio",
         "teamId": "1610612741",
         "teamTricode": "CHI",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1628464",
@@ -785,17 +805,7 @@
         "lastName": "Theis",
         "teamId": "1610612741",
         "teamTricode": "CHI",
-        "source": "fallback"
-      },
-      {
-        "key": "1627756",
-        "name": "Denzel Valentine",
-        "playerId": "1627756",
-        "firstName": "Denzel",
-        "lastName": "Valentine",
-        "teamId": "1610612741",
-        "teamTricode": "CHI",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629653",
@@ -805,17 +815,7 @@
         "lastName": "Dotson",
         "teamId": "1610612741",
         "teamTricode": "CHI",
-        "source": "fallback"
-      },
-      {
-        "key": "202066",
-        "name": "Garrett Temple",
-        "playerId": "202066",
-        "firstName": "Garrett",
-        "lastName": "Temple",
-        "teamId": "1610612741",
-        "teamTricode": "CHI",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629750",
@@ -825,7 +825,7 @@
         "lastName": "Green",
         "teamId": "1610612741",
         "teamTricode": "CHI",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1628374",
@@ -835,7 +835,7 @@
         "lastName": "Markkanen",
         "teamId": "1610612741",
         "teamTricode": "CHI",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "202696",
@@ -845,7 +845,7 @@
         "lastName": "Vucevic",
         "teamId": "1610612741",
         "teamTricode": "CHI",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1630172",
@@ -855,7 +855,7 @@
         "lastName": "Williams",
         "teamId": "1610612741",
         "teamTricode": "CHI",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1627853",
@@ -865,7 +865,7 @@
         "lastName": "Arcidiacono",
         "teamId": "1610612741",
         "teamTricode": "CHI",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "201152",
@@ -875,7 +875,7 @@
         "lastName": "Young",
         "teamId": "1610612741",
         "teamTricode": "CHI",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "203107",
@@ -885,7 +885,7 @@
         "lastName": "Satoransky",
         "teamId": "1610612741",
         "teamTricode": "CHI",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1628972",
@@ -895,7 +895,7 @@
         "lastName": "Jr.",
         "teamId": "1610612741",
         "teamTricode": "CHI",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "203897",
@@ -905,7 +905,7 @@
         "lastName": "LaVine",
         "teamId": "1610612741",
         "teamTricode": "CHI",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       }
     ],
     "keyAdditions": [],
@@ -928,7 +928,7 @@
         "lastName": "Varejao",
         "teamId": "1610612739",
         "teamTricode": "CLE",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1630271",
@@ -938,7 +938,7 @@
         "lastName": "Thomas",
         "teamId": "1610612739",
         "teamTricode": "CLE",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1626224",
@@ -948,17 +948,7 @@
         "lastName": "Osman",
         "teamId": "1610612739",
         "teamTricode": "CLE",
-        "source": "fallback"
-      },
-      {
-        "key": "1629012",
-        "name": "Collin Sexton",
-        "playerId": "1629012",
-        "firstName": "Collin",
-        "lastName": "Sexton",
-        "teamId": "1610612739",
-        "teamTricode": "CLE",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1628422",
@@ -968,7 +958,7 @@
         "lastName": "Dotson",
         "teamId": "1610612739",
         "teamTricode": "CLE",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629636",
@@ -978,7 +968,7 @@
         "lastName": "Garland",
         "teamId": "1610612739",
         "teamTricode": "CLE",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629731",
@@ -988,7 +978,7 @@
         "lastName": "Wade",
         "teamId": "1610612739",
         "teamTricode": "CLE",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629685",
@@ -998,7 +988,7 @@
         "lastName": "Windler",
         "teamId": "1610612739",
         "teamTricode": "CLE",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1630171",
@@ -1008,7 +998,7 @@
         "lastName": "Okoro",
         "teamId": "1610612739",
         "teamTricode": "CLE",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1628392",
@@ -1018,7 +1008,7 @@
         "lastName": "Hartenstein",
         "teamId": "1610612739",
         "teamTricode": "CLE",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1628386",
@@ -1028,7 +1018,7 @@
         "lastName": "Allen",
         "teamId": "1610612739",
         "teamTricode": "CLE",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629725",
@@ -1038,7 +1028,7 @@
         "lastName": "Martin",
         "teamId": "1610612739",
         "teamTricode": "CLE",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "201567",
@@ -1048,7 +1038,7 @@
         "lastName": "Love",
         "teamId": "1610612739",
         "teamTricode": "CLE",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1630205",
@@ -1058,7 +1048,7 @@
         "lastName": "Stevens",
         "teamId": "1610612739",
         "teamTricode": "CLE",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1626204",
@@ -1068,7 +1058,7 @@
         "lastName": "Jr.",
         "teamId": "1610612739",
         "teamTricode": "CLE",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "203521",
@@ -1078,7 +1068,7 @@
         "lastName": "Dellavedova",
         "teamId": "1610612739",
         "teamTricode": "CLE",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629662",
@@ -1088,7 +1078,7 @@
         "lastName": "Kabengele",
         "teamId": "1610612739",
         "teamTricode": "CLE",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1627752",
@@ -1098,7 +1088,7 @@
         "lastName": "Prince",
         "teamId": "1610612739",
         "teamTricode": "CLE",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       }
     ],
     "keyAdditions": [],
@@ -1122,8 +1112,7 @@
         "lastName": "Davis",
         "teamId": "1610612742",
         "teamTricode": "DAL",
-        "source": "fallback",
-        "isNewAddition": true
+        "source": "ball_dont_lie"
       },
       {
         "key": "1626246",
@@ -1133,7 +1122,7 @@
         "lastName": "Marjanovic",
         "teamId": "1610612742",
         "teamTricode": "DAL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1627827",
@@ -1143,7 +1132,7 @@
         "lastName": "Finney-Smith",
         "teamId": "1610612742",
         "teamTricode": "DAL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "203939",
@@ -1153,7 +1142,7 @@
         "lastName": "Powell",
         "teamId": "1610612742",
         "teamTricode": "DAL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1628973",
@@ -1163,7 +1152,7 @@
         "lastName": "Brunson",
         "teamId": "1610612742",
         "teamTricode": "DAL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "200755",
@@ -1173,7 +1162,7 @@
         "lastName": "Redick",
         "teamId": "1610612742",
         "teamTricode": "DAL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1630182",
@@ -1183,7 +1172,7 @@
         "lastName": "Green",
         "teamId": "1610612742",
         "teamTricode": "DAL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1626196",
@@ -1193,7 +1182,7 @@
         "lastName": "Richardson",
         "teamId": "1610612742",
         "teamTricode": "DAL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "204001",
@@ -1203,7 +1192,7 @@
         "lastName": "Porzingis",
         "teamId": "1610612742",
         "teamTricode": "DAL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1628467",
@@ -1213,7 +1202,7 @@
         "lastName": "Kleber",
         "teamId": "1610612742",
         "teamTricode": "DAL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1630207",
@@ -1223,7 +1212,7 @@
         "lastName": "Hinton",
         "teamId": "1610612742",
         "teamTricode": "DAL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629740",
@@ -1233,7 +1222,7 @@
         "lastName": "Melli",
         "teamId": "1610612742",
         "teamTricode": "DAL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "203501",
@@ -1243,7 +1232,7 @@
         "lastName": "Jr.",
         "teamId": "1610612742",
         "teamTricode": "DAL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "203504",
@@ -1253,7 +1242,7 @@
         "lastName": "Burke",
         "teamId": "1610612742",
         "teamTricode": "DAL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1630189",
@@ -1263,7 +1252,7 @@
         "lastName": "Bey",
         "teamId": "1610612742",
         "teamTricode": "DAL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1630179",
@@ -1273,7 +1262,7 @@
         "lastName": "Terry",
         "teamId": "1610612742",
         "teamTricode": "DAL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1626161",
@@ -1283,15 +1272,11 @@
         "lastName": "Cauley-Stein",
         "teamId": "1610612742",
         "teamTricode": "DAL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       }
     ],
-    "keyAdditions": [
-      "Anthony Davis"
-    ],
-    "keyLosses": [
-      "Luka Doncic"
-    ],
+    "keyAdditions": [],
+    "keyLosses": [],
     "notes": [],
     "lastSeasonWins": 50,
     "lastSeasonSRS": 3.7
@@ -1310,17 +1295,7 @@
         "lastName": "Gordon",
         "teamId": "1610612743",
         "teamTricode": "DEN",
-        "source": "fallback"
-      },
-      {
-        "key": "203085",
-        "name": "Austin Rivers",
-        "playerId": "203085",
-        "firstName": "Austin",
-        "lastName": "Rivers",
-        "teamId": "1610612743",
-        "teamTricode": "DEN",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629626",
@@ -1330,7 +1305,17 @@
         "lastName": "Bol",
         "teamId": "1610612743",
         "teamTricode": "DEN",
-        "source": "fallback"
+        "source": "ball_dont_lie"
+      },
+      {
+        "key": "1628971",
+        "name": "Bruce Brown",
+        "playerId": "1628971",
+        "firstName": "Bruce",
+        "lastName": "Brown",
+        "teamId": "1610612743",
+        "teamTricode": "DEN",
+        "source": "ball_dont_lie"
       },
       {
         "key": "1630267",
@@ -1340,7 +1325,7 @@
         "lastName": "Campazzo",
         "teamId": "1610612743",
         "teamTricode": "DEN",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1627750",
@@ -1350,7 +1335,7 @@
         "lastName": "Murray",
         "teamId": "1610612743",
         "teamTricode": "DEN",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "203210",
@@ -1360,7 +1345,7 @@
         "lastName": "Green",
         "teamId": "1610612743",
         "teamTricode": "DEN",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "201580",
@@ -1370,7 +1355,7 @@
         "lastName": "McGee",
         "teamId": "1610612743",
         "teamTricode": "DEN",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1630210",
@@ -1380,7 +1365,7 @@
         "lastName": "Howard",
         "teamId": "1610612743",
         "teamTricode": "DEN",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629008",
@@ -1390,7 +1375,7 @@
         "lastName": "Jr.",
         "teamId": "1610612743",
         "teamTricode": "DEN",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1628420",
@@ -1400,7 +1385,7 @@
         "lastName": "Morris",
         "teamId": "1610612743",
         "teamTricode": "DEN",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "203999",
@@ -1410,7 +1395,7 @@
         "lastName": "Jokic",
         "teamId": "1610612743",
         "teamTricode": "DEN",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "200794",
@@ -1420,7 +1405,7 @@
         "lastName": "Millsap",
         "teamId": "1610612743",
         "teamTricode": "DEN",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1628408",
@@ -1430,7 +1415,7 @@
         "lastName": "Dozier",
         "teamId": "1610612743",
         "teamTricode": "DEN",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1627885",
@@ -1440,7 +1425,7 @@
         "lastName": "Harrison",
         "teamId": "1610612743",
         "teamTricode": "DEN",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1628427",
@@ -1450,7 +1435,7 @@
         "lastName": "Cancar",
         "teamId": "1610612743",
         "teamTricode": "DEN",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "203115",
@@ -1460,7 +1445,7 @@
         "lastName": "Barton",
         "teamId": "1610612743",
         "teamTricode": "DEN",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1630192",
@@ -1470,7 +1455,7 @@
         "lastName": "Nnaji",
         "teamId": "1610612743",
         "teamTricode": "DEN",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       }
     ],
     "keyAdditions": [],
@@ -1486,14 +1471,34 @@
     "name": "Pistons",
     "roster": [
       {
-        "key": "202709",
-        "name": "Cory Joseph",
-        "playerId": "202709",
-        "firstName": "Cory",
-        "lastName": "Joseph",
+        "key": "201229",
+        "name": "Anthony Tolliver",
+        "playerId": "201229",
+        "firstName": "Anthony",
+        "lastName": "Tolliver",
         "teamId": "1610612765",
         "teamTricode": "DET",
-        "source": "fallback"
+        "source": "ball_dont_lie"
+      },
+      {
+        "key": "203382",
+        "name": "Aron Baynes",
+        "playerId": "203382",
+        "firstName": "Aron",
+        "lastName": "Baynes",
+        "teamId": "1610612765",
+        "teamTricode": "DET",
+        "source": "ball_dont_lie"
+      },
+      {
+        "key": "1627747",
+        "name": "Caris LeVert",
+        "playerId": "1627747",
+        "firstName": "Caris",
+        "lastName": "LeVert",
+        "teamId": "1610612765",
+        "teamTricode": "DET",
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629686",
@@ -1503,7 +1508,7 @@
         "lastName": "Sirvydis",
         "teamId": "1610612765",
         "teamTricode": "DET",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1628372",
@@ -1513,7 +1518,7 @@
         "lastName": "Jr.",
         "teamId": "1610612765",
         "teamTricode": "DET",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1628402",
@@ -1523,7 +1528,7 @@
         "lastName": "Jackson",
         "teamId": "1610612765",
         "teamTricode": "DET",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1628977",
@@ -1533,7 +1538,7 @@
         "lastName": "Diallo",
         "teamId": "1610612765",
         "teamTricode": "DET",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1630191",
@@ -1543,7 +1548,7 @@
         "lastName": "Stewart",
         "teamId": "1610612765",
         "teamTricode": "DET",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1626143",
@@ -1553,7 +1558,7 @@
         "lastName": "Okafor",
         "teamId": "1610612765",
         "teamTricode": "DET",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "203924",
@@ -1563,7 +1568,7 @@
         "lastName": "Grant",
         "teamId": "1610612765",
         "teamTricode": "DET",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1628367",
@@ -1573,7 +1578,7 @@
         "lastName": "Jackson",
         "teamId": "1610612765",
         "teamTricode": "DET",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1630165",
@@ -1583,7 +1588,7 @@
         "lastName": "Hayes",
         "teamId": "1610612765",
         "teamTricode": "DET",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "203486",
@@ -1593,7 +1598,7 @@
         "lastName": "Plumlee",
         "teamId": "1610612765",
         "teamTricode": "DET",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "203585",
@@ -1603,7 +1608,7 @@
         "lastName": "McGruder",
         "teamId": "1610612765",
         "teamTricode": "DET",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1630240",
@@ -1613,7 +1618,7 @@
         "lastName": "Lee",
         "teamId": "1610612765",
         "teamTricode": "DET",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1630180",
@@ -1623,7 +1628,7 @@
         "lastName": "Bey",
         "teamId": "1610612765",
         "teamTricode": "DET",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629635",
@@ -1633,7 +1638,7 @@
         "lastName": "Doumbouya",
         "teamId": "1610612765",
         "teamTricode": "DET",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629076",
@@ -1643,7 +1648,7 @@
         "lastName": "Cook",
         "teamId": "1610612765",
         "teamTricode": "DET",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "201961",
@@ -1653,7 +1658,7 @@
         "lastName": "Ellington",
         "teamId": "1610612765",
         "teamTricode": "DET",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       }
     ],
     "keyAdditions": [],
@@ -1676,7 +1681,17 @@
         "lastName": "Smailagic",
         "teamId": "1610612744",
         "teamTricode": "GSW",
-        "source": "fallback"
+        "source": "ball_dont_lie"
+      },
+      {
+        "key": "2738",
+        "name": "Andre Iguodala",
+        "playerId": "2738",
+        "firstName": "Andre",
+        "lastName": "Iguodala",
+        "teamId": "1610612744",
+        "teamTricode": "GSW",
+        "source": "ball_dont_lie"
       },
       {
         "key": "203952",
@@ -1686,17 +1701,7 @@
         "lastName": "Wiggins",
         "teamId": "1610612744",
         "teamTricode": "GSW",
-        "source": "fallback"
-      },
-      {
-        "key": "1627814",
-        "name": "Damion Lee",
-        "playerId": "1627814",
-        "firstName": "Damion",
-        "lastName": "Lee",
-        "teamId": "1610612744",
-        "teamTricode": "GSW",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "203110",
@@ -1706,7 +1711,7 @@
         "lastName": "Green",
         "teamId": "1610612744",
         "teamTricode": "GSW",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629672",
@@ -1716,7 +1721,7 @@
         "lastName": "Paschall",
         "teamId": "1610612744",
         "teamTricode": "GSW",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1630164",
@@ -1726,7 +1731,7 @@
         "lastName": "Wiseman",
         "teamId": "1610612744",
         "teamTricode": "GSW",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1628395",
@@ -1736,7 +1741,7 @@
         "lastName": "Bell",
         "teamId": "1610612744",
         "teamTricode": "GSW",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629673",
@@ -1746,7 +1751,7 @@
         "lastName": "Poole",
         "teamId": "1610612744",
         "teamTricode": "GSW",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629308",
@@ -1756,7 +1761,7 @@
         "lastName": "Toscano-Anderson",
         "teamId": "1610612744",
         "teamTricode": "GSW",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1626162",
@@ -1766,7 +1771,7 @@
         "lastName": "Jr.",
         "teamId": "1610612744",
         "teamTricode": "GSW",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "203145",
@@ -1776,7 +1781,7 @@
         "lastName": "Bazemore",
         "teamId": "1610612744",
         "teamTricode": "GSW",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1626172",
@@ -1786,7 +1791,7 @@
         "lastName": "Looney",
         "teamId": "1610612744",
         "teamTricode": "GSW",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "202691",
@@ -1796,7 +1801,7 @@
         "lastName": "Thompson",
         "teamId": "1610612744",
         "teamTricode": "GSW",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1628539",
@@ -1806,7 +1811,7 @@
         "lastName": "Mulder",
         "teamId": "1610612744",
         "teamTricode": "GSW",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1630185",
@@ -1816,7 +1821,7 @@
         "lastName": "Mannion",
         "teamId": "1610612744",
         "teamTricode": "GSW",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "201939",
@@ -1826,7 +1831,7 @@
         "lastName": "Curry",
         "teamId": "1610612744",
         "teamTricode": "GSW",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       }
     ],
     "keyAdditions": [],
@@ -1842,6 +1847,16 @@
     "name": "Rockets",
     "roster": [
       {
+        "key": "1628988",
+        "name": "Aaron Holiday",
+        "playerId": "1628988",
+        "firstName": "Aaron",
+        "lastName": "Holiday",
+        "teamId": "1610612745",
+        "teamTricode": "HOU",
+        "source": "ball_dont_lie"
+      },
+      {
         "key": "1630237",
         "name": "Anthony Lamb",
         "playerId": "1630237",
@@ -1849,7 +1864,7 @@
         "lastName": "Lamb",
         "teamId": "1610612745",
         "teamTricode": "HOU",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629717",
@@ -1859,17 +1874,7 @@
         "lastName": "Brooks",
         "teamId": "1610612745",
         "teamTricode": "HOU",
-        "source": "fallback"
-      },
-      {
-        "key": "202340",
-        "name": "Avery Bradley",
-        "playerId": "202340",
-        "firstName": "Avery",
-        "lastName": "Bradley",
-        "teamId": "1610612745",
-        "teamTricode": "HOU",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1628419",
@@ -1879,7 +1884,7 @@
         "lastName": "Oliver",
         "teamId": "1610612745",
         "teamTricode": "HOU",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629244",
@@ -1889,7 +1894,7 @@
         "lastName": "Reynolds",
         "teamId": "1610612745",
         "teamTricode": "HOU",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1626174",
@@ -1899,7 +1904,7 @@
         "lastName": "Wood",
         "teamId": "1610612745",
         "teamTricode": "HOU",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "201571",
@@ -1909,7 +1914,7 @@
         "lastName": "Augustin",
         "teamId": "1610612745",
         "teamTricode": "HOU",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1628391",
@@ -1919,7 +1924,7 @@
         "lastName": "Wilson",
         "teamId": "1610612745",
         "teamTricode": "HOU",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "203957",
@@ -1929,7 +1934,7 @@
         "lastName": "Exum",
         "teamId": "1610612745",
         "teamTricode": "HOU",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1627863",
@@ -1939,7 +1944,7 @@
         "lastName": "Jr.",
         "teamId": "1610612745",
         "teamTricode": "HOU",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1628021",
@@ -1949,7 +1954,7 @@
         "lastName": "Nwaba",
         "teamId": "1610612745",
         "teamTricode": "HOU",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "201569",
@@ -1959,7 +1964,7 @@
         "lastName": "Gordon",
         "teamId": "1610612745",
         "teamTricode": "HOU",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1630256",
@@ -1969,7 +1974,7 @@
         "lastName": "Tate",
         "teamId": "1610612745",
         "teamTricode": "HOU",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "202322",
@@ -1979,7 +1984,7 @@
         "lastName": "Wall",
         "teamId": "1610612745",
         "teamTricode": "HOU",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "203482",
@@ -1989,7 +1994,7 @@
         "lastName": "Olynyk",
         "teamId": "1610612745",
         "teamTricode": "HOU",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1630231",
@@ -1999,7 +2004,7 @@
         "lastName": "Jr.",
         "teamId": "1610612745",
         "teamTricode": "HOU",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629645",
@@ -2009,7 +2014,7 @@
         "lastName": "Jr.",
         "teamId": "1610612745",
         "teamTricode": "HOU",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629017",
@@ -2019,7 +2024,7 @@
         "lastName": "Thomas",
         "teamId": "1610612745",
         "teamTricode": "HOU",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1628425",
@@ -2029,7 +2034,7 @@
         "lastName": "Brown",
         "teamId": "1610612745",
         "teamTricode": "HOU",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       }
     ],
     "keyAdditions": [],
@@ -2045,16 +2050,6 @@
     "name": "Pacers",
     "roster": [
       {
-        "key": "1628988",
-        "name": "Aaron Holiday",
-        "playerId": "1628988",
-        "firstName": "Aaron",
-        "lastName": "Holiday",
-        "teamId": "1610612754",
-        "teamTricode": "IND",
-        "source": "fallback"
-      },
-      {
         "key": "1628578",
         "name": "Amida Brimah",
         "playerId": "1628578",
@@ -2062,17 +2057,7 @@
         "lastName": "Brimah",
         "teamId": "1610612754",
         "teamTricode": "IND",
-        "source": "fallback"
-      },
-      {
-        "key": "1627747",
-        "name": "Caris LeVert",
-        "playerId": "1627747",
-        "firstName": "Caris",
-        "lastName": "LeVert",
-        "teamId": "1610612754",
-        "teamTricode": "IND",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1630199",
@@ -2082,7 +2067,17 @@
         "lastName": "Stanley",
         "teamId": "1610612754",
         "teamTricode": "IND",
-        "source": "fallback"
+        "source": "ball_dont_lie"
+      },
+      {
+        "key": "1626153",
+        "name": "Delon Wright",
+        "playerId": "1626153",
+        "firstName": "Delon",
+        "lastName": "Wright",
+        "teamId": "1610612754",
+        "teamTricode": "IND",
+        "source": "ball_dont_lie"
       },
       {
         "key": "1627734",
@@ -2092,7 +2087,7 @@
         "lastName": "Sabonis",
         "teamId": "1610612754",
         "teamTricode": "IND",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "203926",
@@ -2102,7 +2097,7 @@
         "lastName": "McDermott",
         "teamId": "1610612754",
         "teamTricode": "IND",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1628410",
@@ -2112,7 +2107,7 @@
         "lastName": "Sumner",
         "teamId": "1610612754",
         "teamTricode": "IND",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629048",
@@ -2122,7 +2117,7 @@
         "lastName": "Bitadze",
         "teamId": "1610612754",
         "teamTricode": "IND",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "203960",
@@ -2132,7 +2127,7 @@
         "lastName": "Sampson",
         "teamId": "1610612754",
         "teamTricode": "IND",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "203087",
@@ -2142,7 +2137,7 @@
         "lastName": "Lamb",
         "teamId": "1610612754",
         "teamTricode": "IND",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "203200",
@@ -2152,7 +2147,7 @@
         "lastName": "Holiday",
         "teamId": "1610612754",
         "teamTricode": "IND",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629103",
@@ -2162,7 +2157,7 @@
         "lastName": "Martin",
         "teamId": "1610612754",
         "teamTricode": "IND",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1627763",
@@ -2172,7 +2167,7 @@
         "lastName": "Brogdon",
         "teamId": "1610612754",
         "teamTricode": "IND",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1626167",
@@ -2182,7 +2177,7 @@
         "lastName": "Turner",
         "teamId": "1610612754",
         "teamTricode": "IND",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629052",
@@ -2192,7 +2187,7 @@
         "lastName": "Brissett",
         "teamId": "1610612754",
         "teamTricode": "IND",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "204456",
@@ -2202,7 +2197,7 @@
         "lastName": "McConnell",
         "teamId": "1610612754",
         "teamTricode": "IND",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "203933",
@@ -2212,7 +2207,7 @@
         "lastName": "Warren",
         "teamId": "1610612754",
         "teamTricode": "IND",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       }
     ],
     "keyAdditions": [],
@@ -2235,7 +2230,17 @@
         "lastName": "Coffey",
         "teamId": "1610612746",
         "teamTricode": "LAC",
-        "source": "fallback"
+        "source": "ball_dont_lie"
+      },
+      {
+        "key": "1627732",
+        "name": "Ben Simmons",
+        "playerId": "1627732",
+        "firstName": "Ben",
+        "lastName": "Simmons",
+        "teamId": "1610612746",
+        "teamTricode": "LAC",
+        "source": "ball_dont_lie"
       },
       {
         "key": "1630187",
@@ -2245,7 +2250,7 @@
         "lastName": "Oturu",
         "teamId": "1610612746",
         "teamTricode": "LAC",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "202326",
@@ -2255,7 +2260,7 @@
         "lastName": "Cousins",
         "teamId": "1610612746",
         "teamTricode": "LAC",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1627826",
@@ -2265,7 +2270,7 @@
         "lastName": "Zubac",
         "teamId": "1610612746",
         "teamTricode": "LAC",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1630206",
@@ -2275,7 +2280,7 @@
         "lastName": "Scrubb",
         "teamId": "1610612746",
         "teamTricode": "LAC",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "202695",
@@ -2285,7 +2290,7 @@
         "lastName": "Leonard",
         "teamId": "1610612746",
         "teamTricode": "LAC",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1628379",
@@ -2295,7 +2300,7 @@
         "lastName": "Kennard",
         "teamId": "1610612746",
         "teamTricode": "LAC",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "202694",
@@ -2305,7 +2310,7 @@
         "lastName": "Sr.",
         "teamId": "1610612746",
         "teamTricode": "LAC",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "201587",
@@ -2315,7 +2320,7 @@
         "lastName": "Batum",
         "teamId": "1610612746",
         "teamTricode": "LAC",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "201976",
@@ -2325,7 +2330,7 @@
         "lastName": "Beverley",
         "teamId": "1610612746",
         "teamTricode": "LAC",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "202335",
@@ -2335,7 +2340,7 @@
         "lastName": "Patterson",
         "teamId": "1610612746",
         "teamTricode": "LAC",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "202331",
@@ -2345,7 +2350,7 @@
         "lastName": "George",
         "teamId": "1610612746",
         "teamTricode": "LAC",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "200765",
@@ -2355,7 +2360,7 @@
         "lastName": "Rondo",
         "teamId": "1610612746",
         "teamTricode": "LAC",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "202704",
@@ -2365,7 +2370,7 @@
         "lastName": "Jackson",
         "teamId": "1610612746",
         "teamTricode": "LAC",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "201586",
@@ -2375,7 +2380,7 @@
         "lastName": "Ibaka",
         "teamId": "1610612746",
         "teamTricode": "LAC",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629611",
@@ -2385,7 +2390,7 @@
         "lastName": "Mann",
         "teamId": "1610612746",
         "teamTricode": "LAC",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1627812",
@@ -2395,7 +2400,7 @@
         "lastName": "Ferrell",
         "teamId": "1610612746",
         "teamTricode": "LAC",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       }
     ],
     "keyAdditions": [],
@@ -2418,27 +2423,17 @@
         "lastName": "Caruso",
         "teamId": "1610612747",
         "teamTricode": "LAL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
-        "key": "1628035",
-        "name": "Alfonzo McKinnie",
-        "playerId": "1628035",
-        "firstName": "Alfonzo",
-        "lastName": "McKinnie",
+        "key": "202340",
+        "name": "Avery Bradley",
+        "playerId": "202340",
+        "firstName": "Avery",
+        "lastName": "Bradley",
         "teamId": "1610612747",
         "teamTricode": "LAL",
-        "source": "fallback"
-      },
-      {
-        "key": "203083",
-        "name": "Andre Drummond",
-        "playerId": "203083",
-        "firstName": "Andre",
-        "lastName": "Drummond",
-        "teamId": "1610612747",
-        "teamTricode": "LAL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "203463",
@@ -2448,7 +2443,7 @@
         "lastName": "McLemore",
         "teamId": "1610612747",
         "teamTricode": "LAL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "203471",
@@ -2458,7 +2453,7 @@
         "lastName": "Schroder",
         "teamId": "1610612747",
         "teamTricode": "LAL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629719",
@@ -2468,7 +2463,7 @@
         "lastName": "Cacok",
         "teamId": "1610612747",
         "teamTricode": "LAL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "201162",
@@ -2478,7 +2473,7 @@
         "lastName": "Dudley",
         "teamId": "1610612747",
         "teamTricode": "LAL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "203484",
@@ -2488,7 +2483,7 @@
         "lastName": "Caldwell-Pope",
         "teamId": "1610612747",
         "teamTricode": "LAL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1628961",
@@ -2498,7 +2493,7 @@
         "lastName": "Antetokounmpo",
         "teamId": "1610612747",
         "teamTricode": "LAL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1628398",
@@ -2508,7 +2503,7 @@
         "lastName": "Kuzma",
         "teamId": "1610612747",
         "teamTricode": "LAL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "2544",
@@ -2518,7 +2513,7 @@
         "lastName": "James",
         "teamId": "1610612747",
         "teamTricode": "LAL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629029",
@@ -2529,8 +2524,7 @@
         "lastName": "Doncic",
         "teamId": "1610612747",
         "teamTricode": "LAL",
-        "source": "fallback",
-        "isNewAddition": true
+        "source": "ball_dont_lie"
       },
       {
         "key": "201188",
@@ -2540,7 +2534,7 @@
         "lastName": "Gasol",
         "teamId": "1610612747",
         "teamTricode": "LAL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "202693",
@@ -2550,7 +2544,7 @@
         "lastName": "Morris",
         "teamId": "1610612747",
         "teamTricode": "LAL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1626149",
@@ -2560,7 +2554,7 @@
         "lastName": "Harrell",
         "teamId": "1610612747",
         "teamTricode": "LAL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629659",
@@ -2570,7 +2564,7 @@
         "lastName": "Horton-Tucker",
         "teamId": "1610612747",
         "teamTricode": "LAL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "202083",
@@ -2580,15 +2574,11 @@
         "lastName": "Matthews",
         "teamId": "1610612747",
         "teamTricode": "LAL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       }
     ],
-    "keyAdditions": [
-      "Luka Doncic"
-    ],
-    "keyLosses": [
-      "Anthony Davis"
-    ],
+    "keyAdditions": [],
+    "keyLosses": [],
     "notes": [],
     "lastSeasonWins": 47,
     "lastSeasonSRS": 1.7
@@ -2607,17 +2597,7 @@
         "lastName": "Clarke",
         "teamId": "1610612763",
         "teamTricode": "MEM",
-        "source": "fallback"
-      },
-      {
-        "key": "1629001",
-        "name": "De'Anthony Melton",
-        "playerId": "1629001",
-        "firstName": "De'Anthony",
-        "lastName": "Melton",
-        "teamId": "1610612763",
-        "teamTricode": "MEM",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1630217",
@@ -2627,7 +2607,7 @@
         "lastName": "Bane",
         "teamId": "1610612763",
         "teamTricode": "MEM",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1628415",
@@ -2637,7 +2617,7 @@
         "lastName": "Brooks",
         "teamId": "1610612763",
         "teamTricode": "MEM",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1628960",
@@ -2647,7 +2627,7 @@
         "lastName": "Allen",
         "teamId": "1610612763",
         "teamTricode": "MEM",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629630",
@@ -2657,7 +2637,7 @@
         "lastName": "Morant",
         "teamId": "1610612763",
         "teamTricode": "MEM",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1628991",
@@ -2667,7 +2647,7 @@
         "lastName": "Jr.",
         "teamId": "1610612763",
         "teamTricode": "MEM",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629723",
@@ -2677,7 +2657,7 @@
         "lastName": "Konchar",
         "teamId": "1610612763",
         "teamTricode": "MEM",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "202685",
@@ -2687,7 +2667,7 @@
         "lastName": "Valanciunas",
         "teamId": "1610612763",
         "teamTricode": "MEM",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629007",
@@ -2697,7 +2677,7 @@
         "lastName": "Porter",
         "teamId": "1610612763",
         "teamTricode": "MEM",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1626159",
@@ -2707,7 +2687,7 @@
         "lastName": "Winslow",
         "teamId": "1610612763",
         "teamTricode": "MEM",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629681",
@@ -2717,7 +2697,7 @@
         "lastName": "Tillie",
         "teamId": "1610612763",
         "teamTricode": "MEM",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "203937",
@@ -2727,7 +2707,7 @@
         "lastName": "Anderson",
         "teamId": "1610612763",
         "teamTricode": "MEM",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1630253",
@@ -2737,7 +2717,7 @@
         "lastName": "McDermott",
         "teamId": "1610612763",
         "teamTricode": "MEM",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "204025",
@@ -2747,7 +2727,7 @@
         "lastName": "Frazier",
         "teamId": "1610612763",
         "teamTricode": "MEM",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1626145",
@@ -2757,7 +2737,7 @@
         "lastName": "Jones",
         "teamId": "1610612763",
         "teamTricode": "MEM",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1630214",
@@ -2767,7 +2747,7 @@
         "lastName": "Tillman",
         "teamId": "1610612763",
         "teamTricode": "MEM",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       }
     ],
     "keyAdditions": [],
@@ -2783,14 +2763,14 @@
     "name": "Heat",
     "roster": [
       {
-        "key": "2738",
-        "name": "Andre Iguodala",
-        "playerId": "2738",
-        "firstName": "Andre",
-        "lastName": "Iguodala",
+        "key": "202692",
+        "name": "Alec Burks",
+        "playerId": "202692",
+        "firstName": "Alec",
+        "lastName": "Burks",
         "teamId": "1610612748",
         "teamTricode": "MIA",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1628389",
@@ -2800,7 +2780,7 @@
         "lastName": "Adebayo",
         "teamId": "1610612748",
         "teamTricode": "MIA",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "203473",
@@ -2810,7 +2790,7 @@
         "lastName": "Dedmon",
         "teamId": "1610612748",
         "teamTricode": "MIA",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629130",
@@ -2820,7 +2800,7 @@
         "lastName": "Robinson",
         "teamId": "1610612748",
         "teamTricode": "MIA",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629216",
@@ -2830,7 +2810,7 @@
         "lastName": "Vincent",
         "teamId": "1610612748",
         "teamTricode": "MIA",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "201609",
@@ -2840,7 +2820,7 @@
         "lastName": "Dragic",
         "teamId": "1610612748",
         "teamTricode": "MIA",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "202710",
@@ -2850,7 +2830,7 @@
         "lastName": "Butler",
         "teamId": "1610612748",
         "teamTricode": "MIA",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629134",
@@ -2860,7 +2840,7 @@
         "lastName": "Nunn",
         "teamId": "1610612748",
         "teamTricode": "MIA",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629644",
@@ -2870,7 +2850,7 @@
         "lastName": "Okpala",
         "teamId": "1610612748",
         "teamTricode": "MIA",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629622",
@@ -2880,7 +2860,7 @@
         "lastName": "Strus",
         "teamId": "1610612748",
         "teamTricode": "MIA",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "202357",
@@ -2890,7 +2870,7 @@
         "lastName": "Bjelica",
         "teamId": "1610612748",
         "teamTricode": "MIA",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1630209",
@@ -2900,7 +2880,7 @@
         "lastName": "Yurtseven",
         "teamId": "1610612748",
         "teamTricode": "MIA",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1630173",
@@ -2910,7 +2890,7 @@
         "lastName": "Achiuwa",
         "teamId": "1610612748",
         "teamTricode": "MIA",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "2772",
@@ -2920,7 +2900,7 @@
         "lastName": "Ariza",
         "teamId": "1610612748",
         "teamTricode": "MIA",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629639",
@@ -2930,7 +2910,7 @@
         "lastName": "Herro",
         "teamId": "1610612748",
         "teamTricode": "MIA",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "2617",
@@ -2940,7 +2920,7 @@
         "lastName": "Haslem",
         "teamId": "1610612748",
         "teamTricode": "MIA",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "203506",
@@ -2950,7 +2930,7 @@
         "lastName": "Oladipo",
         "teamId": "1610612748",
         "teamTricode": "MIA",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       }
     ],
     "keyAdditions": [],
@@ -2973,7 +2953,7 @@
         "lastName": "Toupane",
         "teamId": "1610612749",
         "teamTricode": "MIL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1626171",
@@ -2983,7 +2963,7 @@
         "lastName": "Portis",
         "teamId": "1610612749",
         "teamTricode": "MIL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "201572",
@@ -2993,7 +2973,7 @@
         "lastName": "Lopez",
         "teamId": "1610612749",
         "teamTricode": "MIL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1627854",
@@ -3003,7 +2983,7 @@
         "lastName": "Forbes",
         "teamId": "1610612749",
         "teamTricode": "MIL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1628978",
@@ -3013,7 +2993,7 @@
         "lastName": "DiVincenzo",
         "teamId": "1610612749",
         "teamTricode": "MIL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629091",
@@ -3023,7 +3003,7 @@
         "lastName": "Bryant",
         "teamId": "1610612749",
         "teamTricode": "MIL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "203507",
@@ -3033,7 +3013,7 @@
         "lastName": "Antetokounmpo",
         "teamId": "1610612749",
         "teamTricode": "MIL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "201952",
@@ -3043,7 +3023,7 @@
         "lastName": "Teague",
         "teamId": "1610612749",
         "teamTricode": "MIL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629670",
@@ -3053,7 +3033,7 @@
         "lastName": "Nwora",
         "teamId": "1610612749",
         "teamTricode": "MIL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "201950",
@@ -3063,7 +3043,7 @@
         "lastName": "Holiday",
         "teamId": "1610612749",
         "teamTricode": "MIL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1628382",
@@ -3073,7 +3053,7 @@
         "lastName": "Jackson",
         "teamId": "1610612749",
         "teamTricode": "MIL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "203114",
@@ -3083,7 +3063,7 @@
         "lastName": "Middleton",
         "teamId": "1610612749",
         "teamTricode": "MIL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629603",
@@ -3093,7 +3073,7 @@
         "lastName": "Diakite",
         "teamId": "1610612749",
         "teamTricode": "MIL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "200782",
@@ -3103,7 +3083,7 @@
         "lastName": "Tucker",
         "teamId": "1610612749",
         "teamTricode": "MIL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1626192",
@@ -3113,7 +3093,7 @@
         "lastName": "Connaughton",
         "teamId": "1610612749",
         "teamTricode": "MIL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1630241",
@@ -3123,7 +3103,7 @@
         "lastName": "Merrill",
         "teamId": "1610612749",
         "teamTricode": "MIL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "203648",
@@ -3133,7 +3113,7 @@
         "lastName": "Antetokounmpo",
         "teamId": "1610612749",
         "teamTricode": "MIL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       }
     ],
     "keyAdditions": [],
@@ -3149,6 +3129,16 @@
     "name": "Timberwolves",
     "roster": [
       {
+        "key": "1628993",
+        "name": "Alize Johnson",
+        "playerId": "1628993",
+        "firstName": "Alize",
+        "lastName": "Johnson",
+        "teamId": "1610612750",
+        "teamTricode": "MIN",
+        "source": "ball_dont_lie"
+      },
+      {
         "key": "1630162",
         "name": "Anthony Edwards",
         "playerId": "1630162",
@@ -3156,7 +3146,17 @@
         "lastName": "Edwards",
         "teamId": "1610612750",
         "teamTricode": "MIN",
-        "source": "fallback"
+        "source": "ball_dont_lie"
+      },
+      {
+        "key": "203085",
+        "name": "Austin Rivers",
+        "playerId": "203085",
+        "firstName": "Austin",
+        "lastName": "Rivers",
+        "teamId": "1610612750",
+        "teamTricode": "MIN",
+        "source": "ball_dont_lie"
       },
       {
         "key": "1626156",
@@ -3166,7 +3166,7 @@
         "lastName": "Russell",
         "teamId": "1610612750",
         "teamTricode": "MIN",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "202334",
@@ -3176,7 +3176,7 @@
         "lastName": "Davis",
         "teamId": "1610612750",
         "teamTricode": "MIN",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1630183",
@@ -3186,7 +3186,7 @@
         "lastName": "McDaniels",
         "teamId": "1610612750",
         "teamTricode": "MIN",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1627774",
@@ -3196,7 +3196,7 @@
         "lastName": "Layman",
         "teamId": "1610612750",
         "teamTricode": "MIN",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629020",
@@ -3206,7 +3206,7 @@
         "lastName": "Vanderbilt",
         "teamId": "1610612750",
         "teamTricode": "MIN",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629633",
@@ -3216,7 +3216,7 @@
         "lastName": "Culver",
         "teamId": "1610612750",
         "teamTricode": "MIN",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629669",
@@ -3226,7 +3226,7 @@
         "lastName": "Nowell",
         "teamId": "1610612750",
         "teamTricode": "MIN",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629162",
@@ -3236,7 +3236,7 @@
         "lastName": "McLaughlin",
         "teamId": "1610612750",
         "teamTricode": "MIN",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629006",
@@ -3246,7 +3246,7 @@
         "lastName": "Okogie",
         "teamId": "1610612750",
         "teamTricode": "MIN",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1627823",
@@ -3256,7 +3256,7 @@
         "lastName": "Hernangomez",
         "teamId": "1610612750",
         "teamTricode": "MIN",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1626157",
@@ -3266,7 +3266,7 @@
         "lastName": "Towns",
         "teamId": "1610612750",
         "teamTricode": "MIN",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1627736",
@@ -3276,7 +3276,7 @@
         "lastName": "Beasley",
         "teamId": "1610612750",
         "teamTricode": "MIN",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629675",
@@ -3286,7 +3286,7 @@
         "lastName": "Reid",
         "teamId": "1610612750",
         "teamTricode": "MIN",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "201937",
@@ -3296,7 +3296,7 @@
         "lastName": "Rubio",
         "teamId": "1610612750",
         "teamTricode": "MIN",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       }
     ],
     "keyAdditions": [],
@@ -3319,7 +3319,17 @@
         "lastName": "Ingram",
         "teamId": "1610612740",
         "teamTricode": "NOP",
-        "source": "fallback"
+        "source": "ball_dont_lie"
+      },
+      {
+        "key": "1627749",
+        "name": "Dejounte Murray",
+        "playerId": "1627749",
+        "firstName": "Dejounte",
+        "lastName": "Murray",
+        "teamId": "1610612740",
+        "teamTricode": "NOP",
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629712",
@@ -3329,7 +3339,7 @@
         "lastName": "Louzada",
         "teamId": "1610612740",
         "teamTricode": "NOP",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "202339",
@@ -3339,7 +3349,7 @@
         "lastName": "Bledsoe",
         "teamId": "1610612740",
         "teamTricode": "NOP",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "201949",
@@ -3349,7 +3359,7 @@
         "lastName": "Johnson",
         "teamId": "1610612740",
         "teamTricode": "NOP",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "203263",
@@ -3359,7 +3369,7 @@
         "lastName": "Nunnally",
         "teamId": "1610612740",
         "teamTricode": "NOP",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629637",
@@ -3369,7 +3379,7 @@
         "lastName": "Hayes",
         "teamId": "1610612740",
         "teamTricode": "NOP",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1628404",
@@ -3379,7 +3389,7 @@
         "lastName": "Hart",
         "teamId": "1610612740",
         "teamTricode": "NOP",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1630184",
@@ -3389,7 +3399,7 @@
         "lastName": "Jr.",
         "teamId": "1610612740",
         "teamTricode": "NOP",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1628366",
@@ -3399,7 +3409,7 @@
         "lastName": "Ball",
         "teamId": "1610612740",
         "teamTricode": "NOP",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1630230",
@@ -3409,7 +3419,7 @@
         "lastName": "Marshall",
         "teamId": "1610612740",
         "teamTricode": "NOP",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629638",
@@ -3419,7 +3429,7 @@
         "lastName": "Alexander-Walker",
         "teamId": "1610612740",
         "teamTricode": "NOP",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "203500",
@@ -3429,7 +3439,7 @@
         "lastName": "Adams",
         "teamId": "1610612740",
         "teamTricode": "NOP",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629117",
@@ -3439,7 +3449,7 @@
         "lastName": "Gabriel",
         "teamId": "1610612740",
         "teamTricode": "NOP",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1628411",
@@ -3449,7 +3459,7 @@
         "lastName": "Iwundu",
         "teamId": "1610612740",
         "teamTricode": "NOP",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1626195",
@@ -3459,7 +3469,7 @@
         "lastName": "Hernangomez",
         "teamId": "1610612740",
         "teamTricode": "NOP",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629627",
@@ -3469,7 +3479,7 @@
         "lastName": "Williamson",
         "teamId": "1610612740",
         "teamTricode": "NOP",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       }
     ],
     "keyAdditions": [],
@@ -3485,14 +3495,14 @@
     "name": "Knicks",
     "roster": [
       {
-        "key": "202692",
-        "name": "Alec Burks",
-        "playerId": "202692",
-        "firstName": "Alec",
-        "lastName": "Burks",
+        "key": "203458",
+        "name": "Alex Len",
+        "playerId": "203458",
+        "firstName": "Alex",
+        "lastName": "Len",
         "teamId": "1610612752",
         "teamTricode": "NYK",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "201565",
@@ -3502,7 +3512,7 @@
         "lastName": "Rose",
         "teamId": "1610612752",
         "teamTricode": "NYK",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "203901",
@@ -3512,7 +3522,7 @@
         "lastName": "Payton",
         "teamId": "1610612752",
         "teamTricode": "NYK",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1628373",
@@ -3522,7 +3532,7 @@
         "lastName": "Ntilikina",
         "teamId": "1610612752",
         "teamTricode": "NYK",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1630193",
@@ -3532,7 +3542,7 @@
         "lastName": "Quickley",
         "teamId": "1610612752",
         "teamTricode": "NYK",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629607",
@@ -3542,7 +3552,7 @@
         "lastName": "Harper",
         "teamId": "1610612752",
         "teamTricode": "NYK",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "203944",
@@ -3552,7 +3562,7 @@
         "lastName": "Randle",
         "teamId": "1610612752",
         "teamTricode": "NYK",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1628995",
@@ -3562,7 +3572,7 @@
         "lastName": "II",
         "teamId": "1610612752",
         "teamTricode": "NYK",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1630492",
@@ -3572,7 +3582,7 @@
         "lastName": "Vildoza",
         "teamId": "1610612752",
         "teamTricode": "NYK",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629011",
@@ -3582,7 +3592,7 @@
         "lastName": "Robinson",
         "teamId": "1610612752",
         "teamTricode": "NYK",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "203457",
@@ -3592,7 +3602,7 @@
         "lastName": "Noel",
         "teamId": "1610612752",
         "teamTricode": "NYK",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "203658",
@@ -3602,7 +3612,7 @@
         "lastName": "Pelle",
         "teamId": "1610612752",
         "teamTricode": "NYK",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1630167",
@@ -3612,7 +3622,7 @@
         "lastName": "Toppin",
         "teamId": "1610612752",
         "teamTricode": "NYK",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "203493",
@@ -3622,7 +3632,7 @@
         "lastName": "Bullock",
         "teamId": "1610612752",
         "teamTricode": "NYK",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629628",
@@ -3632,7 +3642,7 @@
         "lastName": "Barrett",
         "teamId": "1610612752",
         "teamTricode": "NYK",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "201959",
@@ -3642,7 +3652,7 @@
         "lastName": "Gibson",
         "teamId": "1610612752",
         "teamTricode": "NYK",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629033",
@@ -3652,7 +3662,7 @@
         "lastName": "Pinson",
         "teamId": "1610612752",
         "teamTricode": "NYK",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       }
     ],
     "keyAdditions": [],
@@ -3668,16 +3678,6 @@
     "name": "Thunder",
     "roster": [
       {
-        "key": "201143",
-        "name": "Al Horford",
-        "playerId": "201143",
-        "firstName": "Al",
-        "lastName": "Horford",
-        "teamId": "1610612760",
-        "teamTricode": "OKC",
-        "source": "fallback"
-      },
-      {
         "key": "1630197",
         "name": "Aleksej Pokusevski",
         "playerId": "1630197",
@@ -3685,7 +3685,7 @@
         "lastName": "Pokusevski",
         "teamId": "1610612760",
         "teamTricode": "OKC",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629718",
@@ -3695,7 +3695,7 @@
         "lastName": "Jr.",
         "teamId": "1610612760",
         "teamTricode": "OKC",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629647",
@@ -3705,7 +3705,7 @@
         "lastName": "Bazley",
         "teamId": "1610612760",
         "teamTricode": "OKC",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1630466",
@@ -3715,7 +3715,7 @@
         "lastName": "Deck",
         "teamId": "1610612760",
         "teamTricode": "OKC",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629676",
@@ -3725,7 +3725,7 @@
         "lastName": "Roby",
         "teamId": "1610612760",
         "teamTricode": "OKC",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629658",
@@ -3735,7 +3735,7 @@
         "lastName": "Hoard",
         "teamId": "1610612760",
         "teamTricode": "OKC",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1630221",
@@ -3745,7 +3745,7 @@
         "lastName": "Hall",
         "teamId": "1610612760",
         "teamTricode": "OKC",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629026",
@@ -3755,7 +3755,7 @@
         "lastName": "Williams",
         "teamId": "1610612760",
         "teamTricode": "OKC",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629652",
@@ -3765,7 +3765,7 @@
         "lastName": "Dort",
         "teamId": "1610612760",
         "teamTricode": "OKC",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "203488",
@@ -3775,7 +3775,7 @@
         "lastName": "Muscala",
         "teamId": "1610612760",
         "teamTricode": "OKC",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629650",
@@ -3785,7 +3785,7 @@
         "lastName": "Brown",
         "teamId": "1610612760",
         "teamTricode": "OKC",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1628983",
@@ -3795,7 +3795,7 @@
         "lastName": "Gilgeous-Alexander",
         "teamId": "1610612760",
         "teamTricode": "OKC",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629004",
@@ -3805,7 +3805,7 @@
         "lastName": "Mykhailiuk",
         "teamId": "1610612760",
         "teamTricode": "OKC",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1630177",
@@ -3815,7 +3815,7 @@
         "lastName": "Maledon",
         "teamId": "1610612760",
         "teamTricode": "OKC",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1628396",
@@ -3825,7 +3825,7 @@
         "lastName": "Bradley",
         "teamId": "1610612760",
         "teamTricode": "OKC",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629660",
@@ -3835,7 +3835,7 @@
         "lastName": "Jerome",
         "teamId": "1610612760",
         "teamTricode": "OKC",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       }
     ],
     "keyAdditions": [],
@@ -3858,7 +3858,7 @@
         "lastName": "Randle",
         "teamId": "1610612753",
         "teamTricode": "ORL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629643",
@@ -3868,7 +3868,7 @@
         "lastName": "Okeke",
         "teamId": "1610612753",
         "teamTricode": "ORL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1630175",
@@ -3878,7 +3878,17 @@
         "lastName": "Anthony",
         "teamId": "1610612753",
         "teamTricode": "ORL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
+      },
+      {
+        "key": "202709",
+        "name": "Cory Joseph",
+        "playerId": "202709",
+        "firstName": "Cory",
+        "lastName": "Joseph",
+        "teamId": "1610612753",
+        "teamTricode": "ORL",
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629743",
@@ -3888,7 +3898,7 @@
         "lastName": "Hall",
         "teamId": "1610612753",
         "teamTricode": "ORL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1628407",
@@ -3898,7 +3908,7 @@
         "lastName": "Bacon",
         "teamId": "1610612753",
         "teamTricode": "ORL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "203914",
@@ -3908,7 +3918,7 @@
         "lastName": "Harris",
         "teamId": "1610612753",
         "teamTricode": "ORL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629649",
@@ -3918,7 +3928,7 @@
         "lastName": "Brazdeikis",
         "teamId": "1610612753",
         "teamTricode": "ORL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "203516",
@@ -3928,7 +3938,7 @@
         "lastName": "III",
         "teamId": "1610612753",
         "teamTricode": "ORL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1628371",
@@ -3938,7 +3948,7 @@
         "lastName": "Isaac",
         "teamId": "1610612753",
         "teamTricode": "ORL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1628365",
@@ -3948,7 +3958,7 @@
         "lastName": "Fultz",
         "teamId": "1610612753",
         "teamTricode": "ORL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "203487",
@@ -3958,7 +3968,7 @@
         "lastName": "Carter-Williams",
         "teamId": "1610612753",
         "teamTricode": "ORL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1628964",
@@ -3968,7 +3978,7 @@
         "lastName": "Bamba",
         "teamId": "1610612753",
         "teamTricode": "ORL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629021",
@@ -3978,7 +3988,7 @@
         "lastName": "Wagner",
         "teamId": "1610612753",
         "teamTricode": "ORL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "203490",
@@ -3988,7 +3998,7 @@
         "lastName": "Jr.",
         "teamId": "1610612753",
         "teamTricode": "ORL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1630181",
@@ -3998,7 +4008,7 @@
         "lastName": "Hampton",
         "teamId": "1610612753",
         "teamTricode": "ORL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1628414",
@@ -4008,7 +4018,7 @@
         "lastName": "Thornwell",
         "teamId": "1610612753",
         "teamTricode": "ORL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "203082",
@@ -4018,7 +4028,7 @@
         "lastName": "Ross",
         "teamId": "1610612753",
         "teamTricode": "ORL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1628976",
@@ -4028,7 +4038,7 @@
         "lastName": "Jr.",
         "teamId": "1610612753",
         "teamTricode": "ORL",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       }
     ],
     "keyAdditions": [],
@@ -4044,24 +4054,14 @@
     "name": "76ers",
     "roster": [
       {
-        "key": "201229",
-        "name": "Anthony Tolliver",
-        "playerId": "201229",
-        "firstName": "Anthony",
-        "lastName": "Tolliver",
+        "key": "203083",
+        "name": "Andre Drummond",
+        "playerId": "203083",
+        "firstName": "Andre",
+        "lastName": "Drummond",
         "teamId": "1610612755",
         "teamTricode": "PHI",
-        "source": "fallback"
-      },
-      {
-        "key": "1627732",
-        "name": "Ben Simmons",
-        "playerId": "1627732",
-        "firstName": "Ben",
-        "lastName": "Simmons",
-        "teamId": "1610612755",
-        "teamTricode": "PHI",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "201980",
@@ -4071,7 +4071,7 @@
         "lastName": "Green",
         "teamId": "1610612755",
         "teamTricode": "PHI",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "2730",
@@ -4081,7 +4081,7 @@
         "lastName": "Howard",
         "teamId": "1610612755",
         "teamTricode": "PHI",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1627788",
@@ -4091,7 +4091,7 @@
         "lastName": "Korkmaz",
         "teamId": "1610612755",
         "teamTricode": "PHI",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629109",
@@ -4101,7 +4101,7 @@
         "lastName": "Clark",
         "teamId": "1610612755",
         "teamTricode": "PHI",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "201588",
@@ -4111,7 +4111,7 @@
         "lastName": "Hill",
         "teamId": "1610612755",
         "teamTricode": "PHI",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1630198",
@@ -4121,7 +4121,7 @@
         "lastName": "Joe",
         "teamId": "1610612755",
         "teamTricode": "PHI",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "203954",
@@ -4131,7 +4131,7 @@
         "lastName": "Embiid",
         "teamId": "1610612755",
         "teamTricode": "PHI",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629680",
@@ -4141,7 +4141,7 @@
         "lastName": "Thybulle",
         "teamId": "1610612755",
         "teamTricode": "PHI",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "203118",
@@ -4151,7 +4151,7 @@
         "lastName": "Scott",
         "teamId": "1610612755",
         "teamTricode": "PHI",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1630194",
@@ -4161,7 +4161,7 @@
         "lastName": "Reed",
         "teamId": "1610612755",
         "teamTricode": "PHI",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629730",
@@ -4171,7 +4171,7 @@
         "lastName": "Tucker",
         "teamId": "1610612755",
         "teamTricode": "PHI",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "203552",
@@ -4181,7 +4181,7 @@
         "lastName": "Curry",
         "teamId": "1610612755",
         "teamTricode": "PHI",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629003",
@@ -4191,7 +4191,7 @@
         "lastName": "Milton",
         "teamId": "1610612755",
         "teamTricode": "PHI",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "202699",
@@ -4201,7 +4201,7 @@
         "lastName": "Harris",
         "teamId": "1610612755",
         "teamTricode": "PHI",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1630178",
@@ -4211,7 +4211,7 @@
         "lastName": "Maxey",
         "teamId": "1610612755",
         "teamTricode": "PHI",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       }
     ],
     "keyAdditions": [],
@@ -4234,7 +4234,7 @@
         "lastName": "Nader",
         "teamId": "1610612756",
         "teamTricode": "PHX",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629661",
@@ -4244,7 +4244,7 @@
         "lastName": "Johnson",
         "teamId": "1610612756",
         "teamTricode": "PHX",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1626166",
@@ -4254,7 +4254,7 @@
         "lastName": "Payne",
         "teamId": "1610612756",
         "teamTricode": "PHX",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "101108",
@@ -4264,7 +4264,17 @@
         "lastName": "Paul",
         "teamId": "1610612756",
         "teamTricode": "PHX",
-        "source": "fallback"
+        "source": "ball_dont_lie"
+      },
+      {
+        "key": "1627814",
+        "name": "Damion Lee",
+        "playerId": "1627814",
+        "firstName": "Damion",
+        "lastName": "Lee",
+        "teamId": "1610612756",
+        "teamTricode": "PHX",
+        "source": "ball_dont_lie"
       },
       {
         "key": "203967",
@@ -4274,7 +4284,7 @@
         "lastName": "Saric",
         "teamId": "1610612756",
         "teamTricode": "PHX",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629028",
@@ -4284,7 +4294,7 @@
         "lastName": "Ayton",
         "teamId": "1610612756",
         "teamTricode": "PHX",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1626164",
@@ -4294,7 +4304,7 @@
         "lastName": "Booker",
         "teamId": "1610612756",
         "teamTricode": "PHX",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "202734",
@@ -4304,7 +4314,7 @@
         "lastName": "Moore",
         "teamId": "1610612756",
         "teamTricode": "PHX",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1626163",
@@ -4314,7 +4324,7 @@
         "lastName": "Kaminsky",
         "teamId": "1610612756",
         "teamTricode": "PHX",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "203109",
@@ -4324,7 +4334,7 @@
         "lastName": "Crowder",
         "teamId": "1610612756",
         "teamTricode": "PHX",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1630188",
@@ -4334,7 +4344,7 @@
         "lastName": "Smith",
         "teamId": "1610612756",
         "teamTricode": "PHX",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1628975",
@@ -4344,7 +4354,7 @@
         "lastName": "Carter",
         "teamId": "1610612756",
         "teamTricode": "PHX",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "204038",
@@ -4354,7 +4364,7 @@
         "lastName": "Galloway",
         "teamId": "1610612756",
         "teamTricode": "PHX",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1628969",
@@ -4364,7 +4374,7 @@
         "lastName": "Bridges",
         "teamId": "1610612756",
         "teamTricode": "PHX",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1628470",
@@ -4374,7 +4384,7 @@
         "lastName": "Craig",
         "teamId": "1610612756",
         "teamTricode": "PHX",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1630234",
@@ -4384,7 +4394,7 @@
         "lastName": "Alexander",
         "teamId": "1610612756",
         "teamTricode": "PHX",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       }
     ],
     "keyAdditions": [],
@@ -4400,14 +4410,14 @@
     "name": "Trail Blazers",
     "roster": [
       {
-        "key": "1629014",
-        "name": "Anfernee Simons",
-        "playerId": "1629014",
-        "firstName": "Anfernee",
-        "lastName": "Simons",
+        "key": "202329",
+        "name": "Al-Farouq Aminu",
+        "playerId": "202329",
+        "firstName": "Al-Farouq",
+        "lastName": "Aminu",
         "teamId": "1610612757",
         "teamTricode": "POR",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "2546",
@@ -4417,7 +4427,7 @@
         "lastName": "Anthony",
         "teamId": "1610612757",
         "teamTricode": "POR",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629604",
@@ -4427,7 +4437,7 @@
         "lastName": "Elleby",
         "teamId": "1610612757",
         "teamTricode": "POR",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "203468",
@@ -4437,7 +4447,7 @@
         "lastName": "McCollum",
         "teamId": "1610612757",
         "teamTricode": "POR",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "203081",
@@ -4447,7 +4457,7 @@
         "lastName": "Lillard",
         "teamId": "1610612757",
         "teamTricode": "POR",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1627884",
@@ -4457,7 +4467,7 @@
         "lastName": "Jr.",
         "teamId": "1610612757",
         "teamTricode": "POR",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "202683",
@@ -4467,7 +4477,7 @@
         "lastName": "Kanter",
         "teamId": "1610612757",
         "teamTricode": "POR",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1628385",
@@ -4477,7 +4487,7 @@
         "lastName": "III",
         "teamId": "1610612757",
         "teamTricode": "POR",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "203994",
@@ -4487,7 +4497,7 @@
         "lastName": "Nurkic",
         "teamId": "1610612757",
         "teamTricode": "POR",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629833",
@@ -4497,7 +4507,7 @@
         "lastName": "Blevins",
         "teamId": "1610612757",
         "teamTricode": "POR",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629642",
@@ -4507,7 +4517,7 @@
         "lastName": "Little",
         "teamId": "1610612757",
         "teamTricode": "POR",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1626181",
@@ -4517,7 +4527,7 @@
         "lastName": "Powell",
         "teamId": "1610612757",
         "teamTricode": "POR",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "203496",
@@ -4527,7 +4537,7 @@
         "lastName": "Covington",
         "teamId": "1610612757",
         "teamTricode": "POR",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1626178",
@@ -4537,7 +4547,7 @@
         "lastName": "Hollis-Jefferson",
         "teamId": "1610612757",
         "teamTricode": "POR",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1628388",
@@ -4547,7 +4557,7 @@
         "lastName": "Leaf",
         "teamId": "1610612757",
         "teamTricode": "POR",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1628380",
@@ -4557,7 +4567,7 @@
         "lastName": "Collins",
         "teamId": "1610612757",
         "teamTricode": "POR",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       }
     ],
     "keyAdditions": [],
@@ -4580,7 +4590,7 @@
         "lastName": "Hield",
         "teamId": "1610612758",
         "teamTricode": "SAC",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629002",
@@ -4590,7 +4600,7 @@
         "lastName": "Metu",
         "teamId": "1610612758",
         "teamTricode": "SAC",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1627745",
@@ -4600,27 +4610,17 @@
         "lastName": "Jones",
         "teamId": "1610612758",
         "teamTricode": "SAC",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
-        "key": "1628368",
-        "name": "De'Aaron Fox",
-        "playerId": "1628368",
-        "firstName": "De'Aaron",
-        "lastName": "Fox",
+        "key": "201942",
+        "name": "DeMar DeRozan",
+        "playerId": "201942",
+        "firstName": "DeMar",
+        "lastName": "DeRozan",
         "teamId": "1610612758",
         "teamTricode": "SAC",
-        "source": "fallback"
-      },
-      {
-        "key": "1626153",
-        "name": "Delon Wright",
-        "playerId": "1626153",
-        "firstName": "Delon",
-        "lastName": "Wright",
-        "teamId": "1610612758",
-        "teamTricode": "SAC",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "203084",
@@ -4630,7 +4630,7 @@
         "lastName": "Barnes",
         "teamId": "1610612758",
         "teamTricode": "SAC",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "202355",
@@ -4640,7 +4640,7 @@
         "lastName": "Whiteside",
         "teamId": "1610612758",
         "teamTricode": "SAC",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1630186",
@@ -4650,7 +4650,7 @@
         "lastName": "Ramsey",
         "teamId": "1610612758",
         "teamTricode": "SAC",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629713",
@@ -4660,7 +4660,7 @@
         "lastName": "James",
         "teamId": "1610612758",
         "teamTricode": "SAC",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629657",
@@ -4670,7 +4670,7 @@
         "lastName": "Guy",
         "teamId": "1610612758",
         "teamTricode": "SAC",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629663",
@@ -4680,7 +4680,7 @@
         "lastName": "King",
         "teamId": "1610612758",
         "teamTricode": "SAC",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1628963",
@@ -4690,7 +4690,7 @@
         "lastName": "III",
         "teamId": "1610612758",
         "teamTricode": "SAC",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "203090",
@@ -4700,7 +4700,7 @@
         "lastName": "Harkless",
         "teamId": "1610612758",
         "teamTricode": "SAC",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1626158",
@@ -4710,7 +4710,7 @@
         "lastName": "Holmes",
         "teamId": "1610612758",
         "teamTricode": "SAC",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1630218",
@@ -4720,7 +4720,7 @@
         "lastName": "II",
         "teamId": "1610612758",
         "teamTricode": "SAC",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629056",
@@ -4730,7 +4730,7 @@
         "lastName": "Davis",
         "teamId": "1610612758",
         "teamTricode": "SAC",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1630169",
@@ -4740,7 +4740,7 @@
         "lastName": "Haliburton",
         "teamId": "1610612758",
         "teamTricode": "SAC",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       }
     ],
     "keyAdditions": [],
@@ -4756,24 +4756,14 @@
     "name": "Spurs",
     "roster": [
       {
-        "key": "1627749",
-        "name": "Dejounte Murray",
-        "playerId": "1627749",
-        "firstName": "Dejounte",
-        "lastName": "Murray",
+        "key": "1628368",
+        "name": "De'Aaron Fox",
+        "playerId": "1628368",
+        "firstName": "De'Aaron",
+        "lastName": "Fox",
         "teamId": "1610612759",
         "teamTricode": "SAS",
-        "source": "fallback"
-      },
-      {
-        "key": "201942",
-        "name": "DeMar DeRozan",
-        "playerId": "201942",
-        "firstName": "DeMar",
-        "lastName": "DeRozan",
-        "teamId": "1610612759",
-        "teamTricode": "SAS",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1628401",
@@ -4783,7 +4773,7 @@
         "lastName": "White",
         "teamId": "1610612759",
         "teamTricode": "SAS",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1630170",
@@ -4793,7 +4783,7 @@
         "lastName": "Vassell",
         "teamId": "1610612759",
         "teamTricode": "SAS",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629234",
@@ -4803,7 +4793,7 @@
         "lastName": "Eubanks",
         "teamId": "1610612759",
         "teamTricode": "SAS",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "203476",
@@ -4813,7 +4803,7 @@
         "lastName": "Dieng",
         "teamId": "1610612759",
         "teamTricode": "SAS",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1627751",
@@ -4823,7 +4813,7 @@
         "lastName": "Poeltl",
         "teamId": "1610612759",
         "teamTricode": "SAS",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1628966",
@@ -4833,7 +4823,7 @@
         "lastName": "Bates-Diop",
         "teamId": "1610612759",
         "teamTricode": "SAS",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629640",
@@ -4843,7 +4833,7 @@
         "lastName": "Johnson",
         "teamId": "1610612759",
         "teamTricode": "SAS",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629022",
@@ -4853,7 +4843,7 @@
         "lastName": "IV",
         "teamId": "1610612759",
         "teamTricode": "SAS",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629677",
@@ -4863,7 +4853,7 @@
         "lastName": "Samanic",
         "teamId": "1610612759",
         "teamTricode": "SAS",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "201988",
@@ -4873,7 +4863,7 @@
         "lastName": "Mills",
         "teamId": "1610612759",
         "teamTricode": "SAS",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629683",
@@ -4883,7 +4873,7 @@
         "lastName": "Weatherspoon",
         "teamId": "1610612759",
         "teamTricode": "SAS",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "200752",
@@ -4893,7 +4883,7 @@
         "lastName": "Gay",
         "teamId": "1610612759",
         "teamTricode": "SAS",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1630200",
@@ -4903,7 +4893,7 @@
         "lastName": "Jones",
         "teamId": "1610612759",
         "teamTricode": "SAS",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1626168",
@@ -4913,7 +4903,7 @@
         "lastName": "Lyles",
         "teamId": "1610612759",
         "teamTricode": "SAS",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       }
     ],
     "keyAdditions": [],
@@ -4929,16 +4919,6 @@
     "name": "Raptors",
     "roster": [
       {
-        "key": "203382",
-        "name": "Aron Baynes",
-        "playerId": "203382",
-        "firstName": "Aron",
-        "lastName": "Baynes",
-        "teamId": "1610612761",
-        "teamTricode": "TOR",
-        "source": "fallback"
-      },
-      {
         "key": "1628449",
         "name": "Chris Boucher",
         "playerId": "1628449",
@@ -4946,7 +4926,7 @@
         "lastName": "Boucher",
         "teamId": "1610612761",
         "teamTricode": "TOR",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1627761",
@@ -4956,7 +4936,7 @@
         "lastName": "Bembry",
         "teamId": "1610612761",
         "teamTricode": "TOR",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1627832",
@@ -4966,7 +4946,7 @@
         "lastName": "VanVleet",
         "teamId": "1610612761",
         "teamTricode": "TOR",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1630273",
@@ -4976,7 +4956,17 @@
         "lastName": "Gillespie",
         "teamId": "1610612761",
         "teamTricode": "TOR",
-        "source": "fallback"
+        "source": "ball_dont_lie"
+      },
+      {
+        "key": "202066",
+        "name": "Garrett Temple",
+        "playerId": "202066",
+        "firstName": "Garrett",
+        "lastName": "Temple",
+        "teamId": "1610612761",
+        "teamTricode": "TOR",
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629018",
@@ -4986,7 +4976,7 @@
         "lastName": "Jr.",
         "teamId": "1610612761",
         "teamTricode": "TOR",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1630223",
@@ -4996,7 +4986,7 @@
         "lastName": "Harris",
         "teamId": "1610612761",
         "teamTricode": "TOR",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "203920",
@@ -5006,7 +4996,7 @@
         "lastName": "Birch",
         "teamId": "1610612761",
         "teamTricode": "TOR",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "200768",
@@ -5016,7 +5006,7 @@
         "lastName": "Lowry",
         "teamId": "1610612761",
         "teamTricode": "TOR",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1630201",
@@ -5026,7 +5016,7 @@
         "lastName": "Flynn",
         "teamId": "1610612761",
         "teamTricode": "TOR",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1628384",
@@ -5036,7 +5026,7 @@
         "lastName": "Anunoby",
         "teamId": "1610612761",
         "teamTricode": "TOR",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1627783",
@@ -5046,7 +5036,7 @@
         "lastName": "Siakam",
         "teamId": "1610612761",
         "teamTricode": "TOR",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1628778",
@@ -5056,7 +5046,7 @@
         "lastName": "Watson",
         "teamId": "1610612761",
         "teamTricode": "TOR",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "203918",
@@ -5066,7 +5056,7 @@
         "lastName": "Hood",
         "teamId": "1610612761",
         "teamTricode": "TOR",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1626169",
@@ -5076,7 +5066,7 @@
         "lastName": "Johnson",
         "teamId": "1610612761",
         "teamTricode": "TOR",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629139",
@@ -5086,7 +5076,7 @@
         "lastName": "Watanabe",
         "teamId": "1610612761",
         "teamTricode": "TOR",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       }
     ],
     "keyAdditions": [],
@@ -5109,7 +5099,17 @@
         "lastName": "Bogdanovic",
         "teamId": "1610612762",
         "teamTricode": "UTA",
-        "source": "fallback"
+        "source": "ball_dont_lie"
+      },
+      {
+        "key": "1627756",
+        "name": "Denzel Valentine",
+        "playerId": "1627756",
+        "firstName": "Denzel",
+        "lastName": "Valentine",
+        "teamId": "1610612762",
+        "teamTricode": "UTA",
+        "source": "ball_dont_lie"
       },
       {
         "key": "202324",
@@ -5119,7 +5119,7 @@
         "lastName": "Favors",
         "teamId": "1610612762",
         "teamTricode": "UTA",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1628378",
@@ -5129,7 +5129,7 @@
         "lastName": "Mitchell",
         "teamId": "1610612762",
         "teamTricode": "UTA",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1630190",
@@ -5139,7 +5139,7 @@
         "lastName": "Hughes",
         "teamId": "1610612762",
         "teamTricode": "UTA",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "101141",
@@ -5149,7 +5149,7 @@
         "lastName": "Ilyasova",
         "teamId": "1610612762",
         "teamTricode": "UTA",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1627777",
@@ -5159,7 +5159,7 @@
         "lastName": "Niang",
         "teamId": "1610612762",
         "teamTricode": "UTA",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629714",
@@ -5169,7 +5169,7 @@
         "lastName": "Brantley",
         "teamId": "1610612762",
         "teamTricode": "UTA",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "204060",
@@ -5179,7 +5179,7 @@
         "lastName": "Ingles",
         "teamId": "1610612762",
         "teamTricode": "UTA",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "203903",
@@ -5189,7 +5189,7 @@
         "lastName": "Clarkson",
         "teamId": "1610612762",
         "teamTricode": "UTA",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629752",
@@ -5199,7 +5199,7 @@
         "lastName": "Morgan",
         "teamId": "1610612762",
         "teamTricode": "UTA",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629744",
@@ -5209,7 +5209,7 @@
         "lastName": "Thomas",
         "teamId": "1610612762",
         "teamTricode": "UTA",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "201144",
@@ -5219,7 +5219,7 @@
         "lastName": "Conley",
         "teamId": "1610612762",
         "teamTricode": "UTA",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629671",
@@ -5229,7 +5229,7 @@
         "lastName": "Oni",
         "teamId": "1610612762",
         "teamTricode": "UTA",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1626220",
@@ -5239,7 +5239,7 @@
         "lastName": "O'Neale",
         "teamId": "1610612762",
         "teamTricode": "UTA",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "203497",
@@ -5249,7 +5249,7 @@
         "lastName": "Gobert",
         "teamId": "1610612762",
         "teamTricode": "UTA",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1630235",
@@ -5259,7 +5259,7 @@
         "lastName": "Forrest",
         "teamId": "1610612762",
         "teamTricode": "UTA",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1628962",
@@ -5269,7 +5269,7 @@
         "lastName": "Azubuike",
         "teamId": "1610612762",
         "teamTricode": "UTA",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       }
     ],
     "keyAdditions": [],
@@ -5285,16 +5285,6 @@
     "name": "Wizards",
     "roster": [
       {
-        "key": "203458",
-        "name": "Alex Len",
-        "playerId": "203458",
-        "firstName": "Alex",
-        "lastName": "Len",
-        "teamId": "1610612764",
-        "teamTricode": "WAS",
-        "source": "fallback"
-      },
-      {
         "key": "1630264",
         "name": "Anthony Gill",
         "playerId": "1630264",
@@ -5302,7 +5292,7 @@
         "lastName": "Gill",
         "teamId": "1610612764",
         "teamTricode": "WAS",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "203078",
@@ -5312,7 +5302,7 @@
         "lastName": "Beal",
         "teamId": "1610612764",
         "teamTricode": "WAS",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1630216",
@@ -5322,7 +5312,7 @@
         "lastName": "Winston",
         "teamId": "1610612764",
         "teamTricode": "WAS",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1628990",
@@ -5332,7 +5322,7 @@
         "lastName": "Hutchison",
         "teamId": "1610612764",
         "teamTricode": "WAS",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629655",
@@ -5342,7 +5332,7 @@
         "lastName": "Gafford",
         "teamId": "1610612764",
         "teamTricode": "WAS",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "202722",
@@ -5352,7 +5342,7 @@
         "lastName": "Bertans",
         "teamId": "1610612764",
         "teamTricode": "WAS",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1630166",
@@ -5362,7 +5352,7 @@
         "lastName": "Avdija",
         "teamId": "1610612764",
         "teamTricode": "WAS",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629726",
@@ -5372,7 +5362,7 @@
         "lastName": "Mathews",
         "teamId": "1610612764",
         "teamTricode": "WAS",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629067",
@@ -5382,7 +5372,7 @@
         "lastName": "Bonga",
         "teamId": "1610612764",
         "teamTricode": "WAS",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "202397",
@@ -5392,7 +5382,7 @@
         "lastName": "Smith",
         "teamId": "1610612764",
         "teamTricode": "WAS",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "203526",
@@ -5402,7 +5392,7 @@
         "lastName": "Neto",
         "teamId": "1610612764",
         "teamTricode": "WAS",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "201577",
@@ -5412,7 +5402,7 @@
         "lastName": "Lopez",
         "teamId": "1610612764",
         "teamTricode": "WAS",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1629060",
@@ -5422,7 +5412,7 @@
         "lastName": "Hachimura",
         "teamId": "1610612764",
         "teamTricode": "WAS",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "201566",
@@ -5432,7 +5422,7 @@
         "lastName": "Westbrook",
         "teamId": "1610612764",
         "teamTricode": "WAS",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       },
       {
         "key": "1628418",
@@ -5442,7 +5432,7 @@
         "lastName": "Bryant",
         "teamId": "1610612764",
         "teamTricode": "WAS",
-        "source": "fallback"
+        "source": "ball_dont_lie"
       }
     ],
     "keyAdditions": [],

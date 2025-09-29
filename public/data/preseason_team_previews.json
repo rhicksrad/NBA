@@ -1,6 +1,6 @@
 {
   "season": "2025-26",
-  "generatedAt": "2025-09-28T23:27:03.640Z",
+  "generatedAt": "2025-09-29T02:30:53.681Z",
   "previews": [
     {
       "tricode": "ATL",
@@ -28,13 +28,13 @@
       "name": "Nets",
       "heading": "Brooklyn Nets",
       "introParagraphs": [
-        "The core trio of Alize Johnson, Blake Griffin, and Bruce Brown gives the staff a clear identity to start from.",
+        "The core trio of Blake Griffin, Chris Chiozza, and De'Anthony Melton gives the staff a clear identity to start from.",
         "The front office kept the core intact and will lean on internal development.",
         "No rotation regulars departed, so continuity remains a strength."
       ],
       "coreStrength": "This is a developmental year, so cohesion and player growth drive the optimism.",
       "primaryRisk": "The margin for error is slim if the shooting variance swings the wrong way.",
-      "swingFactor": "Alize Johnson maintaining two-way consistency is the swing skill.",
+      "swingFactor": "Blake Griffin maintaining two-way consistency is the swing skill.",
       "seasonLabel": "2025-26",
       "ranking": {
         "score": 0.545827,
@@ -48,7 +48,7 @@
       "name": "Celtics",
       "heading": "Boston Celtics",
       "introParagraphs": [
-        "The core trio of Aaron Nesmith, Carsen Edwards, and Evan Fournier gives the staff a clear identity to start from.",
+        "The core trio of Aaron Nesmith, Al Horford, and Anfernee Simons gives the staff a clear identity to start from.",
         "The front office kept the core intact and will lean on internal development.",
         "No rotation regulars departed, so continuity remains a strength."
       ],
@@ -88,7 +88,7 @@
       "name": "Bulls",
       "heading": "Chicago Bulls",
       "introParagraphs": [
-        "The core trio of Adam Mokoka, Al-Farouq Aminu, and Coby White gives the staff a clear identity to start from.",
+        "The core trio of Adam Mokoka, Alfonzo McKinnie, and Coby White gives the staff a clear identity to start from.",
         "The front office kept the core intact and will lean on internal development.",
         "No rotation regulars departed, so continuity remains a strength."
       ],
@@ -148,7 +148,7 @@
       "name": "Nuggets",
       "heading": "Denver Nuggets",
       "introParagraphs": [
-        "The core trio of Aaron Gordon, Austin Rivers, and Bol Bol gives the staff a clear identity to start from.",
+        "The core trio of Aaron Gordon, Bol Bol, and Bruce Brown gives the staff a clear identity to start from.",
         "The front office kept the core intact and will lean on internal development.",
         "No rotation regulars departed, so continuity remains a strength."
       ],
@@ -168,13 +168,13 @@
       "name": "Pistons",
       "heading": "Detroit Pistons",
       "introParagraphs": [
-        "The core trio of Cory Joseph, Deividas Sirvydis, and Dennis Smith Jr. gives the staff a clear identity to start from.",
+        "The core trio of Anthony Tolliver, Aron Baynes, and Caris LeVert gives the staff a clear identity to start from.",
         "The front office kept the core intact and will lean on internal development.",
         "No rotation regulars departed, so continuity remains a strength."
       ],
       "coreStrength": "This is a developmental year, so cohesion and player growth drive the optimism.",
       "primaryRisk": "The margin for error is slim if the shooting variance swings the wrong way.",
-      "swingFactor": "Cory Joseph maintaining two-way consistency is the swing skill.",
+      "swingFactor": "Anthony Tolliver maintaining two-way consistency is the swing skill.",
       "seasonLabel": "2025-26",
       "ranking": {
         "score": 0.361096,
@@ -188,7 +188,7 @@
       "name": "Warriors",
       "heading": "Golden State Warriors",
       "introParagraphs": [
-        "The core trio of Alen Smailagic, Andrew Wiggins, and Damion Lee gives the staff a clear identity to start from.",
+        "The core trio of Alen Smailagic, Andre Iguodala, and Andrew Wiggins gives the staff a clear identity to start from.",
         "The front office kept the core intact and will lean on internal development.",
         "No rotation regulars departed, so continuity remains a strength."
       ],
@@ -208,13 +208,13 @@
       "name": "Rockets",
       "heading": "Houston Rockets",
       "introParagraphs": [
-        "The core trio of Anthony Lamb, Armoni Brooks, and Avery Bradley gives the staff a clear identity to start from.",
+        "The core trio of Aaron Holiday, Anthony Lamb, and Armoni Brooks gives the staff a clear identity to start from.",
         "The front office kept the core intact and will lean on internal development.",
         "No rotation regulars departed, so continuity remains a strength."
       ],
       "coreStrength": "Solid metrics and a dependable defensive spine give this group a high nightly floor.",
       "primaryRisk": "The margin for error is slim if the shooting variance swings the wrong way.",
-      "swingFactor": "Anthony Lamb maintaining two-way consistency is the swing skill.",
+      "swingFactor": "Aaron Holiday maintaining two-way consistency is the swing skill.",
       "seasonLabel": "2025-26",
       "ranking": {
         "score": 0.652192,
@@ -228,13 +228,13 @@
       "name": "Pacers",
       "heading": "Indiana Pacers",
       "introParagraphs": [
-        "The core trio of Aaron Holiday, Amida Brimah, and Caris LeVert gives the staff a clear identity to start from.",
+        "The core trio of Amida Brimah, Cassius Stanley, and Delon Wright gives the staff a clear identity to start from.",
         "The front office kept the core intact and will lean on internal development.",
         "No rotation regulars departed, so continuity remains a strength."
       ],
       "coreStrength": "Solid metrics and a dependable defensive spine give this group a high nightly floor.",
       "primaryRisk": "The margin for error is slim if the shooting variance swings the wrong way.",
-      "swingFactor": "Aaron Holiday maintaining two-way consistency is the swing skill.",
+      "swingFactor": "Amida Brimah maintaining two-way consistency is the swing skill.",
       "seasonLabel": "2025-26",
       "ranking": {
         "score": 0.706769,
@@ -248,7 +248,7 @@
       "name": "Clippers",
       "heading": "Los Angeles Clippers",
       "introParagraphs": [
-        "The core trio of Amir Coffey, Daniel Oturu, and DeMarcus Cousins gives the staff a clear identity to start from.",
+        "The core trio of Amir Coffey, Ben Simmons, and Daniel Oturu gives the staff a clear identity to start from.",
         "The front office kept the core intact and will lean on internal development.",
         "No rotation regulars departed, so continuity remains a strength."
       ],
@@ -268,7 +268,7 @@
       "name": "Lakers",
       "heading": "Los Angeles Lakers",
       "introParagraphs": [
-        "The core trio of Alex Caruso, Alfonzo McKinnie, and Andre Drummond gives the staff a clear identity to start from.",
+        "The core trio of Alex Caruso, Avery Bradley, and Ben McLemore gives the staff a clear identity to start from.",
         "The front office kept the core intact and will lean on internal development.",
         "No rotation regulars departed, so continuity remains a strength."
       ],
@@ -288,7 +288,7 @@
       "name": "Grizzlies",
       "heading": "Memphis Grizzlies",
       "introParagraphs": [
-        "The core trio of Brandon Clarke, De'Anthony Melton, and Desmond Bane gives the staff a clear identity to start from.",
+        "The core trio of Brandon Clarke, Desmond Bane, and Dillon Brooks gives the staff a clear identity to start from.",
         "The front office kept the core intact and will lean on internal development.",
         "No rotation regulars departed, so continuity remains a strength."
       ],
@@ -308,13 +308,13 @@
       "name": "Heat",
       "heading": "Miami Heat",
       "introParagraphs": [
-        "The core trio of Andre Iguodala, Bam Adebayo, and Dewayne Dedmon gives the staff a clear identity to start from.",
+        "The core trio of Alec Burks, Bam Adebayo, and Dewayne Dedmon gives the staff a clear identity to start from.",
         "The front office kept the core intact and will lean on internal development.",
         "No rotation regulars departed, so continuity remains a strength."
       ],
       "coreStrength": "Solid metrics and a dependable defensive spine give this group a high nightly floor.",
       "primaryRisk": "The margin for error is slim if the shooting variance swings the wrong way.",
-      "swingFactor": "Andre Iguodala maintaining two-way consistency is the swing skill.",
+      "swingFactor": "Alec Burks maintaining two-way consistency is the swing skill.",
       "seasonLabel": "2025-26",
       "ranking": {
         "score": 0.673173,
@@ -348,13 +348,13 @@
       "name": "Timberwolves",
       "heading": "Minnesota Timberwolves",
       "introParagraphs": [
-        "The core trio of Anthony Edwards, D'Angelo Russell, and Ed Davis gives the staff a clear identity to start from.",
+        "The core trio of Alize Johnson, Anthony Edwards, and Austin Rivers gives the staff a clear identity to start from.",
         "The front office kept the core intact and will lean on internal development.",
         "No rotation regulars departed, so continuity remains a strength."
       ],
       "coreStrength": "A top-tier efficiency profile remains the foundation; expect pace-and-space to set the tone.",
       "primaryRisk": "The margin for error is slim if the shooting variance swings the wrong way.",
-      "swingFactor": "Anthony Edwards maintaining two-way consistency is the swing skill.",
+      "swingFactor": "Alize Johnson maintaining two-way consistency is the swing skill.",
       "seasonLabel": "2025-26",
       "ranking": {
         "score": 0.790385,
@@ -368,7 +368,7 @@
       "name": "Pelicans",
       "heading": "New Orleans Pelicans",
       "introParagraphs": [
-        "The core trio of Brandon Ingram, Didi Louzada, and Eric Bledsoe gives the staff a clear identity to start from.",
+        "The core trio of Brandon Ingram, Dejounte Murray, and Didi Louzada gives the staff a clear identity to start from.",
         "The front office kept the core intact and will lean on internal development.",
         "No rotation regulars departed, so continuity remains a strength."
       ],
@@ -388,13 +388,13 @@
       "name": "Knicks",
       "heading": "New York Knicks",
       "introParagraphs": [
-        "The core trio of Alec Burks, Derrick Rose, and Elfrid Payton gives the staff a clear identity to start from.",
+        "The core trio of Alex Len, Derrick Rose, and Elfrid Payton gives the staff a clear identity to start from.",
         "The front office kept the core intact and will lean on internal development.",
         "No rotation regulars departed, so continuity remains a strength."
       ],
       "coreStrength": "A top-tier efficiency profile remains the foundation; expect pace-and-space to set the tone.",
       "primaryRisk": "The margin for error is slim if the shooting variance swings the wrong way.",
-      "swingFactor": "Alec Burks maintaining two-way consistency is the swing skill.",
+      "swingFactor": "Alex Len maintaining two-way consistency is the swing skill.",
       "seasonLabel": "2025-26",
       "ranking": {
         "score": 0.760308,
@@ -408,13 +408,13 @@
       "name": "Thunder",
       "heading": "Oklahoma City Thunder",
       "introParagraphs": [
-        "The core trio of Al Horford, Aleksej Pokusevski, and Charlie Brown Jr. gives the staff a clear identity to start from.",
+        "The core trio of Aleksej Pokusevski, Charlie Brown Jr., and Darius Bazley gives the staff a clear identity to start from.",
         "The front office kept the core intact and will lean on internal development.",
         "No rotation regulars departed, so continuity remains a strength."
       ],
       "coreStrength": "A top-tier efficiency profile remains the foundation; expect pace-and-space to set the tone.",
       "primaryRisk": "The margin for error is slim if the shooting variance swings the wrong way.",
-      "swingFactor": "Al Horford maintaining two-way consistency is the swing skill.",
+      "swingFactor": "Aleksej Pokusevski maintaining two-way consistency is the swing skill.",
       "seasonLabel": "2025-26",
       "ranking": {
         "score": 0.799481,
@@ -448,13 +448,13 @@
       "name": "76ers",
       "heading": "Philadelphia 76ers",
       "introParagraphs": [
-        "The core trio of Anthony Tolliver, Ben Simmons, and Danny Green gives the staff a clear identity to start from.",
+        "The core trio of Andre Drummond, Danny Green, and Dwight Howard gives the staff a clear identity to start from.",
         "The front office kept the core intact and will lean on internal development.",
         "No rotation regulars departed, so continuity remains a strength."
       ],
       "coreStrength": "A top-tier efficiency profile remains the foundation; expect pace-and-space to set the tone.",
       "primaryRisk": "The margin for error is slim if the shooting variance swings the wrong way.",
-      "swingFactor": "Anthony Tolliver maintaining two-way consistency is the swing skill.",
+      "swingFactor": "Andre Drummond maintaining two-way consistency is the swing skill.",
       "seasonLabel": "2025-26",
       "ranking": {
         "score": 0.722519,
@@ -488,13 +488,13 @@
       "name": "Trail Blazers",
       "heading": "Portland Trail Blazers",
       "introParagraphs": [
-        "The core trio of Anfernee Simons, Carmelo Anthony, and CJ Elleby gives the staff a clear identity to start from.",
+        "The core trio of Al-Farouq Aminu, Carmelo Anthony, and CJ Elleby gives the staff a clear identity to start from.",
         "The front office kept the core intact and will lean on internal development.",
         "No rotation regulars departed, so continuity remains a strength."
       ],
       "coreStrength": "This is a developmental year, so cohesion and player growth drive the optimism.",
       "primaryRisk": "The margin for error is slim if the shooting variance swings the wrong way.",
-      "swingFactor": "Anfernee Simons maintaining two-way consistency is the swing skill.",
+      "swingFactor": "Al-Farouq Aminu maintaining two-way consistency is the swing skill.",
       "seasonLabel": "2025-26",
       "ranking": {
         "score": 0.421269,
@@ -528,13 +528,13 @@
       "name": "Spurs",
       "heading": "San Antonio Spurs",
       "introParagraphs": [
-        "The core trio of Dejounte Murray, DeMar DeRozan, and Derrick White gives the staff a clear identity to start from.",
+        "The core trio of De'Aaron Fox, Derrick White, and Devin Vassell gives the staff a clear identity to start from.",
         "The front office kept the core intact and will lean on internal development.",
         "No rotation regulars departed, so continuity remains a strength."
       ],
       "coreStrength": "This is a developmental year, so cohesion and player growth drive the optimism.",
       "primaryRisk": "The margin for error is slim if the shooting variance swings the wrong way.",
-      "swingFactor": "Dejounte Murray maintaining two-way consistency is the swing skill.",
+      "swingFactor": "De'Aaron Fox maintaining two-way consistency is the swing skill.",
       "seasonLabel": "2025-26",
       "ranking": {
         "score": 0.414615,
@@ -548,13 +548,13 @@
       "name": "Raptors",
       "heading": "Toronto Raptors",
       "introParagraphs": [
-        "The core trio of Aron Baynes, Chris Boucher, and DeAndre' Bembry gives the staff a clear identity to start from.",
+        "The core trio of Chris Boucher, DeAndre' Bembry, and Fred VanVleet gives the staff a clear identity to start from.",
         "The front office kept the core intact and will lean on internal development.",
         "No rotation regulars departed, so continuity remains a strength."
       ],
       "coreStrength": "This is a developmental year, so cohesion and player growth drive the optimism.",
       "primaryRisk": "The margin for error is slim if the shooting variance swings the wrong way.",
-      "swingFactor": "Aron Baynes maintaining two-way consistency is the swing skill.",
+      "swingFactor": "Chris Boucher maintaining two-way consistency is the swing skill.",
       "seasonLabel": "2025-26",
       "ranking": {
         "score": 0.468154,
@@ -568,7 +568,7 @@
       "name": "Jazz",
       "heading": "Utah Jazz",
       "introParagraphs": [
-        "The core trio of Bojan Bogdanovic, Derrick Favors, and Donovan Mitchell gives the staff a clear identity to start from.",
+        "The core trio of Bojan Bogdanovic, Denzel Valentine, and Derrick Favors gives the staff a clear identity to start from.",
         "The front office kept the core intact and will lean on internal development.",
         "No rotation regulars departed, so continuity remains a strength."
       ],
@@ -588,13 +588,13 @@
       "name": "Wizards",
       "heading": "Washington Wizards",
       "introParagraphs": [
-        "The core trio of Alex Len, Anthony Gill, and Bradley Beal gives the staff a clear identity to start from.",
+        "The core trio of Anthony Gill, Bradley Beal, and Cassius Winston gives the staff a clear identity to start from.",
         "The front office kept the core intact and will lean on internal development.",
         "No rotation regulars departed, so continuity remains a strength."
       ],
       "coreStrength": "This is a developmental year, so cohesion and player growth drive the optimism.",
       "primaryRisk": "The margin for error is slim if the shooting variance swings the wrong way.",
-      "swingFactor": "Alex Len maintaining two-way consistency is the swing skill.",
+      "swingFactor": "Anthony Gill maintaining two-way consistency is the swing skill.",
       "seasonLabel": "2025-26",
       "ranking": {
         "score": 0.373692,

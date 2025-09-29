@@ -1,6 +1,6 @@
 # Denver Nuggets
 
-The core trio of Aaron Gordon, Austin Rivers, and Bol Bol gives the staff a clear identity to start from.
+The core trio of Aaron Gordon, Bol Bol, and Bruce Brown gives the staff a clear identity to start from.
 The front office kept the core intact and will lean on internal development.
 No rotation regulars departed, so continuity remains a strength.
 
