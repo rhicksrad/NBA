@@ -28,8 +28,22 @@ function formatList(values: string[]): string {
   return `${values.slice(0, -1).join(", ")}, and ${values[values.length - 1]}`;
 }
 
+function normalizedRoster(team: TeamRecord): TeamRecord["roster"] {
+  const roster = team.roster ?? [];
+  if (roster.length === 0) {
+    return roster;
+  }
+  const filtered = roster.filter((player) => {
+    if (!player.teamTricode) {
+      return true;
+    }
+    return player.teamTricode === team.tricode;
+  });
+  return filtered.length > 0 ? filtered : roster;
+}
+
 function summarizeAdditions(team: TeamRecord): string {
-  const rosterNames = new Set(team.roster.map((player) => player.name));
+  const rosterNames = new Set(normalizedRoster(team).map((player) => player.name));
   const additions = team.keyAdditions.filter((name) => rosterNames.has(name));
   if (additions.length === 0) {
     return "The front office kept the core intact and will lean on internal development.";
@@ -68,7 +82,7 @@ function coreStrength(team: TeamRecord): string {
 
 function primaryRisk(team: TeamRecord, ctx: LeagueContext): string {
   const injuries = ctx.injuries.filter((injury) => {
-    const rosterNames = new Set(team.roster.map((player) => player.name));
+    const rosterNames = new Set(normalizedRoster(team).map((player) => player.name));
     return rosterNames.has(injury.playerName);
   });
   if (injuries.length > 0) {
@@ -89,7 +103,7 @@ function primaryRisk(team: TeamRecord, ctx: LeagueContext): string {
 }
 
 function swingFactor(team: TeamRecord): string {
-  const roster = team.roster;
+  const roster = normalizedRoster(team);
   if (roster.length === 0) {
     return "Training camp is about establishing a rotation hierarchy from scratch.";
   }
@@ -105,7 +119,8 @@ function swingFactor(team: TeamRecord): string {
 }
 
 function corePlayers(team: TeamRecord): string {
-  const core = team.roster.slice(0, 3).map((player) => player.name);
+  const roster = normalizedRoster(team);
+  const core = roster.slice(0, 3).map((player) => player.name);
   if (core.length === 0) {
     return "The roster is still being finalized around training-camp invites.";
   }
