@@ -42,6 +42,7 @@ except ModuleNotFoundError:  # pragma: no cover - fallback for direct execution
 
 ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_ACTIVE_ROSTER = ROOT / "data" / "2025-26" / "manual" / "roster_reference.json"
+DEFAULT_ROSTER_SNAPSHOT = ROOT / "public" / "data" / "rosters.json"
 DEFAULT_PLAYERS_CSV = ROOT / "Players.csv"
 DEFAULT_TEAM_HISTORIES = ROOT / "TeamHistories.csv"
 DEFAULT_OUTPUT = ROOT / "public" / "data" / "player_profiles.json"
@@ -156,6 +157,7 @@ TEAM_METADATA = [
 ]
 
 TEAM_ID_TO_TRICODE = {meta["team_id"]: meta["tricode"] for meta in TEAM_METADATA}
+TEAM_TRICODE_TO_ID = {meta["tricode"]: meta["team_id"] for meta in TEAM_METADATA}
 
 
 def _default_season_end_year() -> int:
@@ -538,6 +540,98 @@ def _resolve_active_player(
     return row.person_id, first_name, last_name
 
 
+def _load_active_players_from_roster_snapshot(
+    path: Path,
+    *,
+    fallback_players: list[ActivePlayer] | None = None,
+) -> list[ActivePlayer]:
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except FileNotFoundError:
+        raise
+    except (OSError, json.JSONDecodeError) as exc:
+        raise RuntimeError(f"Failed to read roster snapshot at {path}: {exc}") from exc
+
+    teams = payload.get("teams")
+    if not isinstance(teams, list):
+        raise RuntimeError("Roster snapshot missing teams array")
+
+    fallback_by_id = {player.person_id: player for player in fallback_players or []}
+    players: dict[str, ActivePlayer] = {}
+
+    for team in teams:
+        if not isinstance(team, dict):
+            continue
+
+        abbr = (team.get("abbreviation") or "").strip().upper()
+        team_id_raw = team.get("id")
+        if isinstance(team_id_raw, int):
+            team_id = str(team_id_raw)
+        elif isinstance(team_id_raw, str) and team_id_raw.strip():
+            team_id = team_id_raw.strip()
+        else:
+            team_id = TEAM_TRICODE_TO_ID.get(abbr, "0")
+        if not team_id:
+            team_id = "0"
+
+        roster_entries = team.get("roster")
+        if not isinstance(roster_entries, list):
+            continue
+
+        for entry in roster_entries:
+            if not isinstance(entry, dict):
+                continue
+
+            player_id_raw = entry.get("id")
+            if isinstance(player_id_raw, int):
+                person_id = str(player_id_raw)
+            elif isinstance(player_id_raw, str) and player_id_raw.strip():
+                person_id = player_id_raw.strip()
+            else:
+                continue
+
+            first_name = (entry.get("first_name") or "").strip()
+            last_name = (entry.get("last_name") or "").strip()
+            fallback = fallback_by_id.get(person_id)
+            if fallback:
+                if not first_name:
+                    first_name = fallback.first_name
+                if not last_name:
+                    last_name = fallback.last_name
+            if not first_name and not last_name:
+                continue
+
+            team_tricode = abbr or (fallback.team_tricode if fallback else None)
+            candidate = ActivePlayer(
+                person_id=person_id,
+                first_name=first_name or "",
+                last_name=last_name or "",
+                team_id=team_id,
+                team_tricode=team_tricode,
+            )
+
+            existing = players.get(person_id)
+            if existing:
+                replace = existing.team_id == "0" and candidate.team_id != "0"
+                if not replace:
+                    continue
+            players[person_id] = candidate
+
+    if fallback_players:
+        for player in fallback_players:
+            if player.person_id not in players and player.team_id == "0":
+                players[player.person_id] = player
+
+    return sorted(
+        players.values(),
+        key=lambda p: (
+            p.team_tricode or p.team_id,
+            p.last_name.lower(),
+            p.first_name.lower(),
+        ),
+    )
+
+
 def _fetch_active_players_from_bbr(
     roster_lookup: dict[str, RosterRow],
     *,
@@ -775,6 +869,7 @@ def _build_recent_goat_payload(leaderboard: list[dict[str, Any]]) -> dict[str, A
 def build_player_profiles(
     *,
     active_roster: Path = DEFAULT_ACTIVE_ROSTER,
+    rosters_snapshot: Path = DEFAULT_ROSTER_SNAPSHOT,
     players_csv: Path = DEFAULT_PLAYERS_CSV,
     team_histories: Path = DEFAULT_TEAM_HISTORIES,
     birthplace_files: list[Path] = DEFAULT_BIRTHPLACE_FILES,
@@ -793,23 +888,38 @@ def build_player_profiles(
                 stacklevel=2,
             )
 
-    season_year = season_end_year or _default_season_end_year()
-    try:
-        players = _fetch_active_players_from_bbr(
-            roster_lookup,
-            season_end_year=season_year,
-            fallback_players=fallback_players or None,
-        )
-    except RuntimeError as exc:
-        if fallback_players:
+    players: list[ActivePlayer] | None = None
+    if rosters_snapshot and rosters_snapshot.exists():
+        try:
+            players = _load_active_players_from_roster_snapshot(
+                rosters_snapshot,
+                fallback_players=fallback_players or None,
+            )
+        except RuntimeError as exc:
             warnings.warn(
-                f"Falling back to local roster reference after Basketball-Reference fetch failure: {exc}",
+                f"Failed to load Ball Don't Lie roster snapshot at {rosters_snapshot}: {exc}",
                 RuntimeWarning,
                 stacklevel=2,
             )
-            players = fallback_players
-        else:
-            raise
+
+    if players is None:
+        season_year = season_end_year or _default_season_end_year()
+        try:
+            players = _fetch_active_players_from_bbr(
+                roster_lookup,
+                season_end_year=season_year,
+                fallback_players=fallback_players or None,
+            )
+        except RuntimeError as exc:
+            if fallback_players:
+                warnings.warn(
+                    f"Falling back to local roster reference after Basketball-Reference fetch failure: {exc}",
+                    RuntimeWarning,
+                    stacklevel=2,
+                )
+                players = fallback_players
+            else:
+                raise
 
     teams = _load_team_lookup(team_histories)
     birthplaces = _load_birthplaces(birthplace_files)
@@ -932,6 +1042,12 @@ def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         default=DEFAULT_ACTIVE_ROSTER,
         help="Optional fallback roster reference JSON used if live Basketball-Reference fetch fails.",
     )
+    parser.add_argument(
+        "--rosters",
+        type=Path,
+        default=DEFAULT_ROSTER_SNAPSHOT,
+        help="Path to the Ball Don't Lie roster snapshot JSON (rosters.json).",
+    )
     parser.add_argument("--players-csv", type=Path, default=DEFAULT_PLAYERS_CSV, help="Path to Players.csv metadata table.")
     parser.add_argument("--team-histories", type=Path, default=DEFAULT_TEAM_HISTORIES, help="Path to TeamHistories.csv for franchise metadata.")
     parser.add_argument("--goat-system", type=Path, default=DEFAULT_GOAT_SYSTEM, help="Path to GOAT system rankings feed.")
@@ -955,6 +1071,7 @@ def main(argv: list[str] | None = None) -> None:
     args = _parse_args(argv)
     payload, recent_payload = build_player_profiles(
         active_roster=args.active_roster,
+        rosters_snapshot=args.rosters,
         players_csv=args.players_csv,
         team_histories=args.team_histories,
         goat_system=args.goat_system,

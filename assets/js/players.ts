@@ -196,6 +196,7 @@ function renderDoc(index: PlayersIndex) {
   const timestampTitle = hasTeams
     ? new Date(index.fetched_at).toLocaleString()
     : "No roster snapshot cached yet";
+  const sourceLabel = index.source?.trim() || "Unknown";
 
   const headerHtml = `
     <div class="roster-controls">
@@ -226,7 +227,7 @@ function renderDoc(index: PlayersIndex) {
       </div>
       <div class="roster-controls__meta">
         <small title="${timestampTitle}">
-          Last updated: ${lastUpdatedText} • Source: BallDontLie
+          Last updated: ${lastUpdatedText} • Source: ${escapeHtml(sourceLabel)}
         </small>
         <button type="button" class="roster-button" data-roster-refresh>Refresh</button>
       </div>

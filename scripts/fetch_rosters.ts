@@ -197,6 +197,7 @@ async function buildRosterFromBallDontLie(): Promise<RostersDoc> {
   return {
     fetched_at: new Date().toISOString(),
     ttl_hours: TTL_HOURS,
+    source: "ball_dont_lie",
     teams: rosterTeams,
   };
 }
@@ -306,6 +307,7 @@ async function buildRosterFromManualReference(): Promise<RostersDoc | null> {
   return {
     fetched_at: new Date().toISOString(),
     ttl_hours: TTL_HOURS,
+    source: "manual_roster_reference",
     teams: rosterTeams,
   };
 }
