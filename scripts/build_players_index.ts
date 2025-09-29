@@ -4,6 +4,7 @@ import path from "node:path";
 type RosterDoc = {
   fetched_at: string;
   ttl_hours: number;
+  source?: string;
   teams: {
     id: number;
     abbreviation: string;
@@ -96,8 +97,17 @@ async function main() {
   }
 
   const out = {
-    fetched_at: new Date().toISOString(),
-    source: "rosters.json",
+    fetched_at: rosters.fetched_at ?? new Date().toISOString(),
+    source: (() => {
+      const source = typeof rosters.source === "string" ? rosters.source.trim() : "";
+      if (source === "ball_dont_lie") {
+        return "Ball Don't Lie";
+      }
+      if (source === "manual_roster_reference") {
+        return "Manual roster reference";
+      }
+      return source || "Unknown";
+    })(),
     count: rows.length,
     players: rows,
   };
