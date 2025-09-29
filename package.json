@@ -10,10 +10,12 @@
   "scripts": {
     "build": "esbuild components/main.ts --bundle --format=esm --target=es2019 --minify --outfile=assets/js/main.tmp.js && node scripts/finalize-hash.js && node scripts/build-players.js",
     "build:data": "tsx scripts/data/build_canonical.ts && tsx scripts/data/build_preseason_schedule.ts",
+    "build:players-index": "tsx scripts/build_players_index.ts",
     "gen:previews": "tsx scripts/generate/preseason_previews.ts && tsx scripts/generate/previews.ts",
     "validate:previews": "tsx scripts/validate/previews_staleness.ts && tsx scripts/validate/links.ts",
     "previews": "pnpm build:data && pnpm gen:previews && pnpm validate:previews",
     "fetch:rosters": "tsx scripts/fetch_rosters.ts",
+    "validate:rosters": "tsx scripts/validate_rosters.ts",
     "predeploy": "pnpm fetch:rosters",
     "deploy": "echo 'static site build only'",
     "test": "vitest run"

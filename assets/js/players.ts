@@ -1,13 +1,37 @@
-import type { RosterTeam, RostersDoc } from "../../types/ball";
+
+type PlayersIndex = {
+  fetched_at: string;
+  source: string;
+  count: number;
+  players: Array<{
+    id: number;
+    name: string;
+    team_abbr: string;
+    position: string | null;
+    jersey: string | null;
+    height: string | null;
+    weight: string | null;
+  }>;
+};
+
+type PlayerRow = PlayersIndex["players"][number];
 
 type AppState = {
-  doc: RostersDoc | null;
+  index: PlayersIndex | null;
   loading: boolean;
   error: string | null;
   searchTerm: string;
   teamFilter: string;
   anchorApplied: boolean;
 };
+
+async function loadIndex(): Promise<PlayersIndex> {
+  const response = await fetch(`/data/players_index.json?cb=${Date.now()}`);
+  if (!response.ok) {
+    throw new Error(`Request failed with status ${response.status}`);
+  }
+  return (await response.json()) as PlayersIndex;
+}
 
 const app = document.getElementById("players-app");
 
@@ -20,7 +44,7 @@ const initialTeam = (params.get("team") ?? "").toUpperCase();
 const initialSearch = params.get("search") ?? "";
 
 const state: AppState = {
-  doc: null,
+  index: null,
   loading: true,
   error: null,
   searchTerm: initialSearch,
@@ -76,13 +100,13 @@ function formatRelativeTime(iso: string): string {
   return formatter.format(Math.round(duration), "year");
 }
 
-function matchesSearch(player: RosterTeam["roster"][number], query: string): boolean {
+function matchesSearch(player: PlayerRow, query: string): boolean {
   if (!query) {
     return true;
   }
   const lower = query.toLowerCase();
-  const name = `${player.first_name} ${player.last_name}`.toLowerCase();
-  const jersey = player.jersey_number ? `#${player.jersey_number}`.toLowerCase() : "";
+  const name = player.name.toLowerCase();
+  const jersey = player.jersey ? `#${player.jersey}`.toLowerCase() : "";
   return name.includes(lower) || jersey.includes(lower);
 }
 
@@ -96,6 +120,39 @@ function updateUrl(paramsToSet: Record<string, string | null>) {
     }
   });
   window.history.replaceState({}, "", url.toString());
+}
+
+function teamLabel(abbr: string): string {
+  if (abbr === "FA") {
+    return "Free agents";
+  }
+  return abbr;
+}
+
+function sortTeams(a: string, b: string): number {
+  if (a === "FA" && b !== "FA") {
+    return 1;
+  }
+  if (b === "FA" && a !== "FA") {
+    return -1;
+  }
+  return a.localeCompare(b);
+}
+
+function buildTeams(players: PlayerRow[]): Array<{ abbr: string; players: PlayerRow[] }> {
+  const map = new Map<string, PlayerRow[]>();
+  for (const player of players) {
+    const abbr = player.team_abbr || "FA";
+    const roster = map.get(abbr);
+    if (roster) {
+      roster.push(player);
+    } else {
+      map.set(abbr, [player]);
+    }
+  }
+  return [...map.entries()]
+    .map(([abbr, roster]) => ({ abbr, players: roster }))
+    .sort((lhs, rhs) => sortTeams(lhs.abbr, rhs.abbr));
 }
 
 function renderLoading() {
@@ -115,27 +172,29 @@ function renderError(message: string) {
   `;
   const retry = app.querySelector<HTMLButtonElement>("[data-roster-retry]");
   if (retry) {
-    retry.addEventListener("click", () => fetchDoc(true));
+    retry.addEventListener("click", () => fetchIndex());
   }
 }
 
-function renderDoc(doc: RostersDoc) {
-  const teams = [...doc.teams].sort((a, b) => a.abbreviation.localeCompare(b.abbreviation));
+function renderDoc(index: PlayersIndex) {
+  const teams = buildTeams(index.players);
   const selectedTeam = state.teamFilter;
-  if (selectedTeam && !teams.some((team) => team.abbreviation === selectedTeam)) {
+  if (selectedTeam && !teams.some((team) => team.abbr === selectedTeam)) {
     state.teamFilter = "";
     updateUrl({ team: null });
   }
   const effectiveTeam = state.teamFilter;
-  const visibleTeams = teams.filter((team) => !effectiveTeam || team.abbreviation === effectiveTeam);
-  const teamOptions = ["", ...teams.map((team) => team.abbreviation)];
+  const visibleTeams = teams.filter(
+    (team) => !effectiveTeam || team.abbr === effectiveTeam,
+  );
+  const teamOptions = ["", ...teams.map((team) => team.abbr)];
 
   const hasTeams = teams.length > 0;
   const lastUpdatedText = hasTeams
-    ? formatRelativeTime(doc.fetched_at)
+    ? formatRelativeTime(index.fetched_at)
     : "not yet available";
   const timestampTitle = hasTeams
-    ? new Date(doc.fetched_at).toLocaleString()
+    ? new Date(index.fetched_at).toLocaleString()
     : "No roster snapshot cached yet";
 
   const headerHtml = `
@@ -176,17 +235,19 @@ function renderDoc(doc: RostersDoc) {
 
   const sections = visibleTeams
     .map((team) => {
-      const players = team.roster.filter((player) => matchesSearch(player, state.searchTerm));
+      const players = team.players.filter((player) =>
+        matchesSearch(player, state.searchTerm),
+      );
       const items = players
         .map((player) => {
-          const jersey = player.jersey_number ? `#${player.jersey_number}` : "";
+          const jersey = player.jersey ? `#${player.jersey}` : "";
           const pieces = [player.position ?? "", jersey].filter(Boolean).join(" · ");
           const meta = [player.height ?? "", player.weight ? `${player.weight} lb` : ""]
             .filter(Boolean)
             .join(" • ");
           return `
             <li class="roster-player">
-              <span class="roster-player__name">${escapeHtml(`${player.first_name} ${player.last_name}`)}</span>
+              <span class="roster-player__name">${escapeHtml(player.name)}</span>
               ${pieces ? `<span class="roster-player__role">${escapeHtml(pieces)}</span>` : ""}
               ${meta ? `<span class="roster-player__meta">${escapeHtml(meta)}</span>` : ""}
             </li>
@@ -194,13 +255,17 @@ function renderDoc(doc: RostersDoc) {
         })
         .join("");
 
-      const emptyMessage = players.length ? "" : `<li class="roster-player roster-player--empty">No players match this filter.</li>`;
+      const emptyMessage = players.length
+        ? ""
+        : `<li class="roster-player roster-player--empty">No players match this filter.</li>`;
+
+      const subtitle = `${escapeHtml(teamLabel(team.abbr))} · ${players.length} players`;
 
       return `
-        <section class="roster-team" data-team-anchor="${team.abbreviation}">
+        <section class="roster-team" data-team-anchor="${team.abbr}">
           <header class="roster-team__header">
-            <h3 id="team-${team.abbreviation}">${team.abbreviation}</h3>
-            <p>${escapeHtml(team.full_name)} · ${players.length} players</p>
+            <h3 id="team-${team.abbr}">${team.abbr}</h3>
+            <p>${subtitle}</p>
           </header>
           <ul class="roster-list">
             ${items || emptyMessage}
@@ -243,7 +308,7 @@ function renderDoc(doc: RostersDoc) {
   }
 
   if (refreshButton) {
-    refreshButton.addEventListener("click", () => fetchDoc(true));
+    refreshButton.addEventListener("click", () => fetchIndex());
   }
 
   if (!state.anchorApplied && state.teamFilter) {
@@ -264,34 +329,28 @@ function render() {
     renderError(state.error);
     return;
   }
-  if (state.doc) {
-    renderDoc(state.doc);
+  if (state.index) {
+    renderDoc(state.index);
   }
 }
 
-async function fetchDoc(cacheBust = false) {
+async function fetchIndex() {
   state.loading = true;
   state.error = null;
   render();
-  const baseUrl = "/data/rosters.json";
-  const url = cacheBust ? `${baseUrl}?cb=${Date.now()}` : baseUrl;
   try {
-    const response = await fetch(url, { cache: "no-store" });
-    if (!response.ok) {
-      throw new Error(`Request failed with status ${response.status}`);
+    const index = await loadIndex();
+    if (!index || !Array.isArray(index.players)) {
+      throw new Error("Malformed players index payload");
     }
-    const json = (await response.json()) as RostersDoc;
-    if (!json || !Array.isArray(json.teams)) {
-      throw new Error("Malformed roster payload");
-    }
-    state.doc = json;
+    state.index = index;
     state.loading = false;
     render();
   } catch (error) {
     state.loading = false;
-    state.error = error instanceof Error ? error.message : "Unable to load rosters.";
+    state.error = error instanceof Error ? error.message : "Unable to load players.";
     render();
   }
 }
 
-fetchDoc();
+fetchIndex();
