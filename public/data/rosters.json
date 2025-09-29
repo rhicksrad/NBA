@@ -1,5 +1,4761 @@
 {
-  "fetched_at": "1970-01-01T00:00:00Z",
+  "fetched_at": "2025-09-29T13:46:58.590Z",
   "ttl_hours": 6,
-  "teams": []
+  "teams": [
+    {
+      "id": 1610612737,
+      "abbreviation": "ATL",
+      "full_name": "Atlanta Hawks",
+      "roster": [
+        {
+          "id": 203992,
+          "first_name": "Bogdan",
+          "last_name": "Bogdanovic",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 203991,
+          "first_name": "Clint",
+          "last_name": "Capela",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1628381,
+          "first_name": "John",
+          "last_name": "Collins",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1627739,
+          "first_name": "Kris",
+          "last_name": "Dunn",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1628981,
+          "first_name": "Bruno",
+          "last_name": "Fernando",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 201568,
+          "first_name": "Danilo",
+          "last_name": "Gallinari",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629164,
+          "first_name": "Brandon",
+          "last_name": "Goodwin",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 203524,
+          "first_name": "Solomon",
+          "last_name": "Hill",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1628989,
+          "first_name": "Kevin",
+          "last_name": "Huerter",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629631,
+          "first_name": "De'Andre",
+          "last_name": "Hunter",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1630233,
+          "first_name": "Nathan",
+          "last_name": "Knight",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1630219,
+          "first_name": "Skylar",
+          "last_name": "Mays",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1630168,
+          "first_name": "Onyeka",
+          "last_name": "Okongwu",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629629,
+          "first_name": "Cam",
+          "last_name": "Reddish",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 203503,
+          "first_name": "Tony",
+          "last_name": "Snell",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 101150,
+          "first_name": "Lou",
+          "last_name": "Williams",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629027,
+          "first_name": "Trae",
+          "last_name": "Young",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        }
+      ]
+    },
+    {
+      "id": 1610612751,
+      "abbreviation": "BKN",
+      "full_name": "Brooklyn Nets",
+      "roster": [
+        {
+          "id": 1629185,
+          "first_name": "Chris",
+          "last_name": "Chiozza",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629651,
+          "first_name": "Nicolas",
+          "last_name": "Claxton",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 203915,
+          "first_name": "Spencer",
+          "last_name": "Dinwiddie",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 201142,
+          "first_name": "Kevin",
+          "last_name": "Durant",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 201145,
+          "first_name": "Jeff",
+          "last_name": "Green",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 201933,
+          "first_name": "Blake",
+          "last_name": "Griffin",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 201935,
+          "first_name": "James",
+          "last_name": "Harden",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 203925,
+          "first_name": "Joe",
+          "last_name": "Harris",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 202681,
+          "first_name": "Kyrie",
+          "last_name": "Irving",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1628455,
+          "first_name": "Mike",
+          "last_name": "James",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 204020,
+          "first_name": "Tyler",
+          "last_name": "Johnson",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 201599,
+          "first_name": "DeAndre",
+          "last_name": "Jordan",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1627789,
+          "first_name": "Timothe",
+          "last_name": "Luwawu-Cabarrot",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629001,
+          "first_name": "De'Anthony",
+          "last_name": "Melton",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629617,
+          "first_name": "Reggie",
+          "last_name": "Perry",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629013,
+          "first_name": "Landry",
+          "last_name": "Shamet",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        }
+      ]
+    },
+    {
+      "id": 1610612738,
+      "abbreviation": "BOS",
+      "full_name": "Boston Celtics",
+      "roster": [
+        {
+          "id": 1627759,
+          "first_name": "Jaylen",
+          "last_name": "Brown",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629035,
+          "first_name": "Carsen",
+          "last_name": "Edwards",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629605,
+          "first_name": "Tacko",
+          "last_name": "Fall",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 203095,
+          "first_name": "Evan",
+          "last_name": "Fournier",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 201143,
+          "first_name": "Al",
+          "last_name": "Horford",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629057,
+          "first_name": "Robert Williams",
+          "last_name": "III",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1628436,
+          "first_name": "Luke",
+          "last_name": "Kornet",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629641,
+          "first_name": "Romeo",
+          "last_name": "Langford",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1630174,
+          "first_name": "Aaron",
+          "last_name": "Nesmith",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1628400,
+          "first_name": "Semi",
+          "last_name": "Ojeleye",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 203953,
+          "first_name": "Jabari",
+          "last_name": "Parker",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1630202,
+          "first_name": "Payton",
+          "last_name": "Pritchard",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629014,
+          "first_name": "Anfernee",
+          "last_name": "Simons",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 203935,
+          "first_name": "Marcus",
+          "last_name": "Smart",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1628369,
+          "first_name": "Jayson",
+          "last_name": "Tatum",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 202684,
+          "first_name": "Tristan",
+          "last_name": "Thompson",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 202689,
+          "first_name": "Kemba",
+          "last_name": "Walker",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629682,
+          "first_name": "Tremont",
+          "last_name": "Waters",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629684,
+          "first_name": "Grant",
+          "last_name": "Williams",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        }
+      ]
+    },
+    {
+      "id": 1610612766,
+      "abbreviation": "CHA",
+      "full_name": "Charlotte Hornets",
+      "roster": [
+        {
+          "id": 1630163,
+          "first_name": "LaMelo",
+          "last_name": "Ball",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 202687,
+          "first_name": "Bismack",
+          "last_name": "Biyombo",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1628970,
+          "first_name": "Miles",
+          "last_name": "Bridges",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1630268,
+          "first_name": "Nate",
+          "last_name": "Darling",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1628984,
+          "first_name": "Devonte'",
+          "last_name": "Graham",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 202330,
+          "first_name": "Gordon",
+          "last_name": "Hayward",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1630176,
+          "first_name": "Vernon Carey",
+          "last_name": "Jr.",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1628997,
+          "first_name": "Caleb",
+          "last_name": "Martin",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1628998,
+          "first_name": "Cody",
+          "last_name": "Martin",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629667,
+          "first_name": "Jalen",
+          "last_name": "McDaniels",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1628370,
+          "first_name": "Malik",
+          "last_name": "Monk",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1630208,
+          "first_name": "Nick",
+          "last_name": "Richards",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1630203,
+          "first_name": "Grant",
+          "last_name": "Riller",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1626179,
+          "first_name": "Terry",
+          "last_name": "Rozier",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629012,
+          "first_name": "Collin",
+          "last_name": "Sexton",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 202954,
+          "first_name": "Brad",
+          "last_name": "Wanamaker",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629023,
+          "first_name": "P.J.",
+          "last_name": "Washington",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 203469,
+          "first_name": "Cody",
+          "last_name": "Zeller",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        }
+      ]
+    },
+    {
+      "id": 1610612741,
+      "abbreviation": "CHI",
+      "full_name": "Chicago Bulls",
+      "roster": [
+        {
+          "id": 1627853,
+          "first_name": "Ryan",
+          "last_name": "Arcidiacono",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629653,
+          "first_name": "Devon",
+          "last_name": "Dotson",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1626245,
+          "first_name": "Cristiano",
+          "last_name": "Felicio",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629750,
+          "first_name": "Javonte",
+          "last_name": "Green",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1628972,
+          "first_name": "Troy Brown",
+          "last_name": "Jr.",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 203897,
+          "first_name": "Zach",
+          "last_name": "LaVine",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1628374,
+          "first_name": "Lauri",
+          "last_name": "Markkanen",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1628035,
+          "first_name": "Alfonzo",
+          "last_name": "McKinnie",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629690,
+          "first_name": "Adam",
+          "last_name": "Mokoka",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 203107,
+          "first_name": "Tomas",
+          "last_name": "Satoransky",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1628464,
+          "first_name": "Daniel",
+          "last_name": "Theis",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 202696,
+          "first_name": "Nikola",
+          "last_name": "Vucevic",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629632,
+          "first_name": "Coby",
+          "last_name": "White",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1630172,
+          "first_name": "Patrick",
+          "last_name": "Williams",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 201152,
+          "first_name": "Thaddeus",
+          "last_name": "Young",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        }
+      ]
+    },
+    {
+      "id": 1610612739,
+      "abbreviation": "CLE",
+      "full_name": "Cleveland Cavaliers",
+      "roster": [
+        {
+          "id": 1628386,
+          "first_name": "Jarrett",
+          "last_name": "Allen",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 203521,
+          "first_name": "Matthew",
+          "last_name": "Dellavedova",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1628422,
+          "first_name": "Damyean",
+          "last_name": "Dotson",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629636,
+          "first_name": "Darius",
+          "last_name": "Garland",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1628392,
+          "first_name": "Isaiah",
+          "last_name": "Hartenstein",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1626204,
+          "first_name": "Larry Nance",
+          "last_name": "Jr.",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629662,
+          "first_name": "Mfiondu",
+          "last_name": "Kabengele",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 201567,
+          "first_name": "Kevin",
+          "last_name": "Love",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629725,
+          "first_name": "Jeremiah",
+          "last_name": "Martin",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1630171,
+          "first_name": "Isaac",
+          "last_name": "Okoro",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1626224,
+          "first_name": "Cedi",
+          "last_name": "Osman",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1627752,
+          "first_name": "Taurean",
+          "last_name": "Prince",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1630205,
+          "first_name": "Lamar",
+          "last_name": "Stevens",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1630271,
+          "first_name": "Brodric",
+          "last_name": "Thomas",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 2760,
+          "first_name": "Anderson",
+          "last_name": "Varejao",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629731,
+          "first_name": "Dean",
+          "last_name": "Wade",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629685,
+          "first_name": "Dylan",
+          "last_name": "Windler",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        }
+      ]
+    },
+    {
+      "id": 1610612742,
+      "abbreviation": "DAL",
+      "full_name": "Dallas Mavericks",
+      "roster": [
+        {
+          "id": 1630189,
+          "first_name": "Tyler",
+          "last_name": "Bey",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1628973,
+          "first_name": "Jalen",
+          "last_name": "Brunson",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 203504,
+          "first_name": "Trey",
+          "last_name": "Burke",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1626161,
+          "first_name": "Willie",
+          "last_name": "Cauley-Stein",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 203076,
+          "first_name": "Anthony",
+          "last_name": "Davis",
+          "position": "C",
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1627827,
+          "first_name": "Dorian",
+          "last_name": "Finney-Smith",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1630182,
+          "first_name": "Josh",
+          "last_name": "Green",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1630207,
+          "first_name": "Nate",
+          "last_name": "Hinton",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 203501,
+          "first_name": "Tim Hardaway",
+          "last_name": "Jr.",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1628467,
+          "first_name": "Maxi",
+          "last_name": "Kleber",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1626246,
+          "first_name": "Boban",
+          "last_name": "Marjanovic",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629740,
+          "first_name": "Nicolo",
+          "last_name": "Melli",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 204001,
+          "first_name": "Kristaps",
+          "last_name": "Porzingis",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 203939,
+          "first_name": "Dwight",
+          "last_name": "Powell",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 200755,
+          "first_name": "JJ",
+          "last_name": "Redick",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1626196,
+          "first_name": "Josh",
+          "last_name": "Richardson",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1630179,
+          "first_name": "Tyrell",
+          "last_name": "Terry",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        }
+      ]
+    },
+    {
+      "id": 1610612743,
+      "abbreviation": "DEN",
+      "full_name": "Denver Nuggets",
+      "roster": [
+        {
+          "id": 203115,
+          "first_name": "Will",
+          "last_name": "Barton",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629626,
+          "first_name": "Bol",
+          "last_name": "Bol",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1628971,
+          "first_name": "Bruce",
+          "last_name": "Brown",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1630267,
+          "first_name": "Facundo",
+          "last_name": "Campazzo",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1628427,
+          "first_name": "Vlatko",
+          "last_name": "Cancar",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1628408,
+          "first_name": "PJ",
+          "last_name": "Dozier",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 203932,
+          "first_name": "Aaron",
+          "last_name": "Gordon",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 203210,
+          "first_name": "JaMychal",
+          "last_name": "Green",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1627885,
+          "first_name": "Shaquille",
+          "last_name": "Harrison",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1630210,
+          "first_name": "Markus",
+          "last_name": "Howard",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 203999,
+          "first_name": "Nikola",
+          "last_name": "Jokic",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629008,
+          "first_name": "Michael Porter",
+          "last_name": "Jr.",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 201580,
+          "first_name": "JaVale",
+          "last_name": "McGee",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 200794,
+          "first_name": "Paul",
+          "last_name": "Millsap",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1628420,
+          "first_name": "Monte",
+          "last_name": "Morris",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1627750,
+          "first_name": "Jamal",
+          "last_name": "Murray",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1630192,
+          "first_name": "Zeke",
+          "last_name": "Nnaji",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        }
+      ]
+    },
+    {
+      "id": 1610612765,
+      "abbreviation": "DET",
+      "full_name": "Detroit Pistons",
+      "roster": [
+        {
+          "id": 203382,
+          "first_name": "Aron",
+          "last_name": "Baynes",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1630180,
+          "first_name": "Saddiq",
+          "last_name": "Bey",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629076,
+          "first_name": "Tyler",
+          "last_name": "Cook",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1628977,
+          "first_name": "Hamidou",
+          "last_name": "Diallo",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629635,
+          "first_name": "Sekou",
+          "last_name": "Doumbouya",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 201961,
+          "first_name": "Wayne",
+          "last_name": "Ellington",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 203924,
+          "first_name": "Jerami",
+          "last_name": "Grant",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1630165,
+          "first_name": "Killian",
+          "last_name": "Hayes",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1628402,
+          "first_name": "Frank",
+          "last_name": "Jackson",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1628367,
+          "first_name": "Josh",
+          "last_name": "Jackson",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1628372,
+          "first_name": "Dennis Smith",
+          "last_name": "Jr.",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1630240,
+          "first_name": "Saben",
+          "last_name": "Lee",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1627747,
+          "first_name": "Caris",
+          "last_name": "LeVert",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 203585,
+          "first_name": "Rodney",
+          "last_name": "McGruder",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1626143,
+          "first_name": "Jahlil",
+          "last_name": "Okafor",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 203486,
+          "first_name": "Mason",
+          "last_name": "Plumlee",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629686,
+          "first_name": "Deividas",
+          "last_name": "Sirvydis",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1630191,
+          "first_name": "Isaiah",
+          "last_name": "Stewart",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 201229,
+          "first_name": "Anthony",
+          "last_name": "Tolliver",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        }
+      ]
+    },
+    {
+      "id": 1610612744,
+      "abbreviation": "GSW",
+      "full_name": "Golden State Warriors",
+      "roster": [
+        {
+          "id": 203145,
+          "first_name": "Kent",
+          "last_name": "Bazemore",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1628395,
+          "first_name": "Jordan",
+          "last_name": "Bell",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 201939,
+          "first_name": "Stephen",
+          "last_name": "Curry",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 203110,
+          "first_name": "Draymond",
+          "last_name": "Green",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 2738,
+          "first_name": "Andre",
+          "last_name": "Iguodala",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1626162,
+          "first_name": "Kelly Oubre",
+          "last_name": "Jr.",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1626172,
+          "first_name": "Kevon",
+          "last_name": "Looney",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1630185,
+          "first_name": "Nico",
+          "last_name": "Mannion",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1628539,
+          "first_name": "Mychal",
+          "last_name": "Mulder",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629672,
+          "first_name": "Eric",
+          "last_name": "Paschall",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629673,
+          "first_name": "Jordan",
+          "last_name": "Poole",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629346,
+          "first_name": "Alen",
+          "last_name": "Smailagic",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 202691,
+          "first_name": "Klay",
+          "last_name": "Thompson",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629308,
+          "first_name": "Juan",
+          "last_name": "Toscano-Anderson",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 203952,
+          "first_name": "Andrew",
+          "last_name": "Wiggins",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1630164,
+          "first_name": "James",
+          "last_name": "Wiseman",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        }
+      ]
+    },
+    {
+      "id": 1610612745,
+      "abbreviation": "HOU",
+      "full_name": "Houston Rockets",
+      "roster": [
+        {
+          "id": 201571,
+          "first_name": "D.J.",
+          "last_name": "Augustin",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629717,
+          "first_name": "Armoni",
+          "last_name": "Brooks",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1628425,
+          "first_name": "Sterling",
+          "last_name": "Brown",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 203957,
+          "first_name": "Dante",
+          "last_name": "Exum",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 201569,
+          "first_name": "Eric",
+          "last_name": "Gordon",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1628988,
+          "first_name": "Aaron",
+          "last_name": "Holiday",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1627863,
+          "first_name": "Danuel House",
+          "last_name": "Jr.",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1630231,
+          "first_name": "Kenyon Martin",
+          "last_name": "Jr.",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629645,
+          "first_name": "Kevin Porter",
+          "last_name": "Jr.",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1630237,
+          "first_name": "Anthony",
+          "last_name": "Lamb",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1628021,
+          "first_name": "David",
+          "last_name": "Nwaba",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1628419,
+          "first_name": "Cameron",
+          "last_name": "Oliver",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 203482,
+          "first_name": "Kelly",
+          "last_name": "Olynyk",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629244,
+          "first_name": "Cameron",
+          "last_name": "Reynolds",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1630256,
+          "first_name": "Jae'Sean",
+          "last_name": "Tate",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629017,
+          "first_name": "Khyri",
+          "last_name": "Thomas",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 202322,
+          "first_name": "John",
+          "last_name": "Wall",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1628391,
+          "first_name": "D.J.",
+          "last_name": "Wilson",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1626174,
+          "first_name": "Christian",
+          "last_name": "Wood",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        }
+      ]
+    },
+    {
+      "id": 1610612754,
+      "abbreviation": "IND",
+      "full_name": "Indiana Pacers",
+      "roster": [
+        {
+          "id": 1629048,
+          "first_name": "Goga",
+          "last_name": "Bitadze",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1628578,
+          "first_name": "Amida",
+          "last_name": "Brimah",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629052,
+          "first_name": "Oshae",
+          "last_name": "Brissett",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1627763,
+          "first_name": "Malcolm",
+          "last_name": "Brogdon",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 203200,
+          "first_name": "Justin",
+          "last_name": "Holiday",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 203087,
+          "first_name": "Jeremy",
+          "last_name": "Lamb",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629103,
+          "first_name": "Kelan",
+          "last_name": "Martin",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 204456,
+          "first_name": "T.J.",
+          "last_name": "McConnell",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 203926,
+          "first_name": "Doug",
+          "last_name": "McDermott",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1627734,
+          "first_name": "Domantas",
+          "last_name": "Sabonis",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 203960,
+          "first_name": "JaKarr",
+          "last_name": "Sampson",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1630199,
+          "first_name": "Cassius",
+          "last_name": "Stanley",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1628410,
+          "first_name": "Edmond",
+          "last_name": "Sumner",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1626167,
+          "first_name": "Myles",
+          "last_name": "Turner",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 203933,
+          "first_name": "T.J.",
+          "last_name": "Warren",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1626153,
+          "first_name": "Delon",
+          "last_name": "Wright",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        }
+      ]
+    },
+    {
+      "id": 1610612746,
+      "abbreviation": "LAC",
+      "full_name": "Los Angeles Clippers",
+      "roster": [
+        {
+          "id": 201587,
+          "first_name": "Nicolas",
+          "last_name": "Batum",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 201976,
+          "first_name": "Patrick",
+          "last_name": "Beverley",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629599,
+          "first_name": "Amir",
+          "last_name": "Coffey",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 202326,
+          "first_name": "DeMarcus",
+          "last_name": "Cousins",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1627812,
+          "first_name": "Yogi",
+          "last_name": "Ferrell",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 202331,
+          "first_name": "Paul",
+          "last_name": "George",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 201586,
+          "first_name": "Serge",
+          "last_name": "Ibaka",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 202704,
+          "first_name": "Reggie",
+          "last_name": "Jackson",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1628379,
+          "first_name": "Luke",
+          "last_name": "Kennard",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 202695,
+          "first_name": "Kawhi",
+          "last_name": "Leonard",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629611,
+          "first_name": "Terance",
+          "last_name": "Mann",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1630187,
+          "first_name": "Daniel",
+          "last_name": "Oturu",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 202335,
+          "first_name": "Patrick",
+          "last_name": "Patterson",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 200765,
+          "first_name": "Rajon",
+          "last_name": "Rondo",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1630206,
+          "first_name": "Jay",
+          "last_name": "Scrubb",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1627732,
+          "first_name": "Ben",
+          "last_name": "Simmons",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 202694,
+          "first_name": "Marcus Morris",
+          "last_name": "Sr.",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1627826,
+          "first_name": "Ivica",
+          "last_name": "Zubac",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        }
+      ]
+    },
+    {
+      "id": 1610612747,
+      "abbreviation": "LAL",
+      "full_name": "Los Angeles Lakers",
+      "roster": [
+        {
+          "id": 1628961,
+          "first_name": "Kostas",
+          "last_name": "Antetokounmpo",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 202340,
+          "first_name": "Avery",
+          "last_name": "Bradley",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629719,
+          "first_name": "Devontae",
+          "last_name": "Cacok",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 203484,
+          "first_name": "Kentavious",
+          "last_name": "Caldwell-Pope",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1627936,
+          "first_name": "Alex",
+          "last_name": "Caruso",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629029,
+          "first_name": "Luka",
+          "last_name": "Doncic",
+          "position": "PG",
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 201162,
+          "first_name": "Jared",
+          "last_name": "Dudley",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 201188,
+          "first_name": "Marc",
+          "last_name": "Gasol",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1626149,
+          "first_name": "Montrezl",
+          "last_name": "Harrell",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629659,
+          "first_name": "Talen",
+          "last_name": "Horton-Tucker",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 2544,
+          "first_name": "LeBron",
+          "last_name": "James",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1628398,
+          "first_name": "Kyle",
+          "last_name": "Kuzma",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 202083,
+          "first_name": "Wesley",
+          "last_name": "Matthews",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 203463,
+          "first_name": "Ben",
+          "last_name": "McLemore",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 202693,
+          "first_name": "Markieff",
+          "last_name": "Morris",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 203471,
+          "first_name": "Dennis",
+          "last_name": "Schroder",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        }
+      ]
+    },
+    {
+      "id": 1610612763,
+      "abbreviation": "MEM",
+      "full_name": "Memphis Grizzlies",
+      "roster": [
+        {
+          "id": 1628960,
+          "first_name": "Grayson",
+          "last_name": "Allen",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 203937,
+          "first_name": "Kyle",
+          "last_name": "Anderson",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1630217,
+          "first_name": "Desmond",
+          "last_name": "Bane",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1628415,
+          "first_name": "Dillon",
+          "last_name": "Brooks",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629634,
+          "first_name": "Brandon",
+          "last_name": "Clarke",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 204025,
+          "first_name": "Tim",
+          "last_name": "Frazier",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1626145,
+          "first_name": "Tyus",
+          "last_name": "Jones",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1628991,
+          "first_name": "Jaren Jackson",
+          "last_name": "Jr.",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629723,
+          "first_name": "John",
+          "last_name": "Konchar",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1630253,
+          "first_name": "Sean",
+          "last_name": "McDermott",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629630,
+          "first_name": "Ja",
+          "last_name": "Morant",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629007,
+          "first_name": "Jontay",
+          "last_name": "Porter",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629681,
+          "first_name": "Killian",
+          "last_name": "Tillie",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1630214,
+          "first_name": "Xavier",
+          "last_name": "Tillman",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 202685,
+          "first_name": "Jonas",
+          "last_name": "Valanciunas",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1626159,
+          "first_name": "Justise",
+          "last_name": "Winslow",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        }
+      ]
+    },
+    {
+      "id": 1610612748,
+      "abbreviation": "MIA",
+      "full_name": "Miami Heat",
+      "roster": [
+        {
+          "id": 1630173,
+          "first_name": "Precious",
+          "last_name": "Achiuwa",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1628389,
+          "first_name": "Bam",
+          "last_name": "Adebayo",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 2772,
+          "first_name": "Trevor",
+          "last_name": "Ariza",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 202357,
+          "first_name": "Nemanja",
+          "last_name": "Bjelica",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 202692,
+          "first_name": "Alec",
+          "last_name": "Burks",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 202710,
+          "first_name": "Jimmy",
+          "last_name": "Butler",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 203473,
+          "first_name": "Dewayne",
+          "last_name": "Dedmon",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 201609,
+          "first_name": "Goran",
+          "last_name": "Dragic",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 2617,
+          "first_name": "Udonis",
+          "last_name": "Haslem",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629639,
+          "first_name": "Tyler",
+          "last_name": "Herro",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629134,
+          "first_name": "Kendrick",
+          "last_name": "Nunn",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629644,
+          "first_name": "KZ",
+          "last_name": "Okpala",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 203506,
+          "first_name": "Victor",
+          "last_name": "Oladipo",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629130,
+          "first_name": "Duncan",
+          "last_name": "Robinson",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629622,
+          "first_name": "Max",
+          "last_name": "Strus",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629216,
+          "first_name": "Gabe",
+          "last_name": "Vincent",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1630209,
+          "first_name": "Omer",
+          "last_name": "Yurtseven",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        }
+      ]
+    },
+    {
+      "id": 1610612749,
+      "abbreviation": "MIL",
+      "full_name": "Milwaukee Bucks",
+      "roster": [
+        {
+          "id": 203507,
+          "first_name": "Giannis",
+          "last_name": "Antetokounmpo",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 203648,
+          "first_name": "Thanasis",
+          "last_name": "Antetokounmpo",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629091,
+          "first_name": "Elijah",
+          "last_name": "Bryant",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1626192,
+          "first_name": "Pat",
+          "last_name": "Connaughton",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629603,
+          "first_name": "Mamadi",
+          "last_name": "Diakite",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1628978,
+          "first_name": "Donte",
+          "last_name": "DiVincenzo",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1627854,
+          "first_name": "Bryn",
+          "last_name": "Forbes",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 201950,
+          "first_name": "Jrue",
+          "last_name": "Holiday",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1628382,
+          "first_name": "Justin",
+          "last_name": "Jackson",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 201572,
+          "first_name": "Brook",
+          "last_name": "Lopez",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1630241,
+          "first_name": "Sam",
+          "last_name": "Merrill",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 203114,
+          "first_name": "Khris",
+          "last_name": "Middleton",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629670,
+          "first_name": "Jordan",
+          "last_name": "Nwora",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1626171,
+          "first_name": "Bobby",
+          "last_name": "Portis",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 201952,
+          "first_name": "Jeff",
+          "last_name": "Teague",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1626253,
+          "first_name": "Axel",
+          "last_name": "Toupane",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 200782,
+          "first_name": "P.J.",
+          "last_name": "Tucker",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        }
+      ]
+    },
+    {
+      "id": 1610612750,
+      "abbreviation": "MIN",
+      "full_name": "Minnesota Timberwolves",
+      "roster": [
+        {
+          "id": 1627736,
+          "first_name": "Malik",
+          "last_name": "Beasley",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629633,
+          "first_name": "Jarrett",
+          "last_name": "Culver",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 202334,
+          "first_name": "Ed",
+          "last_name": "Davis",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1630162,
+          "first_name": "Anthony",
+          "last_name": "Edwards",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1627823,
+          "first_name": "Juancho",
+          "last_name": "Hernangomez",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1628993,
+          "first_name": "Alize",
+          "last_name": "Johnson",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1627774,
+          "first_name": "Jake",
+          "last_name": "Layman",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1630183,
+          "first_name": "Jaden",
+          "last_name": "McDaniels",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629162,
+          "first_name": "Jordan",
+          "last_name": "McLaughlin",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629669,
+          "first_name": "Jaylen",
+          "last_name": "Nowell",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629006,
+          "first_name": "Josh",
+          "last_name": "Okogie",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629675,
+          "first_name": "Naz",
+          "last_name": "Reid",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 203085,
+          "first_name": "Austin",
+          "last_name": "Rivers",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 201937,
+          "first_name": "Ricky",
+          "last_name": "Rubio",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1626156,
+          "first_name": "D'Angelo",
+          "last_name": "Russell",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1626157,
+          "first_name": "Karl-Anthony",
+          "last_name": "Towns",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629020,
+          "first_name": "Jarred",
+          "last_name": "Vanderbilt",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        }
+      ]
+    },
+    {
+      "id": 1610612740,
+      "abbreviation": "NOP",
+      "full_name": "New Orleans Pelicans",
+      "roster": [
+        {
+          "id": 203500,
+          "first_name": "Steven",
+          "last_name": "Adams",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629638,
+          "first_name": "Nickeil",
+          "last_name": "Alexander-Walker",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1628366,
+          "first_name": "Lonzo",
+          "last_name": "Ball",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 202339,
+          "first_name": "Eric",
+          "last_name": "Bledsoe",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629117,
+          "first_name": "Wenyen",
+          "last_name": "Gabriel",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1628404,
+          "first_name": "Josh",
+          "last_name": "Hart",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629637,
+          "first_name": "Jaxson",
+          "last_name": "Hayes",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1626195,
+          "first_name": "Willy",
+          "last_name": "Hernangomez",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1627742,
+          "first_name": "Brandon",
+          "last_name": "Ingram",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1628411,
+          "first_name": "Wes",
+          "last_name": "Iwundu",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 201949,
+          "first_name": "James",
+          "last_name": "Johnson",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1630184,
+          "first_name": "Kira Lewis",
+          "last_name": "Jr.",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629712,
+          "first_name": "Didi",
+          "last_name": "Louzada",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1630230,
+          "first_name": "Naji",
+          "last_name": "Marshall",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1627749,
+          "first_name": "Dejounte",
+          "last_name": "Murray",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 203263,
+          "first_name": "James",
+          "last_name": "Nunnally",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629627,
+          "first_name": "Zion",
+          "last_name": "Williamson",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        }
+      ]
+    },
+    {
+      "id": 1610612752,
+      "abbreviation": "NYK",
+      "full_name": "New York Knicks",
+      "roster": [
+        {
+          "id": 1629628,
+          "first_name": "RJ",
+          "last_name": "Barrett",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 203493,
+          "first_name": "Reggie",
+          "last_name": "Bullock",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 201959,
+          "first_name": "Taj",
+          "last_name": "Gibson",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629607,
+          "first_name": "Jared",
+          "last_name": "Harper",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1628995,
+          "first_name": "Kevin Knox",
+          "last_name": "II",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 203458,
+          "first_name": "Alex",
+          "last_name": "Len",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 203457,
+          "first_name": "Nerlens",
+          "last_name": "Noel",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1628373,
+          "first_name": "Frank",
+          "last_name": "Ntilikina",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 203901,
+          "first_name": "Elfrid",
+          "last_name": "Payton",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 203658,
+          "first_name": "Norvel",
+          "last_name": "Pelle",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629033,
+          "first_name": "Theo",
+          "last_name": "Pinson",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1630193,
+          "first_name": "Immanuel",
+          "last_name": "Quickley",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 203944,
+          "first_name": "Julius",
+          "last_name": "Randle",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629011,
+          "first_name": "Mitchell",
+          "last_name": "Robinson",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 201565,
+          "first_name": "Derrick",
+          "last_name": "Rose",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1630167,
+          "first_name": "Obi",
+          "last_name": "Toppin",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1630492,
+          "first_name": "Luca",
+          "last_name": "Vildoza",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        }
+      ]
+    },
+    {
+      "id": 1610612760,
+      "abbreviation": "OKC",
+      "full_name": "Oklahoma City Thunder",
+      "roster": [
+        {
+          "id": 1629647,
+          "first_name": "Darius",
+          "last_name": "Bazley",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1628396,
+          "first_name": "Tony",
+          "last_name": "Bradley",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629650,
+          "first_name": "Moses",
+          "last_name": "Brown",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1630466,
+          "first_name": "Gabriel",
+          "last_name": "Deck",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629652,
+          "first_name": "Luguentz",
+          "last_name": "Dort",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1628983,
+          "first_name": "Shai",
+          "last_name": "Gilgeous-Alexander",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1630221,
+          "first_name": "Josh",
+          "last_name": "Hall",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629658,
+          "first_name": "Jaylen",
+          "last_name": "Hoard",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629660,
+          "first_name": "Ty",
+          "last_name": "Jerome",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629718,
+          "first_name": "Charlie Brown",
+          "last_name": "Jr.",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1630177,
+          "first_name": "Theo",
+          "last_name": "Maledon",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 203488,
+          "first_name": "Mike",
+          "last_name": "Muscala",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629004,
+          "first_name": "Svi",
+          "last_name": "Mykhailiuk",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1630197,
+          "first_name": "Aleksej",
+          "last_name": "Pokusevski",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629676,
+          "first_name": "Isaiah",
+          "last_name": "Roby",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629026,
+          "first_name": "Kenrich",
+          "last_name": "Williams",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        }
+      ]
+    },
+    {
+      "id": 1610612753,
+      "abbreviation": "ORL",
+      "full_name": "Orlando Magic",
+      "roster": [
+        {
+          "id": 1630175,
+          "first_name": "Cole",
+          "last_name": "Anthony",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1628407,
+          "first_name": "Dwayne",
+          "last_name": "Bacon",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1628964,
+          "first_name": "Mo",
+          "last_name": "Bamba",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629649,
+          "first_name": "Ignas",
+          "last_name": "Brazdeikis",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 203487,
+          "first_name": "Michael",
+          "last_name": "Carter-Williams",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1628365,
+          "first_name": "Markelle",
+          "last_name": "Fultz",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629743,
+          "first_name": "Donta",
+          "last_name": "Hall",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1630181,
+          "first_name": "R.J.",
+          "last_name": "Hampton",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 203914,
+          "first_name": "Gary",
+          "last_name": "Harris",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 203516,
+          "first_name": "James Ennis",
+          "last_name": "III",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1628371,
+          "first_name": "Jonathan",
+          "last_name": "Isaac",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 202709,
+          "first_name": "Cory",
+          "last_name": "Joseph",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 203490,
+          "first_name": "Otto Porter",
+          "last_name": "Jr.",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1628976,
+          "first_name": "Wendell Carter",
+          "last_name": "Jr.",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629643,
+          "first_name": "Chuma",
+          "last_name": "Okeke",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1626184,
+          "first_name": "Chasson",
+          "last_name": "Randle",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 203082,
+          "first_name": "Terrence",
+          "last_name": "Ross",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1628414,
+          "first_name": "Sindarius",
+          "last_name": "Thornwell",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629021,
+          "first_name": "Moritz",
+          "last_name": "Wagner",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        }
+      ]
+    },
+    {
+      "id": 1610612755,
+      "abbreviation": "PHI",
+      "full_name": "Philadelphia 76ers",
+      "roster": [
+        {
+          "id": 1629109,
+          "first_name": "Gary",
+          "last_name": "Clark",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 203552,
+          "first_name": "Seth",
+          "last_name": "Curry",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 203083,
+          "first_name": "Andre",
+          "last_name": "Drummond",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 203954,
+          "first_name": "Joel",
+          "last_name": "Embiid",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 201980,
+          "first_name": "Danny",
+          "last_name": "Green",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 202699,
+          "first_name": "Tobias",
+          "last_name": "Harris",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 201588,
+          "first_name": "George",
+          "last_name": "Hill",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 2730,
+          "first_name": "Dwight",
+          "last_name": "Howard",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1630198,
+          "first_name": "Isaiah",
+          "last_name": "Joe",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1627788,
+          "first_name": "Furkan",
+          "last_name": "Korkmaz",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1630178,
+          "first_name": "Tyrese",
+          "last_name": "Maxey",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629003,
+          "first_name": "Shake",
+          "last_name": "Milton",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1630194,
+          "first_name": "Paul",
+          "last_name": "Reed",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 203118,
+          "first_name": "Mike",
+          "last_name": "Scott",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629680,
+          "first_name": "Matisse",
+          "last_name": "Thybulle",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629730,
+          "first_name": "Rayjon",
+          "last_name": "Tucker",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        }
+      ]
+    },
+    {
+      "id": 1610612756,
+      "abbreviation": "PHX",
+      "full_name": "Phoenix Suns",
+      "roster": [
+        {
+          "id": 1630234,
+          "first_name": "Ty-Shon",
+          "last_name": "Alexander",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629028,
+          "first_name": "Deandre",
+          "last_name": "Ayton",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1626164,
+          "first_name": "Devin",
+          "last_name": "Booker",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1628969,
+          "first_name": "Mikal",
+          "last_name": "Bridges",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1628975,
+          "first_name": "Jevon",
+          "last_name": "Carter",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1628470,
+          "first_name": "Torrey",
+          "last_name": "Craig",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 203109,
+          "first_name": "Jae",
+          "last_name": "Crowder",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 204038,
+          "first_name": "Langston",
+          "last_name": "Galloway",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629661,
+          "first_name": "Cameron",
+          "last_name": "Johnson",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1626163,
+          "first_name": "Frank",
+          "last_name": "Kaminsky",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1627814,
+          "first_name": "Damion",
+          "last_name": "Lee",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 202734,
+          "first_name": "E'Twaun",
+          "last_name": "Moore",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1627846,
+          "first_name": "Abdel",
+          "last_name": "Nader",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 101108,
+          "first_name": "Chris",
+          "last_name": "Paul",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1626166,
+          "first_name": "Cameron",
+          "last_name": "Payne",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 203967,
+          "first_name": "Dario",
+          "last_name": "Saric",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1630188,
+          "first_name": "Jalen",
+          "last_name": "Smith",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        }
+      ]
+    },
+    {
+      "id": 1610612757,
+      "abbreviation": "POR",
+      "full_name": "Portland Trail Blazers",
+      "roster": [
+        {
+          "id": 202329,
+          "first_name": "Al-Farouq",
+          "last_name": "Aminu",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 2546,
+          "first_name": "Carmelo",
+          "last_name": "Anthony",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629833,
+          "first_name": "Keljin",
+          "last_name": "Blevins",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1628380,
+          "first_name": "Zach",
+          "last_name": "Collins",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 203496,
+          "first_name": "Robert",
+          "last_name": "Covington",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629604,
+          "first_name": "CJ",
+          "last_name": "Elleby",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1626178,
+          "first_name": "Rondae",
+          "last_name": "Hollis-Jefferson",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1628385,
+          "first_name": "Harry Giles",
+          "last_name": "III",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1627884,
+          "first_name": "Derrick Jones",
+          "last_name": "Jr.",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 202683,
+          "first_name": "Enes",
+          "last_name": "Kanter",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1628388,
+          "first_name": "T.J.",
+          "last_name": "Leaf",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 203081,
+          "first_name": "Damian",
+          "last_name": "Lillard",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629642,
+          "first_name": "Nassir",
+          "last_name": "Little",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 203468,
+          "first_name": "CJ",
+          "last_name": "McCollum",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 203994,
+          "first_name": "Jusuf",
+          "last_name": "Nurkic",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1626181,
+          "first_name": "Norman",
+          "last_name": "Powell",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        }
+      ]
+    },
+    {
+      "id": 1610612758,
+      "abbreviation": "SAC",
+      "full_name": "Sacramento Kings",
+      "roster": [
+        {
+          "id": 203084,
+          "first_name": "Harrison",
+          "last_name": "Barnes",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629056,
+          "first_name": "Terence",
+          "last_name": "Davis",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 201942,
+          "first_name": "DeMar",
+          "last_name": "DeRozan",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629657,
+          "first_name": "Kyle",
+          "last_name": "Guy",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1630169,
+          "first_name": "Tyrese",
+          "last_name": "Haliburton",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 203090,
+          "first_name": "Maurice",
+          "last_name": "Harkless",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1627741,
+          "first_name": "Buddy",
+          "last_name": "Hield",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1626158,
+          "first_name": "Richaun",
+          "last_name": "Holmes",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1630218,
+          "first_name": "Robert Woodard",
+          "last_name": "II",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1628963,
+          "first_name": "Marvin Bagley",
+          "last_name": "III",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629713,
+          "first_name": "Justin",
+          "last_name": "James",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1627745,
+          "first_name": "Damian",
+          "last_name": "Jones",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629663,
+          "first_name": "Louis",
+          "last_name": "King",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629002,
+          "first_name": "Chimezie",
+          "last_name": "Metu",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1630186,
+          "first_name": "Jahmi'us",
+          "last_name": "Ramsey",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 202355,
+          "first_name": "Hassan",
+          "last_name": "Whiteside",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        }
+      ]
+    },
+    {
+      "id": 1610612759,
+      "abbreviation": "SAS",
+      "full_name": "San Antonio Spurs",
+      "roster": [
+        {
+          "id": 1628966,
+          "first_name": "Keita",
+          "last_name": "Bates-Diop",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 203476,
+          "first_name": "Gorgui",
+          "last_name": "Dieng",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629234,
+          "first_name": "Drew",
+          "last_name": "Eubanks",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1628368,
+          "first_name": "De'Aaron",
+          "last_name": "Fox",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 200752,
+          "first_name": "Rudy",
+          "last_name": "Gay",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629022,
+          "first_name": "Lonnie Walker",
+          "last_name": "IV",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629640,
+          "first_name": "Keldon",
+          "last_name": "Johnson",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1630200,
+          "first_name": "Tre",
+          "last_name": "Jones",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1626168,
+          "first_name": "Trey",
+          "last_name": "Lyles",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 201988,
+          "first_name": "Patty",
+          "last_name": "Mills",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1627751,
+          "first_name": "Jakob",
+          "last_name": "Poeltl",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629677,
+          "first_name": "Luka",
+          "last_name": "Samanic",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1630170,
+          "first_name": "Devin",
+          "last_name": "Vassell",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629683,
+          "first_name": "Quinndary",
+          "last_name": "Weatherspoon",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1628401,
+          "first_name": "Derrick",
+          "last_name": "White",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        }
+      ]
+    },
+    {
+      "id": 1610612761,
+      "abbreviation": "TOR",
+      "full_name": "Toronto Raptors",
+      "roster": [
+        {
+          "id": 1628384,
+          "first_name": "OG",
+          "last_name": "Anunoby",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1627761,
+          "first_name": "DeAndre'",
+          "last_name": "Bembry",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 203920,
+          "first_name": "Khem",
+          "last_name": "Birch",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1628449,
+          "first_name": "Chris",
+          "last_name": "Boucher",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1630201,
+          "first_name": "Malachi",
+          "last_name": "Flynn",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1630273,
+          "first_name": "Freddie",
+          "last_name": "Gillespie",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1630223,
+          "first_name": "Jalen",
+          "last_name": "Harris",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 203918,
+          "first_name": "Rodney",
+          "last_name": "Hood",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1626169,
+          "first_name": "Stanley",
+          "last_name": "Johnson",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629018,
+          "first_name": "Gary Trent",
+          "last_name": "Jr.",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 200768,
+          "first_name": "Kyle",
+          "last_name": "Lowry",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1627783,
+          "first_name": "Pascal",
+          "last_name": "Siakam",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 202066,
+          "first_name": "Garrett",
+          "last_name": "Temple",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1627832,
+          "first_name": "Fred",
+          "last_name": "VanVleet",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629139,
+          "first_name": "Yuta",
+          "last_name": "Watanabe",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1628778,
+          "first_name": "Paul",
+          "last_name": "Watson",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        }
+      ]
+    },
+    {
+      "id": 1610612762,
+      "abbreviation": "UTA",
+      "full_name": "Utah Jazz",
+      "roster": [
+        {
+          "id": 1628962,
+          "first_name": "Udoka",
+          "last_name": "Azubuike",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 202711,
+          "first_name": "Bojan",
+          "last_name": "Bogdanovic",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629714,
+          "first_name": "Jarrell",
+          "last_name": "Brantley",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 203903,
+          "first_name": "Jordan",
+          "last_name": "Clarkson",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 201144,
+          "first_name": "Mike",
+          "last_name": "Conley",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 202324,
+          "first_name": "Derrick",
+          "last_name": "Favors",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1630235,
+          "first_name": "Trent",
+          "last_name": "Forrest",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 203497,
+          "first_name": "Rudy",
+          "last_name": "Gobert",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1630190,
+          "first_name": "Elijah",
+          "last_name": "Hughes",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 101141,
+          "first_name": "Ersan",
+          "last_name": "Ilyasova",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 204060,
+          "first_name": "Joe",
+          "last_name": "Ingles",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1628378,
+          "first_name": "Donovan",
+          "last_name": "Mitchell",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629752,
+          "first_name": "Juwan",
+          "last_name": "Morgan",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1627777,
+          "first_name": "Georges",
+          "last_name": "Niang",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1626220,
+          "first_name": "Royce",
+          "last_name": "O'Neale",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629671,
+          "first_name": "Miye",
+          "last_name": "Oni",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629744,
+          "first_name": "Matt",
+          "last_name": "Thomas",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1627756,
+          "first_name": "Denzel",
+          "last_name": "Valentine",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        }
+      ]
+    },
+    {
+      "id": 1610612764,
+      "abbreviation": "WAS",
+      "full_name": "Washington Wizards",
+      "roster": [
+        {
+          "id": 1630166,
+          "first_name": "Deni",
+          "last_name": "Avdija",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 203078,
+          "first_name": "Bradley",
+          "last_name": "Beal",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 202722,
+          "first_name": "Davis",
+          "last_name": "Bertans",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629067,
+          "first_name": "Isaac",
+          "last_name": "Bonga",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1628418,
+          "first_name": "Thomas",
+          "last_name": "Bryant",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629655,
+          "first_name": "Daniel",
+          "last_name": "Gafford",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1630264,
+          "first_name": "Anthony",
+          "last_name": "Gill",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629060,
+          "first_name": "Rui",
+          "last_name": "Hachimura",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1628990,
+          "first_name": "Chandler",
+          "last_name": "Hutchison",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 201577,
+          "first_name": "Robin",
+          "last_name": "Lopez",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1629726,
+          "first_name": "Garrison",
+          "last_name": "Mathews",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 203526,
+          "first_name": "Raul",
+          "last_name": "Neto",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 202397,
+          "first_name": "Ish",
+          "last_name": "Smith",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 201566,
+          "first_name": "Russell",
+          "last_name": "Westbrook",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        },
+        {
+          "id": 1630216,
+          "first_name": "Cassius",
+          "last_name": "Winston",
+          "position": null,
+          "jersey_number": null,
+          "height": null,
+          "weight": null
+        }
+      ]
+    }
+  ]
 }
