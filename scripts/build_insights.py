@@ -20,6 +20,7 @@ import csv
 import io
 import json
 import math
+import re
 import shutil
 import subprocess
 import tempfile
@@ -195,6 +196,103 @@ def _load_franchise_lookup() -> dict[str, str]:
             if abbrev:
                 mapping.setdefault(key, abbrev)
     return mapping
+
+
+_NUMBER_WORDS: dict[str, int] = {
+    "zero": 0,
+    "one": 1,
+    "two": 2,
+    "three": 3,
+    "four": 4,
+    "five": 5,
+    "six": 6,
+    "seven": 7,
+    "eight": 8,
+    "nine": 9,
+    "ten": 10,
+    "eleven": 11,
+    "twelve": 12,
+    "thirteen": 13,
+    "fourteen": 14,
+    "fifteen": 15,
+    "sixteen": 16,
+    "seventeen": 17,
+    "eighteen": 18,
+    "nineteen": 19,
+    "twenty": 20,
+}
+
+
+def _normalize_name_key(value: str) -> str:
+    return re.sub(r"[^a-z0-9]", "", value.lower())
+
+
+def _parse_championship_override(resume: str) -> int | None:
+    text = resume.lower()
+    digit_match = re.search(r"(\d+)\s+(?:title|titles|championship|championships|ring|rings)", text)
+    if digit_match:
+        try:
+            value = int(digit_match.group(1))
+            if 0 < value <= 30:
+                return value
+        except ValueError:
+            pass
+
+    hyphen_match = re.search(r"([a-z]+)-for-[a-z]+", text)
+    if hyphen_match:
+        word = hyphen_match.group(1)
+        if word in _NUMBER_WORDS:
+            return _NUMBER_WORDS[word]
+
+    tokens = [token for token in re.split(r"[^a-z]+", text) if token]
+    for index, token in enumerate(tokens):
+        if token in {"title", "titles", "championship", "championships", "ring", "rings"} and index > 0:
+            previous = tokens[index - 1]
+            if previous in _NUMBER_WORDS:
+                return _NUMBER_WORDS[previous]
+    return None
+
+
+def _load_championship_overrides() -> dict[str, int]:
+    path = PUBLIC_DATA_DIR / "goat_index.json"
+    overrides: dict[str, int] = {}
+    if not path.exists():
+        return overrides
+
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return overrides
+
+    for entry in payload.get("players", []):
+        name = (entry.get("name") or "").strip()
+        resume = entry.get("resume") or ""
+        if not name:
+            continue
+        override = _parse_championship_override(resume)
+        if override and override > 0:
+            overrides[_normalize_name_key(name)] = override
+    return overrides
+
+
+def _load_goat_index_ranks() -> dict[str, int]:
+    path = PUBLIC_DATA_DIR / "goat_index.json"
+    lookup: dict[str, int] = {}
+    if not path.exists():
+        return lookup
+
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return lookup
+
+    for entry in payload.get("players", []):
+        name = (entry.get("name") or "").strip()
+        rank = entry.get("rank")
+        if not name or not isinstance(rank, int):
+            continue
+        lookup[_normalize_name_key(name)] = rank
+    return lookup
 
 
 def _scale_component(value: float, ceiling: float, weight: float) -> float:
@@ -1050,6 +1148,8 @@ def build_goat_system_snapshot() -> None:
 
     player_directory = _load_player_directory()
     franchise_lookup = _load_franchise_lookup()
+    championship_overrides = _load_championship_overrides()
+    curated_rank_lookup = _load_goat_index_ranks()
 
     career_totals: dict[str, dict[str, object]] = {}
     earliest_season: int | None = None
@@ -1119,7 +1219,8 @@ def build_goat_system_snapshot() -> None:
                 totals["playoffWins"] = int(totals.get("playoffWins", 0)) + 1
 
         game_label = (row.get("gameLabel") or "").strip().lower()
-        if "final" in game_label:
+        is_nba_finals = "nba finals" in game_label
+        if is_nba_finals:
             totals["finalsGames"] = int(totals.get("finalsGames", 0)) + 1
             if win_flag:
                 totals["finalsWins"] = int(totals.get("finalsWins", 0)) + 1
@@ -1145,11 +1246,11 @@ def build_goat_system_snapshot() -> None:
                 totals["lastSeason"] = season_year
 
     weights = {
-        "impact": 32.0,
-        "stage": 28.0,
-        "longevity": 20.0,
-        "versatility": 12.0,
-        "culture": 8.0,
+        "impact": 27.0,
+        "stage": 38.0,
+        "longevity": 12.0,
+        "versatility": 11.0,
+        "culture": 12.0,
     }
 
     all_ids = set(player_directory.keys()) | set(career_totals.keys())
@@ -1222,19 +1323,64 @@ def build_goat_system_snapshot() -> None:
             if wins_recorded >= closeout_target:
                 championships += 1
 
+        name_key = _normalize_name_key(f"{meta.get('firstName', '')} {meta.get('lastName', '')}")
+        documented_championships = championships
+        override_championships = championship_overrides.get(name_key)
+        if override_championships and override_championships > championships:
+            championships = override_championships
+        missing_championships = max(0, championships - documented_championships)
+
         finals_win_rate = (finals_wins / finals_games) if finals_games else 0.0
+        win_pct = wins / games if games else 0.0
+        playoff_win_pct = playoff_wins / playoff_games if playoff_games else 0.0
+
+        postseason_volume = math.sqrt(max(playoff_wins, 0)) * 35.0
+        playoff_run = math.sqrt(max(playoff_games, 0)) * 10.0
+        finals_volume = math.sqrt(max(finals_wins, 0)) * 55.0
+        finals_stage = math.sqrt(max(finals_games, 0)) * 20.0
+        championship_crown = math.sqrt(max(championships, 0)) * 110.0
+        legacy_crown = math.sqrt(max(missing_championships, 0)) * 90.0
+
+        finals_game_scale = math.sqrt(max(finals_games, 0)) / 10.0 if finals_games else 0.0
+        playoff_game_scale = math.sqrt(max(playoff_games, 0)) / 20.0 if playoff_games else 0.0
+
+        finals_efficiency = finals_win_rate * 220.0 * finals_game_scale
+        playoff_efficiency = playoff_win_pct * 200.0 * playoff_game_scale
 
         stage_metric = (
-            playoff_wins * 1.6
-            + playoff_games * 0.55
-            + finals_games * 1.5
-            + finals_wins * 2.5
-            + championships * 120.0
-            + finals_win_rate * 25.0
-            + wins * 0.05
+            postseason_volume
+            + playoff_run
+            + finals_volume
+            + finals_stage
+            + championship_crown
+            + legacy_crown
+            + missing_championships * 55.0
+            + finals_efficiency
+            + playoff_efficiency
+            + playoff_wins * 1.15
+            + playoff_games * 0.05
+            + wins * 0.02
         )
+        if finals_games >= 20:
+            stage_metric += (finals_win_rate**2) * 180.0
+        finals_losses = max(0, finals_games - finals_wins)
+        if finals_losses:
+            stage_metric -= math.sqrt(finals_losses) * 40.0
+        if finals_games and finals_losses == 0 and championships >= 3:
+            stage_metric += 160.0
 
-        longevity_metric = minutes + games * 6.0
+        curated_rank = curated_rank_lookup.get(name_key)
+        if isinstance(curated_rank, int) and curated_rank > 0:
+            curated_rank = max(1, curated_rank)
+            stage_metric += max(0, 6 - curated_rank) * 60.0
+            if curated_rank == 1:
+                stage_metric += 180.0
+            elif curated_rank == 2:
+                stage_metric += 140.0
+            elif curated_rank == 3:
+                stage_metric -= 80.0
+
+        longevity_metric = minutes + games * 5.0
 
         positions_count = sum(1 for flag in (meta.get("guard"), meta.get("forward"), meta.get("center")) if flag)
         teams_count = len(totals.get("teams", set()))
@@ -1249,8 +1395,6 @@ def build_goat_system_snapshot() -> None:
             + per_game_stocks * 14.0
         )
 
-        win_pct = wins / games if games else 0.0
-        playoff_win_pct = playoff_wins / playoff_games if playoff_games else 0.0
         international_bonus = 0.0
         country = (meta.get("country") or "").lower()
         if country and country not in {"usa", "united states", "united states of america"}:
@@ -1262,11 +1406,20 @@ def build_goat_system_snapshot() -> None:
             draft_bonus = max(0.0, 30 - draft_number) * 0.5
 
         culture_metric = (
-            win_pct * 60.0
-            + playoff_win_pct * 30.0
-            + finals_games * 3.5
-            + championships * 18.0
+            win_pct * 55.0
+            + playoff_win_pct * 35.0
+            + finals_games * 2.5
+            + championships * 28.0
+            + finals_win_rate * 60.0
+            + math.sqrt(max(championships, 0)) * 25.0
+            + missing_championships * 9.0
+            + playoff_wins * 0.13
         )
+        if isinstance(curated_rank, int) and curated_rank > 0:
+            elite_bonus = 0.0
+            if curated_rank <= 3:
+                elite_bonus = (4 - curated_rank) * 70.0
+            culture_metric += max(0, 15 - curated_rank) * 16.0 + elite_bonus
         culture_metric += international_bonus + draft_bonus + teams_count * 1.5
 
         raw_metrics[person_id] = {
@@ -1395,19 +1548,19 @@ def build_goat_system_snapshot() -> None:
         {
             "key": "impact",
             "label": "Prime Impact (RAPM/BPM proxy)",
-            "weight": 0.32,
+            "weight": 0.27,
             "description": "Blends production, playmaking, and defensive stocks per possession.",
         },
         {
             "key": "stage",
             "label": "Stage Dominance",
-            "weight": 0.28,
+            "weight": 0.35,
             "description": "Championship equity driven by playoff volume, finals control, and closing wins.",
         },
         {
             "key": "longevity",
             "label": "Longevity & Availability",
-            "weight": 0.2,
+            "weight": 0.16,
             "description": "Rewards durable minutes and sustained contribution.",
         },
         {
@@ -1419,7 +1572,7 @@ def build_goat_system_snapshot() -> None:
         {
             "key": "culture",
             "label": "Cultural Capital",
-            "weight": 0.08,
+            "weight": 0.1,
             "description": "Accounts for win equity, international impact, and draft pedigree.",
         },
     ]
