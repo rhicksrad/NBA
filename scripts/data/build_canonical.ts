@@ -1,9 +1,9 @@
-import { readFile, writeFile, mkdir } from "fs/promises";
+import { readFile, writeFile, mkdir, rm } from "fs/promises";
 import path from "path";
 import { fileURLToPath, pathToFileURL } from "url";
 import { parse as parseYaml } from "yaml";
 import { fetchNbaStatsRosters } from "../fetch/nba_stats_rosters.js";
-import { fetchBbrRosters } from "../fetch/bbr_rosters.js";
+import { BbrRosterResult, fetchBbrRosters } from "../fetch/bbr_rosters.js";
 import { SEASON } from "../lib/season.js";
 import { TEAM_METADATA, ensureTeamMetadata } from "../lib/teams.js";
 import {
@@ -28,10 +28,12 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../"
 const CANONICAL_DIR = path.join(ROOT, "data/2025-26/canonical");
 const OVERRIDES_PATH = path.join(ROOT, "data/2025-26/manual/overrides.yaml");
 const ROSTER_REFERENCE_PATH = path.join(ROOT, "data/2025-26/manual/roster_reference.json");
+const BREF_MISSING_PATH = path.join(ROOT, "data/2025-26/manual/bref_missing.json");
 
 export interface BuildOptions {
   nbaStats?: LeagueDataSource;
   bbr?: LeagueDataSource;
+  bbrMissing?: string[];
   overrides?: OverridesConfig;
   fallbackPlayers?: SourcePlayerRecord[];
 }
@@ -45,15 +47,82 @@ interface ChangeLog {
   losses: Set<string>;
 }
 
+function emptyLeagueDataSource(): LeagueDataSource {
+  return {
+    teams: {},
+    players: {},
+    transactions: [],
+    coaches: {},
+    injuries: [],
+  };
+}
+
+function resolveSeasonEndYear(season: string): number {
+  const [start, endFragment] = season.split("-");
+  const base = Number.parseInt(start, 10);
+  if (Number.isNaN(base)) {
+    throw new Error(`Invalid season string: ${season}`);
+  }
+  if (!endFragment) {
+    return base + 1;
+  }
+  const prefix = start.slice(0, start.length - endFragment.length);
+  const year = Number.parseInt(`${prefix}${endFragment}`, 10);
+  return Number.isNaN(year) ? base + 1 : year;
+}
+
 export async function buildCanonicalData(options: Partial<BuildOptions> = {}): Promise<CanonicalData> {
-  const [nbaStats, bbr, overrides, fallbackPlayers] = await Promise.all([
-    options.nbaStats ?? fetchNbaStatsRosters(SEASON),
-    options.bbr ?? fetchBbrRosters(SEASON),
-    options.overrides ?? loadOverrides(),
-    options.fallbackPlayers ?? loadFallbackPlayers(),
+  const useBref = process.env.USE_BREF !== "0";
+  const nbaStatsPromise = options.nbaStats
+    ? Promise.resolve(options.nbaStats)
+    : fetchNbaStatsRosters(SEASON);
+  const overridesPromise = options.overrides ? Promise.resolve(options.overrides) : loadOverrides();
+  const fallbackPlayersPromise = options.fallbackPlayers
+    ? Promise.resolve(options.fallbackPlayers)
+    : loadFallbackPlayers();
+
+  let brefPromise: Promise<BbrRosterResult>;
+  if (options.bbr) {
+    brefPromise = Promise.resolve({ rosters: options.bbr, missing: options.bbrMissing ?? [] });
+  } else if (useBref) {
+    brefPromise = fetchBbrRosters(SEASON);
+  } else {
+    console.warn("Skipping BRef enrichment (USE_BREF=0).");
+    brefPromise = Promise.resolve({ rosters: emptyLeagueDataSource(), missing: [] });
+  }
+
+  const [nbaStats, brefResult, overrides, fallbackPlayers] = await Promise.all([
+    nbaStatsPromise,
+    brefPromise,
+    overridesPromise,
+    fallbackPlayersPromise,
   ]);
 
-  return mergeSources({ nbaStats, bbr, overrides, fallbackPlayers });
+  const { rosters: bbr, missing: bbrMissing } = brefResult;
+
+  if (bbrMissing.length) {
+    console.warn("BRef missing teams:", bbrMissing.join(", "));
+    await mkdir(path.dirname(BREF_MISSING_PATH), { recursive: true });
+    await writeFile(
+      BREF_MISSING_PATH,
+      JSON.stringify(
+        { season: SEASON, endYear: resolveSeasonEndYear(SEASON), teams: bbrMissing, at: new Date().toISOString() },
+        null,
+        2,
+      ),
+      "utf8",
+    );
+  } else {
+    await rm(BREF_MISSING_PATH, { force: true });
+  }
+
+  const merged = mergeSources({ nbaStats, bbr, overrides, fallbackPlayers });
+  const total = merged.players.length;
+  if (total < 360 || total > 600) {
+    throw new Error(`League player total ${total} outside expected range`);
+  }
+
+  return merged;
 }
 
 interface MergeOptions {

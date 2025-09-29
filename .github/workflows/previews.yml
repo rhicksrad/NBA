@@ -55,6 +55,8 @@ jobs:
         run: echo "date=$(date -u +'%Y-%m-%d')" >> "$GITHUB_OUTPUT"
 
       - name: Generate previews
+        env:
+          USE_BREF: "0"
         run: pnpm previews
 
       - name: Validate previews
