@@ -35,6 +35,10 @@ jobs:
           BALLDONTLIE_API_KEY: ${{ secrets.BALLDONTLIE_API_KEY }}
           DATA_TTL_HOURS: 6
         run: pnpm run fetch:rosters
+      - name: Build players index
+        run: pnpm run build:players-index
+      - name: Validate rosters
+        run: pnpm run validate:rosters
       - name: Build
         run: pnpm run build
       - name: Upload artifact
