@@ -1083,6 +1083,8 @@ def build_goat_system_snapshot() -> None:
                 "playoffGames": 0,
                 "playoffWins": 0,
                 "finalsGames": 0,
+                "finalsWins": 0,
+                "finalsSeasons": {},
                 "teams": set(),
                 "firstSeason": season_year,
                 "lastSeason": season_year,
@@ -1119,6 +1121,14 @@ def build_goat_system_snapshot() -> None:
         game_label = (row.get("gameLabel") or "").strip().lower()
         if "final" in game_label:
             totals["finalsGames"] = int(totals.get("finalsGames", 0)) + 1
+            if win_flag:
+                totals["finalsWins"] = int(totals.get("finalsWins", 0)) + 1
+            if season_year is not None:
+                finals_seasons = totals.setdefault("finalsSeasons", {})
+                season_record = finals_seasons.setdefault(season_year, {"wins": 0, "games": 0})
+                season_record["games"] = int(season_record.get("games", 0)) + 1
+                if win_flag:
+                    season_record["wins"] = int(season_record.get("wins", 0)) + 1
 
         team_name = f"{(row.get('playerteamCity') or '').strip()} {(row.get('playerteamName') or '').strip()}".strip()
         if team_name:
@@ -1135,10 +1145,10 @@ def build_goat_system_snapshot() -> None:
                 totals["lastSeason"] = season_year
 
     weights = {
-        "impact": 35.0,
-        "stage": 20.0,
-        "longevity": 22.0,
-        "versatility": 15.0,
+        "impact": 32.0,
+        "stage": 28.0,
+        "longevity": 20.0,
+        "versatility": 12.0,
         "culture": 8.0,
     }
 
@@ -1199,7 +1209,30 @@ def build_goat_system_snapshot() -> None:
             production = (points + 1.25 * assists + 1.1 * rebounds + 1.5 * (steals + blocks)) / games
         impact_metric = production * (0.6 + (minutes / games if games else 0.0))
 
-        stage_metric = playoff_wins * 2.0 + playoff_games * 0.6 + int(totals.get("finalsGames", 0)) * 1.2 + wins * 0.05
+        finals_games = int(totals.get("finalsGames", 0))
+        finals_wins = int(totals.get("finalsWins", 0))
+        finals_seasons = totals.get("finalsSeasons") or {}
+        championships = 0
+        for season_record in finals_seasons.values():
+            games_played = int(season_record.get("games", 0))
+            wins_recorded = int(season_record.get("wins", 0))
+            if games_played <= 0:
+                continue
+            closeout_target = 4 if games_played > 5 else 3
+            if wins_recorded >= closeout_target:
+                championships += 1
+
+        finals_win_rate = (finals_wins / finals_games) if finals_games else 0.0
+
+        stage_metric = (
+            playoff_wins * 1.6
+            + playoff_games * 0.55
+            + finals_games * 1.5
+            + finals_wins * 2.5
+            + championships * 120.0
+            + finals_win_rate * 25.0
+            + wins * 0.05
+        )
 
         longevity_metric = minutes + games * 6.0
 
@@ -1228,7 +1261,12 @@ def build_goat_system_snapshot() -> None:
         if isinstance(draft_number, int) and draft_number > 0:
             draft_bonus = max(0.0, 30 - draft_number) * 0.5
 
-        culture_metric = win_pct * 60.0 + playoff_win_pct * 25.0 + int(totals.get("finalsGames", 0)) * 3.0
+        culture_metric = (
+            win_pct * 60.0
+            + playoff_win_pct * 30.0
+            + finals_games * 3.5
+            + championships * 18.0
+        )
         culture_metric += international_bonus + draft_bonus + teams_count * 1.5
 
         raw_metrics[person_id] = {
@@ -1241,6 +1279,8 @@ def build_goat_system_snapshot() -> None:
             "wins": wins,
             "playoffGames": playoff_games,
             "playoffWins": playoff_wins,
+            "championships": championships,
+            "finalsWins": finals_wins,
             "winPct": win_pct,
             "playoffWinPct": playoff_win_pct,
             "firstSeason": totals.get("firstSeason"),
@@ -1355,25 +1395,25 @@ def build_goat_system_snapshot() -> None:
         {
             "key": "impact",
             "label": "Prime Impact (RAPM/BPM proxy)",
-            "weight": 0.35,
+            "weight": 0.32,
             "description": "Blends production, playmaking, and defensive stocks per possession.",
         },
         {
             "key": "stage",
             "label": "Stage Dominance",
-            "weight": 0.2,
-            "description": "Captures playoff volume, wins, and finals presence.",
+            "weight": 0.28,
+            "description": "Championship equity driven by playoff volume, finals control, and closing wins.",
         },
         {
             "key": "longevity",
             "label": "Longevity & Availability",
-            "weight": 0.22,
+            "weight": 0.2,
             "description": "Rewards durable minutes and sustained contribution.",
         },
         {
             "key": "versatility",
             "label": "Versatility & Scalability",
-            "weight": 0.15,
+            "weight": 0.12,
             "description": "Highlights positional flexibility and all-around skills.",
         },
         {
