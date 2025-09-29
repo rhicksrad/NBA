@@ -1,15 +1,20 @@
+# .github/workflows/previews.yml
 name: Previews pipeline
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
   schedule:
-    - cron: "27 7 * * *"
+    - cron: "27 7 * * *"     # daily at 07:27 UTC
+  workflow_dispatch:
 
 permissions:
   contents: write
   pull-requests: write
+
+concurrency:
+  group: previews
+  cancel-in-progress: true
 
 jobs:
   build-previews:
@@ -21,16 +26,17 @@ jobs:
           fetch-depth: 0
           persist-credentials: true
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9.1.0
-
-      - name: Setup Node
+      - name: Setup Node (with pnpm cache)
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: pnpm
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.12.1
+          run_install: false
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -42,9 +48,12 @@ jobs:
       - name: Generate previews
         run: pnpm previews
 
+      # Fail fast if data/previews are stale or wrong
+      - name: Validate previews
+        run: pnpm run validate:previews
+
       - name: Detect changes
         id: changes
-        shell: bash
         run: |
           if git diff --quiet; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
@@ -52,22 +61,15 @@ jobs:
             echo "changed=true" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Configure git and push branch
-        if: steps.changes.outputs.changed == 'true'
-        run: |
-          git config user.name "automation"
-          git config user.email "actions@users.noreply.github.com"
-          DATE='${{ steps.metadata.outputs.date }}'
-          git checkout -B "chore/auto-previews-${{ github.run_id }}"
-          git add -A
-          git commit -m "chore(previews): refresh canonical data and regenerate previews for ${DATE}"
-          git push -u origin HEAD
-
+      # Use a PR action to avoid manual branch juggling
       - name: Open pull request
         if: steps.changes.outputs.changed == 'true'
         uses: peter-evans/create-pull-request@v6
         with:
+          commit-message: "chore(previews): refresh canonical data and regenerate previews for ${{ steps.metadata.outputs.date }}"
           title: "Auto refresh previews ${{ steps.metadata.outputs.date }}"
+          body: |
+            Auto-generated previews. CI will fail if stale names are detected.
           branch: "chore/auto-previews-${{ github.run_id }}"
           base: "main"
-          body: "Auto generated previews. Fails CI if stale names are detected."
+          delete-branch: true
