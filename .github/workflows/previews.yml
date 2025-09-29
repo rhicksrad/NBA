@@ -54,10 +54,16 @@ jobs:
         id: metadata
         run: echo "date=$(date -u +'%Y-%m-%d')" >> "$GITHUB_OUTPUT"
 
-      - name: Generate previews
+      - name: Verify Ball Don't Lie API access
+        env:
+          BDL_API_KEY: ${{ secrets.BDL_API_KEY }}
+        run: pnpm verify:bdl
+
+      - name: Build and validate previews
         env:
           USE_NBA_STATS: "0"
           USE_BREF: "0"
+          BDL_API_KEY: ${{ secrets.BDL_API_KEY }}
         run: pnpm previews
 
       - name: Validate previews

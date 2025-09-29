@@ -1,18 +1,13 @@
 import { createHash } from "node:crypto";
 import fs from "node:fs/promises";
 import path from "node:path";
-import { setTimeout as sleep } from "node:timers/promises";
-
-import type { BLPlayer, BLTeam, RosterTeam, RostersDoc } from "../types/ball";
-
-const API = "https://api.balldontlie.io/v1";
-const DEFAULT_API_KEY = "849684d4-054c-43bf-8fe1-e87c4ff8d67c";
-const KEY = process.env.BALLDONTLIE_API_KEY?.trim() || DEFAULT_API_KEY;
+import type { RosterTeam, RostersDoc } from "../types/ball";
+import { getActivePlayersByTeam, getTeams } from "./fetch/bdl.js";
+import type { BdlPlayer } from "./fetch/bdl.js";
 const OUT_DIR = path.join(process.cwd(), "public", "data");
 const OUT_FILE = path.join(OUT_DIR, "rosters.json");
 const FAIL_FILE = path.join(OUT_DIR, "rosters.failed.json");
 const HASH_FILE = path.join(OUT_DIR, "rosters.sha256");
-const MAX_ATTEMPTS = 4;
 
 function parseTTL(): number {
   const arg = process.argv
@@ -74,69 +69,7 @@ async function clearFailureFile() {
   }
 }
 
-async function http<T = JsonValue>(url: string, attempt = 1): Promise<T> {
-  const headers: Record<string, string> = KEY ? { Authorization: KEY } : {};
-  try {
-    const res = await fetch(url, { headers });
-    if (res.status === 429 && attempt < MAX_ATTEMPTS) {
-      const delay = 500 * Math.pow(2, attempt - 1);
-      await sleep(delay);
-      return http<T>(url, attempt + 1);
-    }
-    if (!res.ok) {
-      if (attempt < MAX_ATTEMPTS) {
-        const delay = 500 * Math.pow(2, attempt - 1);
-        await sleep(delay);
-        return http<T>(url, attempt + 1);
-      }
-      throw new Error(`${res.status} ${res.statusText} for ${url}`);
-    }
-    return (await res.json()) as T;
-  } catch (error) {
-    if (attempt < MAX_ATTEMPTS) {
-      const delay = 500 * Math.pow(2, attempt - 1);
-      await sleep(delay);
-      return http<T>(url, attempt + 1);
-    }
-    throw error;
-  }
-}
-
-async function getTeams(): Promise<BLTeam[]> {
-  const response = await http<{ data: BLTeam[] }>(`${API}/teams`);
-  return response.data ?? [];
-}
-
-interface PaginatedPlayers {
-  data: BLPlayer[];
-  meta?: {
-    next_cursor?: number | null;
-  };
-}
-
-async function getActivePlayersByTeam(teamId: number): Promise<BLPlayer[]> {
-  const players: BLPlayer[] = [];
-  let cursor: number | undefined;
-  const baseUrl = `${API}/players/active?team_ids[]=${teamId}&per_page=100`;
-
-  while (true) {
-    const url = cursor != null ? `${baseUrl}&cursor=${cursor}` : baseUrl;
-    const json = await http<PaginatedPlayers>(url);
-    if (Array.isArray(json.data)) {
-      players.push(...json.data);
-    }
-    const nextCursor = json.meta?.next_cursor ?? null;
-    if (!nextCursor) {
-      break;
-    }
-    cursor = nextCursor;
-    await sleep(125);
-  }
-
-  return players;
-}
-
-function normalizePlayer(player: BLPlayer): RosterTeam["roster"][number] {
+function normalizePlayer(player: BdlPlayer): RosterTeam["roster"][number] {
   return {
     id: player.id,
     first_name: player.first_name,
@@ -207,11 +140,9 @@ async function main() {
       if (roster.length < 10 || roster.length > 22) {
         console.warn(`Suspicious roster size for ${team.abbreviation}: ${roster.length}`);
       }
-      await sleep(100);
     } catch (error) {
       failedTeams.push({ id: team.id, code: team.abbreviation, error });
       console.error(`Error fetching roster for ${team.abbreviation}:`, error);
-      await sleep(250);
     }
   }
 
