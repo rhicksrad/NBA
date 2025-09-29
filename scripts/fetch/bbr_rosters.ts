@@ -1,4 +1,8 @@
 import { load } from "cheerio";
+import { mkdir, rm, writeFile } from "fs/promises";
+import path from "path";
+import { fileURLToPath } from "url";
+import { brefTeam, fetchBref } from "../data/helpers/bref.js";
 import { TEAM_METADATA } from "../lib/teams.js";
 import {
   CoachRecord,
@@ -11,6 +15,8 @@ import {
 import { loadCanonicalLeagueSource } from "./canonical_cache.js";
 
 const BBR_BASE = "https://www.basketball-reference.com";
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
+const BREF_MISSING_PATH = path.join(ROOT, "data/2025-26/manual/bref_missing.json");
 
 function resolveEndYear(season: string): number {
   const [start, endFragment] = season.split("-");
@@ -31,6 +37,7 @@ export async function fetchBbrRosters(season: string): Promise<LeagueDataSource>
   const canonicalFallback = await loadCanonicalLeagueSource();
   const teams: Record<string, Partial<SourceTeamRecord>> = {};
   const players: Record<string, SourcePlayerRecord> = {};
+  const missingTeams: string[] = [];
   const transactions: TransactionRecord[] = canonicalFallback
     ? canonicalFallback.transactions.map((transaction) => ({ ...transaction }))
     : [];
@@ -46,11 +53,19 @@ export async function fetchBbrRosters(season: string): Promise<LeagueDataSource>
     ? canonicalFallback.injuries.map((injury) => ({ ...injury }))
     : [];
 
+  let totalPlayers = 0;
+
   for (const meta of TEAM_METADATA) {
     const tricode = meta.tricode;
-    const url = `${BBR_BASE}/teams/${tricode}/${endYear}.html`;
+    const code = brefTeam(tricode);
+    const url = `${BBR_BASE}/teams/${code}/${endYear}.html`;
     try {
-      const response = await fetch(url, { headers: { "User-Agent": "Mozilla/5.0" } });
+      const response = await fetchBref(url);
+      if (response.status === 404) {
+        console.warn(`BRef 404 for ${tricode} at ${url}`);
+        missingTeams.push(tricode);
+        throw new Error("Basketball-Reference 404");
+      }
       if (!response.ok) {
         throw new Error(`Unexpected status ${response.status}`);
       }
@@ -70,8 +85,11 @@ export async function fetchBbrRosters(season: string): Promise<LeagueDataSource>
           teamTricode: tricode,
         };
         roster.push(player);
-        players[name] = player;
+        const key = player.playerId ?? player.name;
+        players[key] = player;
       });
+
+      totalPlayers += roster.length;
 
       const coachText = $("table#coach-staff tbody tr:first-child td[data-stat='coach_name']").text().trim();
       if (coachText) {
@@ -112,6 +130,7 @@ export async function fetchBbrRosters(season: string): Promise<LeagueDataSource>
           const key = player.playerId ?? player.name;
           players[key] = { ...player };
         }
+        totalPlayers += roster.length;
       } else {
         teams[tricode] = {
           teamId: meta.teamId,
@@ -122,8 +141,25 @@ export async function fetchBbrRosters(season: string): Promise<LeagueDataSource>
           lastSeasonWins: meta.lastSeasonWins,
           lastSeasonSRS: meta.lastSeasonSRS,
         };
+        totalPlayers += 0;
       }
     }
+  }
+
+  if (totalPlayers < 360 || totalPlayers > 600) {
+    throw new Error(`Basketball-Reference roster size ${totalPlayers} outside expected range`);
+  }
+
+  if (missingTeams.length) {
+    await mkdir(path.dirname(BREF_MISSING_PATH), { recursive: true });
+    await writeFile(
+      BREF_MISSING_PATH,
+      JSON.stringify({ season, missingTeams, at: new Date().toISOString() }, null, 2),
+      "utf8",
+    );
+    console.warn("Basketball-Reference missing teams:", missingTeams.join(", "));
+  } else {
+    await rm(BREF_MISSING_PATH, { force: true });
   }
 
   return { teams, players, transactions, coaches, injuries };
