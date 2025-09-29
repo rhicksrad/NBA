@@ -49,12 +49,30 @@ const gaugeLabelPlugin = {
 const GAUGE_ROTATION = (-135 / 180) * Math.PI;
 const GAUGE_CIRCUMFERENCE = (270 / 180) * Math.PI;
 
+const GOAT_DATA_SOURCES = [
+  { url: 'data/goat_system.json', label: 'GOAT system' },
+  { url: 'data/goat_index.json', label: 'GOAT index' },
+];
+
 async function loadGoatData() {
-  const response = await fetch('data/goat_index.json');
-  if (!response.ok) {
-    throw new Error(`Unable to load GOAT index: ${response.status}`);
+  let lastError = null;
+  for (const source of GOAT_DATA_SOURCES) {
+    try {
+      const response = await fetch(source.url);
+      if (!response?.ok) {
+        if (response) {
+          console.warn(`GOAT data source unavailable (${source.label}):`, response.status);
+        }
+        continue;
+      }
+      const payload = await response.json();
+      return { payload, source: source.url };
+    } catch (error) {
+      console.warn(`Unable to load ${source.label} data`, error);
+      lastError = error;
+    }
   }
-  return response.json();
+  throw lastError ?? new Error('Unable to load GOAT data from configured sources');
 }
 
 function formatDelta(value) {
@@ -314,7 +332,7 @@ function getStartYear(player) {
 
 async function init() {
   try {
-    const data = await loadGoatData();
+    const { payload: data, source: goatDataSource } = await loadGoatData();
     const weights = Array.isArray(data?.weights) ? data.weights : [];
     const players = Array.isArray(data?.players) ? data.players : [];
 
@@ -330,7 +348,7 @@ async function init() {
     const gaugeDefinitions = [
       {
         element: document.querySelector('[data-chart="goat-saturation-gauge"]'),
-        source: 'data/goat_index.json',
+        source: goatDataSource,
         async createConfig(source) {
           const playersSource = Array.isArray(source?.players) ? source.players : [];
           if (!playersSource.length) return null;
@@ -377,7 +395,7 @@ async function init() {
       },
       {
         element: document.querySelector('[data-chart="goat-active-gauge"]'),
-        source: 'data/goat_index.json',
+        source: goatDataSource,
         async createConfig(source) {
           const playersSource = Array.isArray(source?.players) ? source.players : [];
           if (!playersSource.length) return null;
@@ -424,7 +442,7 @@ async function init() {
       },
       {
         element: document.querySelector('[data-chart="goat-multi-franchise-gauge"]'),
-        source: 'data/goat_index.json',
+        source: goatDataSource,
         async createConfig(source) {
           const playersSource = Array.isArray(source?.players) ? source.players : [];
           if (!playersSource.length) return null;
@@ -475,7 +493,7 @@ async function init() {
       ...gaugeDefinitions,
       {
         element: document.querySelector('[data-chart="goat-weight-donut"]'),
-        source: 'data/goat_index.json',
+        source: goatDataSource,
         async createConfig(source) {
           const weightsSource = Array.isArray(source?.weights) ? source.weights : [];
           if (!weightsSource.length) return null;
@@ -509,7 +527,7 @@ async function init() {
       },
       {
         element: document.querySelector('[data-chart="goat-top-bar"]'),
-        source: 'data/goat_index.json',
+        source: goatDataSource,
         async createConfig(source) {
           const series = Array.isArray(source?.players)
             ? source.players.slice().sort((a, b) => a.rank - b.rank).slice(0, 10)
@@ -558,7 +576,7 @@ async function init() {
       },
       {
         element: document.querySelector('[data-chart="goat-component-radar"]'),
-        source: 'data/goat_index.json',
+        source: goatDataSource,
         async createConfig(source) {
           const weightsSource = Array.isArray(source?.weights) ? source.weights : [];
           const playersSource = Array.isArray(source?.players)
@@ -597,7 +615,7 @@ async function init() {
       },
       {
         element: document.querySelector('[data-chart="goat-impact-longevity"]'),
-        source: 'data/goat_index.json',
+        source: goatDataSource,
         async createConfig(source) {
           const playersSource = Array.isArray(source?.players) ? source.players : [];
           if (!playersSource.length) return null;
@@ -659,7 +677,7 @@ async function init() {
       },
       {
         element: document.querySelector('[data-chart="goat-stage-culture"]'),
-        source: 'data/goat_index.json',
+        source: goatDataSource,
         async createConfig(source) {
           const playersSource = Array.isArray(source?.players) ? source.players : [];
           if (!playersSource.length) return null;
@@ -717,7 +735,7 @@ async function init() {
       },
       {
         element: document.querySelector('[data-chart="goat-delta-bars"]'),
-        source: 'data/goat_index.json',
+        source: goatDataSource,
         async createConfig(source) {
           const playersSource = Array.isArray(source?.players) ? source.players : [];
           const deltaSeries = playersSource
@@ -767,7 +785,7 @@ async function init() {
       },
       {
         element: document.querySelector('[data-chart="goat-decade-curve"]'),
-        source: 'data/goat_index.json',
+        source: goatDataSource,
         async createConfig(source) {
           const playersSource = Array.isArray(source?.players) ? source.players : [];
           const decadeMap = new Map();
@@ -811,7 +829,7 @@ async function init() {
       },
       {
         element: document.querySelector('[data-chart="goat-franchise-polar"]'),
-        source: 'data/goat_index.json',
+        source: goatDataSource,
         async createConfig(source) {
           const playersSource = Array.isArray(source?.players) ? source.players : [];
           const franchiseCounts = new Map();
@@ -856,7 +874,7 @@ async function init() {
       },
       {
         element: document.querySelector('[data-chart="goat-versatility-stream"]'),
-        source: 'data/goat_index.json',
+        source: goatDataSource,
         async createConfig(source) {
           const playersSource = Array.isArray(source?.players) ? source.players : [];
           const values = playersSource
@@ -896,7 +914,7 @@ async function init() {
       },
       {
         element: document.querySelector('[data-chart="goat-tier-wheel"]'),
-        source: 'data/goat_index.json',
+        source: goatDataSource,
         async createConfig(source) {
           const playersSource = Array.isArray(source?.players) ? source.players : [];
           if (!playersSource.length) return null;
@@ -936,7 +954,7 @@ async function init() {
       },
       {
         element: document.querySelector('[data-chart="goat-era-delta"]'),
-        source: 'data/goat_index.json',
+        source: goatDataSource,
         async createConfig(source) {
           const playersSource = Array.isArray(source?.players) ? source.players : [];
           const dataset = playersSource
