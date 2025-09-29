@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2025-09-30T00:00:00Z",
+  "generatedAt": "2025-09-29T14:45:30+00:00",
   "window": "2022-23 to 2024-25",
   "metric": "Rolling three-year GOAT index",
   "players": [
@@ -7,101 +7,101 @@
       "rank": 1,
       "personId": "203999",
       "name": "Nikola Jokic",
-      "displayName": "Nikola Joki\u0107",
+      "displayName": "Nikola Jokic",
       "team": "Nuggets",
       "franchise": "DEN",
-      "score": 97.4,
-      "blurb": "Two MVPs and a title run fueled by an all-time efficiency blend of scoring and playmaking."
+      "score": 100.0,
+      "blurb": "275 games · 185-90 record · 2022-23–2024-25"
     },
     {
       "rank": 2,
-      "personId": "203507",
-      "name": "Giannis Antetokounmpo",
-      "displayName": "Giannis Antetokounmpo",
-      "team": "Bucks",
-      "franchise": "MIL",
-      "score": 94.3,
-      "blurb": "Still the league's most relentless downhill force, anchoring elite two-way metrics."
-    },
-    {
-      "rank": 3,
-      "personId": "1629029",
-      "name": "Luka Doncic",
-      "displayName": "Luka Don\u010di\u0107",
-      "team": "Mavericks",
-      "franchise": "DAL",
-      "score": 92.8,
-      "blurb": "Carrying Dallas with historic usage, triple-double pace, and deep playoff shotmaking."
-    },
-    {
-      "rank": 4,
-      "personId": "203954",
-      "name": "Joel Embiid",
-      "displayName": "Joel Embiid",
-      "team": "76ers",
-      "franchise": "PHI",
-      "score": 91.5,
-      "blurb": "The reigning scoring champ whose interior gravity warps defenses every trip."
-    },
-    {
-      "rank": 5,
       "personId": "1628983",
       "name": "Shai Gilgeous-Alexander",
       "displayName": "Shai Gilgeous-Alexander",
       "team": "Thunder",
       "franchise": "OKC",
-      "score": 90.2,
-      "blurb": "Efficiency monster with elite drives, rim pressure, and clutch steal rates."
+      "score": 91.6,
+      "blurb": "260 games · 177-83 record · 2022-23–2024-25"
     },
     {
-      "rank": 6,
+      "rank": 3,
+      "personId": "203507",
+      "name": "Giannis Antetokounmpo",
+      "displayName": "Giannis Antetokounmpo",
+      "team": "Bucks",
+      "franchise": "MIL",
+      "score": 88.9,
+      "blurb": "219 games · 137-82 record · 2022-23–2024-25"
+    },
+    {
+      "rank": 4,
       "personId": "1628369",
       "name": "Jayson Tatum",
       "displayName": "Jayson Tatum",
       "team": "Celtics",
       "franchise": "BOS",
-      "score": 88.9,
-      "blurb": "Versatile wing engine spearheading Boston's top-tier net ratings on both ends."
+      "score": 83.9,
+      "blurb": "277 games · 200-77 record · 2022-23–2024-25"
+    },
+    {
+      "rank": 5,
+      "personId": "1629029",
+      "name": "Luka Doncic",
+      "displayName": "Luka Doncic",
+      "team": "Lakers",
+      "franchise": "LAL",
+      "score": 81.4,
+      "blurb": "215 games · 124-91 record · 2022-23–2024-25"
+    },
+    {
+      "rank": 6,
+      "personId": "203076",
+      "name": "Anthony Davis",
+      "displayName": "Anthony Davis",
+      "team": "Mavericks",
+      "franchise": "DAL",
+      "score": 78.1,
+      "blurb": "220 games · 123-97 record · 2022-23–2024-25"
     },
     {
       "rank": 7,
+      "personId": "1627734",
+      "name": "Domantas Sabonis",
+      "displayName": "Domantas Sabonis",
+      "team": "Kings",
+      "franchise": "SAC",
+      "score": 78.0,
+      "blurb": "254 games · 137-117 record · 2022-23–2024-25"
+    },
+    {
+      "rank": 8,
       "personId": "2544",
       "name": "LeBron James",
       "displayName": "LeBron James",
       "team": "Lakers",
       "franchise": "LAL",
-      "score": 88.7,
-      "blurb": "Year 21 and still posting All-NBA numbers: 27-8-8 pace with elite true shooting and matchup versatility."
-    },
-    {
-      "rank": 8,
-      "personId": "201939",
-      "name": "Stephen Curry",
-      "displayName": "Stephen Curry",
-      "team": "Warriors",
-      "franchise": "GSW",
-      "score": 87.4,
-      "blurb": "The original gravity well, still bending defenses with pull-up threes and movement."
+      "score": 77.8,
+      "blurb": "234 games · 130-104 record · 2022-23–2024-25"
     },
     {
       "rank": 9,
-      "personId": "203076",
-      "name": "Anthony Davis",
-      "displayName": "Anthony Davis",
-      "team": "Lakers",
-      "franchise": "LAL",
-      "score": 86.5,
-      "blurb": "Premier rim protector posting 25/12 lines while switching across schemes."
+      "personId": "1630169",
+      "name": "Tyrese Haliburton",
+      "displayName": "Tyrese Haliburton",
+      "team": "Pacers",
+      "franchise": "IND",
+      "score": 77.4,
+      "blurb": "244 games · 142-102 record · 2022-23–2024-25"
     },
     {
       "rank": 10,
-      "personId": "201142",
-      "name": "Kevin Durant",
-      "displayName": "Kevin Durant",
-      "team": "Suns",
-      "franchise": "PHX",
-      "score": 85.9,
-      "blurb": "Still an elite shotmaker with 50/40/90 efficiency powering Phoenix's half-court sets."
+      "personId": "201935",
+      "name": "James Harden",
+      "displayName": "James Harden",
+      "team": "Clippers",
+      "franchise": "LAC",
+      "score": 74.9,
+      "blurb": "239 games · 152-87 record · 2022-23–2024-25"
     }
   ]
 }
