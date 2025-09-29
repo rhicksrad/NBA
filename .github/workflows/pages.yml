@@ -1,3 +1,4 @@
+# .github/workflows/pages.yml
 name: Deploy
 
 on:
@@ -5,6 +6,7 @@ on:
     branches: [main]
   schedule:
     - cron: "23 */6 * * *"
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -12,44 +14,57 @@ permissions:
   id-token: write
 
 concurrency:
-  group: "pages"
+  group: pages
   cancel-in-progress: false
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node (with pnpm cache)
+        uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: "pnpm"
-      - name: Enable Corepack
+          cache: pnpm
+
+      - name: Enable Corepack / Activate pnpm
         run: |
           corepack enable
           corepack prepare pnpm@9 --activate
+          pnpm -v
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+
       - name: Fetch rosters
         env:
           BALLDONTLIE_API_KEY: ${{ secrets.BALLDONTLIE_API_KEY }}
           DATA_TTL_HOURS: 6
         run: pnpm run fetch:rosters
+
       - name: Build
         run: pnpm run build
+
+      # If your HTML lives at repo root, upload "./".
+      # If you truly publish from "public/", change path to "public".
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: public
+          path: ./
+
   deploy:
     needs: build
-    permissions:
-      pages: write
-      id-token: write
+    runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
     steps:
       - id: deployment
         uses: actions/deploy-pages@v4
+
