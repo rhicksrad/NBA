@@ -4471,12 +4471,15 @@ section h2 { margin-top: 0; font-size: clamp(1.35rem, 3vw, 1.8rem); letter-spaci
 }
 .player-metric__value {
   display: inline-flex;
-  align-items: baseline;
-  gap: 0.35rem;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-end;
+  gap: 0.15rem;
   font-weight: 700;
   font-size: 1.05rem;
   color: color-mix(in srgb, var(--royal) 68%, var(--navy) 32%);
   justify-self: end;
+  text-align: right;
 }
 .player-metric__value-number {
   font-size: clamp(1.1rem, 2.6vw, 1.35rem);
@@ -4487,10 +4490,23 @@ section h2 { margin-top: 0; font-size: clamp(1.35rem, 3vw, 1.8rem); letter-spaci
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.16em;
+  line-height: 1;
+  white-space: nowrap;
   color: color-mix(in srgb, var(--text-subtle) 78%, var(--navy) 22%);
+}
+.player-metric__value:where(:not(.player-metric__value--empty)) {
+  min-height: 2.2rem;
 }
 .player-metric__value--empty {
   color: color-mix(in srgb, var(--text-subtle) 76%, var(--navy) 24%);
+}
+@media (min-width: 720px) {
+  .player-metric__value {
+    flex-direction: row;
+    align-items: baseline;
+    gap: 0.35rem;
+    min-height: auto;
+  }
 }
 .player-metric__meter {
   position: relative;
