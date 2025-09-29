@@ -1773,6 +1773,7 @@ function initPlayerAtlas() {
   }
 
   let players = [];
+  let allPlayers = [];
   const playersById = new Map();
   const playersByBdlId = new Map();
   let catalog = [];
@@ -1793,6 +1794,14 @@ function initPlayerAtlas() {
     player.searchTokens = buildPlayerTokens(player);
     player.nameToken = simplifyText(player?.name);
   };
+  const sortPlayersByName = (list) =>
+    (Array.isArray(list) ? list : [])
+      .slice()
+      .sort((a, b) => {
+        const left = a?.name || '';
+        const right = b?.name || '';
+        return left.localeCompare(right);
+      });
   const rebuildPlayerIndexes = () => {
     playersById.clear();
     players.forEach((player) => {
@@ -1844,6 +1853,31 @@ function initPlayerAtlas() {
     if (hint) hint.hidden = false;
     if (empty) empty.hidden = true;
     if (error) error.hidden = true;
+  };
+  const setActivePlayers = (nextPlayers) => {
+    const sorted = sortPlayersByName(nextPlayers);
+    players = sorted;
+    rebuildPlayerIndexes();
+    renderTeamBrowser(players);
+    if (activePlayerId && !playersById.has(activePlayerId)) {
+      activePlayerId = null;
+      if (profile) {
+        profile.hidden = true;
+        delete profile.dataset.playerId;
+      }
+    }
+    highlightTeamPlayer(activePlayerId);
+    const pendingQuery = searchInput.value.trim();
+    if (pendingQuery) {
+      renderResults(pendingQuery);
+    } else {
+      matches = [];
+      activeIndex = -1;
+      resultsList.innerHTML = '';
+      setResultsVisibility(false);
+      setClearVisibility(false);
+      resetStatusMessages();
+    }
   };
 
   const renderMeta = (player) => {
@@ -1993,12 +2027,12 @@ function initPlayerAtlas() {
     currentRostersDoc = doc ?? null;
     playersByBdlId.clear();
     if (!doc || !Array.isArray(doc.teams)) {
-      renderTeamBrowser(players);
+      setActivePlayers([]);
       return;
     }
 
     const nameBuckets = new Map();
-    players.forEach((player) => {
+    allPlayers.forEach((player) => {
       const key = normalizeName(player?.name);
       if (!key) {
         return;
@@ -2020,14 +2054,21 @@ function initPlayerAtlas() {
       return bucket.shift();
     };
 
+    const extras = [];
+
+    const atlasPlayers = [];
+
     doc.teams.forEach((team) => {
       const roster = Array.isArray(team?.roster) ? team.roster : [];
       roster.forEach((member) => {
         const fullName = buildFullName(member?.first_name, member?.last_name);
         const nameKey = normalizeName(fullName || '');
-        let playerRecord = takeFromBucket(nameKey);
+        const sourceRecord = nameKey ? takeFromBucket(nameKey) : null;
+        let playerRecord = sourceRecord ? { ...sourceRecord } : null;
+        let isNewRecord = false;
+
         if (!playerRecord) {
-          const rosterId = member?.id ?? `${team?.abbreviation ?? 'FA'}-${players.length + 1}`;
+          const rosterId = member?.id ?? `${team?.abbreviation ?? 'FA'}-${atlasPlayers.length + 1}`;
           playerRecord = {
             id: `bdl-${rosterId}`,
             name: fullName || `Player ${rosterId}`,
@@ -2040,10 +2081,12 @@ function initPlayerAtlas() {
             era: null,
             goatScores: null,
             goatScore: null,
+            goatRank: null,
+            goatTier: null,
+            goatResume: null,
             metrics: {},
           };
-          ensurePlayerSearchTokens(playerRecord);
-          players.push(playerRecord);
+          isNewRecord = true;
         }
 
         const teamName = team?.full_name || team?.abbreviation || playerRecord.team || '';
@@ -2052,19 +2095,7 @@ function initPlayerAtlas() {
         const heightValue = member?.height ?? null;
         const positionValue = member?.position ?? null;
 
-        playerRecord.bdl = {
-          id: member?.id ?? playerRecord?.bdl?.id ?? null,
-          teamName,
-          teamAbbr: team?.abbreviation ?? playerRecord?.bdl?.teamAbbr ?? null,
-          position: positionValue ?? playerRecord?.bdl?.position ?? null,
-          jersey: jerseyNumber ?? playerRecord?.bdl?.jersey ?? null,
-          height: heightValue ?? playerRecord?.bdl?.height ?? null,
-          weight: formattedWeight ?? playerRecord?.bdl?.weight ?? null,
-        };
-
-        if (teamName) {
-          playerRecord.team = teamName;
-        }
+        playerRecord.team = teamName || playerRecord.team || '';
         if (team?.abbreviation) {
           playerRecord.teamAbbr = team.abbreviation;
         }
@@ -2081,20 +2112,43 @@ function initPlayerAtlas() {
           playerRecord.weight = formattedWeight;
         }
 
+        const previousBdl = playerRecord?.bdl ?? {};
+        playerRecord.bdl = {
+          ...previousBdl,
+          id: member?.id ?? previousBdl.id ?? null,
+          teamName,
+          teamAbbr: team?.abbreviation ?? previousBdl.teamAbbr ?? null,
+          position: positionValue ?? previousBdl.position ?? null,
+          jersey: jerseyNumber ?? previousBdl.jersey ?? null,
+          height: heightValue ?? previousBdl.height ?? null,
+          weight: formattedWeight ?? previousBdl.weight ?? null,
+        };
+
         ensurePlayerSearchTokens(playerRecord);
 
         if (member?.id !== undefined && member?.id !== null) {
           playersByBdlId.set(String(member.id), playerRecord);
         }
+
+        if (isNewRecord) {
+          extras.push(playerRecord);
+        }
+
+        atlasPlayers.push(playerRecord);
       });
     });
 
-    players.sort((a, b) => a.name.localeCompare(b.name));
-    rebuildPlayerIndexes();
-    renderTeamBrowser(players);
-    if (activePlayerId) {
-      highlightTeamPlayer(activePlayerId);
+    if (extras.length) {
+      const existingIds = new Set(allPlayers.map((player) => player?.id));
+      extras.forEach((player) => {
+        if (player?.id && !existingIds.has(player.id)) {
+          allPlayers.push(player);
+          existingIds.add(player.id);
+        }
+      });
     }
+
+    setActivePlayers(atlasPlayers);
   };
 
   const updateActiveOption = () => {
@@ -2582,7 +2636,7 @@ function initPlayerAtlas() {
         return enriched;
       });
 
-      rebuildPlayerIndexes();
+      allPlayers = players.map((player) => ({ ...player }));
 
       let rostersDoc = null;
       if (rostersResponse && rostersResponse.ok) {
@@ -2597,7 +2651,7 @@ function initPlayerAtlas() {
         applyBallDontLieDoc(rostersDoc);
       } else {
         playersByBdlId.clear();
-        renderTeamBrowser(players);
+        setActivePlayers([]);
       }
 
       isLoaded = true;
@@ -2632,11 +2686,12 @@ function initPlayerAtlas() {
         if (hint) hint.hidden = true;
         if (empty) {
           empty.hidden = false;
-          empty.textContent = 'Player profiles are temporarily unavailable.';
+          empty.textContent = 'Active roster profiles are temporarily unavailable.';
         }
         searchInput.disabled = true;
         setClearVisibility(false);
       } else {
+        searchInput.disabled = false;
         const pendingQuery = searchInput.value.trim();
         if (pendingQuery) {
           renderResults(pendingQuery);
