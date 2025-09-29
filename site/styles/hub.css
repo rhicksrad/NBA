@@ -5136,6 +5136,12 @@ section h2 { margin-top: 0; font-size: clamp(1.35rem, 3vw, 1.8rem); letter-spaci
   color: var(--text-subtle);
 }
 
+.roster-controls__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 .roster-button {
   appearance: none;
   border: none;
@@ -5206,6 +5212,30 @@ section h2 { margin-top: 0; font-size: clamp(1.35rem, 3vw, 1.8rem); letter-spaci
   border-radius: var(--radius-sm);
   border: 1px solid rgba(17, 86, 214, 0.06);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65);
+  width: 100%;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  appearance: none;
+  background-clip: padding-box;
+  cursor: pointer;
+  transition: border-color 120ms ease, box-shadow 120ms ease, transform 120ms ease;
+}
+
+.roster-player:hover {
+  border-color: color-mix(in srgb, var(--royal) 35%, transparent);
+  transform: translateY(-1px);
+}
+
+.roster-player:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--royal) 55%, transparent);
+  outline-offset: 2px;
+}
+
+.roster-player.is-active {
+  border-color: color-mix(in srgb, var(--royal) 65%, transparent);
+  box-shadow: 0 0 0 2px rgba(17, 86, 214, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.65);
+  background: rgba(17, 86, 214, 0.08);
 }
 
 .roster-player__name {
@@ -5231,6 +5261,8 @@ section h2 { margin-top: 0; font-size: clamp(1.35rem, 3vw, 1.8rem); letter-spaci
   color: var(--text-subtle);
   background: transparent;
   border: 1px dashed rgba(11, 37, 69, 0.2);
+  cursor: default;
+  pointer-events: none;
 }
 
 .roster-status {
