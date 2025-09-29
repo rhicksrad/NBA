@@ -12,17 +12,19 @@
     "build:data": "tsx scripts/data/build_canonical.ts && tsx scripts/data/build_preseason_schedule.ts",
     "build:players-index": "tsx scripts/build_players_index.ts",
     "gen:previews": "tsx scripts/generate/preseason_previews.ts && tsx scripts/generate/previews.ts",
-    "validate:previews": "tsx scripts/validate/previews_staleness.ts && tsx scripts/validate/links.ts",
+    "validate:previews": "tsx scripts/validate/previews_staleness.ts && tsx scripts/validate/links.ts && tsx scripts/validate/rosters_nonempty.ts",
     "previews": "pnpm build:data && pnpm gen:previews && pnpm validate:previews",
     "fetch:rosters": "tsx scripts/fetch_rosters.ts",
     "validate:rosters": "tsx scripts/validate_rosters.ts",
     "predeploy": "pnpm fetch:rosters",
     "deploy": "echo 'static site build only'",
-    "test": "vitest run"
+    "test": "vitest run",
+    "verify:bdl": "tsx scripts/dev/verify_bdl.ts"
   },
   "dependencies": {
     "cheerio": "1.0.0-rc.12",
-    "yaml": "2.4.1"
+    "yaml": "2.4.1",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@types/cheerio": "0.22.35",
@@ -30,7 +32,6 @@
     "esbuild": "^0.23.0",
     "tsx": "^4.19.0",
     "typescript": "5.4.5",
-    "vitest": "1.4.0",
-    "zod": "^3.23.8"
+    "vitest": "1.4.0"
   }
 }

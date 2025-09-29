@@ -1,78 +1,14 @@
-import { setTimeout as sleep } from "node:timers/promises";
-import type { BLPlayer, BLTeam } from "../../types/ball.js";
-import { ensureTeamMetadata, TEAM_METADATA } from "../lib/teams.js";
+import { getRosterMapByTeamIds, getTeams } from "./bdl.js";
+import type { BdlPlayer, BdlTeam } from "./bdl.js";
+import { TEAM_METADATA } from "../lib/teams.js";
+import type { TeamMetadata } from "../lib/teams.js";
 import type { LeagueDataSource, SourcePlayerRecord, SourceTeamRecord } from "../lib/types.js";
 
-const API = "https://api.balldontlie.io/v1";
-const DEFAULT_API_KEY = "849684d4-054c-43bf-8fe1-e87c4ff8d67c";
-const KEY = process.env.BALLDONTLIE_API_KEY?.trim() || DEFAULT_API_KEY;
-const MAX_ATTEMPTS = 4;
-
-interface PaginatedPlayers {
-  data: BLPlayer[];
-  meta?: { next_cursor?: number | null };
+export interface BallDontLieRosters extends LeagueDataSource {
+  teamAbbrs: string[];
 }
 
-function authHeaders(): Record<string, string> {
-  return KEY ? { Authorization: KEY } : {};
-}
-
-async function http<T>(url: string, attempt = 1): Promise<T> {
-  try {
-    const res = await fetch(url, { headers: authHeaders() });
-    if (res.status === 429 && attempt < MAX_ATTEMPTS) {
-      await sleep(500 * Math.pow(2, attempt - 1));
-      return http<T>(url, attempt + 1);
-    }
-    if (!res.ok) {
-      if (attempt < MAX_ATTEMPTS) {
-        await sleep(500 * Math.pow(2, attempt - 1));
-        return http<T>(url, attempt + 1);
-      }
-      throw new Error(`${res.status} ${res.statusText} for ${url}`);
-    }
-    return (await res.json()) as T;
-  } catch (error) {
-    if (attempt < MAX_ATTEMPTS) {
-      await sleep(500 * Math.pow(2, attempt - 1));
-      return http<T>(url, attempt + 1);
-    }
-    throw error;
-  }
-}
-
-async function getTeams(): Promise<BLTeam[]> {
-  const json = await http<{ data: BLTeam[] }>(`${API}/teams`);
-  return json.data ?? [];
-}
-
-async function getActivePlayersByTeam(teamId: number): Promise<BLPlayer[]> {
-  const players: BLPlayer[] = [];
-  let cursor: number | undefined;
-  const baseUrl = `${API}/players/active?team_ids[]=${teamId}&per_page=100`;
-
-  while (true) {
-    const url = cursor != null ? `${baseUrl}&cursor=${cursor}` : baseUrl;
-    const json = await http<PaginatedPlayers>(url);
-    if (Array.isArray(json.data)) {
-      players.push(...json.data);
-    }
-    const nextCursor = json.meta?.next_cursor ?? null;
-    if (!nextCursor) {
-      break;
-    }
-    cursor = nextCursor;
-    await sleep(125);
-  }
-
-  return players;
-}
-
-function toSourcePlayer(
-  player: BLPlayer,
-  teamId: string,
-  tricode: string
-): SourcePlayerRecord {
+function toSourcePlayer(player: BdlPlayer, teamId: string, tricode: string): SourcePlayerRecord {
   const fullName = `${player.first_name} ${player.last_name}`.trim();
   return {
     playerId: String(player.id),
@@ -83,33 +19,43 @@ function toSourcePlayer(
   };
 }
 
-export interface BallDontLieRosters extends LeagueDataSource {
-  teamAbbrs: string[];
+function mapTeamsByAbbr(teams: BdlTeam[]): Map<string, BdlTeam> {
+  const map = new Map<string, BdlTeam>();
+  for (const team of teams) {
+    map.set(team.abbreviation.toUpperCase(), team);
+  }
+  return map;
 }
 
 export async function fetchBallDontLieRosters(): Promise<BallDontLieRosters> {
-  const teamsResponse = await getTeams();
-  if (!teamsResponse.length) {
-    throw new Error("BallDontLie returned no teams");
+  const bdlTeams = await getTeams();
+  if (!bdlTeams.length) {
+    throw new Error("Ball Don't Lie returned no teams");
   }
 
-  const validAbbrs = new Set(TEAM_METADATA.map((team) => team.tricode));
-  const teams: Record<string, Partial<SourceTeamRecord>> = {};
+  const teamsByAbbr = mapTeamsByAbbr(bdlTeams);
+  const nbaTeams: Array<{ meta: TeamMetadata; bdl: BdlTeam }> = [];
+
+  for (const teamMeta of TEAM_METADATA) {
+    const bdlTeam = teamsByAbbr.get(teamMeta.tricode);
+    if (!bdlTeam) {
+      throw new Error(`Missing Ball Don't Lie mapping for ${teamMeta.tricode}`);
+    }
+    nbaTeams.push({ meta: teamMeta, bdl: bdlTeam });
+  }
+
+  const rosterMap = await getRosterMapByTeamIds(nbaTeams.map((entry) => entry.bdl.id));
+  const teams: Record<string, SourceTeamRecord> = {};
   const players: Record<string, SourcePlayerRecord> = {};
   const teamAbbrs: string[] = [];
   let totalPlayers = 0;
 
-  for (const team of teamsResponse) {
-    const abbr = team.abbreviation.toUpperCase();
-    if (!validAbbrs.has(abbr)) {
-      continue;
-    }
-    const meta = ensureTeamMetadata(abbr);
-    const rawPlayers = await getActivePlayersByTeam(team.id);
-    const roster = rawPlayers.map((player) => toSourcePlayer(player, meta.teamId, meta.tricode));
+  for (const entry of nbaTeams) {
+    const { meta, bdl } = entry;
+    const roster = (rosterMap[bdl.id] ?? []).map((player) => toSourcePlayer(player, meta.teamId, meta.tricode));
     totalPlayers += roster.length;
 
-    teams[abbr] = {
+    teams[meta.tricode] = {
       teamId: meta.teamId,
       tricode: meta.tricode,
       market: meta.market,
@@ -123,18 +69,15 @@ export async function fetchBallDontLieRosters(): Promise<BallDontLieRosters> {
       players[player.playerId ?? player.name] = player;
     }
 
-    teamAbbrs.push(abbr);
-    await sleep(100);
+    teamAbbrs.push(meta.tricode);
   }
 
-  if (totalPlayers < 360 || totalPlayers > 600) {
-    throw new Error(`BallDontLie returned suspicious league size ${totalPlayers}`);
+  if (totalPlayers < 360) {
+    throw new Error(`Ball Don't Lie returned too few active players (${totalPlayers})`);
   }
-
-  teamAbbrs.sort();
 
   return {
-    teamAbbrs,
+    teamAbbrs: teamAbbrs.sort(),
     teams,
     players,
     transactions: [],
