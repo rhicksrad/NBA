@@ -85,8 +85,8 @@ export async function paginate<T>(
   parser?: z.ZodType<T>,
 ): Promise<T[]> {
   const results: T[] = [];
-  let page = 1;
   let cursor: string | number | undefined;
+  let nextPage: number | undefined;
   let attempts = 0;
 
   while (true) {
@@ -102,8 +102,8 @@ export async function paginate<T>(
     }
     if (cursor !== undefined) {
       search.set("cursor", String(cursor));
-    } else {
-      search.set("page", String(page));
+    } else if (nextPage !== undefined) {
+      search.set("page", String(nextPage));
     }
     if (!search.has("per_page")) {
       search.set("per_page", String(pageSize));
@@ -116,19 +116,32 @@ export async function paginate<T>(
     const items = parser ? dataArray.map((entry) => parser.parse(entry)) : (dataArray as T[]);
     results.push(...items);
 
-    const meta = parsedPage.meta;
-    if (meta?.next_cursor !== undefined && meta.next_cursor !== null) {
-      cursor = meta.next_cursor;
+    const meta = parsedPage.meta ?? {};
+    const nextCursor = meta.next_cursor;
+    if (nextCursor !== undefined && nextCursor !== null && String(nextCursor).length > 0) {
+      cursor = nextCursor;
+      nextPage = undefined;
       continue;
     }
-    if (meta?.next_page && meta.next_page !== null) {
-      page = meta.next_page;
+
+    const metaNextPage = meta.next_page;
+    if (typeof metaNextPage === "number" && Number.isFinite(metaNextPage)) {
+      cursor = undefined;
+      nextPage = metaNextPage;
       continue;
     }
-    if (dataArray.length < pageSize) {
-      break;
+
+    const totalPages = typeof meta.total_pages === "number" && Number.isFinite(meta.total_pages) ? meta.total_pages : undefined;
+    const currentPage = typeof meta.current_page === "number" && Number.isFinite(meta.current_page)
+      ? meta.current_page
+      : undefined;
+    if (totalPages !== undefined && currentPage !== undefined && currentPage < totalPages) {
+      cursor = undefined;
+      nextPage = currentPage + 1;
+      continue;
     }
-    page += 1;
+
+    break;
   }
 
   return results;
