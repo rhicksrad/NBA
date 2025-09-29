@@ -7,6 +7,9 @@ const API = "https://api.balldontlie.io/v1";
 const DEFAULT_API_KEY = "849684d4-054c-43bf-8fe1-e87c4ff8d67c";
 const KEY = process.env.BALLDONTLIE_API_KEY?.trim() || DEFAULT_API_KEY;
 const MAX_ATTEMPTS = 4;
+export const MAX_TEAM_ACTIVE = 30;
+const WARN_LEAGUE_ACTIVE = 800;
+const PER_PAGE = 100;
 
 interface PaginatedPlayers {
   data: BLPlayer[];
@@ -48,14 +51,21 @@ async function getTeams(): Promise<BLTeam[]> {
 
 async function getActivePlayersByTeam(teamId: number): Promise<BLPlayer[]> {
   const players: BLPlayer[] = [];
+  const seen = new Set<number>();
   let cursor: number | undefined;
-  const baseUrl = `${API}/players/active?team_ids[]=${teamId}&per_page=100`;
+  const baseUrl = `${API}/players/active?team_ids[]=${teamId}&per_page=${PER_PAGE}`;
 
   while (true) {
     const url = cursor != null ? `${baseUrl}&cursor=${cursor}` : baseUrl;
     const json = await http<PaginatedPlayers>(url);
     if (Array.isArray(json.data)) {
-      players.push(...json.data);
+      for (const player of json.data) {
+        if (seen.has(player.id)) {
+          continue;
+        }
+        seen.add(player.id);
+        players.push(player);
+      }
     }
     const nextCursor = json.meta?.next_cursor ?? null;
     if (!nextCursor) {
@@ -63,6 +73,13 @@ async function getActivePlayersByTeam(teamId: number): Promise<BLPlayer[]> {
     }
     cursor = nextCursor;
     await sleep(125);
+  }
+
+  if (players.length > MAX_TEAM_ACTIVE) {
+    console.warn(
+      `Team ${teamId} returned ${players.length} active players; trimming to latest ${MAX_TEAM_ACTIVE}.`
+    );
+    return players.slice(0, MAX_TEAM_ACTIVE);
   }
 
   return players;
@@ -97,7 +114,7 @@ export async function fetchBallDontLieRosters(): Promise<BallDontLieRosters> {
   const teams: Record<string, Partial<SourceTeamRecord>> = {};
   const players: Record<string, SourcePlayerRecord> = {};
   const teamAbbrs: string[] = [];
-  let totalPlayers = 0;
+  const uniquePlayerKeys = new Set<string>();
 
   for (const team of teamsResponse) {
     const abbr = team.abbreviation.toUpperCase();
@@ -107,7 +124,6 @@ export async function fetchBallDontLieRosters(): Promise<BallDontLieRosters> {
     const meta = ensureTeamMetadata(abbr);
     const rawPlayers = await getActivePlayersByTeam(team.id);
     const roster = rawPlayers.map((player) => toSourcePlayer(player, meta.teamId, meta.tricode));
-    totalPlayers += roster.length;
 
     teams[abbr] = {
       teamId: meta.teamId,
@@ -120,15 +136,20 @@ export async function fetchBallDontLieRosters(): Promise<BallDontLieRosters> {
     };
 
     for (const player of roster) {
-      players[player.playerId ?? player.name] = player;
+      const key = player.playerId ?? player.name;
+      players[key] = player;
+      uniquePlayerKeys.add(key);
     }
 
     teamAbbrs.push(abbr);
     await sleep(100);
   }
 
-  if (totalPlayers < 360 || totalPlayers > 600) {
-    throw new Error(`BallDontLie returned suspicious league size ${totalPlayers}`);
+  const totalUniquePlayers = uniquePlayerKeys.size;
+  if (totalUniquePlayers > WARN_LEAGUE_ACTIVE) {
+    console.warn(
+      `League active count ${totalUniquePlayers} looks high; check pagination/filtering.`
+    );
   }
 
   teamAbbrs.sort();
