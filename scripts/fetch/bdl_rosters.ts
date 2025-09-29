@@ -1,12 +1,7 @@
-import {
-  createTeamMap,
-  getRosterMapByTeamIds,
-  getTeams,
-  normalizeTeamName,
-} from "./bdl.js";
-import type { BdlPlayer, BdlTeam } from "./bdl.js";
+import { getTeams } from "./bdl.js";
+import type { BdlTeam } from "./bdl.js";
+import { SEASON } from "../lib/season.js";
 import { TEAM_METADATA } from "../lib/teams.js";
-import type { TeamMetadata } from "../lib/teams.js";
 import type { LeagueDataSource, SourcePlayerRecord, SourceTeamRecord } from "../lib/types.js";
 
 export interface BallDontLieRosters extends LeagueDataSource {
@@ -15,7 +10,29 @@ export interface BallDontLieRosters extends LeagueDataSource {
 
 export const MAX_TEAM_ACTIVE = 30;
 
-function toSourcePlayer(player: BdlPlayer, teamId: string, tricode: string): SourcePlayerRecord {
+const API = "https://api.balldontlie.io/v1";
+const KEY = process.env.BALLDONTLIE_API_KEY?.trim();
+const PER_PAGE = 100;
+const MAX_RETRIES = 2;
+
+type BdlApiPlayer = {
+  id: number;
+  first_name: string;
+  last_name: string;
+  position: string | null;
+  team: { id: number; abbreviation: string; full_name: string };
+};
+
+function resolveSeasonStartYear(season: string): number {
+  const [start] = season.split("-");
+  const parsed = Number.parseInt(start, 10);
+  if (!Number.isFinite(parsed)) {
+    throw new Error(`Invalid season string: ${season}`);
+  }
+  return parsed;
+}
+
+function toSourcePlayer(player: BdlApiPlayer, teamId: string, tricode: string): SourcePlayerRecord {
   const fullName = `${player.first_name} ${player.last_name}`.trim();
   return {
     playerId: String(player.id),
@@ -26,99 +43,148 @@ function toSourcePlayer(player: BdlPlayer, teamId: string, tricode: string): Sou
   };
 }
 
-function candidateTeamNameKeys(team: TeamMetadata): string[] {
-  const names = new Set<string>();
-  const market = team.market ?? "";
-  const name = team.name ?? "";
-  names.add(normalizeTeamName(`${market} ${name}`));
-  if (market) {
-    names.add(normalizeTeamName(market));
+async function http<T>(path: string, qs: Record<string, string | number | undefined>): Promise<T> {
+  const url = new URL(path, API);
+  Object.entries(qs).forEach(([key, value]) => {
+    if (value !== undefined) {
+      url.searchParams.append(key, String(value));
+    }
+  });
+
+  const response = await fetch(url.toString(), {
+    headers: KEY ? { Authorization: KEY } : undefined,
+  });
+
+  if (!response.ok) {
+    const body = await response.text().catch(() => "");
+    throw new Error(
+      `${response.status} ${response.statusText} for ${url.toString()}${body ? ` — ${body}` : ""}`,
+    );
   }
-  if (name) {
-    names.add(normalizeTeamName(name));
-  }
-  return Array.from(names).filter(Boolean);
+
+  return (await response.json()) as T;
 }
 
-export async function fetchBallDontLieRosters(): Promise<BallDontLieRosters> {
+async function fetchTeamPlayers(teamId: number, season: number): Promise<BdlApiPlayer[]> {
+  let cursor: string | number | undefined;
+  const players: BdlApiPlayer[] = [];
+
+  while (true) {
+    const result: { data: BdlApiPlayer[]; meta?: { next_cursor?: number | null } } = await http(
+      "/players",
+      {
+        "team_ids[]": teamId,
+        per_page: PER_PAGE,
+        seasons: season,
+        cursor,
+      },
+    );
+
+    players.push(...result.data);
+
+    const nextCursor = result.meta?.next_cursor ?? null;
+    if (!nextCursor) {
+      break;
+    }
+    cursor = nextCursor;
+  }
+
+  return players;
+}
+
+export async function fetchBallDontLieRosters(
+  targetSeason: number = resolveSeasonStartYear(SEASON),
+): Promise<BallDontLieRosters> {
   const bdlTeams = await getTeams();
   if (!bdlTeams.length) {
     throw new Error("Ball Don't Lie returned no teams");
   }
 
-  const teamMap = createTeamMap(bdlTeams);
-  const nbaTeams: Array<{ meta: TeamMetadata; bdl: BdlTeam }> = [];
-
-  for (const teamMeta of TEAM_METADATA) {
-    const abbrKey = teamMeta.tricode.toUpperCase();
-    let bdlTeam = teamMap.byAbbr[abbrKey];
-    if (!bdlTeam) {
-      for (const key of candidateTeamNameKeys(teamMeta)) {
-        const mapped = teamMap.byName[key];
-        if (mapped) {
-          bdlTeam = mapped;
-          break;
-        }
-      }
-    }
-    if (!bdlTeam) {
-      throw new Error(
-        `Missing Ball Don't Lie mapping for ${teamMeta.tricode} (${teamMeta.teamId})`
-      );
-    }
-    nbaTeams.push({ meta: teamMeta, bdl: bdlTeam });
-  }
-
-  // Pull active rosters using shared bdl.js helper
-  const rosterMap = await getRosterMapByTeamIds(nbaTeams.map((entry) => entry.bdl.id));
+  const bdlByAbbr = new Map<string, BdlTeam>(
+    bdlTeams.map((team) => [team.abbreviation.toUpperCase(), team]),
+  );
 
   const teams: Record<string, SourceTeamRecord> = {};
   const players: Record<string, SourcePlayerRecord> = {};
   const teamAbbrs: string[] = [];
-  const uniquePlayerKeys = new Set<string>();
-
   let totalPlayers = 0;
 
-  for (const entry of nbaTeams) {
-    const { meta, bdl } = entry;
-    const rawRoster = rosterMap[bdl.id] ?? [];
-    if (rawRoster.length === 0) {
-      throw new Error(
-        `Ball Don't Lie returned 0 active players for ${meta.tricode} (NBA ${meta.teamId}) mapped to BDL team ${bdl.id}`
-      );
+  for (const teamMeta of TEAM_METADATA) {
+    const abbr = teamMeta.tricode.toUpperCase();
+    const bdlTeam = bdlByAbbr.get(abbr);
+    if (!bdlTeam) {
+      throw new Error(`Cannot map NBA ${teamMeta.teamId} (${abbr}) to Ball Don't Lie team`);
     }
-    if (rawRoster.length > MAX_TEAM_ACTIVE) {
+
+    const nbaId = Number.parseInt(teamMeta.teamId, 10);
+    const attemptSeasons = Array.from(new Set([targetSeason, targetSeason - 1]))
+      .slice(0, MAX_RETRIES)
+      .filter((season) => Number.isFinite(season));
+
+    let rosterPlayers: BdlApiPlayer[] = [];
+
+    for (const season of attemptSeasons) {
+      try {
+        const fetched = await fetchTeamPlayers(bdlTeam.id, season);
+        if (fetched.length > 0) {
+          rosterPlayers = fetched;
+          if (season !== targetSeason) {
+            console.warn(
+              `BDL fallback: used season ${season} for ${teamMeta.tricode} (NBA ${nbaId}, BDL ${bdlTeam.id})`,
+            );
+          }
+          break;
+        }
+      } catch (error) {
+        if (season === attemptSeasons[attemptSeasons.length - 1]) {
+          throw error;
+        }
+      }
+    }
+
+    if (rosterPlayers.length === 0) {
       console.warn(
-        `Team ${meta.tricode} mapped to BDL ${bdl.id} returned ${rawRoster.length} players; trimming to ${MAX_TEAM_ACTIVE}.`
+        `BDL WARNING — 0 players for ${teamMeta.tricode} (NBA ${nbaId}) mapped to BDL ${bdlTeam.id} in seasons ${attemptSeasons.join(
+          " or ",
+        )}`,
+      );
+      continue;
+    }
+
+    if (rosterPlayers.length > MAX_TEAM_ACTIVE) {
+      console.warn(
+        `Team ${teamMeta.tricode} mapped to BDL ${bdlTeam.id} returned ${rosterPlayers.length} players; trimming to ${MAX_TEAM_ACTIVE}.`,
       );
     }
-    const roster = rawRoster
+
+    const roster = rosterPlayers
       .slice(0, MAX_TEAM_ACTIVE)
-      .map((player) => toSourcePlayer(player, meta.teamId, meta.tricode));
+      .map((player) => toSourcePlayer(player, teamMeta.teamId, teamMeta.tricode));
 
     totalPlayers += roster.length;
 
-    teams[meta.tricode] = {
-      teamId: meta.teamId,
-      tricode: meta.tricode,
-      market: meta.market,
-      name: meta.name,
+    teams[teamMeta.tricode] = {
+      teamId: teamMeta.teamId,
+      tricode: teamMeta.tricode,
+      market: teamMeta.market,
+      name: teamMeta.name,
       roster,
-      lastSeasonWins: meta.lastSeasonWins,
-      lastSeasonSRS: meta.lastSeasonSRS,
+      lastSeasonWins: teamMeta.lastSeasonWins,
+      lastSeasonSRS: teamMeta.lastSeasonSRS,
     };
 
     for (const player of roster) {
       const key = player.playerId ?? player.name;
       players[key] = player;
-      uniquePlayerKeys.add(key);
     }
 
-    teamAbbrs.push(meta.tricode);
+    teamAbbrs.push(teamMeta.tricode);
   }
 
   if (totalPlayers < 360) {
-    throw new Error(`Ball Don't Lie returned too few active players (${totalPlayers})`);
+    console.warn(
+      `Ball Don't Lie returned ${totalPlayers} total players; downstream data may be incomplete until rosters populate.`,
+    );
   }
 
   return {
