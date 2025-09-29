@@ -1,4 +1,3 @@
-# .github/workflows/previews.yml
 name: Previews pipeline
 
 on:
@@ -22,23 +21,23 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+        with: { fetch-depth: 0 }
 
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      # Install pnpm onto PATH (no Corepack here)
-      - name: Install pnpm
+      - name: Install pnpm (and fix PATH)
+        shell: bash
         run: |
           npm i -g pnpm@9.12.1
+          prefix="$(npm config get prefix)"
+          echo "$prefix/bin" >> "$GITHUB_PATH"
           pnpm -v
           which pnpm
 
-      # Use a stable pnpm store and cache it
-      - name: Set pnpm store path
+      - name: Use dedicated pnpm store
         run: pnpm config set store-dir ~/.pnpm-store
 
       - name: Cache pnpm store
@@ -46,8 +45,7 @@ jobs:
         with:
           path: ~/.pnpm-store
           key: pnpm-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            pnpm-${{ runner.os }}-
+          restore-keys: pnpm-${{ runner.os }}-
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -81,5 +79,3 @@ jobs:
           branch: "chore/auto-previews-${{ github.run_id }}"
           base: "main"
           delete-branch: true
-
-
