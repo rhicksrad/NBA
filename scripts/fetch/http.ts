@@ -47,11 +47,30 @@ async function processQueue(): Promise<void> {
   processing = false;
 }
 
+function resolveBdlKey(): string | undefined {
+  const candidates = [
+    process.env.BDL_API_KEY,
+    process.env.BALLDONTLIE_API_KEY,
+    process.env.BALL_DONT_LIE_API_KEY,
+  ];
+
+  for (const value of candidates) {
+    const trimmed = value?.trim();
+    if (trimmed) {
+      return trimmed;
+    }
+  }
+
+  return undefined;
+}
+
 function ensureKey(url: URL): string {
-  const key = process.env.BDL_API_KEY?.trim();
+  const key = resolveBdlKey();
   const isBdlHost = /\bballdontlie\.io$/i.test(url.hostname);
   if (isBdlHost && (!key || key.length === 0)) {
-    throw new Error("Missing BDL_API_KEY — set your Ball Don't Lie All-Star key or enable USE_BDL_CACHE=1");
+    throw new Error(
+      "Missing BDL_API_KEY — set your Ball Don't Lie All-Star key or enable USE_BDL_CACHE=1",
+    );
   }
   return key ?? "";
 }
