@@ -59,3 +59,94 @@ describe("BallDontLieClient.paginate", () => {
     expect(mockRequest.mock.calls[1][0]).toContain("page=2");
   });
 });
+
+describe("BallDontLieClient.getActivePlayersByTeam", () => {
+  const client = new BallDontLieClient({ baseUrl: "https://example.test" });
+
+  beforeEach(() => {
+    mockRequest.mockReset();
+  });
+
+  it("requests season-scoped active rosters when a start year is provided", async () => {
+    mockRequest.mockResolvedValueOnce({
+      data: [
+        {
+          id: 1,
+          first_name: "Ada",
+          last_name: "Lovelace",
+          position: null,
+          jersey_number: null,
+          height: null,
+          weight: null,
+          team: { id: 42, abbreviation: "ALG", full_name: "Algorithm City" },
+        },
+        {
+          id: 2,
+          first_name: "Charles",
+          last_name: "Babbage",
+          position: null,
+          jersey_number: null,
+          height: null,
+          weight: null,
+          team: { id: 7, abbreviation: "ALT", full_name: "Alt Mechanics" },
+        },
+      ],
+    });
+
+    const players = await client.getActivePlayersByTeam(42, 2025);
+
+    expect(mockRequest).toHaveBeenCalledTimes(1);
+    const [url] = mockRequest.mock.calls[0];
+    expect(url).toContain("/v1/players");
+    expect(url).toContain("active=true");
+    expect(url).toContain("seasons%5B%5D=2025");
+    expect(players).toEqual([
+      {
+        id: 1,
+        first_name: "Ada",
+        last_name: "Lovelace",
+        position: null,
+        jersey_number: null,
+        height: null,
+        weight: null,
+        team: { id: 42, abbreviation: "ALG", full_name: "Algorithm City" },
+      },
+    ]);
+  });
+
+  it("falls back to the active players endpoint when no season is supplied", async () => {
+    mockRequest.mockResolvedValueOnce({
+      data: [
+        {
+          id: 3,
+          first_name: "Grace",
+          last_name: "Hopper",
+          position: "G",
+          jersey_number: "99",
+          height: "5-6",
+          weight: "140",
+          team: { id: 7, abbreviation: "ALT", full_name: "Alt Mechanics" },
+        },
+      ],
+    });
+
+    const players = await client.getActivePlayersByTeam(7);
+
+    expect(mockRequest).toHaveBeenCalledTimes(1);
+    const [url] = mockRequest.mock.calls[0];
+    expect(url).toContain("/v1/players/active");
+    expect(url).not.toContain("seasons%5B%5D");
+    expect(players).toEqual([
+      {
+        id: 3,
+        first_name: "Grace",
+        last_name: "Hopper",
+        position: "G",
+        jersey_number: "99",
+        height: "5-6",
+        weight: "140",
+        team: { id: 7, abbreviation: "ALT", full_name: "Alt Mechanics" },
+      },
+    ]);
+  });
+});

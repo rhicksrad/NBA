@@ -22,12 +22,15 @@ export function getTeams(): Promise<BdlTeam[]> {
   return defaultClient.getTeams();
 }
 
-export function getActivePlayersByTeam(teamId: number): Promise<BdlPlayer[]> {
-  return defaultClient.getActivePlayersByTeam(teamId);
+export function getActivePlayersByTeam(teamId: number, season?: number): Promise<BdlPlayer[]> {
+  return defaultClient.getActivePlayersByTeam(teamId, season);
 }
 
-export function getRosterMapByTeamIds(teamIds: number[]): Promise<Record<number, BdlPlayer[]>> {
-  return defaultClient.getRosterMapByTeamIds(teamIds);
+export function getRosterMapByTeamIds(
+  teamIds: number[],
+  season?: number,
+): Promise<Record<number, BdlPlayer[]>> {
+  return defaultClient.getRosterMapByTeamIds(teamIds, season);
 }
 
 export function getPreseasonSchedule(season: number): Promise<BdlGame[]> {

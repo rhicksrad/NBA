@@ -5,6 +5,8 @@ type RosterDoc = {
   fetched_at: string;
   ttl_hours: number;
   source?: string;
+  season?: string;
+  season_start_year?: number;
   teams: {
     id: number;
     abbreviation: string;
