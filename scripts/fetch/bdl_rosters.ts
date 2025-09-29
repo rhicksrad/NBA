@@ -10,7 +10,7 @@ export interface BallDontLieRosters extends LeagueDataSource {
 
 export const MAX_TEAM_ACTIVE = 30;
 
-const API = "https://api.balldontlie.io/v1";
+const API = "https://api.balldontlie.io/v1/";
 
 function resolveBdlKey(): string | undefined {
   const candidates = [
@@ -62,7 +62,8 @@ function toSourcePlayer(player: BdlApiPlayer, teamId: string, tricode: string): 
 }
 
 async function http<T>(path: string, qs: Record<string, string | number | undefined>): Promise<T> {
-  const url = new URL(path, API);
+  const normalizedPath = path.replace(/^\/+/, "");
+  const url = new URL(normalizedPath, API);
   Object.entries(qs).forEach(([key, value]) => {
     if (value !== undefined) {
       url.searchParams.append(key, String(value));
@@ -89,7 +90,7 @@ async function fetchTeamPlayers(teamId: number, season: number): Promise<BdlApiP
 
   while (true) {
     const result: { data: BdlApiPlayer[]; meta?: { next_cursor?: number | null } } = await http(
-      "/players",
+      "players",
       {
         "team_ids[]": teamId,
         per_page: PER_PAGE,
