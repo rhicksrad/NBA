@@ -1,7 +1,7 @@
 import { describe, expect, it, beforeEach, vi, type MockInstance } from "vitest";
 import { z } from "zod";
 
-import { paginate } from "./bdl.js";
+import { BallDontLieClient } from "./ball_dont_lie_client.js";
 
 vi.mock("./http.js", () => {
   return {
@@ -13,7 +13,9 @@ const { request } = await import("./http.js");
 
 const mockRequest = request as unknown as MockInstance<[string, RequestInit?], Promise<unknown>>;
 
-describe("paginate", () => {
+describe("BallDontLieClient.paginate", () => {
+  const client = new BallDontLieClient({ baseUrl: "https://example.test" });
+
   beforeEach(() => {
     mockRequest.mockReset();
   });
@@ -29,10 +31,11 @@ describe("paginate", () => {
         meta: { next_cursor: null, per_page: 2 },
       });
 
-    const result = await paginate<number>("/v1/demo", {}, 2, undefined, z.number());
+    const result = await client.paginate<number>("/v1/demo", {}, 2, undefined, z.number());
 
     expect(result).toEqual([1, 2, 3, 4]);
     expect(mockRequest).toHaveBeenCalledTimes(2);
+    expect(mockRequest.mock.calls[0][0]).toContain("https://example.test/v1/demo");
     expect(mockRequest.mock.calls[0][0]).toContain("per_page=2");
     expect(mockRequest.mock.calls[1][0]).toContain("cursor=25");
   });
@@ -49,7 +52,7 @@ describe("paginate", () => {
       });
 
     const parser = z.string();
-    const result = await paginate<string>("/v1/demo", {}, 2, undefined, parser);
+    const result = await client.paginate<string>("/v1/demo", {}, 2, undefined, parser);
 
     expect(result).toEqual(["a", "b", "c"]);
     expect(mockRequest).toHaveBeenCalledTimes(2);

@@ -1,3 +1,5 @@
+import { loadSecret } from "../lib/secrets.js";
+
 const MAX_ATTEMPTS = 5;
 const MIN_DELAY_MS = 120;
 
@@ -61,7 +63,11 @@ function resolveBdlKey(): string | undefined {
     }
   }
 
-  return undefined;
+  const fileKey = loadSecret("bdl_api_key", {
+    aliases: ["ball_dont_lie_api_key", "balldontlie_api_key", "ball-dont-lie"],
+  });
+
+  return fileKey?.trim() || undefined;
 }
 
 function ensureKey(url: URL): string {
