@@ -1,6 +1,9 @@
 # Node dependencies
 node_modules/
 
+# Secrets injected during CI or local runs
+secrets/
+
 # Python artifacts
 __pycache__/
 *.pyc
