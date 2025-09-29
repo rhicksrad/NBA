@@ -69,6 +69,11 @@ export type BdlTeam = z.infer<typeof teamSchema>;
 export type BdlPlayer = z.infer<typeof playerSchema>;
 export type BdlGame = z.infer<typeof gameSchema>;
 
+export interface TeamMap {
+  byAbbr: Record<string, BdlTeam>;
+  byName: Record<string, BdlTeam>;
+}
+
 function buildUrl(pathname: string, params: URLSearchParams): string {
   const base = new URL(pathname, API_BASE);
   base.search = params.toString();
@@ -142,6 +147,25 @@ export async function getTeams(): Promise<BdlTeam[]> {
     const teams = parsed.data.map((team) => teamSchema.parse(team));
     return teams;
   });
+}
+
+export function normalizeTeamName(name: string): string {
+  return name.toLowerCase().replace(/\s+/g, " ").trim();
+}
+
+export function createTeamMap(teams: BdlTeam[]): TeamMap {
+  const byAbbr: Record<string, BdlTeam> = {};
+  const byName: Record<string, BdlTeam> = {};
+  for (const team of teams) {
+    byAbbr[team.abbreviation.toUpperCase()] = team;
+    byName[normalizeTeamName(team.full_name)] = team;
+  }
+  return { byAbbr, byName };
+}
+
+export async function buildTeamMap(): Promise<TeamMap> {
+  const teams = await getTeams();
+  return createTeamMap(teams);
 }
 
 export async function getActivePlayersByTeam(teamId: number): Promise<BdlPlayer[]> {

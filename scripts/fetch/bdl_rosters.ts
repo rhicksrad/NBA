@@ -1,4 +1,9 @@
-import { getRosterMapByTeamIds, getTeams } from "./bdl.js";
+import {
+  createTeamMap,
+  getRosterMapByTeamIds,
+  getTeams,
+  normalizeTeamName,
+} from "./bdl.js";
 import type { BdlPlayer, BdlTeam } from "./bdl.js";
 import { TEAM_METADATA } from "../lib/teams.js";
 import type { TeamMetadata } from "../lib/teams.js";
@@ -7,6 +12,8 @@ import type { LeagueDataSource, SourcePlayerRecord, SourceTeamRecord } from "../
 export interface BallDontLieRosters extends LeagueDataSource {
   teamAbbrs: string[];
 }
+
+export const MAX_TEAM_ACTIVE = 30;
 
 function toSourcePlayer(player: BdlPlayer, teamId: string, tricode: string): SourcePlayerRecord {
   const fullName = `${player.first_name} ${player.last_name}`.trim();
@@ -19,12 +26,18 @@ function toSourcePlayer(player: BdlPlayer, teamId: string, tricode: string): Sou
   };
 }
 
-function mapTeamsByAbbr(teams: BdlTeam[]): Map<string, BdlTeam> {
-  const map = new Map<string, BdlTeam>();
-  for (const team of teams) {
-    map.set(team.abbreviation.toUpperCase(), team);
+function candidateTeamNameKeys(team: TeamMetadata): string[] {
+  const names = new Set<string>();
+  const market = team.market ?? "";
+  const name = team.name ?? "";
+  names.add(normalizeTeamName(`${market} ${name}`));
+  if (market) {
+    names.add(normalizeTeamName(market));
   }
-  return map;
+  if (name) {
+    names.add(normalizeTeamName(name));
+  }
+  return Array.from(names).filter(Boolean);
 }
 
 export async function fetchBallDontLieRosters(): Promise<BallDontLieRosters> {
@@ -33,13 +46,25 @@ export async function fetchBallDontLieRosters(): Promise<BallDontLieRosters> {
     throw new Error("Ball Don't Lie returned no teams");
   }
 
-  const teamsByAbbr = mapTeamsByAbbr(bdlTeams);
+  const teamMap = createTeamMap(bdlTeams);
   const nbaTeams: Array<{ meta: TeamMetadata; bdl: BdlTeam }> = [];
 
   for (const teamMeta of TEAM_METADATA) {
-    const bdlTeam = teamsByAbbr.get(teamMeta.tricode);
+    const abbrKey = teamMeta.tricode.toUpperCase();
+    let bdlTeam = teamMap.byAbbr[abbrKey];
     if (!bdlTeam) {
-      throw new Error(`Missing Ball Don't Lie mapping for ${teamMeta.tricode}`);
+      for (const key of candidateTeamNameKeys(teamMeta)) {
+        const mapped = teamMap.byName[key];
+        if (mapped) {
+          bdlTeam = mapped;
+          break;
+        }
+      }
+    }
+    if (!bdlTeam) {
+      throw new Error(
+        `Missing Ball Don't Lie mapping for ${teamMeta.tricode} (${teamMeta.teamId})`
+      );
     }
     nbaTeams.push({ meta: teamMeta, bdl: bdlTeam });
   }
@@ -56,9 +81,20 @@ export async function fetchBallDontLieRosters(): Promise<BallDontLieRosters> {
 
   for (const entry of nbaTeams) {
     const { meta, bdl } = entry;
-    const roster = (rosterMap[bdl.id] ?? []).map((player) =>
-      toSourcePlayer(player, meta.teamId, meta.tricode)
-    );
+    const rawRoster = rosterMap[bdl.id] ?? [];
+    if (rawRoster.length === 0) {
+      throw new Error(
+        `Ball Don't Lie returned 0 active players for ${meta.tricode} (NBA ${meta.teamId}) mapped to BDL team ${bdl.id}`
+      );
+    }
+    if (rawRoster.length > MAX_TEAM_ACTIVE) {
+      console.warn(
+        `Team ${meta.tricode} mapped to BDL ${bdl.id} returned ${rawRoster.length} players; trimming to ${MAX_TEAM_ACTIVE}.`
+      );
+    }
+    const roster = rawRoster
+      .slice(0, MAX_TEAM_ACTIVE)
+      .map((player) => toSourcePlayer(player, meta.teamId, meta.tricode));
 
     totalPlayers += roster.length;
 
