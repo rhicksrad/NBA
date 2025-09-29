@@ -4,7 +4,8 @@ import { ensureTeamMetadata, TEAM_METADATA } from "../lib/teams.js";
 import type { LeagueDataSource, SourcePlayerRecord, SourceTeamRecord } from "../lib/types.js";
 
 const API = "https://api.balldontlie.io/v1";
-const KEY = process.env.BALLDONTLIE_API_KEY ?? "";
+const DEFAULT_API_KEY = "849684d4-054c-43bf-8fe1-e87c4ff8d67c";
+const KEY = process.env.BALLDONTLIE_API_KEY?.trim() || DEFAULT_API_KEY;
 const MAX_ATTEMPTS = 4;
 
 interface PaginatedPlayers {

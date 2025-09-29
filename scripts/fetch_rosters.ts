@@ -6,7 +6,8 @@ import { setTimeout as sleep } from "node:timers/promises";
 import type { BLPlayer, BLTeam, RosterTeam, RostersDoc } from "../types/ball";
 
 const API = "https://api.balldontlie.io/v1";
-const KEY = process.env.BALLDONTLIE_API_KEY ?? "";
+const DEFAULT_API_KEY = "849684d4-054c-43bf-8fe1-e87c4ff8d67c";
+const KEY = process.env.BALLDONTLIE_API_KEY?.trim() || DEFAULT_API_KEY;
 const OUT_DIR = path.join(process.cwd(), "public", "data");
 const OUT_FILE = path.join(OUT_DIR, "rosters.json");
 const FAIL_FILE = path.join(OUT_DIR, "rosters.failed.json");
