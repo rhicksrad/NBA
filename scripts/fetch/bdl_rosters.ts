@@ -39,7 +39,7 @@ type BdlApiPlayer = {
   first_name: string;
   last_name: string;
   position: string | null;
-  team: { id: number; abbreviation: string; full_name: string };
+  team?: { id: number; abbreviation: string; full_name: string } | null;
 };
 
 function resolveSeasonStartYear(season: string): number {
@@ -75,8 +75,8 @@ async function http<T>(path: string, qs: Record<string, string | number | undefi
 }
 
 async function fetchTeamPlayers(teamId: number, season: number): Promise<BdlApiPlayer[]> {
-  let cursor: string | number | undefined;
-  const players: BdlApiPlayer[] = [];
+  let cursor: number | string | undefined;
+  const playersById = new Map<number, BdlApiPlayer>();
 
   while (true) {
     const result: { data: BdlApiPlayer[]; meta?: { next_cursor?: number | null } } = await http(
@@ -84,12 +84,17 @@ async function fetchTeamPlayers(teamId: number, season: number): Promise<BdlApiP
       {
         "team_ids[]": teamId,
         per_page: PER_PAGE,
-        seasons: season,
+        active: "true",
+        "seasons[]": season,
         cursor,
       },
     );
 
-    players.push(...result.data);
+    for (const player of result.data) {
+      if (player.team?.id === teamId) {
+        playersById.set(player.id, player);
+      }
+    }
 
     const nextCursor = result.meta?.next_cursor ?? null;
     if (!nextCursor) {
@@ -98,7 +103,7 @@ async function fetchTeamPlayers(teamId: number, season: number): Promise<BdlApiP
     cursor = nextCursor;
   }
 
-  return players;
+  return Array.from(playersById.values());
 }
 
 export async function fetchBallDontLieRosters(
