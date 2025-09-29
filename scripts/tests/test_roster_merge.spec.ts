@@ -62,7 +62,7 @@ describe("mergeSources", () => {
       nbaStats,
       bbr: emptySource,
       overrides,
-      fallbackPlayers: [],
+      primary: emptySource,
     });
 
     const lakers = canonical.teams.find((team) => team.tricode === "LAL");
