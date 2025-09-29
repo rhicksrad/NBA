@@ -32,7 +32,6 @@ import {
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../");
 const CANONICAL_DIR = path.join(ROOT, "data/2025-26/canonical");
 const OVERRIDES_PATH = path.join(ROOT, "data/2025-26/manual/overrides.yaml");
-const ROSTER_REFERENCE_PATH = path.join(ROOT, "data/2025-26/manual/roster_reference.json");
 const BREF_MISSING_PATH = path.join(ROOT, "data/2025-26/manual/bref_missing.json");
 const MIN_TEAM_ACTIVE = 10;
 
@@ -55,7 +54,6 @@ export interface BuildOptions {
   nbaStats?: LeagueDataSource;
   bbr?: BbrRosterResult;
   overrides?: OverridesConfig;
-  fallbackPlayers?: SourcePlayerRecord[];
 }
 
 interface InternalPlayer extends PlayerRecord {
@@ -68,26 +66,21 @@ interface ChangeLog {
 }
 
 export async function buildCanonicalData(options: Partial<BuildOptions> = {}): Promise<CanonicalData> {
-  const [overrides, fallbackPlayers] = await Promise.all([
-    options.overrides ?? loadOverrides(),
-    options.fallbackPlayers ?? loadFallbackPlayers(),
-  ]);
+  const overrides = options.overrides ?? (await loadOverrides());
 
   let ballDontLie = options.ballDontLie;
   if (!ballDontLie) {
     try {
       ballDontLie = await fetchBallDontLieRosters();
     } catch (error) {
-      const message = error instanceof Error ? error.message : String(error);
-      console.warn(
-        `Falling back to manual roster reference data after Ball Don't Lie fetch failure: ${message}`,
+      throw new Error(
+        `Failed to load Ball Don't Lie rosters: ${error instanceof Error ? error.message : String(error)}`,
       );
-      ballDontLie = buildFallbackLeagueSourceFromManualRoster(fallbackPlayers);
     }
   }
 
   if (!ballDontLie) {
-    throw new Error("Unable to resolve Ball Don't Lie roster data or fallback rosters");
+    throw new Error("Unable to resolve Ball Don't Lie roster data");
   }
 
   for (const metadata of TEAM_METADATA) {
@@ -158,7 +151,6 @@ export async function buildCanonicalData(options: Partial<BuildOptions> = {}): P
     nbaStats,
     bbr: bbrResult?.rosters ?? createEmptyLeagueSource(),
     overrides,
-    fallbackPlayers,
   });
 
   return merged;
@@ -169,7 +161,6 @@ interface MergeOptions {
   nbaStats?: LeagueDataSource;
   bbr?: LeagueDataSource;
   overrides: OverridesConfig;
-  fallbackPlayers: SourcePlayerRecord[];
 }
 
 function createEmptyLeagueSource(): LeagueDataSource {
@@ -321,118 +312,6 @@ async function loadOverrides(): Promise<OverridesConfig> {
   }
 }
 
-async function loadFallbackPlayers(): Promise<SourcePlayerRecord[]> {
-  try {
-    const contents = await readFile(ROSTER_REFERENCE_PATH, "utf8");
-    const data = JSON.parse(contents) as Array<Record<string, unknown>>;
-
-    const fallback = data
-      .map((entry) => {
-        const rawFirst = typeof entry["firstName"] === "string" ? (entry["firstName"] as string).trim() : "";
-        const rawLast = typeof entry["lastName"] === "string" ? (entry["lastName"] as string).trim() : "";
-        const name = `${rawFirst} ${rawLast}`.trim();
-        if (!name) {
-          return undefined;
-        }
-
-        const rawPlayerId = entry["playerId"];
-        const playerId = rawPlayerId === null || rawPlayerId === undefined ? undefined : String(rawPlayerId).trim();
-        const rawTeamId = entry["teamId"];
-        const teamId = rawTeamId === null || rawTeamId === undefined ? undefined : String(rawTeamId).trim();
-        const rawTricode = entry["teamTricode"];
-        const teamTricode = rawTricode === null || rawTricode === undefined ? undefined : String(rawTricode).trim();
-        const rawPosition = entry["position"];
-        const position = rawPosition === null || rawPosition === undefined ? undefined : String(rawPosition).trim() || undefined;
-
-        const resolvedTricode = teamTricode ?? (teamId ? TEAM_ID_MAP.get(teamId) : undefined);
-        if (!resolvedTricode) {
-          return undefined;
-        }
-
-        return {
-          name,
-          playerId: playerId && playerId.length > 0 ? playerId : undefined,
-          position,
-          teamId,
-          teamTricode: resolvedTricode,
-        } satisfies SourcePlayerRecord;
-      })
-      .filter((player): player is SourcePlayerRecord => !!player);
-
-    return fallback;
-  } catch (error) {
-    console.warn(`Failed to load fallback players: ${(error as Error).message}`);
-    return [];
-  }
-}
-
-function buildFallbackLeagueSourceFromManualRoster(
-  fallbackPlayers: SourcePlayerRecord[],
-): BallDontLieRosters {
-  const teams: Record<string, SourceTeamRecord> = {};
-  const players: Record<string, SourcePlayerRecord> = {};
-
-  for (const meta of TEAM_METADATA) {
-    teams[meta.tricode] = {
-      teamId: meta.teamId,
-      tricode: meta.tricode,
-      market: meta.market,
-      name: meta.name,
-      roster: [],
-      lastSeasonWins: meta.lastSeasonWins,
-      lastSeasonSRS: meta.lastSeasonSRS,
-    } as SourceTeamRecord;
-  }
-
-  for (const entry of fallbackPlayers) {
-    const tricode = entry.teamTricode;
-    if (!tricode) continue;
-    const team = teams[tricode];
-    if (!team) continue;
-
-    const normalized: SourcePlayerRecord = {
-      ...entry,
-      teamId: team.teamId,
-      teamTricode: team.tricode,
-    };
-
-    if (!team.roster) {
-      team.roster = [];
-    }
-
-    if (team.roster.length < MAX_TEAM_ACTIVE) {
-      team.roster.push(normalized);
-    }
-
-    const key = normalized.playerId ?? normalized.name;
-    if (key) {
-      players[key] = normalized;
-    }
-  }
-
-  for (const team of Object.values(teams)) {
-    if (team.roster) {
-      team.roster = team.roster
-        .slice()
-        .sort((a, b) => (a.name ?? "").localeCompare(b.name ?? ""))
-        .slice(0, MAX_TEAM_ACTIVE);
-    }
-  }
-
-  const teamAbbrs = Object.keys(teams).sort();
-
-  return {
-    teamAbbrs,
-    teams,
-    players,
-    transactions: [],
-    coaches: {},
-    injuries: [],
-  };
-}
-
-const TEAM_ID_MAP = new Map(TEAM_METADATA.map((team) => [team.teamId, team.tricode]));
-
 function addPlayerToTeam(
   team: TeamRecord,
   player: InternalPlayer,
@@ -478,7 +357,7 @@ function getChangeLog(changeLog: Map<string, ChangeLog>, tricode: string): Chang
 }
 
 function mergeSources(options: MergeOptions): CanonicalData {
-  const { primary, nbaStats, bbr, overrides, fallbackPlayers } = options;
+  const { primary, nbaStats, bbr, overrides } = options;
   const teamMap = new Map<string, TeamRecord>();
   const playerMap = new Map<string, InternalPlayer>();
   const changeLog = new Map<string, ChangeLog>();
@@ -541,34 +420,6 @@ function mergeSources(options: MergeOptions): CanonicalData {
   }
   if (bbr?.teams) {
     applySourceRoster(bbr.teams as Record<string, Partial<SourceTeamRecord>>, "bbr");
-  }
-
-  for (const fallback of fallbackPlayers) {
-    const key = playerKey(fallback);
-    if (!key) continue;
-    if (playerMap.has(key)) {
-      continue;
-    }
-    const teamTricode = fallback.teamTricode ?? (fallback.teamId ? TEAM_ID_MAP.get(fallback.teamId) : undefined);
-    if (!teamTricode) {
-      continue;
-    }
-    const team = teamMap.get(teamTricode) ?? createEmptyTeamRecord(teamTricode);
-    teamMap.set(teamTricode, team);
-    const { firstName, lastName } = normalizeName(fallback.name);
-    const player: InternalPlayer = {
-      key,
-      name: fallback.name,
-      playerId: fallback.playerId,
-      position: fallback.position,
-      firstName,
-      lastName,
-      teamId: fallback.teamId,
-      teamTricode,
-      source: "fallback",
-    } as InternalPlayer;
-    playerMap.set(key, player);
-    addPlayerToTeam(team, player, changeLog, false);
   }
 
   applyOverrides({ overrides, teamMap, playerMap, changeLog });
