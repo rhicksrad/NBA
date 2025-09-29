@@ -1,73 +1,68 @@
-import { createHash } from "node:crypto";
+// scripts/build-players.js
 import fs from "node:fs/promises";
 import path from "node:path";
+import crypto from "node:crypto";
 import { build } from "esbuild";
 
-const ENTRY = path.join(process.cwd(), "assets", "js", "players.ts");
-const OUT_DIR = path.join(process.cwd(), "public", "assets", "js");
-const HTML_PATH = path.join(process.cwd(), "public", "players.html");
+const SRC = path.join("assets", "js", "players.ts");
+const OUTDIR = path.join("public", "assets", "js");
+const HTML = path.join("public", "players.html");
 
-async function removeOldBundles() {
-  try {
-    const files = await fs.readdir(OUT_DIR);
-    await Promise.all(
-      files
-        .filter((file) => /^players\.[a-f0-9]+\.js$/u.test(file))
-        .map((file) => fs.unlink(path.join(OUT_DIR, file))),
-    );
-  } catch (error) {
-    if (!(error && typeof error === "object" && "code" in error && error.code === "ENOENT")) {
-      throw error;
-    }
-  }
+async function sha256(buf) {
+  return crypto.createHash("sha256").update(buf).digest("hex").slice(0, 16);
 }
 
-async function main() {
+async function ensureDir(d) {
+  await fs.mkdir(d, { recursive: true });
+}
+
+async function bundle() {
+  await ensureDir(OUTDIR);
   const result = await build({
-    entryPoints: [ENTRY],
+    entryPoints: [SRC],
     bundle: true,
     format: "esm",
     target: "es2019",
     minify: true,
-    sourcemap: false,
-    logLevel: "error",
     write: false,
   });
-
-  const output = result.outputFiles?.[0];
-  if (!output) {
-    throw new Error("esbuild returned no output for players bundle");
-  }
-
-  const hash = createHash("sha256").update(output.contents).digest("hex");
-  const fileName = `players.${hash.slice(0, 8)}.js`;
-
-  await fs.mkdir(OUT_DIR, { recursive: true });
-  await removeOldBundles();
-  await fs.writeFile(path.join(OUT_DIR, fileName), output.contents);
-
-  const html = await fs.readFile(HTML_PATH, "utf8");
-  const nextScriptTag = `<script type="module" src="/assets/js/${fileName}"></script>`;
-  let updated = false;
-  const replaced = html.replace(
-    /<script type="module" src="\/assets\/js\/players[^"']*"><\/script>/u,
-    () => {
-      updated = true;
-      return nextScriptTag;
-    },
-  );
-
-  if (!updated) {
-    throw new Error(
-      "Unable to locate players asset tag in public/players.html for replacement",
-    );
-  }
-
-  await fs.writeFile(HTML_PATH, replaced);
-  console.log(`Built players bundle ${fileName}`);
+  const code = result.outputFiles[0].contents;
+  const hash = await sha256(code);
+  const file = `players.${hash}.js`;
+  await fs.writeFile(path.join(OUTDIR, file), code);
+  return file;
 }
 
-main().catch((error) => {
-  console.error("Failed to build roster client:", error);
+async function patchHtml(file) {
+  let html = await fs.readFile(HTML, "utf8");
+  const tagRe = /<script\s+[^>]*id=["']players-bundle["'][^>]*><\/script>/i;
+  const newTag = `<script id="players-bundle" type="module" src="/assets/js/${file}"></script>`;
+
+  if (tagRe.test(html)) {
+    html = html.replace(tagRe, newTag);
+  } else {
+    // fallback: inject before </body>
+    const bodyClose = /<\/body>\s*<\/html>\s*$/i;
+    if (!bodyClose.test(html)) {
+      throw new Error("Unable to find </body> in public/players.html for injection");
+    }
+    // remove any old BUILD:PLAYERS block if it exists
+    html = html.replace(/<!--\s*BUILD:PLAYERS\s*-->[\s\S]*?<!--\s*\/BUILD:PLAYERS\s*-->/i, "");
+    html = html.replace(
+      bodyClose,
+      `\n<!-- BUILD:PLAYERS -->\n${newTag}\n<!-- /BUILD:PLAYERS -->\n</body>\n</html>`
+    );
+  }
+  await fs.writeFile(HTML, html);
+}
+
+async function main() {
+  const file = await bundle();
+  await patchHtml(file);
+  console.log(`Built roster client → ${file} and wired into players.html`);
+}
+
+main().catch((e) => {
+  console.error(`Failed to build roster client: ${e.message}`);
   process.exit(1);
 });
