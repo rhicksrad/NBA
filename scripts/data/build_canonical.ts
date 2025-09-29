@@ -1,9 +1,10 @@
-import { readFile, writeFile, mkdir } from "fs/promises";
+import { readFile, writeFile, mkdir, rm } from "fs/promises";
 import path from "path";
 import { fileURLToPath, pathToFileURL } from "url";
 import { parse as parseYaml } from "yaml";
+import { fetchBallDontLieRosters, BallDontLieRosters } from "../fetch/bdl_rosters.js";
+import { fetchBbrRosters, BbrRosterResult } from "../fetch/bbr_rosters.js";
 import { fetchNbaStatsRosters } from "../fetch/nba_stats_rosters.js";
-import { fetchBbrRosters } from "../fetch/bbr_rosters.js";
 import { SEASON } from "../lib/season.js";
 import { TEAM_METADATA, ensureTeamMetadata } from "../lib/teams.js";
 import {
@@ -28,10 +29,26 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../"
 const CANONICAL_DIR = path.join(ROOT, "data/2025-26/canonical");
 const OVERRIDES_PATH = path.join(ROOT, "data/2025-26/manual/overrides.yaml");
 const ROSTER_REFERENCE_PATH = path.join(ROOT, "data/2025-26/manual/roster_reference.json");
+const BREF_MISSING_PATH = path.join(ROOT, "data/2025-26/manual/bref_missing.json");
+
+function resolveEndYear(season: string): number {
+  const [start, endFragment] = season.split("-");
+  const base = Number.parseInt(start, 10);
+  if (Number.isNaN(base)) {
+    throw new Error(`Invalid season string: ${season}`);
+  }
+  if (!endFragment) {
+    return base + 1;
+  }
+  const prefix = start.slice(0, start.length - endFragment.length);
+  const year = Number.parseInt(`${prefix}${endFragment}`, 10);
+  return Number.isNaN(year) ? base + 1 : year;
+}
 
 export interface BuildOptions {
+  ballDontLie?: BallDontLieRosters;
   nbaStats?: LeagueDataSource;
-  bbr?: LeagueDataSource;
+  bbr?: BbrRosterResult;
   overrides?: OverridesConfig;
   fallbackPlayers?: SourcePlayerRecord[];
 }
@@ -46,21 +63,80 @@ interface ChangeLog {
 }
 
 export async function buildCanonicalData(options: Partial<BuildOptions> = {}): Promise<CanonicalData> {
-  const [nbaStats, bbr, overrides, fallbackPlayers] = await Promise.all([
-    options.nbaStats ?? fetchNbaStatsRosters(SEASON),
-    options.bbr ?? fetchBbrRosters(SEASON),
+  const [overrides, fallbackPlayers] = await Promise.all([
     options.overrides ?? loadOverrides(),
     options.fallbackPlayers ?? loadFallbackPlayers(),
   ]);
 
-  return mergeSources({ nbaStats, bbr, overrides, fallbackPlayers });
+  const ballDontLie = options.ballDontLie ?? (await fetchBallDontLieRosters());
+
+  const seasonEndYear = resolveEndYear(SEASON);
+
+  let bbrResult: BbrRosterResult | undefined;
+  try {
+    bbrResult = options.bbr ?? (await fetchBbrRosters(ballDontLie.teamAbbrs, seasonEndYear));
+  } catch (error) {
+    console.warn(`Basketball-Reference enrichment disabled due to error: ${String(error)}`);
+    bbrResult = {
+      source: createEmptyLeagueSource(),
+      missing: [...ballDontLie.teamAbbrs],
+    };
+  }
+
+  let nbaStats: LeagueDataSource = createEmptyLeagueSource();
+  if (process.env.USE_NBA_STATS === "1") {
+    try {
+      nbaStats = options.nbaStats ?? (await fetchNbaStatsRosters(SEASON));
+    } catch (error) {
+      console.warn(`NBA Stats enrichment disabled due to error: ${String(error)}`);
+      nbaStats = createEmptyLeagueSource();
+    }
+  } else if (options.nbaStats) {
+    nbaStats = options.nbaStats;
+  }
+
+  await handleBrefMissing(bbrResult?.missing ?? []);
+
+  return mergeSources({
+    primary: ballDontLie,
+    nbaStats,
+    bbr: bbrResult?.source ?? createEmptyLeagueSource(),
+    overrides,
+    fallbackPlayers,
+  });
 }
 
 interface MergeOptions {
-  nbaStats: LeagueDataSource;
-  bbr: LeagueDataSource;
+  primary: LeagueDataSource;
+  nbaStats?: LeagueDataSource;
+  bbr?: LeagueDataSource;
   overrides: OverridesConfig;
   fallbackPlayers: SourcePlayerRecord[];
+}
+
+function createEmptyLeagueSource(): LeagueDataSource {
+  return { teams: {}, players: {}, transactions: [], coaches: {}, injuries: [] };
+}
+
+async function handleBrefMissing(missing: string[]): Promise<void> {
+  if (missing.length) {
+    await mkdir(path.dirname(BREF_MISSING_PATH), { recursive: true });
+    await writeFile(
+      BREF_MISSING_PATH,
+      JSON.stringify(
+        {
+          seasonEnd: resolveEndYear(SEASON),
+          teams: missing,
+          at: new Date().toISOString(),
+        },
+        null,
+        2
+      ) + "\n",
+      "utf8"
+    );
+  } else {
+    await rm(BREF_MISSING_PATH, { force: true });
+  }
 }
 
 function createEmptyTeamRecord(tricode: string): TeamRecord {
@@ -279,7 +355,7 @@ function getChangeLog(changeLog: Map<string, ChangeLog>, tricode: string): Chang
 }
 
 function mergeSources(options: MergeOptions): CanonicalData {
-  const { nbaStats, bbr, overrides, fallbackPlayers } = options;
+  const { primary, nbaStats, bbr, overrides, fallbackPlayers } = options;
   const teamMap = new Map<string, TeamRecord>();
   const playerMap = new Map<string, InternalPlayer>();
   const changeLog = new Map<string, ChangeLog>();
@@ -334,8 +410,15 @@ function mergeSources(options: MergeOptions): CanonicalData {
     }
   };
 
-  applySourceRoster(nbaStats.teams as Record<string, Partial<SourceTeamRecord>>, "nba_stats");
-  applySourceRoster(bbr.teams as Record<string, Partial<SourceTeamRecord>>, "bbr");
+  if (primary?.teams) {
+    applySourceRoster(primary.teams as Record<string, Partial<SourceTeamRecord>>, "ball_dont_lie");
+  }
+  if (nbaStats?.teams) {
+    applySourceRoster(nbaStats.teams as Record<string, Partial<SourceTeamRecord>>, "nba_stats");
+  }
+  if (bbr?.teams) {
+    applySourceRoster(bbr.teams as Record<string, Partial<SourceTeamRecord>>, "bbr");
+  }
 
   for (const fallback of fallbackPlayers) {
     const key = playerKey(fallback);
@@ -389,9 +472,12 @@ function mergeSources(options: MergeOptions): CanonicalData {
     })
     .sort((a, b) => a.name.localeCompare(b.name));
 
-  const injuries: InjuryRecord[] = [...(nbaStats.injuries ?? []), ...(bbr.injuries ?? []), ...overrides.injuries].map(
-    (injury) => ({ ...injury })
-  );
+  const injuries: InjuryRecord[] = [
+    ...(primary?.injuries ?? []),
+    ...(nbaStats?.injuries ?? []),
+    ...(bbr?.injuries ?? []),
+    ...overrides.injuries,
+  ].map((injury) => ({ ...injury }));
 
   const coachEntries: CoachRecordEntry[] = teams
     .filter((team) => team.coach)
@@ -402,7 +488,11 @@ function mergeSources(options: MergeOptions): CanonicalData {
       isNew: team.coach?.isNew,
     }));
 
-  const transactions: TransactionRecord[] = [...(nbaStats.transactions ?? []), ...(bbr.transactions ?? [])];
+  const transactions: TransactionRecord[] = [
+    ...(primary?.transactions ?? []),
+    ...(nbaStats?.transactions ?? []),
+    ...(bbr?.transactions ?? []),
+  ].map((transaction) => ({ ...transaction }));
 
   return {
     teams,

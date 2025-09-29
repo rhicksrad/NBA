@@ -36,6 +36,11 @@ async function main() {
     throw new Error("Duplicate player IDs in players_index.json");
   }
 
+  const totalPlayers = index.players.length;
+  if (totalPlayers < 360 || totalPlayers > 600) {
+    throw new Error(`Suspicious league size ${totalPlayers}`);
+  }
+
   const missing = index.players.filter(
     (player) => !player.team_abbr || typeof player.team_abbr !== "string",
   );
