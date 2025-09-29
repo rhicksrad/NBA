@@ -1,5 +1,6 @@
 import { getTeams } from "./bdl.js";
 import type { BdlTeam } from "./bdl.js";
+import { request } from "./http.js";
 import { SEASON } from "../lib/season.js";
 import { TEAM_METADATA } from "../lib/teams.js";
 import type { LeagueDataSource, SourcePlayerRecord, SourceTeamRecord } from "../lib/types.js";
@@ -70,18 +71,7 @@ async function http<T>(path: string, qs: Record<string, string | number | undefi
     }
   });
 
-  const response = await fetch(url.toString(), {
-    headers: KEY ? { Authorization: KEY } : undefined,
-  });
-
-  if (!response.ok) {
-    const body = await response.text().catch(() => "");
-    throw new Error(
-      `${response.status} ${response.statusText} for ${url.toString()}${body ? ` — ${body}` : ""}`,
-    );
-  }
-
-  return (await response.json()) as T;
+  return request<T>(url.toString());
 }
 
 async function fetchTeamPlayers(teamId: number, season: number): Promise<BdlApiPlayer[]> {
