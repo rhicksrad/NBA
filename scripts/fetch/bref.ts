@@ -2,9 +2,9 @@ export const BREF_MAP: Record<string, string> = {
   ATL: "ATL",
   BOS: "BOS",
   BKN: "BRK",
-  BRK: "BRK", // Nets
+  BRK: "BRK",
   CHA: "CHO",
-  CHO: "CHO", // Hornets
+  CHO: "CHO",
   CHI: "CHI",
   CLE: "CLE",
   DAL: "DAL",
@@ -25,32 +25,34 @@ export const BREF_MAP: Record<string, string> = {
   ORL: "ORL",
   PHI: "PHI",
   PHX: "PHO",
-  PHO: "PHO", // Suns
+  PHO: "PHO",
   POR: "POR",
   SAC: "SAC",
   SAS: "SAS",
   TOR: "TOR",
   UTA: "UTA",
   WAS: "WAS",
-} as const;
+};
 
 export function brefTeam(abbr: string): string {
-  const k = abbr.toUpperCase();
-  const m = BREF_MAP[k];
-  if (!m) throw new Error(`Unknown team abbr for Basketball-Reference: ${abbr}`);
-  return m;
+  const out = BREF_MAP[abbr.toUpperCase()];
+  if (!out) throw new Error(`Unknown team abbr for BRef: ${abbr}`);
+  return out;
 }
 
-export async function fetchBref(url: string, attempt = 1): Promise<Response> {
+export async function fetchBref(url: string, attempt = 1): Promise<string> {
   const res = await fetch(url, {
     headers: {
-      "User-Agent": "nba-previews-bot/1.0 (+https://github.com/rhicksrad/NBA)",
+      "User-Agent": "nba-previews/1.0 (+https://github.com/rhicksrad/NBA)",
       Accept: "text/html,application/xhtml+xml",
     },
   });
-  if (res.status >= 500 && attempt < 3) {
-    await new Promise((r) => setTimeout(r, 400 * attempt));
+  if (res.status >= 500 && attempt < 4) {
+    await new Promise((r) => setTimeout(r, 300 * attempt));
     return fetchBref(url, attempt + 1);
   }
-  return res;
+  if (!res.ok) {
+    throw new Error(`HTTP ${res.status} for ${url}`);
+  }
+  return res.text();
 }
