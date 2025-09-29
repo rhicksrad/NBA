@@ -79,8 +79,8 @@ export async function buildCanonicalData(options: Partial<BuildOptions> = {}): P
     const team = ballDontLie.teams[metadata.tricode];
     const rosterSize = team?.roster?.length ?? 0;
     if (rosterSize < MIN_TEAM_ACTIVE) {
-      throw new Error(
-        `Roster too small for team ${metadata.teamId ?? metadata.tricode}: ${rosterSize}`
+      console.warn(
+        `Thin preseason roster for ${metadata.tricode} (${metadata.teamId}): ${rosterSize}`
       );
     }
     if (rosterSize > MAX_TEAM_ACTIVE) {
