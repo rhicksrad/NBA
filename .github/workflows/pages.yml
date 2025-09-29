@@ -30,11 +30,17 @@ jobs:
           node-version: 20
           cache: pnpm
 
-      - name: Enable Corepack / Activate pnpm
+      # Install pnpm onto PATH (no Corepack in this workflow)
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.12.1
+          run_install: false
+
+      - name: Verify pnpm
         run: |
-          corepack enable
-          corepack prepare pnpm@9 --activate
           pnpm -v
+          which pnpm
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -48,8 +54,6 @@ jobs:
       - name: Build
         run: pnpm run build
 
-      # If your HTML lives at repo root, upload "./".
-      # If you truly publish from "public/", change path to "public".
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
@@ -67,5 +71,6 @@ jobs:
     steps:
       - id: deployment
         uses: actions/deploy-pages@v4
+
 
 
