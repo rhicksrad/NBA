@@ -73,7 +73,22 @@ export async function buildCanonicalData(options: Partial<BuildOptions> = {}): P
     options.fallbackPlayers ?? loadFallbackPlayers(),
   ]);
 
-  const ballDontLie = options.ballDontLie ?? (await fetchBallDontLieRosters());
+  let ballDontLie = options.ballDontLie;
+  if (!ballDontLie) {
+    try {
+      ballDontLie = await fetchBallDontLieRosters();
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      console.warn(
+        `Falling back to manual roster reference data after Ball Don't Lie fetch failure: ${message}`,
+      );
+      ballDontLie = buildFallbackLeagueSourceFromManualRoster(fallbackPlayers);
+    }
+  }
+
+  if (!ballDontLie) {
+    throw new Error("Unable to resolve Ball Don't Lie roster data or fallback rosters");
+  }
 
   for (const metadata of TEAM_METADATA) {
     const team = ballDontLie.teams[metadata.tricode];
@@ -349,6 +364,71 @@ async function loadFallbackPlayers(): Promise<SourcePlayerRecord[]> {
     console.warn(`Failed to load fallback players: ${(error as Error).message}`);
     return [];
   }
+}
+
+function buildFallbackLeagueSourceFromManualRoster(
+  fallbackPlayers: SourcePlayerRecord[],
+): BallDontLieRosters {
+  const teams: Record<string, SourceTeamRecord> = {};
+  const players: Record<string, SourcePlayerRecord> = {};
+
+  for (const meta of TEAM_METADATA) {
+    teams[meta.tricode] = {
+      teamId: meta.teamId,
+      tricode: meta.tricode,
+      market: meta.market,
+      name: meta.name,
+      roster: [],
+      lastSeasonWins: meta.lastSeasonWins,
+      lastSeasonSRS: meta.lastSeasonSRS,
+    } as SourceTeamRecord;
+  }
+
+  for (const entry of fallbackPlayers) {
+    const tricode = entry.teamTricode;
+    if (!tricode) continue;
+    const team = teams[tricode];
+    if (!team) continue;
+
+    const normalized: SourcePlayerRecord = {
+      ...entry,
+      teamId: team.teamId,
+      teamTricode: team.tricode,
+    };
+
+    if (!team.roster) {
+      team.roster = [];
+    }
+
+    if (team.roster.length < MAX_TEAM_ACTIVE) {
+      team.roster.push(normalized);
+    }
+
+    const key = normalized.playerId ?? normalized.name;
+    if (key) {
+      players[key] = normalized;
+    }
+  }
+
+  for (const team of Object.values(teams)) {
+    if (team.roster) {
+      team.roster = team.roster
+        .slice()
+        .sort((a, b) => (a.name ?? "").localeCompare(b.name ?? ""))
+        .slice(0, MAX_TEAM_ACTIVE);
+    }
+  }
+
+  const teamAbbrs = Object.keys(teams).sort();
+
+  return {
+    teamAbbrs,
+    teams,
+    players,
+    transactions: [],
+    coaches: {},
+    injuries: [],
+  };
 }
 
 const TEAM_ID_MAP = new Map(TEAM_METADATA.map((team) => [team.teamId, team.tricode]));

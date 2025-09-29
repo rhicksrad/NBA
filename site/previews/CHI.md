@@ -1,6 +1,6 @@
 # Chicago Bulls
 
-The core trio of Adam Mokoka, Al-Farouq Aminu, and Coby White gives the staff a clear identity to start from.
+The core trio of Adam Mokoka, Alfonzo McKinnie, and Coby White gives the staff a clear identity to start from.
 The front office kept the core intact and will lean on internal development.
 No rotation regulars departed, so continuity remains a strength.
 

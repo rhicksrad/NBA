@@ -1,6 +1,6 @@
 # Boston Celtics
 
-The core trio of Aaron Nesmith, Carsen Edwards, and Evan Fournier gives the staff a clear identity to start from.
+The core trio of Aaron Nesmith, Al Horford, and Anfernee Simons gives the staff a clear identity to start from.
 The front office kept the core intact and will lean on internal development.
 No rotation regulars departed, so continuity remains a strength.
 

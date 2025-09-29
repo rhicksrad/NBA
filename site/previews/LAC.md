@@ -1,6 +1,6 @@
 # Los Angeles Clippers
 
-The core trio of Amir Coffey, Daniel Oturu, and DeMarcus Cousins gives the staff a clear identity to start from.
+The core trio of Amir Coffey, Ben Simmons, and Daniel Oturu gives the staff a clear identity to start from.
 The front office kept the core intact and will lean on internal development.
 No rotation regulars departed, so continuity remains a strength.
 

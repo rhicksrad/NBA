@@ -1,6 +1,6 @@
 # Memphis Grizzlies
 
-The core trio of Brandon Clarke, De'Anthony Melton, and Desmond Bane gives the staff a clear identity to start from.
+The core trio of Brandon Clarke, Desmond Bane, and Dillon Brooks gives the staff a clear identity to start from.
 The front office kept the core intact and will lean on internal development.
 No rotation regulars departed, so continuity remains a strength.
 

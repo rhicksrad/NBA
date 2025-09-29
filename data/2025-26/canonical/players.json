@@ -6,16 +6,16 @@
     "lastName": "Gordon",
     "teamId": "1610612743",
     "teamTricode": "DEN",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Aaron Holiday",
     "playerId": "1628988",
     "firstName": "Aaron",
     "lastName": "Holiday",
-    "teamId": "1610612754",
-    "teamTricode": "IND",
-    "source": "fallback"
+    "teamId": "1610612745",
+    "teamTricode": "HOU",
+    "source": "ball_dont_lie"
   },
   {
     "name": "Aaron Nesmith",
@@ -24,7 +24,7 @@
     "lastName": "Nesmith",
     "teamId": "1610612738",
     "teamTricode": "BOS",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Abdel Nader",
@@ -33,7 +33,7 @@
     "lastName": "Nader",
     "teamId": "1610612756",
     "teamTricode": "PHX",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Adam Mokoka",
@@ -42,34 +42,34 @@
     "lastName": "Mokoka",
     "teamId": "1610612741",
     "teamTricode": "CHI",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Al Horford",
     "playerId": "201143",
     "firstName": "Al",
     "lastName": "Horford",
-    "teamId": "1610612760",
-    "teamTricode": "OKC",
-    "source": "fallback"
+    "teamId": "1610612738",
+    "teamTricode": "BOS",
+    "source": "ball_dont_lie"
   },
   {
     "name": "Al-Farouq Aminu",
     "playerId": "202329",
     "firstName": "Al-Farouq",
     "lastName": "Aminu",
-    "teamId": "1610612741",
-    "teamTricode": "CHI",
-    "source": "fallback"
+    "teamId": "1610612757",
+    "teamTricode": "POR",
+    "source": "ball_dont_lie"
   },
   {
     "name": "Alec Burks",
     "playerId": "202692",
     "firstName": "Alec",
     "lastName": "Burks",
-    "teamId": "1610612752",
-    "teamTricode": "NYK",
-    "source": "fallback"
+    "teamId": "1610612748",
+    "teamTricode": "MIA",
+    "source": "ball_dont_lie"
   },
   {
     "name": "Aleksej Pokusevski",
@@ -78,7 +78,7 @@
     "lastName": "Pokusevski",
     "teamId": "1610612760",
     "teamTricode": "OKC",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Alen Smailagic",
@@ -87,7 +87,7 @@
     "lastName": "Smailagic",
     "teamId": "1610612744",
     "teamTricode": "GSW",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Alex Caruso",
@@ -96,34 +96,34 @@
     "lastName": "Caruso",
     "teamId": "1610612747",
     "teamTricode": "LAL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Alex Len",
     "playerId": "203458",
     "firstName": "Alex",
     "lastName": "Len",
-    "teamId": "1610612764",
-    "teamTricode": "WAS",
-    "source": "fallback"
+    "teamId": "1610612752",
+    "teamTricode": "NYK",
+    "source": "ball_dont_lie"
   },
   {
     "name": "Alfonzo McKinnie",
     "playerId": "1628035",
     "firstName": "Alfonzo",
     "lastName": "McKinnie",
-    "teamId": "1610612747",
-    "teamTricode": "LAL",
-    "source": "fallback"
+    "teamId": "1610612741",
+    "teamTricode": "CHI",
+    "source": "ball_dont_lie"
   },
   {
     "name": "Alize Johnson",
     "playerId": "1628993",
     "firstName": "Alize",
     "lastName": "Johnson",
-    "teamId": "1610612751",
-    "teamTricode": "BKN",
-    "source": "fallback"
+    "teamId": "1610612750",
+    "teamTricode": "MIN",
+    "source": "ball_dont_lie"
   },
   {
     "name": "Amida Brimah",
@@ -132,7 +132,7 @@
     "lastName": "Brimah",
     "teamId": "1610612754",
     "teamTricode": "IND",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Amir Coffey",
@@ -141,7 +141,7 @@
     "lastName": "Coffey",
     "teamId": "1610612746",
     "teamTricode": "LAC",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Anderson Varejao",
@@ -150,25 +150,25 @@
     "lastName": "Varejao",
     "teamId": "1610612739",
     "teamTricode": "CLE",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Andre Drummond",
     "playerId": "203083",
     "firstName": "Andre",
     "lastName": "Drummond",
-    "teamId": "1610612747",
-    "teamTricode": "LAL",
-    "source": "fallback"
+    "teamId": "1610612755",
+    "teamTricode": "PHI",
+    "source": "ball_dont_lie"
   },
   {
     "name": "Andre Iguodala",
     "playerId": "2738",
     "firstName": "Andre",
     "lastName": "Iguodala",
-    "teamId": "1610612748",
-    "teamTricode": "MIA",
-    "source": "fallback"
+    "teamId": "1610612744",
+    "teamTricode": "GSW",
+    "source": "ball_dont_lie"
   },
   {
     "name": "Andrew Wiggins",
@@ -177,16 +177,16 @@
     "lastName": "Wiggins",
     "teamId": "1610612744",
     "teamTricode": "GSW",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Anfernee Simons",
     "playerId": "1629014",
     "firstName": "Anfernee",
     "lastName": "Simons",
-    "teamId": "1610612757",
-    "teamTricode": "POR",
-    "source": "fallback"
+    "teamId": "1610612738",
+    "teamTricode": "BOS",
+    "source": "ball_dont_lie"
   },
   {
     "name": "Anthony Davis",
@@ -196,8 +196,7 @@
     "lastName": "Davis",
     "teamId": "1610612742",
     "teamTricode": "DAL",
-    "source": "fallback",
-    "isNewAddition": true
+    "source": "ball_dont_lie"
   },
   {
     "name": "Anthony Edwards",
@@ -206,7 +205,7 @@
     "lastName": "Edwards",
     "teamId": "1610612750",
     "teamTricode": "MIN",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Anthony Gill",
@@ -215,7 +214,7 @@
     "lastName": "Gill",
     "teamId": "1610612764",
     "teamTricode": "WAS",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Anthony Lamb",
@@ -224,16 +223,16 @@
     "lastName": "Lamb",
     "teamId": "1610612745",
     "teamTricode": "HOU",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Anthony Tolliver",
     "playerId": "201229",
     "firstName": "Anthony",
     "lastName": "Tolliver",
-    "teamId": "1610612755",
-    "teamTricode": "PHI",
-    "source": "fallback"
+    "teamId": "1610612765",
+    "teamTricode": "DET",
+    "source": "ball_dont_lie"
   },
   {
     "name": "Armoni Brooks",
@@ -242,34 +241,34 @@
     "lastName": "Brooks",
     "teamId": "1610612745",
     "teamTricode": "HOU",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Aron Baynes",
     "playerId": "203382",
     "firstName": "Aron",
     "lastName": "Baynes",
-    "teamId": "1610612761",
-    "teamTricode": "TOR",
-    "source": "fallback"
+    "teamId": "1610612765",
+    "teamTricode": "DET",
+    "source": "ball_dont_lie"
   },
   {
     "name": "Austin Rivers",
     "playerId": "203085",
     "firstName": "Austin",
     "lastName": "Rivers",
-    "teamId": "1610612743",
-    "teamTricode": "DEN",
-    "source": "fallback"
+    "teamId": "1610612750",
+    "teamTricode": "MIN",
+    "source": "ball_dont_lie"
   },
   {
     "name": "Avery Bradley",
     "playerId": "202340",
     "firstName": "Avery",
     "lastName": "Bradley",
-    "teamId": "1610612745",
-    "teamTricode": "HOU",
-    "source": "fallback"
+    "teamId": "1610612747",
+    "teamTricode": "LAL",
+    "source": "ball_dont_lie"
   },
   {
     "name": "Axel Toupane",
@@ -278,7 +277,7 @@
     "lastName": "Toupane",
     "teamId": "1610612749",
     "teamTricode": "MIL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Bam Adebayo",
@@ -287,7 +286,7 @@
     "lastName": "Adebayo",
     "teamId": "1610612748",
     "teamTricode": "MIA",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Ben McLemore",
@@ -296,16 +295,16 @@
     "lastName": "McLemore",
     "teamId": "1610612747",
     "teamTricode": "LAL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Ben Simmons",
     "playerId": "1627732",
     "firstName": "Ben",
     "lastName": "Simmons",
-    "teamId": "1610612755",
-    "teamTricode": "PHI",
-    "source": "fallback"
+    "teamId": "1610612746",
+    "teamTricode": "LAC",
+    "source": "ball_dont_lie"
   },
   {
     "name": "Bismack Biyombo",
@@ -314,7 +313,7 @@
     "lastName": "Biyombo",
     "teamId": "1610612766",
     "teamTricode": "CHA",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Blake Griffin",
@@ -323,7 +322,7 @@
     "lastName": "Griffin",
     "teamId": "1610612751",
     "teamTricode": "BKN",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Boban Marjanovic",
@@ -332,7 +331,7 @@
     "lastName": "Marjanovic",
     "teamId": "1610612742",
     "teamTricode": "DAL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Bobby Portis",
@@ -341,7 +340,7 @@
     "lastName": "Portis",
     "teamId": "1610612749",
     "teamTricode": "MIL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Bogdan Bogdanovic",
@@ -350,7 +349,7 @@
     "lastName": "Bogdanovic",
     "teamId": "1610612737",
     "teamTricode": "ATL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Bojan Bogdanovic",
@@ -359,7 +358,7 @@
     "lastName": "Bogdanovic",
     "teamId": "1610612762",
     "teamTricode": "UTA",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Bol Bol",
@@ -368,7 +367,7 @@
     "lastName": "Bol",
     "teamId": "1610612743",
     "teamTricode": "DEN",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Brad Wanamaker",
@@ -377,7 +376,7 @@
     "lastName": "Wanamaker",
     "teamId": "1610612766",
     "teamTricode": "CHA",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Bradley Beal",
@@ -386,7 +385,7 @@
     "lastName": "Beal",
     "teamId": "1610612764",
     "teamTricode": "WAS",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Brandon Clarke",
@@ -395,7 +394,7 @@
     "lastName": "Clarke",
     "teamId": "1610612763",
     "teamTricode": "MEM",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Brandon Goodwin",
@@ -404,7 +403,7 @@
     "lastName": "Goodwin",
     "teamId": "1610612737",
     "teamTricode": "ATL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Brandon Ingram",
@@ -413,7 +412,7 @@
     "lastName": "Ingram",
     "teamId": "1610612740",
     "teamTricode": "NOP",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Brodric Thomas",
@@ -422,7 +421,7 @@
     "lastName": "Thomas",
     "teamId": "1610612739",
     "teamTricode": "CLE",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Brook Lopez",
@@ -431,16 +430,16 @@
     "lastName": "Lopez",
     "teamId": "1610612749",
     "teamTricode": "MIL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Bruce Brown",
     "playerId": "1628971",
     "firstName": "Bruce",
     "lastName": "Brown",
-    "teamId": "1610612751",
-    "teamTricode": "BKN",
-    "source": "fallback"
+    "teamId": "1610612743",
+    "teamTricode": "DEN",
+    "source": "ball_dont_lie"
   },
   {
     "name": "Bruno Fernando",
@@ -449,7 +448,7 @@
     "lastName": "Fernando",
     "teamId": "1610612737",
     "teamTricode": "ATL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Bryn Forbes",
@@ -458,7 +457,7 @@
     "lastName": "Forbes",
     "teamId": "1610612749",
     "teamTricode": "MIL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Buddy Hield",
@@ -467,7 +466,7 @@
     "lastName": "Hield",
     "teamId": "1610612758",
     "teamTricode": "SAC",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Caleb Martin",
@@ -476,7 +475,7 @@
     "lastName": "Martin",
     "teamId": "1610612766",
     "teamTricode": "CHA",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Cam Reddish",
@@ -485,7 +484,7 @@
     "lastName": "Reddish",
     "teamId": "1610612737",
     "teamTricode": "ATL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Cameron Johnson",
@@ -494,7 +493,7 @@
     "lastName": "Johnson",
     "teamId": "1610612756",
     "teamTricode": "PHX",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Cameron Oliver",
@@ -503,7 +502,7 @@
     "lastName": "Oliver",
     "teamId": "1610612745",
     "teamTricode": "HOU",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Cameron Payne",
@@ -512,7 +511,7 @@
     "lastName": "Payne",
     "teamId": "1610612756",
     "teamTricode": "PHX",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Cameron Reynolds",
@@ -521,16 +520,16 @@
     "lastName": "Reynolds",
     "teamId": "1610612745",
     "teamTricode": "HOU",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Caris LeVert",
     "playerId": "1627747",
     "firstName": "Caris",
     "lastName": "LeVert",
-    "teamId": "1610612754",
-    "teamTricode": "IND",
-    "source": "fallback"
+    "teamId": "1610612765",
+    "teamTricode": "DET",
+    "source": "ball_dont_lie"
   },
   {
     "name": "Carmelo Anthony",
@@ -539,7 +538,7 @@
     "lastName": "Anthony",
     "teamId": "1610612757",
     "teamTricode": "POR",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Carsen Edwards",
@@ -548,7 +547,7 @@
     "lastName": "Edwards",
     "teamId": "1610612738",
     "teamTricode": "BOS",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Cassius Stanley",
@@ -557,7 +556,7 @@
     "lastName": "Stanley",
     "teamId": "1610612754",
     "teamTricode": "IND",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Cassius Winston",
@@ -566,7 +565,7 @@
     "lastName": "Winston",
     "teamId": "1610612764",
     "teamTricode": "WAS",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Cedi Osman",
@@ -575,7 +574,7 @@
     "lastName": "Osman",
     "teamId": "1610612739",
     "teamTricode": "CLE",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Chandler Hutchison",
@@ -584,7 +583,7 @@
     "lastName": "Hutchison",
     "teamId": "1610612764",
     "teamTricode": "WAS",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Charlie Brown Jr.",
@@ -593,7 +592,7 @@
     "lastName": "Jr.",
     "teamId": "1610612760",
     "teamTricode": "OKC",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Chasson Randle",
@@ -602,7 +601,7 @@
     "lastName": "Randle",
     "teamId": "1610612753",
     "teamTricode": "ORL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Chimezie Metu",
@@ -611,7 +610,7 @@
     "lastName": "Metu",
     "teamId": "1610612758",
     "teamTricode": "SAC",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Chris Boucher",
@@ -620,7 +619,7 @@
     "lastName": "Boucher",
     "teamId": "1610612761",
     "teamTricode": "TOR",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Chris Chiozza",
@@ -629,7 +628,7 @@
     "lastName": "Chiozza",
     "teamId": "1610612751",
     "teamTricode": "BKN",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Chris Paul",
@@ -638,7 +637,7 @@
     "lastName": "Paul",
     "teamId": "1610612756",
     "teamTricode": "PHX",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Christian Wood",
@@ -647,7 +646,7 @@
     "lastName": "Wood",
     "teamId": "1610612745",
     "teamTricode": "HOU",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Chuma Okeke",
@@ -656,7 +655,7 @@
     "lastName": "Okeke",
     "teamId": "1610612753",
     "teamTricode": "ORL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "CJ Elleby",
@@ -665,7 +664,7 @@
     "lastName": "Elleby",
     "teamId": "1610612757",
     "teamTricode": "POR",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "CJ McCollum",
@@ -674,7 +673,7 @@
     "lastName": "McCollum",
     "teamId": "1610612757",
     "teamTricode": "POR",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Clint Capela",
@@ -683,7 +682,7 @@
     "lastName": "Capela",
     "teamId": "1610612737",
     "teamTricode": "ATL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Coby White",
@@ -692,7 +691,7 @@
     "lastName": "White",
     "teamId": "1610612741",
     "teamTricode": "CHI",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Cody Martin",
@@ -701,7 +700,7 @@
     "lastName": "Martin",
     "teamId": "1610612766",
     "teamTricode": "CHA",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Cody Zeller",
@@ -710,7 +709,7 @@
     "lastName": "Zeller",
     "teamId": "1610612766",
     "teamTricode": "CHA",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Cole Anthony",
@@ -719,25 +718,25 @@
     "lastName": "Anthony",
     "teamId": "1610612753",
     "teamTricode": "ORL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Collin Sexton",
     "playerId": "1629012",
     "firstName": "Collin",
     "lastName": "Sexton",
-    "teamId": "1610612739",
-    "teamTricode": "CLE",
-    "source": "fallback"
+    "teamId": "1610612766",
+    "teamTricode": "CHA",
+    "source": "ball_dont_lie"
   },
   {
     "name": "Cory Joseph",
     "playerId": "202709",
     "firstName": "Cory",
     "lastName": "Joseph",
-    "teamId": "1610612765",
-    "teamTricode": "DET",
-    "source": "fallback"
+    "teamId": "1610612753",
+    "teamTricode": "ORL",
+    "source": "ball_dont_lie"
   },
   {
     "name": "Cristiano Felicio",
@@ -746,7 +745,7 @@
     "lastName": "Felicio",
     "teamId": "1610612741",
     "teamTricode": "CHI",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "D.J. Augustin",
@@ -755,7 +754,7 @@
     "lastName": "Augustin",
     "teamId": "1610612745",
     "teamTricode": "HOU",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "D.J. Wilson",
@@ -764,7 +763,7 @@
     "lastName": "Wilson",
     "teamId": "1610612745",
     "teamTricode": "HOU",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "D'Angelo Russell",
@@ -773,7 +772,7 @@
     "lastName": "Russell",
     "teamId": "1610612750",
     "teamTricode": "MIN",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Damian Jones",
@@ -782,7 +781,7 @@
     "lastName": "Jones",
     "teamId": "1610612758",
     "teamTricode": "SAC",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Damian Lillard",
@@ -791,16 +790,16 @@
     "lastName": "Lillard",
     "teamId": "1610612757",
     "teamTricode": "POR",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Damion Lee",
     "playerId": "1627814",
     "firstName": "Damion",
     "lastName": "Lee",
-    "teamId": "1610612744",
-    "teamTricode": "GSW",
-    "source": "fallback"
+    "teamId": "1610612756",
+    "teamTricode": "PHX",
+    "source": "ball_dont_lie"
   },
   {
     "name": "Damyean Dotson",
@@ -809,7 +808,7 @@
     "lastName": "Dotson",
     "teamId": "1610612739",
     "teamTricode": "CLE",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Daniel Gafford",
@@ -818,7 +817,7 @@
     "lastName": "Gafford",
     "teamId": "1610612764",
     "teamTricode": "WAS",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Daniel Oturu",
@@ -827,7 +826,7 @@
     "lastName": "Oturu",
     "teamId": "1610612746",
     "teamTricode": "LAC",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Daniel Theis",
@@ -836,7 +835,7 @@
     "lastName": "Theis",
     "teamId": "1610612741",
     "teamTricode": "CHI",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Danilo Gallinari",
@@ -845,7 +844,7 @@
     "lastName": "Gallinari",
     "teamId": "1610612737",
     "teamTricode": "ATL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Danny Green",
@@ -854,7 +853,7 @@
     "lastName": "Green",
     "teamId": "1610612755",
     "teamTricode": "PHI",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Dante Exum",
@@ -863,7 +862,7 @@
     "lastName": "Exum",
     "teamId": "1610612745",
     "teamTricode": "HOU",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Danuel House Jr.",
@@ -872,7 +871,7 @@
     "lastName": "Jr.",
     "teamId": "1610612745",
     "teamTricode": "HOU",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Dario Saric",
@@ -881,7 +880,7 @@
     "lastName": "Saric",
     "teamId": "1610612756",
     "teamTricode": "PHX",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Darius Bazley",
@@ -890,7 +889,7 @@
     "lastName": "Bazley",
     "teamId": "1610612760",
     "teamTricode": "OKC",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Darius Garland",
@@ -899,7 +898,7 @@
     "lastName": "Garland",
     "teamId": "1610612739",
     "teamTricode": "CLE",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "David Nwaba",
@@ -908,7 +907,7 @@
     "lastName": "Nwaba",
     "teamId": "1610612745",
     "teamTricode": "HOU",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Davis Bertans",
@@ -917,16 +916,16 @@
     "lastName": "Bertans",
     "teamId": "1610612764",
     "teamTricode": "WAS",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "De'Aaron Fox",
     "playerId": "1628368",
     "firstName": "De'Aaron",
     "lastName": "Fox",
-    "teamId": "1610612758",
-    "teamTricode": "SAC",
-    "source": "fallback"
+    "teamId": "1610612759",
+    "teamTricode": "SAS",
+    "source": "ball_dont_lie"
   },
   {
     "name": "De'Andre Hunter",
@@ -935,16 +934,16 @@
     "lastName": "Hunter",
     "teamId": "1610612737",
     "teamTricode": "ATL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "De'Anthony Melton",
     "playerId": "1629001",
     "firstName": "De'Anthony",
     "lastName": "Melton",
-    "teamId": "1610612763",
-    "teamTricode": "MEM",
-    "source": "fallback"
+    "teamId": "1610612751",
+    "teamTricode": "BKN",
+    "source": "ball_dont_lie"
   },
   {
     "name": "Dean Wade",
@@ -953,7 +952,7 @@
     "lastName": "Wade",
     "teamId": "1610612739",
     "teamTricode": "CLE",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Deandre Ayton",
@@ -962,7 +961,7 @@
     "lastName": "Ayton",
     "teamId": "1610612756",
     "teamTricode": "PHX",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "DeAndre Jordan",
@@ -971,7 +970,7 @@
     "lastName": "Jordan",
     "teamId": "1610612751",
     "teamTricode": "BKN",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "DeAndre' Bembry",
@@ -980,7 +979,7 @@
     "lastName": "Bembry",
     "teamId": "1610612761",
     "teamTricode": "TOR",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Deividas Sirvydis",
@@ -989,34 +988,34 @@
     "lastName": "Sirvydis",
     "teamId": "1610612765",
     "teamTricode": "DET",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Dejounte Murray",
     "playerId": "1627749",
     "firstName": "Dejounte",
     "lastName": "Murray",
-    "teamId": "1610612759",
-    "teamTricode": "SAS",
-    "source": "fallback"
+    "teamId": "1610612740",
+    "teamTricode": "NOP",
+    "source": "ball_dont_lie"
   },
   {
     "name": "Delon Wright",
     "playerId": "1626153",
     "firstName": "Delon",
     "lastName": "Wright",
-    "teamId": "1610612758",
-    "teamTricode": "SAC",
-    "source": "fallback"
+    "teamId": "1610612754",
+    "teamTricode": "IND",
+    "source": "ball_dont_lie"
   },
   {
     "name": "DeMar DeRozan",
     "playerId": "201942",
     "firstName": "DeMar",
     "lastName": "DeRozan",
-    "teamId": "1610612759",
-    "teamTricode": "SAS",
-    "source": "fallback"
+    "teamId": "1610612758",
+    "teamTricode": "SAC",
+    "source": "ball_dont_lie"
   },
   {
     "name": "DeMarcus Cousins",
@@ -1025,7 +1024,7 @@
     "lastName": "Cousins",
     "teamId": "1610612746",
     "teamTricode": "LAC",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Deni Avdija",
@@ -1034,7 +1033,7 @@
     "lastName": "Avdija",
     "teamId": "1610612764",
     "teamTricode": "WAS",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Dennis Schroder",
@@ -1043,7 +1042,7 @@
     "lastName": "Schroder",
     "teamId": "1610612747",
     "teamTricode": "LAL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Dennis Smith Jr.",
@@ -1052,16 +1051,16 @@
     "lastName": "Jr.",
     "teamId": "1610612765",
     "teamTricode": "DET",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Denzel Valentine",
     "playerId": "1627756",
     "firstName": "Denzel",
     "lastName": "Valentine",
-    "teamId": "1610612741",
-    "teamTricode": "CHI",
-    "source": "fallback"
+    "teamId": "1610612762",
+    "teamTricode": "UTA",
+    "source": "ball_dont_lie"
   },
   {
     "name": "Derrick Favors",
@@ -1070,7 +1069,7 @@
     "lastName": "Favors",
     "teamId": "1610612762",
     "teamTricode": "UTA",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Derrick Jones Jr.",
@@ -1079,7 +1078,7 @@
     "lastName": "Jr.",
     "teamId": "1610612757",
     "teamTricode": "POR",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Derrick Rose",
@@ -1088,7 +1087,7 @@
     "lastName": "Rose",
     "teamId": "1610612752",
     "teamTricode": "NYK",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Derrick White",
@@ -1097,7 +1096,7 @@
     "lastName": "White",
     "teamId": "1610612759",
     "teamTricode": "SAS",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Desmond Bane",
@@ -1106,7 +1105,7 @@
     "lastName": "Bane",
     "teamId": "1610612763",
     "teamTricode": "MEM",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Devin Booker",
@@ -1115,7 +1114,7 @@
     "lastName": "Booker",
     "teamId": "1610612756",
     "teamTricode": "PHX",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Devin Vassell",
@@ -1124,7 +1123,7 @@
     "lastName": "Vassell",
     "teamId": "1610612759",
     "teamTricode": "SAS",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Devon Dotson",
@@ -1133,7 +1132,7 @@
     "lastName": "Dotson",
     "teamId": "1610612741",
     "teamTricode": "CHI",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Devontae Cacok",
@@ -1142,7 +1141,7 @@
     "lastName": "Cacok",
     "teamId": "1610612747",
     "teamTricode": "LAL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Devonte' Graham",
@@ -1151,7 +1150,7 @@
     "lastName": "Graham",
     "teamId": "1610612766",
     "teamTricode": "CHA",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Dewayne Dedmon",
@@ -1160,7 +1159,7 @@
     "lastName": "Dedmon",
     "teamId": "1610612748",
     "teamTricode": "MIA",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Didi Louzada",
@@ -1169,7 +1168,7 @@
     "lastName": "Louzada",
     "teamId": "1610612740",
     "teamTricode": "NOP",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Dillon Brooks",
@@ -1178,7 +1177,7 @@
     "lastName": "Brooks",
     "teamId": "1610612763",
     "teamTricode": "MEM",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Domantas Sabonis",
@@ -1187,7 +1186,7 @@
     "lastName": "Sabonis",
     "teamId": "1610612754",
     "teamTricode": "IND",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Donovan Mitchell",
@@ -1196,7 +1195,7 @@
     "lastName": "Mitchell",
     "teamId": "1610612762",
     "teamTricode": "UTA",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Donta Hall",
@@ -1205,7 +1204,7 @@
     "lastName": "Hall",
     "teamId": "1610612753",
     "teamTricode": "ORL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Donte DiVincenzo",
@@ -1214,7 +1213,7 @@
     "lastName": "DiVincenzo",
     "teamId": "1610612749",
     "teamTricode": "MIL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Dorian Finney-Smith",
@@ -1223,7 +1222,7 @@
     "lastName": "Finney-Smith",
     "teamId": "1610612742",
     "teamTricode": "DAL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Doug McDermott",
@@ -1232,7 +1231,7 @@
     "lastName": "McDermott",
     "teamId": "1610612754",
     "teamTricode": "IND",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Draymond Green",
@@ -1241,7 +1240,7 @@
     "lastName": "Green",
     "teamId": "1610612744",
     "teamTricode": "GSW",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Drew Eubanks",
@@ -1250,7 +1249,7 @@
     "lastName": "Eubanks",
     "teamId": "1610612759",
     "teamTricode": "SAS",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Duncan Robinson",
@@ -1259,7 +1258,7 @@
     "lastName": "Robinson",
     "teamId": "1610612748",
     "teamTricode": "MIA",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Dwayne Bacon",
@@ -1268,7 +1267,7 @@
     "lastName": "Bacon",
     "teamId": "1610612753",
     "teamTricode": "ORL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Dwight Howard",
@@ -1277,7 +1276,7 @@
     "lastName": "Howard",
     "teamId": "1610612755",
     "teamTricode": "PHI",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Dwight Powell",
@@ -1286,7 +1285,7 @@
     "lastName": "Powell",
     "teamId": "1610612742",
     "teamTricode": "DAL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Dylan Windler",
@@ -1295,7 +1294,7 @@
     "lastName": "Windler",
     "teamId": "1610612739",
     "teamTricode": "CLE",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "E'Twaun Moore",
@@ -1304,7 +1303,7 @@
     "lastName": "Moore",
     "teamId": "1610612756",
     "teamTricode": "PHX",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Ed Davis",
@@ -1313,7 +1312,7 @@
     "lastName": "Davis",
     "teamId": "1610612750",
     "teamTricode": "MIN",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Edmond Sumner",
@@ -1322,7 +1321,7 @@
     "lastName": "Sumner",
     "teamId": "1610612754",
     "teamTricode": "IND",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Elfrid Payton",
@@ -1331,7 +1330,7 @@
     "lastName": "Payton",
     "teamId": "1610612752",
     "teamTricode": "NYK",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Elijah Bryant",
@@ -1340,7 +1339,7 @@
     "lastName": "Bryant",
     "teamId": "1610612749",
     "teamTricode": "MIL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Elijah Hughes",
@@ -1349,7 +1348,7 @@
     "lastName": "Hughes",
     "teamId": "1610612762",
     "teamTricode": "UTA",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Enes Kanter",
@@ -1358,7 +1357,7 @@
     "lastName": "Kanter",
     "teamId": "1610612757",
     "teamTricode": "POR",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Eric Bledsoe",
@@ -1367,7 +1366,7 @@
     "lastName": "Bledsoe",
     "teamId": "1610612740",
     "teamTricode": "NOP",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Eric Gordon",
@@ -1376,7 +1375,7 @@
     "lastName": "Gordon",
     "teamId": "1610612745",
     "teamTricode": "HOU",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Eric Paschall",
@@ -1385,7 +1384,7 @@
     "lastName": "Paschall",
     "teamId": "1610612744",
     "teamTricode": "GSW",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Ersan Ilyasova",
@@ -1394,7 +1393,7 @@
     "lastName": "Ilyasova",
     "teamId": "1610612762",
     "teamTricode": "UTA",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Evan Fournier",
@@ -1403,7 +1402,7 @@
     "lastName": "Fournier",
     "teamId": "1610612738",
     "teamTricode": "BOS",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Facundo Campazzo",
@@ -1412,7 +1411,7 @@
     "lastName": "Campazzo",
     "teamId": "1610612743",
     "teamTricode": "DEN",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Frank Jackson",
@@ -1421,7 +1420,7 @@
     "lastName": "Jackson",
     "teamId": "1610612765",
     "teamTricode": "DET",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Frank Kaminsky",
@@ -1430,7 +1429,7 @@
     "lastName": "Kaminsky",
     "teamId": "1610612756",
     "teamTricode": "PHX",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Frank Ntilikina",
@@ -1439,7 +1438,7 @@
     "lastName": "Ntilikina",
     "teamId": "1610612752",
     "teamTricode": "NYK",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Fred VanVleet",
@@ -1448,7 +1447,7 @@
     "lastName": "VanVleet",
     "teamId": "1610612761",
     "teamTricode": "TOR",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Freddie Gillespie",
@@ -1457,7 +1456,7 @@
     "lastName": "Gillespie",
     "teamId": "1610612761",
     "teamTricode": "TOR",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Furkan Korkmaz",
@@ -1466,7 +1465,7 @@
     "lastName": "Korkmaz",
     "teamId": "1610612755",
     "teamTricode": "PHI",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Gabe Vincent",
@@ -1475,7 +1474,7 @@
     "lastName": "Vincent",
     "teamId": "1610612748",
     "teamTricode": "MIA",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Gabriel Deck",
@@ -1484,16 +1483,16 @@
     "lastName": "Deck",
     "teamId": "1610612760",
     "teamTricode": "OKC",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Garrett Temple",
     "playerId": "202066",
     "firstName": "Garrett",
     "lastName": "Temple",
-    "teamId": "1610612741",
-    "teamTricode": "CHI",
-    "source": "fallback"
+    "teamId": "1610612761",
+    "teamTricode": "TOR",
+    "source": "ball_dont_lie"
   },
   {
     "name": "Garrison Mathews",
@@ -1502,7 +1501,7 @@
     "lastName": "Mathews",
     "teamId": "1610612764",
     "teamTricode": "WAS",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Gary Clark",
@@ -1511,7 +1510,7 @@
     "lastName": "Clark",
     "teamId": "1610612755",
     "teamTricode": "PHI",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Gary Harris",
@@ -1520,7 +1519,7 @@
     "lastName": "Harris",
     "teamId": "1610612753",
     "teamTricode": "ORL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Gary Trent Jr.",
@@ -1529,7 +1528,7 @@
     "lastName": "Jr.",
     "teamId": "1610612761",
     "teamTricode": "TOR",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "George Hill",
@@ -1538,7 +1537,7 @@
     "lastName": "Hill",
     "teamId": "1610612755",
     "teamTricode": "PHI",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Georges Niang",
@@ -1547,7 +1546,7 @@
     "lastName": "Niang",
     "teamId": "1610612762",
     "teamTricode": "UTA",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Giannis Antetokounmpo",
@@ -1556,7 +1555,7 @@
     "lastName": "Antetokounmpo",
     "teamId": "1610612749",
     "teamTricode": "MIL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Goga Bitadze",
@@ -1565,7 +1564,7 @@
     "lastName": "Bitadze",
     "teamId": "1610612754",
     "teamTricode": "IND",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Goran Dragic",
@@ -1574,7 +1573,7 @@
     "lastName": "Dragic",
     "teamId": "1610612748",
     "teamTricode": "MIA",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Gordon Hayward",
@@ -1583,7 +1582,7 @@
     "lastName": "Hayward",
     "teamId": "1610612766",
     "teamTricode": "CHA",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Gorgui Dieng",
@@ -1592,7 +1591,7 @@
     "lastName": "Dieng",
     "teamId": "1610612759",
     "teamTricode": "SAS",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Grant Riller",
@@ -1601,7 +1600,7 @@
     "lastName": "Riller",
     "teamId": "1610612766",
     "teamTricode": "CHA",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Grant Williams",
@@ -1610,7 +1609,7 @@
     "lastName": "Williams",
     "teamId": "1610612738",
     "teamTricode": "BOS",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Grayson Allen",
@@ -1619,7 +1618,7 @@
     "lastName": "Allen",
     "teamId": "1610612763",
     "teamTricode": "MEM",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Hamidou Diallo",
@@ -1628,7 +1627,7 @@
     "lastName": "Diallo",
     "teamId": "1610612765",
     "teamTricode": "DET",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Harrison Barnes",
@@ -1637,7 +1636,7 @@
     "lastName": "Barnes",
     "teamId": "1610612758",
     "teamTricode": "SAC",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Harry Giles III",
@@ -1646,7 +1645,7 @@
     "lastName": "III",
     "teamId": "1610612757",
     "teamTricode": "POR",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Hassan Whiteside",
@@ -1655,7 +1654,7 @@
     "lastName": "Whiteside",
     "teamId": "1610612758",
     "teamTricode": "SAC",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Ignas Brazdeikis",
@@ -1664,7 +1663,7 @@
     "lastName": "Brazdeikis",
     "teamId": "1610612753",
     "teamTricode": "ORL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Immanuel Quickley",
@@ -1673,7 +1672,7 @@
     "lastName": "Quickley",
     "teamId": "1610612752",
     "teamTricode": "NYK",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Isaac Bonga",
@@ -1682,7 +1681,7 @@
     "lastName": "Bonga",
     "teamId": "1610612764",
     "teamTricode": "WAS",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Isaac Okoro",
@@ -1691,7 +1690,7 @@
     "lastName": "Okoro",
     "teamId": "1610612739",
     "teamTricode": "CLE",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Isaiah Hartenstein",
@@ -1700,7 +1699,7 @@
     "lastName": "Hartenstein",
     "teamId": "1610612739",
     "teamTricode": "CLE",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Isaiah Joe",
@@ -1709,7 +1708,7 @@
     "lastName": "Joe",
     "teamId": "1610612755",
     "teamTricode": "PHI",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Isaiah Roby",
@@ -1718,7 +1717,7 @@
     "lastName": "Roby",
     "teamId": "1610612760",
     "teamTricode": "OKC",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Isaiah Stewart",
@@ -1727,7 +1726,7 @@
     "lastName": "Stewart",
     "teamId": "1610612765",
     "teamTricode": "DET",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Ish Smith",
@@ -1736,7 +1735,7 @@
     "lastName": "Smith",
     "teamId": "1610612764",
     "teamTricode": "WAS",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Ivica Zubac",
@@ -1745,7 +1744,7 @@
     "lastName": "Zubac",
     "teamId": "1610612746",
     "teamTricode": "LAC",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Ja Morant",
@@ -1754,7 +1753,7 @@
     "lastName": "Morant",
     "teamId": "1610612763",
     "teamTricode": "MEM",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Jabari Parker",
@@ -1763,7 +1762,7 @@
     "lastName": "Parker",
     "teamId": "1610612738",
     "teamTricode": "BOS",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Jaden McDaniels",
@@ -1772,7 +1771,7 @@
     "lastName": "McDaniels",
     "teamId": "1610612750",
     "teamTricode": "MIN",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Jae Crowder",
@@ -1781,7 +1780,7 @@
     "lastName": "Crowder",
     "teamId": "1610612756",
     "teamTricode": "PHX",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Jae'Sean Tate",
@@ -1790,7 +1789,7 @@
     "lastName": "Tate",
     "teamId": "1610612745",
     "teamTricode": "HOU",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Jahlil Okafor",
@@ -1799,7 +1798,7 @@
     "lastName": "Okafor",
     "teamId": "1610612765",
     "teamTricode": "DET",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Jahmi'us Ramsey",
@@ -1808,7 +1807,7 @@
     "lastName": "Ramsey",
     "teamId": "1610612758",
     "teamTricode": "SAC",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "JaKarr Sampson",
@@ -1817,7 +1816,7 @@
     "lastName": "Sampson",
     "teamId": "1610612754",
     "teamTricode": "IND",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Jake Layman",
@@ -1826,7 +1825,7 @@
     "lastName": "Layman",
     "teamId": "1610612750",
     "teamTricode": "MIN",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Jakob Poeltl",
@@ -1835,7 +1834,7 @@
     "lastName": "Poeltl",
     "teamId": "1610612759",
     "teamTricode": "SAS",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Jalen Brunson",
@@ -1844,7 +1843,7 @@
     "lastName": "Brunson",
     "teamId": "1610612742",
     "teamTricode": "DAL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Jalen Harris",
@@ -1853,7 +1852,7 @@
     "lastName": "Harris",
     "teamId": "1610612761",
     "teamTricode": "TOR",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Jalen McDaniels",
@@ -1862,7 +1861,7 @@
     "lastName": "McDaniels",
     "teamId": "1610612766",
     "teamTricode": "CHA",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Jalen Smith",
@@ -1871,7 +1870,7 @@
     "lastName": "Smith",
     "teamId": "1610612756",
     "teamTricode": "PHX",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Jamal Murray",
@@ -1880,7 +1879,7 @@
     "lastName": "Murray",
     "teamId": "1610612743",
     "teamTricode": "DEN",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "James Ennis III",
@@ -1889,7 +1888,7 @@
     "lastName": "III",
     "teamId": "1610612753",
     "teamTricode": "ORL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "James Harden",
@@ -1898,7 +1897,7 @@
     "lastName": "Harden",
     "teamId": "1610612751",
     "teamTricode": "BKN",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "James Johnson",
@@ -1907,7 +1906,7 @@
     "lastName": "Johnson",
     "teamId": "1610612740",
     "teamTricode": "NOP",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "James Nunnally",
@@ -1916,7 +1915,7 @@
     "lastName": "Nunnally",
     "teamId": "1610612740",
     "teamTricode": "NOP",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "James Wiseman",
@@ -1925,7 +1924,7 @@
     "lastName": "Wiseman",
     "teamId": "1610612744",
     "teamTricode": "GSW",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "JaMychal Green",
@@ -1934,7 +1933,7 @@
     "lastName": "Green",
     "teamId": "1610612743",
     "teamTricode": "DEN",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Jared Dudley",
@@ -1943,7 +1942,7 @@
     "lastName": "Dudley",
     "teamId": "1610612747",
     "teamTricode": "LAL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Jared Harper",
@@ -1952,7 +1951,7 @@
     "lastName": "Harper",
     "teamId": "1610612752",
     "teamTricode": "NYK",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Jaren Jackson Jr.",
@@ -1961,7 +1960,7 @@
     "lastName": "Jr.",
     "teamId": "1610612763",
     "teamTricode": "MEM",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Jarred Vanderbilt",
@@ -1970,7 +1969,7 @@
     "lastName": "Vanderbilt",
     "teamId": "1610612750",
     "teamTricode": "MIN",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Jarrell Brantley",
@@ -1979,7 +1978,7 @@
     "lastName": "Brantley",
     "teamId": "1610612762",
     "teamTricode": "UTA",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Jarrett Allen",
@@ -1988,7 +1987,7 @@
     "lastName": "Allen",
     "teamId": "1610612739",
     "teamTricode": "CLE",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Jarrett Culver",
@@ -1997,7 +1996,7 @@
     "lastName": "Culver",
     "teamId": "1610612750",
     "teamTricode": "MIN",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "JaVale McGee",
@@ -2006,7 +2005,7 @@
     "lastName": "McGee",
     "teamId": "1610612743",
     "teamTricode": "DEN",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Javonte Green",
@@ -2015,7 +2014,7 @@
     "lastName": "Green",
     "teamId": "1610612741",
     "teamTricode": "CHI",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Jaxson Hayes",
@@ -2024,7 +2023,7 @@
     "lastName": "Hayes",
     "teamId": "1610612740",
     "teamTricode": "NOP",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Jay Scrubb",
@@ -2033,7 +2032,7 @@
     "lastName": "Scrubb",
     "teamId": "1610612746",
     "teamTricode": "LAC",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Jaylen Brown",
@@ -2042,7 +2041,7 @@
     "lastName": "Brown",
     "teamId": "1610612738",
     "teamTricode": "BOS",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Jaylen Hoard",
@@ -2051,7 +2050,7 @@
     "lastName": "Hoard",
     "teamId": "1610612760",
     "teamTricode": "OKC",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Jaylen Nowell",
@@ -2060,7 +2059,7 @@
     "lastName": "Nowell",
     "teamId": "1610612750",
     "teamTricode": "MIN",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Jayson Tatum",
@@ -2069,7 +2068,7 @@
     "lastName": "Tatum",
     "teamId": "1610612738",
     "teamTricode": "BOS",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Jeff Green",
@@ -2078,7 +2077,7 @@
     "lastName": "Green",
     "teamId": "1610612751",
     "teamTricode": "BKN",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Jeff Teague",
@@ -2087,7 +2086,7 @@
     "lastName": "Teague",
     "teamId": "1610612749",
     "teamTricode": "MIL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Jerami Grant",
@@ -2096,7 +2095,7 @@
     "lastName": "Grant",
     "teamId": "1610612765",
     "teamTricode": "DET",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Jeremiah Martin",
@@ -2105,7 +2104,7 @@
     "lastName": "Martin",
     "teamId": "1610612739",
     "teamTricode": "CLE",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Jeremy Lamb",
@@ -2114,7 +2113,7 @@
     "lastName": "Lamb",
     "teamId": "1610612754",
     "teamTricode": "IND",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Jevon Carter",
@@ -2123,7 +2122,7 @@
     "lastName": "Carter",
     "teamId": "1610612756",
     "teamTricode": "PHX",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Jimmy Butler",
@@ -2132,7 +2131,7 @@
     "lastName": "Butler",
     "teamId": "1610612748",
     "teamTricode": "MIA",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "JJ Redick",
@@ -2141,7 +2140,7 @@
     "lastName": "Redick",
     "teamId": "1610612742",
     "teamTricode": "DAL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Joe Harris",
@@ -2150,7 +2149,7 @@
     "lastName": "Harris",
     "teamId": "1610612751",
     "teamTricode": "BKN",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Joe Ingles",
@@ -2159,7 +2158,7 @@
     "lastName": "Ingles",
     "teamId": "1610612762",
     "teamTricode": "UTA",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Joel Embiid",
@@ -2168,7 +2167,7 @@
     "lastName": "Embiid",
     "teamId": "1610612755",
     "teamTricode": "PHI",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "John Collins",
@@ -2177,7 +2176,7 @@
     "lastName": "Collins",
     "teamId": "1610612737",
     "teamTricode": "ATL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "John Konchar",
@@ -2186,7 +2185,7 @@
     "lastName": "Konchar",
     "teamId": "1610612763",
     "teamTricode": "MEM",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "John Wall",
@@ -2195,7 +2194,7 @@
     "lastName": "Wall",
     "teamId": "1610612745",
     "teamTricode": "HOU",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Jonas Valanciunas",
@@ -2204,7 +2203,7 @@
     "lastName": "Valanciunas",
     "teamId": "1610612763",
     "teamTricode": "MEM",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Jonathan Isaac",
@@ -2213,7 +2212,7 @@
     "lastName": "Isaac",
     "teamId": "1610612753",
     "teamTricode": "ORL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Jontay Porter",
@@ -2222,7 +2221,7 @@
     "lastName": "Porter",
     "teamId": "1610612763",
     "teamTricode": "MEM",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Jordan Bell",
@@ -2231,7 +2230,7 @@
     "lastName": "Bell",
     "teamId": "1610612744",
     "teamTricode": "GSW",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Jordan Clarkson",
@@ -2240,7 +2239,7 @@
     "lastName": "Clarkson",
     "teamId": "1610612762",
     "teamTricode": "UTA",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Jordan McLaughlin",
@@ -2249,7 +2248,7 @@
     "lastName": "McLaughlin",
     "teamId": "1610612750",
     "teamTricode": "MIN",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Jordan Nwora",
@@ -2258,7 +2257,7 @@
     "lastName": "Nwora",
     "teamId": "1610612749",
     "teamTricode": "MIL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Jordan Poole",
@@ -2267,7 +2266,7 @@
     "lastName": "Poole",
     "teamId": "1610612744",
     "teamTricode": "GSW",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Josh Green",
@@ -2276,7 +2275,7 @@
     "lastName": "Green",
     "teamId": "1610612742",
     "teamTricode": "DAL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Josh Hall",
@@ -2285,7 +2284,7 @@
     "lastName": "Hall",
     "teamId": "1610612760",
     "teamTricode": "OKC",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Josh Hart",
@@ -2294,7 +2293,7 @@
     "lastName": "Hart",
     "teamId": "1610612740",
     "teamTricode": "NOP",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Josh Jackson",
@@ -2303,7 +2302,7 @@
     "lastName": "Jackson",
     "teamId": "1610612765",
     "teamTricode": "DET",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Josh Okogie",
@@ -2312,7 +2311,7 @@
     "lastName": "Okogie",
     "teamId": "1610612750",
     "teamTricode": "MIN",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Josh Richardson",
@@ -2321,7 +2320,7 @@
     "lastName": "Richardson",
     "teamId": "1610612742",
     "teamTricode": "DAL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Jrue Holiday",
@@ -2330,7 +2329,7 @@
     "lastName": "Holiday",
     "teamId": "1610612749",
     "teamTricode": "MIL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Juan Toscano-Anderson",
@@ -2339,7 +2338,7 @@
     "lastName": "Toscano-Anderson",
     "teamId": "1610612744",
     "teamTricode": "GSW",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Juancho Hernangomez",
@@ -2348,7 +2347,7 @@
     "lastName": "Hernangomez",
     "teamId": "1610612750",
     "teamTricode": "MIN",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Julius Randle",
@@ -2357,7 +2356,7 @@
     "lastName": "Randle",
     "teamId": "1610612752",
     "teamTricode": "NYK",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Justin Holiday",
@@ -2366,7 +2365,7 @@
     "lastName": "Holiday",
     "teamId": "1610612754",
     "teamTricode": "IND",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Justin Jackson",
@@ -2375,7 +2374,7 @@
     "lastName": "Jackson",
     "teamId": "1610612749",
     "teamTricode": "MIL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Justin James",
@@ -2384,7 +2383,7 @@
     "lastName": "James",
     "teamId": "1610612758",
     "teamTricode": "SAC",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Justise Winslow",
@@ -2393,7 +2392,7 @@
     "lastName": "Winslow",
     "teamId": "1610612763",
     "teamTricode": "MEM",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Jusuf Nurkic",
@@ -2402,7 +2401,7 @@
     "lastName": "Nurkic",
     "teamId": "1610612757",
     "teamTricode": "POR",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Juwan Morgan",
@@ -2411,7 +2410,7 @@
     "lastName": "Morgan",
     "teamId": "1610612762",
     "teamTricode": "UTA",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Karl-Anthony Towns",
@@ -2420,7 +2419,7 @@
     "lastName": "Towns",
     "teamId": "1610612750",
     "teamTricode": "MIN",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Kawhi Leonard",
@@ -2429,7 +2428,7 @@
     "lastName": "Leonard",
     "teamId": "1610612746",
     "teamTricode": "LAC",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Keita Bates-Diop",
@@ -2438,7 +2437,7 @@
     "lastName": "Bates-Diop",
     "teamId": "1610612759",
     "teamTricode": "SAS",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Kelan Martin",
@@ -2447,7 +2446,7 @@
     "lastName": "Martin",
     "teamId": "1610612754",
     "teamTricode": "IND",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Keldon Johnson",
@@ -2456,7 +2455,7 @@
     "lastName": "Johnson",
     "teamId": "1610612759",
     "teamTricode": "SAS",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Keljin Blevins",
@@ -2465,7 +2464,7 @@
     "lastName": "Blevins",
     "teamId": "1610612757",
     "teamTricode": "POR",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Kelly Olynyk",
@@ -2474,7 +2473,7 @@
     "lastName": "Olynyk",
     "teamId": "1610612745",
     "teamTricode": "HOU",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Kelly Oubre Jr.",
@@ -2483,7 +2482,7 @@
     "lastName": "Jr.",
     "teamId": "1610612744",
     "teamTricode": "GSW",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Kemba Walker",
@@ -2492,7 +2491,7 @@
     "lastName": "Walker",
     "teamId": "1610612738",
     "teamTricode": "BOS",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Kendrick Nunn",
@@ -2501,7 +2500,7 @@
     "lastName": "Nunn",
     "teamId": "1610612748",
     "teamTricode": "MIA",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Kenrich Williams",
@@ -2510,7 +2509,7 @@
     "lastName": "Williams",
     "teamId": "1610612760",
     "teamTricode": "OKC",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Kent Bazemore",
@@ -2519,7 +2518,7 @@
     "lastName": "Bazemore",
     "teamId": "1610612744",
     "teamTricode": "GSW",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Kentavious Caldwell-Pope",
@@ -2528,7 +2527,7 @@
     "lastName": "Caldwell-Pope",
     "teamId": "1610612747",
     "teamTricode": "LAL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Kenyon Martin Jr.",
@@ -2537,7 +2536,7 @@
     "lastName": "Jr.",
     "teamId": "1610612745",
     "teamTricode": "HOU",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Kevin Durant",
@@ -2546,7 +2545,7 @@
     "lastName": "Durant",
     "teamId": "1610612751",
     "teamTricode": "BKN",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Kevin Huerter",
@@ -2555,7 +2554,7 @@
     "lastName": "Huerter",
     "teamId": "1610612737",
     "teamTricode": "ATL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Kevin Knox II",
@@ -2564,7 +2563,7 @@
     "lastName": "II",
     "teamId": "1610612752",
     "teamTricode": "NYK",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Kevin Love",
@@ -2573,7 +2572,7 @@
     "lastName": "Love",
     "teamId": "1610612739",
     "teamTricode": "CLE",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Kevin Porter Jr.",
@@ -2582,7 +2581,7 @@
     "lastName": "Jr.",
     "teamId": "1610612745",
     "teamTricode": "HOU",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Kevon Looney",
@@ -2591,7 +2590,7 @@
     "lastName": "Looney",
     "teamId": "1610612744",
     "teamTricode": "GSW",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Khem Birch",
@@ -2600,7 +2599,7 @@
     "lastName": "Birch",
     "teamId": "1610612761",
     "teamTricode": "TOR",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Khris Middleton",
@@ -2609,7 +2608,7 @@
     "lastName": "Middleton",
     "teamId": "1610612749",
     "teamTricode": "MIL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Khyri Thomas",
@@ -2618,7 +2617,7 @@
     "lastName": "Thomas",
     "teamId": "1610612745",
     "teamTricode": "HOU",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Killian Hayes",
@@ -2627,7 +2626,7 @@
     "lastName": "Hayes",
     "teamId": "1610612765",
     "teamTricode": "DET",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Killian Tillie",
@@ -2636,7 +2635,7 @@
     "lastName": "Tillie",
     "teamId": "1610612763",
     "teamTricode": "MEM",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Kira Lewis Jr.",
@@ -2645,7 +2644,7 @@
     "lastName": "Jr.",
     "teamId": "1610612740",
     "teamTricode": "NOP",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Klay Thompson",
@@ -2654,7 +2653,7 @@
     "lastName": "Thompson",
     "teamId": "1610612744",
     "teamTricode": "GSW",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Kostas Antetokounmpo",
@@ -2663,7 +2662,7 @@
     "lastName": "Antetokounmpo",
     "teamId": "1610612747",
     "teamTricode": "LAL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Kris Dunn",
@@ -2672,7 +2671,7 @@
     "lastName": "Dunn",
     "teamId": "1610612737",
     "teamTricode": "ATL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Kristaps Porzingis",
@@ -2681,7 +2680,7 @@
     "lastName": "Porzingis",
     "teamId": "1610612742",
     "teamTricode": "DAL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Kyle Anderson",
@@ -2690,7 +2689,7 @@
     "lastName": "Anderson",
     "teamId": "1610612763",
     "teamTricode": "MEM",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Kyle Guy",
@@ -2699,7 +2698,7 @@
     "lastName": "Guy",
     "teamId": "1610612758",
     "teamTricode": "SAC",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Kyle Kuzma",
@@ -2708,7 +2707,7 @@
     "lastName": "Kuzma",
     "teamId": "1610612747",
     "teamTricode": "LAL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Kyle Lowry",
@@ -2717,7 +2716,7 @@
     "lastName": "Lowry",
     "teamId": "1610612761",
     "teamTricode": "TOR",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Kyrie Irving",
@@ -2726,7 +2725,7 @@
     "lastName": "Irving",
     "teamId": "1610612751",
     "teamTricode": "BKN",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "KZ Okpala",
@@ -2735,7 +2734,7 @@
     "lastName": "Okpala",
     "teamId": "1610612748",
     "teamTricode": "MIA",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Lamar Stevens",
@@ -2744,7 +2743,7 @@
     "lastName": "Stevens",
     "teamId": "1610612739",
     "teamTricode": "CLE",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "LaMelo Ball",
@@ -2753,7 +2752,7 @@
     "lastName": "Ball",
     "teamId": "1610612766",
     "teamTricode": "CHA",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Landry Shamet",
@@ -2762,7 +2761,7 @@
     "lastName": "Shamet",
     "teamId": "1610612751",
     "teamTricode": "BKN",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Langston Galloway",
@@ -2771,7 +2770,7 @@
     "lastName": "Galloway",
     "teamId": "1610612756",
     "teamTricode": "PHX",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Larry Nance Jr.",
@@ -2780,7 +2779,7 @@
     "lastName": "Jr.",
     "teamId": "1610612739",
     "teamTricode": "CLE",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Lauri Markkanen",
@@ -2789,7 +2788,7 @@
     "lastName": "Markkanen",
     "teamId": "1610612741",
     "teamTricode": "CHI",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "LeBron James",
@@ -2798,7 +2797,7 @@
     "lastName": "James",
     "teamId": "1610612747",
     "teamTricode": "LAL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Lonnie Walker IV",
@@ -2807,7 +2806,7 @@
     "lastName": "IV",
     "teamId": "1610612759",
     "teamTricode": "SAS",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Lonzo Ball",
@@ -2816,7 +2815,7 @@
     "lastName": "Ball",
     "teamId": "1610612740",
     "teamTricode": "NOP",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Lou Williams",
@@ -2825,7 +2824,7 @@
     "lastName": "Williams",
     "teamId": "1610612737",
     "teamTricode": "ATL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Louis King",
@@ -2834,7 +2833,7 @@
     "lastName": "King",
     "teamId": "1610612758",
     "teamTricode": "SAC",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Luca Vildoza",
@@ -2843,7 +2842,7 @@
     "lastName": "Vildoza",
     "teamId": "1610612752",
     "teamTricode": "NYK",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Luguentz Dort",
@@ -2852,7 +2851,7 @@
     "lastName": "Dort",
     "teamId": "1610612760",
     "teamTricode": "OKC",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Luka Doncic",
@@ -2862,8 +2861,7 @@
     "lastName": "Doncic",
     "teamId": "1610612747",
     "teamTricode": "LAL",
-    "source": "fallback",
-    "isNewAddition": true
+    "source": "ball_dont_lie"
   },
   {
     "name": "Luka Samanic",
@@ -2872,7 +2870,7 @@
     "lastName": "Samanic",
     "teamId": "1610612759",
     "teamTricode": "SAS",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Luke Kennard",
@@ -2881,7 +2879,7 @@
     "lastName": "Kennard",
     "teamId": "1610612746",
     "teamTricode": "LAC",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Luke Kornet",
@@ -2890,7 +2888,7 @@
     "lastName": "Kornet",
     "teamId": "1610612738",
     "teamTricode": "BOS",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Malachi Flynn",
@@ -2899,7 +2897,7 @@
     "lastName": "Flynn",
     "teamId": "1610612761",
     "teamTricode": "TOR",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Malcolm Brogdon",
@@ -2908,7 +2906,7 @@
     "lastName": "Brogdon",
     "teamId": "1610612754",
     "teamTricode": "IND",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Malik Beasley",
@@ -2917,7 +2915,7 @@
     "lastName": "Beasley",
     "teamId": "1610612750",
     "teamTricode": "MIN",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Malik Monk",
@@ -2926,7 +2924,7 @@
     "lastName": "Monk",
     "teamId": "1610612766",
     "teamTricode": "CHA",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Mamadi Diakite",
@@ -2935,7 +2933,7 @@
     "lastName": "Diakite",
     "teamId": "1610612749",
     "teamTricode": "MIL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Marc Gasol",
@@ -2944,7 +2942,7 @@
     "lastName": "Gasol",
     "teamId": "1610612747",
     "teamTricode": "LAL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Marcus Morris Sr.",
@@ -2953,7 +2951,7 @@
     "lastName": "Sr.",
     "teamId": "1610612746",
     "teamTricode": "LAC",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Marcus Smart",
@@ -2962,7 +2960,7 @@
     "lastName": "Smart",
     "teamId": "1610612738",
     "teamTricode": "BOS",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Markelle Fultz",
@@ -2971,7 +2969,7 @@
     "lastName": "Fultz",
     "teamId": "1610612753",
     "teamTricode": "ORL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Markieff Morris",
@@ -2980,7 +2978,7 @@
     "lastName": "Morris",
     "teamId": "1610612747",
     "teamTricode": "LAL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Markus Howard",
@@ -2989,7 +2987,7 @@
     "lastName": "Howard",
     "teamId": "1610612743",
     "teamTricode": "DEN",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Marvin Bagley III",
@@ -2998,7 +2996,7 @@
     "lastName": "III",
     "teamId": "1610612758",
     "teamTricode": "SAC",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Mason Plumlee",
@@ -3007,7 +3005,7 @@
     "lastName": "Plumlee",
     "teamId": "1610612765",
     "teamTricode": "DET",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Matisse Thybulle",
@@ -3016,7 +3014,7 @@
     "lastName": "Thybulle",
     "teamId": "1610612755",
     "teamTricode": "PHI",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Matt Thomas",
@@ -3025,7 +3023,7 @@
     "lastName": "Thomas",
     "teamId": "1610612762",
     "teamTricode": "UTA",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Matthew Dellavedova",
@@ -3034,7 +3032,7 @@
     "lastName": "Dellavedova",
     "teamId": "1610612739",
     "teamTricode": "CLE",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Maurice Harkless",
@@ -3043,7 +3041,7 @@
     "lastName": "Harkless",
     "teamId": "1610612758",
     "teamTricode": "SAC",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Max Strus",
@@ -3052,7 +3050,7 @@
     "lastName": "Strus",
     "teamId": "1610612748",
     "teamTricode": "MIA",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Maxi Kleber",
@@ -3061,7 +3059,7 @@
     "lastName": "Kleber",
     "teamId": "1610612742",
     "teamTricode": "DAL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Mfiondu Kabengele",
@@ -3070,7 +3068,7 @@
     "lastName": "Kabengele",
     "teamId": "1610612739",
     "teamTricode": "CLE",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Michael Carter-Williams",
@@ -3079,7 +3077,7 @@
     "lastName": "Carter-Williams",
     "teamId": "1610612753",
     "teamTricode": "ORL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Michael Porter Jr.",
@@ -3088,7 +3086,7 @@
     "lastName": "Jr.",
     "teamId": "1610612743",
     "teamTricode": "DEN",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Mikal Bridges",
@@ -3097,7 +3095,7 @@
     "lastName": "Bridges",
     "teamId": "1610612756",
     "teamTricode": "PHX",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Mike Conley",
@@ -3106,7 +3104,7 @@
     "lastName": "Conley",
     "teamId": "1610612762",
     "teamTricode": "UTA",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Mike James",
@@ -3115,7 +3113,7 @@
     "lastName": "James",
     "teamId": "1610612751",
     "teamTricode": "BKN",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Mike Muscala",
@@ -3124,7 +3122,7 @@
     "lastName": "Muscala",
     "teamId": "1610612760",
     "teamTricode": "OKC",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Mike Scott",
@@ -3133,7 +3131,7 @@
     "lastName": "Scott",
     "teamId": "1610612755",
     "teamTricode": "PHI",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Miles Bridges",
@@ -3142,7 +3140,7 @@
     "lastName": "Bridges",
     "teamId": "1610612766",
     "teamTricode": "CHA",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Mitchell Robinson",
@@ -3151,7 +3149,7 @@
     "lastName": "Robinson",
     "teamId": "1610612752",
     "teamTricode": "NYK",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Miye Oni",
@@ -3160,7 +3158,7 @@
     "lastName": "Oni",
     "teamId": "1610612762",
     "teamTricode": "UTA",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Mo Bamba",
@@ -3169,7 +3167,7 @@
     "lastName": "Bamba",
     "teamId": "1610612753",
     "teamTricode": "ORL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Monte Morris",
@@ -3178,7 +3176,7 @@
     "lastName": "Morris",
     "teamId": "1610612743",
     "teamTricode": "DEN",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Montrezl Harrell",
@@ -3187,7 +3185,7 @@
     "lastName": "Harrell",
     "teamId": "1610612747",
     "teamTricode": "LAL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Moritz Wagner",
@@ -3196,7 +3194,7 @@
     "lastName": "Wagner",
     "teamId": "1610612753",
     "teamTricode": "ORL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Moses Brown",
@@ -3205,7 +3203,7 @@
     "lastName": "Brown",
     "teamId": "1610612760",
     "teamTricode": "OKC",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Mychal Mulder",
@@ -3214,7 +3212,7 @@
     "lastName": "Mulder",
     "teamId": "1610612744",
     "teamTricode": "GSW",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Myles Turner",
@@ -3223,7 +3221,7 @@
     "lastName": "Turner",
     "teamId": "1610612754",
     "teamTricode": "IND",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Naji Marshall",
@@ -3232,7 +3230,7 @@
     "lastName": "Marshall",
     "teamId": "1610612740",
     "teamTricode": "NOP",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Nassir Little",
@@ -3241,7 +3239,7 @@
     "lastName": "Little",
     "teamId": "1610612757",
     "teamTricode": "POR",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Nate Darling",
@@ -3250,7 +3248,7 @@
     "lastName": "Darling",
     "teamId": "1610612766",
     "teamTricode": "CHA",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Nate Hinton",
@@ -3259,7 +3257,7 @@
     "lastName": "Hinton",
     "teamId": "1610612742",
     "teamTricode": "DAL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Nathan Knight",
@@ -3268,7 +3266,7 @@
     "lastName": "Knight",
     "teamId": "1610612737",
     "teamTricode": "ATL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Naz Reid",
@@ -3277,7 +3275,7 @@
     "lastName": "Reid",
     "teamId": "1610612750",
     "teamTricode": "MIN",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Nemanja Bjelica",
@@ -3286,7 +3284,7 @@
     "lastName": "Bjelica",
     "teamId": "1610612748",
     "teamTricode": "MIA",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Nerlens Noel",
@@ -3295,7 +3293,7 @@
     "lastName": "Noel",
     "teamId": "1610612752",
     "teamTricode": "NYK",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Nick Richards",
@@ -3304,7 +3302,7 @@
     "lastName": "Richards",
     "teamId": "1610612766",
     "teamTricode": "CHA",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Nickeil Alexander-Walker",
@@ -3313,7 +3311,7 @@
     "lastName": "Alexander-Walker",
     "teamId": "1610612740",
     "teamTricode": "NOP",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Nico Mannion",
@@ -3322,7 +3320,7 @@
     "lastName": "Mannion",
     "teamId": "1610612744",
     "teamTricode": "GSW",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Nicolas Batum",
@@ -3331,7 +3329,7 @@
     "lastName": "Batum",
     "teamId": "1610612746",
     "teamTricode": "LAC",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Nicolas Claxton",
@@ -3340,7 +3338,7 @@
     "lastName": "Claxton",
     "teamId": "1610612751",
     "teamTricode": "BKN",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Nicolo Melli",
@@ -3349,7 +3347,7 @@
     "lastName": "Melli",
     "teamId": "1610612742",
     "teamTricode": "DAL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Nikola Jokic",
@@ -3358,7 +3356,7 @@
     "lastName": "Jokic",
     "teamId": "1610612743",
     "teamTricode": "DEN",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Nikola Vucevic",
@@ -3367,7 +3365,7 @@
     "lastName": "Vucevic",
     "teamId": "1610612741",
     "teamTricode": "CHI",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Norman Powell",
@@ -3376,7 +3374,7 @@
     "lastName": "Powell",
     "teamId": "1610612757",
     "teamTricode": "POR",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Norvel Pelle",
@@ -3385,7 +3383,7 @@
     "lastName": "Pelle",
     "teamId": "1610612752",
     "teamTricode": "NYK",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Obi Toppin",
@@ -3394,7 +3392,7 @@
     "lastName": "Toppin",
     "teamId": "1610612752",
     "teamTricode": "NYK",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "OG Anunoby",
@@ -3403,7 +3401,7 @@
     "lastName": "Anunoby",
     "teamId": "1610612761",
     "teamTricode": "TOR",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Omer Yurtseven",
@@ -3412,7 +3410,7 @@
     "lastName": "Yurtseven",
     "teamId": "1610612748",
     "teamTricode": "MIA",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Onyeka Okongwu",
@@ -3421,7 +3419,7 @@
     "lastName": "Okongwu",
     "teamId": "1610612737",
     "teamTricode": "ATL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Oshae Brissett",
@@ -3430,7 +3428,7 @@
     "lastName": "Brissett",
     "teamId": "1610612754",
     "teamTricode": "IND",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Otto Porter Jr.",
@@ -3439,7 +3437,7 @@
     "lastName": "Jr.",
     "teamId": "1610612753",
     "teamTricode": "ORL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "P.J. Tucker",
@@ -3448,7 +3446,7 @@
     "lastName": "Tucker",
     "teamId": "1610612749",
     "teamTricode": "MIL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "P.J. Washington",
@@ -3457,7 +3455,7 @@
     "lastName": "Washington",
     "teamId": "1610612766",
     "teamTricode": "CHA",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Pascal Siakam",
@@ -3466,7 +3464,7 @@
     "lastName": "Siakam",
     "teamId": "1610612761",
     "teamTricode": "TOR",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Pat Connaughton",
@@ -3475,7 +3473,7 @@
     "lastName": "Connaughton",
     "teamId": "1610612749",
     "teamTricode": "MIL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Patrick Beverley",
@@ -3484,7 +3482,7 @@
     "lastName": "Beverley",
     "teamId": "1610612746",
     "teamTricode": "LAC",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Patrick Patterson",
@@ -3493,7 +3491,7 @@
     "lastName": "Patterson",
     "teamId": "1610612746",
     "teamTricode": "LAC",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Patrick Williams",
@@ -3502,7 +3500,7 @@
     "lastName": "Williams",
     "teamId": "1610612741",
     "teamTricode": "CHI",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Patty Mills",
@@ -3511,7 +3509,7 @@
     "lastName": "Mills",
     "teamId": "1610612759",
     "teamTricode": "SAS",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Paul George",
@@ -3520,7 +3518,7 @@
     "lastName": "George",
     "teamId": "1610612746",
     "teamTricode": "LAC",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Paul Millsap",
@@ -3529,7 +3527,7 @@
     "lastName": "Millsap",
     "teamId": "1610612743",
     "teamTricode": "DEN",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Paul Reed",
@@ -3538,7 +3536,7 @@
     "lastName": "Reed",
     "teamId": "1610612755",
     "teamTricode": "PHI",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Paul Watson",
@@ -3547,7 +3545,7 @@
     "lastName": "Watson",
     "teamId": "1610612761",
     "teamTricode": "TOR",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Payton Pritchard",
@@ -3556,7 +3554,7 @@
     "lastName": "Pritchard",
     "teamId": "1610612738",
     "teamTricode": "BOS",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "PJ Dozier",
@@ -3565,7 +3563,7 @@
     "lastName": "Dozier",
     "teamId": "1610612743",
     "teamTricode": "DEN",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Precious Achiuwa",
@@ -3574,7 +3572,7 @@
     "lastName": "Achiuwa",
     "teamId": "1610612748",
     "teamTricode": "MIA",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Quinndary Weatherspoon",
@@ -3583,7 +3581,7 @@
     "lastName": "Weatherspoon",
     "teamId": "1610612759",
     "teamTricode": "SAS",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "R.J. Hampton",
@@ -3592,7 +3590,7 @@
     "lastName": "Hampton",
     "teamId": "1610612753",
     "teamTricode": "ORL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Rajon Rondo",
@@ -3601,7 +3599,7 @@
     "lastName": "Rondo",
     "teamId": "1610612746",
     "teamTricode": "LAC",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Raul Neto",
@@ -3610,7 +3608,7 @@
     "lastName": "Neto",
     "teamId": "1610612764",
     "teamTricode": "WAS",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Rayjon Tucker",
@@ -3619,7 +3617,7 @@
     "lastName": "Tucker",
     "teamId": "1610612755",
     "teamTricode": "PHI",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Reggie Bullock",
@@ -3628,7 +3626,7 @@
     "lastName": "Bullock",
     "teamId": "1610612752",
     "teamTricode": "NYK",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Reggie Jackson",
@@ -3637,7 +3635,7 @@
     "lastName": "Jackson",
     "teamId": "1610612746",
     "teamTricode": "LAC",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Reggie Perry",
@@ -3646,7 +3644,7 @@
     "lastName": "Perry",
     "teamId": "1610612751",
     "teamTricode": "BKN",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Richaun Holmes",
@@ -3655,7 +3653,7 @@
     "lastName": "Holmes",
     "teamId": "1610612758",
     "teamTricode": "SAC",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Ricky Rubio",
@@ -3664,7 +3662,7 @@
     "lastName": "Rubio",
     "teamId": "1610612750",
     "teamTricode": "MIN",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "RJ Barrett",
@@ -3673,7 +3671,7 @@
     "lastName": "Barrett",
     "teamId": "1610612752",
     "teamTricode": "NYK",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Robert Covington",
@@ -3682,7 +3680,7 @@
     "lastName": "Covington",
     "teamId": "1610612757",
     "teamTricode": "POR",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Robert Williams III",
@@ -3691,7 +3689,7 @@
     "lastName": "III",
     "teamId": "1610612738",
     "teamTricode": "BOS",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Robert Woodard II",
@@ -3700,7 +3698,7 @@
     "lastName": "II",
     "teamId": "1610612758",
     "teamTricode": "SAC",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Robin Lopez",
@@ -3709,7 +3707,7 @@
     "lastName": "Lopez",
     "teamId": "1610612764",
     "teamTricode": "WAS",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Rodney Hood",
@@ -3718,7 +3716,7 @@
     "lastName": "Hood",
     "teamId": "1610612761",
     "teamTricode": "TOR",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Rodney McGruder",
@@ -3727,7 +3725,7 @@
     "lastName": "McGruder",
     "teamId": "1610612765",
     "teamTricode": "DET",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Romeo Langford",
@@ -3736,7 +3734,7 @@
     "lastName": "Langford",
     "teamId": "1610612738",
     "teamTricode": "BOS",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Rondae Hollis-Jefferson",
@@ -3745,7 +3743,7 @@
     "lastName": "Hollis-Jefferson",
     "teamId": "1610612757",
     "teamTricode": "POR",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Royce O'Neale",
@@ -3754,7 +3752,7 @@
     "lastName": "O'Neale",
     "teamId": "1610612762",
     "teamTricode": "UTA",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Rudy Gay",
@@ -3763,7 +3761,7 @@
     "lastName": "Gay",
     "teamId": "1610612759",
     "teamTricode": "SAS",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Rudy Gobert",
@@ -3772,7 +3770,7 @@
     "lastName": "Gobert",
     "teamId": "1610612762",
     "teamTricode": "UTA",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Rui Hachimura",
@@ -3781,7 +3779,7 @@
     "lastName": "Hachimura",
     "teamId": "1610612764",
     "teamTricode": "WAS",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Russell Westbrook",
@@ -3790,7 +3788,7 @@
     "lastName": "Westbrook",
     "teamId": "1610612764",
     "teamTricode": "WAS",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Ryan Arcidiacono",
@@ -3799,7 +3797,7 @@
     "lastName": "Arcidiacono",
     "teamId": "1610612741",
     "teamTricode": "CHI",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Saben Lee",
@@ -3808,7 +3806,7 @@
     "lastName": "Lee",
     "teamId": "1610612765",
     "teamTricode": "DET",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Saddiq Bey",
@@ -3817,7 +3815,7 @@
     "lastName": "Bey",
     "teamId": "1610612765",
     "teamTricode": "DET",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Sam Merrill",
@@ -3826,7 +3824,7 @@
     "lastName": "Merrill",
     "teamId": "1610612749",
     "teamTricode": "MIL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Sean McDermott",
@@ -3835,7 +3833,7 @@
     "lastName": "McDermott",
     "teamId": "1610612763",
     "teamTricode": "MEM",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Sekou Doumbouya",
@@ -3844,7 +3842,7 @@
     "lastName": "Doumbouya",
     "teamId": "1610612765",
     "teamTricode": "DET",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Semi Ojeleye",
@@ -3853,7 +3851,7 @@
     "lastName": "Ojeleye",
     "teamId": "1610612738",
     "teamTricode": "BOS",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Serge Ibaka",
@@ -3862,7 +3860,7 @@
     "lastName": "Ibaka",
     "teamId": "1610612746",
     "teamTricode": "LAC",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Seth Curry",
@@ -3871,7 +3869,7 @@
     "lastName": "Curry",
     "teamId": "1610612755",
     "teamTricode": "PHI",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Shai Gilgeous-Alexander",
@@ -3880,7 +3878,7 @@
     "lastName": "Gilgeous-Alexander",
     "teamId": "1610612760",
     "teamTricode": "OKC",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Shake Milton",
@@ -3889,7 +3887,7 @@
     "lastName": "Milton",
     "teamId": "1610612755",
     "teamTricode": "PHI",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Shaquille Harrison",
@@ -3898,7 +3896,7 @@
     "lastName": "Harrison",
     "teamId": "1610612743",
     "teamTricode": "DEN",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Sindarius Thornwell",
@@ -3907,7 +3905,7 @@
     "lastName": "Thornwell",
     "teamId": "1610612753",
     "teamTricode": "ORL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Skylar Mays",
@@ -3916,7 +3914,7 @@
     "lastName": "Mays",
     "teamId": "1610612737",
     "teamTricode": "ATL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Solomon Hill",
@@ -3925,7 +3923,7 @@
     "lastName": "Hill",
     "teamId": "1610612737",
     "teamTricode": "ATL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Spencer Dinwiddie",
@@ -3934,7 +3932,7 @@
     "lastName": "Dinwiddie",
     "teamId": "1610612751",
     "teamTricode": "BKN",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Stanley Johnson",
@@ -3943,7 +3941,7 @@
     "lastName": "Johnson",
     "teamId": "1610612761",
     "teamTricode": "TOR",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Stephen Curry",
@@ -3952,7 +3950,7 @@
     "lastName": "Curry",
     "teamId": "1610612744",
     "teamTricode": "GSW",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Sterling Brown",
@@ -3961,7 +3959,7 @@
     "lastName": "Brown",
     "teamId": "1610612745",
     "teamTricode": "HOU",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Steven Adams",
@@ -3970,7 +3968,7 @@
     "lastName": "Adams",
     "teamId": "1610612740",
     "teamTricode": "NOP",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Svi Mykhailiuk",
@@ -3979,7 +3977,7 @@
     "lastName": "Mykhailiuk",
     "teamId": "1610612760",
     "teamTricode": "OKC",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "T.J. Leaf",
@@ -3988,7 +3986,7 @@
     "lastName": "Leaf",
     "teamId": "1610612757",
     "teamTricode": "POR",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "T.J. McConnell",
@@ -3997,7 +3995,7 @@
     "lastName": "McConnell",
     "teamId": "1610612754",
     "teamTricode": "IND",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "T.J. Warren",
@@ -4006,7 +4004,7 @@
     "lastName": "Warren",
     "teamId": "1610612754",
     "teamTricode": "IND",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Tacko Fall",
@@ -4015,7 +4013,7 @@
     "lastName": "Fall",
     "teamId": "1610612738",
     "teamTricode": "BOS",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Taj Gibson",
@@ -4024,7 +4022,7 @@
     "lastName": "Gibson",
     "teamId": "1610612752",
     "teamTricode": "NYK",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Talen Horton-Tucker",
@@ -4033,7 +4031,7 @@
     "lastName": "Horton-Tucker",
     "teamId": "1610612747",
     "teamTricode": "LAL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Taurean Prince",
@@ -4042,7 +4040,7 @@
     "lastName": "Prince",
     "teamId": "1610612739",
     "teamTricode": "CLE",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Terance Mann",
@@ -4051,7 +4049,7 @@
     "lastName": "Mann",
     "teamId": "1610612746",
     "teamTricode": "LAC",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Terence Davis",
@@ -4060,7 +4058,7 @@
     "lastName": "Davis",
     "teamId": "1610612758",
     "teamTricode": "SAC",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Terrence Ross",
@@ -4069,7 +4067,7 @@
     "lastName": "Ross",
     "teamId": "1610612753",
     "teamTricode": "ORL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Terry Rozier",
@@ -4078,7 +4076,7 @@
     "lastName": "Rozier",
     "teamId": "1610612766",
     "teamTricode": "CHA",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Thaddeus Young",
@@ -4087,7 +4085,7 @@
     "lastName": "Young",
     "teamId": "1610612741",
     "teamTricode": "CHI",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Thanasis Antetokounmpo",
@@ -4096,7 +4094,7 @@
     "lastName": "Antetokounmpo",
     "teamId": "1610612749",
     "teamTricode": "MIL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Theo Maledon",
@@ -4105,7 +4103,7 @@
     "lastName": "Maledon",
     "teamId": "1610612760",
     "teamTricode": "OKC",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Theo Pinson",
@@ -4114,7 +4112,7 @@
     "lastName": "Pinson",
     "teamId": "1610612752",
     "teamTricode": "NYK",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Thomas Bryant",
@@ -4123,7 +4121,7 @@
     "lastName": "Bryant",
     "teamId": "1610612764",
     "teamTricode": "WAS",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Tim Frazier",
@@ -4132,7 +4130,7 @@
     "lastName": "Frazier",
     "teamId": "1610612763",
     "teamTricode": "MEM",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Tim Hardaway Jr.",
@@ -4141,7 +4139,7 @@
     "lastName": "Jr.",
     "teamId": "1610612742",
     "teamTricode": "DAL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Timothe Luwawu-Cabarrot",
@@ -4150,7 +4148,7 @@
     "lastName": "Luwawu-Cabarrot",
     "teamId": "1610612751",
     "teamTricode": "BKN",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Tobias Harris",
@@ -4159,7 +4157,7 @@
     "lastName": "Harris",
     "teamId": "1610612755",
     "teamTricode": "PHI",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Tomas Satoransky",
@@ -4168,7 +4166,7 @@
     "lastName": "Satoransky",
     "teamId": "1610612741",
     "teamTricode": "CHI",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Tony Bradley",
@@ -4177,7 +4175,7 @@
     "lastName": "Bradley",
     "teamId": "1610612760",
     "teamTricode": "OKC",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Tony Snell",
@@ -4186,7 +4184,7 @@
     "lastName": "Snell",
     "teamId": "1610612737",
     "teamTricode": "ATL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Torrey Craig",
@@ -4195,7 +4193,7 @@
     "lastName": "Craig",
     "teamId": "1610612756",
     "teamTricode": "PHX",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Trae Young",
@@ -4204,7 +4202,7 @@
     "lastName": "Young",
     "teamId": "1610612737",
     "teamTricode": "ATL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Tre Jones",
@@ -4213,7 +4211,7 @@
     "lastName": "Jones",
     "teamId": "1610612759",
     "teamTricode": "SAS",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Tremont Waters",
@@ -4222,7 +4220,7 @@
     "lastName": "Waters",
     "teamId": "1610612738",
     "teamTricode": "BOS",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Trent Forrest",
@@ -4231,7 +4229,7 @@
     "lastName": "Forrest",
     "teamId": "1610612762",
     "teamTricode": "UTA",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Trevor Ariza",
@@ -4240,7 +4238,7 @@
     "lastName": "Ariza",
     "teamId": "1610612748",
     "teamTricode": "MIA",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Trey Burke",
@@ -4249,7 +4247,7 @@
     "lastName": "Burke",
     "teamId": "1610612742",
     "teamTricode": "DAL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Trey Lyles",
@@ -4258,7 +4256,7 @@
     "lastName": "Lyles",
     "teamId": "1610612759",
     "teamTricode": "SAS",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Tristan Thompson",
@@ -4267,7 +4265,7 @@
     "lastName": "Thompson",
     "teamId": "1610612738",
     "teamTricode": "BOS",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Troy Brown Jr.",
@@ -4276,7 +4274,7 @@
     "lastName": "Jr.",
     "teamId": "1610612741",
     "teamTricode": "CHI",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Ty Jerome",
@@ -4285,7 +4283,7 @@
     "lastName": "Jerome",
     "teamId": "1610612760",
     "teamTricode": "OKC",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Ty-Shon Alexander",
@@ -4294,7 +4292,7 @@
     "lastName": "Alexander",
     "teamId": "1610612756",
     "teamTricode": "PHX",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Tyler Bey",
@@ -4303,7 +4301,7 @@
     "lastName": "Bey",
     "teamId": "1610612742",
     "teamTricode": "DAL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Tyler Cook",
@@ -4312,7 +4310,7 @@
     "lastName": "Cook",
     "teamId": "1610612765",
     "teamTricode": "DET",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Tyler Herro",
@@ -4321,7 +4319,7 @@
     "lastName": "Herro",
     "teamId": "1610612748",
     "teamTricode": "MIA",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Tyler Johnson",
@@ -4330,7 +4328,7 @@
     "lastName": "Johnson",
     "teamId": "1610612751",
     "teamTricode": "BKN",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Tyrell Terry",
@@ -4339,7 +4337,7 @@
     "lastName": "Terry",
     "teamId": "1610612742",
     "teamTricode": "DAL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Tyrese Haliburton",
@@ -4348,7 +4346,7 @@
     "lastName": "Haliburton",
     "teamId": "1610612758",
     "teamTricode": "SAC",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Tyrese Maxey",
@@ -4357,7 +4355,7 @@
     "lastName": "Maxey",
     "teamId": "1610612755",
     "teamTricode": "PHI",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Tyus Jones",
@@ -4366,7 +4364,7 @@
     "lastName": "Jones",
     "teamId": "1610612763",
     "teamTricode": "MEM",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Udoka Azubuike",
@@ -4375,7 +4373,7 @@
     "lastName": "Azubuike",
     "teamId": "1610612762",
     "teamTricode": "UTA",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Udonis Haslem",
@@ -4384,7 +4382,7 @@
     "lastName": "Haslem",
     "teamId": "1610612748",
     "teamTricode": "MIA",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Vernon Carey Jr.",
@@ -4393,7 +4391,7 @@
     "lastName": "Jr.",
     "teamId": "1610612766",
     "teamTricode": "CHA",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Victor Oladipo",
@@ -4402,7 +4400,7 @@
     "lastName": "Oladipo",
     "teamId": "1610612748",
     "teamTricode": "MIA",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Vlatko Cancar",
@@ -4411,7 +4409,7 @@
     "lastName": "Cancar",
     "teamId": "1610612743",
     "teamTricode": "DEN",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Wayne Ellington",
@@ -4420,7 +4418,7 @@
     "lastName": "Ellington",
     "teamId": "1610612765",
     "teamTricode": "DET",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Wendell Carter Jr.",
@@ -4429,7 +4427,7 @@
     "lastName": "Jr.",
     "teamId": "1610612753",
     "teamTricode": "ORL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Wenyen Gabriel",
@@ -4438,7 +4436,7 @@
     "lastName": "Gabriel",
     "teamId": "1610612740",
     "teamTricode": "NOP",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Wes Iwundu",
@@ -4447,7 +4445,7 @@
     "lastName": "Iwundu",
     "teamId": "1610612740",
     "teamTricode": "NOP",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Wesley Matthews",
@@ -4456,7 +4454,7 @@
     "lastName": "Matthews",
     "teamId": "1610612747",
     "teamTricode": "LAL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Will Barton",
@@ -4465,7 +4463,7 @@
     "lastName": "Barton",
     "teamId": "1610612743",
     "teamTricode": "DEN",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Willie Cauley-Stein",
@@ -4474,7 +4472,7 @@
     "lastName": "Cauley-Stein",
     "teamId": "1610612742",
     "teamTricode": "DAL",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Willy Hernangomez",
@@ -4483,7 +4481,7 @@
     "lastName": "Hernangomez",
     "teamId": "1610612740",
     "teamTricode": "NOP",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Xavier Tillman",
@@ -4492,7 +4490,7 @@
     "lastName": "Tillman",
     "teamId": "1610612763",
     "teamTricode": "MEM",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Yogi Ferrell",
@@ -4501,7 +4499,7 @@
     "lastName": "Ferrell",
     "teamId": "1610612746",
     "teamTricode": "LAC",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Yuta Watanabe",
@@ -4510,7 +4508,7 @@
     "lastName": "Watanabe",
     "teamId": "1610612761",
     "teamTricode": "TOR",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Zach Collins",
@@ -4519,7 +4517,7 @@
     "lastName": "Collins",
     "teamId": "1610612757",
     "teamTricode": "POR",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Zach LaVine",
@@ -4528,7 +4526,7 @@
     "lastName": "LaVine",
     "teamId": "1610612741",
     "teamTricode": "CHI",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Zeke Nnaji",
@@ -4537,7 +4535,7 @@
     "lastName": "Nnaji",
     "teamId": "1610612743",
     "teamTricode": "DEN",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   },
   {
     "name": "Zion Williamson",
@@ -4546,6 +4544,6 @@
     "lastName": "Williamson",
     "teamId": "1610612740",
     "teamTricode": "NOP",
-    "source": "fallback"
+    "source": "ball_dont_lie"
   }
 ]

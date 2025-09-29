@@ -1,6 +1,6 @@
 # New Orleans Pelicans
 
-The core trio of Brandon Ingram, Didi Louzada, and Eric Bledsoe gives the staff a clear identity to start from.
+The core trio of Brandon Ingram, Dejounte Murray, and Didi Louzada gives the staff a clear identity to start from.
 The front office kept the core intact and will lean on internal development.
 No rotation regulars departed, so continuity remains a strength.
 
