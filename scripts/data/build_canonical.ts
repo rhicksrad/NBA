@@ -71,16 +71,27 @@ export async function buildCanonicalData(options: Partial<BuildOptions> = {}): P
   const ballDontLie = options.ballDontLie ?? (await fetchBallDontLieRosters());
 
   const seasonEndYear = resolveEndYear(SEASON);
+  const useBref = process.env.USE_BREF !== "0";
 
-  let bbrResult: BbrRosterResult | undefined;
-  try {
-    bbrResult = options.bbr ?? (await fetchBbrRosters(ballDontLie.teamAbbrs, seasonEndYear));
-  } catch (error) {
-    console.warn(`Basketball-Reference enrichment disabled due to error: ${String(error)}`);
-    bbrResult = {
-      source: createEmptyLeagueSource(),
-      missing: [...ballDontLie.teamAbbrs],
-    };
+  let bbrResult: BbrRosterResult = options.bbr ?? {
+    rosters: createEmptyLeagueSource(),
+    missing: [],
+  };
+
+  if (!options.bbr) {
+    if (useBref) {
+      try {
+        bbrResult = await fetchBbrRosters(ballDontLie.teamAbbrs, seasonEndYear);
+      } catch (error) {
+        console.warn(`Basketball-Reference enrichment disabled due to error: ${String(error)}`);
+        bbrResult = {
+          rosters: createEmptyLeagueSource(),
+          missing: [...ballDontLie.teamAbbrs],
+        };
+      }
+    } else {
+      console.warn("Skipping BRef enrichment (USE_BREF=0).");
+    }
   }
 
   let nbaStats: LeagueDataSource = createEmptyLeagueSource();
@@ -95,15 +106,32 @@ export async function buildCanonicalData(options: Partial<BuildOptions> = {}): P
     nbaStats = options.nbaStats;
   }
 
-  await handleBrefMissing(bbrResult?.missing ?? []);
+  const brefWasUsed = options.bbr !== undefined || useBref;
+  const bbrMissing = bbrResult?.missing ?? [];
+  if (brefWasUsed && bbrMissing.length) {
+    console.warn("BRef missing teams:", bbrMissing.join(", "));
+  }
 
-  return mergeSources({
+  if (brefWasUsed) {
+    await handleBrefMissing(bbrMissing, seasonEndYear);
+  } else {
+    await handleBrefMissing([], seasonEndYear);
+  }
+
+  const merged = mergeSources({
     primary: ballDontLie,
     nbaStats,
-    bbr: bbrResult?.source ?? createEmptyLeagueSource(),
+    bbr: bbrResult?.rosters ?? createEmptyLeagueSource(),
     overrides,
     fallbackPlayers,
   });
+
+  const total = merged.players.length;
+  if (total < 360 || total > 600) {
+    throw new Error(`League player total ${total} outside expected range`);
+  }
+
+  return merged;
 }
 
 interface MergeOptions {
@@ -118,14 +146,14 @@ function createEmptyLeagueSource(): LeagueDataSource {
   return { teams: {}, players: {}, transactions: [], coaches: {}, injuries: [] };
 }
 
-async function handleBrefMissing(missing: string[]): Promise<void> {
+async function handleBrefMissing(missing: string[], endYear: number): Promise<void> {
   if (missing.length) {
     await mkdir(path.dirname(BREF_MISSING_PATH), { recursive: true });
     await writeFile(
       BREF_MISSING_PATH,
       JSON.stringify(
         {
-          seasonEnd: resolveEndYear(SEASON),
+          endYear,
           teams: missing,
           at: new Date().toISOString(),
         },

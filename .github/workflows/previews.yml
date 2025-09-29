@@ -57,6 +57,7 @@ jobs:
       - name: Generate previews
         env:
           USE_NBA_STATS: "0"
+          USE_BREF: "0"
         run: pnpm previews
 
       - name: Validate previews
