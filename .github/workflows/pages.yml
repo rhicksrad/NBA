@@ -1,10 +1,9 @@
+# .github/workflows/pages.yml
 name: Deploy
 
 on:
   push:
     branches: [main]
-  schedule:
-    - cron: "23 */6 * * *"
   workflow_dispatch:
 
 permissions:
@@ -32,10 +31,8 @@ jobs:
         shell: bash
         run: |
           npm i -g pnpm@9.12.1
-          prefix="$(npm config get prefix)"
-          echo "$prefix/bin" >> "$GITHUB_PATH"
+          echo "$(npm config get prefix)/bin" >> "$GITHUB_PATH"
           pnpm -v
-          which pnpm
 
       - name: Use dedicated pnpm store
         run: pnpm config set store-dir ~/.pnpm-store
@@ -47,22 +44,43 @@ jobs:
           key: pnpm-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: pnpm-${{ runner.os }}-
 
-      - name: Install dependencies
+      - name: Install deps
         run: pnpm install --frozen-lockfile
 
-      - name: Fetch rosters
-        env:
-          BALLDONTLIE_API_KEY: ${{ secrets.BALLDONTLIE_API_KEY }}
-          DATA_TTL_HOURS: 6
-        run: pnpm run fetch:rosters
+      # build/refresh data if you need to
+      # - name: Fetch rosters
+      #   env:
+      #     BALLDONTLIE_API_KEY: ${{ secrets.BALLDONTLIE_API_KEY }}
+      #     DATA_TTL_HOURS: 6
+      #   run: pnpm run fetch:rosters
 
       - name: Build
         run: pnpm run build
 
+      # --- pick the deploy dir automatically ---
+      - name: Pick deploy dir
+        id: pickdir
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -f public/index.html ]; then
+            echo "dir=public" >> "$GITHUB_OUTPUT"
+          elif [ -f index.html ]; then
+            echo "dir=." >> "$GITHUB_OUTPUT"
+          else
+            echo "No index.html found in repo root or public/"; ls -la; exit 1
+          fi
+          echo "Deploying from: $(cat "$GITHUB_OUTPUT" | cut -d= -f2)"
+
+      - name: List deploy files
+        run: |
+          echo "Listing ${{ steps.pickdir.outputs.dir }}"
+          ls -la ${{ steps.pickdir.outputs.dir }} | sed -n '1,200p'
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: public
+          path: ${{ steps.pickdir.outputs.dir }}
 
   deploy:
     needs: build
