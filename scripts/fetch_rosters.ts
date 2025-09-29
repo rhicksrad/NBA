@@ -4,6 +4,7 @@ import path from "node:path";
 import type { RosterTeam, RostersDoc } from "../types/ball";
 import { getActivePlayersByTeam, getTeams } from "./fetch/bdl.js";
 import type { BdlPlayer } from "./fetch/bdl.js";
+import { SEASON, getSeasonStartYear } from "./lib/season.js";
 
 const MANUAL_ROSTER_PATH = path.join(
   process.cwd(),
@@ -44,6 +45,7 @@ function parseTTL(): number {
 }
 
 const TTL_HOURS = parseTTL();
+const TARGET_SEASON_START_YEAR = getSeasonStartYear(SEASON);
 
 type JsonValue = Record<string, unknown>;
 
@@ -155,9 +157,13 @@ async function buildRosterFromBallDontLie(): Promise<RostersDoc> {
   const failedTeams: Array<{ id: number; code: string; error: unknown }> = [];
   let totalPlayers = 0;
 
+  console.log(
+    `Fetching Ball Don't Lie active rosters for ${SEASON} (season start ${TARGET_SEASON_START_YEAR}).`,
+  );
+
   for (const team of teams) {
     try {
-      const rawPlayers = await getActivePlayersByTeam(team.id);
+      const rawPlayers = await getActivePlayersByTeam(team.id, TARGET_SEASON_START_YEAR);
       const roster = rawPlayers.map(normalizePlayer).sort((a, b) => {
         const aName = `${a.last_name} ${a.first_name}`.toLowerCase();
         const bName = `${b.last_name} ${b.first_name}`.toLowerCase();
@@ -198,6 +204,8 @@ async function buildRosterFromBallDontLie(): Promise<RostersDoc> {
     fetched_at: new Date().toISOString(),
     ttl_hours: TTL_HOURS,
     source: "ball_dont_lie",
+    season: SEASON,
+    season_start_year: TARGET_SEASON_START_YEAR,
     teams: rosterTeams,
   };
 }
@@ -308,6 +316,8 @@ async function buildRosterFromManualReference(): Promise<RostersDoc | null> {
     fetched_at: new Date().toISOString(),
     ttl_hours: TTL_HOURS,
     source: "manual_roster_reference",
+    season: SEASON,
+    season_start_year: TARGET_SEASON_START_YEAR,
     teams: rosterTeams,
   };
 }

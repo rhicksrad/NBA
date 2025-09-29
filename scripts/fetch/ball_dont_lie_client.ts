@@ -184,23 +184,32 @@ export class BallDontLieClient {
     });
   }
 
-  async getActivePlayersByTeam(teamId: number): Promise<BdlPlayer[]> {
-    return withCache(`players-active-${teamId}`, this.#ttlMs, async () => {
+  async getActivePlayersByTeam(teamId: number, season?: number): Promise<BdlPlayer[]> {
+    const cacheKey = season !== undefined ? `players-active-${teamId}-${season}` : `players-active-${teamId}`;
+    return withCache(cacheKey, this.#ttlMs, async () => {
+      const basePath = season !== undefined ? "/v1/players" : "/v1/players/active";
+      const params: Record<string, QueryValue> = { "team_ids[]": teamId };
+      if (season !== undefined) {
+        params.active = "true";
+        params["seasons[]"] = season;
+      }
+
       const players = await this.paginate<BdlPlayer>(
-        "/v1/players/active",
-        { "team_ids[]": teamId },
+        basePath,
+        params,
         100,
         undefined,
         playerSchema,
       );
-      return players;
+
+      return players.filter((player) => player.team?.id === teamId);
     });
   }
 
-  async getRosterMapByTeamIds(teamIds: number[]): Promise<Record<number, BdlPlayer[]>> {
+  async getRosterMapByTeamIds(teamIds: number[], season?: number): Promise<Record<number, BdlPlayer[]>> {
     const entries = await Promise.all(
       teamIds.map(async (teamId) => {
-        const roster = await this.getActivePlayersByTeam(teamId);
+        const roster = await this.getActivePlayersByTeam(teamId, season);
         return [teamId, roster] as const;
       }),
     );

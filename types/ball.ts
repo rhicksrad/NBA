@@ -33,5 +33,7 @@ export interface RostersDoc {
   fetched_at: string;
   ttl_hours: number;
   source?: string;
+  season?: string;
+  season_start_year?: number;
   teams: RosterTeam[];
 }
