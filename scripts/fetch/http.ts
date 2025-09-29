@@ -1,7 +1,9 @@
 import { loadSecret } from "../lib/secrets.js";
 
 const MAX_ATTEMPTS = 5;
-const MIN_DELAY_MS = 120;
+// Ball Don't Lie free tier allows at most 60 requests per minute.
+// Enforce a ~1.1s delay between calls so we stay comfortably under the limit.
+const MIN_DELAY_MS = 1100;
 
 interface QueueTask<T> {
   execute: () => Promise<T>;
