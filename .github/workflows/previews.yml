@@ -25,19 +25,29 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup Node (with pnpm cache)
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: pnpm
 
-      # Force-install pnpm globally (bypasses Corepack and any PATH weirdness)
-      - name: Install pnpm explicitly
+      # Install pnpm onto PATH (no Corepack here)
+      - name: Install pnpm
         run: |
           npm i -g pnpm@9.12.1
           pnpm -v
           which pnpm
-          echo "$PATH"
+
+      # Use a stable pnpm store and cache it
+      - name: Set pnpm store path
+        run: pnpm config set store-dir ~/.pnpm-store
+
+      - name: Cache pnpm store
+        uses: actions/cache@v4
+        with:
+          path: ~/.pnpm-store
+          key: pnpm-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            pnpm-${{ runner.os }}-
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -71,4 +81,5 @@ jobs:
           branch: "chore/auto-previews-${{ github.run_id }}"
           base: "main"
           delete-branch: true
+
 
