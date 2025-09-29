@@ -36,7 +36,7 @@ async function bundle() {
 async function patchHtml(file) {
   let html = await fs.readFile(HTML, "utf8");
   const tagRe = /<script\s+[^>]*id=["']players-bundle["'][^>]*><\/script>/i;
-  const newTag = `<script id="players-bundle" type="module" src="/assets/js/${file}"></script>`;
+  const newTag = `<script id="players-bundle" type="module" src="assets/js/${file}"></script>`;
 
   if (tagRe.test(html)) {
     html = html.replace(tagRe, newTag);
