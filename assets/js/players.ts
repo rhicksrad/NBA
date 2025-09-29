@@ -26,7 +26,7 @@ type AppState = {
 };
 
 async function loadIndex(): Promise<PlayersIndex> {
-  const response = await fetch(`/data/players_index.json?cb=${Date.now()}`);
+  const response = await fetch(`data/players_index.json?cb=${Date.now()}`);
   if (!response.ok) {
     throw new Error(`Request failed with status ${response.status}`);
   }
