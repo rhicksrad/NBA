@@ -48,6 +48,7 @@ DEFAULT_TEAM_HISTORIES = ROOT / "TeamHistories.csv"
 DEFAULT_OUTPUT = ROOT / "public" / "data" / "player_profiles.json"
 DEFAULT_GOAT_RECENT_OUTPUT = ROOT / "public" / "data" / "goat_recent.json"
 DEFAULT_GOAT_SYSTEM = ROOT / "public" / "data" / "goat_system.json"
+DEFAULT_LEAGUE_DIRECTORY = ROOT / "public" / "data" / "league_directory.json"
 DEFAULT_BIRTHPLACE_FILES = [
     ROOT / "data" / "nba_birthplaces.csv",
     ROOT / "data" / "nba_draft_birthplaces.csv",
@@ -632,6 +633,95 @@ def _load_active_players_from_roster_snapshot(
     )
 
 
+def _load_active_players_from_directory(
+    path: Path,
+    *,
+    fallback_players: list[ActivePlayer] | None = None,
+) -> list[ActivePlayer]:
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except FileNotFoundError:
+        raise
+    except (OSError, json.JSONDecodeError) as exc:
+        raise RuntimeError(f"Failed to read league directory at {path}: {exc}") from exc
+
+    players_payload = payload.get("players")
+    if not isinstance(players_payload, list):
+        raise RuntimeError("League directory missing players array")
+
+    fallback_by_id = {player.person_id: player for player in fallback_players or []}
+
+    active: dict[str, ActivePlayer] = {}
+    for entry in players_payload:
+        if not isinstance(entry, dict):
+            continue
+
+        if not entry.get("isActive"):
+            continue
+
+        person_id_raw = entry.get("personId")
+        if isinstance(person_id_raw, int):
+            person_id = str(person_id_raw)
+        elif isinstance(person_id_raw, str) and person_id_raw.strip():
+            person_id = person_id_raw.strip()
+        else:
+            continue
+
+        team_id_raw = entry.get("currentTeamId")
+        if isinstance(team_id_raw, int):
+            team_id = str(team_id_raw)
+        elif isinstance(team_id_raw, str) and team_id_raw.strip():
+            team_id = team_id_raw.strip()
+        else:
+            team_id = "0"
+
+        first_name = (entry.get("firstName") or "").strip()
+        last_name = (entry.get("lastName") or "").strip()
+
+        fallback = fallback_by_id.get(person_id)
+        if fallback:
+            if not first_name:
+                first_name = fallback.first_name
+            if not last_name:
+                last_name = fallback.last_name
+
+        if not first_name and not last_name:
+            display = (entry.get("displayName") or "").strip()
+            if display:
+                parts = display.split()
+                if parts:
+                    first_name = parts[0]
+                    last_name = " ".join(parts[1:])
+
+        if not first_name and not last_name:
+            continue
+
+        team_tricode = TEAM_ID_TO_TRICODE.get(team_id)
+        candidate = ActivePlayer(
+            person_id=person_id,
+            first_name=first_name or "",
+            last_name=last_name or "",
+            team_id=team_id or "0",
+            team_tricode=team_tricode,
+        )
+
+        active[person_id] = candidate
+
+    if fallback_players:
+        for player in fallback_players:
+            if player.person_id not in active and player.team_id == "0":
+                active[player.person_id] = player
+
+    return sorted(
+        active.values(),
+        key=lambda p: (
+            p.team_tricode or p.team_id,
+            p.last_name.lower(),
+            p.first_name.lower(),
+        ),
+    )
+
+
 def _fetch_active_players_from_bbr(
     roster_lookup: dict[str, RosterRow],
     *,
@@ -874,6 +964,7 @@ def build_player_profiles(
     team_histories: Path = DEFAULT_TEAM_HISTORIES,
     birthplace_files: list[Path] = DEFAULT_BIRTHPLACE_FILES,
     goat_system: Path = DEFAULT_GOAT_SYSTEM,
+    league_directory: Path = DEFAULT_LEAGUE_DIRECTORY,
     season_end_year: int | None = None,
 ) -> tuple[dict[str, Any], dict[str, Any]]:
     roster_lookup = _load_roster(players_csv)
@@ -889,12 +980,37 @@ def build_player_profiles(
             )
 
     players: list[ActivePlayer] | None = None
+    if league_directory and league_directory.exists():
+        try:
+            players = _load_active_players_from_directory(
+                league_directory, fallback_players=fallback_players or None
+            )
+        except RuntimeError as exc:
+            warnings.warn(
+                f"Failed to load league directory at {league_directory}: {exc}",
+                RuntimeWarning,
+                stacklevel=2,
+            )
     if rosters_snapshot and rosters_snapshot.exists():
         try:
-            players = _load_active_players_from_roster_snapshot(
-                rosters_snapshot,
-                fallback_players=fallback_players or None,
+            snapshot_players = _load_active_players_from_roster_snapshot(
+                rosters_snapshot, fallback_players=fallback_players or None
             )
+            if players is None:
+                players = snapshot_players
+            else:
+                by_id = {player.person_id: player for player in players}
+                for candidate in snapshot_players:
+                    if candidate.person_id not in by_id:
+                        by_id[candidate.person_id] = candidate
+                players = sorted(
+                    by_id.values(),
+                    key=lambda p: (
+                        p.team_tricode or p.team_id,
+                        p.last_name.lower(),
+                        p.first_name.lower(),
+                    ),
+                )
         except RuntimeError as exc:
             warnings.warn(
                 f"Failed to load Ball Don't Lie roster snapshot at {rosters_snapshot}: {exc}",
@@ -1048,9 +1164,30 @@ def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         default=DEFAULT_ROSTER_SNAPSHOT,
         help="Path to the Ball Don't Lie roster snapshot JSON (rosters.json).",
     )
-    parser.add_argument("--players-csv", type=Path, default=DEFAULT_PLAYERS_CSV, help="Path to Players.csv metadata table.")
-    parser.add_argument("--team-histories", type=Path, default=DEFAULT_TEAM_HISTORIES, help="Path to TeamHistories.csv for franchise metadata.")
-    parser.add_argument("--goat-system", type=Path, default=DEFAULT_GOAT_SYSTEM, help="Path to GOAT system rankings feed.")
+    parser.add_argument(
+        "--players-csv",
+        type=Path,
+        default=DEFAULT_PLAYERS_CSV,
+        help="Path to Players.csv metadata table.",
+    )
+    parser.add_argument(
+        "--team-histories",
+        type=Path,
+        default=DEFAULT_TEAM_HISTORIES,
+        help="Path to TeamHistories.csv for franchise metadata.",
+    )
+    parser.add_argument(
+        "--goat-system",
+        type=Path,
+        default=DEFAULT_GOAT_SYSTEM,
+        help="Path to GOAT system rankings feed.",
+    )
+    parser.add_argument(
+        "--league-directory",
+        type=Path,
+        default=DEFAULT_LEAGUE_DIRECTORY,
+        help="Path to the league directory payload for active roster filtering.",
+    )
     parser.add_argument(
         "--season-end-year",
         type=int,
@@ -1075,6 +1212,7 @@ def main(argv: list[str] | None = None) -> None:
         players_csv=args.players_csv,
         team_histories=args.team_histories,
         goat_system=args.goat_system,
+        league_directory=args.league_directory,
         season_end_year=args.season_end_year,
     )
     args.output.parent.mkdir(parents=True, exist_ok=True)
