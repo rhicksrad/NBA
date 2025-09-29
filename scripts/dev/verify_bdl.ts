@@ -1,16 +1,39 @@
 import { pathToFileURL } from "url";
 
-import { request } from "../fetch/http.js";
+import { fetchBallDontLieRosters } from "../fetch/bdl_rosters.js";
+import { SEASON } from "../lib/season.js";
+import { TEAM_METADATA } from "../lib/teams.js";
 
-interface VerifyResponse {
-  data?: unknown[];
+function resolveSeasonStartYear(season: string): number {
+  const [start] = season.split("-");
+  const parsed = Number.parseInt(start, 10);
+  if (!Number.isFinite(parsed)) {
+    throw new Error(`Invalid season format: ${season}`);
+  }
+  return parsed;
 }
 
 async function verify(): Promise<void> {
-  const url = "https://api.balldontlie.io/v1/players/active?team_ids[]=1&per_page=1";
-  const response = await request<VerifyResponse>(url);
-  const count = Array.isArray(response.data) ? response.data.length : 0;
-  console.log(`BDL OK — ${count} player(s) returned`);
+  const targetSeason = resolveSeasonStartYear(SEASON);
+  const roster = await fetchBallDontLieRosters(targetSeason);
+  const empties = TEAM_METADATA.filter((team) => {
+    const record = roster.teams[team.tricode];
+    return !record || record.roster.length === 0;
+  });
+
+  if (empties.length > 4) {
+    const missingAbbrs = empties.map((team) => team.tricode).join(", ");
+    throw new Error(
+      `BDL verify failed: ${empties.length} teams returned 0 players (${missingAbbrs})`,
+    );
+  }
+
+  console.log(
+    `BDL OK — ${TEAM_METADATA.length - empties.length} teams populated (${empties.length} empty)`,
+  );
+  if (empties.length > 0) {
+    console.warn(`BDL empty rosters: ${empties.map((team) => team.tricode).join(", ")}`);
+  }
 }
 
 function useCache(): boolean {
