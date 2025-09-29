@@ -49,5 +49,11 @@
   ],
   "message": "Failed to fetch one or more team rosters.",
   "fallback": "manual_roster_reference",
-  "at": "2025-09-29T13:46:58.598Z"
+  "at": "2025-09-29T23:48:16.069456+00:00",
+  "notes": [
+    {
+      "at": "2025-09-29T23:48:16.069456+00:00",
+      "context": "Environment could not reach api.balldontlie.io (HTTP 403 via proxy)."
+    }
+  ]
 }
