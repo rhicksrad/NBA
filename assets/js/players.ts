@@ -1,23 +1,49 @@
 
-type PlayersIndex = {
-  fetched_at: string;
-  source: string;
-  count: number;
-  players: Array<{
-    id: number;
-    name: string;
-    team_abbr: string;
-    position: string | null;
-    jersey: string | null;
-    height: string | null;
-    weight: string | null;
-  }>;
+type RosterPlayer = {
+  id: number;
+  first_name: string;
+  last_name: string;
+  position: string | null;
+  jersey_number: string | null;
+  height: string | null;
+  weight: string | null;
 };
 
-type PlayerRow = PlayersIndex["players"][number];
+type RosterTeam = {
+  id: number;
+  abbreviation: string;
+  full_name: string;
+  roster: RosterPlayer[];
+};
+
+type RostersDoc = {
+  fetched_at: string;
+  ttl_hours: number;
+  source?: string;
+  season?: string;
+  season_start_year?: number;
+  teams: RosterTeam[];
+};
+
+type PlayerRow = {
+  id: number;
+  name: string;
+  team_abbr: string;
+  team_name: string;
+  position: string | null;
+  jersey: string | null;
+  height: string | null;
+  weight: string | null;
+};
+
+type TeamRow = {
+  abbr: string;
+  name: string;
+  players: PlayerRow[];
+};
 
 type AppState = {
-  index: PlayersIndex | null;
+  doc: RostersDoc | null;
   loading: boolean;
   error: string | null;
   searchTerm: string;
@@ -25,12 +51,12 @@ type AppState = {
   anchorApplied: boolean;
 };
 
-async function loadIndex(): Promise<PlayersIndex> {
-  const response = await fetch(`data/players_index.json?cb=${Date.now()}`);
+async function loadRosters(): Promise<RostersDoc> {
+  const response = await fetch(`data/rosters.json?cb=${Date.now()}`);
   if (!response.ok) {
     throw new Error(`Request failed with status ${response.status}`);
   }
-  return (await response.json()) as PlayersIndex;
+  return (await response.json()) as RostersDoc;
 }
 
 const app = document.getElementById("players-app");
@@ -44,7 +70,7 @@ const initialTeam = (params.get("team") ?? "").toUpperCase();
 const initialSearch = params.get("search") ?? "";
 
 const state: AppState = {
-  index: null,
+  doc: null,
   loading: true,
   error: null,
   searchTerm: initialSearch,
@@ -122,11 +148,38 @@ function updateUrl(paramsToSet: Record<string, string | null>) {
   window.history.replaceState({}, "", url.toString());
 }
 
-function teamLabel(abbr: string): string {
-  if (abbr === "FA") {
+function formatSource(doc: RostersDoc): string {
+  const source = doc.source?.trim().toLowerCase();
+  if (source === "ball_dont_lie") {
+    return "Ball Don't Lie";
+  }
+  if (source === "manual_roster_reference") {
+    return "Manual roster reference";
+  }
+  if (doc.source && doc.source.trim().length) {
+    return doc.source.trim();
+  }
+  return "Unknown";
+}
+
+function formatSeason(doc: RostersDoc): string {
+  const season = doc.season?.trim();
+  if (season) {
+    return season;
+  }
+  if (typeof doc.season_start_year === "number" && Number.isFinite(doc.season_start_year)) {
+    const start = doc.season_start_year;
+    const end = String(start + 1).slice(-2);
+    return `${start}-${end}`;
+  }
+  return "2025-26";
+}
+
+function teamLabel(team: TeamRow): string {
+  if (team.abbr === "FA") {
     return "Free agents";
   }
-  return abbr;
+  return team.name || team.abbr;
 }
 
 function sortTeams(a: string, b: string): number {
@@ -139,20 +192,32 @@ function sortTeams(a: string, b: string): number {
   return a.localeCompare(b);
 }
 
-function buildTeams(players: PlayerRow[]): Array<{ abbr: string; players: PlayerRow[] }> {
-  const map = new Map<string, PlayerRow[]>();
-  for (const player of players) {
-    const abbr = player.team_abbr || "FA";
-    const roster = map.get(abbr);
-    if (roster) {
-      roster.push(player);
-    } else {
-      map.set(abbr, [player]);
-    }
+function toPlayerRow(team: RosterTeam, player: RosterPlayer): PlayerRow {
+  const abbr = team.abbreviation?.trim().toUpperCase() || "FA";
+  const teamName = team.full_name?.trim() || abbr;
+  return {
+    id: player.id,
+    name: `${player.first_name} ${player.last_name}`.trim(),
+    team_abbr: abbr,
+    team_name: teamName,
+    position: player.position ?? null,
+    jersey: player.jersey_number ?? null,
+    height: player.height ?? null,
+    weight: player.weight ?? null,
+  };
+}
+
+function buildTeams(doc: RostersDoc): TeamRow[] {
+  const teams: TeamRow[] = [];
+  for (const team of Array.isArray(doc.teams) ? doc.teams : []) {
+    const abbr = team.abbreviation?.trim().toUpperCase() || "FA";
+    const name = team.full_name?.trim() || abbr;
+    const players = (Array.isArray(team.roster) ? team.roster : [])
+      .map((player) => toPlayerRow(team, player))
+      .sort((lhs, rhs) => lhs.name.localeCompare(rhs.name));
+    teams.push({ abbr, name, players });
   }
-  return [...map.entries()]
-    .map(([abbr, roster]) => ({ abbr, players: roster }))
-    .sort((lhs, rhs) => sortTeams(lhs.abbr, rhs.abbr));
+  return teams.sort((lhs, rhs) => sortTeams(lhs.abbr, rhs.abbr));
 }
 
 function renderLoading() {
@@ -172,12 +237,12 @@ function renderError(message: string) {
   `;
   const retry = app.querySelector<HTMLButtonElement>("[data-roster-retry]");
   if (retry) {
-    retry.addEventListener("click", () => fetchIndex());
+    retry.addEventListener("click", () => fetchRosters());
   }
 }
 
-function renderDoc(index: PlayersIndex) {
-  const teams = buildTeams(index.players);
+function renderDoc(doc: RostersDoc) {
+  const teams = buildTeams(doc);
   const selectedTeam = state.teamFilter;
   if (selectedTeam && !teams.some((team) => team.abbr === selectedTeam)) {
     state.teamFilter = "";
@@ -191,12 +256,18 @@ function renderDoc(index: PlayersIndex) {
 
   const hasTeams = teams.length > 0;
   const lastUpdatedText = hasTeams
-    ? formatRelativeTime(index.fetched_at)
+    ? formatRelativeTime(doc.fetched_at)
     : "not yet available";
   const timestampTitle = hasTeams
-    ? new Date(index.fetched_at).toLocaleString()
+    ? new Date(doc.fetched_at).toLocaleString()
     : "No roster snapshot cached yet";
-  const sourceLabel = index.source?.trim() || "Unknown";
+  const sourceLabel = formatSource(doc);
+  const seasonLabel = formatSeason(doc);
+  const metaPieces = [
+    `Last updated: ${lastUpdatedText}`,
+    `Source: ${escapeHtml(sourceLabel)}`,
+    `Season: ${escapeHtml(seasonLabel)}`,
+  ];
 
   const headerHtml = `
     <div class="roster-controls">
@@ -227,7 +298,7 @@ function renderDoc(index: PlayersIndex) {
       </div>
       <div class="roster-controls__meta">
         <small title="${timestampTitle}">
-          Last updated: ${lastUpdatedText} • Source: ${escapeHtml(sourceLabel)}
+          ${metaPieces.join(" • ")}
         </small>
         <button type="button" class="roster-button" data-roster-refresh>Refresh</button>
       </div>
@@ -260,7 +331,7 @@ function renderDoc(index: PlayersIndex) {
         ? ""
         : `<li class="roster-player roster-player--empty">No players match this filter.</li>`;
 
-      const subtitle = `${escapeHtml(teamLabel(team.abbr))} · ${players.length} players`;
+      const subtitle = `${escapeHtml(teamLabel(team))} · ${players.length} players`;
 
       return `
         <section class="roster-team" data-team-anchor="${team.abbr}">
@@ -309,7 +380,7 @@ function renderDoc(index: PlayersIndex) {
   }
 
   if (refreshButton) {
-    refreshButton.addEventListener("click", () => fetchIndex());
+    refreshButton.addEventListener("click", () => fetchRosters());
   }
 
   if (!state.anchorApplied && state.teamFilter) {
@@ -330,21 +401,21 @@ function render() {
     renderError(state.error);
     return;
   }
-  if (state.index) {
-    renderDoc(state.index);
+  if (state.doc) {
+    renderDoc(state.doc);
   }
 }
 
-async function fetchIndex() {
+async function fetchRosters() {
   state.loading = true;
   state.error = null;
   render();
   try {
-    const index = await loadIndex();
-    if (!index || !Array.isArray(index.players)) {
-      throw new Error("Malformed players index payload");
+    const doc = await loadRosters();
+    if (!doc || !Array.isArray(doc.teams)) {
+      throw new Error("Malformed roster payload");
     }
-    state.index = index;
+    state.doc = doc;
     state.loading = false;
     render();
   } catch (error) {
@@ -354,4 +425,4 @@ async function fetchIndex() {
   }
 }
 
-fetchIndex();
+fetchRosters();
