@@ -13,8 +13,26 @@ async function verify(): Promise<void> {
   console.log(`BDL OK — ${count} player(s) returned`);
 }
 
+function useCache(): boolean {
+  const value = process.env.USE_BDL_CACHE;
+  if (!value) {
+    return false;
+  }
+  const normalized = value.trim().toLowerCase();
+  return normalized === "1" || normalized === "true" || normalized === "yes";
+}
+
 async function run(): Promise<void> {
-  await verify();
+  try {
+    await verify();
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    if (message.includes("Missing BDL_API_KEY") && useCache()) {
+      console.log("BDL check skipped — using cached data (USE_BDL_CACHE)");
+      return;
+    }
+    throw error;
+  }
 }
 
 const isMain = process.argv[1] && pathToFileURL(process.argv[1]).href === import.meta.url;
