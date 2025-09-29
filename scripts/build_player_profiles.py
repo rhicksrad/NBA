@@ -20,17 +20,32 @@ from urllib.request import Request, urlopen
 
 try:
     from scripts.build_insights import iter_player_statistics_rows
+    from scripts.goat_metrics import (
+        RECENT_SEASON_SPAN,
+        RECENT_SEASON_START,
+        compute_recent_goat_scores,
+        format_season_span,
+        format_season_window,
+    )
 except ModuleNotFoundError:  # pragma: no cover - fallback for direct execution
     import sys
 
     sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
     from scripts.build_insights import iter_player_statistics_rows  # type: ignore
+    from scripts.goat_metrics import (  # type: ignore
+        RECENT_SEASON_SPAN,
+        RECENT_SEASON_START,
+        compute_recent_goat_scores,
+        format_season_span,
+        format_season_window,
+    )
 
 ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_ACTIVE_ROSTER = ROOT / "data" / "2025-26" / "manual" / "roster_reference.json"
 DEFAULT_PLAYERS_CSV = ROOT / "Players.csv"
 DEFAULT_TEAM_HISTORIES = ROOT / "TeamHistories.csv"
 DEFAULT_OUTPUT = ROOT / "public" / "data" / "player_profiles.json"
+DEFAULT_GOAT_RECENT_OUTPUT = ROOT / "public" / "data" / "goat_recent.json"
 DEFAULT_GOAT_SYSTEM = ROOT / "public" / "data" / "goat_system.json"
 DEFAULT_BIRTHPLACE_FILES = [
     ROOT / "data" / "nba_birthplaces.csv",
@@ -39,12 +54,8 @@ DEFAULT_BIRTHPLACE_FILES = [
 
 ACTIVE_SEASON_END_YEAR = 2026
 
-RECENT_SEASON_START = 2022
-RECENT_SEASON_SPAN = 3  # 2022-23 through 2024-25
-RECENT_SEASON_YEARS = {
-    RECENT_SEASON_START + offset for offset in range(RECENT_SEASON_SPAN)
-}
-RECENT_SEASON_MAX_GAMES = 82 * RECENT_SEASON_SPAN
+RECENT_LEADERBOARD_LIMIT = 10
+GOAT_RECENT_METRIC = "Rolling three-year GOAT index"
 
 METRICS_CATALOG = [
     {
@@ -143,6 +154,8 @@ TEAM_METADATA = [
     {"team_id": "1610612762", "tricode": "UTA"},
     {"team_id": "1610612764", "tricode": "WAS"},
 ]
+
+TEAM_ID_TO_TRICODE = {meta["team_id"]: meta["tricode"] for meta in TEAM_METADATA}
 
 
 def _default_season_end_year() -> int:
@@ -675,146 +688,88 @@ def _load_goat_scores(path: Path) -> tuple[dict[str, dict[str, Any]], dict[str, 
     return by_id, by_name
 
 
-def _parse_game_date(value: str | None) -> datetime | None:
-    if not value:
-        return None
-    text = value.strip()
-    if not text:
-        return None
-    try:
-        return datetime.fromisoformat(text)
-    except ValueError:
-        pass
-    for fmt in ("%Y-%m-%d %H:%M", "%Y-%m-%d"):
-        try:
-            return datetime.strptime(text, fmt)
-        except ValueError:
+def _format_recent_blurb(record: dict[str, Any]) -> str:
+    games = int(record.get("games") or 0)
+    wins = int(record.get("wins") or 0)
+    losses = max(games - wins, 0)
+    span_text = format_season_span(record.get("seasons") or [])
+    parts: list[str] = []
+    if games:
+        parts.append(f"{games} games")
+    if wins or losses:
+        parts.append(f"{wins}-{losses} record")
+    if span_text:
+        parts.append(span_text)
+    return " · ".join(parts)
+
+
+def _build_recent_goat_leaderboard(
+    players: list[ActivePlayer],
+    recent_scores: dict[str, dict[str, Any]],
+    team_lookup: dict[str, dict[str, str]],
+    *,
+    limit: int = RECENT_LEADERBOARD_LIMIT,
+) -> list[dict[str, Any]]:
+    if not recent_scores:
+        return []
+
+    index = {player.person_id: player for player in players}
+    leaderboard: list[dict[str, Any]] = []
+    for person_id, record in recent_scores.items():
+        score = record.get("score")
+        rank = record.get("rank")
+        if score is None or rank is None:
             continue
-    return None
+        player = index.get(person_id)
+        if not player:
+            continue
 
+        record_team_name = (record.get("teamName") or "").strip()
+        record_team_city = (record.get("teamCity") or "").strip()
+        resolved_meta: dict[str, str] | None = None
+        resolved_tricode: str | None = None
+        if record_team_name or record_team_city:
+            name_key = record_team_name.lower()
+            city_key = record_team_city.lower()
+            for team_id, payload in team_lookup.items():
+                nickname = (payload.get("nickname") or "").strip().lower()
+                city = (payload.get("city") or "").strip().lower()
+                if name_key and name_key != nickname:
+                    continue
+                if city_key and city_key != city:
+                    continue
+                resolved_meta = payload
+                resolved_tricode = TEAM_ID_TO_TRICODE.get(team_id)
+                break
 
-def _season_year_from_date(value: str | None) -> int | None:
-    parsed = _parse_game_date(value)
-    if not parsed:
-        return None
-    anchor_year = parsed.year
-    if parsed.month >= 7:
-        return anchor_year
-    return anchor_year - 1
-
-
-def _compute_recent_goat_scores(active_ids: set[str]) -> dict[str, dict[str, Any]]:
-    """Aggregate last-three-season GOAT scores for the provided players."""
-
-    if not active_ids:
-        return {}
-
-    aggregates: dict[str, dict[str, Any]] = {
-        person_id: {
-            "games": 0,
-            "wins": 0,
-            "minutes": 0.0,
-            "points": 0.0,
-            "assists": 0.0,
-            "rebounds": 0.0,
-            "steals": 0.0,
-            "blocks": 0.0,
-            "plus_minus": 0.0,
-            "seasons": set(),
+        team_meta = resolved_meta or team_lookup.get(player.team_id, team_lookup.get("0", {}))
+        team_name = record_team_name or team_meta.get("nickname") or team_meta.get("full") or "Free Agent"
+        franchise = resolved_tricode or player.team_tricode
+        entry = {
+            "rank": int(rank),
+            "personId": person_id,
+            "name": player.full_name,
+            "displayName": player.full_name,
+            "team": team_name,
+            "franchise": franchise,
+            "score": float(score),
+            "blurb": _format_recent_blurb(record),
         }
-        for person_id in active_ids
+        leaderboard.append(entry)
+
+    leaderboard.sort(key=lambda item: (item["rank"], -item["score"]))
+    if limit > 0:
+        return leaderboard[:limit]
+    return leaderboard
+
+
+def _build_recent_goat_payload(leaderboard: list[dict[str, Any]]) -> dict[str, Any]:
+    return {
+        "generatedAt": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "window": format_season_window(RECENT_SEASON_START, RECENT_SEASON_SPAN),
+        "metric": GOAT_RECENT_METRIC,
+        "players": leaderboard,
     }
-
-    for row in iter_player_statistics_rows():
-        person_id = (row.get("personId") or "").strip()
-        if person_id not in aggregates:
-            continue
-        season_year = _season_year_from_date(row.get("gameDate"))
-        if season_year not in RECENT_SEASON_YEARS:
-            continue
-
-        minutes = _parse_float(row.get("numMinutes")) or 0.0
-        # Ignore box score stubs with no recorded run.
-        if minutes <= 0:
-            continue
-
-        bucket = aggregates[person_id]
-        bucket["games"] += 1
-        if (row.get("win") or "").strip() == "1":
-            bucket["wins"] += 1
-        bucket["minutes"] += minutes
-        bucket["points"] += _parse_float(row.get("points")) or 0.0
-        bucket["assists"] += _parse_float(row.get("assists")) or 0.0
-        bucket["rebounds"] += _parse_float(row.get("reboundsTotal")) or 0.0
-        bucket["steals"] += _parse_float(row.get("steals")) or 0.0
-        bucket["blocks"] += _parse_float(row.get("blocks")) or 0.0
-        bucket["plus_minus"] += _parse_float(row.get("plusMinusPoints")) or 0.0
-        bucket["seasons"].add(season_year)
-
-    raw_values: list[float] = []
-    for bucket in aggregates.values():
-        minutes = bucket["minutes"]
-        if minutes <= 0:
-            bucket["raw"] = 0.0
-            raw_values.append(0.0)
-            continue
-
-        per36_points = (bucket["points"] / minutes) * 36.0 if minutes else 0.0
-        per36_assists = (bucket["assists"] / minutes) * 36.0 if minutes else 0.0
-        per36_rebounds = (bucket["rebounds"] / minutes) * 36.0 if minutes else 0.0
-        per36_stocks = ((bucket["steals"] + bucket["blocks"]) / minutes) * 36.0 if minutes else 0.0
-
-        availability = min(bucket["games"] / RECENT_SEASON_MAX_GAMES, 1.0)
-        win_pct = (bucket["wins"] / bucket["games"]) if bucket["games"] else 0.0
-        plus_minus = (bucket["plus_minus"] / bucket["games"]) if bucket["games"] else 0.0
-
-        impact = max(
-            per36_points
-            + 1.6 * per36_assists
-            + 1.1 * per36_rebounds
-            + 3.0 * per36_stocks,
-            0.0,
-        )
-
-        raw_score = impact * availability
-        if win_pct > 0:
-            raw_score += win_pct * 18.0
-        if plus_minus > 0:
-            raw_score += plus_minus * 0.4
-
-        bucket["raw"] = max(raw_score, 0.0)
-        raw_values.append(bucket["raw"])
-
-    if not raw_values:
-        return {person_id: {"score": None, "rank": None} for person_id in active_ids}
-
-    min_raw = min(raw_values)
-    max_raw = max(raw_values)
-    span = max_raw - min_raw
-    rankings: dict[str, int] = {}
-    sorted_entries = sorted(
-        aggregates.items(), key=lambda item: item[1]["raw"], reverse=True
-    )
-    for index, (person_id, _bucket) in enumerate(sorted_entries):
-        rankings[person_id] = index + 1
-
-    recent_scores: dict[str, dict[str, Any]] = {}
-    for person_id, bucket in aggregates.items():
-        raw = bucket["raw"]
-        if span <= 0:
-            score = 0.0
-        else:
-            normalized = (raw - min_raw) / span
-            clamped = min(max(normalized, 0.0), 1.0)
-            score = round(clamped * 100.0, 1)
-        recent_scores[person_id] = {
-            "score": score,
-            "rank": rankings.get(person_id),
-            "games": bucket["games"],
-            "seasons": sorted(bucket["seasons"]),
-        }
-
-    return recent_scores
 
 
 def build_player_profiles(
@@ -825,7 +780,7 @@ def build_player_profiles(
     birthplace_files: list[Path] = DEFAULT_BIRTHPLACE_FILES,
     goat_system: Path = DEFAULT_GOAT_SYSTEM,
     season_end_year: int | None = None,
-) -> dict[str, Any]:
+) -> tuple[dict[str, Any], dict[str, Any]]:
     roster_lookup = _load_roster(players_csv)
     fallback_players: list[ActivePlayer] = []
     if active_roster and active_roster.exists():
@@ -859,7 +814,9 @@ def build_player_profiles(
     teams = _load_team_lookup(team_histories)
     birthplaces = _load_birthplaces(birthplace_files)
     goat_by_id, goat_by_name = _load_goat_scores(goat_system)
-    recent_goat = _compute_recent_goat_scores({player.person_id for player in players})
+    recent_goat = compute_recent_goat_scores(
+        iter_player_statistics_rows(), {player.person_id for player in players}
+    )
 
     profiles: list[dict[str, Any]] = []
     for player in players:
@@ -926,6 +883,7 @@ def build_player_profiles(
         profile: dict[str, Any] = {
             "id": player_id,
             "name": name,
+            "personId": player.person_id,
             "team": team_meta.get("full") or "Free Agent",
             "position": position_display,
             "height": height,
@@ -954,12 +912,16 @@ def build_player_profiles(
         profiles.append(profile)
 
     profiles.sort(key=lambda item: item["name"].lower())
+    recent_leaderboard = _build_recent_goat_leaderboard(
+        players, recent_goat, teams, limit=RECENT_LEADERBOARD_LIMIT
+    )
+    recent_payload = _build_recent_goat_payload(recent_leaderboard)
     payload = {
         "generatedAt": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "metrics": METRICS_CATALOG,
         "players": profiles,
     }
-    return payload
+    return payload, recent_payload
 
 
 def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
@@ -980,12 +942,18 @@ def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         help="Season end year used for Basketball-Reference roster pages (for example 2026 for the 2025-26 season).",
     )
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT, help="Destination for the generated player_profiles.json file.")
+    parser.add_argument(
+        "--goat-recent-output",
+        type=Path,
+        default=DEFAULT_GOAT_RECENT_OUTPUT,
+        help="Destination for the generated goat_recent.json leaderboard.",
+    )
     return parser.parse_args(argv)
 
 
 def main(argv: list[str] | None = None) -> None:
     args = _parse_args(argv)
-    payload = build_player_profiles(
+    payload, recent_payload = build_player_profiles(
         active_roster=args.active_roster,
         players_csv=args.players_csv,
         team_histories=args.team_histories,
@@ -994,6 +962,11 @@ def main(argv: list[str] | None = None) -> None:
     )
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    if recent_payload:
+        args.goat_recent_output.parent.mkdir(parents=True, exist_ok=True)
+        args.goat_recent_output.write_text(
+            json.dumps(recent_payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
+        )
 
 
 if __name__ == "__main__":
