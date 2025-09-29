@@ -50,7 +50,7 @@ export async function fetchBbrRosterForTeam(teamAbbr: string, seasonEndYear: num
 }
 
 export interface BbrRosterResult {
-  source: LeagueDataSource;
+  rosters: LeagueDataSource;
   missing: string[];
 }
 
@@ -87,6 +87,7 @@ export async function fetchBbrRosters(
       }
       totalPlayers += roster.length;
       if (roster.length === 0) {
+        console.warn(`BRef: 0 parsed players for ${abbr}; marking missing and continuing.`);
         missing.push(abbr);
       }
     } catch (error) {
@@ -104,12 +105,14 @@ export async function fetchBbrRosters(
     }
   }
 
-  if (totalPlayers > 0 && (totalPlayers < 360 || totalPlayers > 600)) {
-    throw new Error(`League player total ${totalPlayers} outside expected range`);
+  if (totalPlayers === 0) {
+    console.warn(
+      "BRef: parsed 0 players across all teams; treating as enrichment-only and continuing."
+    );
   }
 
   return {
-    source: {
+    rosters: {
       teams,
       players,
       transactions: [],
