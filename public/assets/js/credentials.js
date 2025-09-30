@@ -1,6 +1,22 @@
 const MAX_ATTEMPTS = 5;
 const POLL_DELAY_MS = 10;
+const PLACEHOLDER_SENTINEL = "__VITE" + "_BDL_KEY__";
 let readinessPromise = null;
+
+function extractValidKey(value) {
+  if (typeof value !== "string") {
+    return null;
+  }
+  const trimmed = value.trim();
+  if (!trimmed) {
+    return null;
+  }
+  const withoutBearer = trimmed.replace(/^Bearer\s+/i, "").trim();
+  if (!withoutBearer || withoutBearer === PLACEHOLDER_SENTINEL) {
+    return null;
+  }
+  return trimmed;
+}
 
 function normalizeAuthorization(key) {
   const trimmed = String(key ?? '').trim();
@@ -16,15 +32,16 @@ function normalizeAuthorization(key) {
 export function resolveBdlKeySync() {
   if (typeof document !== 'undefined') {
     const meta = document.querySelector('meta[name="bdl-api-key"]');
-    const content = meta?.getAttribute('content')?.trim();
-    if (content) {
-      return content;
+    const content = meta?.getAttribute('content');
+    const candidate = extractValidKey(content);
+    if (candidate) {
+      return candidate;
     }
   }
 
-  const inline = globalThis?.BDL_CREDENTIALS?.key;
-  if (typeof inline === 'string' && inline.trim()) {
-    return inline.trim();
+  const inline = extractValidKey(globalThis?.BDL_CREDENTIALS?.key);
+  if (inline) {
+    return inline;
   }
 
   return null;
