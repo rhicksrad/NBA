@@ -12,6 +12,8 @@
     "fetch:active-rosters": "tsx scripts/fetch/bdl_active_rosters.ts",
     "build:data": "pnpm fetch:active-rosters && tsx scripts/data/build_canonical.ts && tsx scripts/data/build_preseason_schedule.ts",
     "build:players-index": "tsx scripts/build_players_index.ts",
+    "build:history:catalog": "tsx scripts/history/build_player_catalog.ts",
+    "build:history": "pnpm build:history:catalog",
     "gen:previews": "tsx scripts/generate/preseason_previews.ts && tsx scripts/generate/previews.ts",
     "validate:previews": "tsx scripts/validate/previews_staleness.ts && tsx scripts/validate/links.ts && tsx scripts/validate/rosters_nonempty.ts",
     "previews": "pnpm build:data && pnpm gen:previews && pnpm validate:previews",
@@ -19,7 +21,8 @@
     "predeploy": "pnpm fetch:active-rosters",
     "deploy": "echo 'static site build only'",
     "test": "vitest run",
-    "verify:bdl": "tsx scripts/dev/verify_bdl.ts"
+    "verify:bdl": "tsx scripts/dev/verify_bdl.ts",
+    "verify:history": "tsx scripts/history/verify_history_assets.ts"
   },
   "dependencies": {
     "cheerio": "1.0.0-rc.12",
