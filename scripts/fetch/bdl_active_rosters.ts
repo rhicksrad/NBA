@@ -1,48 +1,12 @@
 import type { BdlPlayer } from "./ball_dont_lie_client.js";
 import { loadSecret } from "../lib/secrets.js";
 import { TEAM_METADATA } from "../lib/teams.js";
+import { mapBdlTeamToTricode } from "./bdl_team_mappings.js";
 
 const API_BASE = "https://api.balldontlie.io/v1/";
 const ACTIVE_PATH = "players/active";
 const MAX_PER_PAGE = 100;
 const FLAG_KEYS = ["active", "is_active", "on_team", "on_roster"] as const;
-
-const TEAM_MAPPINGS = [
-  { bdlId: 1, bdlAbbr: "ATL", tricode: "ATL" },
-  { bdlId: 2, bdlAbbr: "BOS", tricode: "BOS" },
-  { bdlId: 3, bdlAbbr: "BKN", tricode: "BKN" },
-  { bdlId: 4, bdlAbbr: "CHA", tricode: "CHA" },
-  { bdlId: 5, bdlAbbr: "CHI", tricode: "CHI" },
-  { bdlId: 6, bdlAbbr: "CLE", tricode: "CLE" },
-  { bdlId: 7, bdlAbbr: "DAL", tricode: "DAL" },
-  { bdlId: 8, bdlAbbr: "DEN", tricode: "DEN" },
-  { bdlId: 9, bdlAbbr: "DET", tricode: "DET" },
-  { bdlId: 10, bdlAbbr: "GSW", tricode: "GSW" },
-  { bdlId: 11, bdlAbbr: "HOU", tricode: "HOU" },
-  { bdlId: 12, bdlAbbr: "IND", tricode: "IND" },
-  { bdlId: 13, bdlAbbr: "LAC", tricode: "LAC" },
-  { bdlId: 14, bdlAbbr: "LAL", tricode: "LAL" },
-  { bdlId: 15, bdlAbbr: "MEM", tricode: "MEM" },
-  { bdlId: 16, bdlAbbr: "MIA", tricode: "MIA" },
-  { bdlId: 17, bdlAbbr: "MIL", tricode: "MIL" },
-  { bdlId: 18, bdlAbbr: "MIN", tricode: "MIN" },
-  { bdlId: 19, bdlAbbr: "NOP", tricode: "NOP" },
-  { bdlId: 20, bdlAbbr: "NYK", tricode: "NYK" },
-  { bdlId: 21, bdlAbbr: "OKC", tricode: "OKC" },
-  { bdlId: 22, bdlAbbr: "ORL", tricode: "ORL" },
-  { bdlId: 23, bdlAbbr: "PHI", tricode: "PHI" },
-  { bdlId: 24, bdlAbbr: "PHX", tricode: "PHX" },
-  { bdlId: 25, bdlAbbr: "POR", tricode: "POR" },
-  { bdlId: 26, bdlAbbr: "SAC", tricode: "SAC" },
-  { bdlId: 27, bdlAbbr: "SAS", tricode: "SAS" },
-  { bdlId: 28, bdlAbbr: "TOR", tricode: "TOR" },
-  { bdlId: 29, bdlAbbr: "UTA", tricode: "UTA" },
-  { bdlId: 30, bdlAbbr: "WAS", tricode: "WAS" },
-] as const;
-
-const TEAM_ID_TO_TRICODE = new Map<number, string>(TEAM_MAPPINGS.map((m) => [m.bdlId, m.tricode]));
-const TEAM_ABBR_TO_TRICODE = new Map<string, string>(TEAM_MAPPINGS.map((m) => [m.bdlAbbr, m.tricode]));
-const KNOWN_TRICODES = new Set(TEAM_METADATA.map((team) => team.tricode.toUpperCase()));
 
 function resolveBdlKey(): string | undefined {
   const candidates = [
@@ -97,29 +61,6 @@ function isTrulyActiveRecord(player: Record<string, unknown>): boolean {
     return true;
   }
   return flags.every(Boolean);
-}
-
-function mapTeamToTricode(team: { id?: unknown; abbreviation?: unknown }): string {
-  const teamId = typeof team.id === "number" ? team.id : undefined;
-  const rawAbbr = typeof team.abbreviation === "string" ? team.abbreviation.toUpperCase() : undefined;
-
-  if (rawAbbr) {
-    const mapped = TEAM_ABBR_TO_TRICODE.get(rawAbbr) ?? (KNOWN_TRICODES.has(rawAbbr) ? rawAbbr : undefined);
-    if (mapped) {
-      return mapped;
-    }
-  }
-
-  if (teamId !== undefined) {
-    const mapped = TEAM_ID_TO_TRICODE.get(teamId);
-    if (mapped) {
-      return mapped;
-    }
-  }
-
-  throw new Error(
-    `Unable to map Ball Don't Lie team to local tricode (id=${String(teamId)}, abbreviation=${String(rawAbbr ?? "")})`,
-  );
 }
 
 function comparePlayers(a: ActiveRosterPlayer, b: ActiveRosterPlayer): number {
@@ -230,7 +171,7 @@ export async function fetchActiveRosters(): Promise<ActiveRosters> {
         continue;
       }
 
-      const tricode = mapTeamToTricode({ id: teamId, abbreviation: team.abbreviation });
+      const tricode = mapBdlTeamToTricode({ id: teamId, abbreviation: team.abbreviation });
 
       const previousTeam = playerAssignments.get(id);
       if (previousTeam && previousTeam !== tricode) {
