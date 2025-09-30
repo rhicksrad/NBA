@@ -162,35 +162,8 @@ const preseasonPowerIndex = [
     note: 'Some young core pieces exist, but the rest of the roster lacks depth and star impact. They’ll likely be at or near bottom unless things break favorably.',
   },
 ];
-const projectedTempoLeaders = [
-  {
-    team: 'Indiana Pacers',
-    tempoScore: 86,
-    paceProjection: 102.9,
-    tempoDelta: 3.6,
-    travelMiles: 36450,
-    backToBacks: 13,
-    note: 'Opening 9 games in 14 nights with Siakam small-ball groups turbocharging drag screens and hit-ahead threes.',
-  },
-  {
-    team: 'Sacramento Kings',
-    tempoScore: 80,
-    paceProjection: 101.7,
-    tempoDelta: 2.8,
-    travelMiles: 35200,
-    backToBacks: 11,
-    note: 'Rebuilt dribble handoff tree has Monk as co-pilot to goose early-clock triples and Fox rim pressure.',
-  },
-  {
-    team: 'San Antonio Spurs',
-    tempoScore: 74,
-    paceProjection: 101.2,
-    tempoDelta: 2.4,
-    travelMiles: 38410,
-    backToBacks: 15,
-    note: 'Wembanyama-at-5 lineups push the ball off the glass; November road swing stress-tests their young guards.',
-  },
-];
+let pacePressureDeck = [];
+let pacePressureMeta = null;
 
 const spacingExperimentDeck = [
   {
@@ -1290,6 +1263,81 @@ async function renderInjuryPulse() {
   }
 }
 
+async function loadPacePressure() {
+  try {
+    const response = await fetch('data/pace_pressure.json', { cache: 'no-store' });
+    if (!response.ok) {
+      throw new Error(`Failed to load pace pressure deck: ${response.status}`);
+    }
+    const payload = await response.json();
+    const parseFinite = (value) => {
+      if (value === null || value === undefined) {
+        return null;
+      }
+      const number = Number(value);
+      return Number.isFinite(number) ? number : null;
+    };
+
+    const teams = Array.isArray(payload?.teams) ? payload.teams : [];
+    pacePressureDeck = teams
+      .map((team) => {
+        const paceProjection = parseFinite(team?.paceProjection);
+        const tempoScore = parseFinite(team?.tempoScore);
+        if (paceProjection === null || tempoScore === null) {
+          return null;
+        }
+        const tempoDelta = parseFinite(team?.tempoDelta) ?? 0;
+        const backToBacks = parseFinite(team?.backToBacks);
+        const averageRestDays = parseFinite(team?.averageRestDays);
+        const roadGames = parseFinite(team?.roadGames);
+        const teamName =
+          typeof team?.team === 'string' && team.team.trim()
+            ? team.team.trim()
+            : null;
+        const tricodeCandidate =
+          typeof team?.tricode === 'string' && team.tricode.trim()
+            ? team.tricode.trim()
+            : typeof team?.abbreviation === 'string' && team.abbreviation.trim()
+            ? team.abbreviation.trim()
+            : null;
+        return {
+          team: teamName ?? tricodeCandidate ?? 'Team',
+          tricode: tricodeCandidate,
+          paceProjection,
+          tempoScore,
+          tempoDelta,
+          backToBacks,
+          averageRestDays,
+          roadGames,
+          note: typeof team?.note === 'string' && team.note.trim() ? team.note.trim() : null,
+        };
+      })
+      .filter((entry) => entry !== null);
+
+    pacePressureMeta = {
+      generatedAt: typeof payload?.generatedAt === 'string' ? payload.generatedAt : null,
+      source:
+        typeof payload?.source === 'string' && payload.source.trim()
+          ? payload.source.trim()
+          : "Ball Don't Lie",
+      season:
+        typeof payload?.season === 'string' && payload.season.trim()
+          ? payload.season.trim()
+          : '2024-25',
+      sampleStartDate:
+        typeof payload?.sampleStartDate === 'string' && payload.sampleStartDate.trim()
+          ? payload.sampleStartDate.trim()
+          : null,
+      leagueAveragePace: parseFinite(payload?.leagueAveragePace),
+    };
+  } catch (error) {
+    console.error('Failed to load pace pressure data', error);
+    pacePressureDeck = [];
+    pacePressureMeta = null;
+  }
+  renderPaceRadar();
+}
+
 function renderPaceRadar() {
   const list = document.querySelector('[data-pace-radar]');
   const footnote = document.querySelector('[data-pace-footnote]');
@@ -1299,13 +1347,15 @@ function renderPaceRadar() {
 
   list.innerHTML = '';
 
-  if (!projectedTempoLeaders.length) {
+  const deck = Array.isArray(pacePressureDeck) ? pacePressureDeck : [];
+
+  if (!deck.length) {
     const placeholder = document.createElement('li');
     placeholder.className = 'tempo-gauge__placeholder';
-    placeholder.textContent = 'Tempo board updates once schedule modeling completes.';
+    placeholder.textContent = 'Tempo telemetry syncing…';
     list.appendChild(placeholder);
   } else {
-    projectedTempoLeaders.forEach((entry, index) => {
+    deck.forEach((entry, index) => {
       const item = document.createElement('li');
       item.className = 'tempo-gauge__item';
 
@@ -1319,7 +1369,7 @@ function renderPaceRadar() {
 
       const identity = document.createElement('div');
       identity.className = 'tempo-gauge__identity';
-      identity.appendChild(createTeamLogo(entry.team, 'team-logo team-logo--small'));
+      identity.appendChild(createTeamLogo(entry.tricode ?? entry.team, 'team-logo team-logo--small'));
       const team = document.createElement('p');
       team.className = 'tempo-gauge__team';
       team.textContent = entry.team;
@@ -1344,9 +1394,17 @@ function renderPaceRadar() {
 
       const meta = document.createElement('p');
       meta.className = 'tempo-gauge__meta';
-      const travel = Number(entry.travelMiles) || 0;
-      const miles = helpers.formatNumber(travel / 1000, 1);
-      meta.textContent = `Road miles: ${miles}k · Back-to-backs: ${helpers.formatNumber(entry.backToBacks ?? 0, 0)}`;
+      const metaParts = [];
+      if (Number.isFinite(entry.roadGames)) {
+        metaParts.push(`Road games: ${helpers.formatNumber(entry.roadGames, 0)}`);
+      }
+      if (Number.isFinite(entry.backToBacks)) {
+        metaParts.push(`Back-to-backs: ${helpers.formatNumber(entry.backToBacks, 0)}`);
+      }
+      if (Number.isFinite(entry.averageRestDays)) {
+        metaParts.push(`Avg rest: ${helpers.formatNumber(entry.averageRestDays, 2)} days`);
+      }
+      meta.textContent = metaParts.join(' · ') || 'Schedule inputs syncing…';
       item.appendChild(meta);
 
       if (entry.note) {
@@ -1361,7 +1419,36 @@ function renderPaceRadar() {
   }
 
   if (footnote) {
-    footnote.textContent = 'Tempo pressure score normalizes 95-105 possessions per 48; the meter peaks when projections hit 105.';
+    if (pacePressureMeta) {
+      const { source, season, sampleStartDate, leagueAveragePace, generatedAt } = pacePressureMeta;
+      const descriptorParts = [];
+      if (sampleStartDate) {
+        descriptorParts.push(`sample from ${sampleStartDate}`);
+      }
+      if (Number.isFinite(leagueAveragePace)) {
+        descriptorParts.push(`league pace ${helpers.formatNumber(leagueAveragePace, 1)}`);
+      }
+      const baseLabel = `Source: ${source} ${season} tempo sample`;
+      let footnoteText = descriptorParts.length
+        ? `${baseLabel} — ${descriptorParts.join(' · ')}.`
+        : `${baseLabel}.`;
+      if (generatedAt) {
+        const generatedDate = new Date(generatedAt);
+        if (!Number.isNaN(generatedDate.getTime())) {
+          const formatter = new Intl.DateTimeFormat('en-US', {
+            month: 'short',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: '2-digit',
+            timeZone: 'UTC',
+          });
+          footnoteText = `${footnoteText} Updated ${formatter.format(generatedDate)} UTC.`;
+        }
+      }
+      footnote.textContent = footnoteText;
+    } else {
+      footnote.textContent = 'Tempo pressure score normalizes 95-105 possessions per 48; the meter peaks when projections hit 105.';
+    }
   }
 }
 
@@ -1462,7 +1549,8 @@ async function resolveScheduleSource() {
 }
 
 async function bootstrap() {
-  const scheduleSource = await resolveScheduleSource();
+  renderPaceRadar();
+  const [scheduleSource] = await Promise.all([resolveScheduleSource(), loadPacePressure()]);
 
   registerCharts([
     {
