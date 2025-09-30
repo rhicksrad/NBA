@@ -1,6 +1,6 @@
 # Houston Rockets
 
-The core trio of Aaron Holiday, Adrian Caldwell, and Boban Marjanovic gives the staff a clear identity to start from.
+The core trio of Aaron Holiday, Alperen Sengun, and Amen Thompson gives the staff a clear identity to start from.
 The front office kept the core intact and will lean on internal development.
 No rotation regulars departed, so continuity remains a strength.
 
