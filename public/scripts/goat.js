@@ -268,6 +268,79 @@ function buildWeightCards(weights) {
   });
 }
 
+function buildSourceNotes(weights) {
+  const container = document.querySelector('[data-goat-sources]');
+  if (!container) return;
+
+  container.innerHTML = '';
+
+  if (!Array.isArray(weights) || !weights.length) {
+    const dt = document.createElement('dt');
+    dt.textContent = 'Awaiting GOAT data';
+    const dd = document.createElement('dd');
+    dd.textContent = 'The source inventory populates as soon as the monthly GOAT snapshot finishes loading.';
+    container.append(dt, dd);
+    return;
+  }
+
+  weights.forEach((weight) => {
+    const term = document.createElement('dt');
+    term.textContent = weight.label ?? weight.key ?? 'Component';
+    container.appendChild(term);
+
+    const detail = document.createElement('dd');
+    detail.className = 'goat-sources-card__details';
+
+    if (typeof weight.description === 'string' && weight.description.trim().length) {
+      const description = document.createElement('p');
+      description.className = 'goat-sources-card__description';
+      description.textContent = weight.description.trim();
+      detail.appendChild(description);
+    }
+
+    if (Array.isArray(weight.sources) && weight.sources.length) {
+      const list = document.createElement('ul');
+      list.className = 'goat-sources-card__source-list';
+
+      weight.sources.forEach((source) => {
+        if (!source) return;
+        const item = document.createElement('li');
+        const label = document.createElement('strong');
+        label.textContent = typeof source.name === 'string' && source.name.trim().length ? source.name.trim() : 'Source';
+        item.appendChild(label);
+
+        const details = [];
+        if (typeof source.contribution === 'string' && source.contribution.trim().length) {
+          details.push(source.contribution.trim());
+        }
+        if (Array.isArray(source.fields) && source.fields.length) {
+          details.push(`Fields: ${source.fields.join(', ')}`);
+        } else if (typeof source.fields === 'string' && source.fields.trim().length) {
+          details.push(`Fields: ${source.fields.trim()}`);
+        }
+        if (typeof source.lastUpdated === 'string' && source.lastUpdated.trim().length) {
+          details.push(`Last updated: ${source.lastUpdated.trim()}`);
+        }
+
+        if (details.length) {
+          item.appendChild(document.createTextNode(` — ${details.join(' · ')}`));
+        }
+
+        list.appendChild(item);
+      });
+
+      detail.appendChild(list);
+    } else {
+      const note = document.createElement('p');
+      note.className = 'goat-sources-card__description';
+      note.textContent = 'Detailed sourcing will publish with the next GOAT refresh.';
+      detail.appendChild(note);
+    }
+
+    container.appendChild(detail);
+  });
+}
+
 function buildLeaderboard(players) {
   const container = document.querySelector('[data-goat-tree]');
   if (!container) return null;
@@ -554,6 +627,9 @@ async function init() {
 
     if (weights.length) {
       buildWeightCards(weights);
+      buildSourceNotes(weights);
+    } else {
+      buildSourceNotes([]);
     }
     renderGoatEquation(weights);
     if (players.length) {
