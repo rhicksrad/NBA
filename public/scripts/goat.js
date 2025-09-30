@@ -31,6 +31,10 @@ const TIER_PRIORITY = new Map([
   ['Prospect', 8],
 ]);
 
+const TIER_LABEL_OVERRIDES = new Map([
+  ['Hall of Fame', 'All-NBA'],
+]);
+
 const gaugeLabelPlugin = {
   id: 'gaugeLabel',
   beforeDraw(chart, _args, opts) {
@@ -193,7 +197,7 @@ function buildLeaderboard(players) {
 
     const label = document.createElement('span');
     label.className = 'goat-tier__summary-label';
-    label.textContent = group.tier;
+    label.textContent = TIER_LABEL_OVERRIDES.get(group.tier) ?? group.tier;
 
     const count = group.players.length;
     const playerWord = count === 1 ? 'player' : 'players';
