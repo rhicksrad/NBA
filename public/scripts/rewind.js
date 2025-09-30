@@ -52,6 +52,38 @@ function formatSigned(value, digits = 1, suffix = '') {
   return `${sign}${magnitude}${suffix}`;
 }
 
+function formatTimestamp(date) {
+  return new Intl.DateTimeFormat('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
+    timeZone: 'UTC',
+    timeZoneName: 'short',
+  }).format(date);
+}
+
+function setTimestamp(attribute, value) {
+  const nodes = document.querySelectorAll(`[data-${attribute}]`);
+  const date = value ? new Date(value) : null;
+  const valid = date && !Number.isNaN(date.getTime());
+  nodes.forEach((node) => {
+    if (valid) {
+      const formatted = formatTimestamp(date);
+      node.textContent = formatted;
+      if (node.tagName === 'TIME') {
+        node.dateTime = date.toISOString();
+      }
+    } else {
+      node.textContent = '—';
+      if (node.tagName === 'TIME') {
+        node.removeAttribute('datetime');
+      }
+    }
+  });
+}
+
 function setStat(attribute, value, formatter = (v) => v, fallback = '—') {
   const nodes = document.querySelectorAll(`[data-${attribute}]`);
   const hasValue = value !== undefined && value !== null && !(typeof value === 'number' && Number.isNaN(value));
@@ -983,12 +1015,17 @@ function populateHighlightPanels(data) {
   }
 }
 
+function removeImpactLab() {
+  const impactSection = document.querySelector('.impact-lab');
+  if (impactSection) {
+    impactSection.remove();
+  }
+}
+
 function populateClutchInsights(data) {
   const composite = Array.isArray(data?.clutchComposite) ? data.clutchComposite : [];
   if (!composite.length) {
-    setStat('stat-clutch-leader', null);
-    setStat('stat-clutch-leader-index', null);
-    setStat('stat-clutch-leader-ts', null);
+    removeImpactLab();
     return;
   }
 
@@ -1026,29 +1063,23 @@ function populateCallouts(data) {
 
 scheduleDataPromise
   .then((data) => {
+    setTimestamp('stat-schedule-updated', data?.generatedAt);
     populateCallouts(data);
   })
   .catch((error) => {
     console.error('Unable to hydrate season rewind view', error);
+    setTimestamp('stat-schedule-updated', null);
   });
 
 highlightDataPromise
   .then((data) => {
+    setTimestamp('stat-highlight-updated', data?.generatedAt);
     populateHighlightPanels(data);
     populateClutchInsights(data);
   })
   .catch((error) => {
     console.error('Unable to hydrate rewind highlight data', error);
+    setTimestamp('stat-highlight-updated', null);
     populateHighlightPanels({});
-    populateClutchInsights({});
-    const clutchWrapper = document
-      .querySelector('[data-chart="clutch-index"]')
-      ?.closest('[data-chart-wrapper]');
-    if (clutchWrapper && !clutchWrapper.querySelector('.viz-error__message')) {
-      clutchWrapper.classList.add('viz-error');
-      const message = document.createElement('p');
-      message.className = 'viz-error__message';
-      message.textContent = 'Clutch composite data unavailable.';
-      clutchWrapper.appendChild(message);
-    }
+    removeImpactLab();
   });
