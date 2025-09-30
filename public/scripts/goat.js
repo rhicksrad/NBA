@@ -123,17 +123,23 @@ function updateGeneratedTimestamp(data, sourceUrl) {
 const TIER_PRIORITY = new Map([
   ['Inner Circle', 0],
   ['Pantheon', 1],
-  ['All-Time Great', 2],
-  ['Hall of Fame', 3],
-  ['All-Star', 4],
-  ['Starter', 5],
-  ['Reserve', 6],
-  ['Rotation', 7],
-  ['Prospect', 8],
+  ['Legendary Core', 2],
+  ['All-Time Great', 3],
+  ['Hall of Fame', 4],
+  ['All-Star', 5],
+  ['Starter', 6],
+  ['Ascendant', 7],
+  ['Reserve', 8],
+  ['Rotation', 9],
+  ['Prospect', 10],
 ]);
 
 const TIER_LABEL_OVERRIDES = new Map([
   ['Hall of Fame', 'All-NBA'],
+]);
+
+const TIER_GROUP_ALIASES = new Map([
+  ['Legendary Core', 'Pantheon'],
 ]);
 
 const gaugeLabelPlugin = {
@@ -200,17 +206,53 @@ function formatDelta(value) {
   return `${sign}${helpers.formatNumber(value, 1)}`;
 }
 
-function tierSortValue(tier) {
+function tierSortValue(tier, bestRank = Infinity) {
   const normalized = typeof tier === 'string' && tier.trim().length ? tier : 'Uncategorized';
   const priority = TIER_PRIORITY.get(normalized);
-  return typeof priority === 'number' ? priority : 100;
+  if (typeof priority === 'number') {
+    return priority;
+  }
+  if (Number.isFinite(bestRank)) {
+    return 100 + bestRank / 100;
+  }
+  return 200;
+}
+
+function ensureSequentialRanks(records, rankKey = 'rank') {
+  if (!Array.isArray(records) || !records.length) {
+    return;
+  }
+
+  const rankedEntries = records
+    .map((record, index) => {
+      if (!record || typeof record !== 'object') {
+        return null;
+      }
+      const numericRank = Number(record[rankKey]);
+      if (!Number.isFinite(numericRank)) {
+        return null;
+      }
+      return { record, numericRank, index };
+    })
+    .filter(Boolean)
+    .sort((a, b) => {
+      if (a.numericRank !== b.numericRank) {
+        return a.numericRank - b.numericRank;
+      }
+      return a.index - b.index;
+    });
+
+  rankedEntries.forEach((entry, offset) => {
+    entry.record[rankKey] = offset + 1;
+  });
 }
 
 function groupPlayersByTier(players) {
   const tierMap = new Map();
 
   players.forEach((player) => {
-    const tier = typeof player.tier === 'string' && player.tier.trim().length ? player.tier : 'Uncategorized';
+    const rawTier = typeof player.tier === 'string' && player.tier.trim().length ? player.tier : 'Uncategorized';
+    const tier = TIER_GROUP_ALIASES.get(rawTier) ?? rawTier;
     if (!tierMap.has(tier)) {
       tierMap.set(tier, []);
     }
@@ -218,14 +260,23 @@ function groupPlayersByTier(players) {
   });
 
   return Array.from(tierMap.entries())
-    .map(([tier, tierPlayers]) => ({
-      tier,
-      players: tierPlayers.slice().sort((a, b) => (a.rank ?? Infinity) - (b.rank ?? Infinity)),
-    }))
+    .map(([tier, tierPlayers]) => {
+      const sortedPlayers = tierPlayers.slice().sort((a, b) => (a.rank ?? Infinity) - (b.rank ?? Infinity));
+      const bestRank = sortedPlayers.reduce((min, player) => {
+        if (Number.isFinite(player.rank) && player.rank < min) {
+          return player.rank;
+        }
+        return min;
+      }, Infinity);
+      return { tier, players: sortedPlayers, bestRank };
+    })
     .sort((a, b) => {
-      const tierDifference = tierSortValue(a.tier) - tierSortValue(b.tier);
+      const tierDifference = tierSortValue(a.tier, a.bestRank) - tierSortValue(b.tier, b.bestRank);
       if (tierDifference !== 0) {
         return tierDifference;
+      }
+      if (a.bestRank !== b.bestRank) {
+        return a.bestRank - b.bestRank;
       }
       return a.tier.localeCompare(b.tier);
     });
@@ -346,6 +397,8 @@ function buildLeaderboard(players) {
   if (!container) return null;
 
   container.innerHTML = '';
+
+  ensureSequentialRanks(players, 'rank');
 
   if (!players.length) {
     const placeholder = document.createElement('p');
