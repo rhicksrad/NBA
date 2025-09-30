@@ -44,13 +44,21 @@
     }
   }
 
-  const KEY_LOCATIONS = ['bdl-key.json', 'data/bdl-key.json'];
+  const KEY_LOCATIONS = ['data/bdl-key.json', 'bdl-key.json'];
 
   (async () => {
     for (const path of KEY_LOCATIONS) {
       try {
         const response = await fetch(path, { cache: 'no-store' });
         if (!response.ok) {
+          if (response.status === 404) {
+            continue;
+          }
+          console.warn(
+            "Unexpected response while loading Ball Don't Lie credential stub from",
+            path,
+            response.status,
+          );
           continue;
         }
         const payload = await response.json().catch(() => null);
@@ -58,6 +66,9 @@
         if (applyKey(key)) {
           return;
         }
+        // If we reached a real stub file but it did not provide a key, stop here to
+        // avoid cascading fetch attempts that create additional console noise.
+        return;
       } catch (error) {
         console.warn('Unable to load Ball Don\'t Lie credential stub from', path, error);
       }

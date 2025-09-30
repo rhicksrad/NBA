@@ -8,6 +8,7 @@ const LAST_COMPLETED_SEASON_FINALE = '2024-06-22';
 const EARLIEST_ARCHIVE_DATE = '2012-10-30';
 
 const stageRank = { live: 0, upcoming: 1, final: 2 };
+const ERROR_CODES = { missingApiKey: 'missing-api-key' };
 
 const scoreboardContainer = document.querySelector('[data-scoreboard]');
 const dateInput = document.querySelector('[data-game-date]');
@@ -89,6 +90,12 @@ function getApiKey() {
   return null;
 }
 
+function createMissingApiKeyError() {
+  const error = new Error("Ball Don't Lie API key not configured");
+  error.code = ERROR_CODES.missingApiKey;
+  return error;
+}
+
 function buildSearchParams(params) {
   const search = new URLSearchParams();
   Object.entries(params).forEach(([key, value]) => {
@@ -118,9 +125,10 @@ async function request(endpoint, params = {}) {
   }
   const headers = { Accept: 'application/json' };
   const apiKey = getApiKey();
-  if (apiKey) {
-    headers.Authorization = apiKey;
+  if (!apiKey) {
+    throw createMissingApiKeyError();
   }
+  headers.Authorization = apiKey;
   const response = await fetch(url.toString(), { headers });
   if (!response.ok) {
     throw new Error(`Request failed with status ${response.status}`);
@@ -924,14 +932,24 @@ async function loadGames(options = {}) {
     rebuildCharts();
   } catch (error) {
     console.error('Unable to load live games data', error);
-    const message = error?.message?.includes('401') ? 'Authorization failed' : 'Refresh failed';
+    const isMissingApiKey = error?.code === ERROR_CODES.missingApiKey;
+    const isUnauthorized = error?.message?.includes('401');
+    let message = 'Refresh failed';
+    if (isMissingApiKey) {
+      message = 'API key required';
+    } else if (isUnauthorized) {
+      message = 'Authorization failed';
+    }
     setFetchMessage(message, 'error');
     if (previousGames && previousGames.length) {
       latestGames = previousGames;
       updateMetrics(previousGames);
       renderScoreboard(previousGames);
     } else {
-      renderScoreboardState('Unable to load games right now.');
+      const fallbackMessage = isMissingApiKey
+        ? "Provide a Ball Don't Lie API key to load live games."
+        : 'Unable to load games right now.';
+      renderScoreboardState(fallbackMessage);
       updateMetrics([]);
     }
   } finally {
