@@ -7,6 +7,18 @@ import {
 } from "../fetch/bdl_active_rosters.js";
 import { TEAM_METADATA } from "../lib/teams.js";
 
+function allowPreseason(): boolean {
+  const v = process.env.ALLOW_PRESEASON_SIZES ?? "";
+  const n = v.trim().toLowerCase();
+  return n === "1" || n === "true" || n === "yes";
+}
+
+function preseasonMax(): number {
+  const raw = Number(process.env.PRESEASON_ROSTER_MAX);
+  // default 25 if not set or invalid
+  return Number.isFinite(raw) && raw > 0 ? Math.floor(raw) : 25;
+}
+
 async function verify(): Promise<void> {
   const rosters = await fetchActiveRosters();
   const empties = TEAM_METADATA.filter((team) => {
@@ -21,15 +33,20 @@ async function verify(): Promise<void> {
     );
   }
 
+  // Respect preseason bounds when enabled
+  const maxAllowed = allowPreseason() ? preseasonMax() : MAX_ACTIVE_ROSTER;
+  const minAllowed = MIN_ACTIVE_ROSTER;
+
   const outOfRange = TEAM_METADATA.filter((team) => {
     const record = rosters[team.tricode] ?? [];
-    return record.length < MIN_ACTIVE_ROSTER || record.length > MAX_ACTIVE_ROSTER;
+    const len = record.length;
+    return len < minAllowed || len > maxAllowed;
   });
 
   if (outOfRange.length > 0) {
     const sample = outOfRange.map((team) => `${team.tricode}:${rosters[team.tricode]?.length ?? 0}`);
     throw new Error(
-      `BDL verify failed: roster size out of bounds — ${sample.join(", ")}`,
+      `BDL verify failed: roster size out of bounds (min=${minAllowed}, max=${maxAllowed}) — ${sample.join(", ")}`,
     );
   }
 
