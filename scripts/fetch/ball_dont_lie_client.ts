@@ -188,6 +188,9 @@ export class BallDontLieClient {
     const cacheKey = season !== undefined ? `players-active-${teamId}-${season}` : `players-active-${teamId}`;
     return withCache(cacheKey, this.#ttlMs, async () => {
       const params: Record<string, QueryValue> = { "team_ids[]": teamId };
+      if (season !== undefined) {
+        params["seasons[]"] = season;
+      }
 
       const players = await this.paginate<BdlPlayer>(
         "/v1/players/active",

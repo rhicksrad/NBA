@@ -99,7 +99,7 @@ describe("BallDontLieClient.getActivePlayersByTeam", () => {
     const [url] = mockRequest.mock.calls[0];
     expect(url).toContain("/v1/players/active");
     expect(url).toContain("team_ids%5B%5D=42");
-    expect(url).not.toContain("seasons%5B%5D");
+    expect(url).toContain("seasons%5B%5D=2025");
     expect(players).toEqual([
       {
         id: 1,

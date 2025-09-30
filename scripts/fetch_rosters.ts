@@ -163,7 +163,7 @@ async function buildRosterFromBallDontLie(): Promise<RostersDoc> {
 
   for (const team of teams) {
     try {
-      const rawPlayers = await getActivePlayersByTeam(team.id);
+      const rawPlayers = await getActivePlayersByTeam(team.id, TARGET_SEASON_START_YEAR);
       const roster = rawPlayers.map(normalizePlayer).sort((a, b) => {
         const aName = `${a.last_name} ${a.first_name}`.toLowerCase();
         const bName = `${b.last_name} ${b.first_name}`.toLowerCase();
