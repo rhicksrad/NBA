@@ -18,7 +18,11 @@ function parseBoolean(value: string | undefined): boolean {
 }
 
 function allowPreseason(): boolean {
-  return parseBoolean(process.env.ALLOW_PRESEASON_SIZES);
+  const raw = process.env.ALLOW_PRESEASON_SIZES;
+  if (raw === undefined) {
+    return true;
+  }
+  return parseBoolean(raw);
 }
 
 function preseasonMax(): number {
@@ -50,7 +54,7 @@ async function verify(): Promise<void> {
   const maxAllowed = preseason ? preseasonMax() : REGULAR_SEASON_MAX;
 
   if (preseason) {
-    console.warn(`BDL verify: preseason roster bounds in effect (min=${minAllowed}, max=${maxAllowed}).`);
+    console.log(`BDL verify: preseason roster bounds (min=${minAllowed}, max=${maxAllowed}).`);
   } else {
     console.log(`BDL verify: regular-season roster bounds (min=${minAllowed}, max=${maxAllowed}).`);
   }
