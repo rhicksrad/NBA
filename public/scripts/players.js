@@ -1347,7 +1347,7 @@ function formatBdlWeight(weight) {
     return null;
   }
   if (/^\d+(\.\d+)?$/.test(trimmed)) {
-    return `${trimmed} lb`;
+    return `${trimmed} lbs`;
   }
   return trimmed;
 }

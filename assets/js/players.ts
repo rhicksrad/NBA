@@ -316,7 +316,7 @@ function renderDoc(doc: RostersDoc) {
         .map((player) => {
           const jersey = player.jersey ? `#${player.jersey}` : "";
           const pieces = [player.position ?? "", jersey].filter(Boolean).join(" · ");
-          const meta = [player.height ?? "", player.weight ? `${player.weight} lb` : ""]
+          const meta = [player.height ?? "", player.weight ? `${player.weight} lbs` : ""]
             .filter(Boolean)
             .join(" • ");
           return `

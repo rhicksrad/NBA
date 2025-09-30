@@ -35,7 +35,7 @@ var C=new URL("./data/rosters.json",document.baseURI).toString();async function 
         <button type="button" class="roster-button" data-roster-refresh>Refresh</button>
       </div>
     </div>
-  `,D=o.map(n=>{let c=n.players.filter(m=>V(m,r.searchTerm)),T=c.map(m=>{var S,A;let N=m.jersey?`#${m.jersey}`:"",$=[(S=m.position)!=null?S:"",N].filter(Boolean).join(" \xB7 "),L=[(A=m.height)!=null?A:"",m.weight?`${m.weight} lb`:""].filter(Boolean).join(" \u2022 ");return`
+  `,D=o.map(n=>{let c=n.players.filter(m=>V(m,r.searchTerm)),T=c.map(m=>{var S,A;let N=m.jersey?`#${m.jersey}`:"",$=[(S=m.position)!=null?S:"",N].filter(Boolean).join(" \xB7 "),L=[(A=m.height)!=null?A:"",m.weight?`${m.weight} lbs`:""].filter(Boolean).join(" \u2022 ");return`
             <li class="roster-player">
               <span class="roster-player__name">${p(m.name)}</span>
               ${$?`<span class="roster-player__role">${p($)}</span>`:""}

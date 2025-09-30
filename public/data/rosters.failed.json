@@ -1,5 +1,0 @@
-{
-  "error": "exception",
-  "message": "401 Unauthorized for https://api.balldontlie.io/v1/players/active?per_page=100",
-  "at": "2025-09-30T15:17:23.314Z"
-}
