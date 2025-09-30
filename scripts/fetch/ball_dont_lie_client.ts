@@ -3,7 +3,7 @@ import { z } from "zod";
 import { DEFAULT_TTL_MS, withCache } from "./cache.js";
 import { request } from "./http.js";
 
-const DEFAULT_API_BASE = "https://api.balldontlie.io";
+const DEFAULT_API_BASE = "https://bdlproxy.hicksrch.workers.dev/bdl";
 
 const metaSchema = z
   .object({
@@ -75,7 +75,7 @@ export interface TeamMap {
 }
 
 export interface BallDontLieClientOptions {
-  /** Base URL for API requests. Defaults to https://api.balldontlie.io */
+  /** Base URL for API requests. Defaults to https://bdlproxy.hicksrch.workers.dev/bdl */
   baseUrl?: string;
   /** Cache TTL used for top-level resource snapshots. Defaults to DEFAULT_TTL_MS */
   ttlMs?: number;
@@ -101,9 +101,12 @@ export class BallDontLieClient {
   }
 
   private buildUrl(pathname: string, params: URLSearchParams): string {
-    const base = new URL(pathname, this.#baseUrl);
-    base.search = params.toString();
-    return base.toString();
+    const base = this.#baseUrl.replace(/\/+$/, "");
+    const normalizedPath = pathname.startsWith("/") ? pathname : `/${pathname}`;
+    const full = `${base}${normalizedPath}`;
+    const url = new URL(full);
+    url.search = params.toString();
+    return url.toString();
   }
 
   async paginate<T>(

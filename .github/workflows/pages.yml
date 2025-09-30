@@ -37,33 +37,11 @@ jobs:
 
       - name: Build data
         run: pnpm build:data
-        env:
-          BALLDONTLIE_API_KEY: ${{ secrets.BALLDONTLIE_API_KEY }}
-
-      - name: Inject BDL key
-        run: pnpm inject:bdl
-        env:
-          VITE_BDL_KEY: ${{ secrets.BALLDONTLIE_API_KEY }}
-
-      - name: Verify injected key exists in artifact
-        run: |
-          test -f public/assets/bdl-credentials.js
-          node -e "
-            const fs=require('fs');
-            const s=fs.readFileSync('public/assets/bdl-credentials.js','utf8');
-            if(!/const EMBEDDED_KEY = \"(?!__VITE_BDL_KEY__)\"/.test(s)){
-              console.error('BDL key placeholder still present');
-              process.exit(1);
-            }
-          "
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: public
-
-      - name: Restore placeholder in working tree
-        run: pnpm restore:bdl
 
   deploy:
     environment:

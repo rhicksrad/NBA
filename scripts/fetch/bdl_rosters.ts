@@ -11,26 +11,7 @@ export interface BallDontLieRosters extends LeagueDataSource {
 
 export const MAX_TEAM_ACTIVE = 30;
 
-const API = "https://api.balldontlie.io/v1/";
-
-function resolveBdlKey(): string | undefined {
-  const candidates = [
-    process.env.BDL_API_KEY,
-    process.env.BALLDONTLIE_API_KEY,
-    process.env.BALL_DONT_LIE_API_KEY,
-  ];
-
-  for (const value of candidates) {
-    const trimmed = value?.trim();
-    if (trimmed) {
-      return trimmed;
-    }
-  }
-
-  return undefined;
-}
-
-const KEY = resolveBdlKey();
+const API_BASE = "https://bdlproxy.hicksrch.workers.dev/bdl";
 const PER_PAGE = 100;
 const MAX_RETRIES = 2;
 
@@ -64,7 +45,7 @@ function toSourcePlayer(player: BdlApiPlayer, teamId: string, tricode: string): 
 
 async function http<T>(path: string, qs: Record<string, string | number | undefined>): Promise<T> {
   const normalizedPath = path.replace(/^\/+/, "");
-  const url = new URL(normalizedPath, API);
+  const url = new URL(`${API_BASE}/v1/${normalizedPath}`);
   Object.entries(qs).forEach(([key, value]) => {
     if (value !== undefined) {
       url.searchParams.append(key, String(value));
@@ -109,12 +90,6 @@ async function fetchTeamPlayers(teamId: number, season: number): Promise<BdlApiP
 export async function fetchBallDontLieRosters(
   targetSeason: number = resolveSeasonStartYear(SEASON),
 ): Promise<BallDontLieRosters> {
-  if (!KEY) {
-    throw new Error(
-      "Missing BDL_API_KEY — set your Ball Don't Lie All-Star key or enable USE_BDL_CACHE=1",
-    );
-  }
-
   const bdlTeams = await getTeams();
   if (!bdlTeams.length) {
     throw new Error("Ball Don't Lie returned no teams");

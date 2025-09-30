@@ -12,7 +12,7 @@ import {
   writeMinifiedJsonFile,
 } from "./utils.js";
 
-const API_BASE = "https://api.balldontlie.io/v1";
+const API_BASE = "https://bdlproxy.hicksrch.workers.dev/bdl";
 const PER_PAGE = 100;
 const MAX_PAGES = Number(process.env.HISTORY_PAGE_CAP ?? 2500);
 const PAGE_DELAY_MS = Number(process.env.HISTORY_PAGE_DELAY_MS ?? 250);
@@ -112,7 +112,7 @@ async function fetchPage(cursor?: string): Promise<PageResponse> {
     query.set("cursor", cursor);
   }
 
-  const url = `${API_BASE}/players?${query.toString()}`;
+  const url = `${API_BASE}/v1/players?${query.toString()}`;
   const raw = await request<unknown>(url);
   return pageSchema.parse(raw);
 }

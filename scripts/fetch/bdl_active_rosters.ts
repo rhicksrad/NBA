@@ -1,43 +1,11 @@
 import type { BdlPlayer } from "./ball_dont_lie_client.js";
-import { loadSecret } from "../lib/secrets.js";
 import { TEAM_METADATA } from "../lib/teams.js";
 import { mapBdlTeamToTricode } from "./bdl_team_mappings.js";
 
-const API_BASE = "https://api.balldontlie.io/v1/";
-const ACTIVE_PATH = "players/active";
+const API_BASE = "https://bdlproxy.hicksrch.workers.dev/bdl/";
+const ACTIVE_PATH = "v1/players/active";
 const MAX_PER_PAGE = 100;
 const FLAG_KEYS = ["active", "is_active", "on_team", "on_roster"] as const;
-
-function resolveBdlKey(): string | undefined {
-  const candidates = [
-    process.env.BDL_API_KEY,
-    process.env.BALLDONTLIE_API_KEY,
-    process.env.BALL_DONT_LIE_API_KEY,
-  ];
-
-  for (const value of candidates) {
-    const trimmed = value?.trim();
-    if (trimmed) {
-      return trimmed;
-    }
-  }
-
-  const fileKey = loadSecret("bdl_api_key", {
-    aliases: ["ball_dont_lie_api_key", "balldontlie_api_key", "ball-dont-lie"],
-  });
-
-  return fileKey?.trim() || undefined;
-}
-
-function requireKey(): string {
-  const key = resolveBdlKey();
-  if (!key) {
-    throw new Error(
-      "Missing BDL_API_KEY — set your Ball Don't Lie All-Star key or enable USE_BDL_CACHE=1",
-    );
-  }
-  return key;
-}
 
 function parsePerPage(): number {
   const fromEnv = Number(process.env.BDL_ACTIVE_PER_PAGE);
@@ -102,7 +70,6 @@ export function getLastActiveRosterFetchMeta(): ActiveRosterFetchMeta | null {
 
 export async function fetchActiveRosters(): Promise<ActiveRosters> {
   const perPage = parsePerPage();
-  const authKey = requireKey();
 
   console.log(
     `BDL fetch: GET ${API_BASE}${ACTIVE_PATH} with per_page=${perPage} (max ${MAX_PER_PAGE})`,
@@ -128,7 +95,7 @@ export async function fetchActiveRosters(): Promise<ActiveRosters> {
     const response = await fetch(url, {
       method: "GET",
       headers: {
-        Authorization: authKey,
+        Accept: "application/json",
       },
     });
 

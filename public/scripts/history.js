@@ -1,7 +1,6 @@
-import { authHeaders, ensureBdlKeyReady } from '../assets/js/credentials.js';
+import { bdl } from '../assets/js/bdl.js';
 import { enablePanZoom, enhanceUsaInsets } from './map-utils.js';
 
-const API_BASE = 'https://api.balldontlie.io/v1';
 const LATEST_COMPLETED_SEASON = 2024;
 const EARLIEST_SEASON = 1979;
 const PLAYERS_MIN_URL = 'data/history/players.index.min.json';
@@ -312,22 +311,17 @@ async function fetchSeasonAggregate(player, postseason) {
     dreb: 0,
   };
   const seasons = new Set();
-  const headers = { Accept: 'application/json', ...(await authHeaders()) };
   const { start, end } = resolveSeasonRange(player);
   let emptyStreak = 0;
 
   for (let season = start; season <= end; season += 1) {
-    const url = new URL(`${API_BASE}/season_averages`);
-    url.searchParams.set('season', String(season));
-    url.searchParams.set('player_id', String(playerId));
+    const params = new URLSearchParams();
+    params.set('season', String(season));
+    params.set('player_id', String(playerId));
     if (postseason) {
-      url.searchParams.set('postseason', 'true');
+      params.set('postseason', 'true');
     }
-    const response = await fetch(url, { headers, cache: 'no-store' });
-    if (!response.ok) {
-      throw new Error(`Season averages request failed with ${response.status}`);
-    }
-    const payload = await response.json();
+    const payload = await bdl(`/v1/season_averages?${params.toString()}`, { cache: 'no-store' });
     const record = Array.isArray(payload.data) ? payload.data[0] ?? null : null;
     if (!record) {
       if (totals.games > 0) {
@@ -1091,16 +1085,9 @@ async function bootstrap() {
       };
 
       totalsContainer.innerHTML = '';
-      try {
-        await ensureBdlKeyReady();
-      } catch (credentialError) {
-        console.warn('Ball Don\'t Lie credentials unavailable for history view', credentialError);
-        renderCached('Career totals are unavailable without the site credentials right now.');
-        return;
-      }
 
       totalsContainer.append(
-        createElement('p', 'history-player__hint', 'Fetching the career log with site credentials…'),
+        createElement('p', 'history-player__hint', "Fetching the live career log from Ball Don't Lie…"),
       );
 
       try {
