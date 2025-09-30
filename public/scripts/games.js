@@ -49,6 +49,7 @@ let latestGames = [];
 let lastUpdated = null;
 let refreshTimer = null;
 let loading = false;
+let credentialToken = getApiKey();
 
 function getTodayIso() {
   const now = new Date();
@@ -118,9 +119,10 @@ async function request(endpoint, params = {}) {
   }
   const headers = { Accept: 'application/json' };
   const apiKey = getApiKey();
-  if (apiKey) {
-    headers.Authorization = apiKey;
+  if (!apiKey) {
+    throw new Error("Ball Don't Lie API key missing");
   }
+  headers.Authorization = apiKey;
   const response = await fetch(url.toString(), { headers });
   if (!response.ok) {
     throw new Error(`Request failed with status ${response.status}`);
@@ -924,15 +926,30 @@ async function loadGames(options = {}) {
     rebuildCharts();
   } catch (error) {
     console.error('Unable to load live games data', error);
-    const message = error?.message?.includes('401') ? 'Authorization failed' : 'Refresh failed';
-    setFetchMessage(message, 'error');
-    if (previousGames && previousGames.length) {
-      latestGames = previousGames;
-      updateMetrics(previousGames);
-      renderScoreboard(previousGames);
+    const rawMessage = typeof error?.message === 'string' ? error.message : '';
+    const missingKey = rawMessage.includes('API key missing');
+    const unauthorized = rawMessage.includes('401');
+    if (missingKey) {
+      setFetchMessage('API key required', 'error');
+      if (!previousGames || !previousGames.length) {
+        renderScoreboardState("Add your Ball Don't Lie API key to enable live games.");
+        updateMetrics([]);
+      } else {
+        latestGames = previousGames;
+        updateMetrics(previousGames);
+        renderScoreboard(previousGames);
+      }
     } else {
-      renderScoreboardState('Unable to load games right now.');
-      updateMetrics([]);
+      const message = unauthorized ? 'Authorization failed' : 'Refresh failed';
+      setFetchMessage(message, 'error');
+      if (previousGames && previousGames.length) {
+        latestGames = previousGames;
+        updateMetrics(previousGames);
+        renderScoreboard(previousGames);
+      } else {
+        renderScoreboardState('Unable to load games right now.');
+        updateMetrics([]);
+      }
     }
   } finally {
     loading = false;
@@ -993,6 +1010,17 @@ function init() {
   renderScoreboardState('Loading games…');
   loadGames();
   scheduleAutoRefresh();
+}
+
+if (typeof document !== 'undefined') {
+  document.addEventListener('bdl:credentials-applied', () => {
+    const nextKey = getApiKey();
+    if (!nextKey || nextKey === credentialToken) {
+      return;
+    }
+    credentialToken = nextKey;
+    loadGames({ silent: Boolean(latestGames && latestGames.length) });
+  });
 }
 
 init();
