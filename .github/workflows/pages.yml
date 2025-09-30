@@ -1,9 +1,8 @@
-# .github/workflows/pages.yml
-name: Deploy
+name: Deploy GitHub Pages
 
 on:
   push:
-    branches: [main]
+    branches: [ main ]
   workflow_dispatch:
 
 permissions:
@@ -12,8 +11,8 @@ permissions:
   id-token: write
 
 concurrency:
-  group: pages
-  cancel-in-progress: false
+  group: "pages"
+  cancel-in-progress: true
 
 jobs:
   build:
@@ -26,71 +25,53 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: "pnpm"
 
-      - name: Install pnpm (and fix PATH)
-        shell: bash
-        run: |
-          npm i -g pnpm@9.12.1
-          echo "$(npm config get prefix)/bin" >> "$GITHUB_PATH"
-          pnpm -v
-
-      - name: Use dedicated pnpm store
-        run: pnpm config set store-dir ~/.pnpm-store
-
-      - name: Cache pnpm store
-        uses: actions/cache@v4
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
         with:
-          path: ~/.pnpm-store
-          key: pnpm-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: pnpm-${{ runner.os }}-
+          version: 9.12.1
 
       - name: Install deps
-        run: pnpm install --frozen-lockfile
+        run: pnpm i --frozen-lockfile
 
-      # build/refresh data if you need to
-      # - name: Fetch rosters
-      #   env:
-      #     BALLDONTLIE_API_KEY: ${{ secrets.BALLDONTLIE_API_KEY }}
-      #     DATA_TTL_HOURS: 6
-      #   run: pnpm run fetch:rosters
+      - name: Build data
+        run: pnpm build:data
+        env:
+          BALLDONTLIE_API_KEY: ${{ secrets.BALLDONTLIE_API_KEY }}
 
-      - name: Build
-        run: pnpm run build
+      - name: Inject BDL key
+        run: pnpm inject:bdl
+        env:
+          VITE_BDL_KEY: ${{ secrets.BALLDONTLIE_API_KEY }}
 
-      # --- pick the deploy dir automatically ---
-      - name: Pick deploy dir
-        id: pickdir
-        shell: bash
+      - name: Verify injected key exists in artifact
         run: |
-          set -euo pipefail
-          if [ -f public/index.html ]; then
-            echo "dir=public" >> "$GITHUB_OUTPUT"
-          elif [ -f index.html ]; then
-            echo "dir=." >> "$GITHUB_OUTPUT"
-          else
-            echo "No index.html found in repo root or public/"; ls -la; exit 1
-          fi
-          echo "Deploying from: $(cat "$GITHUB_OUTPUT" | cut -d= -f2)"
+          test -f public/assets/bdl-credentials.js
+          node -e "
+            const fs=require('fs');
+            const s=fs.readFileSync('public/assets/bdl-credentials.js','utf8');
+            if(!/const EMBEDDED_KEY = \"(?!__VITE_BDL_KEY__)\"/.test(s)){
+              console.error('BDL key placeholder still present');
+              process.exit(1);
+            }
+          "
 
-      - name: List deploy files
-        run: |
-          echo "Listing ${{ steps.pickdir.outputs.dir }}"
-          ls -la ${{ steps.pickdir.outputs.dir }} | sed -n '1,200p'
-
-      - name: Upload artifact
+      - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ${{ steps.pickdir.outputs.dir }}
+          path: public
+
+      - name: Restore placeholder in working tree
+        run: pnpm restore:bdl
 
   deploy:
-    needs: build
-    runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    permissions:
-      pages: write
-      id-token: write
+    runs-on: ubuntu-latest
+    needs: build
     steps:
-      - id: deployment
+      - name: Deploy to GitHub Pages
+        id: deployment
         uses: actions/deploy-pages@v4
