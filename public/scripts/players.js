@@ -1654,7 +1654,7 @@ function initializeRosterApp({
     const relativeTime = doc?.fetched_at ? formatRelativeTime(doc.fetched_at) : null;
     const metaParts = [];
     metaParts.push(relativeTime ? `Last updated ${relativeTime}` : 'Last updated not yet available');
-    metaParts.push('Source: BallDontLie');
+    metaParts.push('Source: live league data feed');
     if (Number.isFinite(doc?.ttl_hours)) {
       metaParts.push(`TTL ${doc.ttl_hours}h`);
     }
@@ -1795,7 +1795,7 @@ function initPlayerAtlas() {
   if (statsSeasonEl) {
     statsSeasonEl.textContent = seasonLabel;
   }
-  const defaultStatsMeta = `BallDontLie season averages for the ${seasonLabel} season.`;
+  const defaultStatsMeta = `Season averages for the ${seasonLabel} season.`;
   if (statsMeta) {
     statsMeta.textContent = defaultStatsMeta;
   }
@@ -1887,13 +1887,13 @@ function initPlayerAtlas() {
 
     if (statsMeta) {
       if (status === 'loading') {
-        statsMeta.textContent = `Loading BallDontLie season averages for the ${seasonLabel} season…`;
+        statsMeta.textContent = `Loading season averages for the ${seasonLabel} season…`;
       } else if (status === 'ready') {
         statsMeta.textContent = defaultStatsMeta;
       } else if (status === 'empty') {
-        statsMeta.textContent = `No BallDontLie season averages recorded for the ${seasonLabel} season.`;
+        statsMeta.textContent = `No season averages recorded for the ${seasonLabel} season.`;
       } else if (status === 'error') {
-        statsMeta.textContent = `We couldn't load BallDontLie season averages right now.`;
+        statsMeta.textContent = `We couldn't load season averages right now.`;
       } else {
         statsMeta.textContent = defaultStatsMeta;
       }
@@ -1961,7 +1961,7 @@ function initPlayerAtlas() {
         updateStatsView('ready', stats);
       }
     } catch (seasonError) {
-      console.warn('Unable to load BallDontLie season averages', seasonError);
+      console.warn('Unable to load season averages', seasonError);
       if (requestId === statsRequestToken) {
         updateStatsView('error');
       }
@@ -1988,7 +1988,7 @@ function initPlayerAtlas() {
     }
 
     const sourceName = currentRostersDoc.source === 'ball_dont_lie' || !currentRostersDoc.source
-      ? 'BallDontLie'
+      ? 'Primary league data feed'
       : String(currentRostersDoc.source);
     parts.push(`Source: ${sourceName}`);
 
@@ -2188,7 +2188,7 @@ function initPlayerAtlas() {
     }
   };
 
-  const applyBallDontLieDoc = (doc) => {
+  const applyPrimaryFeedDoc = (doc) => {
     currentRostersDoc = doc ?? null;
     updateRosterTimestamp();
     playersByBdlId.clear();
@@ -2708,7 +2708,7 @@ function initPlayerAtlas() {
       }
 
       if (rostersDoc) {
-        applyBallDontLieDoc(rostersDoc);
+        applyPrimaryFeedDoc(rostersDoc);
       } else {
         playersByBdlId.clear();
         setActivePlayers([]);
@@ -2734,7 +2734,7 @@ function initPlayerAtlas() {
           loadDoc: loadLatestRosters,
           onDocLoaded: (doc) => {
             if (doc && Array.isArray(doc?.teams)) {
-              applyBallDontLieDoc(doc);
+              applyPrimaryFeedDoc(doc);
             }
           },
           selectPlayerByBdlId,

@@ -237,7 +237,7 @@ async function fetchStatAggregate(playerId, apiKey, postseason) {
     }
     const response = await fetch(url, { headers });
     if (!response.ok) {
-      throw new Error(`Ball Don't Lie stats request failed with ${response.status}`);
+      throw new Error(`Live stats request failed with ${response.status}`);
     }
     const payload = await response.json();
     const data = Array.isArray(payload.data) ? payload.data : [];
@@ -289,7 +289,7 @@ function renderTotalsTable(title, data) {
     const wrapper = createElement('div', 'history-player__totals');
     wrapper.append(createElement('h4', 'history-player__totals-heading', title));
     wrapper.append(
-      createElement('p', 'history-player__totals-empty', 'No games recorded in the Ball Don\'t Lie archive.'),
+      createElement('p', 'history-player__totals-empty', 'No games recorded in the archive yet.'),
     );
     return wrapper;
   }
@@ -524,7 +524,7 @@ function renderSearchResults(players, term) {
   selectors.searchResults.innerHTML = '';
   if (!term || !term.trim()) {
     selectors.searchResults.append(
-      createElement('li', 'history-search__hint', 'Enter a player name to start searching the Ball Don\'t Lie archive.'),
+      createElement('li', 'history-search__hint', 'Enter a player name to start searching the archive.'),
     );
     return;
   }
@@ -955,13 +955,13 @@ async function bootstrap() {
             createElement(
               'p',
               'history-player__error',
-              'Ball Don\'t Lie credentials are not configured for this site. Reach out to the data team to restore access.',
+              'Live stats credentials are not configured for this site. Reach out to the data team to restore access.',
             ),
           );
           return;
         }
         totalsContainer.append(
-          createElement('p', 'history-player__hint', 'Fetching Ball Don\'t Lie career log with site credentials…'),
+          createElement('p', 'history-player__hint', 'Fetching the career log with site credentials…'),
         );
         try {
           const career = await fetchCareerStats(playerId, apiKey);
@@ -975,7 +975,7 @@ async function bootstrap() {
             createElement(
               'p',
               'history-player__error',
-              'We hit a snag pulling Ball Don\'t Lie stats. Try again in a moment.',
+              'We hit a snag pulling the career stats. Try again in a moment.',
             ),
           );
         }
