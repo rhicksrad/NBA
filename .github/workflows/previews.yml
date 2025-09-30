@@ -2,7 +2,7 @@ name: Previews pipeline
 
 on:
   push:
-    branches: [main]
+    branches: [ main ]
   schedule:
     - cron: "27 7 * * *"
   workflow_dispatch:
@@ -29,7 +29,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: pnpm
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -49,7 +48,7 @@ jobs:
         env:
           BALLDONTLIE_API_KEY: ${{ secrets.BALLDONTLIE_API_KEY }}
         run: |
-          test -n "$BALLDONTLIE_API_KEY" || { echo "Missing BALLDONTLIE_API_KEY"; exit 2; }
+          test -n "$BALLDONTLIE_API_KEY" || { echo "Missing BALLDONTLIE_API_KEY" >&2; exit 2; }
 
       - name: Stamp date
         id: metadata
