@@ -1642,23 +1642,21 @@ function renderGamePage(
     <style>
       body {
         margin: 0;
-        padding: clamp(1.5rem, 4vw, 3rem);
+        padding: clamp(1rem, 2.5vw, 2.4rem);
         display: flex;
         justify-content: center;
-        background:
-          linear-gradient(155deg, rgba(17, 86, 214, 0.12), rgba(239, 61, 91, 0.08)),
-          color-mix(in srgb, var(--surface) 88%, rgba(14, 34, 68, 0.08) 12%);
+        background: color-mix(in srgb, var(--surface-alt) 78%, rgba(14, 34, 68, 0.08) 22%);
       }
 
       .preview-shell {
-        width: min(1150px, 100%);
+        width: min(1040px, 100%);
         display: grid;
-        gap: clamp(1.5rem, 3vw, 2.75rem);
-        background: color-mix(in srgb, rgba(255, 255, 255, 0.94) 72%, rgba(242, 246, 255, 0.92) 28%);
-        border-radius: var(--radius-xl);
-        border: 1px solid color-mix(in srgb, var(--royal) 16%, transparent);
-        padding: clamp(1.85rem, 3.4vw, 2.9rem);
-        box-shadow: var(--shadow-soft);
+        gap: clamp(1.1rem, 2.6vw, 2.15rem);
+        background: color-mix(in srgb, rgba(255, 255, 255, 0.95) 74%, rgba(242, 246, 255, 0.92) 26%);
+        border-radius: var(--radius-lg);
+        border: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
+        padding: clamp(1.4rem, 2.8vw, 2.35rem);
+        box-shadow: 0 28px 42px rgba(11, 37, 69, 0.08);
         position: relative;
         overflow: hidden;
       }
@@ -1667,13 +1665,10 @@ function renderGamePage(
         content: "";
         position: absolute;
         inset: 0;
-        background: linear-gradient(
-          160deg,
-          rgba(17, 86, 214, 0.14),
-          rgba(244, 181, 63, 0.12) 55%,
-          rgba(239, 61, 91, 0.1)
-        );
-        opacity: 0.55;
+        background: radial-gradient(circle at 12% 18%, rgba(17, 86, 214, 0.12), transparent 45%),
+          radial-gradient(circle at 88% 12%, rgba(239, 61, 91, 0.1), transparent 50%),
+          linear-gradient(160deg, rgba(17, 86, 214, 0.08), rgba(244, 181, 63, 0.06));
+        opacity: 0.45;
         pointer-events: none;
       }
 
@@ -1683,91 +1678,123 @@ function renderGamePage(
 
       .preview-header {
         display: grid;
-        gap: 0.65rem;
+        gap: clamp(0.35rem, 1vw, 0.6rem);
+        padding: clamp(1.1rem, 2.2vw, 1.6rem);
+        border-radius: var(--radius-lg);
+        border: 1px solid color-mix(in srgb, var(--border) 65%, transparent);
+        background: color-mix(in srgb, var(--surface) 82%, rgba(17, 86, 214, 0.06) 18%);
+        align-content: start;
       }
 
-      .preview-header time {
-        font-weight: 600;
-        color: color-mix(in srgb, var(--navy) 78%, rgba(14, 34, 68, 0.42) 22%);
+      @media (min-width: 720px) {
+        .preview-header {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: clamp(0.45rem, 1vw, 0.75rem);
+        }
+
+        .preview-header .chip,
+        .preview-header h1,
+        .preview-header .lead {
+          grid-column: 1 / -1;
+        }
       }
 
-      .preview-header p {
+      .preview-header .chip {
+        font-size: 0.7rem;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+      }
+
+      .preview-header time,
+      .preview-header p:not(.lead) {
         margin: 0;
-        color: var(--text-subtle);
+        font-size: 0.92rem;
+        color: color-mix(in srgb, var(--navy) 72%, rgba(14, 34, 68, 0.38) 28%);
       }
 
       .preview-header h1 {
         margin: 0;
-        font-size: clamp(2rem, 4.8vw, 2.65rem);
+        font-size: clamp(1.65rem, 3.6vw, 2.15rem);
+        line-height: 1.08;
+        letter-spacing: -0.01em;
         color: var(--navy);
+      }
+
+      .preview-header .lead {
+        font-size: 0.98rem;
+        color: var(--text-subtle);
       }
 
       .preview-summary {
         display: grid;
-        gap: clamp(1rem, 2.6vw, 1.6rem);
+        gap: clamp(0.85rem, 2.2vw, 1.4rem);
+        padding: clamp(1.05rem, 2.4vw, 1.6rem);
+        border-radius: var(--radius-lg);
+        border: 1px solid color-mix(in srgb, var(--border) 65%, transparent);
+        background: color-mix(in srgb, var(--surface) 86%, rgba(17, 86, 214, 0.04) 14%);
       }
 
       .preview-summary__header {
         display: grid;
-        gap: 0.35rem;
+        gap: 0.3rem;
       }
 
       .preview-summary__title {
         margin: 0;
-        font-size: 0.82rem;
+        font-size: 0.78rem;
         letter-spacing: 0.14em;
         text-transform: uppercase;
-        color: color-mix(in srgb, var(--navy) 70%, rgba(14, 34, 68, 0.4) 30%);
+        color: color-mix(in srgb, var(--navy) 68%, rgba(14, 34, 68, 0.4) 32%);
       }
 
       .preview-summary__tagline {
         margin: 0;
-        font-size: 0.95rem;
+        font-size: 0.93rem;
         color: var(--text-subtle);
-        max-width: 56ch;
+        max-width: 60ch;
       }
 
       .preview-summary__grid {
         display: grid;
-        gap: clamp(1rem, 3vw, 1.6rem);
-        grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+        gap: clamp(0.85rem, 2.4vw, 1.4rem);
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       }
 
       .preview-summary__card {
         display: grid;
-        gap: 0.6rem;
-        padding: clamp(1rem, 2.6vw, 1.4rem);
+        gap: 0.55rem;
+        padding: clamp(0.9rem, 2.2vw, 1.3rem);
         border-radius: var(--radius-lg);
-        border: 1px solid color-mix(in srgb, var(--royal) 14%, transparent);
-        background: color-mix(in srgb, rgba(255, 255, 255, 0.92) 68%, rgba(242, 246, 255, 0.88) 32%);
-        box-shadow: var(--shadow-soft);
+        border: 1px solid color-mix(in srgb, var(--border) 65%, transparent);
+        background: color-mix(in srgb, rgba(255, 255, 255, 0.95) 72%, rgba(242, 246, 255, 0.92) 28%);
+        box-shadow: 0 18px 28px rgba(11, 37, 69, 0.06);
       }
 
       .preview-summary__card h2 {
         margin: 0;
-        font-size: 1rem;
+        font-size: 0.98rem;
         color: var(--navy);
       }
 
       .preview-summary__card p {
         margin: 0;
-        font-size: 0.95rem;
+        font-size: 0.93rem;
         color: var(--text-subtle);
       }
 
       .preview-summary__list {
-        margin: 0.35rem 0 0 0;
+        margin: 0.3rem 0 0 0;
         padding: 0;
         list-style: none;
         display: grid;
-        gap: 0.45rem;
-        font-size: 0.95rem;
+        gap: 0.4rem;
+        font-size: 0.93rem;
         color: var(--text-subtle);
       }
 
       .preview-summary__list li {
         margin: 0;
-        padding-left: 1.1rem;
+        padding-left: 1rem;
         position: relative;
       }
 
@@ -1781,7 +1808,7 @@ function renderGamePage(
 
       .preview-body {
         display: grid;
-        gap: clamp(1.2rem, 3vw, 1.9rem);
+        gap: clamp(1rem, 2.6vw, 1.7rem);
       }
 
       @media (min-width: 960px) {
@@ -1793,46 +1820,43 @@ function renderGamePage(
 
       .preview-card {
         display: grid;
-        gap: clamp(0.85rem, 2.4vw, 1.4rem);
-        padding: clamp(1.2rem, 2.8vw, 1.85rem);
+        gap: clamp(0.7rem, 2vw, 1.2rem);
+        padding: clamp(1rem, 2.4vw, 1.6rem);
         border-radius: var(--radius-lg);
-        border: 1px solid color-mix(in srgb, var(--royal) 16%, transparent);
-        background: color-mix(in srgb, rgba(255, 255, 255, 0.94) 70%, rgba(242, 246, 255, 0.9) 30%);
-        box-shadow: var(--shadow-soft);
+        border: 1px solid color-mix(in srgb, var(--border) 68%, transparent);
+        background: color-mix(in srgb, var(--surface) 90%, rgba(17, 86, 214, 0.04) 10%);
+        box-shadow: 0 22px 32px rgba(11, 37, 69, 0.07);
       }
 
       .preview-card--story {
-        background:
-          linear-gradient(155deg, rgba(17, 86, 214, 0.12), rgba(244, 181, 63, 0.08)),
-          color-mix(in srgb, rgba(255, 255, 255, 0.93) 68%, rgba(242, 246, 255, 0.9) 32%);
+        background: color-mix(in srgb, var(--surface) 88%, rgba(239, 61, 91, 0.05) 12%);
       }
 
       .preview-card--visuals {
-        background:
-          linear-gradient(150deg, rgba(17, 86, 214, 0.09), rgba(239, 61, 91, 0.07)),
-          color-mix(in srgb, rgba(255, 255, 255, 0.93) 66%, rgba(242, 246, 255, 0.92) 34%);
+        background: color-mix(in srgb, var(--surface) 88%, rgba(17, 86, 214, 0.06) 12%);
       }
 
       .preview-story h2 {
         margin: 0;
-        font-size: 1.35rem;
+        font-size: 1.18rem;
         color: var(--navy);
       }
 
       .preview-story__lead {
         margin: 0;
-        font-size: 1.05rem;
+        font-size: 1rem;
         color: var(--text-strong);
       }
 
       .preview-story__paragraph {
         margin: 0;
         color: var(--text-subtle);
+        font-size: 0.95rem;
       }
 
       .preview-story__lead + .preview-story__paragraph,
       .preview-story__paragraph + .preview-story__paragraph {
-        margin-top: 0.75rem;
+        margin-top: 0.6rem;
       }
 
       .preview-story__list {
@@ -1840,13 +1864,13 @@ function renderGamePage(
         margin: 0;
         padding: 0;
         display: grid;
-        gap: 0.65rem;
+        gap: 0.6rem;
       }
 
       .preview-story__list li {
         margin: 0;
         position: relative;
-        padding-left: 1.6rem;
+        padding-left: 1.5rem;
         font-weight: 600;
         color: var(--text-strong);
       }
@@ -1855,21 +1879,21 @@ function renderGamePage(
         content: "";
         position: absolute;
         left: 0;
-        top: 0.35rem;
-        width: 0.7rem;
-        height: 0.7rem;
+        top: 0.4rem;
+        width: 0.55rem;
+        height: 0.55rem;
         border-radius: 50%;
-        background: linear-gradient(135deg, rgba(17, 86, 214, 0.9), rgba(244, 181, 63, 0.85));
-        box-shadow: 0 0 0 4px color-mix(in srgb, rgba(17, 86, 214, 0.12) 60%, rgba(255, 255, 255, 0.9) 40%);
+        background: linear-gradient(135deg, rgba(17, 86, 214, 0.85), rgba(244, 181, 63, 0.75));
+        box-shadow: 0 0 0 3px color-mix(in srgb, rgba(17, 86, 214, 0.1) 60%, rgba(255, 255, 255, 0.92) 40%);
       }
 
       .preview-story__list--numbered {
         counter-reset: storyline;
-        gap: 1.2rem;
+        gap: 1rem;
       }
 
       .preview-story__list--numbered li {
-        padding-left: 2.6rem;
+        padding-left: 2.35rem;
         font-weight: 400;
       }
 
@@ -1878,32 +1902,32 @@ function renderGamePage(
         content: counter(storyline);
         display: grid;
         place-items: center;
-        width: 1.6rem;
-        height: 1.6rem;
+        width: 1.4rem;
+        height: 1.4rem;
         border-radius: 999px;
-        background: linear-gradient(135deg, rgba(17, 86, 214, 0.95), rgba(239, 61, 91, 0.9));
+        background: linear-gradient(135deg, rgba(17, 86, 214, 0.92), rgba(239, 61, 91, 0.85));
         color: #fff;
         font-weight: 700;
         top: 0;
-        box-shadow: 0 0 0 4px color-mix(in srgb, rgba(17, 86, 214, 0.12) 60%, rgba(255, 255, 255, 0.9) 40%);
+        box-shadow: 0 0 0 3px color-mix(in srgb, rgba(17, 86, 214, 0.1) 60%, rgba(255, 255, 255, 0.92) 40%);
       }
 
       .preview-story__item-title {
         margin: 0;
-        font-size: 1.08rem;
+        font-size: 1.05rem;
         color: var(--navy);
       }
 
       .preview-story__item-title + .preview-story__lead,
       .preview-story__item-title + .preview-story__paragraph {
-        margin-top: 0.55rem;
+        margin-top: 0.45rem;
       }
 
       .preview-story__item-bullets {
         margin: 0.75rem 0 0 0;
         padding-left: 1.2rem;
         display: grid;
-        gap: 0.4rem;
+        gap: 0.35rem;
         color: var(--text-subtle);
         list-style: disc;
       }
@@ -1914,6 +1938,7 @@ function renderGamePage(
         position: static;
         font-weight: 500;
         color: var(--text-subtle);
+        font-size: 0.93rem;
       }
 
       .preview-story__item-bullets li::before {
@@ -1921,33 +1946,34 @@ function renderGamePage(
       }
 
       .preview-story__narratives {
-        margin-top: 1.5rem;
+        margin-top: 1.2rem;
         display: grid;
-        gap: 0.75rem;
+        gap: 0.65rem;
       }
 
       .preview-story__narratives h3 {
         margin: 0;
-        font-size: 0.9rem;
+        font-size: 0.88rem;
         letter-spacing: 0.12em;
         text-transform: uppercase;
-        color: color-mix(in srgb, var(--navy) 70%, rgba(14, 34, 68, 0.4) 30%);
+        color: color-mix(in srgb, var(--navy) 68%, rgba(14, 34, 68, 0.4) 32%);
       }
 
       .preview-story__note {
-        margin: 1.4rem 0 0 0;
+        margin: 1.1rem 0 0 0;
         color: var(--text-subtle);
         font-style: italic;
+        font-size: 0.9rem;
       }
 
       .preview-visuals {
         display: grid;
-        gap: clamp(1rem, 2.8vw, 1.6rem);
+        gap: clamp(0.9rem, 2.4vw, 1.4rem);
       }
 
       .preview-visuals__header {
         display: grid;
-        gap: 0.5rem;
+        gap: 0.45rem;
       }
 
       .preview-visuals__header h2 {
