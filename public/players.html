@@ -42,49 +42,51 @@
                 Search directly or browse each franchise to pull a live card.
               </p>
             </div>
-            <div class="player-atlas__search">
-              <label class="player-atlas__label" for="player-atlas-search">Search active players</label>
-              <div class="player-atlas__searchbox">
-                <div class="player-atlas__field">
-                  <input
-                    id="player-atlas-search"
-                    class="player-atlas__input"
-                    type="search"
-                    name="player-search"
-                    placeholder="Search by name or jersey (e.g. &quot;Curry&quot;, &quot;#0&quot;)"
-                    autocomplete="off"
-                    spellcheck="false"
-                    data-player-search
-                    aria-controls="player-atlas-results"
-                    aria-expanded="false"
-                  />
-                  <button type="button" class="player-atlas__clear" data-player-clear hidden>Clear</button>
-                </div>
-                <ul
-                  id="player-atlas-results"
-                  class="player-atlas__results"
-                  role="listbox"
-                  data-player-results
-                  hidden
-                ></ul>
-              </div>
-              <p class="player-atlas__hint" data-player-hint>Start typing to explore the atlas.</p>
-              <p class="player-atlas__empty" data-player-empty hidden>
-                No active players match that search. Try a different name or jersey number.
-              </p>
-              <p class="player-atlas__error" data-player-error hidden>
-                We couldn't load the roster feed right now. Refresh to try again.
-              </p>
-            </div>
           </div>
           <div class="player-atlas__layout">
-            <aside class="player-atlas__teams" data-player-teams hidden>
-              <h2 class="player-atlas__teams-title">Active franchises</h2>
-              <p class="player-atlas__teams-copy">
-                Expand a franchise to browse its roster snapshot and jump straight to a player's live card.
-              </p>
-              <div class="player-atlas__teams-tree" data-player-team-tree></div>
-            </aside>
+            <div class="player-atlas__panel">
+              <div class="player-atlas__search">
+                <label class="player-atlas__label" for="player-atlas-search">Search active players</label>
+                <div class="player-atlas__searchbox">
+                  <div class="player-atlas__field">
+                    <input
+                      id="player-atlas-search"
+                      class="player-atlas__input"
+                      type="search"
+                      name="player-search"
+                      placeholder="Search by name or jersey (e.g. &quot;Curry&quot;, &quot;#0&quot;)"
+                      autocomplete="off"
+                      spellcheck="false"
+                      data-player-search
+                      aria-controls="player-atlas-results"
+                      aria-expanded="false"
+                    />
+                    <button type="button" class="player-atlas__clear" data-player-clear hidden>Clear</button>
+                  </div>
+                  <ul
+                    id="player-atlas-results"
+                    class="player-atlas__results"
+                    role="listbox"
+                    data-player-results
+                    hidden
+                  ></ul>
+                </div>
+                <p class="player-atlas__hint" data-player-hint>Start typing to explore the atlas.</p>
+                <p class="player-atlas__empty" data-player-empty hidden>
+                  No active players match that search. Try a different name or jersey number.
+                </p>
+                <p class="player-atlas__error" data-player-error hidden>
+                  We couldn't load the roster feed right now. Refresh to try again.
+                </p>
+              </div>
+              <aside class="player-atlas__teams" data-player-teams hidden>
+                <h2 class="player-atlas__teams-title">Active franchises</h2>
+                <p class="player-atlas__teams-copy">
+                  Expand a franchise to browse its roster snapshot and jump straight to a player's live card.
+                </p>
+                <div class="player-atlas__teams-tree" data-player-team-tree></div>
+              </aside>
+            </div>
             <article class="player-card" data-player-profile hidden aria-live="polite">
               <header class="player-card__header">
                 <h2 class="player-card__name" data-player-name></h2>

@@ -1043,14 +1043,208 @@ function buildPlayerTokens(player) {
   };
   push(player?.name);
   push(player?.team);
+  push(player?.teamAbbr);
   push(player?.position);
   push(player?.era);
   push(player?.origin);
   push(player?.archetype);
+  push(player?.nickname);
+  const addJerseyTokens = (value) => {
+    if (value === null || value === undefined) {
+      return;
+    }
+    const raw = String(value).trim();
+    if (!raw) {
+      return;
+    }
+    push(raw);
+    if (raw.startsWith('#')) {
+      push(raw.replace(/^#/, ''));
+    } else {
+      push(`#${raw}`);
+    }
+  };
+  if (player?.bdl) {
+    push(player.bdl.teamName);
+    push(player.bdl.teamAbbr);
+    push(player.bdl.position);
+    addJerseyTokens(player.bdl.jersey);
+  }
+  addJerseyTokens(player?.jerseyNumber);
   if (Array.isArray(player?.keywords)) {
     player.keywords.forEach(push);
   }
   return Array.from(tokens);
+}
+
+function createPlayerSearchEngine() {
+  let records = [];
+  const tokenIndex = new Map();
+  const prefixIndex = new Map();
+
+  const registerToken = (token, record) => {
+    if (!token) {
+      return;
+    }
+    if (!tokenIndex.has(token)) {
+      tokenIndex.set(token, new Set());
+    }
+    tokenIndex.get(token).add(record);
+    const limit = Math.min(3, token.length);
+    for (let length = 1; length <= limit; length += 1) {
+      const prefix = token.slice(0, length);
+      if (!prefixIndex.has(prefix)) {
+        prefixIndex.set(prefix, new Set());
+      }
+      prefixIndex.get(prefix).add(record);
+    }
+  };
+
+  const clear = () => {
+    records = [];
+    tokenIndex.clear();
+    prefixIndex.clear();
+  };
+
+  const gatherMatchesForTerm = (term) => {
+    const candidates = new Set();
+    const exactMatches = tokenIndex.get(term);
+    if (exactMatches) {
+      exactMatches.forEach((record) => candidates.add(record));
+    }
+    const prefixKey = term.slice(0, Math.min(3, term.length));
+    if (prefixKey) {
+      const prefixMatches = prefixIndex.get(prefixKey);
+      if (prefixMatches) {
+        prefixMatches.forEach((record) => {
+          if (
+            (record.nameToken && record.nameToken.startsWith(term)) ||
+            record.tokens.some((token) => token.startsWith(term))
+          ) {
+            candidates.add(record);
+          }
+        });
+      }
+    }
+    return candidates;
+  };
+
+  return {
+    clear,
+    setPlayers: (players) => {
+      clear();
+      if (!Array.isArray(players) || !players.length) {
+        return;
+      }
+      players.forEach((player) => {
+        const id = player?.id !== undefined && player?.id !== null ? String(player.id) : null;
+        if (!id) {
+          return;
+        }
+        const nameToken = simplifyText(player?.name);
+        const normalizedTokens = Array.isArray(player?.searchTokens)
+          ? Array.from(
+              new Set(
+                player.searchTokens
+                  .map((token) => simplifyText(token))
+                  .filter((token) => Boolean(token) && token !== nameToken),
+              ),
+            )
+          : [];
+        const record = {
+          id,
+          player,
+          nameToken,
+          tokens: normalizedTokens,
+        };
+        records.push(record);
+        if (nameToken) {
+          registerToken(nameToken, record);
+        }
+        normalizedTokens.forEach((token) => registerToken(token, record));
+      });
+    },
+    search: (query, limit = 8) => {
+      if (!records.length) {
+        return [];
+      }
+      const normalized = simplifyText(query);
+      if (!normalized) {
+        return [];
+      }
+      const terms = normalized.split(/\s+/).filter(Boolean);
+      if (!terms.length) {
+        return [];
+      }
+
+      let candidateSet = null;
+      for (const term of terms) {
+        const matches = gatherMatchesForTerm(term);
+        if (!matches.size) {
+          candidateSet = new Set();
+          break;
+        }
+        if (candidateSet === null) {
+          candidateSet = matches;
+        } else {
+          const intersection = new Set();
+          matches.forEach((record) => {
+            if (candidateSet.has(record)) {
+              intersection.add(record);
+            }
+          });
+          candidateSet = intersection;
+          if (!candidateSet.size) {
+            break;
+          }
+        }
+      }
+
+      if (!candidateSet) {
+        candidateSet = new Set(records);
+      }
+      if (!candidateSet.size) {
+        return [];
+      }
+
+      return Array.from(candidateSet)
+        .map((record) => {
+          let score = 0;
+          if (record.nameToken && record.nameToken.startsWith(normalized)) {
+            score += 6;
+          }
+          if (record.nameToken && record.nameToken === normalized) {
+            score += 12;
+          }
+          terms.forEach((term) => {
+            if (record.nameToken && record.nameToken === term) {
+              score += 6;
+            } else if (record.nameToken && record.nameToken.startsWith(term)) {
+              score += 4;
+            }
+            record.tokens.forEach((token) => {
+              if (token === term) {
+                score += 5;
+              } else if (token.startsWith(term)) {
+                score += 3;
+              } else if (token.includes(term)) {
+                score += 1;
+              }
+            });
+          });
+          return { player: record.player, score };
+        })
+        .filter((entry) => entry.score > 0)
+        .sort((a, b) => {
+          if (b.score !== a.score) {
+            return b.score - a.score;
+          }
+          return a.player.name.localeCompare(b.player.name);
+        })
+        .slice(0, limit)
+        .map((entry) => entry.player);
+    },
+  };
 }
 
 function extractPersonIdFromProfile(player) {
@@ -1732,6 +1926,7 @@ function initPlayerAtlas() {
   }
 
   const rosterApp = document.getElementById('players-app');
+  const searchEngine = createPlayerSearchEngine();
 
   const searchInput = atlas.querySelector('[data-player-search]');
   const clearButton = atlas.querySelector('[data-player-clear]');
@@ -2021,8 +2216,10 @@ function initPlayerAtlas() {
   };
   const setActivePlayers = (nextPlayers) => {
     const sorted = sortPlayersByName(nextPlayers);
+    sorted.forEach((player) => ensurePlayerSearchTokens(player));
     players = sorted;
     rebuildPlayerIndexes();
+    searchEngine.setPlayers(players);
     renderTeamBrowser(players);
     if (activePlayerId) {
       const normalizedActiveId = normalizePlayerId(activePlayerId);
@@ -2363,38 +2560,7 @@ function initPlayerAtlas() {
       return;
     }
 
-    const normalized = simplifyText(trimmed);
-    const terms = normalized.split(/\s+/).filter(Boolean);
-
-    const found = players
-      .map((player) => {
-        let score = 0;
-        if (player.nameToken?.startsWith(normalized)) {
-          score += 6;
-        }
-        if (player.nameToken === normalized) {
-          score += 12;
-        }
-        terms.forEach((term) => {
-          player.searchTokens.forEach((token) => {
-            if (token === term) {
-              score += 5;
-            } else if (token.startsWith(term)) {
-              score += 3;
-            } else if (token.includes(term)) {
-              score += 1;
-            }
-          });
-        });
-        return { player, score };
-      })
-      .filter((entry) => entry.score > 0)
-      .sort((a, b) => {
-        if (b.score !== a.score) return b.score - a.score;
-        return a.player.name.localeCompare(b.player.name);
-      })
-      .slice(0, 8)
-      .map((entry) => entry.player);
+    const found = searchEngine.search(trimmed, 8);
 
     matches = found;
     resultsList.innerHTML = '';
