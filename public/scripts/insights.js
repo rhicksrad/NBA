@@ -10,6 +10,33 @@ function setMetric(key, value, fallback = '--') {
   target.textContent = value ?? fallback;
 }
 
+function formatUpdatedAt(isoString) {
+  if (typeof isoString !== 'string') {
+    return null;
+  }
+  const parsed = new Date(isoString);
+  if (Number.isNaN(parsed.getTime())) {
+    return null;
+  }
+  return new Intl.DateTimeFormat('en-US', {
+    dateStyle: 'medium',
+    timeStyle: 'short',
+    timeZone: 'UTC',
+  }).format(parsed);
+}
+
+function setSourceStamp(key, isoString) {
+  const target = document.querySelector(`[data-source-stamp="${key}"]`);
+  if (!target) {
+    return;
+  }
+  const formatted = formatUpdatedAt(isoString);
+  const stamp = formatted
+    ? `Source: Ball Don't Lie API · Updated ${formatted} UTC`
+    : "Source: Ball Don't Lie API";
+  target.textContent = stamp;
+}
+
 function fallbackConfig(message) {
   return {
     type: 'bar',
@@ -87,6 +114,10 @@ function updateHero(data) {
     ? `${seasonRangeStart}-${seasonRangeEnd}`
     : null;
   setMetric('season-range', rangeText);
+  const calendarNote = Number.isFinite(seasonRangeStart) && Number.isFinite(seasonRangeEnd)
+    ? `Regular-season months appear on the left; playoff months are on the right. Ball Don't Lie seasons ${seasonRangeStart}-${seasonRangeEnd}.`
+    : 'Regular-season months appear on the left; playoff months are on the right.';
+  setMetric('seasonal-calendar-note', calendarNote);
 
   const latestGap = data?.homeRoadSplits?.latestGap;
   const gapText = Number.isFinite(latestGap)
@@ -114,10 +145,38 @@ function buildSeasonalChart(dataRef) {
     return fallbackConfig('Monthly scoring data unavailable');
   }
 
-  const labels = months.map((entry) => entry.month ?? 'Month');
-  const overall = months.map((entry) => entry.averagePoints ?? null);
-  const regular = months.map((entry) => entry.regularSeasonAverage ?? null);
-  const playoff = months.map((entry) => entry.playoffAverage ?? null);
+  const regularMonths = months.filter((entry) => Number.isFinite(entry?.regularSeasonAverage));
+  const playoffMonths = months.filter((entry) => Number.isFinite(entry?.playoffAverage));
+  if (!regularMonths.length && !playoffMonths.length) {
+    return fallbackConfig('Monthly scoring data unavailable');
+  }
+
+  const labels = [];
+  const overall = [];
+  const regular = [];
+  const playoff = [];
+  const hasDivider = regularMonths.length && playoffMonths.length;
+
+  regularMonths.forEach((entry) => {
+    labels.push(`${entry.month ?? 'Month'} · Reg`);
+    overall.push(entry.averagePoints ?? entry.regularSeasonAverage ?? null);
+    regular.push(entry.regularSeasonAverage ?? null);
+    playoff.push(null);
+  });
+
+  if (hasDivider) {
+    labels.push(' ');
+    overall.push(null);
+    regular.push(null);
+    playoff.push(null);
+  }
+
+  playoffMonths.forEach((entry) => {
+    labels.push(`${entry.month ?? 'Month'} · Playoffs`);
+    overall.push(entry.averagePoints ?? entry.playoffAverage ?? null);
+    regular.push(null);
+    playoff.push(entry.playoffAverage ?? null);
+  });
 
   return {
     type: 'line',
@@ -131,7 +190,7 @@ function buildSeasonalChart(dataRef) {
           backgroundColor: 'rgba(17, 86, 214, 0.16)',
           borderWidth: 2,
           tension: 0.3,
-          spanGaps: true,
+          spanGaps: false,
           fill: 'origin',
         },
         {
@@ -141,7 +200,7 @@ function buildSeasonalChart(dataRef) {
           backgroundColor: 'rgba(11, 37, 69, 0.12)',
           borderWidth: 1.5,
           tension: 0.3,
-          spanGaps: true,
+          spanGaps: false,
           fill: false,
         },
         {
@@ -151,7 +210,7 @@ function buildSeasonalChart(dataRef) {
           backgroundColor: 'rgba(239, 61, 91, 0.12)',
           borderWidth: 1.5,
           tension: 0.3,
-          spanGaps: true,
+          spanGaps: false,
           fill: false,
         },
       ],
@@ -166,6 +225,16 @@ function buildSeasonalChart(dataRef) {
         },
         x: {
           grid: { color: 'rgba(17, 86, 214, 0.05)' },
+          ticks: {
+            callback(value, index) {
+              const label = labels[index];
+              if (!label || label.trim() === '') {
+                return '';
+              }
+              return label.replace(' · ', '\n');
+            },
+            maxRotation: 0,
+          },
         },
       },
     },
@@ -510,6 +579,9 @@ async function bootstrap() {
   }
 
   updateHero(data);
+  ['seasonal-scoring', 'rest-impact', 'close-margins', 'overtime-breakdown', 'season-averages', 'home-road-splits'].forEach((key) => {
+    setSourceStamp(key, data?.generatedAt);
+  });
 
   registerCharts([
     { element: '#seasonal-scoring', source: DATA_URL, createConfig: () => buildSeasonalChart(data) },
