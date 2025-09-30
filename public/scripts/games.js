@@ -10,7 +10,8 @@ const EARLIEST_ARCHIVE_DATE = '2012-10-30';
 const stageRank = { live: 0, upcoming: 1, final: 2 };
 
 const scoreboardContainer = document.querySelector('[data-scoreboard]');
-const dateInput = document.querySelector('[data-game-date]');
+const startDateInput = document.querySelector('[data-game-date-start]');
+const endDateInput = document.querySelector('[data-game-date-end]');
 const refreshButton = document.querySelector('[data-manual-refresh]');
 
 const metricTargets = {
@@ -44,7 +45,12 @@ function determineInitialDate() {
   return determineMaxSelectableDate();
 }
 
-let activeDate = determineInitialDate();
+function determineInitialRange() {
+  const initial = determineInitialDate();
+  return { start: initial, end: initial };
+}
+
+let activeRange = determineInitialRange();
 let latestGames = [];
 let lastUpdated = null;
 let refreshTimer = null;
@@ -71,6 +77,37 @@ function formatDateLabel(value) {
   return date.toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' });
 }
 
+function formatRangeLabel(range) {
+  if (!range || !isValidIsoDate(range.start) || !isValidIsoDate(range.end)) {
+    if (range?.start && isValidIsoDate(range.start)) {
+      return formatDateLabel(range.start);
+    }
+    if (range?.end && isValidIsoDate(range.end)) {
+      return formatDateLabel(range.end);
+    }
+    return '—';
+  }
+  if (range.start === range.end) {
+    return formatDateLabel(range.start);
+  }
+  const startDate = parseDateOnly(range.start);
+  const endDate = parseDateOnly(range.end);
+  if (!startDate || !endDate) {
+    return `${range.start} – ${range.end}`;
+  }
+  const startLabel = startDate.toLocaleDateString(undefined, {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  });
+  const endLabel = endDate.toLocaleDateString(undefined, {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  });
+  return `${startLabel} – ${endLabel}`;
+}
+
 function formatTimeLabel(date) {
   if (!(date instanceof Date) || Number.isNaN(date.getTime())) {
     return null;
@@ -88,6 +125,112 @@ function getApiKey() {
     return String(window.BDL_API_KEY);
   }
   return null;
+}
+
+function getSelectableBounds() {
+  return {
+    min: EARLIEST_ARCHIVE_DATE,
+    max: determineMaxSelectableDate(),
+  };
+}
+
+function clampDate(value, bounds) {
+  if (!bounds) {
+    return isValidIsoDate(value) ? value : null;
+  }
+  if (!isValidIsoDate(value)) {
+    return null;
+  }
+  let next = value;
+  if (bounds.min && next < bounds.min) {
+    next = bounds.min;
+  }
+  if (bounds.max && next > bounds.max) {
+    next = bounds.max;
+  }
+  return next;
+}
+
+function sanitizeRange(range, options = {}) {
+  const bounds = getSelectableBounds();
+  let start = clampDate(range?.start, bounds);
+  let end = clampDate(range?.end, bounds);
+  if (!start && end) {
+    start = end;
+  }
+  if (!end && start) {
+    end = start;
+  }
+  if (!start && !end) {
+    const fallback = clampDate(determineInitialDate(), bounds) ?? determineInitialDate();
+    start = fallback;
+    end = fallback;
+  }
+  if (start > end) {
+    if (options.bias === 'start') {
+      end = start;
+    } else if (options.bias === 'end') {
+      start = end;
+    } else {
+      end = start;
+    }
+  }
+  return { start, end };
+}
+
+function sanitizeActiveRange() {
+  activeRange = sanitizeRange(activeRange);
+}
+
+function applyRangeToInputs() {
+  sanitizeActiveRange();
+  const bounds = getSelectableBounds();
+  if (startDateInput) {
+    startDateInput.value = activeRange.start ?? '';
+    if (bounds.min) {
+      startDateInput.setAttribute('min', bounds.min);
+    }
+    const maxCandidate = activeRange.end ?? bounds.max;
+    if (maxCandidate) {
+      const effectiveMax = bounds.max && maxCandidate > bounds.max ? bounds.max : maxCandidate;
+      startDateInput.setAttribute('max', effectiveMax);
+    } else if (bounds.max) {
+      startDateInput.setAttribute('max', bounds.max);
+    }
+  }
+  if (endDateInput) {
+    endDateInput.value = activeRange.end ?? '';
+    const minCandidate = activeRange.start ?? bounds.min;
+    if (minCandidate) {
+      const effectiveMin = bounds.min && minCandidate < bounds.min ? bounds.min : minCandidate;
+      endDateInput.setAttribute('min', effectiveMin);
+    } else if (bounds.min) {
+      endDateInput.setAttribute('min', bounds.min);
+    }
+    if (bounds.max) {
+      endDateInput.setAttribute('max', bounds.max);
+    }
+  }
+}
+
+function updateActiveRange(nextRange, options = {}) {
+  const sanitized = sanitizeRange({ ...activeRange, ...nextRange }, options);
+  const changed = sanitized.start !== activeRange.start || sanitized.end !== activeRange.end;
+  activeRange = sanitized;
+  applyRangeToInputs();
+  setMetric('dateLabel', formatRangeLabel(activeRange));
+  if (changed) {
+    scheduleAutoRefresh();
+    loadGames();
+  }
+}
+
+function isTodayWithinRange(range) {
+  if (!range || !isValidIsoDate(range.start) || !isValidIsoDate(range.end)) {
+    return false;
+  }
+  const today = getTodayIso();
+  return range.start <= today && today <= range.end;
 }
 
 function buildSearchParams(params) {
@@ -130,18 +273,23 @@ async function request(endpoint, params = {}) {
   return response.json();
 }
 
-async function fetchGamesForDate(date) {
+async function fetchGamesForRange(startDate, endDate) {
+  const { start, end } = sanitizeRange({ start: startDate, end: endDate });
+  if (!start || !end) {
+    return [];
+  }
   const games = [];
   let cursor;
   do {
     const payload = await request('games', {
-      dates: [date],
+      start_date: start,
+      end_date: end,
       per_page: PAGE_SIZE,
       cursor,
     });
     const data = Array.isArray(payload?.data) ? payload.data : [];
     data.forEach((raw) => {
-      games.push(normalizeGame(raw));
+      games.push(normalizeGame(raw, start));
     });
     cursor = payload?.meta?.next_cursor ?? null;
   } while (cursor);
@@ -192,7 +340,7 @@ function normalizeTeam(team, score) {
   };
 }
 
-function normalizeGame(raw) {
+function normalizeGame(raw, fallbackIsoDate) {
   const status = typeof raw?.status === 'string' ? raw.status.trim() : '';
   const period = Number.isFinite(Number(raw?.period)) ? Number(raw.period) : 0;
   const time = typeof raw?.time === 'string' ? raw.time.trim() : '';
@@ -204,7 +352,7 @@ function normalizeGame(raw) {
 
   return {
     id: raw?.id,
-    isoDate: typeof raw?.date === 'string' ? raw.date : activeDate,
+    isoDate: typeof raw?.date === 'string' ? raw.date : fallbackIsoDate,
     status,
     period,
     time,
@@ -413,7 +561,7 @@ function renderScoreboard(games) {
   }
   clearScoreboard();
   if (!games.length) {
-    renderScoreboardState(`No games found for ${formatDateLabel(activeDate)}.`);
+    renderScoreboardState(`No games found for ${formatRangeLabel(activeRange)}.`);
     return;
   }
   const sorted = [...games].sort((a, b) => {
@@ -445,7 +593,7 @@ function setMetric(key, value, fallback = '—') {
 function updateMetrics(games) {
   const totalGames = games.length;
   setMetric('gamesTotal', totalGames ? helpers.formatNumber(totalGames, 0) : '0');
-  setMetric('dateLabel', formatDateLabel(activeDate));
+  setMetric('dateLabel', formatRangeLabel(activeRange));
 
   const liveCount = games.filter((game) => game.stage === 'live').length;
   setMetric('liveCount', helpers.formatNumber(liveCount, 0));
@@ -894,7 +1042,8 @@ function scheduleAutoRefresh() {
     window.clearInterval(refreshTimer);
     refreshTimer = null;
   }
-  if (activeDate === getTodayIso()) {
+  sanitizeActiveRange();
+  if (isTodayWithinRange(activeRange)) {
     refreshTimer = window.setInterval(() => {
       loadGames({ silent: true });
     }, REFRESH_INTERVAL_MS);
@@ -905,6 +1054,7 @@ async function loadGames(options = {}) {
   if (loading) {
     return;
   }
+  sanitizeActiveRange();
   loading = true;
   const { silent = false } = options;
   const previousGames = latestGames;
@@ -916,7 +1066,7 @@ async function loadGames(options = {}) {
   }
   setFetchMessage('Refreshing…');
   try {
-    const games = await fetchGamesForDate(activeDate);
+    const games = await fetchGamesForRange(activeRange.start, activeRange.end);
     latestGames = games;
     lastUpdated = new Date();
     updateMetrics(games);
@@ -960,40 +1110,26 @@ async function loadGames(options = {}) {
 }
 
 function initControls() {
-  if (dateInput) {
-    const maxSelectableDate = determineMaxSelectableDate();
-    const minSelectableDate = EARLIEST_ARCHIVE_DATE;
-    if (minSelectableDate) {
-      dateInput.setAttribute('min', minSelectableDate);
-      if (activeDate < minSelectableDate) {
-        activeDate = minSelectableDate;
+  if (startDateInput) {
+    startDateInput.addEventListener('change', (event) => {
+      const bounds = getSelectableBounds();
+      const nextValue = clampDate(event.target.value, bounds);
+      if (!nextValue) {
+        applyRangeToInputs();
+        return;
       }
-    }
-    if (maxSelectableDate) {
-      dateInput.setAttribute('max', maxSelectableDate);
-      if (activeDate > maxSelectableDate) {
-        activeDate = maxSelectableDate;
+      updateActiveRange({ start: nextValue }, { bias: 'start' });
+    });
+  }
+  if (endDateInput) {
+    endDateInput.addEventListener('change', (event) => {
+      const bounds = getSelectableBounds();
+      const nextValue = clampDate(event.target.value, bounds);
+      if (!nextValue) {
+        applyRangeToInputs();
+        return;
       }
-    }
-    dateInput.value = activeDate;
-    dateInput.addEventListener('change', (event) => {
-      const nextValue = event.target.value;
-      if (isValidIsoDate(nextValue)) {
-        let nextDate = nextValue;
-        if (minSelectableDate && nextDate < minSelectableDate) {
-          nextDate = minSelectableDate;
-        }
-        if (maxSelectableDate && nextDate > maxSelectableDate) {
-          nextDate = maxSelectableDate;
-        }
-        activeDate = nextDate;
-        if (dateInput.value !== activeDate) {
-          dateInput.value = activeDate;
-        }
-        setMetric('dateLabel', formatDateLabel(activeDate));
-        scheduleAutoRefresh();
-        loadGames();
-      }
+      updateActiveRange({ end: nextValue }, { bias: 'end' });
     });
   }
   if (refreshButton) {
@@ -1004,8 +1140,9 @@ function initControls() {
 }
 
 function init() {
+  sanitizeActiveRange();
+  applyRangeToInputs();
   initControls();
-  setMetric('dateLabel', formatDateLabel(activeDate));
   updateMetrics([]);
   renderScoreboardState('Loading games…');
   loadGames();

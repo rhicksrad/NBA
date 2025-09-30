@@ -38,8 +38,24 @@
               tips off.
             </p>
             <div class="games-toolbar">
-              <label for="game-date">Game date</label>
-              <input id="game-date" type="date" name="game-date" data-game-date />
+              <label for="game-date-start">Game dates</label>
+              <div class="games-toolbar__range">
+                <input
+                  id="game-date-start"
+                  type="date"
+                  name="game-date-start"
+                  data-game-date-start
+                  aria-label="Start date"
+                />
+                <span class="games-toolbar__separator" aria-hidden="true">to</span>
+                <input
+                  id="game-date-end"
+                  type="date"
+                  name="game-date-end"
+                  data-game-date-end
+                  aria-label="End date"
+                />
+              </div>
               <button type="button" class="games-toolbar__refresh" data-manual-refresh>
                 Refresh now
               </button>
