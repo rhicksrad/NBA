@@ -1299,7 +1299,40 @@ function extractPersonIdFromProfile(player) {
   return null;
 }
 
+function ensureSequentialRanks(records, rankKey = 'rank') {
+  if (!Array.isArray(records) || !records.length) {
+    return;
+  }
+
+  const rankedEntries = records
+    .map((record, index) => {
+      if (!record || typeof record !== 'object') {
+        return null;
+      }
+      const numericRank = Number(record[rankKey]);
+      if (!Number.isFinite(numericRank)) {
+        return null;
+      }
+      return { record, numericRank, index };
+    })
+    .filter(Boolean)
+    .sort((a, b) => {
+      if (a.numericRank !== b.numericRank) {
+        return a.numericRank - b.numericRank;
+      }
+      return a.index - b.index;
+    });
+
+  rankedEntries.forEach((entry, offset) => {
+    entry.record[rankKey] = offset + 1;
+  });
+}
+
 function buildGoatScoreLookup(indexSource, recentSource) {
+  if (Array.isArray(indexSource?.players)) {
+    ensureSequentialRanks(indexSource.players, 'rank');
+  }
+
   const byId = new Map();
   const byName = new Map();
   const entries = new Map();
@@ -1357,6 +1390,8 @@ function buildGoatScoreLookup(indexSource, recentSource) {
       })
       .filter((player) => player && Number.isFinite(player.rank))
       .sort((a, b) => a.rank - b.rank);
+
+    ensureSequentialRanks(leaderboard, 'rank');
   }
 
   entries.forEach((entry) => {
