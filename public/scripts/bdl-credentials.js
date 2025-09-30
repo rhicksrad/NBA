@@ -1,20 +1,47 @@
 (function () {
   const DEFAULT_KEY_LOCATIONS = (() => {
-    const FALLBACK = ['/bdl-key.json', '/data/bdl-key.json'];
+    const RELATIVE_PATHS = ['data/bdl-key.json', 'bdl-key.json'];
     if (typeof window === 'undefined' || typeof window.location?.href !== 'string') {
-      return FALLBACK;
+      return RELATIVE_PATHS;
+    }
+
+    const resolved = new Set(RELATIVE_PATHS);
+
+    const appendFromBase = (base) => {
+      if (!base) {
+        return;
+      }
+      try {
+        const normalized = typeof base === 'string' ? base : base.href;
+        RELATIVE_PATHS.forEach((relativePath) => {
+          resolved.add(new URL(relativePath, normalized).toString());
+        });
+      } catch (error) {
+        console.warn('Unable to resolve Ball Don\'t Lie credential base path', base, error);
+      }
+    };
+
+    appendFromBase(document?.baseURI);
+
+    try {
+      appendFromBase(new URL('.', window.location.href));
+    } catch (error) {
+      console.warn('Unable to derive credential scope from current location', error);
     }
 
     try {
-      const base = new URL('.', window.location.href);
-      const scoped = ['bdl-key.json', 'data/bdl-key.json'].map((relativePath) =>
-        new URL(relativePath, base).toString(),
-      );
-      return [...scoped, ...FALLBACK];
+      appendFromBase(window.location.origin);
     } catch (error) {
-      console.warn('Unable to resolve Ball Don\'t Lie credential base path', error);
-      return FALLBACK;
+      console.warn('Unable to derive credential scope from origin', error);
     }
+
+    try {
+      appendFromBase(new URL('/NBA/', window.location.origin));
+    } catch (error) {
+      console.warn('Unable to derive credential scope from GitHub Pages base', error);
+    }
+
+    return [...resolved];
   })();
 
   function normalizeKey(raw) {
