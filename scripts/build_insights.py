@@ -389,6 +389,39 @@ def _load_championship_overrides() -> dict[str, int]:
     return overrides
 
 
+def _load_finals_mvp_ledger() -> dict[str, dict[str, object]]:
+    """Load Finals MVP winners keyed by normalized player name."""
+
+    path = ROOT / "data" / "awards" / "finals_mvp.json"
+    ledger: dict[str, dict[str, object]] = {}
+    if not path.exists():
+        return ledger
+
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return ledger
+
+    for entry in payload.get("winners", []):
+        name = (entry.get("player") or "").strip()
+        if not name:
+            continue
+
+        year = entry.get("year")
+        name_key = _normalize_name_key(name)
+        record = ledger.setdefault(name_key, {"count": 0, "years": []})
+        record["count"] = int(record.get("count", 0)) + 1
+        if isinstance(year, int):
+            years = record.setdefault("years", [])
+            if year not in years:
+                years.append(year)
+    for record in ledger.values():
+        years = record.get("years")
+        if isinstance(years, list):
+            record["years"] = sorted({year for year in years if isinstance(year, int)})
+    return ledger
+
+
 def _load_bdi_component_lookup() -> tuple[
     dict[str, dict[str, float]],
     dict[str, float],
@@ -1315,6 +1348,7 @@ def build_goat_system_snapshot() -> None:
     player_directory = _load_player_directory()
     franchise_lookup = _load_franchise_lookup()
     championship_overrides = _load_championship_overrides()
+    finals_mvp_lookup = _load_finals_mvp_ledger()
     bdi_lookup, bdi_maxima, bdi_metadata, bdi_generated_at = _load_bdi_component_lookup()
 
     career_totals: dict[str, dict[str, object]] = {}
@@ -1498,6 +1532,8 @@ def build_goat_system_snapshot() -> None:
                 championships += 1
 
         name_key = _normalize_name_key(f"{meta.get('firstName', '')} {meta.get('lastName', '')}")
+        finals_mvp_meta = finals_mvp_lookup.get(name_key, {})
+        finals_mvp_count = int(finals_mvp_meta.get("count", 0))
         documented_championships = championships
         override_championships = championship_overrides.get(name_key)
         if override_championships and override_championships > championships:
@@ -1521,6 +1557,10 @@ def build_goat_system_snapshot() -> None:
         finals_efficiency = finals_win_rate * 220.0 * finals_game_scale
         playoff_efficiency = playoff_win_pct * 200.0 * playoff_game_scale
 
+        finals_mvp_stage = 0.0
+        if finals_mvp_count > 0:
+            finals_mvp_stage = math.sqrt(finals_mvp_count) * 200.0 + finals_mvp_count * 110.0
+
         stage_metric = (
             postseason_volume
             + playoff_run
@@ -1534,6 +1574,7 @@ def build_goat_system_snapshot() -> None:
             + playoff_wins * 1.15
             + playoff_games * 0.05
             + wins * 0.02
+            + finals_mvp_stage
         )
         if finals_games >= 20:
             stage_metric += (finals_win_rate**2) * 180.0
@@ -1580,6 +1621,8 @@ def build_goat_system_snapshot() -> None:
             + international_bonus
             + draft_bonus
         )
+        if finals_mvp_count > 0:
+            culture_metric += finals_mvp_count * 50.0
 
         raw_metrics[person_id] = {
             "impact": impact_metric,
@@ -1593,6 +1636,7 @@ def build_goat_system_snapshot() -> None:
             "playoffWins": playoff_wins,
             "championships": championships,
             "finalsWins": finals_wins,
+            "finalsMVPs": finals_mvp_count,
             "winPct": win_pct,
             "playoffWinPct": playoff_win_pct,
             "firstSeason": totals.get("firstSeason"),
@@ -1737,6 +1781,7 @@ def build_goat_system_snapshot() -> None:
                 "goatComponents": components,
                 "winPct": round(metrics["winPct"], 3) if games else 0.0,
                 "playoffWinPct": round(metrics["playoffWinPct"], 3) if playoff_games else 0.0,
+                "finalsMVPs": int(metrics.get("finalsMVPs", 0)),
             }
         )
 
@@ -1787,6 +1832,11 @@ def build_goat_system_snapshot() -> None:
                     "contribution": "Stage dominance priors and twelve-month movement flags.",
                     "fields": ["goatComponents.stage", "delta"],
                     "lastUpdated": bdi_generated_at,
+                },
+                {
+                    "name": "Finals MVP ledger (data/awards/finals_mvp.json)",
+                    "contribution": "Finals MVP counts that significantly amplify stage equity.",
+                    "fields": ["player", "year"],
                 },
             ],
         },
@@ -1869,6 +1919,11 @@ def build_goat_system_snapshot() -> None:
                     "contribution": "Cultural capital baseline and story-driven adjustments.",
                     "fields": ["goatComponents.culture"],
                     "lastUpdated": bdi_generated_at,
+                },
+                {
+                    "name": "Finals MVP ledger (data/awards/finals_mvp.json)",
+                    "contribution": "Finals MVP hardware used to elevate leadership and legacy credit.",
+                    "fields": ["player", "year"],
                 },
             ],
         },
