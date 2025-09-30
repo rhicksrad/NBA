@@ -1,7 +1,7 @@
 {
   "fetched_at": "2025-09-29T13:47:09.758Z",
   "source": "rosters.json",
-  "count": 505,
+  "count": 504,
   "players": [
     {
       "id": 203992,
@@ -3444,15 +3444,6 @@
     {
       "id": 201588,
       "name": "George Hill",
-      "team_abbr": "PHI",
-      "position": null,
-      "jersey": null,
-      "height": null,
-      "weight": null
-    },
-    {
-      "id": 2730,
-      "name": "Dwight Howard",
       "team_abbr": "PHI",
       "position": null,
       "jersey": null,
