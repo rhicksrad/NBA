@@ -142,7 +142,8 @@
     return;
   }
 
-  const resolvedPaths = Array.isArray(keyPaths) ? keyPaths : autoFetch ? DEFAULT_KEY_LOCATIONS : [];
+  const shouldAutoFetch = autoFetch !== false;
+  const resolvedPaths = Array.isArray(keyPaths) ? keyPaths : shouldAutoFetch ? DEFAULT_KEY_LOCATIONS : [];
 
   if (!resolvedPaths.length) {
     return;

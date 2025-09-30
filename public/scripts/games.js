@@ -4,7 +4,7 @@ const API_BASE = 'https://api.balldontlie.io/v1';
 const PAGE_SIZE = 100;
 const REFRESH_INTERVAL_MS = 150000;
 const NEXT_SEASON_TIPOFF_DATE = '2025-10-04';
-const LAST_COMPLETED_SEASON_FINALE = '2024-06-22';
+const LAST_COMPLETED_SEASON_FINALE = '2024-06-17';
 const EARLIEST_ARCHIVE_DATE = '2012-10-30';
 
 const stageRank = { live: 0, upcoming: 1, final: 2 };
