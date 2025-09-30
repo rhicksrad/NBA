@@ -32,7 +32,7 @@ const TIER_PRIORITY = new Map([
 ]);
 
 const TIER_LABEL_OVERRIDES = new Map([
-  ['Hall of Fame', '- All-NBA'],
+  ['Hall of Fame', 'All-NBA'],
 ]);
 
 const gaugeLabelPlugin = {
