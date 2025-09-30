@@ -275,6 +275,55 @@ def _load_championship_overrides() -> dict[str, int]:
     return overrides
 
 
+def _load_bdi_component_lookup() -> tuple[
+    dict[str, dict[str, float]],
+    dict[str, float],
+    dict[str, dict[str, object]],
+    str | None,
+]:
+    """Load component values from the BDI (Pantheon) feed for blending."""
+
+    path = PUBLIC_DATA_DIR / "goat_index.json"
+    component_keys = ("impact", "stage", "longevity", "versatility", "culture")
+
+    lookup: dict[str, dict[str, float]] = {}
+    maxima: dict[str, float] = {key: 0.0 for key in component_keys}
+    metadata: dict[str, dict[str, object]] = {}
+    generated_at: str | None = None
+
+    if not path.exists():
+        return lookup, maxima, metadata, generated_at
+
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return lookup, maxima, metadata, generated_at
+
+    generated_at = payload.get("generatedAt")
+
+    for entry in payload.get("players", []):
+        name = (entry.get("name") or "").strip()
+        if not name:
+            continue
+
+        name_key = _normalize_name_key(name)
+        metadata[name_key] = entry
+
+        components = entry.get("goatComponents") or {}
+        component_map: dict[str, float] = {}
+        for key in component_keys:
+            value = components.get(key)
+            if isinstance(value, (int, float)):
+                numeric_value = float(value)
+                component_map[key] = numeric_value
+                maxima[key] = max(maxima[key], numeric_value)
+
+        if component_map:
+            lookup[name_key] = component_map
+
+    return lookup, maxima, metadata, generated_at
+
+
 def _scale_component(value: float, ceiling: float, weight: float) -> float:
     if ceiling <= 0:
         return 0.0
@@ -1129,6 +1178,7 @@ def build_goat_system_snapshot() -> None:
     player_directory = _load_player_directory()
     franchise_lookup = _load_franchise_lookup()
     championship_overrides = _load_championship_overrides()
+    bdi_lookup, bdi_maxima, bdi_metadata, bdi_generated_at = _load_bdi_component_lookup()
 
     career_totals: dict[str, dict[str, object]] = {}
     earliest_season: int | None = None
@@ -1224,17 +1274,25 @@ def build_goat_system_snapshot() -> None:
             ):
                 totals["lastSeason"] = season_year
 
-    weights = {
-        "impact": 40.0,
-        "stage": 30.0,
+    component_keys = ("impact", "stage", "longevity", "versatility", "culture")
+    component_budget = {
+        "impact": 34.0,
+        "stage": 26.0,
         "longevity": 20.0,
-        "versatility": 10.0,
+        "versatility": 12.0,
+        "culture": 8.0,
+    }
+    blend_weights = {
+        "impact": (0.65, 0.35),
+        "stage": (0.6, 0.4),
+        "longevity": (0.7, 0.3),
+        "versatility": (0.55, 0.45),
+        "culture": (0.4, 0.6),
     }
 
     all_ids = set(player_directory.keys()) | set(career_totals.keys())
 
-    raw_metrics: dict[str, dict[str, float]] = {}
-    ceilings = {key: 0.0 for key in weights}
+    raw_metrics: dict[str, dict[str, object]] = {}
 
     for person_id in all_ids:
         meta = player_directory.get(
@@ -1266,12 +1324,13 @@ def build_goat_system_snapshot() -> None:
                 "playoffGames": 0,
                 "playoffWins": 0,
                 "finalsGames": 0,
+                "finalsWins": 0,
+                "finalsSeasons": {},
                 "teams": set(),
                 "firstSeason": meta.get("draftYear"),
                 "lastSeason": meta.get("draftYear"),
             },
         )
-
         games = int(totals.get("games", 0))
         wins = int(totals.get("wins", 0))
         playoff_games = int(totals.get("playoffGames", 0))
@@ -1350,7 +1409,8 @@ def build_goat_system_snapshot() -> None:
         longevity_metric = minutes + games * 5.0
 
         positions_count = sum(1 for flag in (meta.get("guard"), meta.get("forward"), meta.get("center")) if flag)
-        teams_count = len(totals.get("teams", set()))
+        teams_set = set(totals.get("teams", set()))
+        teams_count = len(teams_set)
         per_game_assists = assists / games if games else 0.0
         per_game_rebounds = rebounds / games if games else 0.0
         per_game_stocks = (steals + blocks) / games if games else 0.0
@@ -1362,11 +1422,34 @@ def build_goat_system_snapshot() -> None:
             + per_game_stocks * 14.0
         )
 
+        country = (meta.get("country") or "").strip()
+        international_bonus = 30.0 if country and country.upper() not in {"USA", "US", "UNITED STATES"} else 0.0
+        draft_bonus = 0.0
+        draft_number = meta.get("draftNumber")
+        if isinstance(draft_number, int):
+            if draft_number <= 3:
+                draft_bonus = 12.0
+            elif draft_number <= 14:
+                draft_bonus = 8.0
+            elif draft_number <= 30:
+                draft_bonus = 4.0
+
+        culture_metric = (
+            championships * 55.0
+            + missing_championships * 25.0
+            + wins * 0.08
+            + playoff_wins * 0.35
+            + teams_count * 6.0
+            + international_bonus
+            + draft_bonus
+        )
+
         raw_metrics[person_id] = {
             "impact": impact_metric,
             "stage": stage_metric,
             "longevity": longevity_metric,
             "versatility": versatility_metric,
+            "culture": culture_metric,
             "games": games,
             "wins": wins,
             "playoffGames": playoff_games,
@@ -1380,19 +1463,45 @@ def build_goat_system_snapshot() -> None:
             "points": points,
             "assists": assists,
             "rebounds": rebounds,
-            "teams": totals.get("teams", set()),
+            "teams": teams_set,
             "meta": meta,
+            "nameKey": name_key,
         }
 
-        for key in weights:
-            ceilings[key] = max(ceilings[key], raw_metrics[person_id][key])
+    raw_maxima = {key: 0.0 for key in component_keys}
+    for metrics in raw_metrics.values():
+        for key in component_keys:
+            raw_maxima[key] = max(raw_maxima[key], float(metrics.get(key, 0.0)))
 
     players_payload: list[dict[str, object]] = []
 
     for person_id in all_ids:
         metrics = raw_metrics[person_id]
         meta = metrics["meta"]
-        components = {key: _scale_component(metrics[key], ceilings[key], weights[key]) for key in weights}
+        name_key = metrics["nameKey"]
+        bdi_components = bdi_lookup.get(name_key)
+        bdi_entry = bdi_metadata.get(name_key, {})
+
+        components: dict[str, float] = {}
+        for key in component_keys:
+            budget = component_budget[key]
+            our_value = float(metrics.get(key, 0.0))
+            ceiling = raw_maxima.get(key, 0.0)
+            our_ratio = (our_value / ceiling) if ceiling else 0.0
+            our_ratio = max(0.0, min(1.0, our_ratio))
+
+            combined_ratio = our_ratio
+            blend = blend_weights.get(key, (1.0, 0.0))
+            if bdi_components and key in bdi_components:
+                bdi_value = bdi_components.get(key)
+                bdi_ceiling = bdi_maxima.get(key, 0.0)
+                if isinstance(bdi_value, (int, float)) and bdi_ceiling > 0:
+                    bdi_ratio = max(0.0, min(1.0, float(bdi_value) / bdi_ceiling))
+                    combined_ratio = blend[0] * our_ratio + blend[1] * bdi_ratio
+
+            combined_ratio = max(0.0, min(1.0, combined_ratio))
+            components[key] = round(budget * combined_ratio, 2)
+
         goat_score = round(sum(components.values()), 1)
 
         first_name = (meta.get("firstName") or "").strip()
@@ -1414,6 +1523,9 @@ def build_goat_system_snapshot() -> None:
         if isinstance(first_season, int) and isinstance(last_season, int):
             prime_start = max(first_season, last_season - 4)
             prime_window = f"{prime_start}-{last_season}"
+        bdi_prime = bdi_entry.get("primeWindow")
+        if (not prime_window) and isinstance(bdi_prime, str) and bdi_prime.strip():
+            prime_window = bdi_prime.strip()
 
         franchises = sorted(
             {
@@ -1435,6 +1547,9 @@ def build_goat_system_snapshot() -> None:
             )
         else:
             resume = "Awaiting NBA impact"
+        bdi_resume = (bdi_entry.get("resume") or "").strip()
+        if bdi_resume:
+            resume = f"{resume} · {bdi_resume}" if games else bdi_resume
 
         if last_season and isinstance(last_season, int) and last_season >= (datetime.now().year - 1):
             status = "Active"
@@ -1443,22 +1558,31 @@ def build_goat_system_snapshot() -> None:
         else:
             status = "Prospect"
 
-        if goat_score >= 90:
-            tier = "Pantheon"
-        elif goat_score >= 75:
-            tier = "Inner Circle"
-        elif goat_score >= 60:
-            tier = "All-Time Great"
-        elif goat_score >= 45:
-            tier = "Hall of Fame"
-        elif goat_score >= 30:
-            tier = "All-Star"
-        elif goat_score >= 15:
-            tier = "Starter"
-        elif goat_score >= 5:
-            tier = "Rotation"
+        bdi_tier = bdi_entry.get("tier")
+        if isinstance(bdi_tier, str) and bdi_tier.strip():
+            tier = bdi_tier.strip()
         else:
-            tier = "Reserve"
+            if goat_score >= 92:
+                tier = "Pantheon"
+            elif goat_score >= 80:
+                tier = "Inner Circle"
+            elif goat_score >= 68:
+                tier = "All-Time Great"
+            elif goat_score >= 52:
+                tier = "Hall of Fame"
+            elif goat_score >= 36:
+                tier = "All-Star"
+            elif goat_score >= 22:
+                tier = "Starter"
+            elif goat_score >= 10:
+                tier = "Rotation"
+            else:
+                tier = "Reserve"
+
+        delta = 0.0
+        bdi_delta = bdi_entry.get("delta")
+        if isinstance(bdi_delta, (int, float)):
+            delta = float(bdi_delta)
 
         players_payload.append(
             {
@@ -1470,7 +1594,7 @@ def build_goat_system_snapshot() -> None:
                 "status": status,
                 "careerSpan": career_span,
                 "primeWindow": prime_window,
-                "delta": 0.0,
+                "delta": delta,
                 "franchises": franchises,
                 "resume": resume,
                 "goatComponents": components,
@@ -1486,27 +1610,130 @@ def build_goat_system_snapshot() -> None:
     weights_payload = [
         {
             "key": "impact",
-            "label": "Prime Impact",
-            "weight": 0.4,
-            "description": "Production, playmaking, and defensive stocks per recorded possession.",
+            "label": "Prime Impact & Possession Value",
+            "weight": 0.32,
+            "description": "Possession-weighted scoring, playmaking, and stocks blended with BDI opponent-adjusted impact.",
+            "sources": [
+                {
+                    "name": "Ball Don't Lie API game logs (PlayerStatistics.7z)",
+                    "contribution": "Points, assists, rebounds, steals, blocks, and minutes per game.",
+                    "fields": [
+                        "points",
+                        "assists",
+                        "reboundsTotal",
+                        "steals",
+                        "blocks",
+                        "numMinutes",
+                    ],
+                },
+                {
+                    "name": "BDI API pantheon feed",
+                    "contribution": "Opponent-adjusted impact baseline used for cross-era calibration.",
+                    "fields": ["goatComponents.impact"],
+                    "lastUpdated": bdi_generated_at,
+                },
+            ],
         },
         {
             "key": "stage",
             "label": "Stage Dominance",
-            "weight": 0.3,
-            "description": "Playoff volume, finals control, and championship closes derived from game logs.",
+            "weight": 0.26,
+            "description": "Championship equity from playoff wins, Finals performance, and BDI postseason deltas.",
+            "sources": [
+                {
+                    "name": "Ball Don't Lie API game logs (PlayerStatistics.7z)",
+                    "contribution": "Playoff wins, Finals games, and close-out opportunities.",
+                    "fields": ["gameType", "gameLabel", "win"],
+                },
+                {
+                    "name": "BDI API pantheon feed",
+                    "contribution": "Stage dominance priors and twelve-month movement flags.",
+                    "fields": ["goatComponents.stage", "delta"],
+                    "lastUpdated": bdi_generated_at,
+                },
+            ],
         },
         {
             "key": "longevity",
             "label": "Longevity & Availability",
             "weight": 0.2,
-            "description": "Rewards durable minutes and sustained contributions captured by Ball Don't Lie data.",
+            "description": "Career minutes, appearances, and durability context aligned with BDI aging curves.",
+            "sources": [
+                {
+                    "name": "Ball Don't Lie API game logs (PlayerStatistics.7z)",
+                    "contribution": "Total minutes, games played, and availability counts.",
+                    "fields": ["numMinutes", "personId"],
+                },
+                {
+                    "name": "Players.csv registry",
+                    "contribution": "Draft years to anchor entry seasons when game logs are incomplete.",
+                    "fields": ["draftYear"],
+                },
+                {
+                    "name": "BDI API pantheon feed",
+                    "contribution": "Longevity coefficients ensuring modern and classic careers share the same scale.",
+                    "fields": ["goatComponents.longevity"],
+                    "lastUpdated": bdi_generated_at,
+                },
+            ],
         },
         {
             "key": "versatility",
             "label": "Versatility & Scalability",
+            "weight": 0.12,
+            "description": "Positional flexibility, on-ball creation, and multi-team adaptability factors.",
+            "sources": [
+                {
+                    "name": "Ball Don't Lie API game logs (PlayerStatistics.7z)",
+                    "contribution": "Assist, rebound, steal, and block rates per game.",
+                    "fields": ["assists", "reboundsTotal", "steals", "blocks"],
+                },
+                {
+                    "name": "Players.csv registry",
+                    "contribution": "Declared guard/forward/center flags for positional counts.",
+                    "fields": ["guard", "forward", "center"],
+                },
+                {
+                    "name": "TeamHistories.csv",
+                    "contribution": "Franchise abbreviations that normalize team switches across eras.",
+                    "fields": ["teamCity", "teamName", "teamAbbrev"],
+                },
+                {
+                    "name": "BDI API pantheon feed",
+                    "contribution": "Versatility anchors derived from historical lineup data.",
+                    "fields": ["goatComponents.versatility"],
+                    "lastUpdated": bdi_generated_at,
+                },
+            ],
+        },
+        {
+            "key": "culture",
+            "label": "Cultural Capital",
             "weight": 0.1,
-            "description": "Highlights positional flexibility plus assist, rebound, and stocks rates.",
+            "description": "Leadership credit rooted in championships, global reach, and BDI cultural resonance.",
+            "sources": [
+                {
+                    "name": "Ball Don't Lie API game logs (PlayerStatistics.7z)",
+                    "contribution": "Win totals and postseason success that underpin leadership value.",
+                    "fields": ["win", "gameType"],
+                },
+                {
+                    "name": "Players.csv registry",
+                    "contribution": "Country of origin and draft position for international and pedigree bonuses.",
+                    "fields": ["country", "draftNumber"],
+                },
+                {
+                    "name": "TeamHistories.csv",
+                    "contribution": "Franchise context for multi-market influence scoring.",
+                    "fields": ["teamCity", "teamName", "teamAbbrev"],
+                },
+                {
+                    "name": "BDI API pantheon feed",
+                    "contribution": "Cultural capital baseline and story-driven adjustments.",
+                    "fields": ["goatComponents.culture"],
+                    "lastUpdated": bdi_generated_at,
+                },
+            ],
         },
     ]
 
@@ -1520,8 +1747,10 @@ def build_goat_system_snapshot() -> None:
         "players": players_payload,
     }
 
-    _write_json("goat_system.json", payload, indent=None)
+    if bdi_generated_at:
+        payload["sourceTimestamps"] = {"bdi": bdi_generated_at}
 
+    _write_json("goat_system.json", payload, indent=None)
 
 # ---------------------------------------------------------------------------
 
