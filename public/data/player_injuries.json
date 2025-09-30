@@ -1,0 +1,117 @@
+{
+  "fetched_at": "2025-09-30T16:24:42.265Z",
+  "source": "Ball Don't Lie",
+  "items": [
+    {
+      "player": "Tyrese Maxey",
+      "status": "Day-To-Day",
+      "status_level": "season",
+      "player_id": 3547254,
+      "team_tricode": "PHI",
+      "team_name": "Philadelphia 76ers",
+      "return_date": "Oct 1",
+      "description": "Jul 3: Maxey (finger) is expected to miss the rest of the season, Shams Charania of ESPN reported Thursday.",
+      "report_label": "Jul 3"
+    },
+    {
+      "player": "Jayson Tatum",
+      "status": "Out",
+      "status_level": "caution",
+      "player_id": 434,
+      "team_tricode": "BOS",
+      "team_name": "Boston Celtics",
+      "return_date": "Apr 1",
+      "description": "Sep 23: Tatum (Achilles) said Tuesday that he's not ruling out a return in 2025-26, Zack Cox of the Boston Herald reports.",
+      "report_label": "Sep 23"
+    },
+    {
+      "player": "Darius Garland",
+      "status": "Out",
+      "status_level": "caution",
+      "player_id": 666581,
+      "team_tricode": "CLE",
+      "team_name": "Cleveland Cavaliers",
+      "return_date": "Nov 1",
+      "description": "Sep 23: Cleveland president of basketball operations Koby Altman said Tuesday that Garland (toe) remains without a timetable to return to action, Spencer Davies of SI.com reports.",
+      "report_label": "Sep 23"
+    },
+    {
+      "player": "Max Strus",
+      "status": "Out",
+      "status_level": "caution",
+      "player_id": 666908,
+      "team_tricode": "CLE",
+      "team_name": "Cleveland Cavaliers",
+      "return_date": "Dec 1",
+      "description": "Aug 26: Strus will miss approximately 3-to-4 months after undergoing surgery to repair a Jones fracture in his left foot, Shams Charania of ESPN reports.",
+      "report_label": "Aug 26"
+    },
+    {
+      "player": "Kyrie Irving",
+      "status": "Out",
+      "status_level": "caution",
+      "player_id": 228,
+      "team_tricode": "DAL",
+      "team_name": "Dallas Mavericks",
+      "return_date": "Jan 1",
+      "description": "Sep 29: At Media Day on Monday, Mavericks head coach Jason Kidd refuted the report that Irving (knee) is ahead of schedule in his recovery, Christian Clark reports.",
+      "report_label": "Sep 29"
+    },
+    {
+      "player": "Fred VanVleet",
+      "status": "Out",
+      "status_level": "caution",
+      "player_id": 458,
+      "team_tricode": "HOU",
+      "team_name": "Houston Rockets",
+      "return_date": "Apr 12",
+      "description": "Sep 22: VanVleet suffered a torn ACL and may be out for the entire 2025-26 campaign, Shams Charania of ESPN reports.",
+      "report_label": "Sep 22"
+    },
+    {
+      "player": "Tyrese Haliburton",
+      "status": "Out",
+      "status_level": "caution",
+      "player_id": 3547245,
+      "team_tricode": "IND",
+      "team_name": "Indiana Pacers",
+      "return_date": "Oct 1",
+      "description": "Jul 7: Haliburton will miss the entire 2025-26 season while recovering from surgery on his right Achilles tendon, Shams Charania of ESPN reports.",
+      "report_label": "Jul 7"
+    },
+    {
+      "player": "Brandon Clarke",
+      "status": "Out",
+      "status_level": "caution",
+      "player_id": 666505,
+      "team_tricode": "MEM",
+      "team_name": "Memphis Grizzlies",
+      "return_date": "Nov 7",
+      "description": "Sep 28: Clarke will undergo a procedure to address knee synovitis and will be re-evaluated in six weeks, Shams Charania of ESPNreports.",
+      "report_label": "Sep 28"
+    },
+    {
+      "player": "Zach Edey",
+      "status": "Out",
+      "status_level": "caution",
+      "player_id": 1028025754,
+      "team_tricode": "MEM",
+      "team_name": "Memphis Grizzlies",
+      "return_date": "Nov 1",
+      "description": "Sep 26: Edey has been cleared to begin ramping up basketball activities and is expected to return to play in six to nine weeks.",
+      "report_label": "Sep 26"
+    },
+    {
+      "player": "Tyler Herro",
+      "status": "Out",
+      "status_level": "caution",
+      "player_id": 666633,
+      "team_tricode": "MIA",
+      "team_name": "Miami Heat",
+      "return_date": "Nov 2",
+      "description": "Sep 19: Herro (foot/ankle) is expected to take eight weeks to recover after undergoing successful surgery Friday, Shams Charania of ESPN reports.",
+      "report_label": "Sep 19"
+    }
+  ],
+  "note": "Source: Ball Don't Lie player injuries feed. Displaying the 10 most relevant recent reports."
+}
