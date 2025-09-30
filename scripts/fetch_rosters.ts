@@ -18,8 +18,6 @@ import { TEAM_METADATA } from "./lib/teams.js";
  *     REGULAR_ROSTER_MAX=21
  * - TTL can be passed as CLI: `node build_rosters.mjs ttl=12`
  */
-const MANUAL_ROSTER_PATH = path.join(process.cwd(), "data", "2025-26", "manual", "roster_reference.json");
-const CANONICAL_TEAMS_PATH = path.join(process.cwd(), "data", "2025-26", "canonical", "teams.json");
 const OUT_DIR = path.join(process.cwd(), "public", "data");
 const OUT_FILE = path.join(OUT_DIR, "rosters.json");
 const FAIL_FILE = path.join(OUT_DIR, "rosters.failed.json");
@@ -48,22 +46,6 @@ const REGULAR_ROSTER_MAX = Number(process.env.REGULAR_ROSTER_MAX ?? 23) || 23;
 const PRESEASON_ROSTER_MAX = Number(process.env.PRESEASON_ROSTER_MAX ?? 25) || 25;
 
 type JsonValue = Record<string, unknown>;
-
-type ManualRosterEntry = {
-  playerId: string;
-  firstName: string;
-  lastName: string;
-  teamId: string;
-  teamTricode?: string;
-  position?: string | null;
-};
-
-type CanonicalTeam = {
-  teamId?: string;
-  tricode?: string;
-  market?: string;
-  name?: string;
-};
 
 async function readJSON<T>(p: string): Promise<T | null> {
   try {
@@ -285,94 +267,6 @@ async function buildRosterFromBallDontLie(): Promise<RostersDoc> {
   };
 }
 
-function normalizeManualPosition(position?: string | null): string | null {
-  return safeTrim(position);
-}
-
-async function buildRosterFromManualReference(): Promise<RostersDoc | null> {
-  const manualEntries = await readJSON<ManualRosterEntry[]>(MANUAL_ROSTER_PATH);
-  if (!Array.isArray(manualEntries) || !manualEntries.length) return null;
-
-  const canonicalTeams = await readJSON<CanonicalTeam[]>(CANONICAL_TEAMS_PATH);
-  const teamMetadata = new Map<string, { id: number; abbr: string; name: string }>();
-  if (Array.isArray(canonicalTeams)) {
-    canonicalTeams.forEach((team) => {
-      const teamId = Number.parseInt(team.teamId ?? "", 10);
-      const abbr = (team.tricode ?? "").toUpperCase();
-      const displayName = [team.market, team.name].map((p) => p?.trim()).filter((p): p is string => Boolean(p && p.length)).join(" ").trim();
-
-      if (Number.isFinite(teamId)) {
-        teamMetadata.set(String(teamId), { id: teamId, abbr: abbr || String(teamId), name: displayName || abbr || `Team ${teamId}` });
-      }
-      if (abbr) {
-        teamMetadata.set(abbr, { id: Number.isFinite(teamId) ? teamId : 0, abbr, name: displayName || abbr });
-      }
-    });
-  }
-
-  const teams = new Map<string, RosterTeam>();
-  for (const entry of manualEntries) {
-    const playerId = Number.parseInt(entry.playerId, 10);
-    if (!Number.isFinite(playerId)) continue;
-
-    const teamId = Number.parseInt(entry.teamId, 10);
-    if (!Number.isFinite(teamId)) continue;
-
-    const teamKey = entry.teamTricode?.toUpperCase() ?? String(teamId);
-    const metadata =
-      teamMetadata.get(entry.teamId) ??
-      teamMetadata.get(teamKey) ?? {
-        id: teamId,
-        abbr: teamKey,
-        name: teamKey,
-      };
-
-    if (!teams.has(metadata.abbr)) {
-      teams.set(metadata.abbr, {
-        id: metadata.id,
-        abbreviation: metadata.abbr,
-        full_name: metadata.name,
-        roster: [],
-      });
-    }
-
-    const rosterTeam = teams.get(metadata.abbr)!;
-    rosterTeam.roster.push({
-      id: playerId,
-      first_name: entry.firstName?.trim() ?? "",
-      last_name: entry.lastName?.trim() ?? "",
-      position: normalizeManualPosition(entry.position),
-      jersey_number: null,
-      height: null,
-      weight: null,
-    });
-  }
-
-  if (!teams.size) return null;
-
-  const rosterTeams = Array.from(teams.values()).map((team) => ({
-    ...team,
-    roster: team.roster
-      .filter((p) => p.first_name || p.last_name)
-      .sort((a, b) => {
-        const aName = `${a.last_name} ${a.first_name}`.toLowerCase();
-        const bName = `${b.last_name} ${b.first_name}`.toLowerCase();
-        return aName.localeCompare(bName);
-      }),
-  }));
-
-  rosterTeams.sort((a, b) => a.abbreviation.localeCompare(b.abbreviation));
-
-  return {
-    fetched_at: new Date().toISOString(),
-    ttl_hours: TTL_HOURS,
-    source: "manual_roster_reference",
-    season: SEASON,
-    season_start_year: TARGET_SEASON_START_YEAR,
-    teams: rosterTeams,
-  };
-}
-
 async function main() {
   const existing = await readJSON<RostersDoc>(OUT_FILE);
   if (isCacheFresh(existing)) {
@@ -380,63 +274,42 @@ async function main() {
     return;
   }
 
-  let doc: RostersDoc | null = null;
-  let fetchError: RosterFetchError | null = null;
-
   try {
-    doc = await buildRosterFromBallDontLie();
+    const doc = await buildRosterFromBallDontLie();
+
+    const jsonString = await writeJSON(OUT_FILE, doc);
+    const hash = await writeHash(jsonString);
+
+    await clearFailureFile();
+
+    const teamCount = doc.teams.reduce((sum, team) => sum + team.roster.length, 0);
+    console.log(`Wrote ${OUT_FILE} with ${teamCount} players (Ball Don't Lie; sha256 ${hash.slice(0, 8)}…).`);
   } catch (error) {
-    if (error instanceof RosterFetchError) {
-      fetchError = error;
-      console.warn(`Ball Don't Lie roster fetch failed (${error.reason}): ${error.message}`);
-    } else {
-      const message = error instanceof Error ? error.message : String(error);
-      fetchError = new RosterFetchError("exception", message);
-      console.warn(`Ball Don't Lie roster fetch raised an exception: ${message}`);
-    }
-  }
+    const fetchError =
+      error instanceof RosterFetchError
+        ? error
+        : new RosterFetchError(
+            "exception",
+            error instanceof Error ? error.message : String(error),
+          );
 
-  let usedManualFallback = false;
-  if (!doc) {
-    doc = await buildRosterFromManualReference();
-    if (doc) {
-      usedManualFallback = true;
-      console.warn("Falling back to manual roster reference at data/2025-26/manual/roster_reference.json.");
-    }
-  }
-
-  if (!doc) {
-    const failurePayload = formatFailure(fetchError?.reason ?? "no_roster_sources", {
-      ...(fetchError?.details ?? {}),
-      message: fetchError?.message ?? "Unable to build roster snapshot from any source.",
+    const failurePayload = formatFailure(fetchError.reason, {
+      ...(fetchError.details ?? {}),
+      message: fetchError.message,
     });
     await writeFailure(failurePayload);
-    console.warn("Aborting roster write; no roster data sources succeeded.");
-    return;
+    console.warn("Aborting roster write; Ball Don't Lie roster fetch failed.");
+    throw fetchError;
   }
-
-  const jsonString = await writeJSON(OUT_FILE, doc);
-  const hash = await writeHash(jsonString);
-
-  if (usedManualFallback && fetchError) {
-    await writeFailure(
-      formatFailure(fetchError.reason, {
-        ...(fetchError.details ?? {}),
-        message: fetchError.message,
-        fallback: "manual_roster_reference",
-      }),
-    );
-  } else {
-    await clearFailureFile();
-  }
-
-  const teamCount = doc.teams.reduce((sum, team) => sum + team.roster.length, 0);
-  const sourceLabel = usedManualFallback ? "manual reference" : "Ball Don't Lie";
-  console.log(`Wrote ${OUT_FILE} with ${teamCount} players (${sourceLabel}; sha256 ${hash.slice(0, 8)}…).`);
 }
 
 main().catch(async (error) => {
   console.error("Roster fetch run failed:", error);
-  await writeFailure(formatFailure("exception", { message: String(error) }));
+  if (error instanceof RosterFetchError) {
+    // Failure file already populated in the main workflow.
+  } else {
+    await writeFailure(formatFailure("exception", { message: String(error) }));
+  }
+  process.exitCode = 1;
 });
 
