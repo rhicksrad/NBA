@@ -2518,7 +2518,7 @@ function initPlayerAtlas() {
     renderResults('');
   };
 
-  const rostersDataUrl = new URL('./public/data/rosters.json', document.baseURI).toString();
+  const rostersDataUrl = new URL('./data/rosters.json', document.baseURI).toString();
 
   const hydrate = async () => {
     try {
