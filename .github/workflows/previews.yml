@@ -4,7 +4,7 @@ on:
   push:
     branches: [main]
   schedule:
-    - cron: "27 7 * * *"
+    - cron: "27 7 * * *"  # 07:27 UTC
   workflow_dispatch:
 
 permissions:
@@ -22,51 +22,53 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with: { fetch-depth: 0 }
+        with:
+          fetch-depth: 0
 
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: pnpm
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: 9.1.0
+          version: 9.12.1
+          run_install: false
 
-      - name: Use dedicated pnpm store
-        run: pnpm config set store-dir ~/.pnpm-store
-
-      - name: Cache pnpm store
-        uses: actions/cache@v4
-        with:
-          path: ~/.pnpm-store
-          key: pnpm-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: pnpm-${{ runner.os }}-
+      - name: Sanity check tooling
+        run: |
+          node -v
+          pnpm -v
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm i --frozen-lockfile
 
       - name: Stamp date
         id: metadata
         run: echo "date=$(date -u +'%Y-%m-%d')" >> "$GITHUB_OUTPUT"
 
       - name: Verify Ball Don't Lie API access
+        env:
+          BALLDONTLIE_API_KEY: ${{ secrets.BALLDONTLIE_API_KEY }}
         run: pnpm verify:bdl
 
-      - name: Build and validate previews
+      - name: Build previews (no external stats)
         env:
           USE_NBA_STATS: "0"
           USE_BREF: "0"
+          BALLDONTLIE_API_KEY: ${{ secrets.BALLDONTLIE_API_KEY }}
         run: pnpm previews
 
       - name: Validate previews
-        run: pnpm run validate:previews
+        run: pnpm validate:previews
 
       - name: Detect changes
         id: changes
         run: |
-          if git diff --quiet; then
+          git add -A
+          if git diff --cached --quiet --no-ext-diff; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
           else
             echo "changed=true" >> "$GITHUB_OUTPUT"
