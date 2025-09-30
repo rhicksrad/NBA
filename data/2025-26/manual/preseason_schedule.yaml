@@ -15,39 +15,6 @@ games:
       tricode: "PHI"
     home:
       tricode: "NYK"
-    preview:
-      summaryTagline: "A high-profile warmup, but a meaningful stress test. As training camp shifts toward real minutes, this matchup offers early clues about rotations, health, and identity."
-      matchupSnapshotItems:
-        - "Philadelphia 76ers vs. New York Knicks"
-        - "Preseason Game (Abu Dhabi Showcase)"
-        - "Context: Both teams enter trying to stabilize around core stars (or recovering ones), while coaxing out contributions from young or peripheral players in a low-stakes but spotlighted setting."
-      storylines:
-        items:
-          - title: "Injury Watch & Star Availability"
-            paragraphs:
-              - "The biggest uncertainty centers on Joel Embiid and Paul George, both recovering from knee procedures. Neither has a firm return date. Their participation—or lack thereof—will heavily shape how seriously Philadelphia runs its benchmark sets and allowable mistakes in Abu Dhabi."
-              - "Meanwhile, Philadelphia’s guard Jared McCain suffered a UCL tear in his thumb during an offseason session and is unlikely to be active."
-          - title: "New Regime, New Vision (Knicks)"
-            paragraphs:
-              - "This Abu Dhabi game marks the first real taste of Mike Brown’s system on an international stage. Brown has made no secret of his intention to push more 3-point volume (if they’re the “right” shots) and create better spacing via ball movement."
-              - "The challenge: blending veteran roles (Jalen Brunson, Karl-Anthony Towns) with developmental minutes—especially when you want rhythm and chemistry, not chaos."
-          - title: "Deep Cuts in Philly’s Rotation Hunt"
-            paragraphs:
-              - "Philadelphia’s staff will want to explore how young and bench-level pieces hold up. With injuries clouding the availability of stars, the spotlight falls on names like VJ Edgecombe (rookie, Baylor) and backup wings/forwards trying to break in."
-              - "Because the Sixers’ prior season (24–58) was marred by instability, fans and analysts will look at who emerges worthy of consistent minutes."
-          - title: "Chemistry vs. Minutes Apportionment"
-            paragraphs:
-              - "Do these teams treat Abu Dhabi like a sandbox or a proving ground?"
-              - "Which team shows a more coherent identity by quarter four? Which bench units look sturdier? These will define judgments beyond just who wins the points."
-            bullets:
-              - "Philadelphia may lean more toward intentional sets, tracking spacing and rotations with an eye toward the regular season."
-              - "New York might prioritize teaching the new system live—even if that means short bursts, line-shuffling, or experimental small-ball stints."
-      narrativeHeading: "Narrative Questions to Watch"
-      narrativeQuestions:
-        - "Which emerging contributor earns preseason trust that carries into October?"
-        - "How aggressively does the Knicks rotation tilt toward youth vs. veteran structure?"
-        - "Does a particular interior matchup or small-ball look become a lasting point of conversation?"
-      closingNote: "If you like, I can also produce a “Key Matchups & X-Factors” section (player vs. player, positional battles) and a projected “dress rehearsal” lineup. Do you want me to build that?"
   - id: "PRE2025-02"
     tipoff: "2025-10-03T09:30:00Z"
     label: "Preseason"
