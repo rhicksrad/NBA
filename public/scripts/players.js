@@ -56,15 +56,15 @@ const atlasMetricBlueprint = {
   'rim-pressure': {
     extract(context) {
       const impact = context.components?.impact;
-      const culture = context.components?.culture;
-      if (Number.isFinite(impact) && Number.isFinite(culture)) {
-        return impact * 0.75 + culture * 0.25;
+      const versatility = context.components?.versatility;
+      if (Number.isFinite(impact) && Number.isFinite(versatility)) {
+        return impact * 0.7 + versatility * 0.3;
       }
       if (Number.isFinite(impact)) {
         return impact;
       }
-      if (Number.isFinite(culture)) {
-        return culture;
+      if (Number.isFinite(versatility)) {
+        return versatility;
       }
       return null;
     },
@@ -72,17 +72,17 @@ const atlasMetricBlueprint = {
       const impact = Number.isFinite(context.components?.impact)
         ? helpers.formatNumber(context.components.impact, 1)
         : null;
-      const culture = Number.isFinite(context.components?.culture)
-        ? helpers.formatNumber(context.components.culture, 1)
+      const versatility = Number.isFinite(context.components?.versatility)
+        ? helpers.formatNumber(context.components.versatility, 1)
         : null;
-      if (impact && culture) {
-        return `Blend of impact (${impact}) and culture (${culture}) GOAT points fuels rim pressure.`;
+      if (impact && versatility) {
+        return `Blend of impact (${impact}) and versatility (${versatility}) GOAT points fuels rim pressure.`;
       }
       if (impact) {
         return `Impact pillar at ${impact} GOAT points drives rim pressure.`;
       }
-      if (culture) {
-        return `Culture pillar at ${culture} GOAT points steadies rim pressure.`;
+      if (versatility) {
+        return `Versatility pillar at ${versatility} GOAT points steadies rim pressure.`;
       }
       return 'Rim pressure percentile unavailable.';
     },
@@ -123,13 +123,34 @@ const atlasMetricBlueprint = {
   },
   'defensive-playmaking': {
     extract(context) {
-      const value = context.components?.culture;
-      return Number.isFinite(value) ? value : null;
+      const impact = context.components?.impact;
+      const versatility = context.components?.versatility;
+      if (Number.isFinite(impact) && Number.isFinite(versatility)) {
+        return versatility * 0.6 + impact * 0.4;
+      }
+      if (Number.isFinite(versatility)) {
+        return versatility;
+      }
+      if (Number.isFinite(impact)) {
+        return impact;
+      }
+      return null;
     },
     describe(context) {
-      const value = context.components?.culture;
-      if (Number.isFinite(value)) {
-        return `Culture pillar contributes ${helpers.formatNumber(value, 1)} GOAT points of defensive playmaking.`;
+      const impact = Number.isFinite(context.components?.impact)
+        ? helpers.formatNumber(context.components.impact, 1)
+        : null;
+      const versatility = Number.isFinite(context.components?.versatility)
+        ? helpers.formatNumber(context.components.versatility, 1)
+        : null;
+      if (impact && versatility) {
+        return `Versatility (${versatility}) and impact (${impact}) GOAT points shape defensive playmaking.`;
+      }
+      if (versatility) {
+        return `Versatility pillar contributes ${versatility} GOAT points of defensive playmaking.`;
+      }
+      if (impact) {
+        return `Impact pillar contributes ${impact} GOAT points of defensive playmaking.`;
       }
       return 'Defensive playmaking percentile unavailable.';
     },
@@ -166,8 +187,8 @@ const atlasMetricBlueprint = {
       if (Number.isFinite(context.components?.versatility)) {
         parts.push(context.components.versatility * 0.45);
       }
-      if (Number.isFinite(context.components?.culture)) {
-        parts.push(context.components.culture * 0.35);
+      if (Number.isFinite(context.components?.longevity)) {
+        parts.push(context.components.longevity * 0.3);
       }
       if (Number.isFinite(context.winPct)) {
         parts.push(context.winPct * 40);
@@ -182,11 +203,23 @@ const atlasMetricBlueprint = {
       const versatility = Number.isFinite(context.components?.versatility)
         ? helpers.formatNumber(context.components.versatility, 1)
         : null;
-      if (winPct && versatility) {
-        return `Versatility (${versatility}) GOAT points plus a ${winPct}% win rate steer tempo.`;
+      const longevity = Number.isFinite(context.components?.longevity)
+        ? helpers.formatNumber(context.components.longevity, 1)
+        : null;
+      if (winPct && versatility && longevity) {
+        return `Versatility (${versatility}) and longevity (${longevity}) GOAT points plus a ${winPct}% win rate steer tempo.`;
+      }
+      if (versatility && winPct) {
+        return `Versatility pillar at ${versatility} GOAT points and a ${winPct}% win rate steer tempo.`;
+      }
+      if (longevity && winPct) {
+        return `Longevity pillar at ${longevity} GOAT points with a ${winPct}% win rate steadies tempo.`;
       }
       if (versatility) {
         return `Versatility pillar at ${versatility} GOAT points anchors pace control.`;
+      }
+      if (longevity) {
+        return `Longevity pillar at ${longevity} GOAT points anchors pace control.`;
       }
       if (winPct) {
         return `Career win rate of ${winPct}% keeps possessions in command.`;
@@ -1391,7 +1424,7 @@ function buildAtlasMetrics(catalog, goatSource) {
     const nameKey = normalizeName(player.name);
     const componentSource = player.goatComponents || {};
     const components = {};
-    ['impact', 'stage', 'longevity', 'versatility', 'culture'].forEach((key) => {
+    ['impact', 'stage', 'longevity', 'versatility'].forEach((key) => {
       const value = toNumber(componentSource[key]);
       if (value !== null) {
         components[key] = value;

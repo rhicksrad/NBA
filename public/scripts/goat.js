@@ -789,7 +789,7 @@ async function init() {
         },
       },
       {
-        element: document.querySelector('[data-chart="goat-stage-culture"]'),
+        element: document.querySelector('[data-chart="goat-stage-versatility"]'),
         source: goatDataSource,
         async createConfig(source) {
           const playersSource = Array.isArray(source?.players) ? source.players : [];
@@ -798,7 +798,7 @@ async function init() {
             .filter((player) => player.goatComponents)
             .map((player) => ({
               x: player.goatComponents.stage ?? 0,
-              y: player.goatComponents.culture ?? 0,
+              y: player.goatComponents.versatility ?? 0,
               r: Math.max(6, (player.goatScore ?? 0) * 0.25),
               name: player.name,
               status: player.status ?? 'Unknown',
@@ -808,7 +808,7 @@ async function init() {
             data: {
               datasets: [
                 {
-                  label: 'Stage vs culture',
+                  label: 'Stage vs versatility',
                   data: dataset,
                   backgroundColor: 'rgba(239, 61, 91, 0.32)',
                   borderColor: palette.coral,
@@ -824,7 +824,7 @@ async function init() {
                   callbacks: {
                     label(context) {
                       const raw = context.raw;
-                      return `${raw.name}: Stage ${helpers.formatNumber(raw.x, 1)}, Culture ${helpers.formatNumber(
+                      return `${raw.name}: Stage ${helpers.formatNumber(raw.x, 1)}, Versatility ${helpers.formatNumber(
                         raw.y,
                         1,
                       )}`;
@@ -838,7 +838,7 @@ async function init() {
                   grid: { color: 'rgba(11, 37, 69, 0.08)' },
                 },
                 y: {
-                  title: { display: true, text: 'Cultural capital' },
+                  title: { display: true, text: 'Versatility credit' },
                   grid: { color: 'rgba(11, 37, 69, 0.08)' },
                 },
               },
