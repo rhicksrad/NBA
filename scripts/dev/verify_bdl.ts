@@ -7,6 +7,7 @@ import {
   fetchActiveRosters,
   getLastActiveRosterFetchMeta,
 } from "../fetch/bdl_active_rosters.js";
+import { requireBallDontLieKey } from "../fetch/http.js";
 import { TEAM_METADATA } from "../lib/teams.js";
 
 function parseBoolean(value: string | undefined): boolean {
@@ -39,6 +40,7 @@ function inCi(): boolean {
 }
 
 async function verify(): Promise<void> {
+  requireBallDontLieKey();
   const rosters = await fetchActiveRosters();
 
   const missing = TEAM_METADATA.filter((team) => !Array.isArray(rosters[team.tricode]));
@@ -105,21 +107,6 @@ async function run(): Promise<void> {
   try {
     await verify();
   } catch (error) {
-    const message = error instanceof Error ? error.message : String(error);
-    if (message.includes("Missing BDL_API_KEY")) {
-      if (useCache() && inCi()) {
-        console.log("BDL verify skipped — missing BDL_API_KEY in CI with USE_BDL_CACHE=1");
-        return;
-      }
-      if (useCache()) {
-        console.log("BDL verify skipped — using cached roster data (USE_BDL_CACHE)");
-        return;
-      }
-      if (inCi()) {
-        console.log("BDL verify skipped — missing BDL_API_KEY in CI environment");
-        return;
-      }
-    }
     throw error;
   }
 }

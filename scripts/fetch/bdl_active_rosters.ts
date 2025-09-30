@@ -1,6 +1,7 @@
 import type { BdlPlayer } from "./ball_dont_lie_client.js";
 import { TEAM_METADATA } from "../lib/teams.js";
 import { mapBdlTeamToTricode } from "./bdl_team_mappings.js";
+import { formatBdlAuthHeader, requireBallDontLieKey } from "./http.js";
 
 const API_BASE = "https://bdlproxy.hicksrch.workers.dev/bdl/";
 const ACTIVE_PATH = "v1/players/active";
@@ -70,6 +71,7 @@ export function getLastActiveRosterFetchMeta(): ActiveRosterFetchMeta | null {
 
 export async function fetchActiveRosters(): Promise<ActiveRosters> {
   const perPage = parsePerPage();
+  const authHeader = formatBdlAuthHeader(requireBallDontLieKey());
 
   console.log(
     `BDL fetch: GET ${API_BASE}${ACTIVE_PATH} with per_page=${perPage} (max ${MAX_PER_PAGE})`,
@@ -96,6 +98,7 @@ export async function fetchActiveRosters(): Promise<ActiveRosters> {
       method: "GET",
       headers: {
         Accept: "application/json",
+        Authorization: authHeader,
       },
     });
 

@@ -161,3 +161,12 @@ No top-level side effects in helper modules; keep scripts importable.
 Never invent data. Always regenerate from pipeline + overrides.
 
 Keep season framing explicit in all outputs.
+
+## CI smoke test
+```bash
+export BALLDONTLIE_API_KEY=sk_xxx
+pnpm i --frozen-lockfile
+pnpm verify:bdl
+pnpm previews
+pnpm validate:previews
+```
