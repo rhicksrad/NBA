@@ -2,9 +2,11 @@ import { createHash } from "node:crypto";
 import fs from "node:fs/promises";
 import path from "node:path";
 import type { RosterTeam, RostersDoc } from "../types/ball";
-import { getActivePlayersByTeam, getTeams } from "./fetch/bdl.js";
-import type { BdlPlayer } from "./fetch/bdl.js";
+import { getTeams } from "./fetch/bdl.js";
+import { fetchActiveRosters } from "./fetch/bdl_active_rosters.js";
+import type { SourcePlayerRecord } from "./lib/types.js";
 import { SEASON, getSeasonStartYear } from "./lib/season.js";
+import { TEAM_METADATA } from "./lib/teams.js";
 
 const MANUAL_ROSTER_PATH = path.join(
   process.cwd(),
@@ -102,15 +104,34 @@ async function clearFailureFile() {
   }
 }
 
-function normalizePlayer(player: BdlPlayer): RosterTeam["roster"][number] {
+function normalizePlayer(player: SourcePlayerRecord): RosterTeam["roster"][number] {
+  const idValue =
+    typeof player.id === "number"
+      ? player.id
+      : (() => {
+          const parsed = Number.parseInt(player.playerId ?? "", 10);
+          return Number.isFinite(parsed) ? parsed : NaN;
+        })();
+
+  if (!Number.isFinite(idValue)) {
+    throw new RosterFetchError(
+      "invalid_player_id",
+      `Invalid player id for ${player.name ?? "unknown player"}`,
+      { player },
+    );
+  }
+
+  const [firstFallback = "", ...restName] = (player.name ?? "").split(" ");
+  const lastFallback = restName.join(" ");
+
   return {
-    id: player.id,
-    first_name: player.first_name,
-    last_name: player.last_name,
+    id: idValue,
+    first_name: player.first_name ?? firstFallback,
+    last_name: player.last_name ?? lastFallback,
     position: player.position ?? null,
-    jersey_number: player.jersey_number ?? null,
-    height: player.height ?? null,
-    weight: player.weight ?? null,
+    jersey_number: player.jersey_number?.trim() ? player.jersey_number : null,
+    height: player.height?.trim() ? player.height : null,
+    weight: player.weight?.trim() ? player.weight : null,
   };
 }
 
@@ -148,51 +169,67 @@ class RosterFetchError extends Error {
 }
 
 async function buildRosterFromBallDontLie(): Promise<RostersDoc> {
-  const teams = await getTeams();
+  const [teams, activeRosters] = await Promise.all([getTeams(), fetchActiveRosters()]);
   if (!teams.length) {
     throw new RosterFetchError("no_teams", "No teams returned by API.");
   }
-
-  const rosterTeams: RosterTeam[] = [];
-  const failedTeams: Array<{ id: number; code: string; error: unknown }> = [];
-  let totalPlayers = 0;
 
   console.log(
     `Fetching Ball Don't Lie active rosters for ${SEASON} (season start ${TARGET_SEASON_START_YEAR}).`,
   );
 
-  for (const team of teams) {
-    try {
-      const rawPlayers = await getActivePlayersByTeam(team.id, TARGET_SEASON_START_YEAR);
-      const roster = rawPlayers.map(normalizePlayer).sort((a, b) => {
+  const teamsById = new Map(teams.map((team) => [team.id, team]));
+  const rosterTeams: RosterTeam[] = [];
+  let totalPlayers = 0;
+
+  for (const metadata of TEAM_METADATA) {
+    const roster = activeRosters[metadata.tricode];
+    if (!Array.isArray(roster) || roster.length === 0) {
+      throw new RosterFetchError("missing_team_roster", `No active roster for ${metadata.tricode}.`);
+    }
+
+    const teamBdlId = roster[0]?.team_bdl_id;
+    if (typeof teamBdlId !== "number") {
+      throw new RosterFetchError("invalid_team_mapping", `Missing Ball Don't Lie team id for ${metadata.tricode}.`);
+    }
+
+    const teamInfo = teamsById.get(teamBdlId);
+    if (!teamInfo) {
+      throw new RosterFetchError("unknown_team", `Unknown Ball Don't Lie team id ${teamBdlId} for ${metadata.tricode}.`);
+    }
+
+    const normalizedRoster = roster
+      .map(normalizePlayer)
+      .sort((a, b) => {
         const aName = `${a.last_name} ${a.first_name}`.toLowerCase();
         const bName = `${b.last_name} ${b.first_name}`.toLowerCase();
         return aName.localeCompare(bName);
       });
-      totalPlayers += roster.length;
-      rosterTeams.push({
-        id: team.id,
-        abbreviation: team.abbreviation,
-        full_name: team.full_name,
-        roster,
-      });
-      console.log(`${team.abbreviation}: ${roster.length} active players`);
-      if (roster.length < 10 || roster.length > 22) {
-        console.warn(`Suspicious roster size for ${team.abbreviation}: ${roster.length}`);
+
+    const seen = new Set<number>();
+    for (const player of normalizedRoster) {
+      if (seen.has(player.id)) {
+        throw new RosterFetchError("duplicate_player", `Duplicate player id ${player.id} on ${metadata.tricode}.`);
       }
-    } catch (error) {
-      failedTeams.push({ id: team.id, code: team.abbreviation, error });
-      console.error(`Error fetching roster for ${team.abbreviation}:`, error);
+      seen.add(player.id);
+    }
+
+    totalPlayers += normalizedRoster.length;
+
+    rosterTeams.push({
+      id: teamInfo.id,
+      abbreviation: teamInfo.abbreviation,
+      full_name: teamInfo.full_name,
+      roster: normalizedRoster,
+    });
+
+    console.log(`${teamInfo.abbreviation}: ${normalizedRoster.length} active players`);
+    if (normalizedRoster.length < 13 || normalizedRoster.length > 21) {
+      console.warn(`Suspicious roster size for ${teamInfo.abbreviation}: ${normalizedRoster.length}`);
     }
   }
 
-  if (failedTeams.length) {
-    throw new RosterFetchError("team_fetch_failed", "Failed to fetch one or more team rosters.", {
-      failed: failedTeams.map((entry) => entry.code),
-    });
-  }
-
-  if (totalPlayers < 360 || totalPlayers > 600) {
+  if (totalPlayers < TEAM_METADATA.length * 13 || totalPlayers > TEAM_METADATA.length * 21) {
     throw new RosterFetchError("suspicious_total", "Suspicious league player count detected.", {
       totalPlayers,
     });

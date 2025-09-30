@@ -15,7 +15,7 @@
     "validate:previews": "tsx scripts/validate/previews_staleness.ts && tsx scripts/validate/links.ts && tsx scripts/validate/rosters_nonempty.ts",
     "previews": "pnpm build:data && pnpm gen:previews && pnpm validate:previews",
     "fetch:rosters": "tsx scripts/fetch_rosters.ts",
-    "validate:rosters": "tsx scripts/validate_rosters.ts",
+    "validate:rosters": "tsx scripts/validate/rosters.ts",
     "predeploy": "pnpm fetch:rosters",
     "deploy": "echo 'static site build only'",
     "test": "vitest run",
