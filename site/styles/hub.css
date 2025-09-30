@@ -2556,6 +2556,13 @@ section h2 { margin-top: 0; font-size: clamp(1.35rem, 3vw, 1.8rem); letter-spaci
   to { transform: rotate(360deg); }
 }
 
+
+.section-header__meta {
+  margin: 0.35rem 0 0;
+  font-size: 0.9rem;
+  color: var(--text-subtle);
+}
+
 .goat-methodology { display: grid; gap: 1.8rem; margin-block: 3rem; }
 
 .goat-methodology__layout {
@@ -2565,10 +2572,70 @@ section h2 { margin-top: 0; font-size: clamp(1.35rem, 3vw, 1.8rem); letter-spaci
   align-items: stretch;
 }
 
+.goat-formula-card {
+  padding: 1.25rem 1.4rem;
+  border-radius: var(--radius-md);
+  border: 1px solid color-mix(in srgb, var(--royal) 16%, transparent);
+  background: color-mix(in srgb, rgba(255, 255, 255, 0.95) 70%, rgba(17, 86, 214, 0.08) 30%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65);
+  display: grid;
+  gap: 0.8rem;
+}
+
+.goat-formula-card__title {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--navy);
+}
+
+.goat-formula-card__equation {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--navy);
+  font-weight: 600;
+}
+
+.goat-formula-card__list {
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.55rem;
+  list-style: none;
+}
+
+.goat-formula-card__list li {
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: var(--text-subtle);
+}
+
+.goat-formula-card__list li strong {
+  color: var(--royal);
+  font-weight: 700;
+}
+
+.goat-formula-card__component {
+  font-weight: 600;
+  color: var(--navy);
+}
+
+.goat-formula-card__description {
+  color: var(--text-subtle);
+}
+
+.goat-formula-card__footnote {
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--text-subtle);
+}
+
 .goat-methodology__grid {
   display: grid;
   gap: 1rem;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-column: 1 / -1;
 }
 
 .goat-weight-card {
