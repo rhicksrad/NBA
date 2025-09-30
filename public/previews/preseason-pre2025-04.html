@@ -3,8 +3,16 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <base href="/NBA/" />
+    <script src="assets/bdl-credentials.js"></script>
+    <script type="module">
+      import { ensureBdlKeyReady } from './assets/js/credentials.js';
+      await ensureBdlKeyReady();
+      window.__BDL_READY__ = true;
+    </script>
+
     <title>Preseason Preview: New York Knicks at Philadelphia 76ers</title>
-    <link rel="stylesheet" href="../styles/hub.css" />
+    <link rel="stylesheet" href="styles/hub.css" />
     <style>
       body {
         margin: 0;

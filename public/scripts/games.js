@@ -1,3 +1,4 @@
+import { authHeaders, ensureBdlKeyReady } from '../assets/js/credentials.js';
 import { registerCharts, destroyCharts, helpers } from './hub-charts.js';
 
 const API_BASE = 'https://api.balldontlie.io/v1';
@@ -55,7 +56,6 @@ let latestGames = [];
 let lastUpdated = null;
 let refreshTimer = null;
 let loading = false;
-let credentialToken = getApiKey();
 
 function getTodayIso() {
   const now = new Date();
@@ -113,18 +113,6 @@ function formatTimeLabel(date) {
     return null;
   }
   return date.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' });
-}
-
-function getApiKey() {
-  const meta = document.querySelector('meta[name="bdl-api-key"]');
-  const metaKey = meta?.getAttribute('content')?.trim();
-  if (metaKey) {
-    return metaKey;
-  }
-  if (typeof window !== 'undefined' && window.BDL_API_KEY) {
-    return String(window.BDL_API_KEY);
-  }
-  return null;
 }
 
 function getSelectableBounds() {
@@ -260,13 +248,8 @@ async function request(endpoint, params = {}) {
   if ([...search.keys()].length) {
     url.search = search.toString();
   }
-  const headers = { Accept: 'application/json' };
-  const apiKey = getApiKey();
-  if (!apiKey) {
-    throw new Error("Ball Don't Lie API key missing");
-  }
-  headers.Authorization = apiKey;
-  const response = await fetch(url.toString(), { headers });
+  const headers = { Accept: 'application/json', ...(await authHeaders()) };
+  const response = await fetch(url.toString(), { headers, cache: 'no-store' });
   if (!response.ok) {
     throw new Error(`Request failed with status ${response.status}`);
   }
@@ -1066,6 +1049,7 @@ async function loadGames(options = {}) {
   }
   setFetchMessage('Refreshing…');
   try {
+    await ensureBdlKeyReady();
     const games = await fetchGamesForRange(activeRange.start, activeRange.end);
     latestGames = games;
     lastUpdated = new Date();
@@ -1147,17 +1131,6 @@ function init() {
   renderScoreboardState('Loading games…');
   loadGames();
   scheduleAutoRefresh();
-}
-
-if (typeof document !== 'undefined') {
-  document.addEventListener('bdl:credentials-applied', () => {
-    const nextKey = getApiKey();
-    if (!nextKey || nextKey === credentialToken) {
-      return;
-    }
-    credentialToken = nextKey;
-    loadGames({ silent: Boolean(latestGames && latestGames.length) });
-  });
 }
 
 init();
