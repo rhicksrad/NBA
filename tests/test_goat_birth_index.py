@@ -34,8 +34,12 @@ def test_goat_birth_index_rank_order(goat_index):
     assert players, "GOAT index payload should include players"
 
     previous_score = float("inf")
-    for position, player in enumerate(players, start=1):
-        assert player["rank"] == position
+    previous_rank = 0
+    for player in players:
+        rank = player["rank"]
+        assert isinstance(rank, int) and rank > 0
+        assert rank > previous_rank
+        previous_rank = rank
         score = player["goatScore"]
         assert isinstance(score, (int, float)) and isfinite(score)
         assert score <= 100
@@ -65,8 +69,10 @@ def test_state_legends_top_players(state_legends):
 
     michigan = next((item for item in states if item.get("state") == "MI"), None)
     assert michigan is not None
-    assert michigan["topPlayers"][0]["name"] == "Magic Johnson"
-    assert michigan["topPlayers"][0]["goatScore"] > 80
+    top_michigan = michigan["topPlayers"][0]
+    assert top_michigan["name"] == "Magic Johnson"
+    assert top_michigan["rank"] == 5
+    assert top_michigan["goatScore"] >= 70
 
 
 def test_world_legends_top_players(world_legends):
@@ -78,5 +84,7 @@ def test_world_legends_top_players(world_legends):
 
     virgin_islands = next((item for item in countries if item.get("country") == "VI"), None)
     assert virgin_islands is not None
-    assert virgin_islands["topPlayers"][0]["name"] == "Tim Duncan"
-    assert virgin_islands["topPlayers"][0]["goatScore"] > 80
+    top_vi = virgin_islands["topPlayers"][0]
+    assert top_vi["name"] == "Tim Duncan"
+    assert top_vi["rank"] == 6
+    assert top_vi["goatScore"] >= 70

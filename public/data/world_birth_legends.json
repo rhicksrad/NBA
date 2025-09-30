@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2025-09-28T05:10:59.254624Z",
+  "generatedAt": "2025-09-30T19:13:12.698833Z",
   "countries": [
     {
       "country": "AO",
@@ -17,7 +17,7 @@
         {
           "personId": "1628981",
           "name": "Bruno Fernando",
-          "rank": 770,
+          "rank": 1889,
           "goatScore": 10.0,
           "tier": "Rotation",
           "resume": "995 pts · 182 ast · 826 reb in 431 games",
@@ -53,9 +53,9 @@
         {
           "personId": "203658",
           "name": "Norvel Pelle",
-          "rank": 985,
-          "goatScore": 5.9,
-          "tier": "Rotation",
+          "rank": 2621,
+          "goatScore": 6.0,
+          "tier": "Reserve",
           "resume": "120 pts · 10 ast · 123 reb in 109 games",
           "franchises": [
             "Brooklyn Nets",
@@ -86,8 +86,8 @@
         {
           "personId": "1938",
           "name": "Manu Ginobili",
-          "rank": 62,
-          "goatScore": 44.7,
+          "rank": 49,
+          "goatScore": 47.0,
           "tier": "All-Star",
           "resume": "17,554 pts · 4,994 ast · 4,723 reb in 1,387 games",
           "franchises": [
@@ -102,9 +102,9 @@
         {
           "personId": "2568",
           "name": "Carlos Delfino",
-          "rank": 428,
-          "goatScore": 20.0,
-          "tier": "Starter",
+          "rank": 918,
+          "goatScore": 19.1,
+          "tier": "Rotation",
           "resume": "4,713 pts · 1,037 ast · 2,070 reb in 653 games",
           "franchises": [
             "Detroit Pistons",
@@ -121,8 +121,8 @@
         {
           "personId": "64093",
           "name": "Luis Scola",
-          "rank": 1295,
-          "goatScore": 1.4,
+          "rank": 5219,
+          "goatScore": 1.1,
           "tier": "Reserve",
           "resume": "Awaiting NBA impact",
           "franchises": [],
@@ -150,8 +150,8 @@
         {
           "personId": "202681",
           "name": "Kyrie Irving",
-          "rank": 84,
-          "goatScore": 41.8,
+          "rank": 83,
+          "goatScore": 42.1,
           "tier": "All-Star",
           "resume": "21,247 pts · 5,000 ast · 3,639 reb in 977 games",
           "franchises": [
@@ -169,8 +169,8 @@
         {
           "personId": "1627732",
           "name": "Ben Simmons",
-          "rank": 228,
-          "goatScore": 29.3,
+          "rank": 409,
+          "goatScore": 27.8,
           "tier": "Starter",
           "resume": "5,685 pts · 3,140 ast · 3,260 reb in 464 games",
           "franchises": [
@@ -187,8 +187,8 @@
         {
           "personId": "201988",
           "name": "Patty Mills",
-          "rank": 311,
-          "goatScore": 24.6,
+          "rank": 448,
+          "goatScore": 27.1,
           "tier": "Starter",
           "resume": "9,007 pts · 2,250 ast · 1,709 reb in 1,326 games",
           "franchises": [
@@ -209,9 +209,9 @@
         {
           "personId": "203521",
           "name": "Matthew Dellavedova",
-          "rank": 529,
-          "goatScore": 17.1,
-          "tier": "Starter",
+          "rank": 819,
+          "goatScore": 20.7,
+          "tier": "Rotation",
           "resume": "2,960 pts · 1,971 ast · 968 reb in 654 games",
           "franchises": [
             "Cleveland Cavaliers",
@@ -227,7 +227,7 @@
         {
           "personId": "203957",
           "name": "Dante Exum",
-          "rank": 632,
+          "rank": 1417,
           "goatScore": 14.0,
           "tier": "Rotation",
           "resume": "2,282 pts · 842 ast · 705 reb in 432 games",
@@ -246,7 +246,7 @@
         {
           "personId": "56022",
           "name": "Joe Ingles",
-          "rank": 1335,
+          "rank": 6264,
           "goatScore": 0.0,
           "tier": "Reserve",
           "resume": "Awaiting NBA impact",
@@ -273,9 +273,9 @@
         {
           "personId": "1627751",
           "name": "Jakob Poeltl",
-          "rank": 508,
-          "goatScore": 17.6,
-          "tier": "Starter",
+          "rank": 1108,
+          "goatScore": 17.1,
+          "tier": "Rotation",
           "resume": "5,723 pts · 1,175 ast · 4,535 reb in 714 games",
           "franchises": [
             "San Antonio Spurs",
@@ -303,8 +303,8 @@
         {
           "personId": "1629028",
           "name": "Deandre Ayton",
-          "rank": 278,
-          "goatScore": 26.4,
+          "rank": 493,
+          "goatScore": 26.0,
           "tier": "Starter",
           "resume": "7,497 pts · 734 ast · 4,804 reb in 537 games",
           "franchises": [
@@ -320,8 +320,8 @@
         {
           "personId": "1627741",
           "name": "Buddy Hield",
-          "rank": 314,
-          "goatScore": 24.4,
+          "rank": 651,
+          "goatScore": 23.3,
           "tier": "Starter",
           "resume": "11,487 pts · 1,922 ast · 3,139 reb in 780 games",
           "franchises": [
@@ -340,8 +340,8 @@
         {
           "personId": "202375",
           "name": "Magnum Rolle",
-          "rank": 1101,
-          "goatScore": 4.4,
+          "rank": 3413,
+          "goatScore": 3.8,
           "tier": "Reserve",
           "resume": "13 pts · 3 ast · 12 reb in 7 games",
           "franchises": [
@@ -370,8 +370,8 @@
         {
           "personId": "2225",
           "name": "Tony Parker",
-          "rank": 29,
-          "goatScore": 51.8,
+          "rank": 21,
+          "goatScore": 53.8,
           "tier": "Hall of Fame",
           "resume": "24,085 pts · 8,403 ast · 4,180 reb in 1,613 games",
           "franchises": [
@@ -387,7 +387,7 @@
         {
           "personId": "1628373",
           "name": "Frank Ntilikina",
-          "rank": 753,
+          "rank": 1803,
           "goatScore": 10.6,
           "tier": "Rotation",
           "resume": "1,651 pts · 739 ast · 611 reb in 454 games",
@@ -405,9 +405,9 @@
         {
           "personId": "202333",
           "name": "Xavier Henry",
-          "rank": 853,
-          "goatScore": 8.2,
-          "tier": "Rotation",
+          "rank": 2407,
+          "goatScore": 6.9,
+          "tier": "Reserve",
           "resume": "1,213 pts · 133 ast · 398 reb in 306 games",
           "franchises": [
             "Golden State Warriors",
@@ -422,9 +422,9 @@
           "groupRank": 3
         },
         {
-          "personId": "40048",
+          "personId": "42554",
           "name": "Axel Hervelle",
-          "rank": 1314,
+          "rank": 6504,
           "goatScore": 0.0,
           "tier": "Reserve",
           "resume": "Awaiting NBA impact",
@@ -453,9 +453,9 @@
         {
           "personId": "203994",
           "name": "Jusuf Nurkic",
-          "rank": 417,
-          "goatScore": 20.4,
-          "tier": "Starter",
+          "rank": 915,
+          "goatScore": 19.2,
+          "tier": "Rotation",
           "resume": "7,649 pts · 1,591 ast · 5,743 reb in 796 games",
           "franchises": [
             "Charlotte Hornets",
@@ -472,9 +472,9 @@
         {
           "personId": "1627826",
           "name": "Ivica Zubac",
-          "rank": 450,
-          "goatScore": 19.4,
-          "tier": "Starter",
+          "rank": 941,
+          "goatScore": 18.9,
+          "tier": "Rotation",
           "resume": "6,654 pts · 859 ast · 5,282 reb in 746 games",
           "franchises": [
             "Los Angeles Clippers",
@@ -489,9 +489,9 @@
         {
           "personId": "1627733",
           "name": "Dragan Bender",
-          "rank": 818,
-          "goatScore": 9.1,
-          "tier": "Rotation",
+          "rank": 2213,
+          "goatScore": 7.9,
+          "tier": "Reserve",
           "resume": "1,116 pts · 261 ast · 800 reb in 255 games",
           "franchises": [
             "Golden State Warriors",
@@ -507,8 +507,8 @@
         {
           "personId": "196294544",
           "name": "Dzanan Musa",
-          "rank": 1293,
-          "goatScore": 1.4,
+          "rank": 5243,
+          "goatScore": 1.1,
           "tier": "Reserve",
           "resume": "Awaiting NBA impact",
           "franchises": [],
@@ -519,9 +519,9 @@
           "groupRank": 4
         },
         {
-          "personId": "1962936525",
+          "personId": "1962936107",
           "name": "Bojan Bogdanovic",
-          "rank": 1316,
+          "rank": 6499,
           "goatScore": 0.0,
           "tier": "Reserve",
           "resume": "Awaiting NBA impact",
@@ -551,8 +551,8 @@
         {
           "personId": "2571",
           "name": "Leandro Barbosa",
-          "rank": 238,
-          "goatScore": 28.8,
+          "rank": 349,
+          "goatScore": 29.4,
           "tier": "Starter",
           "resume": "10,633 pts · 2,055 ast · 2,050 reb in 1,141 games",
           "franchises": [
@@ -571,8 +571,8 @@
         {
           "personId": "201168",
           "name": "Tiago Splitter",
-          "rank": 436,
-          "goatScore": 19.9,
+          "rank": 660,
+          "goatScore": 23.2,
           "tier": "Starter",
           "resume": "3,324 pts · 528 ast · 2,134 reb in 495 games",
           "franchises": [
@@ -589,8 +589,8 @@
         {
           "personId": "203526",
           "name": "Raul Neto",
-          "rank": 705,
-          "goatScore": 11.7,
+          "rank": 1651,
+          "goatScore": 11.8,
           "tier": "Rotation",
           "resume": "2,735 pts · 998 ast · 735 reb in 616 games",
           "franchises": [
@@ -608,9 +608,9 @@
         {
           "personId": "203512",
           "name": "Lucas Nogueira",
-          "rank": 910,
-          "goatScore": 7.0,
-          "tier": "Rotation",
+          "rank": 2325,
+          "goatScore": 7.3,
+          "tier": "Reserve",
           "resume": "486 pts · 84 ast · 432 reb in 289 games",
           "franchises": [
             "Toronto Raptors"
@@ -624,8 +624,8 @@
         {
           "personId": "203097",
           "name": "Fab Melo",
-          "rank": 1170,
-          "goatScore": 3.6,
+          "rank": 3300,
+          "goatScore": 4.0,
           "tier": "Reserve",
           "resume": "14 pts · 5 ast · 15 reb in 28 games",
           "franchises": [
@@ -641,8 +641,8 @@
         {
           "personId": "196294585",
           "name": "Bruno Caboclo",
-          "rank": 1290,
-          "goatScore": 1.4,
+          "rank": 5242,
+          "goatScore": 1.1,
           "tier": "Reserve",
           "resume": "Awaiting NBA impact",
           "franchises": [],
@@ -655,7 +655,7 @@
         {
           "personId": "43219",
           "name": "Cristiano Felicio",
-          "rank": 1325,
+          "rank": 6049,
           "goatScore": 0.0,
           "tier": "Reserve",
           "resume": "Awaiting NBA impact",
@@ -669,7 +669,7 @@
         {
           "personId": "43216",
           "name": "Marcus Vinicius",
-          "rank": 1348,
+          "rank": 6062,
           "goatScore": 0.0,
           "tier": "Reserve",
           "resume": "Awaiting NBA impact",
@@ -685,35 +685,20 @@
     {
       "country": "CM",
       "countryName": "Cameroon",
-      "player": "Joel Embiid",
-      "birthCity": "Yaounde",
-      "headline": "14,311 pts · 1,870 ast · 5,762 reb in 613 games",
+      "player": "Pascal Siakam",
+      "birthCity": "Douala",
+      "headline": "13,398 pts · 2,623 ast · 4,953 reb in 795 games",
       "notableTeams": [
-        "Philadelphia 76ers"
+        "Indiana Pacers",
+        "Toronto Raptors"
       ],
       "topPlayers": [
         {
-          "personId": "203954",
-          "name": "Joel Embiid",
-          "rank": 165,
-          "goatScore": 35.3,
-          "tier": "All-Star",
-          "resume": "14,311 pts · 1,870 ast · 5,762 reb in 613 games",
-          "franchises": [
-            "Philadelphia 76ers"
-          ],
-          "birthCity": "Yaounde",
-          "birthState": null,
-          "birthCountry": "Cameroon",
-          "birthCountryCode": "CM",
-          "groupRank": 1
-        },
-        {
           "personId": "1627783",
           "name": "Pascal Siakam",
-          "rank": 174,
-          "goatScore": 33.9,
-          "tier": "All-Star",
+          "rank": 185,
+          "goatScore": 35.1,
+          "tier": "Starter",
           "resume": "13,398 pts · 2,623 ast · 4,953 reb in 795 games",
           "franchises": [
             "Indiana Pacers",
@@ -723,14 +708,30 @@
           "birthState": null,
           "birthCountry": "Cameroon",
           "birthCountryCode": "CM",
+          "groupRank": 1
+        },
+        {
+          "personId": "203954",
+          "name": "Joel Embiid",
+          "rank": 239,
+          "goatScore": 33.1,
+          "tier": "Starter",
+          "resume": "14,311 pts · 1,870 ast · 5,762 reb in 613 games",
+          "franchises": [
+            "Philadelphia 76ers"
+          ],
+          "birthCity": "Yaounde",
+          "birthState": null,
+          "birthCountry": "Cameroon",
+          "birthCountryCode": "CM",
           "groupRank": 2
         },
         {
           "personId": "201601",
           "name": "Luc Mbah a Moute",
-          "rank": 454,
-          "goatScore": 19.3,
-          "tier": "Starter",
+          "rank": 963,
+          "goatScore": 18.7,
+          "tier": "Rotation",
           "resume": "4,823 pts · 645 ast · 3,084 reb in 854 games",
           "franchises": [
             "Houston Rockets",
@@ -749,8 +750,8 @@
         {
           "personId": "2257",
           "name": "Ruben Boumtje-Boumtje",
-          "rank": 1103,
-          "goatScore": 4.4,
+          "rank": 3613,
+          "goatScore": 3.4,
           "tier": "Reserve",
           "resume": "71 pts · 6 ast · 71 reb in 90 games",
           "franchises": [
@@ -768,7 +769,7 @@
         {
           "personId": "267636",
           "name": "Sofoklis Schortsanitis",
-          "rank": 1372,
+          "rank": 5990,
           "goatScore": 0.0,
           "tier": "Reserve",
           "resume": "Awaiting NBA impact",
@@ -795,9 +796,9 @@
         {
           "personId": "1628983",
           "name": "Shai Gilgeous-Alexander",
-          "rank": 190,
-          "goatScore": 32.5,
-          "tier": "All-Star",
+          "rank": 181,
+          "goatScore": 35.2,
+          "tier": "Starter",
           "resume": "12,802 pts · 2,703 ast · 2,541 reb in 547 games",
           "franchises": [
             "Los Angeles Clippers",
@@ -812,9 +813,9 @@
         {
           "personId": "1627750",
           "name": "Jamal Murray",
-          "rank": 205,
-          "goatScore": 31.4,
-          "tier": "All-Star",
+          "rank": 229,
+          "goatScore": 33.5,
+          "tier": "Starter",
           "resume": "11,841 pts · 3,093 ast · 2,497 reb in 662 games",
           "franchises": [
             "Denver Nuggets"
@@ -828,9 +829,9 @@
         {
           "personId": "203952",
           "name": "Andrew Wiggins",
-          "rank": 211,
-          "goatScore": 30.6,
-          "tier": "All-Star",
+          "rank": 230,
+          "goatScore": 33.4,
+          "tier": "Starter",
           "resume": "15,468 pts · 1,919 ast · 3,845 reb in 895 games",
           "franchises": [
             "Golden State Warriors",
@@ -846,8 +847,8 @@
         {
           "personId": "202709",
           "name": "Cory Joseph",
-          "rank": 298,
-          "goatScore": 25.2,
+          "rank": 423,
+          "goatScore": 27.5,
           "tier": "Starter",
           "resume": "6,651 pts · 2,809 ast · 2,321 reb in 1,154 games",
           "franchises": [
@@ -868,8 +869,8 @@
         {
           "personId": "203482",
           "name": "Kelly Olynyk",
-          "rank": 313,
-          "goatScore": 24.5,
+          "rank": 623,
+          "goatScore": 23.8,
           "tier": "Starter",
           "resume": "8,936 pts · 2,153 ast · 4,516 reb in 963 games",
           "franchises": [
@@ -890,8 +891,8 @@
         {
           "personId": "1629628",
           "name": "RJ Barrett",
-          "rank": 339,
-          "goatScore": 23.2,
+          "rank": 703,
+          "goatScore": 22.4,
           "tier": "Starter",
           "resume": "7,926 pts · 1,374 ast · 2,336 reb in 443 games",
           "franchises": [
@@ -905,27 +906,10 @@
           "groupRank": 6
         },
         {
-          "personId": "1628415",
-          "name": "Dillon Brooks",
-          "rank": 466,
-          "goatScore": 18.8,
-          "tier": "Starter",
-          "resume": "7,763 pts · 1,097 ast · 1,768 reb in 572 games",
-          "franchises": [
-            "Houston Rockets",
-            "Memphis Grizzlies"
-          ],
-          "birthCity": "Mississaugua",
-          "birthState": null,
-          "birthCountry": "Canada",
-          "birthCountryCode": "CA",
-          "groupRank": 7
-        },
-        {
           "personId": "1629652",
           "name": "Luguentz Dort",
-          "rank": 472,
-          "goatScore": 18.7,
+          "rank": 711,
+          "goatScore": 22.2,
           "tier": "Starter",
           "resume": "5,044 pts · 662 ast · 1,624 reb in 439 games",
           "franchises": [
@@ -935,14 +919,31 @@
           "birthState": null,
           "birthCountry": "Canada",
           "birthCountryCode": "CA",
+          "groupRank": 7
+        },
+        {
+          "personId": "1628415",
+          "name": "Dillon Brooks",
+          "rank": 962,
+          "goatScore": 18.7,
+          "tier": "Rotation",
+          "resume": "7,763 pts · 1,097 ast · 1,768 reb in 572 games",
+          "franchises": [
+            "Houston Rockets",
+            "Memphis Grizzlies"
+          ],
+          "birthCity": "Mississaugua",
+          "birthState": null,
+          "birthCountry": "Canada",
+          "birthCountryCode": "CA",
           "groupRank": 8
         },
         {
           "personId": "203939",
           "name": "Dwight Powell",
-          "rank": 492,
-          "goatScore": 18.2,
-          "tier": "Starter",
+          "rank": 1056,
+          "goatScore": 17.7,
+          "tier": "Rotation",
           "resume": "5,120 pts · 790 ast · 3,229 reb in 899 games",
           "franchises": [
             "Boston Celtics",
@@ -957,9 +958,9 @@
         {
           "personId": "1626168",
           "name": "Trey Lyles",
-          "rank": 564,
-          "goatScore": 16.0,
-          "tier": "Starter",
+          "rank": 1258,
+          "goatScore": 15.6,
+          "tier": "Rotation",
           "resume": "5,226 pts · 748 ast · 3,027 reb in 789 games",
           "franchises": [
             "Denver Nuggets",
@@ -987,7 +988,7 @@
         {
           "personId": "56003",
           "name": "Romain Sato",
-          "rank": 1367,
+          "rank": 5748,
           "goatScore": 0.0,
           "tier": "Reserve",
           "resume": "Awaiting NBA impact",
@@ -1015,9 +1016,9 @@
         {
           "personId": "1917",
           "name": "Wang Zhi-zhi",
-          "rank": 900,
-          "goatScore": 7.2,
-          "tier": "Rotation",
+          "rank": 2284,
+          "goatScore": 7.5,
+          "tier": "Reserve",
           "resume": "651 pts · 44 ast · 246 reb in 307 games",
           "franchises": [
             "Dallas Mavericks",
@@ -1033,8 +1034,8 @@
         {
           "personId": "1627753",
           "name": "Zhou Qi",
-          "rank": 1277,
-          "goatScore": 2.2,
+          "rank": 3890,
+          "goatScore": 3.0,
           "tier": "Reserve",
           "resume": "32 pts · 2 ast · 28 reb in 51 games",
           "franchises": [
@@ -1065,8 +1066,8 @@
         {
           "personId": "201586",
           "name": "Serge Ibaka",
-          "rank": 135,
-          "goatScore": 37.7,
+          "rank": 163,
+          "goatScore": 36.3,
           "tier": "All-Star",
           "resume": "13,236 pts · 895 ast · 7,797 reb in 1,188 games",
           "franchises": [
@@ -1103,8 +1104,8 @@
         {
           "personId": "87",
           "name": "Dikembe Mutombo",
-          "rank": 113,
-          "goatScore": 39.8,
+          "rank": 136,
+          "goatScore": 37.7,
           "tier": "All-Star",
           "resume": "12,694 pts · 1,323 ast · 13,389 reb in 1,455 games",
           "franchises": [
@@ -1142,9 +1143,9 @@
         {
           "personId": "203967",
           "name": "Dario Saric",
-          "rank": 516,
-          "goatScore": 17.4,
-          "tier": "Starter",
+          "rank": 1000,
+          "goatScore": 18.3,
+          "tier": "Rotation",
           "resume": "5,615 pts · 1,023 ast · 2,867 reb in 692 games",
           "franchises": [
             "Denver Nuggets",
@@ -1163,9 +1164,9 @@
         {
           "personId": "1627790",
           "name": "Ante Zizic",
-          "rank": 901,
-          "goatScore": 7.1,
-          "tier": "Rotation",
+          "rank": 2402,
+          "goatScore": 6.9,
+          "tier": "Reserve",
           "resume": "746 pts · 69 ast · 485 reb in 211 games",
           "franchises": [
             "Cleveland Cavaliers"
@@ -1179,9 +1180,9 @@
         {
           "personId": "1629677",
           "name": "Luka Samanic",
-          "rank": 1040,
-          "goatScore": 5.0,
-          "tier": "Rotation",
+          "rank": 3203,
+          "goatScore": 4.2,
+          "tier": "Reserve",
           "resume": "435 pts · 59 ast · 237 reb in 182 games",
           "franchises": [
             "Boston Celtics",
@@ -1195,9 +1196,9 @@
           "groupRank": 3
         },
         {
-          "personId": "56024",
+          "personId": "196294537",
           "name": "Mario Hezonja",
-          "rank": 1349,
+          "rank": 6292,
           "goatScore": 0.0,
           "tier": "Reserve",
           "resume": "Awaiting NBA impact",
@@ -1223,8 +1224,8 @@
         {
           "personId": "1628426",
           "name": "Sasha Vezenkov",
-          "rank": 1051,
-          "goatScore": 4.9,
+          "rank": 3287,
+          "goatScore": 4.1,
           "tier": "Reserve",
           "resume": "261 pts · 22 ast · 120 reb in 60 games",
           "franchises": [
@@ -1249,7 +1250,7 @@
         {
           "personId": "40036",
           "name": "Christian Drejer",
-          "rank": 1322,
+          "rank": 6379,
           "goatScore": 0.0,
           "tier": "Reserve",
           "resume": "Awaiting NBA impact",
@@ -1278,9 +1279,9 @@
         {
           "personId": "201143",
           "name": "Al Horford",
-          "rank": 45,
-          "goatScore": 49.3,
-          "tier": "Hall of Fame",
+          "rank": 56,
+          "goatScore": 46.0,
+          "tier": "All-Star",
           "resume": "17,860 pts · 4,420 ast · 11,009 reb in 1,481 games",
           "franchises": [
             "Atlanta Hawks",
@@ -1297,8 +1298,8 @@
         {
           "personId": "2784",
           "name": "Luis Flores",
-          "rank": 1143,
-          "goatScore": 3.9,
+          "rank": 3750,
+          "goatScore": 3.2,
           "tier": "Reserve",
           "resume": "55 pts · 20 ast · 8 reb in 40 games",
           "franchises": [
@@ -1330,8 +1331,8 @@
         {
           "personId": "1627846",
           "name": "Abdel Nader",
-          "rank": 801,
-          "goatScore": 9.3,
+          "rank": 1835,
+          "goatScore": 10.3,
           "tier": "Rotation",
           "resume": "1,062 pts · 124 ast · 425 reb in 346 games",
           "franchises": [
@@ -1362,9 +1363,9 @@
         {
           "personId": "1628374",
           "name": "Lauri Markkanen",
-          "rank": 400,
-          "goatScore": 21.1,
-          "tier": "Starter",
+          "rank": 911,
+          "goatScore": 19.2,
+          "tier": "Rotation",
           "resume": "8,610 pts · 693 ast · 3,378 reb in 502 games",
           "franchises": [
             "Chicago Bulls",
@@ -1396,8 +1397,8 @@
         {
           "personId": "1122",
           "name": "Dominique Wilkins",
-          "rank": 92,
-          "goatScore": 40.7,
+          "rank": 102,
+          "goatScore": 39.8,
           "tier": "All-Star",
           "resume": "28,089 pts · 2,818 ast · 7,542 reb in 1,175 games",
           "franchises": [
@@ -1416,8 +1417,8 @@
         {
           "personId": "2564",
           "name": "Boris Diaw",
-          "rank": 143,
-          "goatScore": 37.1,
+          "rank": 141,
+          "goatScore": 37.4,
           "tier": "All-Star",
           "resume": "10,691 pts · 4,287 ast · 5,436 reb in 1,292 games",
           "franchises": [
@@ -1436,9 +1437,9 @@
         {
           "personId": "203497",
           "name": "Rudy Gobert",
-          "rank": 181,
-          "goatScore": 33.5,
-          "tier": "All-Star",
+          "rank": 297,
+          "goatScore": 31.1,
+          "tier": "Starter",
           "resume": "11,987 pts · 1,270 ast · 10,995 reb in 1,030 games",
           "franchises": [
             "Minnesota Timberwolves",
@@ -1453,9 +1454,9 @@
         {
           "personId": "201587",
           "name": "Nicolas Batum",
-          "rank": 212,
-          "goatScore": 30.4,
-          "tier": "All-Star",
+          "rank": 361,
+          "goatScore": 29.1,
+          "tier": "Starter",
           "resume": "12,509 pts · 3,860 ast · 6,122 reb in 1,372 games",
           "franchises": [
             "Charlotte Hornets",
@@ -1470,30 +1471,10 @@
           "groupRank": 4
         },
         {
-          "personId": "203095",
-          "name": "Evan Fournier",
-          "rank": 384,
-          "goatScore": 21.6,
-          "tier": "Starter",
-          "resume": "10,409 pts · 1,928 ast · 2,053 reb in 979 games",
-          "franchises": [
-            "Boston Celtics",
-            "Denver Nuggets",
-            "Detroit Pistons",
-            "New York Knicks",
-            "Orlando Magic"
-          ],
-          "birthCity": "Saint-Quentin",
-          "birthState": null,
-          "birthCountry": "France",
-          "birthCountryCode": "FR",
-          "groupRank": 5
-        },
-        {
           "personId": "101133",
           "name": "Ian Mahinmi",
-          "rank": 449,
-          "goatScore": 19.4,
+          "rank": 728,
+          "goatScore": 22.0,
           "tier": "Starter",
           "resume": "3,723 pts · 402 ast · 3,104 reb in 922 games",
           "franchises": [
@@ -1506,13 +1487,33 @@
           "birthState": null,
           "birthCountry": "France",
           "birthCountryCode": "FR",
+          "groupRank": 5
+        },
+        {
+          "personId": "203095",
+          "name": "Evan Fournier",
+          "rank": 796,
+          "goatScore": 21.0,
+          "tier": "Rotation",
+          "resume": "10,409 pts · 1,928 ast · 2,053 reb in 979 games",
+          "franchises": [
+            "Boston Celtics",
+            "Denver Nuggets",
+            "Detroit Pistons",
+            "New York Knicks",
+            "Orlando Magic"
+          ],
+          "birthCity": "Saint-Quentin",
+          "birthState": null,
+          "birthCountry": "France",
+          "birthCountryCode": "FR",
           "groupRank": 6
         },
         {
           "personId": "1505",
           "name": "Tariq Abdul-Wahad",
-          "rank": 657,
-          "goatScore": 13.2,
+          "rank": 1535,
+          "goatScore": 12.9,
           "tier": "Rotation",
           "resume": "1,908 pts · 281 ast · 829 reb in 317 games",
           "franchises": [
@@ -1530,8 +1531,8 @@
         {
           "personId": "1627789",
           "name": "Timothe Luwawu-Cabarrot",
-          "rank": 672,
-          "goatScore": 12.7,
+          "rank": 1547,
+          "goatScore": 12.8,
           "tier": "Rotation",
           "resume": "2,175 pts · 333 ast · 755 reb in 478 games",
           "franchises": [
@@ -1552,8 +1553,8 @@
         {
           "personId": "101130",
           "name": "Johan Petro",
-          "rank": 675,
-          "goatScore": 12.5,
+          "rank": 1555,
+          "goatScore": 12.7,
           "tier": "Rotation",
           "resume": "2,441 pts · 251 ast · 2,039 reb in 668 games",
           "franchises": [
@@ -1570,19 +1571,16 @@
           "groupRank": 9
         },
         {
-          "personId": "203530",
-          "name": "Joffrey Lauvergne",
-          "rank": 835,
-          "goatScore": 8.6,
-          "tier": "Rotation",
-          "resume": "1,333 pts · 207 ast · 906 reb in 288 games",
+          "personId": "201958",
+          "name": "Rodrigue Beaubois",
+          "rank": 2062,
+          "goatScore": 8.8,
+          "tier": "Reserve",
+          "resume": "1,388 pts · 407 ast · 360 reb in 260 games",
           "franchises": [
-            "Chicago Bulls",
-            "Denver Nuggets",
-            "Oklahoma City Thunder",
-            "San Antonio Spurs"
+            "Dallas Mavericks"
           ],
-          "birthCity": "Mulhouse",
+          "birthCity": "Pointe-Ã -Pitre, Guadeloupe",
           "birthState": null,
           "birthCountry": "France",
           "birthCountryCode": "FR",
@@ -1604,8 +1602,8 @@
         {
           "personId": "203996",
           "name": "Damien Inglis",
-          "rank": 1184,
-          "goatScore": 3.4,
+          "rank": 4049,
+          "goatScore": 2.8,
           "tier": "Reserve",
           "resume": "59 pts · 11 ast · 46 reb in 67 games",
           "franchises": [
@@ -1621,8 +1619,8 @@
         {
           "personId": "203520",
           "name": "Livio Jean-Charles",
-          "rank": 1246,
-          "goatScore": 2.8,
+          "rank": 4620,
+          "goatScore": 2.0,
           "tier": "Reserve",
           "resume": "6 pts · 4 ast · 12 reb in 6 games",
           "franchises": [
@@ -1653,8 +1651,8 @@
         {
           "personId": "1629735",
           "name": "Chris Silva",
-          "rank": 1053,
-          "goatScore": 4.8,
+          "rank": 2568,
+          "goatScore": 6.2,
           "tier": "Reserve",
           "resume": "236 pts · 42 ast · 221 reb in 157 games",
           "franchises": [
@@ -1673,7 +1671,7 @@
         {
           "personId": "41629",
           "name": "Stephane Lasme",
-          "rank": 1374,
+          "rank": 5826,
           "goatScore": 0.0,
           "tier": "Reserve",
           "resume": "Awaiting NBA impact",
@@ -1705,9 +1703,9 @@
         {
           "personId": "2730",
           "name": "Dwight Howard",
-          "rank": 41,
-          "goatScore": 49.6,
-          "tier": "Hall of Fame",
+          "rank": 42,
+          "goatScore": 48.2,
+          "tier": "All-Star",
           "resume": "22,494 pts · 1,926 ast · 16,835 reb in 1,541 games",
           "franchises": [
             "Atlanta Hawks",
@@ -1725,11 +1723,27 @@
           "groupRank": 1
         },
         {
+          "personId": "1627759",
+          "name": "Jaylen Brown",
+          "rank": 170,
+          "goatScore": 35.7,
+          "tier": "Starter",
+          "resume": "14,495 pts · 1,993 ast · 4,096 reb in 797 games",
+          "franchises": [
+            "Boston Celtics"
+          ],
+          "birthCity": "Marietta",
+          "birthState": null,
+          "birthCountry": "Georgia",
+          "birthCountryCode": "GE",
+          "groupRank": 2
+        },
+        {
           "personId": "2746",
           "name": "Josh Smith",
-          "rank": 150,
-          "goatScore": 36.6,
-          "tier": "All-Star",
+          "rank": 209,
+          "goatScore": 34.3,
+          "tier": "Starter",
           "resume": "14,855 pts · 3,154 ast · 7,550 reb in 1,089 games",
           "franchises": [
             "Atlanta Hawks",
@@ -1742,30 +1756,34 @@
           "birthState": null,
           "birthCountry": "Georgia",
           "birthCountryCode": "GE",
-          "groupRank": 2
+          "groupRank": 3
         },
         {
-          "personId": "1627759",
-          "name": "Jaylen Brown",
-          "rank": 154,
-          "goatScore": 36.5,
-          "tier": "All-Star",
-          "resume": "14,495 pts · 1,993 ast · 4,096 reb in 797 games",
+          "personId": "203484",
+          "name": "Kentavious Caldwell-Pope",
+          "rank": 244,
+          "goatScore": 32.9,
+          "tier": "Starter",
+          "resume": "11,369 pts · 1,863 ast · 3,072 reb in 1,064 games",
           "franchises": [
-            "Boston Celtics"
+            "Denver Nuggets",
+            "Detroit Pistons",
+            "Los Angeles Lakers",
+            "Orlando Magic",
+            "Washington Wizards"
           ],
-          "birthCity": "Marietta",
+          "birthCity": "Thomaston",
           "birthState": null,
           "birthCountry": "Georgia",
           "birthCountryCode": "GE",
-          "groupRank": 3
+          "groupRank": 4
         },
         {
           "personId": "949",
           "name": "Shareef Abdur-Rahim",
-          "rank": 203,
-          "goatScore": 31.5,
-          "tier": "All-Star",
+          "rank": 347,
+          "goatScore": 29.5,
+          "tier": "Starter",
           "resume": "15,261 pts · 2,145 ast · 6,353 reb in 887 games",
           "franchises": [
             "Atlanta Hawks",
@@ -1777,13 +1795,13 @@
           "birthState": null,
           "birthCountry": "Georgia",
           "birthCountryCode": "GE",
-          "groupRank": 4
+          "groupRank": 5
         },
         {
           "personId": "203109",
           "name": "Jae Crowder",
-          "rank": 233,
-          "goatScore": 29.0,
+          "rank": 426,
+          "goatScore": 27.5,
           "tier": "Starter",
           "resume": "9,128 pts · 1,582 ast · 4,175 reb in 1,081 games",
           "franchises": [
@@ -1801,33 +1819,32 @@
           "birthState": null,
           "birthCountry": "Georgia",
           "birthCountryCode": "GE",
-          "groupRank": 5
+          "groupRank": 6
         },
         {
-          "personId": "203484",
-          "name": "Kentavious Caldwell-Pope",
-          "rank": 250,
-          "goatScore": 28.0,
+          "personId": "1000",
+          "name": "Shandon Anderson",
+          "rank": 465,
+          "goatScore": 26.7,
           "tier": "Starter",
-          "resume": "11,369 pts · 1,863 ast · 3,072 reb in 1,064 games",
+          "resume": "5,708 pts · 1,083 ast · 2,454 reb in 851 games",
           "franchises": [
-            "Denver Nuggets",
-            "Detroit Pistons",
-            "Los Angeles Lakers",
-            "Orlando Magic",
-            "Washington Wizards"
+            "Houston Rockets",
+            "Miami Heat",
+            "New York Knicks",
+            "Utah Jazz"
           ],
-          "birthCity": "Thomaston",
+          "birthCity": "Atlanta",
           "birthState": null,
           "birthCountry": "Georgia",
           "birthCountryCode": "GE",
-          "groupRank": 6
+          "groupRank": 7
         },
         {
           "personId": "1627763",
           "name": "Malcolm Brogdon",
-          "rank": 295,
-          "goatScore": 25.4,
+          "rank": 607,
+          "goatScore": 24.1,
           "tier": "Starter",
           "resume": "7,912 pts · 2,442 ast · 2,169 reb in 587 games",
           "franchises": [
@@ -1841,32 +1858,13 @@
           "birthState": null,
           "birthCountry": "Georgia",
           "birthCountryCode": "GE",
-          "groupRank": 7
-        },
-        {
-          "personId": "1000",
-          "name": "Shandon Anderson",
-          "rank": 296,
-          "goatScore": 25.4,
-          "tier": "Starter",
-          "resume": "5,708 pts · 1,083 ast · 2,454 reb in 851 games",
-          "franchises": [
-            "Houston Rockets",
-            "Miami Heat",
-            "New York Knicks",
-            "Utah Jazz"
-          ],
-          "birthCity": "Atlanta",
-          "birthState": null,
-          "birthCountry": "Georgia",
-          "birthCountryCode": "GE",
           "groupRank": 8
         },
         {
           "personId": "202324",
           "name": "Derrick Favors",
-          "rank": 322,
-          "goatScore": 23.9,
+          "rank": 691,
+          "goatScore": 22.7,
           "tier": "Starter",
           "resume": "9,139 pts · 938 ast · 6,184 reb in 986 games",
           "franchises": [
@@ -1886,8 +1884,8 @@
         {
           "personId": "202329",
           "name": "Al-Farouq Aminu",
-          "rank": 328,
-          "goatScore": 23.7,
+          "rank": 704,
+          "goatScore": 22.4,
           "tier": "Starter",
           "resume": "6,246 pts · 998 ast · 4,857 reb in 872 games",
           "franchises": [
@@ -1930,9 +1928,9 @@
         {
           "personId": "203471",
           "name": "Dennis Schroder",
-          "rank": 213,
-          "goatScore": 30.3,
-          "tier": "All-Star",
+          "rank": 376,
+          "goatScore": 28.7,
+          "tier": "Starter",
           "resume": "13,080 pts · 4,551 ast · 2,728 reb in 1,037 games",
           "franchises": [
             "Atlanta Hawks",
@@ -1954,9 +1952,9 @@
         {
           "personId": "1628464",
           "name": "Daniel Theis",
-          "rank": 552,
-          "goatScore": 16.3,
-          "tier": "Starter",
+          "rank": 1210,
+          "goatScore": 16.1,
+          "tier": "Rotation",
           "resume": "3,241 pts · 568 ast · 2,198 reb in 590 games",
           "franchises": [
             "Boston Celtics",
@@ -1975,8 +1973,8 @@
         {
           "personId": "1628467",
           "name": "Maxi Kleber",
-          "rank": 612,
-          "goatScore": 14.7,
+          "rank": 1341,
+          "goatScore": 14.8,
           "tier": "Rotation",
           "resume": "3,286 pts · 574 ast · 2,187 reb in 548 games",
           "franchises": [
@@ -1990,27 +1988,11 @@
           "groupRank": 3
         },
         {
-          "personId": "201195",
-          "name": "Herbert Hill",
-          "rank": 914,
-          "goatScore": 6.9,
-          "tier": "Rotation",
-          "resume": "8 pts · 1 ast · 17 reb in 4 games",
-          "franchises": [
-            "Philadelphia 76ers"
-          ],
-          "birthCity": "Ulm",
-          "birthState": null,
-          "birthCountry": "Germany",
-          "birthCountryCode": "DE",
-          "groupRank": 4
-        },
-        {
           "personId": "1629067",
           "name": "Isaac Bonga",
-          "rank": 955,
-          "goatScore": 6.3,
-          "tier": "Rotation",
+          "rank": 2438,
+          "goatScore": 6.7,
+          "tier": "Reserve",
           "resume": "517 pts · 147 ast · 374 reb in 246 games",
           "franchises": [
             "Los Angeles Lakers",
@@ -2021,14 +2003,14 @@
           "birthState": null,
           "birthCountry": "Germany",
           "birthCountryCode": "DE",
-          "groupRank": 5
+          "groupRank": 4
         },
         {
           "personId": "1627835",
           "name": "Paul Zipser",
-          "rank": 973,
-          "goatScore": 6.0,
-          "tier": "Rotation",
+          "rank": 2567,
+          "goatScore": 6.2,
+          "tier": "Reserve",
           "resume": "569 pts · 95 ast · 306 reb in 152 games",
           "franchises": [
             "Chicago Bulls"
@@ -2037,13 +2019,29 @@
           "birthState": null,
           "birthCountry": "Germany",
           "birthCountryCode": "DE",
+          "groupRank": 5
+        },
+        {
+          "personId": "201195",
+          "name": "Herbert Hill",
+          "rank": 2743,
+          "goatScore": 5.6,
+          "tier": "Reserve",
+          "resume": "8 pts · 1 ast · 17 reb in 4 games",
+          "franchises": [
+            "Philadelphia 76ers"
+          ],
+          "birthCity": "Ulm",
+          "birthState": null,
+          "birthCountry": "Germany",
+          "birthCountryCode": "DE",
           "groupRank": 6
         },
         {
           "personId": "203528",
           "name": "Romero Osby",
-          "rank": 1060,
-          "goatScore": 4.8,
+          "rank": 3273,
+          "goatScore": 4.1,
           "tier": "Reserve",
           "resume": "40 pts · 1 ast · 28 reb in 7 games",
           "franchises": [
@@ -2058,7 +2056,7 @@
         {
           "personId": "43224",
           "name": "Moritz Wagner",
-          "rank": 1352,
+          "rank": 5783,
           "goatScore": 0.0,
           "tier": "Reserve",
           "resume": "Awaiting NBA impact",
@@ -2085,8 +2083,8 @@
         {
           "personId": "1627791",
           "name": "Ben Bentil",
-          "rank": 1148,
-          "goatScore": 3.8,
+          "rank": 3935,
+          "goatScore": 2.9,
           "tier": "Reserve",
           "resume": "15 pts · 1 ast · 15 reb in 12 games",
           "franchises": [
@@ -2114,8 +2112,8 @@
         {
           "personId": "203507",
           "name": "Giannis Antetokounmpo",
-          "rank": 15,
-          "goatScore": 84.8,
+          "rank": 16,
+          "goatScore": 58.9,
           "tier": "Ascendant",
           "resume": "Two MVPs, a DPOY, and a 50-point Finals closeout before turning 30.",
           "franchises": [
@@ -2130,9 +2128,9 @@
         {
           "personId": "203648",
           "name": "Thanasis Antetokounmpo",
-          "rank": 849,
-          "goatScore": 8.3,
-          "tier": "Rotation",
+          "rank": 1944,
+          "goatScore": 9.6,
+          "tier": "Reserve",
           "resume": "601 pts · 143 ast · 387 reb in 431 games",
           "franchises": [
             "Milwaukee Bucks",
@@ -2147,9 +2145,9 @@
         {
           "personId": "203123",
           "name": "Kostas Papanikolaou",
-          "rank": 886,
-          "goatScore": 7.5,
-          "tier": "Rotation",
+          "rank": 2256,
+          "goatScore": 7.6,
+          "tier": "Reserve",
           "resume": "316 pts · 121 ast · 186 reb in 117 games",
           "franchises": [
             "Denver Nuggets",
@@ -2162,10 +2160,42 @@
           "groupRank": 3
         },
         {
+          "personId": "981",
+          "name": "Efthimios Rentzias",
+          "rank": 3129,
+          "goatScore": 4.4,
+          "tier": "Reserve",
+          "resume": "52 pts · 7 ast · 26 reb in 89 games",
+          "franchises": [
+            "Philadelphia 76ers"
+          ],
+          "birthCity": "Trikala",
+          "birthState": null,
+          "birthCountry": "Greece",
+          "birthCountryCode": "GR",
+          "groupRank": 4
+        },
+        {
+          "personId": "2779",
+          "name": "Vassilis Spanoulis",
+          "rank": 3226,
+          "goatScore": 4.2,
+          "tier": "Reserve",
+          "resume": "125 pts · 53 ast · 36 reb in 95 games",
+          "franchises": [
+            "Houston Rockets"
+          ],
+          "birthCity": "Larissa",
+          "birthState": null,
+          "birthCountry": "Greece",
+          "birthCountryCode": "GR",
+          "groupRank": 5
+        },
+        {
           "personId": "1627834",
           "name": "Georgios Papagiannis",
-          "rank": 1082,
-          "goatScore": 4.6,
+          "rank": 3376,
+          "goatScore": 3.9,
           "tier": "Reserve",
           "resume": "202 pts · 34 ast · 148 reb in 86 games",
           "franchises": [
@@ -2176,13 +2206,13 @@
           "birthState": null,
           "birthCountry": "Greece",
           "birthCountryCode": "GR",
-          "groupRank": 4
+          "groupRank": 6
         },
         {
           "personId": "1628961",
           "name": "Kostas Antetokounmpo",
-          "rank": 1131,
-          "goatScore": 4.0,
+          "rank": 3700,
+          "goatScore": 3.3,
           "tier": "Reserve",
           "resume": "67 pts · 13 ast · 58 reb in 74 games",
           "franchises": [
@@ -2194,45 +2224,13 @@
           "birthState": null,
           "birthCountry": "Greece",
           "birthCountryCode": "GR",
-          "groupRank": 5
-        },
-        {
-          "personId": "981",
-          "name": "Efthimios Rentzias",
-          "rank": 1138,
-          "goatScore": 3.9,
-          "tier": "Reserve",
-          "resume": "52 pts · 7 ast · 26 reb in 89 games",
-          "franchises": [
-            "Philadelphia 76ers"
-          ],
-          "birthCity": "Trikala",
-          "birthState": null,
-          "birthCountry": "Greece",
-          "birthCountryCode": "GR",
-          "groupRank": 6
-        },
-        {
-          "personId": "2779",
-          "name": "Vassilis Spanoulis",
-          "rank": 1157,
-          "goatScore": 3.8,
-          "tier": "Reserve",
-          "resume": "125 pts · 53 ast · 36 reb in 95 games",
-          "franchises": [
-            "Houston Rockets"
-          ],
-          "birthCity": "Larissa",
-          "birthState": null,
-          "birthCountry": "Greece",
-          "birthCountryCode": "GR",
           "groupRank": 7
         },
         {
           "personId": "2238",
           "name": "Antonis Fotsis",
-          "rank": 1204,
-          "goatScore": 3.2,
+          "rank": 4063,
+          "goatScore": 2.7,
           "tier": "Reserve",
           "resume": "108 pts · 10 ast · 62 reb in 63 games",
           "franchises": [
@@ -2247,7 +2245,7 @@
         {
           "personId": "267625",
           "name": "Andreas Glyniadakis",
-          "rank": 1310,
+          "rank": 6068,
           "goatScore": 0.0,
           "tier": "Reserve",
           "resume": "Awaiting NBA impact",
@@ -2275,9 +2273,9 @@
         {
           "personId": "1629635",
           "name": "Sekou Doumbouya",
-          "rank": 912,
-          "goatScore": 7.0,
-          "tier": "Rotation",
+          "rank": 2598,
+          "goatScore": 6.1,
+          "tier": "Reserve",
           "resume": "595 pts · 68 ast · 289 reb in 123 games",
           "franchises": [
             "Brooklyn Nets",
@@ -2310,8 +2308,8 @@
         {
           "personId": "2223",
           "name": "Samuel Dalembert",
-          "rank": 347,
-          "goatScore": 22.9,
+          "rank": 710,
+          "goatScore": 22.3,
           "tier": "Starter",
           "resume": "7,239 pts · 506 ast · 7,434 reb in 1,041 games",
           "franchises": [
@@ -2331,8 +2329,8 @@
         {
           "personId": "1627746",
           "name": "Skal Labissiere",
-          "rank": 757,
-          "goatScore": 10.5,
+          "rank": 1837,
+          "goatScore": 10.3,
           "tier": "Rotation",
           "resume": "1,179 pts · 173 ast · 738 reb in 259 games",
           "franchises": [
@@ -2362,8 +2360,8 @@
         {
           "personId": "203529",
           "name": "Arsalan Kazemi",
-          "rank": 1282,
-          "goatScore": 1.9,
+          "rank": 5007,
+          "goatScore": 1.3,
           "tier": "Reserve",
           "resume": "2 pts · 0 ast · 7 reb in 6 games",
           "franchises": [
@@ -2393,9 +2391,9 @@
         {
           "personId": "2469",
           "name": "Pat Burke",
-          "rank": 799,
-          "goatScore": 9.4,
-          "tier": "Rotation",
+          "rank": 1936,
+          "goatScore": 9.6,
+          "tier": "Reserve",
           "resume": "535 pts · 55 ast · 321 reb in 286 games",
           "franchises": [
             "Golden State Warriors",
@@ -2413,29 +2411,15 @@
     {
       "country": "IL",
       "countryName": "Israel",
-      "player": "Lior Eliyahu",
-      "birthCity": "Ramat Gan",
+      "player": "Omri Casspi",
+      "birthCity": "Holon",
       "headline": "Awaiting NBA impact",
       "notableTeams": [],
       "topPlayers": [
         {
-          "personId": "40077",
-          "name": "Lior Eliyahu",
-          "rank": 1341,
-          "goatScore": 0.0,
-          "tier": "Reserve",
-          "resume": "Awaiting NBA impact",
-          "franchises": [],
-          "birthCity": "Ramat Gan",
-          "birthState": null,
-          "birthCountry": "Israel",
-          "birthCountryCode": "IL",
-          "groupRank": 1
-        },
-        {
           "personId": "551",
           "name": "Omri Casspi",
-          "rank": 1359,
+          "rank": 6030,
           "goatScore": 0.0,
           "tier": "Reserve",
           "resume": "Awaiting NBA impact",
@@ -2444,12 +2428,26 @@
           "birthState": null,
           "birthCountry": "Israel",
           "birthCountryCode": "IL",
+          "groupRank": 1
+        },
+        {
+          "personId": "40077",
+          "name": "Lior Eliyahu",
+          "rank": 6144,
+          "goatScore": 0.0,
+          "tier": "Reserve",
+          "resume": "Awaiting NBA impact",
+          "franchises": [],
+          "birthCity": "Ramat Gan",
+          "birthState": null,
+          "birthCountry": "Israel",
+          "birthCountryCode": "IL",
           "groupRank": 2
         },
         {
-          "personId": "572",
+          "personId": "267621",
           "name": "Yotam Halperin",
-          "rank": 1384,
+          "rank": 6455,
           "goatScore": 0.0,
           "tier": "Reserve",
           "resume": "Awaiting NBA impact",
@@ -2479,8 +2477,8 @@
         {
           "personId": "202704",
           "name": "Reggie Jackson",
-          "rank": 240,
-          "goatScore": 28.6,
+          "rank": 326,
+          "goatScore": 30.2,
           "tier": "Starter",
           "resume": "12,319 pts · 4,038 ast · 2,850 reb in 1,122 games",
           "franchises": [
@@ -2497,34 +2495,10 @@
           "groupRank": 1
         },
         {
-          "personId": "201568",
-          "name": "Danilo Gallinari",
-          "rank": 272,
-          "goatScore": 26.7,
-          "tier": "Starter",
-          "resume": "12,976 pts · 1,628 ast · 4,089 reb in 1,029 games",
-          "franchises": [
-            "Atlanta Hawks",
-            "Boston Celtics",
-            "Denver Nuggets",
-            "Detroit Pistons",
-            "Los Angeles Clippers",
-            "Milwaukee Bucks",
-            "New York Knicks",
-            "Oklahoma City Thunder",
-            "Washington Wizards"
-          ],
-          "birthCity": "Saint'Angelo Lodigiano",
-          "birthState": null,
-          "birthCountry": "Italy",
-          "birthCountryCode": "IT",
-          "groupRank": 2
-        },
-        {
           "personId": "201158",
           "name": "Marco Belinelli",
-          "rank": 326,
-          "goatScore": 23.8,
+          "rank": 437,
+          "goatScore": 27.4,
           "tier": "Starter",
           "resume": "9,599 pts · 1,648 ast · 2,039 reb in 1,102 games",
           "franchises": [
@@ -2542,14 +2516,38 @@
           "birthState": null,
           "birthCountry": "Italy",
           "birthCountryCode": "IT",
+          "groupRank": 2
+        },
+        {
+          "personId": "201568",
+          "name": "Danilo Gallinari",
+          "rank": 492,
+          "goatScore": 26.0,
+          "tier": "Starter",
+          "resume": "12,976 pts · 1,628 ast · 4,089 reb in 1,029 games",
+          "franchises": [
+            "Atlanta Hawks",
+            "Boston Celtics",
+            "Denver Nuggets",
+            "Detroit Pistons",
+            "Los Angeles Clippers",
+            "Milwaukee Bucks",
+            "New York Knicks",
+            "Oklahoma City Thunder",
+            "Washington Wizards"
+          ],
+          "birthCity": "Saint'Angelo Lodigiano",
+          "birthState": null,
+          "birthCountry": "Italy",
+          "birthCountryCode": "IT",
           "groupRank": 3
         },
         {
           "personId": "200745",
           "name": "Andrea Bargnani",
-          "rank": 482,
-          "goatScore": 18.3,
-          "tier": "Starter",
+          "rank": 1029,
+          "goatScore": 18.0,
+          "tier": "Rotation",
           "resume": "8,550 pts · 708 ast · 2,747 reb in 642 games",
           "franchises": [
             "Brooklyn Nets",
@@ -2565,7 +2563,7 @@
         {
           "personId": "56043",
           "name": "Alessandro Gentile",
-          "rank": 1308,
+          "rank": 5743,
           "goatScore": 0.0,
           "tier": "Reserve",
           "resume": "Awaiting NBA impact",
@@ -2577,9 +2575,9 @@
           "groupRank": 5
         },
         {
-          "personId": "56040",
+          "personId": "6006",
           "name": "Nicolo Melli",
-          "rank": 1355,
+          "rank": 6433,
           "goatScore": 0.0,
           "tier": "Reserve",
           "resume": "Awaiting NBA impact",
@@ -2608,9 +2606,9 @@
         {
           "personId": "202366",
           "name": "Jerome Jordan",
-          "rank": 1018,
-          "goatScore": 5.3,
-          "tier": "Rotation",
+          "rank": 2682,
+          "goatScore": 5.7,
+          "tier": "Reserve",
           "resume": "257 pts · 22 ast · 175 reb in 162 games",
           "franchises": [
             "Brooklyn Nets",
@@ -2627,8 +2625,8 @@
         {
           "personId": "201607",
           "name": "Patrick Ewing",
-          "rank": 1201,
-          "goatScore": 3.3,
+          "rank": 3520,
+          "goatScore": 3.6,
           "tier": "Reserve",
           "resume": "24 pts · 4 ast · 9 reb in 22 games",
           "franchises": [
@@ -2657,9 +2655,9 @@
         {
           "personId": "1629060",
           "name": "Rui Hachimura",
-          "rank": 546,
-          "goatScore": 16.5,
-          "tier": "Starter",
+          "rank": 1186,
+          "goatScore": 16.3,
+          "tier": "Rotation",
           "resume": "5,007 pts · 491 ast · 1,904 reb in 411 games",
           "franchises": [
             "Los Angeles Lakers",
@@ -2674,9 +2672,9 @@
         {
           "personId": "1629139",
           "name": "Yuta Watanabe",
-          "rank": 841,
-          "goatScore": 8.5,
-          "tier": "Rotation",
+          "rank": 2123,
+          "goatScore": 8.4,
+          "tier": "Reserve",
           "resume": "1,002 pts · 148 ast · 543 reb in 354 games",
           "franchises": [
             "Brooklyn Nets",
@@ -2708,8 +2706,8 @@
         {
           "personId": "204001",
           "name": "Kristaps Porzingis",
-          "rank": 280,
-          "goatScore": 26.4,
+          "rank": 345,
+          "goatScore": 29.6,
           "tier": "Starter",
           "resume": "10,535 pts · 980 ast · 4,206 reb in 621 games",
           "franchises": [
@@ -2727,8 +2725,8 @@
         {
           "personId": "202722",
           "name": "Davis Bertans",
-          "rank": 607,
-          "goatScore": 14.8,
+          "rank": 1364,
+          "goatScore": 14.5,
           "tier": "Rotation",
           "resume": "4,016 pts · 491 ast · 1,294 reb in 641 games",
           "franchises": [
@@ -2747,9 +2745,9 @@
         {
           "personId": "1628394",
           "name": "Anzejs Pasecniks",
-          "rank": 942,
-          "goatScore": 6.4,
-          "tier": "Rotation",
+          "rank": 2791,
+          "goatScore": 5.4,
+          "tier": "Reserve",
           "resume": "192 pts · 27 ast · 135 reb in 62 games",
           "franchises": [
             "Milwaukee Bucks",
@@ -2780,8 +2778,8 @@
         {
           "personId": "202685",
           "name": "Jonas Valanciunas",
-          "rank": 226,
-          "goatScore": 29.4,
+          "rank": 402,
+          "goatScore": 28.0,
           "tier": "Starter",
           "resume": "13,780 pts · 1,455 ast · 9,842 reb in 1,089 games",
           "franchises": [
@@ -2812,7 +2810,7 @@
         {
           "personId": "2264",
           "name": "Alvin Jones",
-          "rank": 1182,
+          "rank": 3636,
           "goatScore": 3.4,
           "tier": "Reserve",
           "resume": "26 pts · 3 ast · 37 reb in 36 games",
@@ -2843,9 +2841,9 @@
         {
           "personId": "1627767",
           "name": "Cheick Diallo",
-          "rank": 810,
-          "goatScore": 9.2,
-          "tier": "Rotation",
+          "rank": 2034,
+          "goatScore": 9.0,
+          "tier": "Reserve",
           "resume": "1,023 pts · 86 ast · 829 reb in 318 games",
           "franchises": [
             "Detroit Pistons",
@@ -2862,8 +2860,8 @@
         {
           "personId": "2066",
           "name": "Soumaila Samake",
-          "rank": 1192,
-          "goatScore": 3.4,
+          "rank": 3956,
+          "goatScore": 2.9,
           "tier": "Reserve",
           "resume": "68 pts · 5 ast · 76 reb in 93 games",
           "franchises": [
@@ -2898,9 +2896,9 @@
         {
           "personId": "101142",
           "name": "Ronny Turiaf",
-          "rank": 526,
-          "goatScore": 17.2,
-          "tier": "Starter",
+          "rank": 810,
+          "goatScore": 20.9,
+          "tier": "Rotation",
           "resume": "2,554 pts · 704 ast · 2,071 reb in 674 games",
           "franchises": [
             "Golden State Warriors",
@@ -2938,8 +2936,8 @@
         {
           "personId": "1922",
           "name": "Francisco Elson",
-          "rank": 683,
-          "goatScore": 12.2,
+          "rank": 1064,
+          "goatScore": 17.6,
           "tier": "Rotation",
           "resume": "1,968 pts · 287 ast · 1,871 reb in 652 games",
           "franchises": [
@@ -2959,8 +2957,8 @@
         {
           "personId": "2429",
           "name": "Dan Gadzuric",
-          "rank": 693,
-          "goatScore": 11.9,
+          "rank": 1602,
+          "goatScore": 12.2,
           "tier": "Rotation",
           "resume": "2,684 pts · 226 ast · 2,539 reb in 753 games",
           "franchises": [
@@ -2994,8 +2992,8 @@
         {
           "personId": "203500",
           "name": "Steven Adams",
-          "rank": 258,
-          "goatScore": 27.5,
+          "rank": 504,
+          "goatScore": 25.8,
           "tier": "Starter",
           "resume": "7,696 pts · 1,272 ast · 6,972 reb in 921 games",
           "franchises": [
@@ -3013,8 +3011,8 @@
         {
           "personId": "203382",
           "name": "Aron Baynes",
-          "rank": 473,
-          "goatScore": 18.6,
+          "rank": 717,
+          "goatScore": 22.2,
           "tier": "Starter",
           "resume": "3,501 pts · 465 ast · 2,718 reb in 719 games",
           "franchises": [
@@ -3033,9 +3031,9 @@
         {
           "personId": "1752",
           "name": "Sean Marks",
-          "rank": 800,
-          "goatScore": 9.4,
-          "tier": "Rotation",
+          "rank": 2030,
+          "goatScore": 9.0,
+          "tier": "Reserve",
           "resume": "784 pts · 62 ast · 622 reb in 530 games",
           "franchises": [
             "Miami Heat",
@@ -3068,8 +3066,8 @@
         {
           "personId": "165",
           "name": "Hakeem Olajuwon",
-          "rank": 14,
-          "goatScore": 85.7,
+          "rank": 13,
+          "goatScore": 63.9,
           "tier": "Legendary Core",
           "resume": "Back-to-back titles, all-time rim protection metrics, and versatile post play.",
           "franchises": [
@@ -3085,9 +3083,9 @@
         {
           "personId": "1709",
           "name": "Michael Olowokandi",
-          "rank": 511,
-          "goatScore": 17.6,
-          "tier": "Starter",
+          "rank": 1128,
+          "goatScore": 16.9,
+          "tier": "Rotation",
           "resume": "4,296 pts · 335 ast · 3,555 reb in 629 games",
           "franchises": [
             "Boston Celtics",
@@ -3103,8 +3101,8 @@
         {
           "personId": "203105",
           "name": "Festus Ezeli",
-          "rank": 653,
-          "goatScore": 13.2,
+          "rank": 1133,
+          "goatScore": 16.9,
           "tier": "Rotation",
           "resume": "985 pts · 93 ast · 947 reb in 282 games",
           "franchises": [
@@ -3120,8 +3118,8 @@
         {
           "personId": "1629006",
           "name": "Josh Okogie",
-          "rank": 695,
-          "goatScore": 11.9,
+          "rank": 1644,
+          "goatScore": 11.8,
           "tier": "Rotation",
           "resume": "2,834 pts · 531 ast · 1,319 reb in 529 games",
           "franchises": [
@@ -3138,9 +3136,9 @@
         {
           "personId": "1918",
           "name": "Obinna Ekezie",
-          "rank": 938,
-          "goatScore": 6.5,
-          "tier": "Rotation",
+          "rank": 2683,
+          "goatScore": 5.7,
+          "tier": "Reserve",
           "resume": "551 pts · 37 ast · 409 reb in 241 games",
           "franchises": [
             "Atlanta Hawks",
@@ -3157,27 +3155,10 @@
           "groupRank": 5
         },
         {
-          "personId": "202374",
-          "name": "Solomon Alabi",
-          "rank": 1191,
-          "goatScore": 3.4,
-          "tier": "Reserve",
-          "resume": "51 pts · 6 ast · 74 reb in 92 games",
-          "franchises": [
-            "New Orleans Hornets",
-            "Toronto Raptors"
-          ],
-          "birthCity": "Kaduna",
-          "birthState": null,
-          "birthCountry": "Nigeria",
-          "birthCountryCode": "NG",
-          "groupRank": 6
-        },
-        {
           "personId": "2071",
           "name": "Olumide Oyedeji",
-          "rank": 1248,
-          "goatScore": 2.8,
+          "rank": 3650,
+          "goatScore": 3.4,
           "tier": "Reserve",
           "resume": "136 pts · 12 ast · 202 reb in 204 games",
           "franchises": [
@@ -3185,6 +3166,23 @@
             "Seattle SuperSonics"
           ],
           "birthCity": "Ibadan, Oyo State",
+          "birthState": null,
+          "birthCountry": "Nigeria",
+          "birthCountryCode": "NG",
+          "groupRank": 6
+        },
+        {
+          "personId": "202374",
+          "name": "Solomon Alabi",
+          "rank": 3985,
+          "goatScore": 2.8,
+          "tier": "Reserve",
+          "resume": "51 pts · 6 ast · 74 reb in 92 games",
+          "franchises": [
+            "New Orleans Hornets",
+            "Toronto Raptors"
+          ],
+          "birthCity": "Kaduna",
           "birthState": null,
           "birthCountry": "Nigeria",
           "birthCountryCode": "NG",
@@ -3208,8 +3206,8 @@
         {
           "personId": "101162",
           "name": "Marcin Gortat",
-          "rank": 218,
-          "goatScore": 29.9,
+          "rank": 417,
+          "goatScore": 27.6,
           "tier": "Starter",
           "resume": "9,013 pts · 1,049 ast · 7,326 reb in 989 games",
           "franchises": [
@@ -3227,7 +3225,7 @@
         {
           "personId": "41631",
           "name": "Maciej Lampe",
-          "rank": 1345,
+          "rank": 6311,
           "goatScore": 0.0,
           "tier": "Reserve",
           "resume": "Awaiting NBA impact",
@@ -3254,8 +3252,8 @@
         {
           "personId": "200826",
           "name": "J.J. Barea",
-          "rank": 437,
-          "goatScore": 19.8,
+          "rank": 631,
+          "goatScore": 23.7,
           "tier": "Starter",
           "resume": "8,380 pts · 3,746 ast · 1,993 reb in 1,095 games",
           "franchises": [
@@ -3271,9 +3269,9 @@
         {
           "personId": "2306",
           "name": "Carlos Arroyo",
-          "rank": 505,
-          "goatScore": 17.7,
-          "tier": "Starter",
+          "rank": 1016,
+          "goatScore": 18.1,
+          "tier": "Rotation",
           "resume": "4,116 pts · 1,936 ast · 1,035 reb in 776 games",
           "franchises": [
             "Boston Celtics",
@@ -3293,8 +3291,8 @@
         {
           "personId": "2762",
           "name": "Peter John Ramos",
-          "rank": 1258,
-          "goatScore": 2.6,
+          "rank": 4550,
+          "goatScore": 2.1,
           "tier": "Reserve",
           "resume": "26 pts · 0 ast · 16 reb in 32 games",
           "franchises": [
@@ -3309,8 +3307,8 @@
         {
           "personId": "200799",
           "name": "Guillermo Diaz",
-          "rank": 1279,
-          "goatScore": 2.0,
+          "rank": 4959,
+          "goatScore": 1.5,
           "tier": "Reserve",
           "resume": "45 pts · 13 ast · 14 reb in 17 games",
           "franchises": [
@@ -3327,54 +3325,23 @@
     {
       "country": "RU",
       "countryName": "Russian Federation",
-      "player": "Zydrunas Ilgauskas",
-      "birthCity": "Kaunas, Lithuanian SSR",
-      "headline": "12,235 pts · 1,066 ast · 6,986 reb in 987 games",
+      "player": "Zaza Pachulia",
+      "birthCity": "Tbilisi, Georgian SSR",
+      "headline": "8,378 pts · 1,579 ast · 7,049 reb in 1,362 games",
       "notableTeams": [
-        "Cleveland Cavaliers",
-        "Miami Heat"
+        "Atlanta Hawks",
+        "Dallas Mavericks",
+        "Detroit Pistons",
+        "Golden State Warriors",
+        "Milwaukee Bucks",
+        "Orlando Magic"
       ],
       "topPlayers": [
         {
-          "personId": "980",
-          "name": "Zydrunas Ilgauskas",
-          "rank": 196,
-          "goatScore": 32.0,
-          "tier": "All-Star",
-          "resume": "12,235 pts · 1,066 ast · 6,986 reb in 987 games",
-          "franchises": [
-            "Cleveland Cavaliers",
-            "Miami Heat"
-          ],
-          "birthCity": "Kaunas, Lithuanian SSR",
-          "birthState": null,
-          "birthCountry": "Soviet Union",
-          "birthCountryCode": "RU",
-          "groupRank": 1
-        },
-        {
-          "personId": "1905",
-          "name": "Andrei Kirilenko",
-          "rank": 230,
-          "goatScore": 29.0,
-          "tier": "Starter",
-          "resume": "10,389 pts · 2,406 ast · 4,810 reb in 975 games",
-          "franchises": [
-            "Brooklyn Nets",
-            "Minnesota Timberwolves",
-            "Utah Jazz"
-          ],
-          "birthCity": "Izhevsk, Russian SFSR",
-          "birthState": null,
-          "birthCountry": "Soviet Union",
-          "birthCountryCode": "RU",
-          "groupRank": 2
-        },
-        {
           "personId": "2585",
           "name": "Zaza Pachulia",
-          "rank": 270,
-          "goatScore": 26.9,
+          "rank": 263,
+          "goatScore": 32.0,
           "tier": "Starter",
           "resume": "8,378 pts · 1,579 ast · 7,049 reb in 1,362 games",
           "franchises": [
@@ -3389,14 +3356,49 @@
           "birthState": null,
           "birthCountry": "Soviet Union",
           "birthCountryCode": "RU",
+          "groupRank": 1
+        },
+        {
+          "personId": "980",
+          "name": "Zydrunas Ilgauskas",
+          "rank": 381,
+          "goatScore": 28.6,
+          "tier": "Starter",
+          "resume": "12,235 pts · 1,066 ast · 6,986 reb in 987 games",
+          "franchises": [
+            "Cleveland Cavaliers",
+            "Miami Heat"
+          ],
+          "birthCity": "Kaunas, Lithuanian SSR",
+          "birthState": null,
+          "birthCountry": "Soviet Union",
+          "birthCountryCode": "RU",
+          "groupRank": 2
+        },
+        {
+          "personId": "1905",
+          "name": "Andrei Kirilenko",
+          "rank": 421,
+          "goatScore": 27.5,
+          "tier": "Starter",
+          "resume": "10,389 pts · 2,406 ast · 4,810 reb in 975 games",
+          "franchises": [
+            "Brooklyn Nets",
+            "Minnesota Timberwolves",
+            "Utah Jazz"
+          ],
+          "birthCity": "Izhevsk, Russian SFSR",
+          "birthState": null,
+          "birthCountry": "Soviet Union",
+          "birthCountryCode": "RU",
           "groupRank": 3
         },
         {
           "personId": "958",
           "name": "Vitaly Potapenko",
-          "rank": 548,
-          "goatScore": 16.5,
-          "tier": "Starter",
+          "rank": 1228,
+          "goatScore": 15.9,
+          "tier": "Rotation",
           "resume": "4,051 pts · 426 ast · 2,763 reb in 782 games",
           "franchises": [
             "Boston Celtics",
@@ -3413,7 +3415,7 @@
         {
           "personId": "2443",
           "name": "Darius Songaila",
-          "rank": 633,
+          "rank": 1421,
           "goatScore": 14.0,
           "tier": "Rotation",
           "resume": "3,750 pts · 647 ast · 1,842 reb in 613 games",
@@ -3433,9 +3435,9 @@
         {
           "personId": "2401",
           "name": "Nikoloz Tskitishvili",
-          "rank": 834,
-          "goatScore": 8.7,
-          "tier": "Rotation",
+          "rank": 2063,
+          "goatScore": 8.8,
+          "tier": "Reserve",
           "resume": "552 pts · 126 ast · 350 reb in 320 games",
           "franchises": [
             "Denver Nuggets",
@@ -3454,9 +3456,9 @@
         {
           "personId": "2751",
           "name": "Viktor Khryapa",
-          "rank": 976,
-          "goatScore": 6.0,
-          "tier": "Rotation",
+          "rank": 2678,
+          "goatScore": 5.8,
+          "tier": "Reserve",
           "resume": "746 pts · 178 ast · 561 reb in 222 games",
           "franchises": [
             "Chicago Bulls",
@@ -3471,8 +3473,8 @@
         {
           "personId": "101117",
           "name": "Yaroslav Korolev",
-          "rank": 1175,
-          "goatScore": 3.6,
+          "rank": 3565,
+          "goatScore": 3.5,
           "tier": "Reserve",
           "resume": "104 pts · 28 ast · 47 reb in 111 games",
           "franchises": [
@@ -3487,8 +3489,8 @@
         {
           "personId": "2752",
           "name": "Sergei Monia",
-          "rank": 1249,
-          "goatScore": 2.8,
+          "rank": 4235,
+          "goatScore": 2.5,
           "tier": "Reserve",
           "resume": "109 pts · 21 ast · 64 reb in 53 games",
           "franchises": [
@@ -3502,14 +3504,14 @@
           "groupRank": 9
         },
         {
-          "personId": "42536",
-          "name": "Linas Kleiza",
-          "rank": 1340,
+          "personId": "6008",
+          "name": "Oleksiy Pecherov",
+          "rank": 5730,
           "goatScore": 0.0,
           "tier": "Reserve",
           "resume": "Awaiting NBA impact",
           "franchises": [],
-          "birthCity": "Kaunas, Lithuanian SSR",
+          "birthCity": "Donetsk, Ukrainian SSR",
           "birthState": null,
           "birthCountry": "Soviet Union",
           "birthCountryCode": "RU",
@@ -3531,8 +3533,8 @@
         {
           "personId": "1628449",
           "name": "Chris Boucher",
-          "rank": 717,
-          "goatScore": 11.4,
+          "rank": 1765,
+          "goatScore": 10.9,
           "tier": "Rotation",
           "resume": "3,874 pts · 216 ast · 2,225 reb in 551 games",
           "franchises": [
@@ -3562,9 +3564,9 @@
         {
           "personId": "1502",
           "name": "Adonal Foyle",
-          "rank": 539,
-          "goatScore": 16.6,
-          "tier": "Starter",
+          "rank": 1209,
+          "goatScore": 16.1,
+          "tier": "Rotation",
           "resume": "3,089 pts · 353 ast · 3,545 reb in 961 games",
           "franchises": [
             "Golden State Warriors",
@@ -3595,9 +3597,9 @@
         {
           "personId": "203476",
           "name": "Gorgui Dieng",
-          "rank": 593,
-          "goatScore": 15.2,
-          "tier": "Starter",
+          "rank": 1369,
+          "goatScore": 14.5,
+          "tier": "Rotation",
           "resume": "4,966 pts · 897 ast · 3,812 reb in 837 games",
           "franchises": [
             "Atlanta Hawks",
@@ -3614,8 +3616,8 @@
         {
           "personId": "2205",
           "name": "DeSagana Diop",
-          "rank": 644,
-          "goatScore": 13.6,
+          "rank": 1394,
+          "goatScore": 14.2,
           "tier": "Rotation",
           "resume": "1,427 pts · 309 ast · 2,635 reb in 891 games",
           "franchises": [
@@ -3633,9 +3635,9 @@
         {
           "personId": "2055",
           "name": "Mamadou N'diaye",
-          "rank": 970,
-          "goatScore": 6.0,
-          "tier": "Rotation",
+          "rank": 2856,
+          "goatScore": 5.2,
+          "tier": "Reserve",
           "resume": "281 pts · 10 ast · 240 reb in 182 games",
           "franchises": [
             "Atlanta Hawks",
@@ -3654,8 +3656,8 @@
         {
           "personId": "2776",
           "name": "Pape Sow",
-          "rank": 1059,
-          "goatScore": 4.8,
+          "rank": 3344,
+          "goatScore": 4.0,
           "tier": "Reserve",
           "resume": "221 pts · 12 ast · 218 reb in 91 games",
           "franchises": [
@@ -3670,8 +3672,8 @@
         {
           "personId": "200754",
           "name": "Mouhamed Sene",
-          "rank": 1133,
-          "goatScore": 4.0,
+          "rank": 3625,
+          "goatScore": 3.4,
           "tier": "Reserve",
           "resume": "138 pts · 1 ast · 110 reb in 146 games",
           "franchises": [
@@ -3688,8 +3690,8 @@
         {
           "personId": "202380",
           "name": "Hamady Ndiaye",
-          "rank": 1209,
-          "goatScore": 3.2,
+          "rank": 4080,
+          "goatScore": 2.7,
           "tier": "Reserve",
           "resume": "28 pts · 3 ast · 39 reb in 81 games",
           "franchises": [
@@ -3705,7 +3707,7 @@
         {
           "personId": "2587",
           "name": "Malick Badiane",
-          "rank": 1306,
+          "rank": 5603,
           "goatScore": 0.4,
           "tier": "Reserve",
           "resume": "0 pts · 0 ast · 0 reb in 1 games",
@@ -3719,9 +3721,9 @@
           "groupRank": 7
         },
         {
-          "personId": "41549",
-          "name": "Cheikh Samb",
-          "rank": 1320,
+          "personId": "196295070",
+          "name": "Tacko Fall",
+          "rank": 5796,
           "goatScore": 0.0,
           "tier": "Reserve",
           "resume": "Awaiting NBA impact",
@@ -3733,9 +3735,9 @@
           "groupRank": 8
         },
         {
-          "personId": "196295070",
-          "name": "Tacko Fall",
-          "rank": 1375,
+          "personId": "41549",
+          "name": "Cheikh Samb",
+          "rank": 6317,
           "goatScore": 0.0,
           "tier": "Reserve",
           "resume": "Awaiting NBA impact",
@@ -3764,8 +3766,8 @@
         {
           "personId": "124",
           "name": "Vlade Divac",
-          "rank": 101,
-          "goatScore": 40.3,
+          "rank": 134,
+          "goatScore": 37.8,
           "tier": "All-Star",
           "resume": "14,873 pts · 3,832 ast · 10,247 reb in 1,281 games",
           "franchises": [
@@ -3795,8 +3797,8 @@
         {
           "personId": "1628427",
           "name": "Vlatko Cancar",
-          "rank": 913,
-          "goatScore": 7.0,
+          "rank": 1647,
+          "goatScore": 11.8,
           "tier": "Rotation",
           "resume": "590 pts · 147 ast · 292 reb in 311 games",
           "franchises": [
@@ -3825,8 +3827,8 @@
         {
           "personId": "959",
           "name": "Steve Nash",
-          "rank": 76,
-          "goatScore": 42.7,
+          "rank": 123,
+          "goatScore": 38.2,
           "tier": "All-Star",
           "resume": "20,059 pts · 11,824 ast · 4,225 reb in 1,546 games",
           "franchises": [
@@ -3860,9 +3862,9 @@
         {
           "personId": "2200",
           "name": "Pau Gasol",
-          "rank": 35,
-          "goatScore": 50.7,
-          "tier": "Hall of Fame",
+          "rank": 28,
+          "goatScore": 51.4,
+          "tier": "All-Star",
           "resume": "23,791 pts · 4,541 ast · 12,967 reb in 1,530 games",
           "franchises": [
             "Chicago Bulls",
@@ -3881,8 +3883,8 @@
         {
           "personId": "201188",
           "name": "Marc Gasol",
-          "rank": 127,
-          "goatScore": 38.4,
+          "rank": 105,
+          "goatScore": 39.6,
           "tier": "All-Star",
           "resume": "14,409 pts · 3,461 ast · 7,730 reb in 1,101 games",
           "franchises": [
@@ -3899,8 +3901,8 @@
         {
           "personId": "1887",
           "name": "Wally Szczerbiak",
-          "rank": 263,
-          "goatScore": 27.3,
+          "rank": 519,
+          "goatScore": 25.6,
           "tier": "Starter",
           "resume": "10,092 pts · 1,648 ast · 2,845 reb in 790 games",
           "franchises": [
@@ -3918,8 +3920,8 @@
         {
           "personId": "1626195",
           "name": "Willy Hernangomez",
-          "rank": 748,
-          "goatScore": 10.8,
+          "rank": 1863,
+          "goatScore": 10.2,
           "tier": "Rotation",
           "resume": "2,715 pts · 393 ast · 2,113 reb in 579 games",
           "franchises": [
@@ -3936,7 +3938,7 @@
         {
           "personId": "56078",
           "name": "Albert Miralles",
-          "rank": 1307,
+          "rank": 5886,
           "goatScore": 0.0,
           "tier": "Reserve",
           "resume": "Awaiting NBA impact",
@@ -3948,14 +3950,14 @@
           "groupRank": 5
         },
         {
-          "personId": "8010",
-          "name": "Juan Carlos Navarro",
-          "rank": 1339,
+          "personId": "56056",
+          "name": "Sergio Llull",
+          "rank": 6105,
           "goatScore": 0.0,
           "tier": "Reserve",
           "resume": "Awaiting NBA impact",
           "franchises": [],
-          "birthCity": "Sant Feliu de Llobregat",
+          "birthCity": "MahÃ³n, Balearic Islands",
           "birthState": null,
           "birthCountry": "Spain",
           "birthCountryCode": "ES",
@@ -3964,7 +3966,7 @@
         {
           "personId": "8013",
           "name": "Ricky Rubio",
-          "rank": 1366,
+          "rank": 6399,
           "goatScore": 0.0,
           "tier": "Reserve",
           "resume": "Awaiting NBA impact",
@@ -3976,14 +3978,14 @@
           "groupRank": 7
         },
         {
-          "personId": "56056",
-          "name": "Sergio Llull",
-          "rank": 1370,
+          "personId": "56018",
+          "name": "Juan Carlos Navarro",
+          "rank": 6513,
           "goatScore": 0.0,
           "tier": "Reserve",
           "resume": "Awaiting NBA impact",
           "franchises": [],
-          "birthCity": "MahÃ³n, Balearic Islands",
+          "birthCity": "Sant Feliu de Llobregat",
           "birthState": null,
           "birthCountry": "Spain",
           "birthCountryCode": "ES",
@@ -4007,7 +4009,7 @@
         {
           "personId": "1627748",
           "name": "Thon Maker",
-          "rank": 758,
+          "rank": 1823,
           "goatScore": 10.5,
           "tier": "Rotation",
           "resume": "1,372 pts · 198 ast · 841 reb in 356 games",
@@ -4026,9 +4028,9 @@
         {
           "personId": "1629626",
           "name": "Bol Bol",
-          "rank": 816,
-          "goatScore": 9.1,
-          "tier": "Rotation",
+          "rank": 2027,
+          "goatScore": 9.0,
+          "tier": "Reserve",
           "resume": "1,429 pts · 152 ast · 852 reb in 399 games",
           "franchises": [
             "Denver Nuggets",
@@ -4044,7 +4046,7 @@
         {
           "personId": "1966938185",
           "name": "Ater Majok",
-          "rank": 1313,
+          "rank": 6508,
           "goatScore": 0.0,
           "tier": "Reserve",
           "resume": "Awaiting NBA impact",
@@ -4073,9 +4075,9 @@
         {
           "personId": "201973",
           "name": "Jonas Jerebko",
-          "rank": 517,
-          "goatScore": 17.4,
-          "tier": "Starter",
+          "rank": 1081,
+          "goatScore": 17.5,
+          "tier": "Rotation",
           "resume": "4,374 pts · 592 ast · 2,831 reb in 828 games",
           "franchises": [
             "Boston Celtics",
@@ -4092,9 +4094,9 @@
         {
           "personId": "203106",
           "name": "Jeffery Taylor",
-          "rank": 1021,
-          "goatScore": 5.2,
-          "tier": "Rotation",
+          "rank": 3013,
+          "goatScore": 4.7,
+          "tier": "Reserve",
           "resume": "903 pts · 119 ast · 296 reb in 191 games",
           "franchises": [
             "Charlotte Hornets"
@@ -4108,8 +4110,8 @@
         {
           "personId": "1750",
           "name": "Miles Simon",
-          "rank": 1263,
-          "goatScore": 2.5,
+          "rank": 4930,
+          "goatScore": 1.6,
           "tier": "Reserve",
           "resume": "2 pts · 0 ast · 2 reb in 26 games",
           "franchises": [
@@ -4138,9 +4140,9 @@
         {
           "personId": "202696",
           "name": "Nikola Vucevic",
-          "rank": 195,
-          "goatScore": 32.1,
-          "tier": "All-Star",
+          "rank": 313,
+          "goatScore": 30.6,
+          "tier": "Starter",
           "resume": "17,912 pts · 3,017 ast · 10,935 reb in 1,139 games",
           "franchises": [
             "Chicago Bulls",
@@ -4156,8 +4158,8 @@
         {
           "personId": "203991",
           "name": "Clint Capela",
-          "rank": 219,
-          "goatScore": 29.7,
+          "rank": 455,
+          "goatScore": 26.9,
           "tier": "Starter",
           "resume": "9,064 pts · 795 ast · 8,076 reb in 844 games",
           "franchises": [
@@ -4173,8 +4175,8 @@
         {
           "personId": "200757",
           "name": "Thabo Sefolosha",
-          "rank": 262,
-          "goatScore": 27.3,
+          "rank": 563,
+          "goatScore": 24.8,
           "tier": "Starter",
           "resume": "5,817 pts · 1,412 ast · 3,740 reb in 1,125 games",
           "franchises": [
@@ -4207,9 +4209,9 @@
         {
           "personId": "201570",
           "name": "Joe Alexander",
-          "rank": 1022,
-          "goatScore": 5.2,
-          "tier": "Rotation",
+          "rank": 3198,
+          "goatScore": 4.3,
+          "tier": "Reserve",
           "resume": "323 pts · 54 ast · 150 reb in 106 games",
           "franchises": [
             "Chicago Bulls",
@@ -4241,9 +4243,9 @@
         {
           "personId": "201934",
           "name": "Hasheem Thabeet",
-          "rank": 784,
+          "rank": 1922,
           "goatScore": 9.7,
-          "tier": "Rotation",
+          "tier": "Reserve",
           "resume": "585 pts · 34 ast · 705 reb in 418 games",
           "franchises": [
             "Detroit Pistons",
@@ -4278,8 +4280,8 @@
         {
           "personId": "203458",
           "name": "Alex Len",
-          "rank": 616,
-          "goatScore": 14.5,
+          "rank": 1407,
+          "goatScore": 14.1,
           "tier": "Rotation",
           "resume": "4,956 pts · 646 ast · 3,909 reb in 977 games",
           "franchises": [
@@ -4299,8 +4301,8 @@
         {
           "personId": "1627762",
           "name": "Joel Bolomboy",
-          "rank": 1262,
-          "goatScore": 2.5,
+          "rank": 4127,
+          "goatScore": 2.6,
           "tier": "Reserve",
           "resume": "72 pts · 6 ast · 52 reb in 82 games",
           "franchises": [
@@ -4329,8 +4331,8 @@
         {
           "personId": "1628384",
           "name": "OG Anunoby",
-          "rank": 331,
-          "goatScore": 23.6,
+          "rank": 487,
+          "goatScore": 26.2,
           "tier": "Starter",
           "resume": "7,412 pts · 950 ast · 2,500 reb in 604 games",
           "franchises": [
@@ -4346,9 +4348,9 @@
         {
           "personId": "2732",
           "name": "Ben Gordon",
-          "rank": 368,
-          "goatScore": 22.1,
-          "tier": "Starter",
+          "rank": 742,
+          "goatScore": 21.7,
+          "tier": "Rotation",
           "resume": "12,326 pts · 2,103 ast · 2,065 reb in 935 games",
           "franchises": [
             "Charlotte Hornets",
@@ -4366,9 +4368,9 @@
         {
           "personId": "200777",
           "name": "Joel Freeland",
-          "rank": 856,
+          "rank": 2168,
           "goatScore": 8.1,
-          "tier": "Rotation",
+          "tier": "Reserve",
           "resume": "564 pts · 78 ast · 613 reb in 225 games",
           "franchises": [
             "Trail Blazers"
@@ -4382,9 +4384,9 @@
         {
           "personId": "1629678",
           "name": "Admiral Schofield",
-          "rank": 1024,
-          "goatScore": 5.1,
-          "tier": "Rotation",
+          "rank": 3172,
+          "goatScore": 4.3,
+          "tier": "Reserve",
           "resume": "466 pts · 88 ast · 250 reb in 228 games",
           "franchises": [
             "Oklahoma City Thunder",
@@ -4400,8 +4402,8 @@
         {
           "personId": "2425",
           "name": "Robert Archibald",
-          "rank": 1110,
-          "goatScore": 4.3,
+          "rank": 3508,
+          "goatScore": 3.7,
           "tier": "Reserve",
           "resume": "53 pts · 16 ast · 70 reb in 95 games",
           "franchises": [
@@ -4419,8 +4421,8 @@
         {
           "personId": "2569",
           "name": "Ndudi Ebi",
-          "rank": 1179,
-          "goatScore": 3.5,
+          "rank": 4146,
+          "goatScore": 2.6,
           "tier": "Reserve",
           "resume": "85 pts · 11 ast · 42 reb in 66 games",
           "franchises": [
@@ -4451,7 +4453,7 @@
           "personId": "2544",
           "name": "LeBron James",
           "rank": 1,
-          "goatScore": 97.6,
+          "goatScore": 81.9,
           "tier": "Pantheon",
           "resume": "All-time playoff minutes leader with 4 titles and 19 All-NBA nods.",
           "franchises": [
@@ -4466,27 +4468,10 @@
           "groupRank": 1
         },
         {
-          "personId": "893",
-          "name": "Michael Jordan",
-          "rank": 2,
-          "goatScore": 96.2,
-          "tier": "Pantheon",
-          "resume": "Six-for-six in the Finals with the highest single-season scoring impact index on record.",
-          "franchises": [
-            "Chicago Bulls",
-            "Washington Wizards"
-          ],
-          "birthCity": "Brooklyn",
-          "birthState": "NY",
-          "birthCountry": "United States",
-          "birthCountryCode": "US",
-          "groupRank": 2
-        },
-        {
           "personId": "76003",
           "name": "Kareem Abdul-Jabbar",
-          "rank": 3,
-          "goatScore": 94.0,
+          "rank": 2,
+          "goatScore": 81.5,
           "tier": "Pantheon",
           "resume": "Six MVP awards, six titles, and 20 seasons anchoring top-five offenses.",
           "franchises": [
@@ -4497,13 +4482,49 @@
           "birthState": "NY",
           "birthCountry": "United States",
           "birthCountryCode": "US",
+          "groupRank": 2
+        },
+        {
+          "personId": "893",
+          "name": "Michael Jordan",
+          "rank": 3,
+          "goatScore": 81.2,
+          "tier": "Pantheon",
+          "resume": "Six-for-six in the Finals with the highest single-season scoring impact index on record.",
+          "franchises": [
+            "Chicago Bulls",
+            "Washington Wizards"
+          ],
+          "birthCity": "Brooklyn",
+          "birthState": "NY",
+          "birthCountry": "United States",
+          "birthCountryCode": "US",
           "groupRank": 3
+        },
+        {
+          "personId": "76375",
+          "name": "Wilt Chamberlain",
+          "rank": 4,
+          "goatScore": 80.3,
+          "tier": "Legendary Core",
+          "resume": "Volume records galore with elite durability, tempered by playoff translation gaps.",
+          "franchises": [
+            "Philadelphia Warriors",
+            "San Francisco Warriors",
+            "Philadelphia 76ers",
+            "Los Angeles Lakers"
+          ],
+          "birthCity": "Philadelphia",
+          "birthState": "PA",
+          "birthCountry": "United States",
+          "birthCountryCode": "US",
+          "groupRank": 4
         },
         {
           "personId": "77142",
           "name": "Magic Johnson",
           "rank": 5,
-          "goatScore": 90.2,
+          "goatScore": 76.5,
           "tier": "Pantheon",
           "resume": "Five titles and the highest offensive box creation mark for a primary initiator.",
           "franchises": [
@@ -4513,13 +4534,13 @@
           "birthState": "MI",
           "birthCountry": "United States",
           "birthCountryCode": "US",
-          "groupRank": 4
+          "groupRank": 5
         },
         {
           "personId": "78049",
           "name": "Bill Russell",
-          "rank": 6,
-          "goatScore": 89.6,
+          "rank": 7,
+          "goatScore": 73.8,
           "tier": "Pantheon",
           "resume": "Eleven titles powered by era-best defensive stop rates and leadership metrics.",
           "franchises": [
@@ -4529,29 +4550,13 @@
           "birthState": "LA",
           "birthCountry": "United States",
           "birthCountryCode": "US",
-          "groupRank": 5
-        },
-        {
-          "personId": "201939",
-          "name": "Stephen Curry",
-          "rank": 7,
-          "goatScore": 89.2,
-          "tier": "Pantheon",
-          "resume": "Four titles, two MVPs, and unrivaled spacing gravity that rewired offensive geometry.",
-          "franchises": [
-            "Golden State Warriors"
-          ],
-          "birthCity": "Akron",
-          "birthState": "OH",
-          "birthCountry": "United States",
-          "birthCountryCode": "US",
           "groupRank": 6
         },
         {
           "personId": "406",
           "name": "Shaquille O'Neal",
           "rank": 8,
-          "goatScore": 88.7,
+          "goatScore": 71.9,
           "tier": "Pantheon",
           "resume": "Peak true shooting plus 3 straight Finals MVPs built a dynasty-level apex.",
           "franchises": [
@@ -4569,18 +4574,18 @@
           "groupRank": 7
         },
         {
-          "personId": "203999",
-          "name": "Nikola Jokic",
+          "personId": "977",
+          "name": "Kobe Bryant",
           "rank": 9,
-          "goatScore": 88.4,
-          "tier": "Ascendant",
-          "resume": "Three MVPs in four years with all-time offensive EPM runs and a 2023 title.",
+          "goatScore": 70.8,
+          "tier": "Legendary Core",
+          "resume": "Five championships and unparalleled shot-making difficulty, with long-term durability.",
           "franchises": [
-            "Denver Nuggets"
+            "Los Angeles Lakers"
           ],
-          "birthCity": "Sombor",
-          "birthState": null,
-          "birthCountry": "Serbia (FRMR Yugoslavia)",
+          "birthCity": "Philadelphia",
+          "birthState": "PA",
+          "birthCountry": "United States",
           "birthCountryCode": "US",
           "groupRank": 8
         },
@@ -4588,7 +4593,7 @@
           "personId": "1449",
           "name": "Larry Bird",
           "rank": 10,
-          "goatScore": 88.0,
+          "goatScore": 69.2,
           "tier": "Pantheon",
           "resume": "Three straight MVPs and the league's most efficient wing-driven offenses of the 1980s.",
           "franchises": [
@@ -4601,20 +4606,21 @@
           "groupRank": 9
         },
         {
-          "personId": "76375",
-          "name": "Wilt Chamberlain",
+          "personId": "201142",
+          "name": "Kevin Durant",
           "rank": 11,
-          "goatScore": 87.4,
+          "goatScore": 67.0,
           "tier": "Legendary Core",
-          "resume": "Volume records galore with elite durability, tempered by playoff translation gaps.",
+          "resume": "Scoring champion in four eras with scalable plug-and-play gravity.",
           "franchises": [
-            "Philadelphia Warriors",
-            "San Francisco Warriors",
-            "Philadelphia 76ers",
-            "Los Angeles Lakers"
+            "Seattle SuperSonics",
+            "Oklahoma City Thunder",
+            "Golden State Warriors",
+            "Brooklyn Nets",
+            "Phoenix Suns"
           ],
-          "birthCity": "Philadelphia",
-          "birthState": "PA",
+          "birthCity": "Washington",
+          "birthState": "DC",
           "birthCountry": "United States",
           "birthCountryCode": "US",
           "groupRank": 10
@@ -4634,8 +4640,8 @@
         {
           "personId": "1495",
           "name": "Tim Duncan",
-          "rank": 4,
-          "goatScore": 90.8,
+          "rank": 6,
+          "goatScore": 74.0,
           "tier": "Pantheon",
           "resume": "19 straight winning seasons and the best defensive RAPM decade of the modern era.",
           "franchises": [
