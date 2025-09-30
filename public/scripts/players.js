@@ -13,6 +13,45 @@ const palette = {
 
 const accents = [palette.royal, palette.gold, palette.coral, palette.violet, palette.teal, '#9050d8', palette.sky, '#f48fb1'];
 
+function getBdlApiKey() {
+  const meta = document.querySelector('meta[name="bdl-api-key"]');
+  const metaKey = meta?.getAttribute('content')?.trim();
+  if (metaKey) {
+    return metaKey;
+  }
+  if (typeof window !== 'undefined') {
+    const globalKey = window.BDL_API_KEY || window.BALLDONTLIE_API_KEY || window.BALL_DONT_LIE_API_KEY;
+    if (globalKey && String(globalKey).trim()) {
+      return String(globalKey).trim();
+    }
+  }
+  return null;
+}
+
+function waitForBdlApiKey(timeoutMs = 3000, intervalMs = 100) {
+  return new Promise((resolve) => {
+    const immediate = getBdlApiKey();
+    if (immediate) {
+      resolve(immediate);
+      return;
+    }
+
+    const deadline = Date.now() + timeoutMs;
+    const timer = setInterval(() => {
+      const key = getBdlApiKey();
+      if (key) {
+        clearInterval(timer);
+        resolve(key);
+        return;
+      }
+      if (Date.now() >= deadline) {
+        clearInterval(timer);
+        resolve(null);
+      }
+    }, intervalMs);
+  });
+}
+
 const atlasMetricBlueprint = {
   'offensive-creation': {
     extract(context) {
@@ -2127,7 +2166,17 @@ function initPlayerAtlas() {
       params.set('season', String(LATEST_COMPLETED_SEASON));
       params.append('player_ids[]', cacheKey);
       const url = `${BDL_API_BASE}/season_averages?${params.toString()}`;
-      const response = await fetch(url, { cache: 'no-store' });
+      let apiKey = getBdlApiKey();
+      if (!apiKey) {
+        apiKey = await waitForBdlApiKey();
+      }
+      if (!apiKey) {
+        throw new Error('Missing Ball Don\'t Lie API credentials for season averages.');
+      }
+      const headers = { Accept: 'application/json' };
+      const auth = /^Bearer\s+/i.test(apiKey) ? apiKey : `Bearer ${apiKey}`;
+      headers.Authorization = auth;
+      const response = await fetch(url, { cache: 'no-store', headers });
       if (!response?.ok) {
         throw new Error(`Failed to load season averages: ${response?.status}`);
       }
@@ -2157,6 +2206,12 @@ function initPlayerAtlas() {
       }
     } catch (seasonError) {
       console.warn('Unable to load season averages', seasonError);
+      const message = seasonError?.message || '';
+      if (!/Missing Ball Don't Lie API credentials/i.test(message)) {
+        seasonAveragesCache.set(cacheKey, { status: 'error', data: null });
+      } else {
+        seasonAveragesCache.delete(cacheKey);
+      }
       if (requestId === statsRequestToken) {
         updateStatsView('error');
       }
