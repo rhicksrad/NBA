@@ -19,6 +19,107 @@ const heroStats = {
   multiFranchiseCount: 0,
 };
 
+function formatWeightPercentage(weight) {
+  if (typeof weight !== 'number' || Number.isNaN(weight)) {
+    return '—';
+  }
+  const percent = weight * 100;
+  const decimals = Math.abs(percent - Math.round(percent)) < 0.01 ? 0 : 1;
+  return helpers.formatNumber(percent, decimals);
+}
+
+function renderGoatEquation(weights) {
+  const equationTarget = document.querySelector('[data-goat-equation]');
+  const listTarget = document.querySelector('[data-goat-equation-terms]');
+
+  if (!equationTarget && !listTarget) {
+    return;
+  }
+
+  if (!Array.isArray(weights) || !weights.length) {
+    if (equationTarget) {
+      equationTarget.textContent = 'GOAT score equation becomes available once weighting data loads.';
+    }
+    if (listTarget) {
+      listTarget.innerHTML = '';
+    }
+    return;
+  }
+
+  const equationParts = weights.map((weight) => {
+    const percentText = formatWeightPercentage(weight.weight);
+    const label = weight.label ?? weight.key ?? 'Component';
+    return `${percentText}% × ${label}`;
+  });
+
+  if (equationTarget) {
+    equationTarget.textContent = `GOAT score = ${equationParts.join(' + ')}`;
+  }
+
+  if (listTarget) {
+    listTarget.innerHTML = '';
+    weights.forEach((weight) => {
+      const item = document.createElement('li');
+
+      const weightStrong = document.createElement('strong');
+      weightStrong.textContent = `${formatWeightPercentage(weight.weight)}%`;
+
+      const componentLabel = document.createElement('span');
+      componentLabel.className = 'goat-formula-card__component';
+      componentLabel.textContent = weight.label ?? weight.key ?? 'Component';
+
+      item.append(weightStrong, document.createTextNode(' × '), componentLabel);
+
+      if (typeof weight.description === 'string' && weight.description.trim().length) {
+        const description = document.createElement('span');
+        description.className = 'goat-formula-card__description';
+        description.textContent = ` — ${weight.description.trim()}`;
+        item.append(description);
+      }
+
+      listTarget.append(item);
+    });
+  }
+}
+
+function updateGeneratedTimestamp(data, sourceUrl) {
+  const target = document.querySelector('[data-goat-generated]');
+  if (!target) {
+    return;
+  }
+
+  const rawTimestamp = data?.generatedAt;
+  if (!rawTimestamp) {
+    target.textContent = 'Latest refresh pending from GOAT data feeds.';
+    return;
+  }
+
+  const parsed = new Date(rawTimestamp);
+  let formatted;
+  if (Number.isNaN(parsed.valueOf())) {
+    formatted = rawTimestamp;
+  } else {
+    formatted = new Intl.DateTimeFormat('en-US', {
+      month: 'long',
+      day: 'numeric',
+      year: 'numeric',
+      hour: 'numeric',
+      minute: '2-digit',
+      timeZoneName: 'short',
+    }).format(parsed);
+  }
+
+  let sourceSuffix = '';
+  if (typeof sourceUrl === 'string' && sourceUrl.trim().length) {
+    const sourceName = sourceUrl.split('/').pop();
+    if (sourceName) {
+      sourceSuffix = ` · Source: ${sourceName}`;
+    }
+  }
+
+  target.textContent = `Last generated ${formatted}${sourceSuffix}`;
+}
+
 const TIER_PRIORITY = new Map([
   ['Inner Circle', 0],
   ['Pantheon', 1],
@@ -449,9 +550,12 @@ async function init() {
     const weights = Array.isArray(data?.weights) ? data.weights : [];
     const players = Array.isArray(data?.players) ? data.players : [];
 
+    updateGeneratedTimestamp(data, goatDataSource);
+
     if (weights.length) {
       buildWeightCards(weights);
     }
+    renderGoatEquation(weights);
     if (players.length) {
       const initialPlayerName = buildLeaderboard(players);
       wireInteractions(players, weights, initialPlayerName);
