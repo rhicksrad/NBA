@@ -4,7 +4,8 @@ const API_BASE = 'https://api.balldontlie.io/v1';
 const PAGE_SIZE = 100;
 const REFRESH_INTERVAL_MS = 150000;
 const NEXT_SEASON_TIPOFF_DATE = '2025-10-04';
-const LAST_COMPLETED_SEASON_FINALE = '2025-06-22';
+const LAST_COMPLETED_SEASON_FINALE = '2024-06-22';
+const EARLIEST_ARCHIVE_DATE = '2012-10-30';
 
 const stageRank = { live: 0, upcoming: 1, final: 2 };
 
@@ -27,12 +28,20 @@ const metricTargets = {
   fetchState: document.querySelector('[data-fetch-state]'),
 };
 
-function determineInitialDate() {
+function determineMaxSelectableDate() {
   const today = getTodayIso();
   if (today >= NEXT_SEASON_TIPOFF_DATE) {
     return today;
   }
   return LAST_COMPLETED_SEASON_FINALE;
+}
+
+function determineInitialDate() {
+  const today = getTodayIso();
+  if (today >= NEXT_SEASON_TIPOFF_DATE) {
+    return today;
+  }
+  return determineMaxSelectableDate();
 }
 
 let activeDate = determineInitialDate();
@@ -935,11 +944,35 @@ async function loadGames(options = {}) {
 
 function initControls() {
   if (dateInput) {
+    const maxSelectableDate = determineMaxSelectableDate();
+    const minSelectableDate = EARLIEST_ARCHIVE_DATE;
+    if (minSelectableDate) {
+      dateInput.setAttribute('min', minSelectableDate);
+      if (activeDate < minSelectableDate) {
+        activeDate = minSelectableDate;
+      }
+    }
+    if (maxSelectableDate) {
+      dateInput.setAttribute('max', maxSelectableDate);
+      if (activeDate > maxSelectableDate) {
+        activeDate = maxSelectableDate;
+      }
+    }
     dateInput.value = activeDate;
     dateInput.addEventListener('change', (event) => {
       const nextValue = event.target.value;
       if (isValidIsoDate(nextValue)) {
-        activeDate = nextValue;
+        let nextDate = nextValue;
+        if (minSelectableDate && nextDate < minSelectableDate) {
+          nextDate = minSelectableDate;
+        }
+        if (maxSelectableDate && nextDate > maxSelectableDate) {
+          nextDate = maxSelectableDate;
+        }
+        activeDate = nextDate;
+        if (dateInput.value !== activeDate) {
+          dateInput.value = activeDate;
+        }
         setMetric('dateLabel', formatDateLabel(activeDate));
         scheduleAutoRefresh();
         loadGames();
@@ -954,10 +987,10 @@ function initControls() {
 }
 
 function init() {
+  initControls();
   setMetric('dateLabel', formatDateLabel(activeDate));
   updateMetrics([]);
   renderScoreboardState('Loading games…');
-  initControls();
   loadGames();
   scheduleAutoRefresh();
 }
