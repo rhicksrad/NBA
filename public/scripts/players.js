@@ -52,6 +52,13 @@ function waitForBdlApiKey(timeoutMs = 3000, intervalMs = 100) {
   });
 }
 
+function areBdlCredentialsDisabled() {
+  if (typeof window === 'undefined') {
+    return false;
+  }
+  return window.BDL_CREDENTIALS_DISABLED === true;
+}
+
 const atlasMetricBlueprint = {
   'offensive-creation': {
     extract(context) {
@@ -2056,10 +2063,23 @@ function initPlayerAtlas() {
   if (statsMeta) {
     statsMeta.textContent = defaultStatsMeta;
   }
+  const defaultStatsError =
+    statsError?.textContent?.trim() ? statsError.textContent : "We couldn't load season averages right now.";
+  const disabledStatsMeta = "Season averages unlock once Ball Don't Lie credentials are configured.";
+  const disabledStatsError = "Connect a Ball Don't Lie API key to view season averages here.";
 
   const BDL_API_BASE = 'https://api.balldontlie.io/v1';
   const seasonAveragesCache = new Map();
   let statsRequestToken = 0;
+
+  if (typeof document !== 'undefined') {
+    document.addEventListener('bdl:credentials-applied', () => {
+      seasonAveragesCache.clear();
+    });
+    document.addEventListener('bdl:credentials-disabled', () => {
+      seasonAveragesCache.clear();
+    });
+  }
 
   let players = [];
   let allPlayers = [];
@@ -2125,7 +2145,16 @@ function initPlayerAtlas() {
       statsEmpty.hidden = status !== 'empty';
     }
     if (statsError) {
-      statsError.hidden = status !== 'error';
+      if (status === 'error') {
+        statsError.hidden = false;
+        statsError.textContent = defaultStatsError;
+      } else if (status === 'unavailable') {
+        statsError.hidden = false;
+        statsError.textContent = disabledStatsError;
+      } else {
+        statsError.hidden = true;
+        statsError.textContent = defaultStatsError;
+      }
     }
 
     const formatValue = (value, digits = 1) =>
@@ -2165,6 +2194,8 @@ function initPlayerAtlas() {
         statsMeta.textContent = `No season averages recorded for the ${seasonLabel} season.`;
       } else if (status === 'error') {
         statsMeta.textContent = `We couldn't load season averages right now.`;
+      } else if (status === 'unavailable') {
+        statsMeta.textContent = disabledStatsMeta;
       } else {
         statsMeta.textContent = defaultStatsMeta;
       }
@@ -2205,6 +2236,15 @@ function initPlayerAtlas() {
     if (seasonAveragesCache.has(cacheKey)) {
       const cached = seasonAveragesCache.get(cacheKey);
       updateStatsView(cached.status, cached.data ?? null);
+      return;
+    }
+
+    if (areBdlCredentialsDisabled() && !getBdlApiKey()) {
+      const entry = { status: 'unavailable', data: null };
+      seasonAveragesCache.set(cacheKey, entry);
+      if (requestId === statsRequestToken) {
+        updateStatsView('unavailable');
+      }
       return;
     }
 

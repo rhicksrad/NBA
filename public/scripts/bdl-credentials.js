@@ -32,6 +32,16 @@
     return `Bearer ${value}`;
   }
 
+  let disabledDetected = false;
+
+  function markDisabled(source) {
+    disabledDetected = true;
+    if (typeof window !== 'undefined') {
+      window.BDL_CREDENTIALS_DISABLED = true;
+    }
+    notifyDisabled(source);
+  }
+
   function notifyApplied(source) {
     if (typeof document === 'undefined') {
       return;
@@ -46,6 +56,23 @@
       );
     } catch (error) {
       console.warn("Unable to dispatch 'bdl:credentials-applied' event", error);
+    }
+  }
+
+  function notifyDisabled(source) {
+    if (typeof document === 'undefined') {
+      return;
+    }
+    try {
+      document.dispatchEvent(
+        new CustomEvent('bdl:credentials-disabled', {
+          detail: {
+            source: source ?? null,
+          },
+        }),
+      );
+    } catch (error) {
+      console.warn("Unable to dispatch 'bdl:credentials-disabled' event", error);
     }
   }
 
@@ -154,6 +181,17 @@
 
   const { keyCandidate, keyPaths, autoFetch, scriptEl, globalOptions } = resolveOptions();
 
+  const disabledOption =
+    scriptEl?.dataset?.disabled === 'true' ||
+    scriptEl?.dataset?.disabled === '1' ||
+    globalOptions?.disabled === true ||
+    globalOptions?.disable === true;
+
+  if (disabledOption) {
+    markDisabled('config');
+    return;
+  }
+
   if (applyKey(keyCandidate, { source: 'inline-option' })) {
     return;
   }
@@ -179,6 +217,10 @@
           continue;
         }
         const payload = await response.json().catch(() => null);
+        if (payload && typeof payload === 'object' && payload.disabled === true) {
+          markDisabled(`fetch:${path}`);
+          return;
+        }
         const key = typeof payload === 'string' ? payload : payload?.key;
         if (applyKey(key, { source: `fetch:${path}` })) {
           if (typeof globalOptions?.onApplied === 'function') {
@@ -193,6 +235,9 @@
       } catch (error) {
         console.warn('Unable to load Ball Don\'t Lie credential stub from', path, error);
       }
+    }
+    if (disabledDetected) {
+      return;
     }
     if (scriptEl?.dataset?.warnMissing !== 'false') {
       console.info(
