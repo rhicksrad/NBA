@@ -1,6 +1,10 @@
 import { pathToFileURL } from "url";
 
-import { fetchActiveRosters } from "../fetch/bdl_active_rosters.js";
+import {
+  fetchActiveRosters,
+  MAX_ACTIVE_ROSTER,
+  MIN_ACTIVE_ROSTER,
+} from "../fetch/bdl_active_rosters.js";
 import { TEAM_METADATA } from "../lib/teams.js";
 
 async function verify(): Promise<void> {
@@ -19,7 +23,7 @@ async function verify(): Promise<void> {
 
   const outOfRange = TEAM_METADATA.filter((team) => {
     const record = rosters[team.tricode] ?? [];
-    return record.length < 13 || record.length > 21;
+    return record.length < MIN_ACTIVE_ROSTER || record.length > MAX_ACTIVE_ROSTER;
   });
 
   if (outOfRange.length > 0) {

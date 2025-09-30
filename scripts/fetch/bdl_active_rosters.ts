@@ -92,8 +92,13 @@ async function fetchActivePlayersForTeam(teamId: number): Promise<BLPlayer[]> {
   return out;
 }
 
+export const MIN_ACTIVE_ROSTER = 13;
+// Training camp and two-way slots can push Ball Don't Lie's "active" response
+// above the in-season 21-player ceiling, so allow up to 23.
+export const MAX_ACTIVE_ROSTER = 23;
+
 function guardRoster(teamAbbr: string, players: BLPlayer[]) {
-  if (players.length < 13 || players.length > 21) {
+  if (players.length < MIN_ACTIVE_ROSTER || players.length > MAX_ACTIVE_ROSTER) {
     throw new Error(`Roster size out of bounds for ${teamAbbr}: ${players.length}`);
   }
   if (players.some(p => p.first_name === "Blake" && p.last_name === "Griffin")) {
