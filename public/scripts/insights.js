@@ -60,46 +60,6 @@ function updateHero(data) {
   setMetric('close-share', closeText);
   setMetric('close-share-detail', closeText);
 
-  const catsWins = data?.mascotShowdown?.summary?.catsWins;
-  const catsLosses = data?.mascotShowdown?.summary?.catsLosses;
-  const catsWinPct = data?.mascotShowdown?.summary?.catsWinPct;
-  const dogsWins = data?.mascotShowdown?.summary?.dogsWins;
-  let ledgerText = null;
-  if (Number.isFinite(catsWins) && Number.isFinite(catsLosses) && Number.isFinite(catsWinPct)) {
-    const base = `Cats ${helpers.formatNumber(catsWins, 0)}-${helpers.formatNumber(catsLosses, 0)} (${helpers.formatNumber(
-      catsWinPct * 100,
-      1,
-    )}% win)`;
-    if (Number.isFinite(dogsWins)) {
-      const margin = dogsWins - catsWins;
-      const leader = margin === 0
-        ? 'Ledger tied'
-        : margin > 0
-          ? `Dogs +${helpers.formatNumber(Math.abs(margin), 0)} wins`
-          : `Cats +${helpers.formatNumber(Math.abs(margin), 0)} wins`;
-      ledgerText = `${base} · ${leader}`;
-    } else {
-      ledgerText = base;
-    }
-  }
-  setMetric('mascot-ledger', ledgerText);
-
-  const catTeams = Array.isArray(data?.mascotShowdown?.catBreakdown) ? data.mascotShowdown.catBreakdown : [];
-  const dogTeams = Array.isArray(data?.mascotShowdown?.dogBreakdown) ? data.mascotShowdown.dogBreakdown : [];
-  const bestCat = [...catTeams]
-    .filter((entry) => Number.isFinite(entry?.winPct) && Number.isFinite(entry?.wins) && Number.isFinite(entry?.losses))
-    .sort((a, b) => (b.winPct ?? 0) - (a.winPct ?? 0))[0];
-  const bestDog = [...dogTeams]
-    .filter((entry) => Number.isFinite(entry?.winPct) && Number.isFinite(entry?.wins) && Number.isFinite(entry?.losses))
-    .sort((a, b) => (b.winPct ?? 0) - (a.winPct ?? 0))[0];
-  const leaderText = bestCat && bestDog
-    ? `Top cat: ${bestCat.team} (${helpers.formatNumber(bestCat.winPct * 100, 1)}% vs dogs) · Top dog: ${bestDog.team} (${helpers.formatNumber(
-        bestDog.winPct * 100,
-        1,
-      )}% vs cats)`
-    : null;
-  setMetric('mascot-leaders', leaderText);
-
   const sampleSize = data?.sampleSize;
   setMetric('sample-size', Number.isFinite(sampleSize) ? `${helpers.formatNumber(sampleSize, 0)} games` : null);
 
@@ -115,14 +75,37 @@ function updateHero(data) {
     : null;
   setMetric('overtime-road-boost', overtimeText);
 
-  const seasons = Array.isArray(data?.threePointTrend?.seasons) ? data.threePointTrend.seasons : [];
-  const recent = [...seasons]
-    .filter((entry) => Number.isFinite(entry?.threePointRate))
-    .sort((a, b) => (b.season ?? 0) - (a.season ?? 0))[0];
-  const threeText = recent
-    ? `${recent.season}: ${helpers.formatNumber((recent.threePointRate ?? 0) * 100, 1)}% 3PA share`
+  const seasonSwing = data?.seasonAverages?.swing;
+  const seasonSwingText = Number.isFinite(seasonSwing)
+    ? `${helpers.formatNumber(seasonSwing, 1)} pts swing`
     : null;
-  setMetric('three-rate-current', threeText);
+  setMetric('season-trend-swing', seasonSwingText);
+
+  const seasonRangeStart = data?.seasonRange?.start;
+  const seasonRangeEnd = data?.seasonRange?.end;
+  const rangeText = Number.isFinite(seasonRangeStart) && Number.isFinite(seasonRangeEnd)
+    ? `${seasonRangeStart}-${seasonRangeEnd}`
+    : null;
+  setMetric('season-range', rangeText);
+
+  const latestGap = data?.homeRoadSplits?.latestGap;
+  const gapText = Number.isFinite(latestGap)
+    ? `${helpers.formatNumber(latestGap * 100, 1)}% home edge`
+    : null;
+  setMetric('home-road-gap', gapText);
+
+  const homeRoadSeasons = Array.isArray(data?.homeRoadSplits?.seasons) ? data.homeRoadSplits.seasons : [];
+  const latestSplit = [...homeRoadSeasons]
+    .filter((entry) => Number.isFinite(entry?.homeWinPct) && Number.isFinite(entry?.roadWinPct))
+    .sort((a, b) => (a.season ?? 0) - (b.season ?? 0))
+    .at(-1);
+  const splitText = latestSplit
+    ? `Latest season: Home ${helpers.formatNumber((latestSplit.homeWinPct ?? 0) * 100, 1)}% · Road ${helpers.formatNumber(
+        (latestSplit.roadWinPct ?? 0) * 100,
+        1,
+      )}%`
+    : null;
+  setMetric('home-road-note', splitText);
 }
 
 function buildSeasonalChart(dataRef) {
@@ -368,120 +351,24 @@ function buildOvertimeChart(dataRef) {
   };
 }
 
-function buildMascotShowdownChart(dataRef) {
-  const trends = Array.isArray(dataRef?.mascotShowdown?.seasonTrends) ? dataRef.mascotShowdown.seasonTrends : [];
-  if (!trends.length) {
-    return fallbackConfig('Mascot showdown history unavailable');
+function formatSeasonLabel(season) {
+  if (!Number.isFinite(season)) {
+    return 'Season';
   }
-
-  const labels = trends.map((entry) => {
-    if (!Number.isFinite(entry?.season)) {
-      return 'Season';
-    }
-    const next = ((entry.season ?? 0) + 1).toString().slice(-2).padStart(2, '0');
-    return `${entry.season}-${next}`;
-  });
-  const catPct = trends.map((entry) => (Number.isFinite(entry?.catWinPct) ? entry.catWinPct * 100 : null));
-  const dogPct = trends.map((entry) => (Number.isFinite(entry?.dogWinPct) ? entry.dogWinPct * 100 : null));
-  const games = trends.map((entry) => (Number.isFinite(entry?.games) ? entry.games : null));
-
-  return {
-    type: 'line',
-    data: {
-      labels,
-      datasets: [
-        {
-          type: 'bar',
-          label: 'Games played',
-          data: games,
-          backgroundColor: 'rgba(17, 86, 214, 0.18)',
-          borderRadius: 18,
-          maxBarThickness: 28,
-          yAxisID: 'games',
-        },
-        {
-          type: 'line',
-          label: 'Cat win %',
-          data: catPct,
-          borderColor: '#ef3d5b',
-          backgroundColor: 'rgba(239, 61, 91, 0.18)',
-          borderWidth: 2,
-          pointRadius: 0,
-          tension: 0.25,
-          fill: 'origin',
-          yAxisID: 'pct',
-        },
-        {
-          type: 'line',
-          label: 'Dog win %',
-          data: dogPct,
-          borderColor: '#0b2545',
-          backgroundColor: 'rgba(11, 37, 69, 0.16)',
-          borderWidth: 2,
-          pointRadius: 0,
-          tension: 0.25,
-          fill: false,
-          yAxisID: 'pct',
-        },
-      ],
-    },
-    options: {
-      maintainAspectRatio: false,
-      interaction: { mode: 'index', intersect: false },
-      scales: {
-        pct: {
-          beginAtZero: true,
-          suggestedMax: 100,
-          title: { display: true, text: 'Win percentage' },
-          ticks: { callback: (value) => `${helpers.formatNumber(value, 0)}%` },
-          grid: { color: 'rgba(11, 37, 69, 0.12)' },
-        },
-        games: {
-          position: 'right',
-          title: { display: true, text: 'Matchups per season' },
-          grid: { drawOnChartArea: false },
-        },
-        x: {
-          ticks: { maxRotation: 0, autoSkip: true, maxTicksLimit: 12 },
-          grid: { color: 'rgba(17, 86, 214, 0.05)' },
-        },
-      },
-      plugins: {
-        tooltip: {
-          callbacks: {
-            title(context) {
-              const item = context?.[0];
-              const label = item?.label ?? '';
-              const season = trends?.[item?.dataIndex ?? -1]?.season;
-              if (!Number.isFinite(season)) {
-                return label;
-              }
-              const endYear = season + 1;
-              return `${season}-${endYear}`;
-            },
-            label(context) {
-              if (context.dataset.type === 'bar') {
-                return `Games: ${helpers.formatNumber(context.parsed.y, 0)}`;
-              }
-              return `${context.dataset.label}: ${helpers.formatNumber(context.parsed.y, 1)}%`;
-            },
-          },
-        },
-      },
-    },
-  };
+  const endYear = (season + 1).toString().slice(-2).padStart(2, '0');
+  return `${season}-${endYear}`;
 }
 
-function buildThreePointTrendChart(dataRef) {
-  const seasons = Array.isArray(dataRef?.threePointTrend?.seasons) ? dataRef.threePointTrend.seasons : [];
+function buildSeasonAveragesChart(dataRef) {
+  const seasons = Array.isArray(dataRef?.seasonAverages?.seasons) ? dataRef.seasonAverages.seasons : [];
   if (!seasons.length) {
-    return fallbackConfig('Three-point trend unavailable');
+    return fallbackConfig('Season scoring trend unavailable');
   }
 
-  const sampled = helpers.evenSample(seasons, 120);
-  const labels = sampled.map((entry) => entry.season ?? 'Season');
-  const rate = sampled.map((entry) => (Number.isFinite(entry.threePointRate) ? entry.threePointRate * 100 : null));
-  const winPct = sampled.map((entry) => (Number.isFinite(entry.teamWinPct) ? entry.teamWinPct * 100 : null));
+  const labels = seasons.map((entry) => formatSeasonLabel(entry?.season));
+  const overall = seasons.map((entry) => entry?.averagePoints ?? null);
+  const regular = seasons.map((entry) => entry?.regularSeasonAverage ?? null);
+  const playoff = seasons.map((entry) => entry?.playoffAverage ?? null);
 
   return {
     type: 'line',
@@ -489,22 +376,32 @@ function buildThreePointTrendChart(dataRef) {
       labels,
       datasets: [
         {
-          label: '3PA rate',
-          data: rate,
+          label: 'All games',
+          data: overall,
           borderColor: '#1156d6',
-          backgroundColor: 'rgba(17, 86, 214, 0.16)',
+          backgroundColor: 'rgba(17, 86, 214, 0.18)',
           borderWidth: 2,
-          tension: 0.25,
+          tension: 0.28,
           spanGaps: true,
           fill: 'origin',
         },
         {
-          label: 'Team win %',
-          data: winPct,
-          borderColor: '#f4b53f',
-          backgroundColor: 'rgba(244, 181, 63, 0.16)',
-          borderWidth: 2,
-          tension: 0.25,
+          label: 'Regular season',
+          data: regular,
+          borderColor: '#0b2545',
+          backgroundColor: 'rgba(11, 37, 69, 0.16)',
+          borderWidth: 1.5,
+          tension: 0.28,
+          spanGaps: true,
+          fill: false,
+        },
+        {
+          label: 'Playoffs',
+          data: playoff,
+          borderColor: '#ef3d5b',
+          backgroundColor: 'rgba(239, 61, 91, 0.16)',
+          borderWidth: 1.5,
+          tension: 0.28,
           spanGaps: true,
           fill: false,
         },
@@ -515,13 +412,83 @@ function buildThreePointTrendChart(dataRef) {
       interaction: { mode: 'index', intersect: false },
       scales: {
         y: {
-          beginAtZero: true,
-          title: { display: true, text: 'Percentage' },
-          ticks: { callback: (value) => `${helpers.formatNumber(value, 0)}%` },
+          title: { display: true, text: 'Average combined points' },
           grid: { color: 'rgba(17, 86, 214, 0.12)' },
         },
         x: {
-          ticks: { maxRotation: 0 },
+          ticks: { maxRotation: 0, autoSkip: true, maxTicksLimit: 12 },
+          grid: { color: 'rgba(17, 86, 214, 0.05)' },
+        },
+      },
+    },
+  };
+}
+
+function buildHomeRoadChart(dataRef) {
+  const seasons = Array.isArray(dataRef?.homeRoadSplits?.seasons) ? dataRef.homeRoadSplits.seasons : [];
+  if (!seasons.length) {
+    return fallbackConfig('Home-road sample unavailable');
+  }
+
+  const labels = seasons.map((entry) => formatSeasonLabel(entry?.season));
+  const homePct = seasons.map((entry) => (Number.isFinite(entry?.homeWinPct) ? entry.homeWinPct * 100 : null));
+  const roadPct = seasons.map((entry) => (Number.isFinite(entry?.roadWinPct) ? entry.roadWinPct * 100 : null));
+  const gap = seasons.map((entry) => (Number.isFinite(entry?.gap) ? entry.gap * 100 : null));
+
+  return {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: 'Home win %',
+          data: homePct,
+          borderColor: '#1156d6',
+          backgroundColor: 'rgba(17, 86, 214, 0.18)',
+          borderWidth: 2,
+          tension: 0.28,
+          spanGaps: true,
+          fill: 'origin',
+        },
+        {
+          label: 'Road win %',
+          data: roadPct,
+          borderColor: '#ef3d5b',
+          backgroundColor: 'rgba(239, 61, 91, 0.18)',
+          borderWidth: 2,
+          tension: 0.28,
+          spanGaps: true,
+          fill: false,
+        },
+        {
+          type: 'bar',
+          label: 'Home edge (pp)',
+          data: gap,
+          backgroundColor: 'rgba(244, 181, 63, 0.28)',
+          borderRadius: 16,
+          yAxisID: 'gap',
+          maxBarThickness: 32,
+        },
+      ],
+    },
+    options: {
+      maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      scales: {
+        y: {
+          beginAtZero: true,
+          suggestedMax: 80,
+          title: { display: true, text: 'Win percentage' },
+          ticks: { callback: (value) => `${helpers.formatNumber(value, 0)}%` },
+          grid: { color: 'rgba(17, 86, 214, 0.12)' },
+        },
+        gap: {
+          position: 'right',
+          title: { display: true, text: 'Home edge (percentage points)' },
+          grid: { drawOnChartArea: false },
+        },
+        x: {
+          ticks: { maxRotation: 0, autoSkip: true, maxTicksLimit: 12 },
           grid: { color: 'rgba(17, 86, 214, 0.05)' },
         },
       },
@@ -549,8 +516,8 @@ async function bootstrap() {
     { element: '#rest-impact', source: DATA_URL, createConfig: () => buildRestImpactChart(data) },
     { element: '#close-margins', source: DATA_URL, createConfig: () => buildCloseMarginsChart(data) },
     { element: '#overtime-breakdown', source: DATA_URL, createConfig: () => buildOvertimeChart(data) },
-    { element: '#mascot-showdown', source: DATA_URL, createConfig: () => buildMascotShowdownChart(data) },
-    { element: '#three-point-trend', source: DATA_URL, createConfig: () => buildThreePointTrendChart(data) },
+    { element: '#season-averages', source: DATA_URL, createConfig: () => buildSeasonAveragesChart(data) },
+    { element: '#home-road-splits', source: DATA_URL, createConfig: () => buildHomeRoadChart(data) },
   ]);
 }
 

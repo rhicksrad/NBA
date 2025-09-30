@@ -1,1138 +1,397 @@
 {
-  "generatedAt": "2025-09-28T03:47:45.724550+00:00",
-  "sampleSize": 71879,
+  "generatedAt": "2025-09-30T17:19:57.293Z",
+  "sampleSize": 19134,
+  "seasonRange": {
+    "start": 2010,
+    "end": 2024
+  },
   "seasonalScoring": {
     "months": [
       {
         "month": "Jan",
-        "games": 12189,
-        "averagePoints": 208.71597341865618,
-        "regularSeasonAverage": 208.71597341865618,
+        "games": 3408,
+        "averagePoints": 212.7118544600939,
+        "regularSeasonAverage": 212.7118544600939,
         "playoffAverage": null
       },
       {
         "month": "Feb",
-        "games": 10543,
-        "averagePoints": 209.7161149577919,
-        "regularSeasonAverage": 209.7161149577919,
+        "games": 2620,
+        "averagePoints": 214.09885496183207,
+        "regularSeasonAverage": 214.09885496183207,
         "playoffAverage": null
       },
       {
         "month": "Mar",
-        "games": 12272,
-        "averagePoints": 209.1300521512386,
-        "regularSeasonAverage": 209.13545416492255,
-        "playoffAverage": 208.93272171253824
+        "games": 3339,
+        "averagePoints": 213.57202755315964,
+        "regularSeasonAverage": 213.57202755315964,
+        "playoffAverage": null
       },
       {
         "month": "Apr",
-        "games": 7774,
-        "averagePoints": 206.43015178801133,
-        "regularSeasonAverage": 207.22632205407243,
-        "playoffAverage": 203.7800963081862
+        "games": 2238,
+        "averagePoints": 211.05942806076854,
+        "regularSeasonAverage": 212.71939953810625,
+        "playoffAverage": 205.37747035573122
       },
       {
         "month": "May",
-        "games": 2012,
-        "averagePoints": 202.14264413518887,
-        "regularSeasonAverage": 218.70391061452514,
-        "playoffAverage": 200.43732895457035
+        "games": 677,
+        "averagePoints": 209.87444608567208,
+        "regularSeasonAverage": 226.41958041958043,
+        "playoffAverage": 205.4438202247191
       },
       {
         "month": "Jun",
-        "games": 327,
-        "averagePoints": 199.13455657492355,
+        "games": 131,
+        "averagePoints": 208.50381679389312,
         "regularSeasonAverage": null,
-        "playoffAverage": 199.13455657492355
+        "playoffAverage": 208.50381679389312
       },
       {
         "month": "Jul",
-        "games": 49,
-        "averagePoints": 219.73469387755102,
-        "regularSeasonAverage": 244.25,
-        "playoffAverage": 223.25
+        "games": 15,
+        "averagePoints": 228.13333333333333,
+        "regularSeasonAverage": 233.83333333333334,
+        "playoffAverage": 224.33333333333334
       },
       {
         "month": "Aug",
-        "games": 123,
-        "averagePoints": 228.47967479674796,
-        "regularSeasonAverage": 230.0625,
-        "playoffAverage": 225.0
+        "games": 124,
+        "averagePoints": 229.33870967741936,
+        "regularSeasonAverage": 231.02439024390245,
+        "playoffAverage": 226.04761904761904
       },
       {
         "month": "Sep",
-        "games": 46,
-        "averagePoints": 213.5,
+        "games": 36,
+        "averagePoints": 212.61111111111111,
         "regularSeasonAverage": null,
-        "playoffAverage": 212.88888888888889
+        "playoffAverage": 212.61111111111111
       },
       {
         "month": "Oct",
-        "games": 3999,
-        "averagePoints": 208.86471617904476,
-        "regularSeasonAverage": 214.957216940363,
-        "playoffAverage": 214.6
+        "games": 751,
+        "averagePoints": 216.55925432756325,
+        "regularSeasonAverage": 216.5758389261745,
+        "playoffAverage": 214.5
       },
       {
         "month": "Nov",
-        "games": 11046,
-        "averagePoints": 207.15172913271772,
-        "regularSeasonAverage": 207.03158565446932,
+        "games": 2798,
+        "averagePoints": 211.14474624731952,
+        "regularSeasonAverage": 211.14474624731952,
         "playoffAverage": null
       },
       {
         "month": "Dec",
-        "games": 11499,
-        "averagePoints": 207.7829376467519,
-        "regularSeasonAverage": 207.77893630070972,
+        "games": 2997,
+        "averagePoints": 212.43777110443776,
+        "regularSeasonAverage": 212.43777110443776,
         "playoffAverage": null
       }
     ],
-    "swing": 29.345118221824407
-  },
-  "restImpact": {
-    "buckets": [
-      {
-        "label": "+2 days",
-        "games": 3130,
-        "winPct": 0.3875399361022364,
-        "pointMargin": -2.9642172523961663
-      },
-      {
-        "label": "+1 day",
-        "games": 7012,
-        "winPct": 0.39289788933257275,
-        "pointMargin": -3.0782943525385056
-      },
-      {
-        "label": "Even rest",
-        "games": 40842,
-        "winPct": 0.39160667939865823,
-        "pointMargin": -3.303976298907987
-      },
-      {
-        "label": "-1 day",
-        "games": 10899,
-        "winPct": 0.3615928066795119,
-        "pointMargin": -4.2808514542618585
-      },
-      {
-        "label": "-2 days",
-        "games": 6541,
-        "winPct": 0.35499159149977066,
-        "pointMargin": -4.610151353004127
-      },
-      {
-        "label": "Back-to-back",
-        "games": 3427,
-        "winPct": 0.37817332944266124,
-        "pointMargin": -4.209804493726291
-      }
-    ],
-    "swing": 0.03790629783280208
+    "swing": 20.834892883526237
   },
   "closeMargins": {
     "distribution": [
       {
         "label": "0-2 pts",
-        "games": 7852,
-        "share": 0.1092391379957985,
-        "averageMargin": 1.5680081507896078
+        "games": 1766,
+        "share": 0.09229643566426257,
+        "averageMargin": 1.5594563986409966
       },
       {
         "label": "3-5 pts",
-        "games": 13049,
-        "share": 0.18154120118532535,
-        "averageMargin": 4.019311824660893
+        "games": 3360,
+        "share": 0.17560363750391972,
+        "averageMargin": 4.028869047619048
       },
       {
         "label": "6-10 pts",
-        "games": 20329,
-        "share": 0.2828225211814299,
-        "averageMargin": 7.88568055487235
+        "games": 5483,
+        "share": 0.28655795965297376,
+        "averageMargin": 7.88108699616998
       },
       {
         "label": "11-15 pts",
-        "games": 13392,
-        "share": 0.18631310953129565,
-        "averageMargin": 12.801224611708482
+        "games": 3547,
+        "share": 0.1853768161388105,
+        "averageMargin": 12.840428531153087
       },
       {
         "label": "16+ pts",
-        "games": 17257,
-        "share": 0.24008403010615062,
-        "averageMargin": 22.744683316914877
+        "games": 4978,
+        "share": 0.26016515104003346,
+        "averageMargin": 23.290277219766974
       }
     ],
-    "closeShare": 0.29078033918112384
+    "closeShare": 0.2679000731681823
+  },
+  "restImpact": {
+    "buckets": [
+      {
+        "label": "+2 days",
+        "games": 640,
+        "winPct": 0.425,
+        "pointMargin": -2.2
+      },
+      {
+        "label": "+1 day",
+        "games": 1578,
+        "winPct": 0.4372623574144487,
+        "pointMargin": -1.8276299112801013
+      },
+      {
+        "label": "Even rest",
+        "games": 12173,
+        "winPct": 0.43111804813932475,
+        "pointMargin": -2.3613735315862976
+      },
+      {
+        "label": "-1 day",
+        "games": 2012,
+        "winPct": 0.38767395626242546,
+        "pointMargin": -3.4363817097415508
+      },
+      {
+        "label": "-2 days",
+        "games": 866,
+        "winPct": 0.4110854503464203,
+        "pointMargin": -3.199769053117783
+      },
+      {
+        "label": "Back-to-back",
+        "games": 1226,
+        "winPct": 0.41353996737357257,
+        "pointMargin": -2.9926590538336053
+      }
+    ],
+    "swing": 0.04958840115202323
   },
   "overtime": {
     "categories": [
       {
         "label": "Regulation",
-        "games": 68110,
-        "share": 0.9475646572712475,
-        "roadWinPct": 0.3784025840552048
+        "games": 18096,
+        "share": 0.9457510191282533,
+        "roadWinPct": 0.42374005305039786
       },
       {
         "label": "1 OT",
-        "games": 3251,
-        "share": 0.0452287872674912,
-        "roadWinPct": 0.4675484466318056
+        "games": 369,
+        "share": 0.019285042333019756,
+        "roadWinPct": 0.45257452574525747
       },
       {
         "label": "2 OT",
-        "games": 446,
-        "share": 0.006204872076684428,
-        "roadWinPct": 0.47085201793721976
+        "games": 42,
+        "share": 0.0021950454687989967,
+        "roadWinPct": 0.4523809523809524
       },
       {
         "label": "3 OT",
-        "games": 60,
-        "share": 0.0008347361538140486,
-        "roadWinPct": 0.45
+        "games": 3,
+        "share": 0.00015678896205707118,
+        "roadWinPct": 1
       },
       {
         "label": "4+ OT",
-        "games": 12,
-        "share": 0.0001669472307628097,
-        "roadWinPct": 0.4166666666666667
+        "games": 2,
+        "share": 0.00010452597470471412,
+        "roadWinPct": 0.5
       }
     ]
   },
-  "threePointTrend": {
+  "seasonAverages": {
     "seasons": [
       {
-        "season": 1947,
-        "threePointRate": null,
-        "teamWinPct": 0.5
-      },
-      {
-        "season": 1948,
-        "threePointRate": 0.0,
-        "teamWinPct": 0.5
-      },
-      {
-        "season": 1949,
-        "threePointRate": null,
-        "teamWinPct": 0.5
-      },
-      {
-        "season": 1950,
-        "threePointRate": 0.0,
-        "teamWinPct": 0.5
-      },
-      {
-        "season": 1951,
-        "threePointRate": 0.0,
-        "teamWinPct": 0.5
-      },
-      {
-        "season": 1952,
-        "threePointRate": 0.0,
-        "teamWinPct": 0.5
-      },
-      {
-        "season": 1953,
-        "threePointRate": 0.0,
-        "teamWinPct": 0.5
-      },
-      {
-        "season": 1954,
-        "threePointRate": 0.0,
-        "teamWinPct": 0.5
-      },
-      {
-        "season": 1955,
-        "threePointRate": 0.0,
-        "teamWinPct": 0.5
-      },
-      {
-        "season": 1956,
-        "threePointRate": 0.0,
-        "teamWinPct": 0.5
-      },
-      {
-        "season": 1957,
-        "threePointRate": 0.0,
-        "teamWinPct": 0.5
-      },
-      {
-        "season": 1958,
-        "threePointRate": 0.0,
-        "teamWinPct": 0.5
-      },
-      {
-        "season": 1959,
-        "threePointRate": 0.0,
-        "teamWinPct": 0.5
-      },
-      {
-        "season": 1960,
-        "threePointRate": 0.0,
-        "teamWinPct": 0.5
-      },
-      {
-        "season": 1961,
-        "threePointRate": 0.0,
-        "teamWinPct": 0.5
-      },
-      {
-        "season": 1962,
-        "threePointRate": 0.0,
-        "teamWinPct": 0.5
-      },
-      {
-        "season": 1963,
-        "threePointRate": 0.0,
-        "teamWinPct": 0.5
-      },
-      {
-        "season": 1964,
-        "threePointRate": 0.0,
-        "teamWinPct": 0.5
-      },
-      {
-        "season": 1965,
-        "threePointRate": null,
-        "teamWinPct": 0.5
-      },
-      {
-        "season": 1966,
-        "threePointRate": 0.0,
-        "teamWinPct": 0.5
-      },
-      {
-        "season": 1967,
-        "threePointRate": null,
-        "teamWinPct": 0.5
-      },
-      {
-        "season": 1968,
-        "threePointRate": null,
-        "teamWinPct": 0.5
-      },
-      {
-        "season": 1969,
-        "threePointRate": 0.0,
-        "teamWinPct": 0.5
-      },
-      {
-        "season": 1970,
-        "threePointRate": 0.0,
-        "teamWinPct": 0.5
-      },
-      {
-        "season": 1971,
-        "threePointRate": 0.0,
-        "teamWinPct": 0.5
-      },
-      {
-        "season": 1972,
-        "threePointRate": 0.0,
-        "teamWinPct": 0.5
-      },
-      {
-        "season": 1973,
-        "threePointRate": 0.0,
-        "teamWinPct": 0.5
-      },
-      {
-        "season": 1974,
-        "threePointRate": 0.0,
-        "teamWinPct": 0.5
-      },
-      {
-        "season": 1975,
-        "threePointRate": 0.0,
-        "teamWinPct": 0.5
-      },
-      {
-        "season": 1976,
-        "threePointRate": 0.0,
-        "teamWinPct": 0.5
-      },
-      {
-        "season": 1977,
-        "threePointRate": 0.0,
-        "teamWinPct": 0.5
-      },
-      {
-        "season": 1978,
-        "threePointRate": 0.0,
-        "teamWinPct": 0.5
-      },
-      {
-        "season": 1979,
-        "threePointRate": 0.0,
-        "teamWinPct": 0.5
-      },
-      {
-        "season": 1980,
-        "threePointRate": 0.018484288354898338,
-        "teamWinPct": 0.5
-      },
-      {
-        "season": 1981,
-        "threePointRate": 0.026717557251908396,
-        "teamWinPct": 0.5
-      },
-      {
-        "season": 1982,
-        "threePointRate": 0.015570014430745082,
-        "teamWinPct": 0.5
-      },
-      {
-        "season": 1983,
-        "threePointRate": 0.0026988751784740037,
-        "teamWinPct": 0.5
-      },
-      {
-        "season": 1984,
-        "threePointRate": 0.0022247866756915703,
-        "teamWinPct": 0.5
-      },
-      {
-        "season": 1985,
-        "threePointRate": 0.005860663691053755,
-        "teamWinPct": 0.5
-      },
-      {
-        "season": 1986,
-        "threePointRate": 0.038366025837774494,
-        "teamWinPct": 0.5
-      },
-      {
-        "season": 1987,
-        "threePointRate": 0.053803700777764175,
-        "teamWinPct": 0.5
-      },
-      {
-        "season": 1988,
-        "threePointRate": 0.057795811606109894,
-        "teamWinPct": 0.5
-      },
-      {
-        "season": 1989,
-        "threePointRate": 0.07588542504032321,
-        "teamWinPct": 0.5
-      },
-      {
-        "season": 1990,
-        "threePointRate": 0.07694896242288278,
-        "teamWinPct": 0.5
-      },
-      {
-        "season": 1991,
-        "threePointRate": 0.08313745078450961,
-        "teamWinPct": 0.5
-      },
-      {
-        "season": 1992,
-        "threePointRate": 0.08817942723553478,
-        "teamWinPct": 0.5
-      },
-      {
-        "season": 1993,
-        "threePointRate": 0.10500939168503098,
-        "teamWinPct": 0.5
-      },
-      {
-        "season": 1994,
-        "threePointRate": 0.11963978986067722,
-        "teamWinPct": 0.5
-      },
-      {
-        "season": 1995,
-        "threePointRate": 0.19029334891461425,
-        "teamWinPct": 0.5
-      },
-      {
-        "season": 1996,
-        "threePointRate": 0.20174875462195746,
-        "teamWinPct": 0.5
-      },
-      {
-        "season": 1997,
-        "threePointRate": 0.214053040933328,
-        "teamWinPct": 0.5
-      },
-      {
-        "season": 1998,
-        "threePointRate": 0.16099996501521838,
-        "teamWinPct": 0.5
-      },
-      {
-        "season": 1999,
-        "threePointRate": 0.16952838456295238,
-        "teamWinPct": 0.5
-      },
-      {
-        "season": 2000,
-        "threePointRate": 0.1683688766381353,
-        "teamWinPct": 0.5
-      },
-      {
-        "season": 2001,
-        "threePointRate": 0.1708969850978538,
-        "teamWinPct": 0.5
-      },
-      {
-        "season": 2002,
-        "threePointRate": 0.18295961057241164,
-        "teamWinPct": 0.5
-      },
-      {
-        "season": 2003,
-        "threePointRate": 0.1839661546522798,
-        "teamWinPct": 0.5
-      },
-      {
-        "season": 2004,
-        "threePointRate": 0.18755679763917255,
-        "teamWinPct": 0.5
-      },
-      {
-        "season": 2005,
-        "threePointRate": 0.19669469996423233,
-        "teamWinPct": 0.5
-      },
-      {
-        "season": 2006,
-        "threePointRate": 0.2023284106954151,
-        "teamWinPct": 0.5
-      },
-      {
-        "season": 2007,
-        "threePointRate": 0.21323705736591084,
-        "teamWinPct": 0.5
-      },
-      {
-        "season": 2008,
-        "threePointRate": 0.2211424974427571,
-        "teamWinPct": 0.5
-      },
-      {
-        "season": 2009,
-        "threePointRate": 0.22467819984424084,
-        "teamWinPct": 0.5
-      },
-      {
         "season": 2010,
-        "threePointRate": 0.22297922376600582,
-        "teamWinPct": 0.5
+        "averagePoints": 198.42716236722308,
+        "regularSeasonAverage": 199.10751818916734,
+        "playoffAverage": 188.03703703703704
       },
       {
         "season": 2011,
-        "threePointRate": 0.22280938493013538,
-        "teamWinPct": 0.5
+        "averagePoints": 191.7703081232493,
+        "regularSeasonAverage": 192.30364372469634,
+        "playoffAverage": 185.42168674698794
       },
       {
         "season": 2012,
-        "threePointRate": 0.2258918104170156,
-        "teamWinPct": 0.5
+        "averagePoints": 195.8958174904943,
+        "regularSeasonAverage": 196.2788617886179,
+        "playoffAverage": 190.35294117647058
       },
       {
         "season": 2013,
-        "threePointRate": 0.24447870727673648,
-        "teamWinPct": 0.5
+        "averagePoints": 201.8107494322483,
+        "regularSeasonAverage": 201.99026763990267,
+        "playoffAverage": 199.29545454545453
       },
       {
         "season": 2014,
-        "threePointRate": 0.2608300990434985,
-        "teamWinPct": 0.5
+        "averagePoints": 200.0462249614792,
+        "regularSeasonAverage": 199.97617091207889,
+        "playoffAverage": 201.09876543209876
       },
       {
         "season": 2015,
-        "threePointRate": 0.27066683026100347,
-        "teamWinPct": 0.5
+        "averagePoints": 204.96299151888974,
+        "regularSeasonAverage": 205.3402146985962,
+        "playoffAverage": 199.65116279069767
       },
       {
         "season": 2016,
-        "threePointRate": 0.2874101110897173,
-        "teamWinPct": 0.5
+        "averagePoints": 211.22361219702893,
+        "regularSeasonAverage": 211.16666666666666,
+        "playoffAverage": 212.08860759493672
       },
       {
         "season": 2017,
-        "threePointRate": 0.31700035491346373,
-        "teamWinPct": 0.5
+        "averagePoints": 212.3394495412844,
+        "regularSeasonAverage": 212.57014681892332,
+        "playoffAverage": 208.890243902439
       },
       {
         "season": 2018,
-        "threePointRate": 0.3387295220117306,
-        "teamWinPct": 0.5
+        "averagePoints": 221.91371340523884,
+        "regularSeasonAverage": 222.3527960526316,
+        "playoffAverage": 215.40243902439025
       },
       {
         "season": 2019,
-        "threePointRate": 0.3596249220625211,
-        "teamWinPct": 0.5
+        "averagePoints": 223.40674955595026,
+        "regularSeasonAverage": 223.72456813819576,
+        "playoffAverage": 219.46428571428572
       },
       {
         "season": 2020,
-        "threePointRate": 0.38321679842541945,
-        "teamWinPct": 0.5
+        "averagePoints": 223.91186440677967,
+        "regularSeasonAverage": 224.14600550964187,
+        "playoffAverage": 221.1098901098901
       },
       {
         "season": 2021,
-        "threePointRate": 0.39666395606420524,
-        "teamWinPct": 0.5
+        "averagePoints": 220.37295690936108,
+        "regularSeasonAverage": 220.99920255183414,
+        "playoffAverage": 211.83695652173913
       },
       {
         "season": 2022,
-        "threePointRate": 0.4005838191707651,
-        "teamWinPct": 0.5
+        "averagePoints": 228.75247524752476,
+        "regularSeasonAverage": 229.40683482506103,
+        "playoffAverage": 219.17857142857142
       },
       {
         "season": 2023,
-        "threePointRate": 0.3887606795639792,
-        "teamWinPct": 0.5
+        "averagePoints": 227.21945701357467,
+        "regularSeasonAverage": 228.2733118971061,
+        "playoffAverage": 211.23170731707316
       },
       {
         "season": 2024,
-        "threePointRate": 0.3962754138995226,
-        "teamWinPct": 0.5
-      },
-      {
-        "season": 2025,
-        "threePointRate": 0.4213877597430285,
-        "teamWinPct": 0.5
+        "averagePoints": 227.02092675635276,
+        "regularSeasonAverage": 227.6555023923445,
+        "playoffAverage": 217.54761904761904
       }
-    ]
+    ],
+    "swing": 36.98216712427546
   },
-  "mascotShowdown": {
-    "summary": {
-      "catsWins": 1482,
-      "catsLosses": 1619,
-      "dogsWins": 1619,
-      "dogsLosses": 1482,
-      "totalGames": 3101,
-      "catsWinPct": 0.47791,
-      "dogsWinPct": 0.52209
-    },
-    "seasonTrends": [
-      {
-        "season": 1949,
-        "games": 2,
-        "catWinPct": 0.5,
-        "dogWinPct": 0.5
-      },
-      {
-        "season": 1950,
-        "games": 6,
-        "catWinPct": 0.666667,
-        "dogWinPct": 0.333333
-      },
-      {
-        "season": 1951,
-        "games": 6,
-        "catWinPct": 0.666667,
-        "dogWinPct": 0.333333
-      },
-      {
-        "season": 1952,
-        "games": 6,
-        "catWinPct": 0.333333,
-        "dogWinPct": 0.666667
-      },
-      {
-        "season": 1953,
-        "games": 8,
-        "catWinPct": 0.375,
-        "dogWinPct": 0.625
-      },
-      {
-        "season": 1954,
-        "games": 9,
-        "catWinPct": 0.222222,
-        "dogWinPct": 0.777778
-      },
-      {
-        "season": 1955,
-        "games": 9,
-        "catWinPct": 0.555556,
-        "dogWinPct": 0.444444
-      },
-      {
-        "season": 1956,
-        "games": 9,
-        "catWinPct": 0.444444,
-        "dogWinPct": 0.555556
-      },
-      {
-        "season": 1957,
-        "games": 9,
-        "catWinPct": 0.444444,
-        "dogWinPct": 0.555556
-      },
-      {
-        "season": 1958,
-        "games": 9,
-        "catWinPct": 0.333333,
-        "dogWinPct": 0.666667
-      },
-      {
-        "season": 1959,
-        "games": 9,
-        "catWinPct": 0.222222,
-        "dogWinPct": 0.777778
-      },
-      {
-        "season": 1960,
-        "games": 10,
-        "catWinPct": 0.4,
-        "dogWinPct": 0.6
-      },
-      {
-        "season": 1961,
-        "games": 9,
-        "catWinPct": 0.555556,
-        "dogWinPct": 0.444444
-      },
-      {
-        "season": 1962,
-        "games": 17,
-        "catWinPct": 0.588235,
-        "dogWinPct": 0.411765
-      },
-      {
-        "season": 1963,
-        "games": 17,
-        "catWinPct": 0.705882,
-        "dogWinPct": 0.294118
-      },
-      {
-        "season": 1964,
-        "games": 14,
-        "catWinPct": 0.5,
-        "dogWinPct": 0.5
-      },
-      {
-        "season": 1965,
-        "games": 10,
-        "catWinPct": 0.4,
-        "dogWinPct": 0.6
-      },
-      {
-        "season": 1966,
-        "games": 13,
-        "catWinPct": 0.153846,
-        "dogWinPct": 0.846154
-      },
-      {
-        "season": 1967,
-        "games": 8,
-        "catWinPct": 0.375,
-        "dogWinPct": 0.625
-      },
-      {
-        "season": 1968,
-        "games": 9,
-        "catWinPct": 0.444444,
-        "dogWinPct": 0.555556
-      },
-      {
-        "season": 1969,
-        "games": 9,
-        "catWinPct": 0.222222,
-        "dogWinPct": 0.777778
-      },
-      {
-        "season": 1970,
-        "games": 9,
-        "catWinPct": 0.222222,
-        "dogWinPct": 0.777778
-      },
-      {
-        "season": 1971,
-        "games": 9,
-        "catWinPct": 0.222222,
-        "dogWinPct": 0.777778
-      },
-      {
-        "season": 1972,
-        "games": 10,
-        "catWinPct": 0.5,
-        "dogWinPct": 0.5
-      },
-      {
-        "season": 1973,
-        "games": 9,
-        "catWinPct": 0.444444,
-        "dogWinPct": 0.555556
-      },
-      {
-        "season": 1974,
-        "games": 9,
-        "catWinPct": 0.444444,
-        "dogWinPct": 0.555556
-      },
-      {
-        "season": 1975,
-        "games": 9,
-        "catWinPct": 0.222222,
-        "dogWinPct": 0.777778
-      },
-      {
-        "season": 1976,
-        "games": 3,
-        "catWinPct": 0.333333,
-        "dogWinPct": 0.666667
-      },
-      {
-        "season": 1977,
-        "games": 27,
-        "catWinPct": 0.407407,
-        "dogWinPct": 0.592593
-      },
-      {
-        "season": 1978,
-        "games": 39,
-        "catWinPct": 0.538462,
-        "dogWinPct": 0.461538
-      },
-      {
-        "season": 1979,
-        "games": 38,
-        "catWinPct": 0.5,
-        "dogWinPct": 0.5
-      },
-      {
-        "season": 1980,
-        "games": 41,
-        "catWinPct": 0.439024,
-        "dogWinPct": 0.560976
-      },
-      {
-        "season": 1981,
-        "games": 40,
-        "catWinPct": 0.525,
-        "dogWinPct": 0.475
-      },
-      {
-        "season": 1982,
-        "games": 39,
-        "catWinPct": 0.461538,
-        "dogWinPct": 0.538462
-      },
-      {
-        "season": 1983,
-        "games": 38,
-        "catWinPct": 0.447368,
-        "dogWinPct": 0.552632
-      },
-      {
-        "season": 1984,
-        "games": 38,
-        "catWinPct": 0.5,
-        "dogWinPct": 0.5
-      },
-      {
-        "season": 1985,
-        "games": 46,
-        "catWinPct": 0.5,
-        "dogWinPct": 0.5
-      },
-      {
-        "season": 1986,
-        "games": 47,
-        "catWinPct": 0.510638,
-        "dogWinPct": 0.489362
-      },
-      {
-        "season": 1987,
-        "games": 50,
-        "catWinPct": 0.42,
-        "dogWinPct": 0.58
-      },
-      {
-        "season": 1988,
-        "games": 53,
-        "catWinPct": 0.490566,
-        "dogWinPct": 0.509434
-      },
-      {
-        "season": 1989,
-        "games": 65,
-        "catWinPct": 0.430769,
-        "dogWinPct": 0.569231
-      },
-      {
-        "season": 1990,
-        "games": 74,
-        "catWinPct": 0.5,
-        "dogWinPct": 0.5
-      },
-      {
-        "season": 1991,
-        "games": 74,
-        "catWinPct": 0.5,
-        "dogWinPct": 0.5
-      },
-      {
-        "season": 1992,
-        "games": 75,
-        "catWinPct": 0.52,
-        "dogWinPct": 0.48
-      },
-      {
-        "season": 1993,
-        "games": 75,
-        "catWinPct": 0.466667,
-        "dogWinPct": 0.533333
-      },
-      {
-        "season": 1994,
-        "games": 74,
-        "catWinPct": 0.5,
-        "dogWinPct": 0.5
-      },
-      {
-        "season": 1995,
-        "games": 74,
-        "catWinPct": 0.459459,
-        "dogWinPct": 0.540541
-      },
-      {
-        "season": 1996,
-        "games": 74,
-        "catWinPct": 0.5,
-        "dogWinPct": 0.5
-      },
-      {
-        "season": 1997,
-        "games": 76,
-        "catWinPct": 0.486842,
-        "dogWinPct": 0.513158
-      },
-      {
-        "season": 1998,
-        "games": 65,
-        "catWinPct": 0.523077,
-        "dogWinPct": 0.476923
-      },
-      {
-        "season": 1999,
-        "games": 36,
-        "catWinPct": 0.444444,
-        "dogWinPct": 0.555556
-      },
-      {
-        "season": 2000,
-        "games": 73,
-        "catWinPct": 0.493151,
-        "dogWinPct": 0.506849
-      },
-      {
-        "season": 2001,
-        "games": 75,
-        "catWinPct": 0.493333,
-        "dogWinPct": 0.506667
-      },
-      {
-        "season": 2002,
-        "games": 73,
-        "catWinPct": 0.479452,
-        "dogWinPct": 0.520548
-      },
-      {
-        "season": 2003,
-        "games": 74,
-        "catWinPct": 0.472973,
-        "dogWinPct": 0.527027
-      },
-      {
-        "season": 2004,
-        "games": 74,
-        "catWinPct": 0.432432,
-        "dogWinPct": 0.567568
-      },
-      {
-        "season": 2005,
-        "games": 70,
-        "catWinPct": 0.442857,
-        "dogWinPct": 0.557143
-      },
-      {
-        "season": 2006,
-        "games": 73,
-        "catWinPct": 0.424658,
-        "dogWinPct": 0.575342
-      },
-      {
-        "season": 2007,
-        "games": 74,
-        "catWinPct": 0.418919,
-        "dogWinPct": 0.581081
-      },
-      {
-        "season": 2008,
-        "games": 74,
-        "catWinPct": 0.5,
-        "dogWinPct": 0.5
-      },
-      {
-        "season": 2009,
-        "games": 74,
-        "catWinPct": 0.459459,
-        "dogWinPct": 0.540541
-      },
+  "homeRoadSplits": {
+    "seasons": [
       {
         "season": 2010,
-        "games": 74,
-        "catWinPct": 0.527027,
-        "dogWinPct": 0.472973
+        "homeWinPct": 0.6100151745068285,
+        "roadWinPct": 0.3899848254931715,
+        "gap": 0.22003034901365703
       },
       {
         "season": 2011,
-        "games": 74,
-        "catWinPct": 0.513514,
-        "dogWinPct": 0.486486
+        "homeWinPct": 0.5938375350140056,
+        "roadWinPct": 0.4061624649859944,
+        "gap": 0.1876750700280112
       },
       {
         "season": 2012,
-        "games": 66,
-        "catWinPct": 0.484848,
-        "dogWinPct": 0.515152
+        "homeWinPct": 0.6144486692015209,
+        "roadWinPct": 0.3855513307984791,
+        "gap": 0.22889733840304177
       },
       {
         "season": 2013,
-        "games": 72,
-        "catWinPct": 0.486111,
-        "dogWinPct": 0.513889
+        "homeWinPct": 0.5783497350492052,
+        "roadWinPct": 0.42165026495079483,
+        "gap": 0.15669947009841034
       },
       {
         "season": 2014,
-        "games": 70,
-        "catWinPct": 0.471429,
-        "dogWinPct": 0.528571
+        "homeWinPct": 0.573959938366718,
+        "roadWinPct": 0.42604006163328195,
+        "gap": 0.14791987673343604
       },
       {
         "season": 2015,
-        "games": 69,
-        "catWinPct": 0.565217,
-        "dogWinPct": 0.434783
+        "homeWinPct": 0.5944487278334618,
+        "roadWinPct": 0.4055512721665382,
+        "gap": 0.18889745566692362
       },
       {
         "season": 2016,
-        "games": 65,
-        "catWinPct": 0.369231,
-        "dogWinPct": 0.630769
+        "homeWinPct": 0.581704456606724,
+        "roadWinPct": 0.418295543393276,
+        "gap": 0.16340891321344797
       },
       {
         "season": 2017,
-        "games": 67,
-        "catWinPct": 0.38806,
-        "dogWinPct": 0.61194
+        "homeWinPct": 0.5863914373088684,
+        "roadWinPct": 0.4136085626911315,
+        "gap": 0.17278287461773695
       },
       {
         "season": 2018,
-        "games": 67,
-        "catWinPct": 0.641791,
-        "dogWinPct": 0.358209
+        "homeWinPct": 0.588597842835131,
+        "roadWinPct": 0.41140215716486905,
+        "gap": 0.1771956856702619
       },
       {
         "season": 2019,
-        "games": 43,
-        "catWinPct": 0.488372,
-        "dogWinPct": 0.511628
+        "homeWinPct": 0.5408525754884547,
+        "roadWinPct": 0.4591474245115453,
+        "gap": 0.08170515097690939
       },
       {
         "season": 2020,
-        "games": 56,
-        "catWinPct": 0.625,
-        "dogWinPct": 0.375
+        "homeWinPct": 0.5457627118644067,
+        "roadWinPct": 0.4542372881355932,
+        "gap": 0.0915254237288135
       },
       {
         "season": 2021,
-        "games": 60,
-        "catWinPct": 0.3,
-        "dogWinPct": 0.7
+        "homeWinPct": 0.5460624071322436,
+        "roadWinPct": 0.4539375928677563,
+        "gap": 0.09212481426448732
       },
       {
         "season": 2022,
-        "games": 64,
-        "catWinPct": 0.46875,
-        "dogWinPct": 0.53125
+        "homeWinPct": 0.5811119573495811,
+        "roadWinPct": 0.4188880426504189,
+        "gap": 0.1622239146991622
       },
       {
         "season": 2023,
-        "games": 63,
-        "catWinPct": 0.47619,
-        "dogWinPct": 0.52381
+        "homeWinPct": 0.5475113122171946,
+        "roadWinPct": 0.45248868778280543,
+        "gap": 0.09502262443438919
       },
       {
         "season": 2024,
-        "games": 66,
-        "catWinPct": 0.469697,
-        "dogWinPct": 0.530303
+        "homeWinPct": 0.5426008968609866,
+        "roadWinPct": 0.45739910313901344,
+        "gap": 0.08520179372197312
       }
     ],
-    "catBreakdown": [
-      {
-        "teamId": 1610612743,
-        "team": "Denver Nuggets",
-        "wins": 293,
-        "losses": 322,
-        "winPct": 0.476423
-      },
-      {
-        "teamId": 1610612754,
-        "team": "Indiana Pacers",
-        "wins": 327,
-        "losses": 330,
-        "winPct": 0.497717
-      },
-      {
-        "teamId": 1610612757,
-        "team": "Portland Trail Blazers",
-        "wins": 332,
-        "losses": 287,
-        "winPct": 0.536349
-      },
-      {
-        "teamId": 1610612758,
-        "team": "Sacramento Kings",
-        "wins": 346,
-        "losses": 454,
-        "winPct": 0.4325
-      },
-      {
-        "teamId": 1610612766,
-        "team": "Charlotte Bobcats",
-        "wins": 184,
-        "losses": 226,
-        "winPct": 0.44878
-      }
-    ],
-    "dogBreakdown": [
-      {
-        "teamId": 1610612739,
-        "team": "Cleveland Cavaliers",
-        "wins": 369,
-        "losses": 376,
-        "winPct": 0.495302
-      },
-      {
-        "teamId": 1610612750,
-        "team": "Minnesota Timberwolves",
-        "wins": 253,
-        "losses": 358,
-        "winPct": 0.414075
-      },
-      {
-        "teamId": 1610612755,
-        "team": "Philadelphia 76ers",
-        "wins": 496,
-        "losses": 409,
-        "winPct": 0.548066
-      },
-      {
-        "teamId": 1610612759,
-        "team": "San Antonio Spurs",
-        "wins": 501,
-        "losses": 339,
-        "winPct": 0.596429
-      }
-    ]
+    "latestGap": 0.08520179372197312
   }
 }
