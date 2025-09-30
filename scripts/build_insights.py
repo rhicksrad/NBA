@@ -275,26 +275,6 @@ def _load_championship_overrides() -> dict[str, int]:
     return overrides
 
 
-def _load_goat_index_ranks() -> dict[str, int]:
-    path = PUBLIC_DATA_DIR / "goat_index.json"
-    lookup: dict[str, int] = {}
-    if not path.exists():
-        return lookup
-
-    try:
-        payload = json.loads(path.read_text(encoding="utf-8"))
-    except json.JSONDecodeError:
-        return lookup
-
-    for entry in payload.get("players", []):
-        name = (entry.get("name") or "").strip()
-        rank = entry.get("rank")
-        if not name or not isinstance(rank, int):
-            continue
-        lookup[_normalize_name_key(name)] = rank
-    return lookup
-
-
 def _scale_component(value: float, ceiling: float, weight: float) -> float:
     if ceiling <= 0:
         return 0.0
@@ -1149,7 +1129,6 @@ def build_goat_system_snapshot() -> None:
     player_directory = _load_player_directory()
     franchise_lookup = _load_franchise_lookup()
     championship_overrides = _load_championship_overrides()
-    curated_rank_lookup = _load_goat_index_ranks()
 
     career_totals: dict[str, dict[str, object]] = {}
     earliest_season: int | None = None
@@ -1246,11 +1225,10 @@ def build_goat_system_snapshot() -> None:
                 totals["lastSeason"] = season_year
 
     weights = {
-        "impact": 27.0,
-        "stage": 38.0,
-        "longevity": 12.0,
-        "versatility": 11.0,
-        "culture": 12.0,
+        "impact": 40.0,
+        "stage": 30.0,
+        "longevity": 20.0,
+        "versatility": 10.0,
     }
 
     all_ids = set(player_directory.keys()) | set(career_totals.keys())
@@ -1369,17 +1347,6 @@ def build_goat_system_snapshot() -> None:
         if finals_games and finals_losses == 0 and championships >= 3:
             stage_metric += 160.0
 
-        curated_rank = curated_rank_lookup.get(name_key)
-        if isinstance(curated_rank, int) and curated_rank > 0:
-            curated_rank = max(1, curated_rank)
-            stage_metric += max(0, 6 - curated_rank) * 60.0
-            if curated_rank == 1:
-                stage_metric += 180.0
-            elif curated_rank == 2:
-                stage_metric += 140.0
-            elif curated_rank == 3:
-                stage_metric -= 80.0
-
         longevity_metric = minutes + games * 5.0
 
         positions_count = sum(1 for flag in (meta.get("guard"), meta.get("forward"), meta.get("center")) if flag)
@@ -1395,39 +1362,11 @@ def build_goat_system_snapshot() -> None:
             + per_game_stocks * 14.0
         )
 
-        international_bonus = 0.0
-        country = (meta.get("country") or "").lower()
-        if country and country not in {"usa", "united states", "united states of america"}:
-            international_bonus = 12.0
-
-        draft_number = meta.get("draftNumber")
-        draft_bonus = 0.0
-        if isinstance(draft_number, int) and draft_number > 0:
-            draft_bonus = max(0.0, 30 - draft_number) * 0.5
-
-        culture_metric = (
-            win_pct * 55.0
-            + playoff_win_pct * 35.0
-            + finals_games * 2.5
-            + championships * 28.0
-            + finals_win_rate * 60.0
-            + math.sqrt(max(championships, 0)) * 25.0
-            + missing_championships * 9.0
-            + playoff_wins * 0.13
-        )
-        if isinstance(curated_rank, int) and curated_rank > 0:
-            elite_bonus = 0.0
-            if curated_rank <= 3:
-                elite_bonus = (4 - curated_rank) * 70.0
-            culture_metric += max(0, 15 - curated_rank) * 16.0 + elite_bonus
-        culture_metric += international_bonus + draft_bonus + teams_count * 1.5
-
         raw_metrics[person_id] = {
             "impact": impact_metric,
             "stage": stage_metric,
             "longevity": longevity_metric,
             "versatility": versatility_metric,
-            "culture": culture_metric,
             "games": games,
             "wins": wins,
             "playoffGames": playoff_games,
@@ -1547,33 +1486,27 @@ def build_goat_system_snapshot() -> None:
     weights_payload = [
         {
             "key": "impact",
-            "label": "Prime Impact (RAPM/BPM proxy)",
-            "weight": 0.27,
-            "description": "Blends production, playmaking, and defensive stocks per possession.",
+            "label": "Prime Impact",
+            "weight": 0.4,
+            "description": "Production, playmaking, and defensive stocks per recorded possession.",
         },
         {
             "key": "stage",
             "label": "Stage Dominance",
-            "weight": 0.35,
-            "description": "Championship equity driven by playoff volume, finals control, and closing wins.",
+            "weight": 0.3,
+            "description": "Playoff volume, finals control, and championship closes derived from game logs.",
         },
         {
             "key": "longevity",
             "label": "Longevity & Availability",
-            "weight": 0.16,
-            "description": "Rewards durable minutes and sustained contribution.",
+            "weight": 0.2,
+            "description": "Rewards durable minutes and sustained contributions captured by Ball Don't Lie data.",
         },
         {
             "key": "versatility",
             "label": "Versatility & Scalability",
-            "weight": 0.12,
-            "description": "Highlights positional flexibility and all-around skills.",
-        },
-        {
-            "key": "culture",
-            "label": "Cultural Capital",
             "weight": 0.1,
-            "description": "Accounts for win equity, international impact, and draft pedigree.",
+            "description": "Highlights positional flexibility plus assist, rebound, and stocks rates.",
         },
     ]
 

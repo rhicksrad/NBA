@@ -458,12 +458,6 @@ function renderVisuals(goatEntry, references) {
       percentile: computePercentile(goatEntry.goatComponents?.versatility ?? null, references.versatility),
     },
     {
-      label: 'Culture',
-      value: goatEntry.goatComponents?.culture,
-      display: decimalFormatter.format(goatEntry.goatComponents?.culture ?? 0),
-      percentile: computePercentile(goatEntry.goatComponents?.culture ?? null, references.culture),
-    },
-    {
       label: 'Career win %',
       value: goatEntry.winPct,
       display: goatEntry.winPct != null ? percentFormatter.format(goatEntry.winPct) : '—',
@@ -563,7 +557,6 @@ function buildGoatReferences(goatPlayers) {
     stage: [],
     longevity: [],
     versatility: [],
-    culture: [],
     winPct: [],
     playoffWinPct: [],
     careerLength: [],
@@ -577,7 +570,6 @@ function buildGoatReferences(goatPlayers) {
     if (Number.isFinite(player.goatComponents?.stage)) refs.stage.push(player.goatComponents.stage);
     if (Number.isFinite(player.goatComponents?.longevity)) refs.longevity.push(player.goatComponents.longevity);
     if (Number.isFinite(player.goatComponents?.versatility)) refs.versatility.push(player.goatComponents.versatility);
-    if (Number.isFinite(player.goatComponents?.culture)) refs.culture.push(player.goatComponents.culture);
     if (Number.isFinite(player.winPct)) refs.winPct.push(player.winPct);
     if (Number.isFinite(player.playoffWinPct)) refs.playoffWinPct.push(player.playoffWinPct);
     if (player.careerSpan) {

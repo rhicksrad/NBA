@@ -12,6 +12,12 @@ RECENT_SEASON_YEARS = {
     RECENT_SEASON_START + offset for offset in range(RECENT_SEASON_SPAN)
 }
 RECENT_SEASON_MAX_GAMES = 82 * RECENT_SEASON_SPAN
+RECENT_COMPONENT_WEIGHTS = {
+    "production": 40.0,
+    "impact": 25.0,
+    "efficiency": 20.0,
+    "availability": 15.0,
+}
 
 
 def _parse_float(value: Any) -> float | None:
@@ -155,12 +161,11 @@ def compute_recent_goat_scores(
                 bucket["team_name"] = (row.get("playerteamName") or "").strip() or None
                 bucket["team_city"] = (row.get("playerteamCity") or "").strip() or None
 
-    raw_values: list[float] = []
+    component_maxima = {key: 0.0 for key in RECENT_COMPONENT_WEIGHTS}
     for bucket in aggregates.values():
         minutes = bucket["minutes"]
         if minutes <= 0:
-            bucket["raw"] = 0.0
-            raw_values.append(0.0)
+            bucket["components"] = {key: 0.0 for key in RECENT_COMPONENT_WEIGHTS}
             continue
 
         per36_points = (bucket["points"] / minutes) * 36.0 if minutes else 0.0
@@ -172,45 +177,52 @@ def compute_recent_goat_scores(
         win_pct = (bucket["wins"] / bucket["games"]) if bucket["games"] else 0.0
         plus_minus = (bucket["plus_minus"] / bucket["games"]) if bucket["games"] else 0.0
 
-        impact = max(
+        game_availability = availability
+        minute_availability = min((minutes / (RECENT_SEASON_MAX_GAMES * 36.0)), 1.0)
+        availability_component = (game_availability + minute_availability) / 2.0
+
+        production_component = max(
             per36_points
-            + 1.6 * per36_assists
+            + 1.5 * per36_assists
             + 1.1 * per36_rebounds
             + 3.0 * per36_stocks,
             0.0,
         )
+        impact_component = max(plus_minus, 0.0)
+        efficiency_component = max(win_pct, 0.0)
 
-        raw_score = impact * availability
-        if win_pct > 0:
-            raw_score += win_pct * 18.0
-        if plus_minus > 0:
-            raw_score += plus_minus * 0.4
+        components = {
+            "production": production_component,
+            "impact": impact_component,
+            "efficiency": efficiency_component,
+            "availability": availability_component,
+        }
+        bucket["components"] = components
 
-        bucket["raw"] = max(raw_score, 0.0)
-        raw_values.append(bucket["raw"])
+        for key, value in components.items():
+            if value > component_maxima[key]:
+                component_maxima[key] = value
 
-    if not raw_values:
-        return {person_id: {"score": None, "rank": None} for person_id in normalized_ids}
-
-    min_raw = min(raw_values)
-    max_raw = max(raw_values)
-    span = max_raw - min_raw
+    scores: dict[str, float] = {}
+    for person_id, bucket in aggregates.items():
+        score_total = 0.0
+        for key, weight in RECENT_COMPONENT_WEIGHTS.items():
+            ceiling = component_maxima[key]
+            value = bucket["components"].get(key, 0.0)
+            if ceiling > 0:
+                score_total += (value / ceiling) * weight
+        score = round(score_total, 1)
+        scores[person_id] = score
     rankings: dict[str, int] = {}
     sorted_entries = sorted(
-        aggregates.items(), key=lambda item: item[1]["raw"], reverse=True
+        aggregates.items(), key=lambda item: scores.get(item[0], 0.0), reverse=True
     )
     for index, (person_id, _bucket) in enumerate(sorted_entries):
         rankings[person_id] = index + 1
 
     recent_scores: dict[str, dict[str, Any]] = {}
     for person_id, bucket in aggregates.items():
-        raw = bucket["raw"]
-        if span <= 0:
-            score = 0.0
-        else:
-            normalized = (raw - min_raw) / span
-            clamped = min(max(normalized, 0.0), 1.0)
-            score = round(clamped * 100.0, 1)
+        score = scores.get(person_id, 0.0)
         last_game = bucket.get("last_game")
         recent_scores[person_id] = {
             "score": score,
