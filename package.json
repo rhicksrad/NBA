@@ -21,6 +21,8 @@
     "validate:previews": "tsx scripts/validate/previews_staleness.ts && tsx scripts/validate/links.ts && tsx scripts/validate/rosters_nonempty.ts",
     "previews": "pnpm build:data && pnpm gen:previews && pnpm validate:previews",
     "validate:rosters": "tsx scripts/validate/rosters.ts",
+    "prepare:bdl": "tsx scripts/dev/export_bdl_key.ts",
+    "dev": "pnpm prepare:bdl && pnpm dlx http-server public --port 4173",
     "predeploy": "pnpm fetch:active-rosters && pnpm fetch:injuries",
     "deploy": "echo 'static site build only'",
     "test": "vitest run",

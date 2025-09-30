@@ -4,6 +4,9 @@ node_modules/
 # Secrets injected during CI or local runs
 secrets/
 
+# Local credentials generated for dev runtime
+public/bdl-key.json
+
 # Python artifacts
 __pycache__/
 *.pyc
