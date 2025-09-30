@@ -19,6 +19,18 @@ const heroStats = {
   multiFranchiseCount: 0,
 };
 
+const TIER_PRIORITY = new Map([
+  ['Inner Circle', 0],
+  ['Pantheon', 1],
+  ['All-Time Great', 2],
+  ['Hall of Fame', 3],
+  ['All-Star', 4],
+  ['Starter', 5],
+  ['Reserve', 6],
+  ['Rotation', 7],
+  ['Prospect', 8],
+]);
+
 const gaugeLabelPlugin = {
   id: 'gaugeLabel',
   beforeDraw(chart, _args, opts) {
@@ -83,6 +95,37 @@ function formatDelta(value) {
   return `${sign}${helpers.formatNumber(value, 1)}`;
 }
 
+function tierSortValue(tier) {
+  const normalized = typeof tier === 'string' && tier.trim().length ? tier : 'Uncategorized';
+  const priority = TIER_PRIORITY.get(normalized);
+  return typeof priority === 'number' ? priority : 100;
+}
+
+function groupPlayersByTier(players) {
+  const tierMap = new Map();
+
+  players.forEach((player) => {
+    const tier = typeof player.tier === 'string' && player.tier.trim().length ? player.tier : 'Uncategorized';
+    if (!tierMap.has(tier)) {
+      tierMap.set(tier, []);
+    }
+    tierMap.get(tier).push(player);
+  });
+
+  return Array.from(tierMap.entries())
+    .map(([tier, tierPlayers]) => ({
+      tier,
+      players: tierPlayers.slice().sort((a, b) => (a.rank ?? Infinity) - (b.rank ?? Infinity)),
+    }))
+    .sort((a, b) => {
+      const tierDifference = tierSortValue(a.tier) - tierSortValue(b.tier);
+      if (tierDifference !== 0) {
+        return tierDifference;
+      }
+      return a.tier.localeCompare(b.tier);
+    });
+}
+
 function buildWeightCards(weights) {
   const container = document.querySelector('[data-weight-list]');
   if (!container) return;
@@ -120,79 +163,128 @@ function buildWeightCards(weights) {
   });
 }
 
-function buildLeaderboard(players, weights) {
-  const table = document.querySelector('[data-goat-table] tbody');
-  if (!table) return;
+function buildLeaderboard(players) {
+  const container = document.querySelector('[data-goat-tree]');
+  if (!container) return null;
 
-  table.innerHTML = '';
+  container.innerHTML = '';
 
-  players
-    .slice()
-    .sort((a, b) => a.rank - b.rank)
-    .forEach((player, index) => {
-      const row = document.createElement('tr');
-      row.dataset.player = player.name;
-      row.tabIndex = 0;
-      row.setAttribute('role', 'button');
-      row.setAttribute('aria-pressed', 'false');
+  if (!players.length) {
+    const placeholder = document.createElement('p');
+    placeholder.className = 'goat-tree__placeholder';
+    placeholder.textContent = 'Pantheon order will populate soon.';
+    container.appendChild(placeholder);
+    return null;
+  }
 
-      const rank = document.createElement('td');
-      rank.textContent = player.rank;
-      rank.setAttribute('data-label', 'Rank');
+  const grouped = groupPlayersByTier(players);
+  let initialPlayerName = null;
 
-      const nameCell = document.createElement('td');
+  grouped.forEach((group, index) => {
+    const details = document.createElement('details');
+    details.className = 'goat-tier';
+    details.dataset.tier = group.tier;
+    if (index === 0) {
+      details.open = true;
+    }
+
+    const summary = document.createElement('summary');
+    summary.className = 'goat-tier__summary';
+
+    const label = document.createElement('span');
+    label.className = 'goat-tier__summary-label';
+    label.textContent = group.tier;
+
+    const count = group.players.length;
+    const playerWord = count === 1 ? 'player' : 'players';
+    const numericScores = group.players
+      .map((player) => (Number.isFinite(player.goatScore) ? player.goatScore : null))
+      .filter((value) => value !== null);
+
+    const summaryMeta = document.createElement('span');
+    summaryMeta.className = 'goat-tier__summary-count';
+    if (numericScores.length) {
+      const topScore = Math.max(...numericScores);
+      summaryMeta.textContent = `${count} ${playerWord} · top ${helpers.formatNumber(topScore, 1)}`;
+    } else {
+      summaryMeta.textContent = `${count} ${playerWord}`;
+    }
+
+    summary.append(label, summaryMeta);
+    details.appendChild(summary);
+
+    const list = document.createElement('ul');
+    list.className = 'goat-tier__list';
+    list.setAttribute('role', 'list');
+
+    group.players.forEach((player) => {
+      const item = document.createElement('li');
+      item.className = 'goat-tier__item';
+
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'goat-tier__player';
+      button.setAttribute('data-goat-player', '');
+      button.dataset.player = player.name;
+      button.setAttribute('aria-pressed', 'false');
+      button.title = `View GOAT profile for ${player.name}`;
+
+      const rank = document.createElement('span');
+      rank.className = 'goat-tier__player-rank';
+      rank.textContent = Number.isFinite(player.rank) ? player.rank : '—';
+
+      const nameBlock = document.createElement('div');
+      nameBlock.className = 'goat-tier__player-name';
+
       const name = document.createElement('span');
       name.className = 'goat-player-name';
       name.textContent = player.name;
-      nameCell.appendChild(name);
+      nameBlock.appendChild(name);
 
-      const badges = document.createElement('div');
-      badges.className = 'badge-list badge-list--compact';
+      if (Array.isArray(player.franchises) && player.franchises.length) {
+        const badges = document.createElement('div');
+        badges.className = 'badge-list badge-list--compact';
 
-      if (player.tier) {
-        const tierBadge = document.createElement('span');
-        tierBadge.className = 'badge';
-        tierBadge.textContent = player.tier;
-        badges.appendChild(tierBadge);
-      }
-
-      if (player.franchises?.length) {
         const franchiseBadge = document.createElement('span');
         franchiseBadge.className = 'badge badge--muted';
         franchiseBadge.textContent = player.franchises.join(' • ');
         badges.appendChild(franchiseBadge);
+
+        nameBlock.appendChild(badges);
       }
 
-      if (badges.children.length) {
-        nameCell.appendChild(badges);
+      if (player.status) {
+        const status = document.createElement('span');
+        status.className = 'goat-status goat-status--inline';
+        status.textContent = player.status;
+        nameBlock.appendChild(status);
       }
 
-      const score = document.createElement('td');
-      score.className = 'goat-score';
-      score.textContent = helpers.formatNumber(player.goatScore, 1);
-      score.setAttribute('data-label', 'GOAT score');
+      const score = document.createElement('span');
+      score.className = 'goat-tier__player-score goat-score';
+      score.textContent = Number.isFinite(player.goatScore) ? helpers.formatNumber(player.goatScore, 1) : '—';
 
-      const delta = document.createElement('td');
-      delta.className = 'goat-delta';
+      const delta = document.createElement('span');
+      delta.className = 'goat-tier__player-delta goat-delta';
       delta.textContent = formatDelta(player.delta);
-      delta.setAttribute('data-label', '12 month delta');
       if (typeof player.delta === 'number') {
         delta.dataset.trend = player.delta > 0 ? 'up' : player.delta < 0 ? 'down' : 'flat';
       }
 
-      const status = document.createElement('td');
-      status.className = 'goat-status';
-      status.textContent = player.status ?? '—';
+      button.append(rank, nameBlock, score, delta);
+      item.appendChild(button);
+      list.appendChild(item);
 
-      row.append(rank, nameCell, score, delta, status);
-      table.appendChild(row);
-
-      if (index === 0) {
-        selectPlayer(player, weights);
-        row.setAttribute('aria-pressed', 'true');
-        row.classList.add('is-selected');
+      if (!initialPlayerName) {
+        initialPlayerName = player.name;
       }
     });
+
+    details.appendChild(list);
+    container.appendChild(details);
+  });
+
+  return initialPlayerName;
 }
 
 function renderComponents(player, weights) {
@@ -269,28 +361,45 @@ function selectPlayer(player, weights = []) {
   renderComponents(player, weights);
 }
 
-function wireInteractions(players, weights) {
-  const rows = document.querySelectorAll('[data-goat-table] tbody tr');
-  rows.forEach((row) => {
-    row.addEventListener('click', () => {
-      rows.forEach((peer) => {
-        peer.classList.remove('is-selected');
-        peer.setAttribute('aria-pressed', 'false');
-      });
-      row.classList.add('is-selected');
-      row.setAttribute('aria-pressed', 'true');
-      const player = players.find((item) => item.name === row.dataset.player);
-      if (player) {
-        selectPlayer(player, weights);
-      }
+function wireInteractions(players, weights, initialPlayerName) {
+  const buttons = Array.from(document.querySelectorAll('[data-goat-player]'));
+  if (!buttons.length) {
+    return;
+  }
+
+  const applySelection = (button, player) => {
+    buttons.forEach((peer) => {
+      peer.classList.remove('is-selected');
+      peer.setAttribute('aria-pressed', 'false');
     });
-    row.addEventListener('keydown', (event) => {
-      if (event.key === 'Enter' || event.key === ' ') {
-        event.preventDefault();
-        row.click();
+    button.classList.add('is-selected');
+    button.setAttribute('aria-pressed', 'true');
+    const tierSection = button.closest('details');
+    if (tierSection) {
+      tierSection.open = true;
+    }
+    selectPlayer(player, weights);
+  };
+
+  buttons.forEach((button) => {
+    button.addEventListener('click', () => {
+      const player = players.find((item) => item.name === button.dataset.player);
+      if (player) {
+        applySelection(button, player);
       }
     });
   });
+
+  const defaultButton =
+    (typeof initialPlayerName === 'string'
+      ? buttons.find((button) => button.dataset.player === initialPlayerName)
+      : null) ?? buttons[0];
+  if (defaultButton) {
+    const defaultPlayer = players.find((item) => item.name === defaultButton.dataset.player);
+    if (defaultPlayer) {
+      applySelection(defaultButton, defaultPlayer);
+    }
+  }
 }
 
 function updateHeroMetrics(players) {
@@ -340,8 +449,8 @@ async function init() {
       buildWeightCards(weights);
     }
     if (players.length) {
-      buildLeaderboard(players, weights);
-      wireInteractions(players, weights);
+      const initialPlayerName = buildLeaderboard(players);
+      wireInteractions(players, weights, initialPlayerName);
       updateHeroMetrics(players);
     }
 
