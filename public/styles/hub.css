@@ -5961,6 +5961,18 @@ section h2 { margin-top: 0; font-size: clamp(1.35rem, 3vw, 1.8rem); letter-spaci
   color: rgba(17, 86, 214, 0.85);
 }
 
+.games-toolbar__range {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.games-toolbar__separator {
+  font-size: 0.85rem;
+  color: color-mix(in srgb, var(--text-muted, #6b7a90) 80%, transparent);
+}
+
 .games-toolbar input[type='date'] {
   appearance: none;
   border: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
