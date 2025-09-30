@@ -19,8 +19,6 @@ jobs:
   build-previews:
     runs-on: ubuntu-latest
     environment: previews
-    env:
-      BALLDONTLIE_API_KEY: ${{ secrets.BALLDONTLIE_API_KEY }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -49,32 +47,20 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Ensure Ball Don't Lie key configured
-        run: |
-          if [ -z "${BALLDONTLIE_API_KEY:-}" ]; then
-            echo "BALLDONTLIE_API_KEY secret not configured" >&2
-            exit 1
-          fi
-
       - name: Stamp date
         id: metadata
         run: echo "date=$(date -u +'%Y-%m-%d')" >> "$GITHUB_OUTPUT"
 
       - name: Verify Ball Don't Lie API access
-        env:
-          BALLDONTLIE_API_KEY: ${{ secrets.BALLDONTLIE_API_KEY }}
         run: pnpm verify:bdl
 
       - name: Build and validate previews
         env:
           USE_NBA_STATS: "0"
           USE_BREF: "0"
-          BALLDONTLIE_API_KEY: ${{ secrets.BALLDONTLIE_API_KEY }}
         run: pnpm previews
 
       - name: Validate previews
-        env:
-          BALLDONTLIE_API_KEY: ${{ secrets.BALLDONTLIE_API_KEY }}
         run: pnpm run validate:previews
 
       - name: Detect changes

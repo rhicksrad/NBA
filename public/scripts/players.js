@@ -1,4 +1,4 @@
-import { authHeaders, ensureBdlKeyReady } from '../assets/js/credentials.js';
+import { bdl } from '../assets/js/bdl.js';
 import { registerCharts, helpers } from './hub-charts.js';
 
 const palette = {
@@ -2055,21 +2055,11 @@ function initPlayerAtlas() {
   }
   const defaultStatsError =
     statsError?.textContent?.trim() ? statsError.textContent : "We couldn't load season averages right now.";
-  const disabledStatsMeta = "Season averages unlock once Ball Don't Lie credentials are configured.";
-  const disabledStatsError = "Connect a Ball Don't Lie API key to view season averages here.";
+  const unavailableStatsMeta = 'Season averages are temporarily unavailable.';
+  const unavailableStatsError = 'Season averages are temporarily unavailable — try again soon.';
 
-  const BDL_API_BASE = 'https://api.balldontlie.io/v1';
   const seasonAveragesCache = new Map();
   let statsRequestToken = 0;
-
-  if (typeof document !== 'undefined') {
-    document.addEventListener('bdl:credentials-applied', () => {
-      seasonAveragesCache.clear();
-    });
-    document.addEventListener('bdl:credentials-disabled', () => {
-      seasonAveragesCache.clear();
-    });
-  }
 
   let players = [];
   let allPlayers = [];
@@ -2140,7 +2130,7 @@ function initPlayerAtlas() {
         statsError.textContent = defaultStatsError;
       } else if (status === 'unavailable') {
         statsError.hidden = false;
-        statsError.textContent = disabledStatsError;
+        statsError.textContent = unavailableStatsError;
       } else {
         statsError.hidden = true;
         statsError.textContent = defaultStatsError;
@@ -2185,7 +2175,7 @@ function initPlayerAtlas() {
       } else if (status === 'error') {
         statsMeta.textContent = `We couldn't load season averages right now.`;
       } else if (status === 'unavailable') {
-        statsMeta.textContent = disabledStatsMeta;
+        statsMeta.textContent = unavailableStatsMeta;
       } else {
         statsMeta.textContent = defaultStatsMeta;
       }
@@ -2229,31 +2219,13 @@ function initPlayerAtlas() {
       return;
     }
 
-    try {
-      await ensureBdlKeyReady();
-    } catch (credentialError) {
-      console.warn('Ball Don\'t Lie credentials unavailable for player view', credentialError);
-      const entry = { status: 'unavailable', data: null };
-      seasonAveragesCache.set(cacheKey, entry);
-      if (requestId === statsRequestToken) {
-        updateStatsView('unavailable');
-      }
-      return;
-    }
-
     updateStatsView('loading');
 
     try {
       const params = new URLSearchParams();
       params.set('season', String(LATEST_COMPLETED_SEASON));
       params.append('player_ids[]', cacheKey);
-      const url = `${BDL_API_BASE}/season_averages?${params.toString()}`;
-      const headers = { Accept: 'application/json', ...(await authHeaders()) };
-      const response = await fetch(url, { cache: 'no-store', headers });
-      if (!response?.ok) {
-        throw new Error(`Failed to load season averages: ${response?.status}`);
-      }
-      const payload = await response.json();
+      const payload = await bdl(`/v1/season_averages?${params.toString()}`, { cache: 'no-store' });
       const record = Array.isArray(payload?.data) ? payload.data[0] : null;
       if (!record) {
         const entry = { status: 'empty', data: null };
@@ -2279,14 +2251,6 @@ function initPlayerAtlas() {
       }
     } catch (seasonError) {
       console.warn('Unable to load season averages', seasonError);
-      const message = seasonError?.message || '';
-      if (/API key missing/i.test(message)) {
-        seasonAveragesCache.delete(cacheKey);
-        if (requestId === statsRequestToken) {
-          updateStatsView('unavailable');
-        }
-        return;
-      }
       seasonAveragesCache.set(cacheKey, { status: 'error', data: null });
       if (requestId === statsRequestToken) {
         updateStatsView('error');

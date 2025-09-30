@@ -1,7 +1,7 @@
-import { authHeaders, ensureBdlKeyReady } from '../assets/js/credentials.js';
+import { bdl } from '../assets/js/bdl.js';
 import { registerCharts, destroyCharts, helpers } from './hub-charts.js';
 
-const API_BASE = 'https://api.balldontlie.io/v1';
+const API_PREFIX = '/v1';
 const PAGE_SIZE = 100;
 const REFRESH_INTERVAL_MS = 150000;
 const NEXT_SEASON_TIPOFF_DATE = '2025-10-04';
@@ -243,17 +243,12 @@ function buildSearchParams(params) {
 }
 
 async function request(endpoint, params = {}) {
-  const url = new URL(`${API_BASE}/${endpoint}`);
   const search = buildSearchParams(params);
-  if ([...search.keys()].length) {
-    url.search = search.toString();
-  }
-  const headers = { Accept: 'application/json', ...(await authHeaders()) };
-  const response = await fetch(url.toString(), { headers, cache: 'no-store' });
-  if (!response.ok) {
-    throw new Error(`Request failed with status ${response.status}`);
-  }
-  return response.json();
+  const query = search.toString();
+  const normalizedEndpoint = endpoint.replace(/^\/+/, '');
+  const basePath = `${API_PREFIX}/${normalizedEndpoint}`;
+  const path = query ? `${basePath}?${query}` : basePath;
+  return bdl(path, { cache: 'no-store' });
 }
 
 async function fetchGamesForRange(startDate, endDate) {
@@ -1049,7 +1044,6 @@ async function loadGames(options = {}) {
   }
   setFetchMessage('Refreshing…');
   try {
-    await ensureBdlKeyReady();
     const games = await fetchGamesForRange(activeRange.start, activeRange.end);
     latestGames = games;
     lastUpdated = new Date();
@@ -1061,29 +1055,16 @@ async function loadGames(options = {}) {
   } catch (error) {
     console.error('Unable to load live games data', error);
     const rawMessage = typeof error?.message === 'string' ? error.message : '';
-    const missingKey = rawMessage.includes('API key missing');
     const unauthorized = rawMessage.includes('401');
-    if (missingKey) {
-      setFetchMessage('API key required', 'error');
-      if (!previousGames || !previousGames.length) {
-        renderScoreboardState("Add your Ball Don't Lie API key to enable live games.");
-        updateMetrics([]);
-      } else {
-        latestGames = previousGames;
-        updateMetrics(previousGames);
-        renderScoreboard(previousGames);
-      }
+    const message = unauthorized ? 'Authorization failed' : 'Refresh failed';
+    setFetchMessage(message, 'error');
+    if (previousGames && previousGames.length) {
+      latestGames = previousGames;
+      updateMetrics(previousGames);
+      renderScoreboard(previousGames);
     } else {
-      const message = unauthorized ? 'Authorization failed' : 'Refresh failed';
-      setFetchMessage(message, 'error');
-      if (previousGames && previousGames.length) {
-        latestGames = previousGames;
-        updateMetrics(previousGames);
-        renderScoreboard(previousGames);
-      } else {
-        renderScoreboardState('Unable to load games right now.');
-        updateMetrics([]);
-      }
+      renderScoreboardState('Unable to load games right now.');
+      updateMetrics([]);
     }
   } finally {
     loading = false;

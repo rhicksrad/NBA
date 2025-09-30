@@ -1,6 +1,6 @@
 import { request } from "./http.js";
 
-const API_URL = "https://api.balldontlie.io/v1/player_injuries";
+const API_URL = "https://bdlproxy.hicksrch.workers.dev/bdl/v1/player_injuries";
 const MAX_PER_PAGE = 100;
 
 export interface BdlPlayerSummary {

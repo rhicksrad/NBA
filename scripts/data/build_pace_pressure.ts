@@ -9,7 +9,7 @@ import { request } from "../fetch/http.js";
 import { BDL_TEAM_ID_TO_TRICODE } from "../fetch/bdl_team_mappings.js";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../");
-const API_BASE = "https://api.balldontlie.io/v1";
+const API_BASE = "https://bdlproxy.hicksrch.workers.dev/bdl";
 const TARGET_SEASON = 2024;
 const SAMPLE_START_DATE = "2025-02-01";
 const CACHE_KEY = `pace-pressure-team-games-${TARGET_SEASON}-${SAMPLE_START_DATE ?? "full"}-v1`;
@@ -191,7 +191,7 @@ async function fetchSeasonTeamGames(): Promise<TeamGameAggregate[]> {
       if (cursor !== undefined && cursor !== null) {
         params.set("cursor", String(cursor));
       }
-      const url = `${API_BASE}/stats?${params.toString()}`;
+      const url = `${API_BASE}/v1/stats?${params.toString()}`;
       const payload = statsResponseSchema.parse(await request<unknown>(url));
       const stats = payload.data;
       for (const stat of stats) {
