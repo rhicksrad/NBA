@@ -1,43 +1,529 @@
-import { registerCharts, helpers } from './hub-charts.js';
+import { registerCharts, destroyCharts, helpers } from './hub-charts.js';
 
-const DATA_URL = 'data/games_insights.json';
+const API_BASE = 'https://api.balldontlie.io/v1';
+const PAGE_SIZE = 100;
+const REFRESH_INTERVAL_MS = 150000;
+
+const stageRank = { live: 0, upcoming: 1, final: 2 };
+
+const scoreboardContainer = document.querySelector('[data-scoreboard]');
+const dateInput = document.querySelector('[data-game-date]');
+const refreshButton = document.querySelector('[data-manual-refresh]');
 
 const metricTargets = {
-  trackedGames: document.querySelector('[data-metric="tracked-games"]'),
-  largestSwing: document.querySelector('[data-metric="largest-swing"]'),
-  milesLogged: document.querySelector('[data-metric="miles-logged"]'),
-  crowdSurge: document.querySelector('[data-metric="crowd-surge"]'),
-  headlineSwing: document.querySelector('[data-metric="headline-swing"]'),
+  gamesTotal: document.querySelector('[data-metric="games-total"]'),
+  liveCount: document.querySelector('[data-metric="live-count"]'),
+  finalCount: document.querySelector('[data-metric="final-count"]'),
+  avgMargin: document.querySelector('[data-metric="avg-margin"]'),
+  avgDetail: document.querySelector('[data-metric="avg-detail"]'),
+  topTotal: document.querySelector('[data-metric="top-total"]'),
+  topDetail: document.querySelector('[data-metric="top-detail"]'),
+  scoreboardSummary: document.querySelector('[data-metric="scoreboard-summary"]'),
+  marginAnnotation: document.querySelector('[data-metric="margin-annotation"]'),
+  dateLabel: document.querySelector('[data-selected-date]'),
+  refreshLabel: document.querySelector('[data-refresh]'),
+  fetchState: document.querySelector('[data-fetch-state]'),
 };
 
-let gamesDataset = null;
+let activeDate = getTodayIso();
+let latestGames = [];
+let lastUpdated = null;
+let refreshTimer = null;
+let loading = false;
 
-function setMetric(target, value, fallback = '—') {
-  const el = typeof target === 'string' ? metricTargets[target] : target;
-  if (!el) {
+function getTodayIso() {
+  const now = new Date();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  return `${now.getFullYear()}-${month}-${day}`;
+}
+
+function isValidIsoDate(value) {
+  return typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value);
+}
+
+function formatDateLabel(value) {
+  if (!isValidIsoDate(value)) {
+    return value ?? '—';
+  }
+  const [year, month, day] = value.split('-').map((part) => Number.parseInt(part, 10));
+  const date = new Date(Date.UTC(year, month - 1, day));
+  return date.toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' });
+}
+
+function formatTimeLabel(date) {
+  if (!(date instanceof Date) || Number.isNaN(date.getTime())) {
+    return null;
+  }
+  return date.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' });
+}
+
+function getApiKey() {
+  const meta = document.querySelector('meta[name="bdl-api-key"]');
+  const metaKey = meta?.getAttribute('content')?.trim();
+  if (metaKey) {
+    return metaKey;
+  }
+  if (typeof window !== 'undefined' && window.BDL_API_KEY) {
+    return String(window.BDL_API_KEY);
+  }
+  return null;
+}
+
+function buildSearchParams(params) {
+  const search = new URLSearchParams();
+  Object.entries(params).forEach(([key, value]) => {
+    if (value === undefined || value === null) {
+      return;
+    }
+    if (Array.isArray(value)) {
+      const paramKey = key.endsWith('[]') ? key : `${key}[]`;
+      value.forEach((entry) => {
+        if (entry === undefined || entry === null) {
+          return;
+        }
+        search.append(paramKey, String(entry));
+      });
+    } else {
+      search.set(key, String(value));
+    }
+  });
+  return search;
+}
+
+async function request(endpoint, params = {}) {
+  const url = new URL(`${API_BASE}/${endpoint}`);
+  const search = buildSearchParams(params);
+  if ([...search.keys()].length) {
+    url.search = search.toString();
+  }
+  const headers = { Accept: 'application/json' };
+  const apiKey = getApiKey();
+  if (apiKey) {
+    headers.Authorization = apiKey;
+  }
+  const response = await fetch(url.toString(), { headers });
+  if (!response.ok) {
+    throw new Error(`Request failed with status ${response.status}`);
+  }
+  return response.json();
+}
+
+async function fetchGamesForDate(date) {
+  const games = [];
+  let cursor;
+  do {
+    const payload = await request('games', {
+      dates: [date],
+      per_page: PAGE_SIZE,
+      cursor,
+    });
+    const data = Array.isArray(payload?.data) ? payload.data : [];
+    data.forEach((raw) => {
+      games.push(normalizeGame(raw));
+    });
+    cursor = payload?.meta?.next_cursor ?? null;
+  } while (cursor);
+  return games;
+}
+
+function parseDateTime(value) {
+  if (!value || typeof value !== 'string') {
+    return null;
+  }
+  const normalized = value.includes('T') ? value : value.replace(' ', 'T');
+  const parsed = new Date(normalized);
+  if (Number.isNaN(parsed.getTime())) {
+    return null;
+  }
+  return parsed;
+}
+
+function parseDateOnly(value) {
+  if (!value || typeof value !== 'string') {
+    return null;
+  }
+  const parsed = new Date(`${value}T00:00:00Z`);
+  if (Number.isNaN(parsed.getTime())) {
+    return null;
+  }
+  return parsed;
+}
+
+function computeStage(status, period) {
+  const normalized = (status ?? '').toString().toLowerCase();
+  if (normalized.includes('final')) {
+    return 'final';
+  }
+  if (period === 0) {
+    return 'upcoming';
+  }
+  return 'live';
+}
+
+function normalizeTeam(team, score) {
+  const abbreviation = team?.abbreviation ?? team?.name?.slice(0, 3) ?? '';
+  return {
+    id: team?.id ?? null,
+    name: team?.full_name ?? team?.name ?? 'Team',
+    abbreviation: abbreviation ? abbreviation.toUpperCase() : '',
+    score: Number.isFinite(Number(score)) ? Number(score) : 0,
+  };
+}
+
+function normalizeGame(raw) {
+  const status = typeof raw?.status === 'string' ? raw.status.trim() : '';
+  const period = Number.isFinite(Number(raw?.period)) ? Number(raw.period) : 0;
+  const time = typeof raw?.time === 'string' ? raw.time.trim() : '';
+  const tipoff = parseDateTime(raw?.datetime) ?? parseDateOnly(raw?.date);
+  const home = normalizeTeam(raw?.home_team, raw?.home_team_score);
+  const visitor = normalizeTeam(raw?.visitor_team, raw?.visitor_team_score);
+  const margin = home.score - visitor.score;
+  const totalPoints = home.score + visitor.score;
+
+  return {
+    id: raw?.id,
+    isoDate: typeof raw?.date === 'string' ? raw.date : activeDate,
+    status,
+    period,
+    time,
+    stage: computeStage(status, period),
+    postseason: Boolean(raw?.postseason),
+    tipoff,
+    home,
+    visitor,
+    margin,
+    totalPoints,
+  };
+}
+
+function formatPeriodLabel(game) {
+  if (game.stage === 'final') {
+    return 'Final';
+  }
+  const period = Number.isFinite(game?.period) ? Number(game.period) : 0;
+  if (period <= 0) {
+    return '';
+  }
+  if (period === 1) return '1st Qtr';
+  if (period === 2) return '2nd Qtr';
+  if (period === 3) return '3rd Qtr';
+  if (period === 4) return '4th Qtr';
+  const overtimeIndex = period - 4;
+  return overtimeIndex === 1 ? 'OT' : `${overtimeIndex}OT`;
+}
+
+function formatGameStatus(game) {
+  if (game.stage === 'upcoming') {
+    return game.status || formatTimeLabel(game.tipoff) || 'Scheduled';
+  }
+  if (game.stage === 'live') {
+    const periodLabel = formatPeriodLabel(game) || 'Live';
+    const clock = game.time ? game.time.replace(/\s+/g, '') : '';
+    return clock ? `${periodLabel} • ${clock}` : periodLabel;
+  }
+  return 'Final';
+}
+
+function formatMarginString(game) {
+  if (!Number.isFinite(game?.margin)) {
+    return null;
+  }
+  if (game.margin === 0) {
+    return 'Level game';
+  }
+  const leader = game.margin > 0 ? game.home : game.visitor;
+  const prefix = game.margin > 0 ? '+' : '−';
+  return `${leader.abbreviation || leader.name}: ${prefix}${helpers.formatNumber(Math.abs(game.margin), 0)} pts`;
+}
+
+function formatTotalString(game) {
+  if (!Number.isFinite(game?.totalPoints) || game.totalPoints <= 0) {
+    return null;
+  }
+  return `${helpers.formatNumber(game.totalPoints, 0)} pts total`;
+}
+
+function formatGameMeta(game) {
+  if (game.stage === 'upcoming') {
+    const tip = formatTimeLabel(game.tipoff);
+    return tip ? `Local tip ${tip}` : '';
+  }
+  const total = formatTotalString(game);
+  if (game.postseason) {
+    return total ? `${total} • Postseason` : 'Postseason';
+  }
+  return total ?? '';
+}
+
+function formatPeriodDetail(game) {
+  if (game.stage === 'final') {
+    if (game.period > 4) {
+      const overtime = game.period - 4;
+      return overtime === 1 ? 'Finished in OT' : `Finished in ${overtime}OT`;
+    }
+    return 'Finished in regulation';
+  }
+  const periodLabel = formatPeriodLabel(game);
+  return periodLabel ? `Period: ${periodLabel}` : null;
+}
+
+function formatSignedMargin(value) {
+  if (!Number.isFinite(value)) {
+    return null;
+  }
+  const magnitude = helpers.formatNumber(Math.abs(value), 0);
+  if (value > 0) return `+${magnitude}`;
+  if (value < 0) return `−${magnitude}`;
+  return '0';
+}
+
+function clearScoreboard() {
+  if (scoreboardContainer) {
+    scoreboardContainer.innerHTML = '';
+  }
+}
+
+function renderScoreboardState(message) {
+  if (!scoreboardContainer) {
+    return;
+  }
+  clearScoreboard();
+  const state = document.createElement('p');
+  state.className = 'scoreboard-state';
+  state.textContent = message;
+  scoreboardContainer.appendChild(state);
+}
+
+function createTeamRow(team, game, role) {
+  const row = document.createElement('div');
+  row.className = 'scoreboard-card__row';
+
+  const teamWrapper = document.createElement('div');
+  teamWrapper.className = 'scoreboard-card__team';
+
+  const tricode = document.createElement('span');
+  tricode.className = 'scoreboard-card__tricode';
+  tricode.textContent = team.abbreviation || team.name.slice(0, 3).toUpperCase();
+
+  const name = document.createElement('span');
+  name.className = 'scoreboard-card__name';
+  name.textContent = team.name;
+
+  teamWrapper.append(tricode, name);
+
+  const score = document.createElement('span');
+  score.className = 'scoreboard-card__score';
+  const scoreValue = Number.isFinite(team.score) ? team.score : 0;
+  score.textContent = helpers.formatNumber(scoreValue, 0);
+  if (formatSignedMargin(game.margin) !== null) {
+    const isLeader = (game.margin > 0 && role === 'home') || (game.margin < 0 && role === 'visitor');
+    if (isLeader && game.margin !== 0) {
+      score.classList.add('scoreboard-card__score--lead');
+    }
+  }
+
+  row.append(teamWrapper, score);
+  return row;
+}
+
+function createScoreboardCard(game) {
+  const card = document.createElement('article');
+  card.className = `scoreboard-card scoreboard-card--${game.stage}`;
+  card.setAttribute('data-game-id', String(game.id ?? ''));
+
+  const header = document.createElement('header');
+  header.className = 'scoreboard-card__header';
+
+  const statusSpan = document.createElement('span');
+  statusSpan.className = 'scoreboard-card__status';
+  statusSpan.textContent = formatGameStatus(game);
+  header.appendChild(statusSpan);
+
+  const metaText = formatGameMeta(game);
+  if (metaText) {
+    const metaSpan = document.createElement('span');
+    metaSpan.className = 'scoreboard-card__meta';
+    metaSpan.textContent = metaText;
+    header.appendChild(metaSpan);
+  }
+
+  const rows = document.createElement('div');
+  rows.className = 'scoreboard-card__rows';
+  rows.appendChild(createTeamRow(game.visitor, game, 'visitor'));
+  rows.appendChild(createTeamRow(game.home, game, 'home'));
+
+  const footer = document.createElement('div');
+  footer.className = 'scoreboard-card__footer';
+  const margin = game.stage === 'upcoming' ? null : formatMarginString(game);
+  if (margin) {
+    const marginSpan = document.createElement('span');
+    marginSpan.textContent = margin;
+    footer.appendChild(marginSpan);
+  }
+  const periodDetail = formatPeriodDetail(game);
+  if (periodDetail) {
+    const periodSpan = document.createElement('span');
+    periodSpan.textContent = periodDetail;
+    footer.appendChild(periodSpan);
+  }
+  const total = formatTotalString(game);
+  if (total) {
+    const totalSpan = document.createElement('span');
+    totalSpan.textContent = total;
+    footer.appendChild(totalSpan);
+  }
+  if (game.postseason) {
+    const postseasonSpan = document.createElement('span');
+    postseasonSpan.textContent = 'Postseason matchup';
+    footer.appendChild(postseasonSpan);
+  }
+
+  card.append(header, rows);
+  if (footer.childNodes.length) {
+    card.appendChild(footer);
+  }
+  return card;
+}
+
+function renderScoreboard(games) {
+  if (!scoreboardContainer) {
+    return;
+  }
+  clearScoreboard();
+  if (!games.length) {
+    renderScoreboardState(`No games found for ${formatDateLabel(activeDate)}.`);
+    return;
+  }
+  const sorted = [...games].sort((a, b) => {
+    const stageDelta = (stageRank[a.stage] ?? 3) - (stageRank[b.stage] ?? 3);
+    if (stageDelta !== 0) {
+      return stageDelta;
+    }
+    const timeA = a.tipoff instanceof Date ? a.tipoff.getTime() : 0;
+    const timeB = b.tipoff instanceof Date ? b.tipoff.getTime() : 0;
+    if (timeA !== timeB) {
+      return timeA - timeB;
+    }
+    return (a.id ?? 0) - (b.id ?? 0);
+  });
+  sorted.forEach((game) => {
+    scoreboardContainer.appendChild(createScoreboardCard(game));
+  });
+}
+
+function setMetric(key, value, fallback = '—') {
+  const target = metricTargets[key];
+  if (!target) {
     return;
   }
   const output = value === null || value === undefined || value === '' ? fallback : value;
-  el.textContent = output;
+  target.textContent = output;
 }
 
-function formatSigned(value, digits = 1) {
-  if (typeof value !== 'number' || Number.isNaN(value)) {
-    return null;
+function updateMetrics(games) {
+  const totalGames = games.length;
+  setMetric('gamesTotal', totalGames ? helpers.formatNumber(totalGames, 0) : '0');
+  setMetric('dateLabel', formatDateLabel(activeDate));
+
+  const liveCount = games.filter((game) => game.stage === 'live').length;
+  setMetric('liveCount', helpers.formatNumber(liveCount, 0));
+
+  const finals = games.filter((game) => game.stage === 'final');
+  setMetric('finalCount', helpers.formatNumber(finals.length, 0));
+
+  if (finals.length) {
+    const avgMargin =
+      finals.reduce((total, game) => total + Math.abs(Number.isFinite(game.margin) ? game.margin : 0), 0) / finals.length;
+    setMetric('avgMargin', `${helpers.formatNumber(avgMargin, 1)} pts`);
+    setMetric('avgDetail', finals.length === 1 ? 'Across 1 final' : `Across ${finals.length} finals`);
+  } else {
+    setMetric('avgMargin', '—');
+    setMetric('avgDetail', games.length ? 'Awaiting finals' : 'Awaiting results');
   }
-  const magnitude = helpers.formatNumber(Math.abs(value), digits);
-  const prefix = value > 0 ? '+' : value < 0 ? '−' : '';
-  return `${prefix}${magnitude}`;
-}
 
-function formatPercent(value, digits = 0) {
-  if (typeof value !== 'number' || Number.isNaN(value)) {
-    return null;
+  const scoringTeams = [];
+  games.forEach((game) => {
+    if (game.home.score > 0) {
+      scoringTeams.push({
+        label: game.home.abbreviation || game.home.name,
+        points: game.home.score,
+        opponent: game.visitor,
+        opponentPoints: game.visitor.score,
+        location: 'home',
+      });
+    }
+    if (game.visitor.score > 0) {
+      scoringTeams.push({
+        label: game.visitor.abbreviation || game.visitor.name,
+        points: game.visitor.score,
+        opponent: game.home,
+        opponentPoints: game.home.score,
+        location: 'away',
+      });
+    }
+  });
+  const topTeam = scoringTeams.sort((a, b) => b.points - a.points)[0];
+  if (topTeam) {
+    setMetric('topTotal', `${helpers.formatNumber(topTeam.points, 0)} pts`);
+    const opponentLabel = topTeam.opponent.abbreviation || topTeam.opponent.name;
+    const opponentPoints = helpers.formatNumber(topTeam.opponentPoints ?? 0, 0);
+    const matchupPrefix = topTeam.location === 'away' ? '@' : 'vs';
+    setMetric('topDetail', `${matchupPrefix} ${opponentLabel} · ${helpers.formatNumber(topTeam.points, 0)}-${opponentPoints}`);
+  } else {
+    setMetric('topTotal', '—');
+    setMetric('topDetail', games.length ? 'Scores building' : 'No scores yet');
   }
-  return `${helpers.formatNumber(value * 100, digits)}%`;
+
+  if (totalGames) {
+    const summaryParts = [];
+    summaryParts.push(`${helpers.formatNumber(liveCount, 0)} live`);
+    summaryParts.push(`${helpers.formatNumber(finals.length, 0)} final${finals.length === 1 ? '' : 's'}`);
+    setMetric('scoreboardSummary', summaryParts.join(' · '));
+  } else {
+    setMetric('scoreboardSummary', 'No games');
+  }
+
+  if (finals.length) {
+    const closest = finals.reduce((min, game) => {
+      const distance = Math.abs(Number.isFinite(game.margin) ? game.margin : Number.POSITIVE_INFINITY);
+      return Math.min(min, distance);
+    }, Number.POSITIVE_INFINITY);
+    if (Number.isFinite(closest) && closest !== Number.POSITIVE_INFINITY) {
+      setMetric('marginAnnotation', `Closest final: ${helpers.formatNumber(closest, 0)} pts`);
+    } else {
+      setMetric('marginAnnotation', 'Final margins logged');
+    }
+  } else if (liveCount) {
+    setMetric('marginAnnotation', 'Live margins updating');
+  } else {
+    setMetric('marginAnnotation', 'No finals yet');
+  }
 }
 
-function fallbackConfig(message) {
+function setRefreshTimestamp(date) {
+  if (!metricTargets.refreshLabel) {
+    return;
+  }
+  const label = date instanceof Date && !Number.isNaN(date.getTime()) ? formatTimeLabel(date) : null;
+  metricTargets.refreshLabel.textContent = label ?? '—';
+}
+
+function setFetchMessage(message = '', type = 'idle') {
+  const target = metricTargets.fetchState;
+  if (!target) {
+    return;
+  }
+  target.textContent = message;
+  target.classList.remove('is-error', 'is-success');
+  if (type === 'error') {
+    target.classList.add('is-error');
+  } else if (type === 'success') {
+    target.classList.add('is-success');
+  }
+}
+
+function fallbackChart(message) {
   return {
     type: 'doughnut',
     data: {
@@ -61,994 +547,409 @@ function fallbackConfig(message) {
   };
 }
 
-function updateHero(data) {
-  const teams = Array.isArray(data?.momentumAtlas?.teams) ? data.momentumAtlas.teams.filter(Boolean) : [];
-  const segments = Array.isArray(data?.travelTax?.segments) ? data.travelTax.segments.filter(Boolean) : [];
-  const arenas = Array.isArray(data?.crowdPulse?.arenas) ? data.crowdPulse.arenas.filter(Boolean) : [];
-
-  const tracked = data?.sampleSize;
-  if (!Number.isFinite(tracked)) {
-    const derived = teams.reduce((total, entry) => total + (Number(entry.gamesTracked) || 0), 0);
-    setMetric('trackedGames', derived ? `${helpers.formatNumber(derived, 0)} games` : 'Mapping');
-  } else {
-    setMetric('trackedGames', `${helpers.formatNumber(tracked, 0)} games`);
-  }
-
-  if (teams.length) {
-    const swingLeader = teams
-      .map((team) => ({
-        team: team.team || team.abbreviation || 'Team',
-        swing: (Number(team.secondHalfMargin) || 0) - (Number(team.firstHalfMargin) || 0),
-      }))
-      .reduce((prev, curr) => {
-        if (!prev || Math.abs(curr.swing) > Math.abs(prev.swing)) {
-          return curr;
-        }
-        return prev;
-      }, null);
-    if (swingLeader) {
-      const formattedSwing = formatSigned(swingLeader.swing, 1);
-      setMetric('largestSwing', formattedSwing ? `${swingLeader.team} ${formattedSwing}` : 'Calibrating');
-      setMetric('headlineSwing', formattedSwing ? `${formattedSwing} swing` : 'Calibrating');
+function buildStatusChart(games) {
+  const counts = { upcoming: 0, live: 0, final: 0 };
+  games.forEach((game) => {
+    if (counts[game.stage] !== undefined) {
+      counts[game.stage] += 1;
     }
-  } else {
-    setMetric('largestSwing', 'Calibrating');
-    setMetric('headlineSwing', 'Calibrating');
-  }
-
-  if (segments.length) {
-    const miles = segments.reduce((total, segment) => total + (Number(segment.miles) || 0), 0);
-    setMetric('milesLogged', miles ? `${helpers.formatNumber(miles, 0)} miles` : 'Measuring');
-  } else {
-    setMetric('milesLogged', 'Measuring');
-  }
-
-  if (arenas.length) {
-    const loudest = arenas.reduce((prev, curr) => {
-      if (!prev || (Number(curr.decibelSurge) || 0) > (Number(prev.decibelSurge) || 0)) {
-        return curr;
-      }
-      return prev;
-    }, null);
-    if (loudest) {
-      const loudValue = Number(loudest.decibelSurge) || 0;
-      setMetric('crowdSurge', `${helpers.formatNumber(loudValue, 1)} dB — ${loudest.arena}`);
-    }
-  } else {
-    setMetric('crowdSurge', 'Listening');
-  }
-}
-
-function buildMomentumChart(dataRef) {
-  const teams = Array.isArray(dataRef?.momentumAtlas?.teams) ? dataRef.momentumAtlas.teams.filter(Boolean) : [];
-  if (!teams.length) {
-    return fallbackConfig('Momentum data loading');
-  }
-
-  const sorted = [...teams].sort((a, b) => {
-    const swingA = (Number(a.secondHalfMargin) || 0) - (Number(a.firstHalfMargin) || 0);
-    const swingB = (Number(b.secondHalfMargin) || 0) - (Number(b.firstHalfMargin) || 0);
-    return Math.abs(swingB) - Math.abs(swingA);
   });
-
-  const labels = sorted.map((team) => team.team || team.abbreviation || 'Team');
-  const firstHalf = sorted.map((team) => Number(team.firstHalfMargin) || 0);
-  const secondHalf = sorted.map((team) => Number(team.secondHalfMargin) || 0);
-  const largestRuns = sorted.map((team) => Number(team.largestRun) || 0);
-
-  return {
-    type: 'line',
-    data: {
-      labels,
-      datasets: [
-        {
-          label: 'First-half margin',
-          data: firstHalf,
-          borderColor: '#9aa5c4',
-          backgroundColor: 'rgba(154, 165, 196, 0.25)',
-          pointBackgroundColor: '#ffffff',
-          pointBorderColor: '#9aa5c4',
-          tension: 0.35,
-          fill: false,
-        },
-        {
-          label: 'Second-half margin',
-          data: secondHalf,
-          borderColor: '#1156d6',
-          backgroundColor: 'rgba(17, 86, 214, 0.32)',
-          pointBackgroundColor: '#ffffff',
-          pointBorderColor: '#1156d6',
-          pointHoverRadius: 6,
-          tension: 0.35,
-          fill: true,
-        },
-      ],
-    },
-    options: {
-      maintainAspectRatio: false,
-      interaction: { mode: 'index', intersect: false },
-      scales: {
-        y: {
-          title: { display: true, text: 'Average scoring margin' },
-          grid: { color: 'rgba(17, 86, 214, 0.12)' },
-        },
-        x: {
-          grid: { display: false },
-        },
-      },
-      plugins: {
-        legend: { position: 'bottom' },
-        tooltip: {
-          callbacks: {
-            afterBody(contexts) {
-              const context = contexts?.[0];
-              if (!context) return '';
-              const run = largestRuns[context.dataIndex];
-              return run ? `Largest unanswered run: ${helpers.formatNumber(run, 0)} points` : '';
-            },
-          },
-        },
-      },
-    },
-  };
-}
-
-function buildTravelChart(dataRef) {
-  const segments = Array.isArray(dataRef?.travelTax?.segments) ? dataRef.travelTax.segments.filter(Boolean) : [];
-  if (!segments.length) {
-    return fallbackConfig('Travel telemetry loading');
+  const total = counts.upcoming + counts.live + counts.final;
+  if (!total) {
+    return fallbackChart('No games scheduled');
   }
-
-  const dataPoints = segments.map((segment) => ({
-    x: Number(segment.miles) || 0,
-    y: Number(segment.netRating) || 0,
-    r: Math.max(8, Math.min(20, (Number(segment.games) || 1) * 4)),
-    label: segment.label || 'Road segment',
-    games: Number(segment.games) || 0,
-    days: Number(segment.days) || 0,
-  }));
-
-  return {
-    type: 'bubble',
-    data: {
-      datasets: [
-        {
-          label: 'Road gauntlets',
-          data: dataPoints,
-          backgroundColor: 'rgba(239, 61, 91, 0.4)',
-          borderColor: '#ef3d5b',
-          borderWidth: 1.5,
-        },
-      ],
-    },
-    options: {
-      maintainAspectRatio: false,
-      scales: {
-        x: {
-          title: { display: true, text: 'Miles traveled' },
-          ticks: { callback: (value) => helpers.formatNumber(value, 0) },
-          grid: { color: 'rgba(17, 86, 214, 0.08)' },
-        },
-        y: {
-          title: { display: true, text: 'Net rating swing' },
-          grid: { color: 'rgba(17, 86, 214, 0.12)' },
-        },
-      },
-      plugins: {
-        tooltip: {
-          callbacks: {
-            label(context) {
-              const point = context.raw;
-              const swing = formatSigned(point.y, 1) ?? point.y;
-              const games = point.games ? `${point.games} games` : '—';
-              const rest = point.days ? `${point.days} days` : '—';
-              return `${point.label}: ${swing} net swing over ${games} / ${rest}`;
-            },
-          },
-        },
-        legend: { display: false },
-      },
-    },
-  };
-}
-
-function buildCrowdChart(dataRef) {
-  const arenas = Array.isArray(dataRef?.crowdPulse?.arenas) ? dataRef.crowdPulse.arenas.filter(Boolean) : [];
-  if (!arenas.length) {
-    return fallbackConfig('Crowd telemetry syncing');
-  }
-
-  const sorted = [...arenas].sort((a, b) => (Number(b.decibelSurge) || 0) - (Number(a.decibelSurge) || 0));
-  const labels = sorted.map((arena) => arena.arena || 'Arena');
-  const decibels = sorted.map((arena) => Number(arena.decibelSurge) || 0);
-  const comebackRate = sorted.map((arena) => (Number(arena.comebackRate) || 0) * 100);
-  const winPct = sorted.map((arena) => Number(arena.homeWinPct) || 0);
-
-  return {
-    data: {
-      labels,
-      datasets: [
-        {
-          type: 'bar',
-          label: 'Decibel surge (dB)',
-          data: decibels,
-          backgroundColor: 'rgba(17, 86, 214, 0.75)',
-          borderRadius: 10,
-          maxBarThickness: 48,
-        },
-        {
-          type: 'line',
-          label: 'Comeback close rate',
-          data: comebackRate,
-          yAxisID: 'y1',
-          borderColor: '#ef3d5b',
-          backgroundColor: 'rgba(239, 61, 91, 0.15)',
-          pointBackgroundColor: '#ffffff',
-          pointBorderColor: '#ef3d5b',
-          pointBorderWidth: 1.5,
-          tension: 0.35,
-          fill: true,
-        },
-      ],
-    },
-    options: {
-      type: 'bar',
-      maintainAspectRatio: false,
-      scales: {
-        x: {
-          grid: { display: false },
-        },
-        y: {
-          position: 'left',
-          title: { display: true, text: 'Decibel surge' },
-          beginAtZero: true,
-          suggestedMax: Math.max(...decibels, 8) + 1,
-          grid: { color: 'rgba(17, 86, 214, 0.1)' },
-        },
-        y1: {
-          position: 'right',
-          title: { display: true, text: 'Comeback close rate' },
-          min: 0,
-          max: 100,
-          ticks: {
-            callback: (value) => `${value}%`,
-          },
-          grid: { display: false },
-        },
-      },
-      plugins: {
-        legend: { position: 'bottom' },
-        tooltip: {
-          callbacks: {
-            label(context) {
-              if (context.dataset.type === 'line') {
-                const value = context.parsed.y;
-                const win = winPct[context.dataIndex] ?? 0;
-                return `Comeback closes: ${helpers.formatNumber(value, 1)}% (home win ${formatPercent(win, 0)})`;
-              }
-              return `Decibel surge: ${helpers.formatNumber(context.parsed.y, 1)} dB`;
-            },
-          },
-        },
-      },
-    },
-  };
-}
-
-function buildClutchChart(dataRef) {
-  const teams = Array.isArray(dataRef?.clutchVolatility?.teams)
-    ? dataRef.clutchVolatility.teams.filter(Boolean)
-    : [];
-  if (!teams.length) {
-    return fallbackConfig('Clutch telemetry syncing');
-  }
-
-  const sorted = [...teams].sort((a, b) => (Number(b.clutchMargin) || 0) - (Number(a.clutchMargin) || 0));
-  const labels = sorted.map((team) => team.team || team.abbreviation || 'Team');
-  const margins = sorted.map((team) => Number(team.clutchMargin) || 0);
-  const winRates = sorted.map((team) => (Number(team.clutchWinPct) || 0) * 100);
-  const possessions = sorted.map((team) => Number(team.possessions) || 0);
-  const overtimeMarks = sorted.map((team) => team.overtimeRecord || '—');
-
-  return {
-    type: 'bar',
-    data: {
-      labels,
-      datasets: [
-        {
-          label: 'Clutch margin',
-          data: margins,
-          backgroundColor: 'rgba(239, 61, 91, 0.68)',
-          borderRadius: 12,
-          maxBarThickness: 46,
-        },
-        {
-          type: 'line',
-          label: 'Clutch win rate',
-          data: winRates,
-          yAxisID: 'y1',
-          borderColor: '#1156d6',
-          backgroundColor: 'rgba(17, 86, 214, 0.2)',
-          pointBackgroundColor: '#ffffff',
-          pointBorderColor: '#1156d6',
-          pointBorderWidth: 1.5,
-          tension: 0.28,
-          fill: true,
-        },
-      ],
-    },
-    options: {
-      maintainAspectRatio: false,
-      scales: {
-        x: { grid: { display: false } },
-        y: {
-          title: { display: true, text: 'Average clutch margin' },
-          grid: { color: 'rgba(11, 37, 69, 0.08)' },
-        },
-        y1: {
-          position: 'right',
-          title: { display: true, text: 'Win rate' },
-          min: 0,
-          max: 100,
-          ticks: { callback: (value) => `${value}%` },
-          grid: { display: false },
-        },
-      },
-      plugins: {
-        legend: { position: 'bottom' },
-        tooltip: {
-          callbacks: {
-            label(context) {
-              const index = context.dataIndex ?? 0;
-              if (context.dataset.type === 'line') {
-                const rate = Number(winRates[index]) / 100;
-                const possessionText = possessions[index]
-                  ? `${helpers.formatNumber(possessions[index], 0)} clutch possessions`
-                  : 'possession sample unavailable';
-                const overtimeText = overtimeMarks[index];
-                return `Win rate: ${formatPercent(rate, 1)} · ${possessionText} · OT ${overtimeText}`;
-              }
-              const signedMargin = formatSigned(margins[index], 1);
-              return `Margin: ${signedMargin ?? helpers.formatNumber(margins[index], 1)} pts`;
-            },
-          },
-        },
-      },
-    },
-  };
-}
-
-function buildPaceChaosChart(dataRef) {
-  const clusters = Array.isArray(dataRef?.paceChaos?.clusters) ? dataRef.paceChaos.clusters.filter(Boolean) : [];
-  if (!clusters.length) {
-    return fallbackConfig('Chaos map warming up');
-  }
-
-  const points = clusters.map((cluster) => ({
-    x: Number(cluster.pace) || 0,
-    y: Number(cluster.leadChanges) || 0,
-    r: Math.max(8, (Number(cluster.runIndex) || 0) * 2.2),
-    label: cluster.label || 'Game archetype',
-    runIndex: Number(cluster.runIndex) || 0,
-  }));
-
-  return {
-    type: 'bubble',
-    data: {
-      datasets: [
-        {
-          label: 'Game archetypes',
-          data: points,
-          parsing: false,
-          backgroundColor: 'rgba(17, 181, 198, 0.45)',
-          borderColor: '#11b5c6',
-          borderWidth: 1.5,
-          hoverBorderWidth: 2,
-        },
-      ],
-    },
-    options: {
-      maintainAspectRatio: false,
-      scales: {
-        x: {
-          title: { display: true, text: 'Pace (possessions per 48)' },
-          grid: { color: 'rgba(11, 37, 69, 0.08)' },
-        },
-        y: {
-          title: { display: true, text: 'Lead changes' },
-          grid: { color: 'rgba(11, 37, 69, 0.12)' },
-        },
-      },
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          callbacks: {
-            label(context) {
-              const point = context.raw || {};
-              const pace = helpers.formatNumber(point.x, 1);
-              const leads = helpers.formatNumber(point.y, 0);
-              const runs = helpers.formatNumber(point.runIndex, 0);
-              return `${point.label}: ${pace} pace · ${leads} lead changes · run index ${runs}`;
-            },
-          },
-        },
-      },
-    },
-  };
-}
-
-function buildLeadDensityChart(dataRef) {
-  const distribution = Array.isArray(dataRef?.leadDensity?.distribution)
-    ? dataRef.leadDensity.distribution.filter(Boolean)
-    : [];
-  if (!distribution.length) {
-    return fallbackConfig('Lead density compiling');
-  }
-
-  const labels = distribution.map((bucket) => bucket.interval || 'Range');
-  const totals = distribution.map((bucket) => Number(bucket.games) || 0);
-  const margins = distribution.map((bucket) => Number(bucket.averageMargin) || 0);
-
-  return {
-    type: 'bar',
-    data: {
-      labels,
-      datasets: [
-        {
-          label: 'Games',
-          data: totals,
-          backgroundColor: 'rgba(17, 86, 214, 0.72)',
-          borderRadius: 10,
-        },
-        {
-          type: 'line',
-          label: 'Average margin',
-          data: margins,
-          yAxisID: 'y1',
-          borderColor: '#ef3d5b',
-          backgroundColor: 'rgba(239, 61, 91, 0.18)',
-          pointBackgroundColor: '#ffffff',
-          pointBorderColor: '#ef3d5b',
-          tension: 0.3,
-          fill: true,
-        },
-      ],
-    },
-    options: {
-      maintainAspectRatio: false,
-      scales: {
-        x: { grid: { display: false } },
-        y: {
-          title: { display: true, text: 'Games' },
-          grid: { color: 'rgba(11, 37, 69, 0.08)' },
-          ticks: { callback: (value) => helpers.formatNumber(value, 0) },
-        },
-        y1: {
-          position: 'right',
-          title: { display: true, text: 'Average scoring margin' },
-          grid: { display: false },
-        },
-      },
-      plugins: {
-        legend: { position: 'bottom' },
-        tooltip: {
-          callbacks: {
-            label(context) {
-              if (context.dataset.type === 'line') {
-                return `Average margin: ${helpers.formatNumber(context.parsed.y, 1)} pts`;
-              }
-              return `Games: ${helpers.formatNumber(context.parsed.y, 0)}`;
-            },
-          },
-        },
-      },
-    },
-  };
-}
-
-function buildRestChart(dataRef) {
-  const scenarios = Array.isArray(dataRef?.restOutcomes?.scenarios)
-    ? dataRef.restOutcomes.scenarios.filter(Boolean)
-    : [];
-  if (!scenarios.length) {
-    return fallbackConfig('Rest delta syncing');
-  }
-
-  const labels = scenarios.map((scenario) => scenario.label || 'Scenario');
-  const winRates = scenarios.map((scenario) => (Number(scenario.winPct) || 0) * 100);
-  const margins = scenarios.map((scenario) => Number(scenario.pointMargin) || 0);
-  const samples = scenarios.map((scenario) => Number(scenario.games) || 0);
-
-  return {
-    type: 'bar',
-    data: {
-      labels,
-      datasets: [
-        {
-          label: 'Win rate',
-          data: winRates,
-          backgroundColor: 'rgba(31, 123, 255, 0.65)',
-          borderRadius: 10,
-        },
-        {
-          type: 'line',
-          label: 'Average margin',
-          data: margins,
-          yAxisID: 'y1',
-          borderColor: '#f4b53f',
-          backgroundColor: 'rgba(244, 181, 63, 0.2)',
-          pointBackgroundColor: '#ffffff',
-          pointBorderColor: '#f4b53f',
-          tension: 0.28,
-          fill: true,
-        },
-      ],
-    },
-    options: {
-      maintainAspectRatio: false,
-      scales: {
-        x: { grid: { display: false } },
-        y: {
-          title: { display: true, text: 'Win rate' },
-          min: 0,
-          max: 100,
-          ticks: { callback: (value) => `${value}%` },
-          grid: { color: 'rgba(11, 37, 69, 0.08)' },
-        },
-        y1: {
-          position: 'right',
-          title: { display: true, text: 'Average scoring margin' },
-          grid: { display: false },
-        },
-      },
-      plugins: {
-        legend: { position: 'bottom' },
-        tooltip: {
-          callbacks: {
-            label(context) {
-              const index = context.dataIndex ?? 0;
-              if (context.dataset.type === 'line') {
-                return `Average margin: ${helpers.formatNumber(context.parsed.y, 1)} pts`;
-              }
-              const rate = Number(winRates[index]) / 100;
-              const sample = samples[index] ? `${helpers.formatNumber(samples[index], 0)} games` : 'sample pending';
-              return `Win rate: ${formatPercent(rate, 1)} · ${sample}`;
-            },
-          },
-        },
-      },
-    },
-  };
-}
-
-function buildOvertimeChart(dataRef) {
-  const segments = Array.isArray(dataRef?.overtimeHeartbeat?.segments)
-    ? dataRef.overtimeHeartbeat.segments.filter(Boolean)
-    : [];
-  if (!segments.length) {
-    return fallbackConfig('Overtime pulse scanning');
-  }
-
-  const labels = segments.map((segment) => segment.label || 'OT');
-  const totals = segments.map((segment) => Number(segment.games) || 0);
-  const winRates = segments.map((segment) => Number(segment.winPct) || 0);
-  const totalGames = totals.reduce((sum, value) => sum + value, 0) || 1;
-
   return {
     type: 'doughnut',
     data: {
-      labels,
+      labels: ['Upcoming', 'Live', 'Final'],
       datasets: [
         {
-          data: totals,
-          backgroundColor: ['#1156d6', '#6c4fe0', '#ef3d5b', '#0b2545'],
-          borderColor: '#ffffff',
-          borderWidth: 2,
-          hoverOffset: 10,
+          data: [counts.upcoming, counts.live, counts.final],
+          backgroundColor: ['rgba(17, 86, 214, 0.78)', 'rgba(239, 61, 91, 0.82)', 'rgba(11, 37, 69, 0.85)'],
+          borderWidth: 0,
         },
       ],
     },
     options: {
       maintainAspectRatio: false,
-      cutout: '58%',
       plugins: {
         legend: { position: 'bottom' },
-        tooltip: {
-          callbacks: {
-            label(context) {
-              const index = context.dataIndex ?? 0;
-              const sliceGames = totals[index];
-              const share = sliceGames / totalGames;
-              const rate = winRates[index];
-              const summary = `${context.label}: ${helpers.formatNumber(sliceGames, 0)} games`;
-              const shareText = `${formatPercent(share, 1)} share`;
-              const winText = `win ${formatPercent(rate, 1)}`;
-              return `${summary} · ${shareText} · ${winText}`;
-            },
-          },
+      },
+    },
+  };
+}
+
+function buildTipoffChart(games) {
+  const buckets = new Map();
+  games.forEach((game) => {
+    if (!(game.tipoff instanceof Date) || Number.isNaN(game.tipoff.getTime())) {
+      return;
+    }
+    const hour = game.tipoff.getHours();
+    const label = game.tipoff.toLocaleTimeString(undefined, { hour: 'numeric' });
+    const key = `${hour}-${label}`;
+    const entry = buckets.get(key) ?? { hour, label, count: 0 };
+    entry.count += 1;
+    buckets.set(key, entry);
+  });
+  const slots = Array.from(buckets.values()).sort((a, b) => a.hour - b.hour);
+  if (!slots.length) {
+    return fallbackChart('Tipoff data pending');
+  }
+  return {
+    type: 'line',
+    data: {
+      labels: slots.map((slot) => slot.label),
+      datasets: [
+        {
+          label: 'Games',
+          data: slots.map((slot) => slot.count),
+          borderColor: '#1156d6',
+          backgroundColor: 'rgba(17, 86, 214, 0.22)',
+          tension: 0.35,
+          fill: true,
+          pointBackgroundColor: '#ffffff',
+          pointBorderColor: '#1156d6',
+          pointHoverRadius: 6,
+        },
+      ],
+    },
+    options: {
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      interaction: { mode: 'nearest', intersect: false },
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: { precision: 0 },
+          title: { display: true, text: 'Games' },
+          grid: { color: 'rgba(17, 86, 214, 0.12)' },
+        },
+        x: {
+          grid: { display: false },
         },
       },
     },
   };
 }
 
-function buildShotProfileChart(dataRef) {
-  const states = Array.isArray(dataRef?.shotProfileTides?.states)
-    ? dataRef.shotProfileTides.states.filter(Boolean)
-    : [];
-  if (!states.length) {
-    return fallbackConfig('Shot mix indexing');
+function buildMarginChart(games) {
+  const relevant = games.filter((game) => game.stage !== 'upcoming');
+  const buckets = [
+    { label: '0-5', min: 0, max: 5 },
+    { label: '6-10', min: 5, max: 10 },
+    { label: '11-15', min: 10, max: 15 },
+    { label: '16-20', min: 15, max: 20 },
+    { label: '21+', min: 20, max: Number.POSITIVE_INFINITY },
+  ];
+  const counts = buckets.map(() => 0);
+  relevant.forEach((game) => {
+    const margin = Math.abs(Number.isFinite(game.margin) ? game.margin : 0);
+    const index = buckets.findIndex((bucket, bucketIndex) => {
+      if (bucketIndex === buckets.length - 1) {
+        return margin >= bucket.min;
+      }
+      return margin >= bucket.min && margin < bucket.max;
+    });
+    if (index >= 0) {
+      counts[index] += 1;
+    }
+  });
+  if (!counts.some((count) => count > 0)) {
+    return fallbackChart('Margins not available yet');
   }
-
-  const labels = states.map((state) => state.state || 'State');
-  const rim = states.map((state) => (Number(state.rim) || 0) * 100);
-  const mid = states.map((state) => (Number(state.mid) || 0) * 100);
-  const three = states.map((state) => (Number(state.three) || 0) * 100);
-
   return {
     type: 'bar',
     data: {
-      labels,
+      labels: buckets.map((bucket) => bucket.label),
       datasets: [
         {
-          label: 'At rim',
-          data: rim,
-          backgroundColor: 'rgba(17, 181, 198, 0.85)',
-          stack: 'shots',
+          label: 'Games',
+          data: counts,
+          backgroundColor: 'rgba(17, 86, 214, 0.78)',
+          borderRadius: 12,
         },
-        {
-          label: 'Mid-range',
-          data: mid,
-          backgroundColor: 'rgba(244, 181, 63, 0.85)',
-          stack: 'shots',
+      ],
+    },
+    options: {
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: { precision: 0 },
+          title: { display: true, text: 'Game count' },
+          grid: { color: 'rgba(17, 86, 214, 0.12)' },
         },
+        x: {
+          grid: { display: false },
+        },
+      },
+    },
+  };
+}
+
+function buildScoringChart(games) {
+  const teams = [];
+  games.forEach((game) => {
+    if (game.home.score > 0) {
+      teams.push({
+        label: game.home.abbreviation || game.home.name,
+        name: game.home.name,
+        points: game.home.score,
+        opponent: game.visitor,
+      });
+    }
+    if (game.visitor.score > 0) {
+      teams.push({
+        label: game.visitor.abbreviation || game.visitor.name,
+        name: game.visitor.name,
+        points: game.visitor.score,
+        opponent: game.home,
+      });
+    }
+  });
+  const top = teams.sort((a, b) => b.points - a.points).slice(0, 6);
+  if (!top.length) {
+    return fallbackChart('Scoring data building');
+  }
+  const colors = ['#1156d6', '#ef3d5b', '#1f7bff', '#f4b53f', '#6c4fe0', '#11b5c6'];
+  return {
+    type: 'bar',
+    data: {
+      labels: top.map((team) => team.label),
+      datasets: [
         {
-          label: 'Three-point',
-          data: three,
-          backgroundColor: 'rgba(17, 86, 214, 0.8)',
-          stack: 'shots',
+          label: 'Points',
+          data: top.map((team) => team.points),
+          backgroundColor: top.map((_, index) => colors[index % colors.length]),
         },
       ],
     },
     options: {
       indexAxis: 'y',
       maintainAspectRatio: false,
-      scales: {
-        x: {
-          stacked: true,
-          max: 100,
-          ticks: { callback: (value) => `${value}%` },
-          grid: { color: 'rgba(11, 37, 69, 0.08)' },
-        },
-        y: { stacked: true, grid: { display: false } },
-      },
-      plugins: {
-        legend: { position: 'bottom' },
-        tooltip: {
-          callbacks: {
-            label(context) {
-              const value = Number(context.parsed.x ?? context.parsed.y) || 0;
-              return `${context.dataset.label}: ${helpers.formatNumber(value, 1)}%`;
-            },
-          },
-        },
-      },
-    },
-  };
-}
-
-function buildWhistleChart(dataRef) {
-  const quarters = Array.isArray(dataRef?.whistleCadence?.quarters)
-    ? dataRef.whistleCadence.quarters.filter(Boolean)
-    : [];
-  if (!quarters.length) {
-    return fallbackConfig('Whistle cadence syncing');
-  }
-
-  const labels = quarters.map((frame) => frame.quarter || 'Frame');
-  const fouls = quarters.map((frame) => Number(frame.fouls) || 0);
-  const freeThrows = quarters.map((frame) => Number(frame.freeThrows) || 0);
-
-  return {
-    type: 'bar',
-    data: {
-      labels,
-      datasets: [
-        {
-          label: 'Team fouls',
-          data: fouls,
-          backgroundColor: 'rgba(239, 61, 91, 0.72)',
-          borderRadius: 8,
-        },
-        {
-          type: 'line',
-          label: 'Free throws attempted',
-          data: freeThrows,
-          yAxisID: 'y1',
-          borderColor: '#6c4fe0',
-          backgroundColor: 'rgba(108, 79, 224, 0.2)',
-          pointBackgroundColor: '#ffffff',
-          pointBorderColor: '#6c4fe0',
-          tension: 0.28,
-          fill: true,
-        },
-      ],
-    },
-    options: {
-      maintainAspectRatio: false,
-      scales: {
-        x: { grid: { display: false } },
-        y: {
-          title: { display: true, text: 'Average fouls' },
-          beginAtZero: true,
-          grid: { color: 'rgba(11, 37, 69, 0.08)' },
-        },
-        y1: {
-          position: 'right',
-          title: { display: true, text: 'Free throws' },
-          beginAtZero: true,
-          grid: { display: false },
-        },
-      },
-      plugins: {
-        legend: { position: 'bottom' },
-        tooltip: {
-          callbacks: {
-            label(context) {
-              if (context.dataset.type === 'line') {
-                return `Free throws: ${helpers.formatNumber(context.parsed.y, 1)} attempts`;
-              }
-              return `Fouls: ${helpers.formatNumber(context.parsed.y, 1)}`;
-            },
-          },
-        },
-      },
-    },
-  };
-}
-
-function buildBroadcastChart(dataRef) {
-  const windows = Array.isArray(dataRef?.broadcastEnergy?.windows)
-    ? dataRef.broadcastEnergy.windows.filter(Boolean)
-    : [];
-  if (!windows.length) {
-    return fallbackConfig('Broadcast telemetry syncing');
-  }
-
-  const labels = windows.map((window) => window.window || 'Window');
-  const viewers = windows.map((window) => Number(window.viewers) || 0);
-  const runRates = windows.map((window) => Number(window.runRate) || 0);
-
-  return {
-    type: 'bar',
-    data: {
-      labels,
-      datasets: [
-        {
-          label: 'Average viewers (millions)',
-          data: viewers,
-          backgroundColor: 'rgba(17, 86, 214, 0.75)',
-          borderRadius: 9,
-        },
-        {
-          type: 'line',
-          label: 'Sustained run frequency',
-          data: runRates,
-          yAxisID: 'y1',
-          borderColor: '#ef3d5b',
-          backgroundColor: 'rgba(239, 61, 91, 0.2)',
-          pointBackgroundColor: '#ffffff',
-          pointBorderColor: '#ef3d5b',
-          tension: 0.32,
-          fill: true,
-        },
-      ],
-    },
-    options: {
-      maintainAspectRatio: false,
-      scales: {
-        x: { grid: { display: false } },
-        y: {
-          title: { display: true, text: 'Viewers (millions)' },
-          beginAtZero: true,
-          grid: { color: 'rgba(11, 37, 69, 0.08)' },
-        },
-        y1: {
-          position: 'right',
-          title: { display: true, text: 'Average scoring runs (8+ points)' },
-          beginAtZero: true,
-          grid: { display: false },
-        },
-      },
-      plugins: {
-        legend: { position: 'bottom' },
-        tooltip: {
-          callbacks: {
-            label(context) {
-              if (context.dataset.type === 'line') {
-                return `Run bursts: ${helpers.formatNumber(context.parsed.y, 1)} per game`;
-              }
-              return `Viewers: ${helpers.formatNumber(context.parsed.y, 1)}M`;
-            },
-          },
-        },
-      },
-    },
-  };
-}
-
-function buildAltitudeChart(dataRef) {
-  const arenas = Array.isArray(dataRef?.altitudeAcclimation?.arenas)
-    ? dataRef.altitudeAcclimation.arenas.filter(Boolean)
-    : [];
-  if (!arenas.length) {
-    return fallbackConfig('Altitude telemetry warming up');
-  }
-
-  const points = arenas.map((arena) => ({
-    x: Number(arena.elevation) || 0,
-    y: Number(arena.netSwing) || 0,
-    r: Math.max(8, (Number(arena.recoveryHours) || 0) / 2),
-    arena: arena.arena || 'Arena',
-    team: arena.team || null,
-    recoveryHours: Number(arena.recoveryHours) || 0,
-  }));
-
-  return {
-    type: 'bubble',
-    data: {
-      datasets: [
-        {
-          label: 'Elevation advantage',
-          data: points,
-          parsing: false,
-          backgroundColor: 'rgba(11, 37, 69, 0.72)',
-          borderColor: '#0b2545',
-          borderWidth: 1.5,
-          hoverBorderWidth: 2,
-        },
-      ],
-    },
-    options: {
-      maintainAspectRatio: false,
-      scales: {
-        x: {
-          title: { display: true, text: 'Arena elevation (feet)' },
-          grid: { color: 'rgba(11, 37, 69, 0.08)' },
-        },
-        y: {
-          title: { display: true, text: 'Net rating swing' },
-          grid: { color: 'rgba(11, 37, 69, 0.12)' },
-        },
-      },
       plugins: {
         legend: { display: false },
         tooltip: {
           callbacks: {
             label(context) {
-              const point = context.raw || {};
-              const swingText = formatSigned(point.y, 1) ?? helpers.formatNumber(point.y, 1);
-              const recovery = point.recoveryHours
-                ? `${helpers.formatNumber(point.recoveryHours, 0)} hours prep`
-                : 'recovery data unavailable';
-              const arenaName = point.arena || 'Arena';
-              const teamSuffix = point.team ? ` (${point.team})` : '';
-              const elevation = helpers.formatNumber(point.x, 0);
-              return `${arenaName}${teamSuffix}: ${elevation} ft · ${swingText} net swing · ${recovery}`;
+              const team = top[context.dataIndex];
+              const opponent = team.opponent.abbreviation || team.opponent.name;
+              return `${context.formattedValue} vs ${opponent}`;
             },
           },
+        },
+      },
+      scales: {
+        x: {
+          beginAtZero: true,
+          title: { display: true, text: 'Points' },
+          grid: { color: 'rgba(17, 86, 214, 0.12)' },
+        },
+        y: {
+          grid: { display: false },
         },
       },
     },
   };
 }
 
-async function loadData() {
-  const response = await fetch(DATA_URL);
-  if (!response.ok) {
-    throw new Error(`Failed to load games dataset: ${response.status}`);
+function buildBalanceChart(games) {
+  const relevant = games.filter((game) => game.home.score > 0 || game.visitor.score > 0);
+  if (!relevant.length) {
+    return fallbackChart('Score data pending');
   }
-  return response.json();
+  const stageColors = {
+    live: 'rgba(239, 61, 91, 0.85)',
+    final: 'rgba(17, 86, 214, 0.85)',
+    upcoming: 'rgba(154, 165, 196, 0.7)',
+  };
+  const points = relevant.map((game) => ({
+    x: Math.max(game.visitor.score, 0),
+    y: Math.max(game.home.score, 0),
+    label: `${game.visitor.abbreviation || game.visitor.name} @ ${game.home.abbreviation || game.home.name}`,
+    stage: game.stage,
+    margin: game.margin,
+    total: game.totalPoints,
+  }));
+  const colors = points.map((point) => stageColors[point.stage] ?? 'rgba(17, 86, 214, 0.6)');
+  return {
+    type: 'scatter',
+    data: {
+      datasets: [
+        {
+          label: 'Score pairs',
+          data: points,
+          parsing: false,
+          pointBackgroundColor: colors,
+          pointBorderColor: colors,
+          pointRadius: 6,
+          pointHoverRadius: 7,
+        },
+      ],
+    },
+    options: {
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label(context) {
+              const raw = context.raw || {};
+              const details = [];
+              if (raw.label) {
+                details.push(raw.label);
+              }
+              if (raw.stage) {
+                details.push(raw.stage.charAt(0).toUpperCase() + raw.stage.slice(1));
+              }
+              const margin = formatSignedMargin(raw.margin);
+              if (margin) {
+                details.push(`Margin ${margin}`);
+              }
+              if (Number.isFinite(raw.total) && raw.total > 0) {
+                details.push(`Total ${helpers.formatNumber(raw.total, 0)}`);
+              }
+              return details;
+            },
+          },
+        },
+      },
+      scales: {
+        x: {
+          beginAtZero: true,
+          title: { display: true, text: 'Visitor points' },
+          grid: { color: 'rgba(17, 86, 214, 0.08)' },
+        },
+        y: {
+          beginAtZero: true,
+          title: { display: true, text: 'Home points' },
+          grid: { color: 'rgba(17, 86, 214, 0.12)' },
+        },
+      },
+    },
+  };
 }
 
-async function init() {
-  try {
-    gamesDataset = await loadData();
-    updateHero(gamesDataset);
-  } catch (error) {
-    console.error('Unable to load games dataset', error);
-    setMetric('trackedGames', 'Mapping');
-    setMetric('largestSwing', 'Calibrating');
-    setMetric('milesLogged', 'Measuring');
-    setMetric('crowdSurge', 'Listening');
-  }
-
+function rebuildCharts() {
+  destroyCharts();
   registerCharts([
     {
-      element: '#momentum-slope',
+      element: '#status-breakdown',
       async createConfig() {
-        if (!gamesDataset) return fallbackConfig('Momentum data unavailable');
-        return buildMomentumChart(gamesDataset);
+        return buildStatusChart(latestGames);
       },
     },
     {
-      element: '#travel-tax',
+      element: '#tipoff-curve',
       async createConfig() {
-        if (!gamesDataset) return fallbackConfig('Travel telemetry unavailable');
-        return buildTravelChart(gamesDataset);
+        return buildTipoffChart(latestGames);
       },
     },
     {
-      element: '#crowd-pulse',
+      element: '#margin-spread',
       async createConfig() {
-        if (!gamesDataset) return fallbackConfig('Crowd telemetry unavailable');
-        return buildCrowdChart(gamesDataset);
+        return buildMarginChart(latestGames);
       },
     },
     {
-      element: '#clutch-volatility',
+      element: '#scoring-leaders',
       async createConfig() {
-        if (!gamesDataset) return fallbackConfig('Clutch telemetry unavailable');
-        return buildClutchChart(gamesDataset);
+        return buildScoringChart(latestGames);
       },
     },
     {
-      element: '#pace-chaos',
+      element: '#score-balance',
       async createConfig() {
-        if (!gamesDataset) return fallbackConfig('Chaos map unavailable');
-        return buildPaceChaosChart(gamesDataset);
-      },
-    },
-    {
-      element: '#lead-density',
-      async createConfig() {
-        if (!gamesDataset) return fallbackConfig('Lead density unavailable');
-        return buildLeadDensityChart(gamesDataset);
-      },
-    },
-    {
-      element: '#rest-outcomes',
-      async createConfig() {
-        if (!gamesDataset) return fallbackConfig('Rest telemetry unavailable');
-        return buildRestChart(gamesDataset);
-      },
-    },
-    {
-      element: '#overtime-heartbeat',
-      async createConfig() {
-        if (!gamesDataset) return fallbackConfig('Overtime telemetry unavailable');
-        return buildOvertimeChart(gamesDataset);
-      },
-    },
-    {
-      element: '#shot-profile',
-      async createConfig() {
-        if (!gamesDataset) return fallbackConfig('Shot mix unavailable');
-        return buildShotProfileChart(gamesDataset);
-      },
-    },
-    {
-      element: '#whistle-cadence',
-      async createConfig() {
-        if (!gamesDataset) return fallbackConfig('Whistle telemetry unavailable');
-        return buildWhistleChart(gamesDataset);
-      },
-    },
-    {
-      element: '#broadcast-energy',
-      async createConfig() {
-        if (!gamesDataset) return fallbackConfig('Broadcast telemetry unavailable');
-        return buildBroadcastChart(gamesDataset);
-      },
-    },
-    {
-      element: '#altitude-acclimation',
-      async createConfig() {
-        if (!gamesDataset) return fallbackConfig('Altitude telemetry unavailable');
-        return buildAltitudeChart(gamesDataset);
+        return buildBalanceChart(latestGames);
       },
     },
   ]);
+}
+
+function scheduleAutoRefresh() {
+  if (refreshTimer) {
+    window.clearInterval(refreshTimer);
+    refreshTimer = null;
+  }
+  if (activeDate === getTodayIso()) {
+    refreshTimer = window.setInterval(() => {
+      loadGames({ silent: true });
+    }, REFRESH_INTERVAL_MS);
+  }
+}
+
+async function loadGames(options = {}) {
+  if (loading) {
+    return;
+  }
+  loading = true;
+  const { silent = false } = options;
+  const previousGames = latestGames;
+  if (refreshButton) {
+    refreshButton.disabled = true;
+  }
+  if (!silent && (!previousGames || !previousGames.length)) {
+    renderScoreboardState('Loading games…');
+  }
+  setFetchMessage('Refreshing…');
+  try {
+    const games = await fetchGamesForDate(activeDate);
+    latestGames = games;
+    lastUpdated = new Date();
+    updateMetrics(games);
+    renderScoreboard(games);
+    setRefreshTimestamp(lastUpdated);
+    setFetchMessage(`Updated ${formatTimeLabel(lastUpdated)}`, 'success');
+    rebuildCharts();
+  } catch (error) {
+    console.error('Unable to load Ball Don't Lie games', error);
+    const message = error?.message?.includes('401') ? 'Authorization failed' : 'Refresh failed';
+    setFetchMessage(message, 'error');
+    if (previousGames && previousGames.length) {
+      latestGames = previousGames;
+      updateMetrics(previousGames);
+      renderScoreboard(previousGames);
+    } else {
+      renderScoreboardState('Unable to load games right now.');
+      updateMetrics([]);
+    }
+  } finally {
+    loading = false;
+    if (refreshButton) {
+      refreshButton.disabled = false;
+    }
+  }
+}
+
+function initControls() {
+  if (dateInput) {
+    dateInput.value = activeDate;
+    dateInput.addEventListener('change', (event) => {
+      const nextValue = event.target.value;
+      if (isValidIsoDate(nextValue)) {
+        activeDate = nextValue;
+        setMetric('dateLabel', formatDateLabel(activeDate));
+        scheduleAutoRefresh();
+        loadGames();
+      }
+    });
+  }
+  if (refreshButton) {
+    refreshButton.addEventListener('click', () => {
+      loadGames();
+    });
+  }
+}
+
+function init() {
+  setMetric('dateLabel', formatDateLabel(activeDate));
+  updateMetrics([]);
+  renderScoreboardState('Loading games…');
+  initControls();
+  loadGames();
+  scheduleAutoRefresh();
 }
 
 init();

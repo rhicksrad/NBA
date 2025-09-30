@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="bdl-api-key" content="" />
     <link rel="icon" type="image/png" href="nba-logo-vector-01.png" />
     <link rel="stylesheet" href="styles/hub.css" />
     <title>Games Observatory | NBA Intelligence Hub</title>
@@ -27,218 +28,160 @@
             <a href="about.html">About</a>
           </nav>
         </div>
-        <div class="hero">
-          <span class="eyebrow">Games Observatory</span>
+        <div class="hero hero--lab">
+          <div class="hero__intro">
+            <span class="eyebrow">Games Observatory</span>
+            <h1>Ball Don't Lie scoreboard lab</h1>
+            <p class="hero__lead">
+              Tracking the 2025-26 buildup through the Ball Don't Lie games API while keeping the 2024-25 finish as our reference
+              point.
+            </p>
+            <div class="games-toolbar">
+              <label for="game-date">Game date</label>
+              <input id="game-date" type="date" name="game-date" data-game-date />
+              <button type="button" class="games-toolbar__refresh" data-manual-refresh>
+                Refresh now
+              </button>
+            </div>
+          </div>
+          <dl class="hero-metrics hero-metrics--lab">
+            <div class="hero-metrics__item">
+              <dt>Games tracked</dt>
+              <dd>
+                <span data-metric="games-total">—</span>
+                <small>for <span data-selected-date>—</span></small>
+              </dd>
+            </div>
+            <div class="hero-metrics__item">
+              <dt>Live right now</dt>
+              <dd>
+                <span data-metric="live-count">—</span>
+                <small>auto-pinging every 2½ minutes</small>
+              </dd>
+            </div>
+            <div class="hero-metrics__item">
+              <dt>Finals logged</dt>
+              <dd>
+                <span data-metric="final-count">—</span>
+                <small>completed on the slate</small>
+              </dd>
+            </div>
+            <div class="hero-metrics__item">
+              <dt>Average final margin</dt>
+              <dd>
+                <span data-metric="avg-margin">—</span>
+                <small data-metric="avg-detail">Awaiting results</small>
+              </dd>
+            </div>
+            <div class="hero-metrics__item">
+              <dt>Highest scoring output</dt>
+              <dd>
+                <span data-metric="top-total">—</span>
+                <small data-metric="top-detail">No scores yet</small>
+              </dd>
+            </div>
+          </dl>
         </div>
       </header>
 
       <main class="lab-content">
         <section class="lab-grid">
-          <article class="lab-module lab-module--wide" data-chart-wrapper>
+          <article class="lab-module lab-module--wide scoreboard-module">
             <header class="lab-module__header">
-              <h2>Momentum rewrites after halftime</h2>
+              <h2>Scoreboard pulse</h2>
               <div class="lab-module__meta">
-                <span class="lab-chip">First-half vs. second-half margins</span>
-                <span class="lab-chip lab-chip--accent" data-metric="headline-swing">—</span>
+                <span class="lab-chip">Powered by Ball Don't Lie</span>
+                <span class="lab-chip lab-chip--accent" data-metric="scoreboard-summary">—</span>
               </div>
             </header>
-            <div class="viz-canvas">
-              <canvas id="momentum-slope" data-chart-ratio="0.55" aria-describedby="momentum-caption"></canvas>
-            </div>
-            <p id="momentum-caption" class="lab-module__caption">
-              Dual lines trace how contenders flip the scoreboard after the break while tooltips
-              surface each club's signature scoring avalanche.
+            <div class="scoreboard-grid" data-scoreboard aria-live="polite"></div>
+            <p class="lab-module__caption">
+              Data syncs directly from the Ball Don't Lie games endpoint. Auto-refreshes every 2½ minutes when today's slate is
+              active.
+              <span class="games-caption-meta">Last update: <span data-refresh>—</span></span>
+              <span class="games-caption-meta" data-fetch-state></span>
             </p>
           </article>
 
           <article class="lab-module" data-chart-wrapper>
             <header class="lab-module__header">
-              <h2>Itinerary tax on net rating</h2>
+              <h2>Status mix</h2>
               <div class="lab-module__meta">
-                <span class="lab-chip">Segment miles vs. efficiency</span>
-                <span class="lab-chip">Bubble size encodes games</span>
+                <span class="lab-chip">Upcoming vs. live vs. finals</span>
               </div>
             </header>
             <div class="viz-canvas">
-              <canvas id="travel-tax" data-chart-ratio="0.8" aria-describedby="travel-caption"></canvas>
+              <canvas id="status-breakdown" data-chart-ratio="0.76" aria-describedby="status-caption"></canvas>
             </div>
-            <p id="travel-caption" class="lab-module__caption">
-              Each bubble plots a road gauntlet, balancing mileage, recovery windows, and the
-              swing it puts on scoring margin.
+            <p id="status-caption" class="lab-module__caption">
+              Doughnut slices show how the slate splits between unplayed, in-progress, and completed games.
             </p>
           </article>
 
           <article class="lab-module" data-chart-wrapper>
             <header class="lab-module__header">
-              <h2>Arena pulse index</h2>
+              <h2>Tipoff cadence</h2>
               <div class="lab-module__meta">
-                <span class="lab-chip">Decibel surges vs. comeback closes</span>
+                <span class="lab-chip">Games by local hour</span>
               </div>
             </header>
             <div class="viz-canvas">
-              <canvas id="crowd-pulse" data-chart-ratio="0.75" aria-describedby="crowd-caption"></canvas>
+              <canvas id="tipoff-curve" data-chart-ratio="0.62" aria-describedby="tipoff-caption"></canvas>
             </div>
-            <p id="crowd-caption" class="lab-module__caption">
-              Bars amplify the loudest momentum spikes while the overlay line tracks how often
-              that noise powers a comeback finish.
+            <p id="tipoff-caption" class="lab-module__caption">
+              Line chart counts how many contests start in each local hour, highlighting the rhythm of the schedule.
             </p>
           </article>
 
           <article class="lab-module lab-module--wide" data-chart-wrapper>
             <header class="lab-module__header">
-              <h2>Clutch time volatility index</h2>
+              <h2>Margin spread</h2>
               <div class="lab-module__meta">
-                <span class="lab-chip">Clutch margin vs. win rate</span>
-                <span class="lab-chip">Possession load annotated</span>
+                <span class="lab-chip">Absolute margin buckets</span>
+                <span class="lab-chip lab-chip--accent" data-metric="margin-annotation">—</span>
               </div>
             </header>
             <div class="viz-canvas">
-              <canvas id="clutch-volatility" data-chart-ratio="0.52" aria-describedby="clutch-caption"></canvas>
+              <canvas id="margin-spread" data-chart-ratio="0.5" aria-describedby="margin-caption"></canvas>
             </div>
-            <p id="clutch-caption" class="lab-module__caption">
-              Combined bars and lines surface which contenders stabilize close games and how their
-              overtime track record shades that composure.
+            <p id="margin-caption" class="lab-module__caption">
+              Bars tally how frequently finals and live games land in each margin band so you can spot tight finishes at a glance.
             </p>
           </article>
 
           <article class="lab-module" data-chart-wrapper>
             <header class="lab-module__header">
-              <h2>Pace vs. chaos signature</h2>
+              <h2>Single-game scoring leaders</h2>
               <div class="lab-module__meta">
-                <span class="lab-chip">Game pace vs. lead changes</span>
-                <span class="lab-chip">Bubble area encodes run index</span>
+                <span class="lab-chip">Team points</span>
               </div>
             </header>
             <div class="viz-canvas">
-              <canvas id="pace-chaos" data-chart-ratio="0.78" aria-describedby="pace-caption"></canvas>
+              <canvas id="scoring-leaders" data-chart-ratio="0.72" aria-describedby="leaders-caption"></canvas>
             </div>
-            <p id="pace-caption" class="lab-module__caption">
-              Scatter bubbles partition four archetypes of nightly drama, balancing tempo against
-              the sheer number of scoreboard flips.
+            <p id="leaders-caption" class="lab-module__caption">
+              Horizontal bars spotlight the loudest offensive performances logged on the selected slate.
             </p>
           </article>
 
           <article class="lab-module" data-chart-wrapper>
             <header class="lab-module__header">
-              <h2>Lead change density</h2>
+              <h2>Score balance</h2>
               <div class="lab-module__meta">
-                <span class="lab-chip">Game count by swing band</span>
-                <span class="lab-chip">Line traces average margin</span>
+                <span class="lab-chip">Visitor points vs. home points</span>
               </div>
             </header>
             <div class="viz-canvas">
-              <canvas id="lead-density" data-chart-ratio="0.6" aria-describedby="lead-caption"></canvas>
+              <canvas id="score-balance" data-chart-ratio="0.78" aria-describedby="balance-caption"></canvas>
             </div>
-            <p id="lead-caption" class="lab-module__caption">
-              Columns stack how often games enter particular lead-change ranges while the companion
-              line reveals the scoreboard cushion those nights settle on.
-            </p>
-          </article>
-
-          <article class="lab-module" data-chart-wrapper>
-            <header class="lab-module__header">
-              <h2>Rest differential outcomes</h2>
-              <div class="lab-module__meta">
-                <span class="lab-chip">Rest edge vs. win rate</span>
-                <span class="lab-chip">Dot plot shows scoring margin</span>
-              </div>
-            </header>
-            <div class="viz-canvas">
-              <canvas id="rest-outcomes" data-chart-ratio="0.62" aria-describedby="rest-caption"></canvas>
-            </div>
-            <p id="rest-caption" class="lab-module__caption">
-              Grouped marks compare how extra downtime or back-to-backs reshape win probability and
-              the cushion teams enjoy or surrender.
-            </p>
-          </article>
-
-          <article class="lab-module" data-chart-wrapper>
-            <header class="lab-module__header">
-              <h2>Overtime heartbeat</h2>
-              <div class="lab-module__meta">
-                <span class="lab-chip">OT length share</span>
-                <span class="lab-chip">Tooltip tracks win rate</span>
-              </div>
-            </header>
-            <div class="viz-canvas">
-              <canvas id="overtime-heartbeat" data-chart-ratio="0.66" aria-describedby="overtime-caption"></canvas>
-            </div>
-            <p id="overtime-caption" class="lab-module__caption">
-              A concentric doughnut shows how rare marathon endings really are while surfacing which
-              sessions flip into coin-flip territory.
-            </p>
-          </article>
-
-          <article class="lab-module lab-module--wide" data-chart-wrapper>
-            <header class="lab-module__header">
-              <h2>Shot profile tides</h2>
-              <div class="lab-module__meta">
-                <span class="lab-chip">Shot mix by game state</span>
-                <span class="lab-chip">Stacked to 100%</span>
-              </div>
-            </header>
-            <div class="viz-canvas">
-              <canvas id="shot-profile" data-chart-ratio="0.5" aria-describedby="shot-caption"></canvas>
-            </div>
-            <p id="shot-caption" class="lab-module__caption">
-              Horizontal stacks reveal how teams shift rim attacks, mid-range probes, and threes as
-              possessions toggle between control, chaos, and desperation.
-            </p>
-          </article>
-
-          <article class="lab-module" data-chart-wrapper>
-            <header class="lab-module__header">
-              <h2>Whistle cadence</h2>
-              <div class="lab-module__meta">
-                <span class="lab-chip">Fouls and free throws per frame</span>
-                <span class="lab-chip">Overlay line tracks bonus trips</span>
-              </div>
-            </header>
-            <div class="viz-canvas">
-              <canvas id="whistle-cadence" data-chart-ratio="0.58" aria-describedby="whistle-caption"></canvas>
-            </div>
-            <p id="whistle-caption" class="lab-module__caption">
-              Dual series underline how whistles intensify late while the tooltip surfaces the free
-              throws those calls unlock.
-            </p>
-          </article>
-
-          <article class="lab-module" data-chart-wrapper>
-            <header class="lab-module__header">
-              <h2>Broadcast window energy</h2>
-              <div class="lab-module__meta">
-                <span class="lab-chip">Audience vs. run frequency</span>
-              </div>
-            </header>
-            <div class="viz-canvas">
-              <canvas id="broadcast-energy" data-chart-ratio="0.64" aria-describedby="broadcast-caption"></canvas>
-            </div>
-            <p id="broadcast-caption" class="lab-module__caption">
-              Bars benchmark average viewership across tip slots while the overlay line shows how
-              often those windows deliver sustained scoring swings.
-            </p>
-          </article>
-
-          <article class="lab-module" data-chart-wrapper>
-            <header class="lab-module__header">
-              <h2>Altitude acclimation curve</h2>
-              <div class="lab-module__meta">
-                <span class="lab-chip">Elevation vs. net swing</span>
-                <span class="lab-chip">Bubble size signals recovery hours</span>
-              </div>
-            </header>
-            <div class="viz-canvas">
-              <canvas id="altitude-acclimation" data-chart-ratio="0.78" aria-describedby="altitude-caption"></canvas>
-            </div>
-            <p id="altitude-caption" class="lab-module__caption">
-              An elevation scatter dramatizes how thin air magnifies home edges, with bubble sizes
-              echoing the recovery build-up clubs budget for the trip.
+            <p id="balance-caption" class="lab-module__caption">
+              Scatter plot pairs each game’s current score, revealing which matchups stay balanced and which tilt toward one side.
             </p>
           </article>
         </section>
       </main>
 
-      <footer class="page-footer">Powered by box scores, travel logs, and acoustic telemetry nobody else is cross-mapping yet.</footer>
+      <footer class="page-footer">Powered by the Ball Don't Lie games feed with a 2024-25 context lens.</footer>
     </div>
 
     <script src="vendor/chart.umd.js" defer></script>
