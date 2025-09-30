@@ -44,7 +44,7 @@
     }
   }
 
-  const KEY_LOCATIONS = ['bdl-key.json', 'data/bdl-key.json'];
+  const KEY_LOCATIONS = ['/bdl-key.json', '/data/bdl-key.json'];
 
   (async () => {
     for (const path of KEY_LOCATIONS) {
