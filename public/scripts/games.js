@@ -3,6 +3,8 @@ import { registerCharts, destroyCharts, helpers } from './hub-charts.js';
 const API_BASE = 'https://api.balldontlie.io/v1';
 const PAGE_SIZE = 100;
 const REFRESH_INTERVAL_MS = 150000;
+const NEXT_SEASON_TIPOFF_DATE = '2025-10-04';
+const LAST_COMPLETED_SEASON_FINALE = '2025-06-22';
 
 const stageRank = { live: 0, upcoming: 1, final: 2 };
 
@@ -25,7 +27,15 @@ const metricTargets = {
   fetchState: document.querySelector('[data-fetch-state]'),
 };
 
-let activeDate = getTodayIso();
+function determineInitialDate() {
+  const today = getTodayIso();
+  if (today >= NEXT_SEASON_TIPOFF_DATE) {
+    return today;
+  }
+  return LAST_COMPLETED_SEASON_FINALE;
+}
+
+let activeDate = determineInitialDate();
 let latestGames = [];
 let lastUpdated = null;
 let refreshTimer = null;
