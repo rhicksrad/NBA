@@ -2,6 +2,10 @@ import { ProxyAgent, setGlobalDispatcher } from "undici";
 
 import { loadSecret } from "../lib/secrets.js";
 
+const DEFAULT_UPSTREAM = "https://api.balldontlie.io";
+const PROXY_BASE = process.env.BDL_PROXY_BASE?.trim();
+export const BDL_BASE = PROXY_BASE || DEFAULT_UPSTREAM;
+
 const proxyUrl =
   process.env.HTTPS_PROXY ??
   process.env.https_proxy ??
@@ -22,11 +26,32 @@ const MAX_ATTEMPTS = 5;
 // Enforce a ~1.1s delay between calls so we stay comfortably under the limit.
 const MIN_DELAY_MS = 1100;
 
-const BDL_HOST_PATTERN = /\bballdontlie\.io$/i;
+const BDL_UPSTREAM_HOST_PATTERN = /\bballdontlie\.io$/i;
 const BDL_PROXY_PATTERN = /bdlproxy\./i;
 
-function isBdlHostname(hostname: string): boolean {
-  return BDL_HOST_PATTERN.test(hostname) || BDL_PROXY_PATTERN.test(hostname);
+const configuredProxyHostname = (() => {
+  if (!PROXY_BASE) {
+    return null;
+  }
+  try {
+    return new URL(PROXY_BASE).hostname;
+  } catch (error) {
+    console.warn(
+      `Invalid BDL_PROXY_BASE (${PROXY_BASE}) — falling back to default upstream: ${String(error)}`,
+    );
+    return null;
+  }
+})();
+
+function isProxyHostname(hostname: string): boolean {
+  if (configuredProxyHostname) {
+    return hostname === configuredProxyHostname;
+  }
+  return BDL_PROXY_PATTERN.test(hostname);
+}
+
+function isUpstreamHostname(hostname: string): boolean {
+  return BDL_UPSTREAM_HOST_PATTERN.test(hostname);
 }
 
 interface QueueTask<T> {
@@ -100,16 +125,20 @@ export function requireBallDontLieKey(): string {
   const key = resolveBdlKey();
   if (!key || key.length === 0) {
     throw new Error(
-      "Missing BALLDONTLIE_API_KEY — set your Ball Don't Lie All-Star key before running data scripts.",
+      "Missing BALLDONTLIE_API_KEY — set it or use BDL_PROXY_BASE to route via the Cloudflare proxy before running data scripts.",
     );
   }
   return key;
 }
 
-function ensureKey(url: URL): string {
-  const isBdlHost = isBdlHostname(url.hostname);
-  const key = isBdlHost ? requireBallDontLieKey() : resolveBdlKey();
-  return key ?? "";
+function ensureKey(url: URL): string | undefined {
+  if (isProxyHostname(url.hostname)) {
+    return undefined;
+  }
+  if (isUpstreamHostname(url.hostname)) {
+    return requireBallDontLieKey();
+  }
+  return resolveBdlKey();
 }
 
 export function formatBdlAuthHeader(key: string): string {
@@ -130,7 +159,7 @@ async function executeRequest<T>(input: string, init: RequestInit | undefined, a
   const headers = new Headers(init?.headers);
   const key = ensureKey(url);
 
-  if (isBdlHostname(url.hostname) && key) {
+  if (key && isUpstreamHostname(url.hostname)) {
     headers.set("Authorization", formatBdlAuthHeader(key));
   }
 

@@ -41,6 +41,8 @@ jobs:
 
       - name: Build site data
         run: pnpm build:data
+        env:
+          BDL_PROXY_BASE: https://bdlproxy.hicksrch.workers.dev/bdl
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
