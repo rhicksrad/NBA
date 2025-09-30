@@ -1437,6 +1437,12 @@ function initializeRosterApp({
         button.scrollIntoView({ block: 'nearest' });
         scrolled = true;
       }
+      if (isActive) {
+        const teamSection = button.closest('.roster-team');
+        if (teamSection && typeof teamSection.open === 'boolean') {
+          teamSection.open = true;
+        }
+      }
     });
     lastHighlightedId = activeBdlId;
   };
@@ -1622,15 +1628,15 @@ function initializeRosterApp({
         const sectionTitle = team?.full_name || team?.abbreviation || 'Team';
 
         return `
-          <section class="roster-team" data-team-anchor="${escapeHtml(team?.abbreviation ?? sectionTitle)}">
-            <header class="roster-team__header">
+          <details class="roster-team" data-team-anchor="${escapeHtml(team?.abbreviation ?? sectionTitle)}">
+            <summary class="roster-team__header">
               <h3>${escapeHtml(sectionTitle)}</h3>
               <p>${escapeHtml(subtitle || '')}</p>
-            </header>
+            </summary>
             <ul class="roster-list">
               ${items || emptyState}
             </ul>
-          </section>
+          </details>
         `;
       })
       .join('');
@@ -1814,6 +1820,12 @@ function initPlayerAtlas() {
   let currentRostersDoc = null;
   let rosterController = null;
   const defaultEmptyText = empty?.textContent?.trim() ?? '';
+  const normalizePlayerId = (value) => {
+    if (value === null || value === undefined) {
+      return null;
+    }
+    return String(value);
+  };
   const ensurePlayerSearchTokens = (player) => {
     player.searchTokens = buildPlayerTokens(player);
     player.nameToken = simplifyText(player?.name);
@@ -1829,8 +1841,9 @@ function initPlayerAtlas() {
   const rebuildPlayerIndexes = () => {
     playersById.clear();
     players.forEach((player) => {
-      if (player?.id) {
-        playersById.set(player.id, player);
+      const key = normalizePlayerId(player?.id);
+      if (key) {
+        playersById.set(key, player);
       }
     });
   };
@@ -2011,11 +2024,16 @@ function initPlayerAtlas() {
     players = sorted;
     rebuildPlayerIndexes();
     renderTeamBrowser(players);
-    if (activePlayerId && !playersById.has(activePlayerId)) {
-      activePlayerId = null;
-      if (profile) {
-        profile.hidden = true;
-        delete profile.dataset.playerId;
+    if (activePlayerId) {
+      const normalizedActiveId = normalizePlayerId(activePlayerId);
+      if (!normalizedActiveId || !playersById.has(normalizedActiveId)) {
+        activePlayerId = null;
+        if (profile) {
+          profile.hidden = true;
+          delete profile.dataset.playerId;
+        }
+      } else {
+        activePlayerId = normalizedActiveId;
       }
     }
     highlightTeamPlayer(activePlayerId);
@@ -2057,9 +2075,10 @@ function initPlayerAtlas() {
     if (!teamButtons.length) {
       teamButtons = Array.from(teamTree.querySelectorAll('[data-player-id]'));
     }
+    const normalizedId = normalizePlayerId(playerId);
     let activeButton = null;
     teamButtons.forEach((button) => {
-      const isActive = Boolean(playerId) && button.dataset.playerId === playerId;
+      const isActive = Boolean(normalizedId) && button.dataset.playerId === normalizedId;
       button.classList.toggle('is-active', isActive);
       if (isActive) {
         activeButton = button;
@@ -2133,7 +2152,7 @@ function initPlayerAtlas() {
           const button = document.createElement('button');
           button.type = 'button';
           button.className = 'player-atlas__team-player';
-          button.dataset.playerId = player.id;
+          button.dataset.playerId = normalizePlayerId(player.id);
 
           const name = document.createElement('span');
           name.className = 'player-atlas__team-player-name';
@@ -2286,11 +2305,16 @@ function initPlayerAtlas() {
     });
 
     if (extras.length) {
-      const existingIds = new Set(allPlayers.map((player) => player?.id));
+      const existingIds = new Set(
+        allPlayers
+          .map((player) => normalizePlayerId(player?.id))
+          .filter((value) => value !== null),
+      );
       extras.forEach((player) => {
-        if (player?.id && !existingIds.has(player.id)) {
+        const candidateId = normalizePlayerId(player?.id);
+        if (candidateId && !existingIds.has(candidateId)) {
           allPlayers.push(player);
-          existingIds.add(player.id);
+          existingIds.add(candidateId);
         }
       });
     }
@@ -2393,12 +2417,16 @@ function initPlayerAtlas() {
 
     matches.forEach((player) => {
       const item = document.createElement('li');
-      const optionId = `player-atlas-option-${player.id}`;
+      const normalizedId = normalizePlayerId(player.id);
+      if (!normalizedId) {
+        return;
+      }
+      const optionId = `player-atlas-option-${normalizedId}`;
       const button = document.createElement('button');
       button.type = 'button';
       button.id = optionId;
       button.className = 'player-atlas__result';
-      button.dataset.playerId = player.id;
+      button.dataset.playerId = normalizedId;
       button.setAttribute('role', 'option');
 
       const name = document.createElement('span');
@@ -2442,8 +2470,9 @@ function initPlayerAtlas() {
     if (empty) empty.hidden = true;
 
     profile.hidden = false;
-    profile.dataset.playerId = player.id;
-    activePlayerId = player.id;
+    const normalizedId = normalizePlayerId(player?.id);
+    profile.dataset.playerId = normalizedId ?? '';
+    activePlayerId = normalizedId;
     highlightTeamPlayer(activePlayerId);
     if (rosterController && typeof rosterController.highlight === 'function') {
       const rosterId = player?.bdl?.id !== undefined && player?.bdl?.id !== null ? String(player.bdl.id) : null;
@@ -2523,7 +2552,7 @@ function initPlayerAtlas() {
     const button = event.target.closest('[data-player-id]');
     if (!button) return;
     const playerId = button.dataset.playerId;
-    const player = players.find((item) => item.id === playerId);
+    const player = playersById.get(normalizePlayerId(playerId));
     selectPlayer(player);
   };
 
@@ -2534,7 +2563,7 @@ function initPlayerAtlas() {
     }
     const playerId = button.dataset.playerId;
     if (!playerId) return;
-    const player = players.find((item) => item.id === playerId);
+    const player = playersById.get(normalizePlayerId(playerId));
     if (player) {
       selectPlayer(player);
     }
