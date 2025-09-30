@@ -1,18 +1,7 @@
 {
-  "fetched_at": "2025-09-30T16:44:37.179Z",
+  "fetched_at": "2025-09-30T17:50:39.151Z",
   "source": "Ball Don't Lie",
   "items": [
-    {
-      "player": "Tyrese Maxey",
-      "status": "Day-To-Day",
-      "status_level": "season",
-      "player_id": 3547254,
-      "team_tricode": "PHI",
-      "team_name": "Philadelphia 76ers",
-      "return_date": "Oct 1",
-      "description": "Jul 3: Maxey (finger) is expected to miss the rest of the season, Shams Charania of ESPN reported Thursday.",
-      "report_label": "Jul 3"
-    },
     {
       "player": "Jayson Tatum",
       "status": "Out",
@@ -111,6 +100,17 @@
       "return_date": "Nov 2",
       "description": "Sep 19: Herro (foot/ankle) is expected to take eight weeks to recover after undergoing successful surgery Friday, Shams Charania of ESPN reports.",
       "report_label": "Sep 19"
+    },
+    {
+      "player": "Dejounte Murray",
+      "status": "Out",
+      "status_level": "caution",
+      "player_id": 334,
+      "team_tricode": "NOP",
+      "team_name": "New Orleans Pelicans",
+      "return_date": "Jan 1",
+      "description": "Sep 25: ESPN's Shams Charania reported Wednesday that Murray (Achilles) could return right after New Years, according to Pelicans Film Room.",
+      "report_label": "Sep 25"
     }
   ],
   "note": "Source: Ball Don't Lie player injuries feed. Displaying the 10 most relevant recent reports."
