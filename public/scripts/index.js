@@ -1149,7 +1149,7 @@ async function renderInjuryPulse() {
 
   const loading = document.createElement('p');
   loading.className = 'injury-grid__placeholder';
-  loading.textContent = 'Syncing Ball Don\'t Lie injury feed...';
+  loading.textContent = 'Syncing the live injury feed...';
   container.appendChild(loading);
 
   const payload = await fetchJsonSafe('data/player_injuries.json');
@@ -1158,7 +1158,7 @@ async function renderInjuryPulse() {
   if (!payload || !Array.isArray(payload.items)) {
     const errorMessage = document.createElement('p');
     errorMessage.className = 'injury-grid__placeholder';
-    errorMessage.textContent = 'Unable to load Ball Don\'t Lie injury feed right now.';
+    errorMessage.textContent = 'Unable to load the live injury feed right now.';
     container.appendChild(errorMessage);
     if (footnote) {
       footnote.textContent = 'Injury feed temporarily unavailable.';
@@ -1170,7 +1170,7 @@ async function renderInjuryPulse() {
   if (!entries.length) {
     const placeholder = document.createElement('p');
     placeholder.className = 'injury-grid__placeholder';
-    placeholder.textContent = 'No current injury reports from Ball Don\'t Lie.';
+    placeholder.textContent = 'No current injury reports available.';
     container.appendChild(placeholder);
   } else {
     const allowedStatuses = new Set(['season', 'caution', 'monitor', 'ready']);
@@ -1263,12 +1263,15 @@ async function renderInjuryPulse() {
     });
   }
 
-  const source = typeof payload.source === 'string' && payload.source.trim() ? payload.source.trim() : 'Ball Don\'t Lie';
+  const source = typeof payload.source === 'string' && payload.source.trim() ? payload.source.trim() : 'Live league data feed';
   const fetchedAt = typeof payload.fetched_at === 'string' ? payload.fetched_at : '';
-  let footnoteText =
-    typeof payload.note === 'string' && payload.note.trim()
-      ? payload.note.trim()
-      : `Source: ${source} injury feed.`;
+  const sanitizedNote = (() => {
+    if (typeof payload.note === 'string' && payload.note.trim()) {
+      return payload.note.replace(/Ball Don't Lie/gi, 'live league injury feed').trim();
+    }
+    return '';
+  })();
+  let footnoteText = sanitizedNote || `Source: ${source} injury feed.`;
   if (fetchedAt) {
     const fetchedDate = new Date(fetchedAt);
     if (!Number.isNaN(fetchedDate.getTime())) {

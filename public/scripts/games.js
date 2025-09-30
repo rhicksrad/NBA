@@ -914,7 +914,7 @@ async function loadGames(options = {}) {
     setFetchMessage(`Updated ${formatTimeLabel(lastUpdated)}`, 'success');
     rebuildCharts();
   } catch (error) {
-    console.error('Unable to load Ball Don't Lie games', error);
+    console.error('Unable to load live games data', error);
     const message = error?.message?.includes('401') ? 'Authorization failed' : 'Refresh failed';
     setFetchMessage(message, 'error');
     if (previousGames && previousGames.length) {

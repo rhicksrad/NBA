@@ -117,7 +117,9 @@
               <h3>Technical architecture</h3>
               <p>
                 A static-first build with modular HTML, CSS, and scripted data ingestion powers fast
-                loads and maintainable updates without heavyweight frameworks.
+                loads and maintainable updates without heavyweight frameworks. Every data pipeline
+                pass attempts to pull the latest numbers from the Ball Don't Lie (BDL) API as the
+                baseline before layering manual research when gaps appear.
               </p>
               <ul class="pillar-list">
                 <li>Reusable component styling in <code>styles/</code></li>

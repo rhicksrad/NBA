@@ -153,7 +153,7 @@ function updateUrl(paramsToSet: Record<string, string | null>) {
 function formatSource(doc: RostersDoc): string {
   const source = doc.source?.trim().toLowerCase();
   if (source === "ball_dont_lie") {
-    return "Ball Don't Lie";
+    return "Primary league data feed";
   }
   if (source === "manual_roster_reference") {
     return "Manual roster reference";
