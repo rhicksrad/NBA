@@ -10,7 +10,8 @@
   "scripts": {
     "build": "esbuild components/main.ts --bundle --format=esm --target=es2019 --minify --outfile=assets/js/main.tmp.js && node scripts/finalize-hash.js && node scripts/build-players.js",
     "fetch:active-rosters": "tsx scripts/fetch/bdl_active_rosters.ts",
-    "build:data": "pnpm fetch:active-rosters && tsx scripts/data/build_canonical.ts && tsx scripts/data/build_preseason_schedule.ts",
+    "fetch:injuries": "tsx scripts/fetch_injuries.ts",
+    "build:data": "pnpm fetch:active-rosters && pnpm fetch:injuries && tsx scripts/data/build_canonical.ts && tsx scripts/data/build_preseason_schedule.ts",
     "build:players-index": "tsx scripts/build_players_index.ts",
     "build:history:catalog": "tsx scripts/history/build_player_catalog.ts",
     "build:history": "pnpm build:history:catalog",
@@ -18,7 +19,7 @@
     "validate:previews": "tsx scripts/validate/previews_staleness.ts && tsx scripts/validate/links.ts && tsx scripts/validate/rosters_nonempty.ts",
     "previews": "pnpm build:data && pnpm gen:previews && pnpm validate:previews",
     "validate:rosters": "tsx scripts/validate/rosters.ts",
-    "predeploy": "pnpm fetch:active-rosters",
+    "predeploy": "pnpm fetch:active-rosters && pnpm fetch:injuries",
     "deploy": "echo 'static site build only'",
     "test": "vitest run",
     "verify:bdl": "tsx scripts/dev/verify_bdl.ts",

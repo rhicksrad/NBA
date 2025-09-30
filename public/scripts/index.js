@@ -162,89 +162,6 @@ const preseasonPowerIndex = [
     note: 'Some young core pieces exist, but the rest of the roster lacks depth and star impact. They’ll likely be at or near bottom unless things break favorably.',
   },
 ];
-const injuryAvailabilityPulse = [
-  {
-    team: 'Philadelphia 76ers',
-    player: 'Joel Embiid',
-    role: 'C · MVP 2023',
-    statusLabel: 'Cleared for camp',
-    statusLevel: 'ready',
-    readiness: 88,
-    timeline: 'Full participant as of Sept 27 media day',
-    impact: '+12.1 net swing when active',
-    note: 'Post-meniscus rehab has Embiid back in full practices; staff is holding him near 30 minutes while conditioning catches up.',
-  },
-  {
-    team: 'Los Angeles Clippers',
-    player: 'Kawhi Leonard',
-    role: 'F · Playoff fulcrum',
-    statusLabel: 'Managed minutes',
-    statusLevel: 'monitor',
-    readiness: 74,
-    timeline: 'Cleared for preseason scrimmages · Back-to-back calls remain day-of',
-    impact: '+8.2 lineup net rating with him on the floor',
-    note: 'Following a May knee cleanup, Leonard is practicing 5-on-5 but the Clippers will sit him for one leg of back-to-backs through November.',
-  },
-  {
-    team: 'Memphis Grizzlies',
-    player: 'Ja Morant',
-    role: 'G · Lead creator',
-    statusLabel: 'No restrictions',
-    statusLevel: 'ready',
-    readiness: 91,
-    timeline: 'Returned to full-contact work Sept 26',
-    impact: '+9.1 pace swing when active',
-    note: 'Morant says the surgically repaired shoulder feels 100 percent; Memphis is leaning on core-strength maintenance rather than contact limitations.',
-  },
-];
-
-const seasonEndingAbsences = [
-  {
-    team: 'Chicago Bulls',
-    player: 'Lonzo Ball',
-    role: 'G · Connector guard',
-    statusLabel: 'Season shutdown',
-    statusLevel: 'season',
-    injury: 'Left knee cartilage transplant follow-up',
-    timeline: 'Out for 2025-26 · Next medical review Feb 2026',
-    impact: 'Chicago leans on Coby White-led playmaking committee.',
-    note: "Ball has resumed light individual work, but the Bulls have ruled him out for the season to prioritize cartilage transplant durability before returning to contact.",
-  },
-  {
-    team: 'Indiana Pacers',
-    player: 'Tyrese Haliburton',
-    role: 'G · Franchise lead guard',
-    statusLabel: 'Season-ending',
-    statusLevel: 'season',
-    injury: 'Ruptured right Achilles tendon',
-    timeline: 'Surgery Jun 18, 2025 · Long-term check July 2026',
-    impact: 'Indiana shifts primary creation to Pascal Siakam and Bennedict Mathurin.',
-    note: 'Haliburton tore his Achilles in Game 5 of the Finals and immediately underwent repair; the Pacers mapped a 12-month recovery before he resumes on-court work.',
-  },
-  {
-    team: 'Houston Rockets',
-    player: 'Steven Adams',
-    role: 'C · Interior anchor',
-    statusLabel: 'Season shutdown',
-    statusLevel: 'season',
-    injury: 'Right knee PCL reconstruction',
-    timeline: 'Re-evaluation slated for March 2026',
-    impact: 'Houston will ride Alperen Şengün and small-ball looks at the five.',
-    note: 'While Adams has progressed to controlled scrimmages, recurring swelling prompted Houston to shelve him for the year and lean on long-term strength programming.',
-  },
-  {
-    team: 'Portland Trail Blazers',
-    player: 'Robert Williams III',
-    role: 'C · Rim protector',
-    statusLabel: 'Season shutdown',
-    statusLevel: 'season',
-    injury: 'Ligament repair on right knee',
-    timeline: 'Re-evaluation after 2026 All-Star break',
-    impact: 'Portland elevates Deandre Ayton and Jabari Walker in the rotation.',
-    note: 'Williams is still addressing chronic knee irritation following ligament repair, keeping Portland focused on a long runway before clearing him for game action.',
-  },
-];
-
 const projectedTempoLeaders = [
   {
     team: 'Indiana Pacers',
@@ -1218,7 +1135,7 @@ function renderStoryCards(storyData) {
   });
 }
 
-function renderInjuryPulse() {
+async function renderInjuryPulse() {
   const container = document.querySelector('[data-injury-report]');
   const footnote = document.querySelector('[data-injury-footnote]');
   if (!container) {
@@ -1226,128 +1143,147 @@ function renderInjuryPulse() {
   }
 
   container.innerHTML = '';
-
-  const createInjuryCard = (entry, { hideReadiness = false, variant } = {}) => {
-    const card = document.createElement('article');
-    card.className = 'injury-card';
-    if (variant) {
-      card.classList.add(`injury-card--${variant}`);
-    }
-
-    const header = document.createElement('header');
-    header.className = 'injury-card__header';
-
-    const identity = document.createElement('div');
-    identity.className = 'injury-card__identity';
-    identity.appendChild(createTeamLogo(entry.team, 'team-logo team-logo--small'));
-
-    const label = document.createElement('div');
-    label.className = 'injury-card__label';
-    const name = document.createElement('strong');
-    name.textContent = entry.player;
-    label.appendChild(name);
-    if (entry.role) {
-      const role = document.createElement('span');
-      role.textContent = entry.role;
-      label.appendChild(role);
-    }
-    identity.appendChild(label);
-    header.appendChild(identity);
-
-    if (entry.statusLabel) {
-      const status = document.createElement('span');
-      const allowedStatuses = new Set(['ready', 'monitor', 'caution', 'season']);
-      const level = allowedStatuses.has(entry.statusLevel) ? entry.statusLevel : 'monitor';
-      status.className = `injury-card__status injury-card__status--${level}`;
-      status.textContent = entry.statusLabel;
-      header.appendChild(status);
-    }
-
-    card.appendChild(header);
-
-    const metrics = document.createElement('dl');
-    metrics.className = 'injury-card__metrics';
-
-    const addMetric = (labelText, valueText) => {
-      if (!labelText || !valueText) return;
-      const row = document.createElement('div');
-      row.className = 'injury-card__metric';
-      const term = document.createElement('dt');
-      term.textContent = labelText;
-      const detail = document.createElement('dd');
-      detail.textContent = valueText;
-      row.append(term, detail);
-      metrics.appendChild(row);
-    };
-
-    addMetric('Timeline', entry.timeline);
-    addMetric('Impact', entry.impact);
-    addMetric('Injury', entry.injury);
-    addMetric('Return plan', entry.returnPlan);
-
-    if (metrics.childElementCount) {
-      card.appendChild(metrics);
-    }
-
-    if (!hideReadiness) {
-      const readiness = clampPercent(entry.readiness);
-      const readinessBar = document.createElement('div');
-      readinessBar.className = 'injury-card__readiness';
-      readinessBar.style.setProperty('--fill', `${readiness}%`);
-      card.appendChild(readinessBar);
-
-      const readinessLabel = document.createElement('span');
-      readinessLabel.className = 'injury-card__readiness-label';
-      readinessLabel.textContent = `Readiness index: ${helpers.formatNumber(readiness, 0)} / 100`;
-      card.appendChild(readinessLabel);
-    }
-
-    if (entry.note) {
-      const note = document.createElement('p');
-      note.className = 'injury-card__note';
-      note.textContent = entry.note;
-      card.appendChild(note);
-    }
-
-    return card;
-  };
-
-  const hasActiveEntries = Array.isArray(injuryAvailabilityPulse) && injuryAvailabilityPulse.length > 0;
-  const hasSeasonLongEntries = Array.isArray(seasonEndingAbsences) && seasonEndingAbsences.length > 0;
-
-  if (!hasActiveEntries && !hasSeasonLongEntries) {
-    const placeholder = document.createElement('p');
-    placeholder.className = 'injury-grid__placeholder';
-    placeholder.textContent = 'Injury board updates once medical reports finalize.';
-    container.appendChild(placeholder);
-  } else {
-    if (hasActiveEntries) {
-      injuryAvailabilityPulse.forEach((entry) => {
-        container.appendChild(createInjuryCard(entry));
-      });
-    }
-
-    if (hasSeasonLongEntries) {
-      if (hasActiveEntries) {
-        const divider = document.createElement('div');
-        divider.className = 'injury-grid__divider';
-        container.appendChild(divider);
-      }
-
-      const heading = document.createElement('h4');
-      heading.className = 'injury-grid__section-title';
-      heading.textContent = 'Season-long absences';
-      container.appendChild(heading);
-
-      seasonEndingAbsences.forEach((entry) => {
-        container.appendChild(createInjuryCard(entry, { hideReadiness: true, variant: 'season' }));
-      });
-    }
+  if (footnote) {
+    footnote.textContent = '';
   }
 
+  const loading = document.createElement('p');
+  loading.className = 'injury-grid__placeholder';
+  loading.textContent = 'Syncing Ball Don\'t Lie injury feed...';
+  container.appendChild(loading);
+
+  const payload = await fetchJsonSafe('data/player_injuries.json');
+  container.innerHTML = '';
+
+  if (!payload || !Array.isArray(payload.items)) {
+    const errorMessage = document.createElement('p');
+    errorMessage.className = 'injury-grid__placeholder';
+    errorMessage.textContent = 'Unable to load Ball Don\'t Lie injury feed right now.';
+    container.appendChild(errorMessage);
+    if (footnote) {
+      footnote.textContent = 'Injury feed temporarily unavailable.';
+    }
+    return;
+  }
+
+  const entries = payload.items.slice(0, 10);
+  if (!entries.length) {
+    const placeholder = document.createElement('p');
+    placeholder.className = 'injury-grid__placeholder';
+    placeholder.textContent = 'No current injury reports from Ball Don\'t Lie.';
+    container.appendChild(placeholder);
+  } else {
+    const allowedStatuses = new Set(['season', 'caution', 'monitor', 'ready']);
+
+    entries.forEach((entry) => {
+      const card = document.createElement('article');
+      card.className = 'injury-card';
+
+      const header = document.createElement('header');
+      header.className = 'injury-card__header';
+
+      const identity = document.createElement('div');
+      identity.className = 'injury-card__identity';
+      const teamIdentifier = entry.team_tricode || entry.team_name || '';
+      identity.appendChild(createTeamLogo(teamIdentifier || 'NBA', 'team-logo team-logo--small'));
+
+      const label = document.createElement('div');
+      label.className = 'injury-card__label';
+      const name = document.createElement('strong');
+      name.textContent = entry.player || 'Unnamed player';
+      label.appendChild(name);
+      const teamText = entry.team_name || entry.team_tricode;
+      if (teamText) {
+        const team = document.createElement('span');
+        team.textContent = teamText;
+        label.appendChild(team);
+      }
+      identity.appendChild(label);
+      header.appendChild(identity);
+
+      const status = document.createElement('span');
+      const level = typeof entry.status_level === 'string' ? entry.status_level.toLowerCase() : 'monitor';
+      const safeLevel = allowedStatuses.has(level) ? level : 'monitor';
+      status.className = `injury-card__status injury-card__status--${safeLevel}`;
+      status.textContent = entry.status || 'Status unavailable';
+      header.appendChild(status);
+
+      card.appendChild(header);
+
+      const metrics = document.createElement('dl');
+      metrics.className = 'injury-card__metrics';
+
+      const addMetric = (labelText, valueText) => {
+        if (!labelText || !valueText) {
+          return;
+        }
+        const row = document.createElement('div');
+        row.className = 'injury-card__metric';
+        const term = document.createElement('dt');
+        term.textContent = labelText;
+        const detail = document.createElement('dd');
+        detail.textContent = valueText;
+        row.append(term, detail);
+        metrics.appendChild(row);
+      };
+
+      const reportLabel = (() => {
+        if (typeof entry.report_label === 'string' && entry.report_label.trim()) {
+          return entry.report_label.trim();
+        }
+        if (typeof entry.last_updated === 'string') {
+          const formatted = formatDateLabel(entry.last_updated, { month: 'short', day: 'numeric' });
+          if (formatted) {
+            return formatted;
+          }
+        }
+        return '';
+      })();
+
+      if (reportLabel) {
+        addMetric('Report', reportLabel);
+      }
+
+      if (typeof entry.return_date === 'string' && entry.return_date.trim()) {
+        addMetric('Return', entry.return_date.trim());
+      }
+
+      if (metrics.childElementCount) {
+        card.appendChild(metrics);
+      }
+
+      if (typeof entry.description === 'string' && entry.description.trim()) {
+        const note = document.createElement('p');
+        note.className = 'injury-card__note';
+        note.textContent = entry.description.trim();
+        card.appendChild(note);
+      }
+
+      container.appendChild(card);
+    });
+  }
+
+  const source = typeof payload.source === 'string' && payload.source.trim() ? payload.source.trim() : 'Ball Don\'t Lie';
+  const fetchedAt = typeof payload.fetched_at === 'string' ? payload.fetched_at : '';
+  let footnoteText =
+    typeof payload.note === 'string' && payload.note.trim()
+      ? payload.note.trim()
+      : `Source: ${source} injury feed.`;
+  if (fetchedAt) {
+    const fetchedDate = new Date(fetchedAt);
+    if (!Number.isNaN(fetchedDate.getTime())) {
+      const formatter = new Intl.DateTimeFormat('en-US', {
+        month: 'short',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: '2-digit',
+        timeZone: 'UTC',
+      });
+      footnoteText = `${footnoteText} Updated ${formatter.format(fetchedDate)} UTC.`;
+    }
+  }
   if (footnote) {
-    footnote.textContent =
-      'Readiness index blends ramp-up participation, travel tolerance, and medical reports—100 signals full go. Season-long absences spotlight players ruled out through 2025-26 and the rehab logic behind each shutdown.';
+    footnote.textContent = footnoteText;
   }
 }
 
@@ -1711,7 +1647,7 @@ async function bootstrap() {
     fetchJsonSafe('data/preseason_openers.json'),
   ]);
 
-  renderInjuryPulse();
+  await renderInjuryPulse();
   renderPaceRadar();
   renderSpacingLab();
   hydrateHero(teamData);
