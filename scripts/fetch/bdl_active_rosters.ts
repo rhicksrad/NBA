@@ -1,9 +1,48 @@
-import { promises as fs } from "node:fs";
-import { pathToFileURL } from "node:url";
-import type { SourcePlayerRecord } from "../lib/types.js";
+import type { BdlPlayer } from "./ball_dont_lie_client.js";
 import { loadSecret } from "../lib/secrets.js";
+import { TEAM_METADATA } from "../lib/teams.js";
 
-const API = "https://api.balldontlie.io/v1";
+const API_BASE = "https://api.balldontlie.io/v1/";
+const ACTIVE_PATH = "players/active";
+const MAX_PER_PAGE = 100;
+const FLAG_KEYS = ["active", "is_active", "on_team", "on_roster"] as const;
+
+const TEAM_MAPPINGS = [
+  { bdlId: 1, bdlAbbr: "ATL", tricode: "ATL" },
+  { bdlId: 2, bdlAbbr: "BOS", tricode: "BOS" },
+  { bdlId: 3, bdlAbbr: "BKN", tricode: "BKN" },
+  { bdlId: 4, bdlAbbr: "CHA", tricode: "CHA" },
+  { bdlId: 5, bdlAbbr: "CHI", tricode: "CHI" },
+  { bdlId: 6, bdlAbbr: "CLE", tricode: "CLE" },
+  { bdlId: 7, bdlAbbr: "DAL", tricode: "DAL" },
+  { bdlId: 8, bdlAbbr: "DEN", tricode: "DEN" },
+  { bdlId: 9, bdlAbbr: "DET", tricode: "DET" },
+  { bdlId: 10, bdlAbbr: "GSW", tricode: "GSW" },
+  { bdlId: 11, bdlAbbr: "HOU", tricode: "HOU" },
+  { bdlId: 12, bdlAbbr: "IND", tricode: "IND" },
+  { bdlId: 13, bdlAbbr: "LAC", tricode: "LAC" },
+  { bdlId: 14, bdlAbbr: "LAL", tricode: "LAL" },
+  { bdlId: 15, bdlAbbr: "MEM", tricode: "MEM" },
+  { bdlId: 16, bdlAbbr: "MIA", tricode: "MIA" },
+  { bdlId: 17, bdlAbbr: "MIL", tricode: "MIL" },
+  { bdlId: 18, bdlAbbr: "MIN", tricode: "MIN" },
+  { bdlId: 19, bdlAbbr: "NOP", tricode: "NOP" },
+  { bdlId: 20, bdlAbbr: "NYK", tricode: "NYK" },
+  { bdlId: 21, bdlAbbr: "OKC", tricode: "OKC" },
+  { bdlId: 22, bdlAbbr: "ORL", tricode: "ORL" },
+  { bdlId: 23, bdlAbbr: "PHI", tricode: "PHI" },
+  { bdlId: 24, bdlAbbr: "PHX", tricode: "PHX" },
+  { bdlId: 25, bdlAbbr: "POR", tricode: "POR" },
+  { bdlId: 26, bdlAbbr: "SAC", tricode: "SAC" },
+  { bdlId: 27, bdlAbbr: "SAS", tricode: "SAS" },
+  { bdlId: 28, bdlAbbr: "TOR", tricode: "TOR" },
+  { bdlId: 29, bdlAbbr: "UTA", tricode: "UTA" },
+  { bdlId: 30, bdlAbbr: "WAS", tricode: "WAS" },
+] as const;
+
+const TEAM_ID_TO_TRICODE = new Map<number, string>(TEAM_MAPPINGS.map((m) => [m.bdlId, m.tricode]));
+const TEAM_ABBR_TO_TRICODE = new Map<string, string>(TEAM_MAPPINGS.map((m) => [m.bdlAbbr, m.tricode]));
+const KNOWN_TRICODES = new Set(TEAM_METADATA.map((team) => team.tricode.toUpperCase()));
 
 function resolveBdlKey(): string | undefined {
   const candidates = [
@@ -36,133 +75,236 @@ function requireKey(): string {
   return key;
 }
 
-type BLTeam = { id: number; abbreviation: string; full_name: string };
-type BLPlayer = {
-  id: number;
-  first_name: string;
-  last_name: string;
-  position?: string | null;
-  height?: string | null;
-  weight?: string | null;
-  jersey_number?: string | null;
-  team: BLTeam | null;
-};
-type Page = { data: BLPlayer[]; meta?: { next_cursor?: number | null } };
-
-async function http(path: string, q: Record<string, unknown> = {}): Promise<Page> {
-  const url = new URL(API + path);
-  for (const [k, v] of Object.entries(q)) {
-    if (Array.isArray(v)) v.forEach(val => url.searchParams.append(`${k}[]`, String(val)));
-    else if (v != null) url.searchParams.set(k, String(v));
+function parsePerPage(): number {
+  const fromEnv = Number(process.env.BDL_ACTIVE_PER_PAGE);
+  if (Number.isFinite(fromEnv) && fromEnv > 0) {
+    return Math.min(Math.max(Math.floor(fromEnv), 1), MAX_PER_PAGE);
   }
-  const res = await fetch(url, { headers: { Authorization: requireKey() } });
-  if (!res.ok) throw new Error(`${res.status} ${res.statusText} for ${url}`);
-  return res.json() as Promise<Page>;
+  return MAX_PER_PAGE;
 }
 
-// Minimal, static map of NBA team IDs in Ball Don’t Lie -> abbr your site uses.
-// If you already have this elsewhere, import it and remove this.
-const TEAMS: { bdlId: number; abbr: string }[] = [
-  { bdlId: 1, abbr: "ATL" }, { bdlId: 2, abbr: "BOS" }, { bdlId: 3, abbr: "BKN" },
-  { bdlId: 4, abbr: "CHA" }, { bdlId: 5, abbr: "CHI" }, { bdlId: 6, abbr: "CLE" },
-  { bdlId: 7, abbr: "DAL" }, { bdlId: 8, abbr: "DEN" }, { bdlId: 9, abbr: "DET" },
-  { bdlId: 10, abbr: "GSW" }, { bdlId: 11, abbr: "HOU" }, { bdlId: 12, abbr: "IND" },
-  { bdlId: 13, abbr: "LAC" }, { bdlId: 14, abbr: "LAL" }, { bdlId: 15, abbr: "MEM" },
-  { bdlId: 16, abbr: "MIA" }, { bdlId: 17, abbr: "MIL" }, { bdlId: 18, abbr: "MIN" },
-  { bdlId: 19, abbr: "NOP" }, { bdlId: 20, abbr: "NYK" }, { bdlId: 21, abbr: "OKC" },
-  { bdlId: 22, abbr: "ORL" }, { bdlId: 23, abbr: "PHI" }, { bdlId: 24, abbr: "PHX" },
-  { bdlId: 25, abbr: "POR" }, { bdlId: 26, abbr: "SAC" }, { bdlId: 27, abbr: "SAS" },
-  { bdlId: 28, abbr: "TOR" }, { bdlId: 29, abbr: "UTA" }, { bdlId: 30, abbr: "WAS" }
-];
+function normalizeCursor(value: unknown): string | null {
+  if (value === null || value === undefined) {
+    return null;
+  }
+  const text = String(value).trim();
+  return text.length ? text : null;
+}
 
-async function fetchActivePlayersForTeam(teamId: number): Promise<BLPlayer[]> {
-  const seen = new Set<number>();
-  const out: BLPlayer[] = [];
-  let cursor: number | undefined;
-  do {
-    const page = await http("/players/active", { team_ids: [teamId], per_page: 100, cursor });
-    for (const p of page.data) {
-      if (!p.team || p.team.id !== teamId) continue; // belt-and-suspenders
-      if (seen.has(p.id)) continue;
-      seen.add(p.id);
-      out.push(p);
+function isTrulyActiveRecord(player: Record<string, unknown>): boolean {
+  const flags = FLAG_KEYS.map((key) => player[key]).filter((value): value is boolean => typeof value === "boolean");
+  if (flags.length === 0) {
+    return true;
+  }
+  return flags.every(Boolean);
+}
+
+function mapTeamToTricode(team: { id?: unknown; abbreviation?: unknown }): string {
+  const teamId = typeof team.id === "number" ? team.id : undefined;
+  const rawAbbr = typeof team.abbreviation === "string" ? team.abbreviation.toUpperCase() : undefined;
+
+  if (rawAbbr) {
+    const mapped = TEAM_ABBR_TO_TRICODE.get(rawAbbr) ?? (KNOWN_TRICODES.has(rawAbbr) ? rawAbbr : undefined);
+    if (mapped) {
+      return mapped;
     }
-    cursor = page.meta?.next_cursor ?? undefined;
-  } while (cursor);
-  return out;
+  }
+
+  if (teamId !== undefined) {
+    const mapped = TEAM_ID_TO_TRICODE.get(teamId);
+    if (mapped) {
+      return mapped;
+    }
+  }
+
+  throw new Error(
+    `Unable to map Ball Don't Lie team to local tricode (id=${String(teamId)}, abbreviation=${String(rawAbbr ?? "")})`,
+  );
 }
 
-export const MIN_ACTIVE_ROSTER = 13;
-// Training camp and two-way slots can push Ball Don't Lie's "active" response
-// above the in-season 21-player ceiling, so allow up to 23.
-export const MAX_ACTIVE_ROSTER = 23;
-
-function guardRoster(teamAbbr: string, players: BLPlayer[]) {
-  if (players.length < MIN_ACTIVE_ROSTER || players.length > MAX_ACTIVE_ROSTER) {
-    throw new Error(`Roster size out of bounds for ${teamAbbr}: ${players.length}`);
+function comparePlayers(a: ActiveRosterPlayer, b: ActiveRosterPlayer): number {
+  const last = a.last_name.localeCompare(b.last_name, "en", { sensitivity: "base" });
+  if (last !== 0) {
+    return last;
   }
-  if (players.some(p => p.first_name === "Blake" && p.last_name === "Griffin")) {
-    throw new Error(`Historical leak: Blake Griffin surfaced in active endpoint for ${teamAbbr}`);
+  const first = a.first_name.localeCompare(b.first_name, "en", { sensitivity: "base" });
+  if (first !== 0) {
+    return first;
   }
+  return a.id - b.id;
 }
 
-export type ActiveRosters = Record<string, SourcePlayerRecord[]>;
+function sortRoster(players: ActiveRosterPlayer[]): ActiveRosterPlayer[] {
+  return players.sort(comparePlayers);
+}
+
+export const REGULAR_SEASON_MIN = 13;
+export const REGULAR_SEASON_MAX = 21;
+export const PRESEASON_DEFAULT_MAX = 25;
+
+export interface ActiveRosterFetchMeta {
+  totalPlayers: number;
+  pages: number;
+  perPage: number;
+  usedNextCursor: boolean;
+  maxPageSize: number;
+}
+
+let lastFetchMeta: ActiveRosterFetchMeta | null = null;
+
+export type ActiveRosterPlayer = BdlPlayer & { team_bdl_id: number; team_abbr: string };
+export type ActiveRosters = Record<string, ActiveRosterPlayer[]>;
+
+export function getLastActiveRosterFetchMeta(): ActiveRosterFetchMeta | null {
+  return lastFetchMeta;
+}
 
 export async function fetchActiveRosters(): Promise<ActiveRosters> {
-  const rosters: ActiveRosters = {};
+  const perPage = parsePerPage();
+  const authKey = requireKey();
 
-  // Also prevent cross-team leaks (e.g., “Bogdan” duplicated). One player ID must not span teams.
-  const globalSeen = new Map<number, string>();
+  console.log(
+    `BDL fetch: GET ${API_BASE}${ACTIVE_PATH} with per_page=${perPage} (max ${MAX_PER_PAGE})`,
+  );
 
-  for (const t of TEAMS) {
-    const raw = await fetchActivePlayersForTeam(t.bdlId);
-    guardRoster(t.abbr, raw);
+  const playerAssignments = new Map<number, string>();
+  const seenPlayers = new Set<number>();
+  const grouped = new Map<string, ActiveRosterPlayer[]>();
 
-    const mapped = raw.map(p => {
-      const home = t.abbr;
-      const prev = globalSeen.get(p.id);
-      if (prev && prev !== home) {
-        throw new Error(`Cross-team leak of player ${p.id} (${p.first_name} ${p.last_name}) on ${prev} and ${home}`);
-      }
-      globalSeen.set(p.id, home);
-      const fullName = `${p.first_name ?? ""} ${p.last_name ?? ""}`.trim() || String(p.id);
-      const record: SourcePlayerRecord = {
-        id: p.id,
-        playerId: String(p.id),
-        first_name: p.first_name ?? "",
-        last_name: p.last_name ?? "",
-        name: fullName,
-        position: p.position ?? "",
-        height: p.height ?? "",
-        weight: p.weight ?? "",
-        jersey_number: p.jersey_number ?? "",
-        team_abbr: home,
-        team_bdl_id: t.bdlId,
-        teamTricode: home,
-      };
-      return record;
+  let cursor: string | null = null;
+  let pageIndex = 0;
+  let totalPlayers = 0;
+  let usedNextCursor = false;
+  let maxPageSize = 0;
+
+  while (true) {
+    const url = new URL(ACTIVE_PATH, API_BASE);
+    url.searchParams.set("per_page", String(perPage));
+    if (cursor) {
+      url.searchParams.set("cursor", cursor);
+    }
+
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        Authorization: authKey,
+      },
     });
 
-    rosters[t.abbr] = mapped;
+    if (!response.ok) {
+      throw new Error(`${response.status} ${response.statusText} for ${url.toString()}`);
+    }
+
+    const raw = (await response.json()) as Record<string, unknown>;
+    const data = Array.isArray(raw.data) ? raw.data : [];
+    const meta = (raw.meta ?? {}) as Record<string, unknown>;
+
+    pageIndex += 1;
+    const pagePlayers: ActiveRosterPlayer[] = [];
+
+    for (const entry of data) {
+      if (!entry || typeof entry !== "object") {
+        continue;
+      }
+
+      const record = entry as Record<string, unknown>;
+      if (!isTrulyActiveRecord(record)) {
+        continue;
+      }
+
+      const id = record.id;
+      if (typeof id !== "number" || !Number.isFinite(id)) {
+        console.warn("Skipping player with invalid id from Ball Don't Lie active feed.");
+        continue;
+      }
+
+      const team = record.team as Record<string, unknown> | null | undefined;
+      if (!team || typeof team !== "object") {
+        console.warn(`Skipping player ${id} with missing team assignment.`);
+        continue;
+      }
+
+      const teamId = typeof team.id === "number" ? team.id : undefined;
+      if (teamId === undefined) {
+        console.warn(`Skipping player ${id} with missing Ball Don't Lie team id.`);
+        continue;
+      }
+
+      const tricode = mapTeamToTricode({ id: teamId, abbreviation: team.abbreviation });
+
+      const previousTeam = playerAssignments.get(id);
+      if (previousTeam && previousTeam !== tricode) {
+        throw new Error(
+          `Player ${id} (${String(record.first_name ?? "")} ${String(
+            record.last_name ?? "",
+          )}) appears on multiple teams (${previousTeam}, ${tricode}).`,
+        );
+      }
+
+      if (seenPlayers.has(id)) {
+        continue;
+      }
+
+      const player = record as BdlPlayer;
+      const enriched: ActiveRosterPlayer = {
+        ...player,
+        team_bdl_id: teamId,
+        team_abbr: tricode,
+      };
+
+      playerAssignments.set(id, tricode);
+      seenPlayers.add(id);
+
+      const bucket = grouped.get(tricode);
+      if (bucket) {
+        bucket.push(enriched);
+      } else {
+        grouped.set(tricode, [enriched]);
+      }
+
+      pagePlayers.push(enriched);
+    }
+
+    totalPlayers += pagePlayers.length;
+    maxPageSize = Math.max(maxPageSize, pagePlayers.length);
+
+    const nextCursor = normalizeCursor(meta.next_cursor);
+    usedNextCursor = usedNextCursor || Boolean(nextCursor);
+
+    console.log(
+      `BDL fetch: page ${pageIndex} returned ${pagePlayers.length} players (next_cursor=${nextCursor ?? "null"})`,
+    );
+
+    if (!nextCursor) {
+      break;
+    }
+
+    cursor = nextCursor;
   }
 
-  return rosters;
-}
+  const rosters: ActiveRosters = {};
+  for (const team of TEAM_METADATA) {
+    const tricode = team.tricode.toUpperCase();
+    const players = grouped.get(tricode) ?? [];
+    rosters[tricode] = sortRoster(players);
+  }
 
-async function main() {
-  const rosters = await fetchActiveRosters();
-  await fs.mkdir("public/data", { recursive: true });
-  await fs.writeFile(
-    "public/data/rosters.json",
-    `${JSON.stringify({ season: "2025-26", source: "balldontlie/players/active", rosters }, null, 2)}\n`
+  const teamSummaries = Object.entries(rosters)
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([team, players]) => `${team}:${players.length}`)
+    .join(", ");
+
+  console.log(
+    `BDL fetch complete: ${totalPlayers} players grouped across ${Object.keys(rosters).length} teams. [${teamSummaries}]`,
   );
-  console.log("Wrote public/data/rosters.json");
-}
 
-const entryUrl = process.argv[1] ? pathToFileURL(process.argv[1]).href : undefined;
-if (entryUrl && import.meta.url === entryUrl) {
-  main().catch(err => {
-    console.error(err);
-    process.exit(1);
-  });
+  lastFetchMeta = {
+    totalPlayers,
+    pages: pageIndex,
+    perPage,
+    usedNextCursor,
+    maxPageSize,
+  };
+
+  return rosters;
 }
