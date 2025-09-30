@@ -7,8 +7,6 @@ const BIRTHPLACES_URL = 'data/history/player_birthplaces.json';
 const GOAT_URL = 'data/goat_system.json';
 const WORLD_LEGENDS_URL = 'data/world_birth_legends.json';
 
-const STORAGE_KEY = 'nba-hub-bdl-key';
-
 const numberFormatter = new Intl.NumberFormat('en-US');
 const decimalFormatter = new Intl.NumberFormat('en-US', { maximumFractionDigits: 1, minimumFractionDigits: 1 });
 const percentFormatter = new Intl.NumberFormat('en-US', { style: 'percent', minimumFractionDigits: 1, maximumFractionDigits: 1 });
@@ -69,9 +67,6 @@ const stateNames = {
 };
 
 const selectors = {
-  keyForm: document.querySelector('[data-history="key-form"]'),
-  keyInput: document.querySelector('[data-history="key-input"]'),
-  keyClear: document.querySelector('[data-history="key-clear"]'),
   searchInput: document.querySelector('[data-history="player-search"]'),
   searchResults: document.querySelector('[data-history="player-results"]'),
   playerCard: document.querySelector('[data-history="player-card"]'),
@@ -102,25 +97,19 @@ async function loadJson(url) {
   return response.json();
 }
 
-function getStoredKey() {
-  try {
-    return window.localStorage.getItem(STORAGE_KEY) || '';
-  } catch (error) {
-    console.warn('Unable to read stored BDL key', error);
-    return '';
+function getApiKey() {
+  const meta = document.querySelector('meta[name="bdl-api-key"]');
+  const metaKey = meta?.getAttribute('content')?.trim();
+  if (metaKey) {
+    return metaKey;
   }
-}
-
-function saveKey(value) {
-  try {
-    if (value) {
-      window.localStorage.setItem(STORAGE_KEY, value);
-    } else {
-      window.localStorage.removeItem(STORAGE_KEY);
+  if (typeof window !== 'undefined') {
+    const globalKey = window.BDL_API_KEY || window.BALLDONTLIE_API_KEY || window.BALL_DONT_LIE_API_KEY;
+    if (globalKey && String(globalKey).trim()) {
+      return String(globalKey).trim();
     }
-  } catch (error) {
-    console.warn('Unable to persist BDL key', error);
   }
+  return null;
 }
 
 function formatInches(value) {
@@ -530,24 +519,6 @@ function renderVisuals(goatEntry, references) {
   }
 }
 
-function attachKeyHandlers() {
-  if (!selectors.keyForm || !selectors.keyInput) return;
-  selectors.keyInput.value = getStoredKey();
-  selectors.keyForm.addEventListener('submit', (event) => {
-    event.preventDefault();
-    const value = selectors.keyInput.value.trim();
-    saveKey(value);
-    selectors.keyForm.classList.add('history-key--saved');
-    setTimeout(() => selectors.keyForm?.classList.remove('history-key--saved'), 1500);
-  });
-  if (selectors.keyClear) {
-    selectors.keyClear.addEventListener('click', () => {
-      selectors.keyInput.value = '';
-      saveKey('');
-    });
-  }
-}
-
 function renderSearchResults(players, term) {
   if (!selectors.searchResults) return;
   selectors.searchResults.innerHTML = '';
@@ -930,7 +901,6 @@ function renderAtlasSpotlight(entry, config) {
 }
 
 async function bootstrap() {
-  attachKeyHandlers();
   try {
     const [playersMin, playersFullDocument, birthplacesDocument, goatDocument, worldLegends] = await Promise.all([
       loadJson(PLAYERS_MIN_URL),
@@ -979,18 +949,20 @@ async function bootstrap() {
         renderVisuals(goatEntry, goatReferences);
         if (!totalsContainer) return;
         totalsContainer.innerHTML = '';
-        const apiKey = getStoredKey().trim();
+        const apiKey = getApiKey();
         if (!apiKey) {
           totalsContainer.append(
             createElement(
               'p',
-              'history-player__hint',
-              'Add a Ball Don\'t Lie All-Star key above to unlock full career totals.',
+              'history-player__error',
+              'Ball Don\'t Lie credentials are not configured for this site. Reach out to the data team to restore access.',
             ),
           );
           return;
         }
-        totalsContainer.append(createElement('p', 'history-player__hint', 'Fetching Ball Don\'t Lie career log…'));
+        totalsContainer.append(
+          createElement('p', 'history-player__hint', 'Fetching Ball Don\'t Lie career log with site credentials…'),
+        );
         try {
           const career = await fetchCareerStats(playerId, apiKey);
           totalsContainer.innerHTML = '';
@@ -1003,7 +975,7 @@ async function bootstrap() {
             createElement(
               'p',
               'history-player__error',
-              'Unable to load Ball Don\'t Lie stats. Double-check your API key and try again.',
+              'We hit a snag pulling Ball Don\'t Lie stats. Try again in a moment.',
             ),
           );
         }

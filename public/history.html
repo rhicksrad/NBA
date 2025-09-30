@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="bdl-api-key" content="" />
     <link rel="icon" type="image/png" href="nba-logo-vector-01.png" />
     <link rel="stylesheet" href="styles/hub.css" />
     <title>History | NBA Intelligence Hub</title>
@@ -44,18 +45,10 @@
 
           <div class="history-archive">
             <div class="history-search-panel">
-              <form class="history-key" data-history="key-form">
-                <label for="bdl-api-key">Ball Don't Lie API key</label>
-                <div class="history-key__controls">
-                  <input id="bdl-api-key" name="bdl-api-key" type="password" autocomplete="off" data-history="key-input" />
-                  <button type="submit">Save</button>
-                  <button type="button" data-history="key-clear">Clear</button>
-                </div>
-                <p class="history-key__help">
-                  The key is stored in this browser only. Supply an All-Star key to aggregate complete career totals.
-                </p>
-              </form>
-
+              <p class="history-key__help">
+                The NBA Intelligence Hub uses its Ball Don't Lie All-Star credentials to hydrate every player card
+                automatically.
+              </p>
               <div class="history-search">
                 <label for="history-player-search">Search historical players</label>
                 <input
