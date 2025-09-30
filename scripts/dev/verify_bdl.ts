@@ -1,39 +1,35 @@
 import { pathToFileURL } from "url";
 
-import { fetchBallDontLieRosters } from "../fetch/bdl_rosters.js";
-import { SEASON } from "../lib/season.js";
+import { fetchActiveRosters } from "../fetch/bdl_active_rosters.js";
 import { TEAM_METADATA } from "../lib/teams.js";
 
-function resolveSeasonStartYear(season: string): number {
-  const [start] = season.split("-");
-  const parsed = Number.parseInt(start, 10);
-  if (!Number.isFinite(parsed)) {
-    throw new Error(`Invalid season format: ${season}`);
-  }
-  return parsed;
-}
-
 async function verify(): Promise<void> {
-  const targetSeason = resolveSeasonStartYear(SEASON);
-  const roster = await fetchBallDontLieRosters(targetSeason);
+  const rosters = await fetchActiveRosters();
   const empties = TEAM_METADATA.filter((team) => {
-    const record = roster.teams[team.tricode];
-    return !record || record.roster.length === 0;
+    const record = rosters[team.tricode];
+    return !Array.isArray(record) || record.length === 0;
   });
 
-  if (empties.length > 4) {
+  if (empties.length > 0) {
     const missingAbbrs = empties.map((team) => team.tricode).join(", ");
     throw new Error(
-      `BDL verify failed: ${empties.length} teams returned 0 players (${missingAbbrs})`,
+      `BDL verify failed: missing active rosters for ${empties.length} team(s) (${missingAbbrs})`,
     );
   }
 
-  console.log(
-    `BDL OK — ${TEAM_METADATA.length - empties.length} teams populated (${empties.length} empty)`,
-  );
-  if (empties.length > 0) {
-    console.warn(`BDL empty rosters: ${empties.map((team) => team.tricode).join(", ")}`);
+  const outOfRange = TEAM_METADATA.filter((team) => {
+    const record = rosters[team.tricode] ?? [];
+    return record.length < 13 || record.length > 21;
+  });
+
+  if (outOfRange.length > 0) {
+    const sample = outOfRange.map((team) => `${team.tricode}:${rosters[team.tricode]?.length ?? 0}`);
+    throw new Error(
+      `BDL verify failed: roster size out of bounds — ${sample.join(", ")}`,
+    );
   }
+
+  console.log("BDL OK — all active rosters populated within expected bounds");
 }
 
 function useCache(): boolean {

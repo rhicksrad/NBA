@@ -73,6 +73,14 @@ export interface SourcePlayerRecord {
   teamTricode?: string;
   status?: string;
   isNewAddition?: boolean;
+  id?: number;
+  first_name?: string;
+  last_name?: string;
+  jersey_number?: string;
+  height?: string;
+  weight?: string;
+  team_abbr?: string;
+  team_bdl_id?: number;
 }
 
 export interface OverridesConfig {

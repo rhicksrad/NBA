@@ -1,4 +1,4 @@
-import { describe, expect, it, beforeEach, vi, type MockInstance } from "vitest";
+import { describe, expect, it, beforeEach, afterEach, vi, type MockInstance } from "vitest";
 import { z } from "zod";
 
 import { BallDontLieClient } from "./ball_dont_lie_client.js";
@@ -65,6 +65,11 @@ describe("BallDontLieClient.getActivePlayersByTeam", () => {
 
   beforeEach(() => {
     mockRequest.mockReset();
+    process.env.NO_CACHE = "1";
+  });
+
+  afterEach(() => {
+    delete process.env.NO_CACHE;
   });
 
   it("requests season-scoped active rosters when a start year is provided", async () => {

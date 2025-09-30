@@ -19,6 +19,8 @@ jobs:
   build-previews:
     runs-on: ubuntu-latest
     environment: previews
+    env:
+      BALLDONTLIE_API_KEY: ${{ secrets.BALLDONTLIE_API_KEY }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -29,14 +31,10 @@ jobs:
         with:
           node-version: 20
 
-      - name: Install pnpm (and fix PATH)
-        shell: bash
-        run: |
-          npm i -g pnpm@9.12.1
-          prefix="$(npm config get prefix)"
-          echo "$prefix/bin" >> "$GITHUB_PATH"
-          pnpm -v
-          which pnpm
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.12.1
 
       - name: Use dedicated pnpm store
         run: pnpm config set store-dir ~/.pnpm-store
@@ -51,36 +49,32 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Provision Ball Don't Lie key
-        shell: bash
-        env:
-          RAW_BDL_API_KEY: ${{ secrets.BDL_API_KEY || vars.BDL_API_KEY }}
+      - name: Ensure Ball Don't Lie key configured
         run: |
-          set -euo pipefail
-          if [ -z "${RAW_BDL_API_KEY:-}" ]; then
-            echo "BDL_API_KEY secret not configured for previews workflow" >&2
-            echo "Provide a repository or environment secret named BDL_API_KEY." >&2
+          if [ -z "${BALLDONTLIE_API_KEY:-}" ]; then
+            echo "BALLDONTLIE_API_KEY secret not configured" >&2
             exit 1
           fi
-          mkdir -p secrets
-          printf '%s' "$RAW_BDL_API_KEY" > secrets/bdl_api_key
-          chmod 600 secrets/bdl_api_key
-          echo "BDL_API_KEY=$RAW_BDL_API_KEY" >> "$GITHUB_ENV"
 
       - name: Stamp date
         id: metadata
         run: echo "date=$(date -u +'%Y-%m-%d')" >> "$GITHUB_OUTPUT"
 
       - name: Verify Ball Don't Lie API access
+        env:
+          BALLDONTLIE_API_KEY: ${{ secrets.BALLDONTLIE_API_KEY }}
         run: pnpm verify:bdl
 
       - name: Build and validate previews
         env:
           USE_NBA_STATS: "0"
           USE_BREF: "0"
+          BALLDONTLIE_API_KEY: ${{ secrets.BALLDONTLIE_API_KEY }}
         run: pnpm previews
 
       - name: Validate previews
+        env:
+          BALLDONTLIE_API_KEY: ${{ secrets.BALLDONTLIE_API_KEY }}
         run: pnpm run validate:previews
 
       - name: Detect changes
