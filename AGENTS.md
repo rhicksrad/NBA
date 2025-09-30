@@ -1,290 +1,146 @@
-Agent Operating Guide 
+agents.md — Cloudflare Proxy Workflow
 
-## 1) Non-negotiables
+This project no longer ships API keys to the browser. All Ball Don’t Lie (BDL) calls go through a Cloudflare Worker proxy.
 
-* Treat Ball Don’t Lie (BDL) as the source of truth for NBA data. Do not “fix” their data. Only fix my code and my mapping.
-* Never invent rosters, teams, or schedules. If an endpoint does not provide what you need, change the endpoint or parameters.
-* Keep the site static and GitHub Pages friendly. No servers, no binary artifacts, no headless Chrome, no Docker.
-* Prefer small, composable scripts over one large script. Everything must run with `pnpm` tasks.
+Non-negotiables
 
-## 2) API usage rules for BDL
+Do not add Authorization headers in browser code.
 
-* Authentication
+Do not re-introduce any client-side key injection, meta tags, or .env lookups for BDL.
 
-  * All BDL requests must include `Authorization: <API_KEY>` header.
-  * Assume the key is injected at build time. Do not fetch `/data/bdl-key.json` from the client. That pattern fails on Pages.
-  * Read the key from `import.meta.env.VITE_BDL_KEY` in browser code, or `process.env.BALLDONTLIE_API_KEY` in Node scripts.
-* Endpoints to use
+All network calls to BDL must use the Worker base:
+https://bdlproxy.hicksrch.workers.dev/bdl
 
-  * Teams: `GET /v1/teams`
-  * Active players: `GET /v1/players/active` with pagination
-  * Players search: `GET /v1/players?search=<q>` with pagination
-  * Games by date range: `GET /v1/games?start_date=YYYY-MM-DD&end_date=YYYY-MM-DD` with pagination
-  * Player season stats: `GET /v1/season_averages?season=<year>&player_ids[]=...`
-  * Use `per_page=100` and follow cursor pagination via `meta.next_cursor` until it is null.
-* Pagination and retries
+Keep requests GET/HEAD only. No POST/PUT/PATCH/DELETE to the proxy.
 
-  * Implement a shared `fetchAll` with cursor support. Stop only when `next_cursor` is null.
-  * On 429 or 5xx, exponential backoff with jitter. Max 4 attempts per page.
-* Roster construction
+How to call BDL now
 
-  * Use `/players/active` as the canonical list, then group by `team.id`.
-  * Enforce `MAX_TEAM_ACTIVE = 30` when rendering, but never truncate the data in storage.
-  * Never fall back to historical endpoints to “pad” active rosters.
-* Historical player search
+Create or use the helper:
 
-  * Build a static index by crawling paginated `/players?per_page=100` across the full ID space.
-  * Cache a flat `players_all.json` with `id`, `first_name`, `last_name`, `team` last seen, height, weight, and known years.
-  * Client search runs against that static file, not live queries.
+// public/assets/js/bdl.js
+export const BDL_BASE = "https://bdlproxy.hicksrch.workers.dev/bdl";
 
-## 3) Secrets and build-time injection
-
-* Do not try to load `data/bdl-key.json` at runtime. That led to 404s and is the wrong pattern for Pages.
-* Inject the key at build:
-
-  * Browser code uses `Vite define` or a small replace step to bake `VITE_BDL_KEY`.
-  * Node scripts read `BALLDONTLIE_API_KEY`.
-* Never print the key in logs or HTML. Never commit the key or any generated file that contains it.
-
-### Minimal replacement step for a non-Vite stack
-
-* Add a tiny replacer to `scripts/build/define_env.mjs` that replaces `__VITE_BDL_KEY__` in `dist/*.js` with the secret during CI.
-* Reference `const BDL_KEY = import.meta.env?.VITE_BDL_KEY ?? "__VITE_BDL_KEY__";` in browser code.
-
-## 4) GitHub Actions that always work
-
-* Install pnpm before using it. Do not assume the runner has pnpm.
-
-```yaml
-name: Previews pipeline
-
-on:
-  push:
-    branches: [main]
-  schedule:
-    - cron: "27 7 * * *"
-
-jobs:
-  build-previews:
-    runs-on: ubuntu-latest
-    env:
-      BALLDONTLIE_API_KEY: ${{ secrets.BALLDONTLIE_API_KEY }}
-      VITE_BDL_KEY: ${{ secrets.BALLDONTLIE_API_KEY }}
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: "pnpm"
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9.12.1
-          run_install: false
-
-      - name: Install
-        run: pnpm i --frozen-lockfile
-
-      - name: Build data
-        run: pnpm build:data
-
-      - name: Generate previews
-        run: pnpm gen:previews
-
-      - name: Validate previews
-        run: pnpm validate:previews
-
-      - name: Build site
-        run: pnpm build
-
-      - name: Upload pages artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: ./dist
-```
-
-Notes
-
-* Put any one-off text replacement for `__VITE_BDL_KEY__` right before “Build site”.
-* Do not curl secrets to files inside `dist`. Secrets inside `dist` become public.
-
-## 5) Data freshness and staleness
-
-* Preview generators must log the exact source and timestamp for each dataset they emit.
-* If a preview references a traded player or old team mapping, treat it as a data refresh bug, not a content bug. Regenerate from BDL with current endpoints.
-* Validations must check “did we use the right source and parameters” rather than “does the data look plausible”.
-
-## 6) Mapping discipline
-
-* Maintain a single `TEAM_METADATA` map keyed by BDL team IDs. No hardcoded abbreviations that drift from the API.
-* All roster and schedule grouping must key off `team.id` from BDL responses.
-* When merging multiple sources, BDL wins. External nicknames or legacy IDs are advisory only.
-
-## 7) Frontend rules
-
-* Use the shared header and `hub-nav` styles on every page, including previews.
-* Ship one hashed JS bundle `main.<hash>.js` and update references automatically after build.
-* No inline secrets in HTML. Access the key via the env constant only.
-* Avoid long runtime chains on page load. Precompute heavy data to JSON during CI and fetch that JSON from the site.
-
-## 8) Error handling that helps debugging
-
-* Wrap every network call with a named `request()` that throws typed errors, for example `ApiKeyMissingError`, `RateLimitError`, `HttpError`.
-* In the UI, show a terse banner with the error class and action taken. Log the full detail to `console.debug`.
-* Never swallow 401 or 404. Surface them with endpoint and params.
-
-## 9) Commands the agent can run locally
-
-* `pnpm verify:bdl` must only validate that we hit the right endpoints with the right params and that pagination is complete.
-* `pnpm build:data` fetches from BDL and writes canonical JSON under `data/`.
-* `pnpm gen:previews` renders static previews from canonical JSON.
-* `pnpm validate:previews` ensures no pages refer to missing players, teams, or mismatched seasons.
-* `pnpm build` emits production assets to `dist/`.
-
-## 10) Conflict hygiene
-
-* When resolving merge conflicts in shared CSS or HTML, prefer the version that contains `hub-nav`, dark header gradients, and link color mixes. That is the current site style.
-* Remove all conflict markers and reformat files with the project formatter before committing.
-
-## 11) Games and schedules
-
-* To show past games, call `GET /v1/games` with a bounded `start_date` and `end_date`. Paginate fully.
-* Do not try to infer “yesterday” on the server. Compute ranges in scripts with explicit dates, checked into previews.
-
-## 12) Historical players page
-
-* Build once during CI by crawling all players. Save `players_all.json` with a compact schema.
-* Client page `history.html`:
-
-  * Text search over `players_all.json`
-  * On select, fetch season averages for target seasons to render GOAT score and percentile cards
-  * Do not compute percentiles against live data at runtime. Use precomputed distributions from `data/percentiles.json`.
-
-## 13) Style for code that touches BDL
-
-Use this exact scaffold when writing new fetchers:
-
-```ts
-const API = "https://api.balldontlie.io/v1";
-const KEY = import.meta.env?.VITE_BDL_KEY ?? process.env.BALLDONTLIE_API_KEY ?? "";
-if (!KEY) throw new Error("Ball Don't Lie API key missing");
-
-type Meta = { next_cursor?: number | null };
-type Page<T> = { data: T[]; meta?: Meta };
-
-async function request<T>(url: string, init: RequestInit = {}): Promise<T> {
-  const res = await fetch(url, {
-    ...init,
-    headers: { ...(init.headers || {}), Authorization: KEY },
-  });
-  if (res.status === 401) throw new Error(`401 Unauthorized ${url}`);
-  if (res.status === 429) throw new Error(`429 Rate limited ${url}`);
-  if (!res.ok) throw new Error(`${res.status} ${res.statusText} ${url}`);
-  return res.json() as Promise<T>;
+export async function bdl(path, init = {}) {
+  const url = `${BDL_BASE}${path}`;
+  const res = await fetch(url, { ...init, headers: { Accept: "application/json", ...(init.headers || {}) } });
+  if (!res.ok) throw new Error(`BDL ${res.status} ${res.statusText} for ${path}`);
+  return res.json();
 }
 
-async function fetchAll<T>(path: string, qs: Record<string, string | number> = {}): Promise<T[]> {
-  const out: T[] = [];
-  let cursor: number | null | undefined = undefined;
-  do {
-    const params = new URLSearchParams({ per_page: "100", ...Object.fromEntries(Object.entries(qs).map(([k,v]) => [k, String(v)])) });
-    if (cursor != null) params.set("cursor", String(cursor));
-    const page = await request<Page<T>>(`${API}${path}?${params.toString()}`);
-    out.push(...page.data);
-    cursor = page.meta?.next_cursor ?? null;
-  } while (cursor);
-  return out;
-}
-```
 
-## 14) What not to do
+Use it everywhere:
 
-* Do not call undocumented endpoints.
-* Do not synthesize rosters from news or scrapes.
-* Do not put secrets in static JSON files or commit history.
-* Do not re-validate BDL content semantics. Validate that we used the correct API and pagination.
+import { bdl } from "./assets/js/bdl.js";
 
----
+const { data } = await bdl("/v1/players?search=lillard");
 
-Paste this into `agents.md` and keep it at the top. It tells the agent exactly how to fetch, how to build, how to inject secrets correctly, and how to stop “fixing” the data when the real bug is our code or pipeline.
+Expected repo state
 
-Canonical workflow rules
+Removed: public/assets/bdl-credentials.js, public/assets/js/credentials.js, any <meta name="bdl-api-key">.
 
-Never write or edit previews directly. Always call the scripts:
+No references to data/bdl-key.json, assets/bdl-key.json, or Authorization: Bearer ... in client code.
 
-pnpm previews
+package.json has no inject:bdl, restore:bdl, or prepare:bdl scripts.
 
-Data input: read only from canonical JSON sources under data/.
+CI workflows contain no secret injection steps for BDL.
 
-Fixing mappings: if you need to fix a player/team mapping, edit data/2025-26/manual/overrides.yaml and re-run.
+Worker summary
 
-If validator fails, fix the data then regenerate. Do not bypass.
+The Worker forwards /bdl/* to https://api.balldontlie.io/* with a server-side key.
 
-Season framing
+60s edge cache on successful GETs.
 
-Treat the 2025–2026 NBA season as the current active season.
+Optional controls:
 
-Treat the 2024–2025 campaign as the most recently completed season.
+Per-IP rate cap via Durable Object limiter (60/min).
 
-All data summaries, visualizations, and narratives must explicitly call out this distinction.
+WAF rules for allow/deny lists and rate limiting when routed via a custom domain.
 
-Repository guidelines
+Optional origin check to only allow requests from our site.
 
-Prefer Python 3.11 when running local tooling.
+When adding new features
 
-Run ruff check . and pytest before submitting changes that touch Python code.
+Build browser code against the proxy base. Never import or construct https://api.balldontlie.io directly.
 
-Keep helper scripts importable (no top-level work at import time) so they remain testable.
+Keep calls idempotent and cache-friendly. Prefer query parameters; avoid needless cache-busters.
 
-Use UTF-8 encoding for text files, with trailing newlines.
+If you need fresh data for a specific call, append a one-off &_=${Date.now()} only to that call.
 
-Never add or commit binary files to the repository.
+Common pitfalls and fixes
 
-Data integrity and reproducibility
+Calls go to api.balldontlie.io
+Fix: replace with bdl("/v1/...") via the helper.
 
-Data is authoritative. No agent is permitted to “invent” values, narratives, or statistics.
+Authorization header added by habit
+Remove it. The Worker adds auth server-side.
 
-All rosters, stats, and schedules must come from the designated fetcher scripts (e.g. BallDontLie API wrappers) and stored JSON under public/data/.
+CORS error
+Ensure the request hits the Worker URL and path begins with /bdl/. The Worker sets permissive CORS.
 
-If an upstream fetch fails:
+429 Too Many Requests
+You exceeded the per-IP cap. Back off and retry after Retry-After seconds.
 
-Use the last-good JSON.
+403 Forbidden
+You’re outside the allowlist (if enabled). Use an approved origin/IP.
 
-Record failure details in a *.failed.json alongside.
+Code patterns agents should follow
 
-Do not generate previews or pages from incomplete data.
+Centralize fetch logic:
 
-Each generated artifact must be reproducible from script + data only.
+Import bdl() and call it; do not duplicate fetch wrappers.
 
-Previews and outputs
+Handle failures with small, local retries only when the endpoint is safe to retry.
 
-Previews are regenerated solely from JSON + overrides + templates.
+Data loaders:
 
-Narrative text must be drawn from templates or structured input data.
+Keep shape compatible with existing renderers.
 
-Agents must never append “free text” commentary.
+Validate presence of required fields; don’t re-validate upstream schema exhaustively.
 
-If additional context is required (injuries, trades, etc.), it must be encoded in data/ and cited by the generator.
+Modules:
 
-Frontend and site rules
+Prefer type="module" scripts and explicit imports from ./assets/js/bdl.js.
 
-All HTML pages should import assets from /assets/js/ modules and /public/data/ JSON.
+Avoid global variables for configuration.
 
-No hardcoded season rosters in the HTML.
+Testing checklist (do this after edits)
 
-Include timestamp + source attribution when displaying fetched data.
+DevTools Network on players.html, history.html, games.html, teams.html shows requests to bdlproxy.hicksrch.workers.dev/bdl/....
 
-GitHub / CI rules
+No browser request carries an Authorization header.
 
-Use pnpm with corepack; do not mix installer methods.
+No fetches to legacy key files or meta tags.
 
-GitHub Actions should:
+Sample sanity:
 
-Fetch data via scripts before build.
+bdl("/v1/players?search=lillard") returns Damian Lillard.
 
-Validate data (counts, schema) before deploy.
+Team and roster pages populate without console errors.
 
-Refuse to deploy if validation fails.
+CI/CD notes
+
+Keep existing site build/validate steps.
+
+Do not add any step that reads or injects a BDL key into artifacts.
+
+If a job needs BDL data server-side, it may call the proxy just like the browser does.
+
+Operational controls (reference)
+
+Rate limit: Worker DO limiter at 60/min per IP and/or Cloudflare WAF Rate Limiting at 60/min on /bdl/*.
+
+IP policy: allow/deny via WAF on a routed domain, or inline CF-Connecting-IP checks in the Worker.
+
+Secret rotation: rotate BDL_API_KEY in the Worker’s Variables/Secrets. No repo change required.
+
+Incident playbook
+
+401 from upstream: rotate BDL_API_KEY.
+
+403 to clients: check allowlist rules or origin checks.
+
+429 spikes: adjust WAF rule or DO limit; verify no client loop.
+
+High latency/errors: confirm BDL status, reduce cache TTL misses, and inspect Worker logs.
+
+Keep it simple: use the proxy, keep secrets server-side, and never reintroduce client auth.
