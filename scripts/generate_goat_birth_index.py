@@ -492,6 +492,20 @@ def build_player_records() -> List[dict]:
         merged = base.copy()
         merged.update(player)
 
+        # Preserve authoritative ranking + scoring data from the system feed so
+        # the birth index mirrors the public GOAT order. Editorial snapshots in
+        # ``goat_index.json`` only cover the top tier and can override fields
+        # such as ``rank`` or ``goatScore`` when merged blindly, which caused
+        # gaps like the missing no. 11, 13, 14, and 16 ranks called out in the
+        # last run.
+        system_rank = base.get("rank")
+        if isinstance(system_rank, (int, float)):
+            merged["rank"] = system_rank
+
+        system_score = base.get("goatScore")
+        if isinstance(system_score, (int, float)):
+            merged["goatScore"] = system_score
+
         if not merged.get("personId"):
             merged["personId"] = base.get("personId")
         if not merged.get("resume"):
@@ -519,11 +533,20 @@ def build_player_records() -> List[dict]:
         franchises_raw = player.get("franchises") or []
         franchises = [team_lookup.get(code, code) for code in franchises_raw if code]
 
+        rank_value = player.get("rank")
+        if isinstance(rank_value, (int, float)):
+            try:
+                rank_value = int(rank_value)
+            except (TypeError, ValueError):  # pragma: no cover - defensive
+                rank_value = None
+        else:
+            rank_value = None
+
         enriched.append(
             {
                 "personId": player.get("personId"),
                 "name": name,
-                "rank": player.get("rank"),
+                "rank": rank_value,
                 "goatScore": round(goat_score, 1),
                 "tier": player.get("tier"),
                 "resume": player.get("resume"),
@@ -536,12 +559,13 @@ def build_player_records() -> List[dict]:
         )
 
     def sort_key(item: dict) -> tuple:
+        rank = item.get("rank")
+        if isinstance(rank, int):
+            return (rank, item.get("name") or "")
         score = item.get("goatScore")
-        return (-(score if isinstance(score, (int, float)) else 0), item.get("name") or "")
+        return (float("inf"), -(score if isinstance(score, (int, float)) else 0), item.get("name") or "")
 
     enriched.sort(key=sort_key)
-    for index, record in enumerate(enriched, start=1):
-        record["rank"] = index
     return enriched
 
 
