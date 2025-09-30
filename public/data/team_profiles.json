@@ -1,6 +1,6 @@
 {
   "season": "1946-2025",
-  "generatedAt": "2025-09-28T03:45:07.297959+00:00",
+  "generatedAt": "2025-09-30T18:49:57.678820+00:00",
   "teams": [
     {
       "abbreviation": "ATL",
@@ -364,7 +364,7 @@
     },
     {
       "abbreviation": "LAC",
-      "name": "Los Angeles Clippers",
+      "name": "LA Clippers",
       "city": "Los Angeles, CA",
       "conference": "West",
       "division": "Pacific",
@@ -791,22 +791,22 @@
       "latitude": 29.427,
       "longitude": -98.4375,
       "metrics": {
-        "winPct": 0.4186,
-        "avgPointsFor": 112.7,
-        "avgPointsAgainst": 115.17,
-        "netMargin": -2.48,
-        "fieldGoalPct": 0.4612,
-        "threePointPct": 0.3507,
-        "rebounds": 43.16,
-        "assists": 28.43,
-        "turnovers": 13.17,
+        "winPct": 0.5845,
+        "avgPointsFor": 104.9,
+        "avgPointsAgainst": 102.31,
+        "netMargin": 2.59,
+        "fieldGoalPct": 0.4726,
+        "threePointPct": 0.3733,
+        "rebounds": 38.35,
+        "assists": 21.06,
+        "turnovers": 12.04,
         "pointsInPaint": 47.65,
         "fastBreakPoints": 16.16,
         "benchPoints": 44.74
       },
-      "gamesSampled": 86,
-      "wins": 36,
-      "losses": 50,
+      "gamesSampled": 4465,
+      "wins": 2610,
+      "losses": 1855,
       "legacy": {
         "titles": 5,
         "hallOfFamers": 8
@@ -874,7 +874,7 @@
     },
     {
       "abbreviation": "WAS",
-      "name": "Washington Wizards",
+      "name": "Washington Capitols",
       "city": "Washington, DC",
       "conference": "East",
       "division": "Southeast",

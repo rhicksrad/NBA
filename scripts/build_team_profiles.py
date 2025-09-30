@@ -16,6 +16,8 @@ ROOT = Path(__file__).resolve().parents[1]
 TEAM_HISTORIES = ROOT / "TeamHistories.csv"
 TEAM_STATS_ARCHIVE = ROOT / "TeamStatistics.zip"
 PROFILES_PATH = ROOT / "public" / "data" / "team_profiles.json"
+CANONICAL_TEAMS = ROOT / "data" / "2025-26" / "canonical" / "teams.json"
+BDL_TEAMS_CACHE = ROOT / "data" / "cache" / "bdl" / "teams.json"
 
 
 # Championship and Hall of Fame counts are sourced from the Basketball-Reference
@@ -85,8 +87,59 @@ def _load_existing_profiles(path: Path) -> dict:
     return data
 
 
-def _active_team_lookup(path: Path) -> dict[str, str]:
-    """Return a mapping of teamId -> current abbreviation."""
+def _load_canonical_team_tricodes(path: Path) -> dict[str, str]:
+    lookup: dict[str, str] = {}
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except FileNotFoundError:
+        return lookup
+    except json.JSONDecodeError as exc:
+        raise ValueError(f"Failed to parse canonical teams JSON: {path}") from exc
+
+    if isinstance(payload, list):
+        for entry in payload:
+            if not isinstance(entry, dict):
+                continue
+            team_id = str(entry.get("teamId", "")).strip()
+            tricode = str(entry.get("tricode", "")).strip().upper()
+            if not team_id or not tricode:
+                continue
+            lookup[team_id] = tricode
+    return lookup
+
+
+def _load_bdl_team_metadata(path: Path) -> dict[str, dict[str, str]]:
+    """Return Ball Don't Lie team metadata keyed by abbreviation."""
+
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except FileNotFoundError:
+        return {}
+    except json.JSONDecodeError as exc:
+        raise ValueError(f"Failed to parse cached BDL teams JSON: {path}") from exc
+
+    teams = payload.get("value") if isinstance(payload, dict) else None
+    if not isinstance(teams, list):
+        return {}
+
+    lookup: dict[str, dict[str, str]] = {}
+    for entry in teams:
+        if not isinstance(entry, dict):
+            continue
+        abbr = str(entry.get("abbreviation", "")).strip().upper()
+        if not abbr:
+            continue
+        lookup[abbr] = entry
+    return lookup
+
+
+def _active_team_lookup(path: Path, canonical_lookup: dict[str, str]) -> dict[str, str]:
+    """Return a mapping of teamId -> current abbreviation.
+
+    Preference order:
+    1. Canonical Ball Don't Lie derived tricode
+    2. Raw TeamHistories abbreviation (legacy CSV)
+    """
 
     lookup: dict[str, str] = {}
     with path.open("r", encoding="utf-8", newline="") as handle:
@@ -95,11 +148,17 @@ def _active_team_lookup(path: Path) -> dict[str, str]:
             active_until = row.get("seasonActiveTill", "").strip()
             if active_until != "2100":
                 continue
-            team_id = row.get("teamId", "").strip()
-            abbrev = row.get("teamAbbrev", "").strip()
-            if not team_id or not abbrev:
+            team_id = (row.get("teamId") or "").strip()
+            if not team_id:
                 continue
-            lookup[team_id] = abbrev
+
+            abbreviation = canonical_lookup.get(team_id)
+            if not abbreviation:
+                abbreviation = (row.get("teamAbbrev") or "").strip().upper()
+
+            if not abbreviation:
+                continue
+            lookup[team_id] = abbreviation
     if not lookup:
         raise ValueError("No active franchises detected in TeamHistories.csv")
     return lookup
@@ -238,14 +297,53 @@ def _update_profiles(data: dict, aggregates: dict[str, TeamAggregate]) -> None:
         }
 
 
+def _apply_team_metadata(data: dict, bdl_lookup: dict[str, dict[str, str]]) -> None:
+    """Enrich team metadata using Ball Don't Lie as the primary source."""
+
+    if not bdl_lookup:
+        return
+
+    for team in data.get("teams", []):
+        abbreviation = str(team.get("abbreviation", "")).strip().upper()
+        if not abbreviation:
+            continue
+
+        metadata = bdl_lookup.get(abbreviation)
+        if not metadata:
+            continue
+
+        bdl_abbr = str(metadata.get("abbreviation", "")).strip().upper()
+        if bdl_abbr:
+            team["abbreviation"] = bdl_abbr
+
+        full_name = str(metadata.get("full_name", "")).strip()
+        if full_name:
+            team["name"] = full_name
+
+        conference = str(metadata.get("conference", "")).strip()
+        if conference:
+            team["conference"] = conference
+
+        division = str(metadata.get("division", "")).strip()
+        if division:
+            team["division"] = division
+
+        city = str(metadata.get("city", "")).strip()
+        if city and not str(team.get("city", "")).strip():
+            team["city"] = city
+
+
 def main() -> None:
     profiles = _load_existing_profiles(PROFILES_PATH)
-    team_lookup = _active_team_lookup(TEAM_HISTORIES)
+    canonical_lookup = _load_canonical_team_tricodes(CANONICAL_TEAMS)
+    bdl_lookup = _load_bdl_team_metadata(BDL_TEAMS_CACHE)
+    team_lookup = _active_team_lookup(TEAM_HISTORIES, canonical_lookup)
     aggregates, earliest, latest = _aggregate_team_metrics(team_lookup)
     if not aggregates:
         raise RuntimeError("No aggregates produced from TeamStatistics.zip")
 
     _update_profiles(profiles, aggregates)
+    _apply_team_metadata(profiles, bdl_lookup)
 
     if earliest and latest:
         profiles["season"] = f"{earliest.year}-{latest.year}"
