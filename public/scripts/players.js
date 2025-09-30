@@ -1736,21 +1736,25 @@ function initPlayerAtlas() {
   const profile = atlas.querySelector('[data-player-profile]');
   const nameEl = atlas.querySelector('[data-player-name]');
   const metaEl = atlas.querySelector('[data-player-meta]');
-  const goatRecentContainer = atlas.querySelector('[data-player-goat-recent]');
-  const goatHistoricContainer = atlas.querySelector('[data-player-goat-historic]');
-  const goatRecentValueEl = atlas.querySelector('[data-player-goat-recent-score]');
-  const goatRecentRankEl = atlas.querySelector('[data-player-goat-recent-rank]');
-  const goatHistoricValueEl = atlas.querySelector('[data-player-goat-historic-score]');
-  const goatHistoricRankEl = atlas.querySelector('[data-player-goat-historic-rank]');
-  const bioEl = atlas.querySelector('[data-player-bio]');
-  const archetypeEl = atlas.querySelector('[data-player-archetype]');
-  const vitalsEl = atlas.querySelector('[data-player-vitals]');
-  const originEl = atlas.querySelector('[data-player-origin]');
-  const draftEl = atlas.querySelector('[data-player-draft]');
+  const teamEl = atlas.querySelector('[data-player-team]');
+  const positionEl = atlas.querySelector('[data-player-position]');
+  const jerseyEl = atlas.querySelector('[data-player-jersey]');
+  const heightEl = atlas.querySelector('[data-player-height]');
+  const weightEl = atlas.querySelector('[data-player-weight]');
+  const updatedEl = atlas.querySelector('[data-player-updated]');
+  const statsContainer = atlas.querySelector('[data-player-stats]');
+  const statsMeta = atlas.querySelector('[data-player-stats-meta]');
+  const statsSeasonEl = atlas.querySelector('[data-player-stats-season]');
+  const statsEmpty = atlas.querySelector('[data-player-stats-empty]');
+  const statsError = atlas.querySelector('[data-player-stats-error]');
+  const statGamesEl = atlas.querySelector('[data-player-stat-games]');
+  const statPointsEl = atlas.querySelector('[data-player-stat-points]');
+  const statReboundsEl = atlas.querySelector('[data-player-stat-rebounds]');
+  const statAssistsEl = atlas.querySelector('[data-player-stat-assists]');
+  const statStealsEl = atlas.querySelector('[data-player-stat-steals]');
+  const statBlocksEl = atlas.querySelector('[data-player-stat-blocks]');
   const teamBrowser = atlas.querySelector('[data-player-teams]');
   const teamTree = atlas.querySelector('[data-player-team-tree]');
-  const metricsContainer = atlas.querySelector('[data-player-metrics]');
-  const metricsEmpty = atlas.querySelector('[data-player-metrics-empty]');
   const recentLeaderboard = document.querySelector('[data-recent-leaderboard]');
   const recentPlaceholder = document.querySelector('[data-recent-placeholder]');
 
@@ -1760,17 +1764,39 @@ function initPlayerAtlas() {
     !profile ||
     !nameEl ||
     !metaEl ||
-    !goatRecentContainer ||
-    !goatHistoricContainer ||
-    !goatRecentValueEl ||
-    !goatRecentRankEl ||
-    !goatHistoricValueEl ||
-    !goatHistoricRankEl ||
-    !bioEl ||
-    !archetypeEl
+    !teamEl ||
+    !positionEl ||
+    !jerseyEl ||
+    !heightEl ||
+    !weightEl ||
+    !updatedEl ||
+    !statsContainer ||
+    !statsMeta ||
+    !statsSeasonEl ||
+    !statGamesEl ||
+    !statPointsEl ||
+    !statReboundsEl ||
+    !statAssistsEl ||
+    !statStealsEl ||
+    !statBlocksEl
   ) {
     return;
   }
+
+  const formatSeasonLabel = (startYear) => `${startYear}-${String(startYear + 1).slice(-2)}`;
+  const LATEST_COMPLETED_SEASON = 2024;
+  const seasonLabel = formatSeasonLabel(LATEST_COMPLETED_SEASON);
+  if (statsSeasonEl) {
+    statsSeasonEl.textContent = seasonLabel;
+  }
+  const defaultStatsMeta = `BallDontLie season averages for the ${seasonLabel} season.`;
+  if (statsMeta) {
+    statsMeta.textContent = defaultStatsMeta;
+  }
+
+  const BDL_API_BASE = 'https://api.balldontlie.io/v1';
+  const seasonAveragesCache = new Map();
+  let statsRequestToken = 0;
 
   let players = [];
   let allPlayers = [];
@@ -1788,8 +1814,6 @@ function initPlayerAtlas() {
   let currentRostersDoc = null;
   let rosterController = null;
   const defaultEmptyText = empty?.textContent?.trim() ?? '';
-  const formatGoatNumber = (value) => (Number.isFinite(value) ? helpers.formatNumber(value, 1) : '—');
-  const formatGoatRank = (rank) => `No. ${Number.isFinite(rank) ? helpers.formatNumber(rank, 0) : '—'}`;
   const ensurePlayerSearchTokens = (player) => {
     player.searchTokens = buildPlayerTokens(player);
     player.nameToken = simplifyText(player?.name);
@@ -1810,31 +1834,159 @@ function initPlayerAtlas() {
       }
     });
   };
-  const describeGoatScore = (value, rank) => {
+  const updateStatsView = (status, payload = null) => {
+    statsContainer.setAttribute('data-state', status);
+    statsContainer.setAttribute('aria-busy', status === 'loading' ? 'true' : 'false');
+    if (statsEmpty) {
+      statsEmpty.hidden = status !== 'empty';
+    }
+    if (statsError) {
+      statsError.hidden = status !== 'error';
+    }
+
+    const formatValue = (value, digits = 1) =>
+      Number.isFinite(value) ? helpers.formatNumber(value, digits) : '—';
+
+    const values = {
+      games: '—',
+      points: '—',
+      rebounds: '—',
+      assists: '—',
+      steals: '—',
+      blocks: '—',
+    };
+
+    if (status === 'ready' && payload) {
+      values.games = formatValue(payload.games, 0);
+      values.points = formatValue(payload.points, 1);
+      values.rebounds = formatValue(payload.rebounds, 1);
+      values.assists = formatValue(payload.assists, 1);
+      values.steals = formatValue(payload.steals, 1);
+      values.blocks = formatValue(payload.blocks, 1);
+    }
+
+    statGamesEl.textContent = values.games;
+    statPointsEl.textContent = values.points;
+    statReboundsEl.textContent = values.rebounds;
+    statAssistsEl.textContent = values.assists;
+    statStealsEl.textContent = values.steals;
+    statBlocksEl.textContent = values.blocks;
+
+    if (statsMeta) {
+      if (status === 'loading') {
+        statsMeta.textContent = `Loading BallDontLie season averages for the ${seasonLabel} season…`;
+      } else if (status === 'ready') {
+        statsMeta.textContent = defaultStatsMeta;
+      } else if (status === 'empty') {
+        statsMeta.textContent = `No BallDontLie season averages recorded for the ${seasonLabel} season.`;
+      } else if (status === 'error') {
+        statsMeta.textContent = `We couldn't load BallDontLie season averages right now.`;
+      } else {
+        statsMeta.textContent = defaultStatsMeta;
+      }
+    }
+  };
+
+  const parseNumeric = (value) => {
+    if (value === null || value === undefined) {
+      return null;
+    }
+    const number = Number(value);
+    return Number.isFinite(number) ? number : null;
+  };
+
+  const loadSeasonAverages = async (player) => {
+    const bdlId = player?.bdl?.id;
+    statsRequestToken += 1;
+    const requestId = statsRequestToken;
+
+    if (!bdlId) {
+      updateStatsView('empty');
+      return;
+    }
+
+    const cacheKey = String(bdlId);
+    if (seasonAveragesCache.has(cacheKey)) {
+      const cached = seasonAveragesCache.get(cacheKey);
+      updateStatsView(cached.status, cached.data ?? null);
+      return;
+    }
+
+    updateStatsView('loading');
+
+    try {
+      const params = new URLSearchParams();
+      params.set('season', String(LATEST_COMPLETED_SEASON));
+      params.append('player_ids[]', cacheKey);
+      const url = `${BDL_API_BASE}/season_averages?${params.toString()}`;
+      const response = await fetch(url, { cache: 'no-store' });
+      if (!response?.ok) {
+        throw new Error(`Failed to load season averages: ${response?.status}`);
+      }
+      const payload = await response.json();
+      const record = Array.isArray(payload?.data) ? payload.data[0] : null;
+      if (!record) {
+        const entry = { status: 'empty', data: null };
+        seasonAveragesCache.set(cacheKey, entry);
+        if (requestId === statsRequestToken) {
+          updateStatsView('empty');
+        }
+        return;
+      }
+
+      const stats = {
+        games: parseNumeric(record.games_played),
+        points: parseNumeric(record.pts),
+        rebounds: parseNumeric(record.reb),
+        assists: parseNumeric(record.ast),
+        steals: parseNumeric(record.stl),
+        blocks: parseNumeric(record.blk),
+      };
+      const entry = { status: 'ready', data: stats };
+      seasonAveragesCache.set(cacheKey, entry);
+      if (requestId === statsRequestToken) {
+        updateStatsView('ready', stats);
+      }
+    } catch (seasonError) {
+      console.warn('Unable to load BallDontLie season averages', seasonError);
+      if (requestId === statsRequestToken) {
+        updateStatsView('error');
+      }
+    }
+  };
+
+  const updateRosterTimestamp = () => {
+    if (!currentRostersDoc) {
+      updatedEl.textContent = 'Active roster snapshot not yet available.';
+      return;
+    }
+
     const parts = [];
-    parts.push(
-      Number.isFinite(value)
-        ? `${helpers.formatNumber(value, 1)} GOAT points`
-        : 'GOAT score unavailable'
-    );
-    parts.push(
-      Number.isFinite(rank)
-        ? `Ranked No. ${helpers.formatNumber(rank, 0)}`
-        : 'ranking unavailable'
-    );
-    return parts.join(' · ');
+    if (currentRostersDoc.fetched_at) {
+      const relative = formatRelativeTime(currentRostersDoc.fetched_at);
+      if (relative) {
+        parts.push(`Refreshed ${relative}`);
+      } else {
+        const timestamp = new Date(currentRostersDoc.fetched_at).toLocaleString();
+        parts.push(`Refreshed ${timestamp}`);
+      }
+    } else {
+      parts.push('Refresh time unavailable');
+    }
+
+    const sourceName = currentRostersDoc.source === 'ball_dont_lie' || !currentRostersDoc.source
+      ? 'BallDontLie'
+      : String(currentRostersDoc.source);
+    parts.push(`Source: ${sourceName}`);
+
+    if (Number.isFinite(currentRostersDoc.ttl_hours)) {
+      parts.push(`TTL ${currentRostersDoc.ttl_hours}h`);
+    }
+
+    updatedEl.textContent = parts.join(' • ');
   };
-  const renderGoatScore = (container, valueEl, rankEl, value, rank, label) => {
-    if (valueEl) {
-      valueEl.textContent = formatGoatNumber(value);
-    }
-    if (rankEl) {
-      rankEl.textContent = formatGoatRank(rank);
-    }
-    if (container && label) {
-      container.setAttribute('aria-label', `${label}: ${describeGoatScore(value, rank)}`);
-    }
-  };
+
+  updateRosterTimestamp();
 
   const setClearVisibility = (value) => {
     if (!clearButton) return;
@@ -1882,24 +2034,22 @@ function initPlayerAtlas() {
 
   const renderMeta = (player) => {
     const parts = [];
-    const position = player?.position || player?.bdl?.position;
-    const jersey = player?.jerseyNumber || player?.bdl?.jersey;
     const teamName = player?.bdl?.teamName || player?.team;
-    if (position) parts.push(position);
-    if (jersey) parts.push(`#${jersey}`);
-    if (teamName) parts.push(teamName);
-    if (player?.era) parts.push(`${player.era} era`);
-    if (player?.goatTier) parts.push(`${player.goatTier} tier`);
-    return parts.join(' · ');
-  };
-
-  const renderVitals = (player) => {
-    const vitals = [];
-    const height = player?.height || player?.bdl?.height;
-    const weight = player?.weight || player?.bdl?.weight;
-    if (height) vitals.push(height);
-    if (weight) vitals.push(weight);
-    return vitals.join(' • ');
+    const teamAbbr = player?.bdl?.teamAbbr || player?.teamAbbr;
+    const position = player?.bdl?.position;
+    const jersey = player?.bdl?.jersey;
+    if (teamName && teamAbbr) {
+      parts.push(`${teamName} (${teamAbbr})`);
+    } else if (teamName) {
+      parts.push(teamName);
+    }
+    if (position) {
+      parts.push(`Position ${position}`);
+    }
+    if (jersey) {
+      parts.push(`#${jersey}`);
+    }
+    return parts.join(' • ');
   };
 
   const highlightTeamPlayer = (playerId) => {
@@ -1940,7 +2090,7 @@ function initPlayerAtlas() {
     const groups = new Map();
 
     roster.forEach((player) => {
-      const teamName = player?.team?.trim() || fallbackTeam;
+      const teamName = player?.bdl?.teamName?.trim() || player?.team?.trim() || fallbackTeam;
       if (!groups.has(teamName)) {
         groups.set(teamName, []);
       }
@@ -1991,13 +2141,9 @@ function initPlayerAtlas() {
 
           button.append(name);
 
-          const positionLabel = player?.position || player?.bdl?.position || null;
-          const jerseyLabel = player?.jerseyNumber || player?.bdl?.jersey || null;
-          const metaBits = [
-            positionLabel,
-            jerseyLabel ? `#${jerseyLabel}` : null,
-            player.era ? `${player.era} era` : null,
-          ].filter(Boolean);
+          const positionLabel = player?.bdl?.position || null;
+          const jerseyLabel = player?.bdl?.jersey || null;
+          const metaBits = [positionLabel, jerseyLabel ? `#${jerseyLabel}` : null].filter(Boolean);
           if (metaBits.length) {
             const meta = document.createElement('span');
             meta.className = 'player-atlas__team-player-meta';
@@ -2025,6 +2171,7 @@ function initPlayerAtlas() {
 
   const applyBallDontLieDoc = (doc) => {
     currentRostersDoc = doc ?? null;
+    updateRosterTimestamp();
     playersByBdlId.clear();
     if (!doc || !Array.isArray(doc.teams)) {
       setActivePlayers([]);
@@ -2260,7 +2407,13 @@ function initPlayerAtlas() {
 
       const meta = document.createElement('span');
       meta.className = 'player-atlas__result-meta';
-      const metaText = [player.team, player.era ? `${player.era} era` : null].filter(Boolean).join(' • ');
+      const metaText = [
+        player?.bdl?.teamName || player?.team || null,
+        player?.bdl?.position ? `Pos ${player.bdl.position}` : null,
+        player?.bdl?.jersey ? `#${player.bdl.jersey}` : null,
+      ]
+        .filter(Boolean)
+        .join(' • ');
       if (metaText) {
         meta.textContent = metaText;
       }
@@ -2275,82 +2428,6 @@ function initPlayerAtlas() {
 
     setResultsVisibility(true);
     updateActiveOption();
-  };
-
-  const renderMetrics = (player) => {
-    if (!metricsContainer) return;
-    metricsContainer.innerHTML = '';
-    let hasMetric = false;
-
-    catalog.forEach((metric) => {
-      const wrapper = document.createElement('figure');
-      wrapper.className = 'player-metric';
-
-      const header = document.createElement('header');
-      header.className = 'player-metric__header';
-
-      const label = document.createElement('span');
-      label.className = 'player-metric__label';
-      label.textContent = metric.label;
-
-      const valueEl = document.createElement('span');
-      valueEl.className = 'player-metric__value';
-
-      const percentile = Number(player?.metrics?.[metric.id]?.value);
-      const hasValue = Number.isFinite(percentile);
-      const clampedPercentile = hasValue ? Math.max(0, Math.min(100, Math.round(percentile))) : null;
-      if (hasValue) {
-        const formatted = formatPercentile(percentile);
-        const valueNumber = document.createElement('span');
-        valueNumber.className = 'player-metric__value-number';
-        valueNumber.textContent = formatted;
-        const suffix = document.createElement('span');
-        suffix.className = 'player-metric__value-suffix';
-        suffix.textContent = 'percentile';
-        valueEl.append(valueNumber, suffix);
-        hasMetric = true;
-        if (clampedPercentile >= 90) {
-          wrapper.classList.add('player-metric--tier-elite');
-        } else if (clampedPercentile >= 70) {
-          wrapper.classList.add('player-metric--tier-strong');
-        } else if (clampedPercentile <= 30) {
-          wrapper.classList.add('player-metric--tier-watch');
-        }
-      } else {
-        valueEl.classList.add('player-metric__value--empty');
-        valueEl.textContent = '—';
-        wrapper.classList.add('player-metric--empty');
-      }
-
-      header.append(label, valueEl);
-
-      const meter = document.createElement('div');
-      meter.className = 'player-metric__meter';
-      if (hasValue) {
-        const fill = document.createElement('span');
-        fill.style.setProperty('--fill', `${clampedPercentile}%`);
-        fill.style.width = `${clampedPercentile}%`;
-        meter.appendChild(fill);
-        meter.setAttribute('role', 'img');
-        meter.setAttribute('aria-label', `${metric.label}: ${formatPercentile(percentile)} percentile`);
-      } else {
-        meter.classList.add('player-metric__meter--empty');
-        meter.setAttribute('role', 'img');
-        meter.setAttribute('aria-label', `${metric.label}: percentile unavailable`);
-      }
-
-      const description = document.createElement('p');
-      description.className = 'player-metric__description';
-      const note = player?.metrics?.[metric.id]?.note;
-      description.textContent = note || metric.description;
-
-      wrapper.append(header, meter, description);
-      metricsContainer.appendChild(wrapper);
-    });
-
-    if (metricsEmpty) {
-      metricsEmpty.hidden = hasMetric;
-    }
   };
 
   const selectPlayer = (player) => {
@@ -2373,71 +2450,23 @@ function initPlayerAtlas() {
       rosterController.highlight(rosterId, { scroll: true });
     }
     nameEl.textContent = player.name;
-    metaEl.textContent = renderMeta(player);
-    const goatScores = player?.goatScores;
-    const fallbackRecentValue = Number.isFinite(player?.goatRecentScore) ? player.goatRecentScore : null;
-    const recentValue = Number.isFinite(goatScores?.recent) ? goatScores.recent : fallbackRecentValue;
-    const fallbackRecentRank = Number.isFinite(player?.goatRecentRank) ? player.goatRecentRank : null;
-    const recentRank = Number.isFinite(goatScores?.recentRank) ? goatScores.recentRank : fallbackRecentRank;
-    renderGoatScore(
-      goatRecentContainer,
-      goatRecentValueEl,
-      goatRecentRankEl,
-      recentValue,
-      recentRank,
-      'GOAT score over the last three seasons'
-    );
+    metaEl.textContent = renderMeta(player) || 'Active roster profile';
 
-    const fallbackHistorical = Number.isFinite(player?.goatScore) ? player.goatScore : null;
-    const historicValue = Number.isFinite(goatScores?.historical)
-      ? goatScores.historical
-      : fallbackHistorical;
-    const fallbackHistoricalRank = Number.isFinite(player?.goatRank) ? player.goatRank : null;
-    const historicRank = Number.isFinite(goatScores?.historicalRank)
-      ? goatScores.historicalRank
-      : fallbackHistoricalRank;
-    renderGoatScore(
-      goatHistoricContainer,
-      goatHistoricValueEl,
-      goatHistoricRankEl,
-      historicValue,
-      historicRank,
-      'Career GOAT score'
-    );
-    const ensureSentence = (text) => {
-      if (!text) return null;
-      const trimmed = text.trim();
-      if (!trimmed) return null;
-      return /[.!?]$/.test(trimmed) ? trimmed : `${trimmed}.`;
-    };
-    const resumeText = player?.goatResume || goatScores?.resume || null;
-    const tierText = player?.goatTier || goatScores?.tier || null;
-    const bioSegments = [];
-    const baseBio = ensureSentence(player?.bio);
-    if (baseBio) bioSegments.push(baseBio);
-    if (resumeText) {
-      bioSegments.push(ensureSentence(`Career resume: ${resumeText}`));
-    }
-    if (tierText) {
-      bioSegments.push(ensureSentence(`GOAT tier: ${tierText}`));
-    }
-    bioEl.textContent = bioSegments.filter(Boolean).join(' ');
-    archetypeEl.textContent = player?.archetype || '—';
-    if (vitalsEl) {
-      const vitals = renderVitals(player);
-      vitalsEl.textContent = vitals || '—';
-    }
-    if (originEl) {
-      originEl.textContent = player?.origin || player?.born || '—';
-    }
-    if (draftEl) {
-      draftEl.textContent = player?.draft || '—';
-    }
+    const teamName = player?.bdl?.teamName || player?.team || '—';
+    const position = player?.bdl?.position || '—';
+    const jersey = player?.bdl?.jersey ? `#${player.bdl.jersey}` : '—';
+    const height = player?.bdl?.height || player?.height || '—';
+    const weight = player?.bdl?.weight || player?.weight || '—';
 
-    renderMetrics(player);
-    if (metricsContainer && metricsContainer.children.length) {
-      metricsContainer.scrollTop = 0;
-    }
+    teamEl.textContent = teamName || '—';
+    positionEl.textContent = position || '—';
+    jerseyEl.textContent = jersey || '—';
+    heightEl.textContent = height || '—';
+    weightEl.textContent = weight || '—';
+
+    updateRosterTimestamp();
+    loadSeasonAverages(player);
+
     profile.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 

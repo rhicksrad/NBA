@@ -4241,26 +4241,51 @@ section h2 { margin-top: 0; font-size: clamp(1.35rem, 3vw, 1.8rem); letter-spaci
   .team-marker__label { display: none; }
 }
 .players-lab { display: grid; gap: clamp(2.4rem, 5vw, 3.8rem); margin-bottom: 4rem; }
-.player-atlas { display: grid; gap: clamp(1.6rem, 3.4vw, 2.3rem); }
+.player-atlas {
+  display: grid;
+  gap: clamp(1.8rem, 4vw, 2.8rem);
+  padding: clamp(1.5rem, 3.6vw, 2.4rem);
+  border-radius: var(--radius-lg);
+  border: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
+  background:
+    linear-gradient(160deg, rgba(17, 86, 214, 0.1), rgba(244, 181, 63, 0.08)),
+    color-mix(in srgb, rgba(255, 255, 255, 0.95) 70%, rgba(242, 246, 255, 0.9) 30%);
+  box-shadow: var(--shadow-soft);
+}
+.player-atlas__header {
+  display: grid;
+  gap: clamp(1rem, 2.4vw, 1.5rem);
+}
+.player-atlas__title { display: grid; gap: 0.55rem; }
+.player-atlas__title h1 {
+  margin: 0;
+  font-size: clamp(1.9rem, 3.8vw, 2.6rem);
+  color: var(--navy);
+}
+.player-atlas__title p {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: color-mix(in srgb, var(--text-subtle) 80%, var(--navy) 20%);
+}
 .player-atlas__layout {
   display: grid;
   grid-template-columns: minmax(0, 320px) minmax(0, 1fr);
-  gap: clamp(1.4rem, 3vw, 2.2rem);
+  gap: clamp(1.6rem, 3.2vw, 2.4rem);
   align-items: start;
 }
 .player-atlas__search {
-  grid-column: 1;
-  grid-row: 1;
   position: relative;
   display: grid;
   gap: 0.65rem;
+  padding: clamp(1.05rem, 2.6vw, 1.5rem);
   border-radius: var(--radius-lg);
   border: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
   background:
     linear-gradient(150deg, rgba(17, 86, 214, 0.12), rgba(244, 181, 63, 0.1)),
-    color-mix(in srgb, rgba(255, 255, 255, 0.9) 70%, rgba(242, 246, 255, 0.85) 30%);
-  padding: clamp(1.1rem, 2.6vw, 1.55rem);
+    color-mix(in srgb, rgba(255, 255, 255, 0.94) 70%, rgba(242, 246, 255, 0.9) 30%);
   box-shadow: var(--shadow-soft);
+  max-width: min(520px, 100%);
 }
 .player-atlas__label {
   font-size: 0.8rem;
@@ -4359,13 +4384,9 @@ section h2 { margin-top: 0; font-size: clamp(1.35rem, 3vw, 1.8rem); letter-spaci
 }
 .player-atlas__error { color: color-mix(in srgb, var(--red) 65%, var(--navy) 35%); }
 .player-atlas__teams {
-  grid-column: 1;
-  grid-row: 2;
   display: grid;
-  gap: 0.65rem;
-  margin-top: -0.35rem;
-  padding-top: 0.9rem;
-  border-top: 1px solid color-mix(in srgb, var(--border) 65%, transparent);
+  gap: 0.75rem;
+  align-content: start;
 }
 .player-atlas__teams[hidden] { display: none; }
 .player-atlas__teams-title {
@@ -4584,6 +4605,75 @@ section h2 { margin-top: 0; font-size: clamp(1.35rem, 3vw, 1.8rem); letter-spaci
   font-size: 0.95rem;
   color: color-mix(in srgb, var(--text-subtle) 82%, var(--navy) 18%);
 }
+.player-card__stats {
+  display: grid;
+  gap: clamp(0.85rem, 2.2vw, 1.2rem);
+  padding: clamp(1rem, 2.6vw, 1.4rem);
+  border-radius: var(--radius-md);
+  border: 1px solid color-mix(in srgb, var(--border) 62%, transparent);
+  background:
+    linear-gradient(150deg, rgba(17, 86, 214, 0.08), rgba(17, 181, 198, 0.06)),
+    color-mix(in srgb, rgba(255, 255, 255, 0.95) 70%, rgba(242, 246, 255, 0.92) 30%);
+  box-shadow: var(--shadow-soft);
+}
+.player-card__stats-header { display: grid; gap: 0.4rem; }
+.player-card__stats-header h3 {
+  margin: 0;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.55rem;
+  font-size: clamp(1.15rem, 2.4vw, 1.45rem);
+  color: color-mix(in srgb, var(--navy) 85%, var(--royal) 15%);
+}
+.player-card__stats-season {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: color-mix(in srgb, var(--text-subtle) 68%, var(--navy) 32%);
+}
+.player-card__stats-meta {
+  margin: 0;
+  font-size: 0.9rem;
+  color: color-mix(in srgb, var(--text-subtle) 80%, var(--navy) 20%);
+}
+.player-card__stats-grid {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+}
+.player-card__stat {
+  display: grid;
+  gap: 0.25rem;
+  padding: 0.65rem 0.75rem;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(160deg, rgba(17, 86, 214, 0.12), rgba(17, 181, 198, 0.12));
+  text-align: center;
+}
+.player-card__stat-value {
+  font-size: clamp(1.35rem, 3.2vw, 1.8rem);
+  font-weight: 700;
+  color: color-mix(in srgb, var(--royal) 70%, var(--navy) 30%);
+}
+.player-card__stat-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: color-mix(in srgb, var(--text-subtle) 70%, var(--navy) 30%);
+}
+.player-card__stats-empty,
+.player-card__stats-error {
+  margin: 0;
+  font-size: 0.88rem;
+  color: color-mix(in srgb, var(--text-subtle) 78%, var(--navy) 22%);
+}
+.player-card__stats-error { color: color-mix(in srgb, var(--red) 65%, var(--navy) 35%); }
+.player-card__footer { margin-top: 0.5rem; }
+.player-card__footer p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: color-mix(in srgb, var(--text-subtle) 78%, var(--navy) 22%);
+}
 .player-card__visuals {
   display: grid;
   gap: clamp(0.85rem, 2.2vw, 1.2rem);
@@ -4768,22 +4858,12 @@ section h2 { margin-top: 0; font-size: clamp(1.35rem, 3vw, 1.8rem); letter-spaci
 
 @media (max-width: 1080px) {
   .player-atlas__layout { grid-template-columns: minmax(0, 1fr); }
-  .player-atlas__search,
-  .player-atlas__teams,
-  .player-card {
-    grid-column: 1;
-    grid-row: auto;
-  }
-  .player-atlas__teams {
-    border-top-color: color-mix(in srgb, var(--border) 52%, transparent);
-  }
+  .player-atlas__layout > * { grid-column: 1; }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 720px) {
   .player-card__header { flex-direction: column; align-items: flex-start; }
-  .player-card__goat { justify-items: stretch; }
-  .player-card__goat-entry { justify-items: start; }
-  .player-card__goat-context { text-align: left; }
+  .player-card__stats-grid { grid-template-columns: minmax(0, 1fr); }
 }
 .franchise-footprint {
   display: grid;
