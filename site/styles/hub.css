@@ -1148,6 +1148,17 @@ a:hover, a:focus { color: var(--sky); }
   font-weight: 600;
 }
 
+.hero-panel__meta--source {
+  margin-top: 0.6rem;
+  font-weight: 500;
+  font-size: 0.85rem;
+  color: color-mix(in srgb, var(--text-subtle) 88%, var(--navy) 12%);
+}
+
+.hero-panel__meta--source time {
+  font-variant-numeric: tabular-nums;
+}
+
 .hero-panel__detail {
   margin: 0;
   font-size: 0.92rem;
@@ -1384,6 +1395,14 @@ section {
   margin: 0;
   font-size: 0.85rem;
   color: var(--text-subtle);
+}
+
+.lab-module__source {
+  margin: 0.65rem 0 0;
+  font-size: 0.75rem;
+  color: color-mix(in srgb, var(--text-subtle) 85%, var(--text-muted, #6b7a90) 15%);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 .lab-chip {
@@ -1993,6 +2012,17 @@ section h2 { margin-top: 0; font-size: clamp(1.35rem, 3vw, 1.8rem); letter-spaci
   margin: 0;
   font-size: 0.95rem;
   color: var(--text-subtle);
+}
+
+.season-snapshot__note {
+  margin: 0.6rem 0 0;
+  font-size: 0.85rem;
+  color: color-mix(in srgb, var(--text-subtle) 84%, var(--navy) 16%);
+  font-weight: 500;
+}
+
+.season-snapshot__note time {
+  font-variant-numeric: tabular-nums;
 }
 
 .season-snapshot__caption {
