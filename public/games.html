@@ -3,7 +3,13 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="bdl-api-key" content="" />
+    <base href="/NBA/" />
+    <script src="assets/bdl-credentials.js"></script>
+    <script type="module">
+      import { ensureBdlKeyReady } from './assets/js/credentials.js';
+      await ensureBdlKeyReady();
+      window.__BDL_READY__ = true;
+    </script>
     <link rel="icon" type="image/png" href="nba-logo-vector-01.png" />
     <link rel="stylesheet" href="styles/hub.css" />
     <title>Games Observatory | NBA Intelligence Hub</title>
@@ -202,7 +208,6 @@
     </div>
 
     <script src="vendor/chart.umd.js" defer></script>
-    <script src="scripts/bdl-credentials.js" defer></script>
     <script type="module" src="scripts/games.js"></script>
   </body>
 </html>

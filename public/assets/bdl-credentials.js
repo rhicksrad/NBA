@@ -1,0 +1,1 @@
+window.BDL_CREDENTIALS = window.BDL_CREDENTIALS || {};

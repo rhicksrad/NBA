@@ -1,3 +1,4 @@
+import { authHeaders, ensureBdlKeyReady } from '../assets/js/credentials.js';
 import { enablePanZoom, enhanceUsaInsets } from './map-utils.js';
 
 const API_BASE = 'https://api.balldontlie.io/v1';
@@ -179,21 +180,6 @@ function renderCachedCareer(totalsContainer, cachedCareer, contextMessage) {
   totalsContainer.append(renderTotalsTable('Postseason', cachedCareer.postseason));
 }
 
-function getApiKey() {
-  const meta = document.querySelector('meta[name="bdl-api-key"]');
-  const metaKey = meta?.getAttribute('content')?.trim();
-  if (metaKey) {
-    return metaKey;
-  }
-  if (typeof window !== 'undefined') {
-    const globalKey = window.BDL_API_KEY || window.BALLDONTLIE_API_KEY || window.BALL_DONT_LIE_API_KEY;
-    if (globalKey && String(globalKey).trim()) {
-      return String(globalKey).trim();
-    }
-  }
-  return null;
-}
-
 function formatInches(value) {
   if (!value) return null;
   if (!value.includes('-')) return value;
@@ -286,14 +272,6 @@ function createElement(tag, className, text) {
   return el;
 }
 
-function buildAuthHeaders(apiKey) {
-  if (!apiKey) return {};
-  const trimmed = String(apiKey).trim();
-  const headers = { Accept: 'application/json' };
-  headers.Authorization = /^Bearer\s+/i.test(trimmed) ? trimmed : `Bearer ${trimmed}`;
-  return headers;
-}
-
 function resolveSeasonRange(player) {
   const draftYear = Number.parseInt(player?.draft_year ?? '', 10);
   const start = Number.isFinite(draftYear)
@@ -309,7 +287,7 @@ function multiplyStat(value, games) {
   return Math.round(numericValue * numericGames);
 }
 
-async function fetchSeasonAggregate(player, apiKey, postseason) {
+async function fetchSeasonAggregate(player, postseason) {
   const playerId = player?.id;
   if (!Number.isFinite(playerId)) {
     throw new Error('Invalid player identifier for season aggregate request.');
@@ -334,7 +312,7 @@ async function fetchSeasonAggregate(player, apiKey, postseason) {
     dreb: 0,
   };
   const seasons = new Set();
-  const headers = buildAuthHeaders(apiKey);
+  const headers = { Accept: 'application/json', ...(await authHeaders()) };
   const { start, end } = resolveSeasonRange(player);
   let emptyStreak = 0;
 
@@ -394,14 +372,14 @@ async function fetchSeasonAggregate(player, apiKey, postseason) {
   return { totals, seasons: seasonList };
 }
 
-async function fetchCareerStats(player, apiKey) {
+async function fetchCareerStats(player) {
   const playerId = player?.id;
   if (!Number.isFinite(playerId)) {
     throw new Error('Cannot fetch career stats without a valid player id.');
   }
   const [regular, postseason] = await Promise.all([
-    fetchSeasonAggregate(player, apiKey, false),
-    fetchSeasonAggregate(player, apiKey, true),
+    fetchSeasonAggregate(player, false),
+    fetchSeasonAggregate(player, true),
   ]);
   return {
     regular,
@@ -1113,8 +1091,10 @@ async function bootstrap() {
       };
 
       totalsContainer.innerHTML = '';
-      const apiKey = getApiKey();
-      if (!apiKey) {
+      try {
+        await ensureBdlKeyReady();
+      } catch (credentialError) {
+        console.warn('Ball Don\'t Lie credentials unavailable for history view', credentialError);
         renderCached('Career totals are unavailable without the site credentials right now.');
         return;
       }
@@ -1124,7 +1104,7 @@ async function bootstrap() {
       );
 
       try {
-        const career = await fetchCareerStats(player, apiKey);
+        const career = await fetchCareerStats(player);
         if (selectionToken !== token) return;
         totalsContainer.innerHTML = '';
         totalsContainer.append(renderTotalsTable('Regular season', career.regular));
