@@ -39,8 +39,23 @@ function inCi(): boolean {
   return parseBoolean(process.env.CI);
 }
 
+const DEFAULT_PROXY_BASE = "https://bdlproxy.hicksrch.workers.dev/bdl/";
+const BDL_UPSTREAM_HOST_PATTERN = /\bballdontlie\.io$/i;
+
+function requiresBdlKey(): boolean {
+  const rawBase = process.env.BDL_PROXY_BASE?.trim() || DEFAULT_PROXY_BASE;
+  try {
+    const hostname = new URL(rawBase).hostname;
+    return BDL_UPSTREAM_HOST_PATTERN.test(hostname);
+  } catch {
+    return true;
+  }
+}
+
 async function verify(): Promise<void> {
-  requireBallDontLieKey();
+  if (requiresBdlKey()) {
+    requireBallDontLieKey();
+  }
   const rosters = await fetchActiveRosters();
 
   const missing = TEAM_METADATA.filter((team) => !Array.isArray(rosters[team.tricode]));

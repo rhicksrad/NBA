@@ -3,10 +3,14 @@ import { TEAM_METADATA } from "../lib/teams.js";
 import { mapBdlTeamToTricode } from "./bdl_team_mappings.js";
 import { formatBdlAuthHeader, requireBallDontLieKey } from "./http.js";
 
-const API_BASE = "https://bdlproxy.hicksrch.workers.dev/bdl/";
+const DEFAULT_PROXY_BASE = "https://bdlproxy.hicksrch.workers.dev/bdl/";
+const RAW_BASE = process.env.BDL_PROXY_BASE?.trim() || DEFAULT_PROXY_BASE;
+const API_BASE = RAW_BASE.endsWith("/") ? RAW_BASE : `${RAW_BASE}/`;
 const ACTIVE_PATH = "v1/players/active";
 const MAX_PER_PAGE = 100;
 const FLAG_KEYS = ["active", "is_active", "on_team", "on_roster"] as const;
+
+const BDL_UPSTREAM_HOST_PATTERN = /\bballdontlie\.io$/i;
 
 function parsePerPage(): number {
   const fromEnv = Number(process.env.BDL_ACTIVE_PER_PAGE);
@@ -71,8 +75,6 @@ export function getLastActiveRosterFetchMeta(): ActiveRosterFetchMeta | null {
 
 export async function fetchActiveRosters(): Promise<ActiveRosters> {
   const perPage = parsePerPage();
-  const authHeader = formatBdlAuthHeader(requireBallDontLieKey());
-
   console.log(
     `BDL fetch: GET ${API_BASE}${ACTIVE_PATH} with per_page=${perPage} (max ${MAX_PER_PAGE})`,
   );
@@ -94,12 +96,16 @@ export async function fetchActiveRosters(): Promise<ActiveRosters> {
       url.searchParams.set("cursor", cursor);
     }
 
+    const headers: Record<string, string> = {
+      Accept: "application/json",
+    };
+    if (BDL_UPSTREAM_HOST_PATTERN.test(url.hostname)) {
+      headers.Authorization = formatBdlAuthHeader(requireBallDontLieKey());
+    }
+
     const response = await fetch(url, {
       method: "GET",
-      headers: {
-        Accept: "application/json",
-        Authorization: authHeader,
-      },
+      headers,
     });
 
     if (!response.ok) {
