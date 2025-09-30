@@ -165,33 +165,6 @@ const preseasonPowerIndex = [
 let pacePressureDeck = [];
 let pacePressureMeta = null;
 
-const spacingExperimentDeck = [
-  {
-    team: 'Oklahoma City Thunder',
-    spacingLift: 4.6,
-    fiveOutFrequency: 0.48,
-    threePointRate: 0.44,
-    cornerThreeRate: 0.12,
-    note: 'Holmgren trail threes plus Giddey short-roll reads put five-out spacing on nearly half their trips.',
-  },
-  {
-    team: 'New York Knicks',
-    spacingLift: 3.8,
-    fiveOutFrequency: 0.37,
-    threePointRate: 0.39,
-    cornerThreeRate: 0.16,
-    note: 'Brunson-Hartenstein delay actions bend defenses to the corners, juicing kickout volume for Donte and Mikal.',
-  },
-  {
-    team: 'Orlando Magic',
-    spacingLift: 3.2,
-    fiveOutFrequency: 0.33,
-    threePointRate: 0.36,
-    cornerThreeRate: 0.19,
-    note: 'Franz Wagner as a jumbo initiator lifts corner gravity while Suggs hammers relocation triples.',
-  },
-];
-
 async function fetchJsonSafe(url) {
   try {
     const response = await fetch(url);
@@ -231,6 +204,51 @@ function clampPercent(value) {
     return 0;
   }
   return Math.min(100, Math.max(0, numeric));
+}
+
+function normalizeInteger(value) {
+  const numeric = Number(value);
+  if (!Number.isFinite(numeric)) {
+    return 0;
+  }
+  return Math.round(numeric);
+}
+
+function computeNextMilestone(total, step) {
+  const base = Math.max(0, normalizeInteger(total));
+  const increment = Number(step) || 0;
+  if (!increment) {
+    return base;
+  }
+  const remainder = base % increment;
+  if (remainder === 0) {
+    return base + increment;
+  }
+  return base + (increment - remainder);
+}
+
+function buildTeamLookup(franchiseData) {
+  const lookup = new Map();
+  const franchises = Array.isArray(franchiseData?.activeFranchises) ? franchiseData.activeFranchises : [];
+  franchises.forEach((team) => {
+    const abbreviation = team?.abbreviation;
+    if (!abbreviation) {
+      return;
+    }
+    const teamId = team?.teamId;
+    if (!teamId) {
+      return;
+    }
+    const idString = String(teamId);
+    if (idString.length < 6) {
+      return;
+    }
+    const label = [team.city, team.name].filter(Boolean).join(' ').trim();
+    if (label && !lookup.has(abbreviation)) {
+      lookup.set(abbreviation, label);
+    }
+  });
+  return lookup;
 }
 
 function formatDateLabel(dateString, options = { month: 'short', day: 'numeric' }) {
@@ -1039,6 +1057,137 @@ function renderBackToBack(scheduleData) {
   safeText('[data-rest-intervals]', helpers.formatNumber(scheduleData?.restSummary?.totalIntervals ?? 0, 0));
 }
 
+function renderMilestoneChase(leadersData, rosterIndex, franchiseData) {
+  const container = document.querySelector('[data-milestone-chase]');
+  if (!container) {
+    return;
+  }
+
+  container.innerHTML = '';
+
+  const activePlayers = new Map();
+  const rosterEntries = Array.isArray(rosterIndex?.players) ? rosterIndex.players : [];
+  rosterEntries.forEach((player) => {
+    if (!player || typeof player.id === 'undefined') {
+      return;
+    }
+    activePlayers.set(String(player.id), player);
+  });
+
+  const categories = [
+    { key: 'points', tag: 'Scoring climb', metric: 'points', perGame: 'pointsPerGame', step: 1000, unit: 'points', shortUnit: 'pts' },
+    { key: 'assists', tag: 'Assist tracker', metric: 'assists', perGame: 'assistsPerGame', step: 500, unit: 'assists', shortUnit: 'ast' },
+    { key: 'rebounds', tag: 'Glass patrol', metric: 'rebounds', perGame: 'reboundsPerGame', step: 500, unit: 'rebounds', shortUnit: 'reb' },
+  ];
+
+  const teamLookup = buildTeamLookup(franchiseData);
+  const deck = [];
+
+  categories.forEach((category) => {
+    const series = Array.isArray(leadersData?.careerLeaders?.[category.key]) ? leadersData.careerLeaders[category.key] : [];
+    if (!series.length) {
+      return;
+    }
+    const candidate = series.find((entry) => activePlayers.has(String(entry.personId)));
+    if (!candidate) {
+      return;
+    }
+
+    const total = normalizeInteger(candidate[category.metric]);
+    if (total <= 0) {
+      return;
+    }
+
+    const milestone = computeNextMilestone(total, category.step);
+    const remaining = milestone - total;
+    if (remaining <= 0) {
+      return;
+    }
+
+    const perGame = Number(candidate[category.perGame] ?? 0) || 0;
+    const gamesAway = perGame > 0 ? Math.max(1, Math.ceil(remaining / perGame)) : null;
+
+    const rosterInfo = activePlayers.get(String(candidate.personId));
+    const teamAbbr = rosterInfo?.team_abbr ?? rosterInfo?.teamAbbr ?? null;
+    const teamLabel = teamAbbr ? teamLookup.get(teamAbbr) ?? teamAbbr : null;
+
+    const gamesPlayed = normalizeInteger(candidate.games);
+    const firstSeason = Number(candidate.firstSeason);
+    const lastSeason = Number(candidate.lastSeason);
+    const hasSeasons = Number.isFinite(firstSeason) && Number.isFinite(lastSeason);
+    const span = hasSeasons ? Math.max(1, lastSeason - firstSeason + 1) : null;
+
+    const bullets = [];
+    bullets.push(`Career total: ${helpers.formatNumber(total, 0)} ${category.unit} across ${helpers.formatNumber(gamesPlayed, 0)} games.`);
+    if (gamesAway) {
+      bullets.push(`Per-game pace: ${helpers.formatNumber(perGame, 1)} ${category.shortUnit}/game → approx ${helpers.formatNumber(gamesAway, 0)} games to milestone.`);
+    }
+    const contextParts = [];
+    if (teamLabel) {
+      contextParts.push(`Current roster: ${teamLabel}`);
+    }
+    if (span && hasSeasons) {
+      contextParts.push(`Seasons: ${firstSeason}–${lastSeason} (${helpers.formatNumber(span, 0)})`);
+    }
+    if (contextParts.length) {
+      bullets.push(contextParts.join(' · '));
+    }
+
+    deck.push({
+      tag: category.tag,
+      title: candidate.name ?? 'Player',
+      summary: `${helpers.formatNumber(remaining, 0)} ${category.unit} until ${helpers.formatNumber(milestone, 0)} career ${category.unit}.`,
+      bullets,
+      remaining,
+    });
+  });
+
+  deck.sort((a, b) => a.remaining - b.remaining);
+
+  const visibleDeck = deck.slice(0, 3);
+
+  if (!visibleDeck.length) {
+    const placeholder = document.createElement('p');
+    placeholder.className = 'milestone-chase__placeholder';
+    placeholder.textContent = 'Milestone tracking unlocks once active BallDontLie data populates.';
+    container.appendChild(placeholder);
+    return;
+  }
+
+  visibleDeck.forEach((entry) => {
+    const card = document.createElement('article');
+    card.className = 'milestone-card';
+
+    const header = document.createElement('header');
+    const tag = document.createElement('span');
+    tag.className = 'milestone-card__tag';
+    tag.textContent = entry.tag;
+    const title = document.createElement('h3');
+    title.textContent = entry.title;
+    header.append(tag, title);
+    card.appendChild(header);
+
+    const summary = document.createElement('p');
+    summary.textContent = entry.summary;
+    card.appendChild(summary);
+
+    if (Array.isArray(entry.bullets) && entry.bullets.length) {
+      const list = document.createElement('ul');
+      entry.bullets.forEach((bullet) => {
+        if (!bullet) return;
+        const item = document.createElement('li');
+        item.textContent = bullet;
+        list.appendChild(item);
+      });
+      if (list.childElementCount) {
+        card.appendChild(list);
+      }
+    }
+
+    container.appendChild(card);
+  });
+}
+
 function renderStoryCards(storyData) {
   const grid = document.querySelector('[data-story-grid]');
   if (!grid) {
@@ -1452,83 +1601,6 @@ function renderPaceRadar() {
   }
 }
 
-function renderSpacingLab() {
-  const lab = document.querySelector('[data-spacing-lab]');
-  if (!lab) {
-    return;
-  }
-
-  lab.innerHTML = '';
-
-  if (!spacingExperimentDeck.length) {
-    const placeholder = document.createElement('p');
-    placeholder.className = 'spacing-lab__placeholder';
-    placeholder.textContent = 'Spacing experiments post once tracking installs new shot-mapping layers.';
-    lab.appendChild(placeholder);
-    return;
-  }
-
-  spacingExperimentDeck.forEach((entry) => {
-    const card = document.createElement('article');
-    card.className = 'spacing-card';
-
-    const header = document.createElement('header');
-    header.className = 'spacing-card__header';
-
-    const identity = document.createElement('div');
-    identity.className = 'spacing-card__identity';
-    identity.appendChild(createTeamLogo(entry.team, 'team-logo team-logo--small'));
-    const team = document.createElement('p');
-    team.className = 'spacing-card__team';
-    team.textContent = entry.team;
-    identity.appendChild(team);
-    header.appendChild(identity);
-
-    const lift = Number(entry.spacingLift) || 0;
-    const tag = document.createElement('span');
-    tag.className = 'spacing-card__tag';
-    tag.textContent = `${lift >= 0 ? '+' : '−'}${helpers.formatNumber(Math.abs(lift), 1)} pts/100 lift`;
-    header.appendChild(tag);
-
-    card.appendChild(header);
-
-    const metrics = document.createElement('dl');
-    metrics.className = 'spacing-card__metrics';
-
-    const addMetric = (labelText, percent, formatter) => {
-      if (!labelText || !Number.isFinite(percent)) return;
-      const row = document.createElement('div');
-      row.className = 'spacing-card__metric';
-      const term = document.createElement('dt');
-      term.textContent = labelText;
-      const detail = document.createElement('dd');
-      const value = document.createElement('span');
-      value.textContent = formatter(percent);
-      const bar = document.createElement('span');
-      bar.className = 'spacing-card__bar';
-      bar.style.setProperty('--fill', `${clampPercent(percent * 100)}%`);
-      detail.append(value, bar);
-      row.append(term, detail);
-      metrics.appendChild(row);
-    };
-
-    addMetric('Five-out frequency', Number(entry.fiveOutFrequency ?? 0), (value) => `${helpers.formatNumber(value * 100, 1)}% of trips`);
-    addMetric('Projected 3P rate', Number(entry.threePointRate ?? 0), (value) => `${helpers.formatNumber(value * 100, 1)}% of FGA`);
-    addMetric('Corner 3 share', Number(entry.cornerThreeRate ?? 0), (value) => `${helpers.formatNumber(value * 100, 1)}% of attempts`);
-
-    card.appendChild(metrics);
-
-    if (entry.note) {
-      const note = document.createElement('p');
-      note.className = 'spacing-card__note';
-      note.textContent = entry.note;
-      card.appendChild(note);
-    }
-
-    lab.appendChild(card);
-  });
-}
-
 async function resolveScheduleSource() {
   const fallback = 'data/season_25_26_schedule.json';
   try {
@@ -1731,21 +1803,32 @@ async function bootstrap() {
 
   renderPreseasonMap();
 
-  const [scheduleData, teamData, storyData, preseasonOpeners] = await Promise.all([
+  const [
+    scheduleData,
+    teamData,
+    storyData,
+    preseasonOpeners,
+    playerLeaders,
+    rosterIndex,
+    franchiseData,
+  ] = await Promise.all([
     fetchJsonSafe(scheduleSource),
     fetchJsonSafe('data/team_performance.json'),
     fetchJsonSafe('data/storytelling_walkthroughs.json'),
     fetchJsonSafe('data/preseason_openers.json'),
+    fetchJsonSafe('data/player_leaders.json'),
+    fetchJsonSafe('data/players_index.json'),
+    fetchJsonSafe('data/active_franchises.json'),
   ]);
 
   await renderInjuryPulse();
   renderPaceRadar();
-  renderSpacingLab();
   hydrateHero(teamData);
   renderSeasonLead(scheduleData);
   renderPreseasonTour(preseasonOpeners);
   renderContenderGrid(teamData);
   renderBackToBack(scheduleData);
+  renderMilestoneChase(playerLeaders, rosterIndex, franchiseData);
   renderStoryCards(storyData);
 }
 
