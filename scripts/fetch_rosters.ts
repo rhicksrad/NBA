@@ -44,7 +44,7 @@ const TARGET_SEASON_START_YEAR = getSeasonStartYear(SEASON);
 
 const ALLOW_PRESEASON_SIZES = String(process.env.ALLOW_PRESEASON_SIZES ?? "").toLowerCase() === "true";
 const REGULAR_ROSTER_MIN = Number(process.env.REGULAR_ROSTER_MIN ?? 13) || 13;
-const REGULAR_ROSTER_MAX = Number(process.env.REGULAR_ROSTER_MAX ?? 21) || 21;
+const REGULAR_ROSTER_MAX = Number(process.env.REGULAR_ROSTER_MAX ?? 23) || 23;
 const PRESEASON_ROSTER_MAX = Number(process.env.PRESEASON_ROSTER_MAX ?? 25) || 25;
 
 type JsonValue = Record<string, unknown>;
