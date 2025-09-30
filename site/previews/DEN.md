@@ -1,6 +1,6 @@
 # Denver Nuggets
 
-The core trio of Aaron Gordon, Alex English, and Anthony Cook gives the staff a clear identity to start from.
+The core trio of Aaron Gordon, Bruce Brown, and Cameron Johnson gives the staff a clear identity to start from.
 The front office kept the core intact and will lean on internal development.
 No rotation regulars departed, so continuity remains a strength.
 
