@@ -2009,6 +2009,17 @@ function initPlayerAtlas() {
   const profile = atlas.querySelector('[data-player-profile]');
   const nameEl = atlas.querySelector('[data-player-name]');
   const metaEl = atlas.querySelector('[data-player-meta]');
+  const goatRecentScoreEl = atlas.querySelector('[data-player-goat-recent-score]');
+  const goatRecentRankEl = atlas.querySelector('[data-player-goat-recent-rank]');
+  const goatHistoricScoreEl = atlas.querySelector('[data-player-goat-historic-score]');
+  const goatHistoricRankEl = atlas.querySelector('[data-player-goat-historic-rank]');
+  const bioEl = atlas.querySelector('[data-player-bio]');
+  const archetypeEl = atlas.querySelector('[data-player-archetype]');
+  const vitalsEl = atlas.querySelector('[data-player-vitals]');
+  const originEl = atlas.querySelector('[data-player-origin]');
+  const draftEl = atlas.querySelector('[data-player-draft]');
+  const metricsContainer = atlas.querySelector('[data-player-metrics]');
+  const metricsEmpty = atlas.querySelector('[data-player-metrics-empty]');
   const teamEl = atlas.querySelector('[data-player-team]');
   const positionEl = atlas.querySelector('[data-player-position]');
   const jerseyEl = atlas.querySelector('[data-player-jersey]');
@@ -2031,28 +2042,7 @@ function initPlayerAtlas() {
   const recentLeaderboard = document.querySelector('[data-recent-leaderboard]');
   const recentPlaceholder = document.querySelector('[data-recent-placeholder]');
 
-  if (
-    !searchInput ||
-    !resultsList ||
-    !profile ||
-    !nameEl ||
-    !metaEl ||
-    !teamEl ||
-    !positionEl ||
-    !jerseyEl ||
-    !heightEl ||
-    !weightEl ||
-    !updatedEl ||
-    !statsContainer ||
-    !statsMeta ||
-    !statsSeasonEl ||
-    !statGamesEl ||
-    !statPointsEl ||
-    !statReboundsEl ||
-    !statAssistsEl ||
-    !statStealsEl ||
-    !statBlocksEl
-  ) {
+  if (!searchInput || !resultsList || !profile || !nameEl || !metaEl || !updatedEl) {
     return;
   }
 
@@ -2084,6 +2074,8 @@ function initPlayerAtlas() {
   let hasError = false;
   let goatLookup = { byId: new Map(), byName: new Map(), recent: [] };
   let atlasMetrics = { byId: new Map(), byName: new Map() };
+  let metricDefinitions = new Map();
+  let metricOrder = new Map();
   let currentRostersDoc = null;
   let rosterController = null;
   const defaultEmptyText = empty?.textContent?.trim() ?? '';
@@ -2115,6 +2107,18 @@ function initPlayerAtlas() {
     });
   };
   const updateStatsView = (status, payload = null) => {
+    if (
+      !statsContainer ||
+      !statGamesEl ||
+      !statPointsEl ||
+      !statReboundsEl ||
+      !statAssistsEl ||
+      !statStealsEl ||
+      !statBlocksEl
+    ) {
+      return;
+    }
+
     statsContainer.setAttribute('data-state', status);
     statsContainer.setAttribute('aria-busy', status === 'loading' ? 'true' : 'false');
     if (statsEmpty) {
@@ -2176,6 +2180,18 @@ function initPlayerAtlas() {
   };
 
   const loadSeasonAverages = async (player) => {
+    if (
+      !statsContainer ||
+      !statGamesEl ||
+      !statPointsEl ||
+      !statReboundsEl ||
+      !statAssistsEl ||
+      !statStealsEl ||
+      !statBlocksEl
+    ) {
+      return;
+    }
+
     const bdlId = player?.bdl?.id;
     statsRequestToken += 1;
     const requestId = statsRequestToken;
@@ -2316,6 +2332,7 @@ function initPlayerAtlas() {
         if (profile) {
           profile.hidden = true;
           delete profile.dataset.playerId;
+          renderPlayerMetricsView(null);
         }
       } else {
         activePlayerId = normalizedActiveId;
@@ -2354,6 +2371,110 @@ function initPlayerAtlas() {
     }
     return parts.join(' • ');
   };
+
+  function renderPlayerMetricsView(player) {
+    if (!metricsContainer) {
+      return;
+    }
+
+    metricsContainer.innerHTML = '';
+    metricsContainer.setAttribute('data-state', player ? 'loading' : 'idle');
+    if (metricsEmpty) {
+      metricsEmpty.hidden = true;
+    }
+
+    if (!player) {
+      return;
+    }
+
+    const record =
+      player?.metrics && typeof player.metrics === 'object' && player.metrics !== null
+        ? player.metrics
+        : {};
+    const entries = Object.entries(record).filter((entry) => {
+      const value = entry?.[1]?.value;
+      return Number.isFinite(value);
+    });
+
+    if (!entries.length) {
+      metricsContainer.setAttribute('data-state', 'empty');
+      if (metricsEmpty) {
+        metricsEmpty.hidden = false;
+      }
+      return;
+    }
+
+    const sorted = entries.slice().sort((a, b) => {
+      const orderA = metricOrder.has(a[0]) ? metricOrder.get(a[0]) : Number.POSITIVE_INFINITY;
+      const orderB = metricOrder.has(b[0]) ? metricOrder.get(b[0]) : Number.POSITIVE_INFINITY;
+      if (orderA !== orderB) {
+        return orderA - orderB;
+      }
+      return a[0].localeCompare(b[0]);
+    });
+
+    metricsContainer.setAttribute('data-state', 'ready');
+    if (metricsEmpty) {
+      metricsEmpty.hidden = true;
+    }
+
+    sorted.forEach(([metricId, payload]) => {
+      const definition = metricDefinitions.get(metricId) || {};
+      const card = document.createElement('article');
+      card.className = 'player-metric';
+
+      const header = document.createElement('div');
+      header.className = 'player-metric__header';
+
+      const label = document.createElement('span');
+      label.className = 'player-metric__label';
+      label.textContent = definition.label || metricId.replace(/[-_]+/g, ' ');
+
+      const value = document.createElement('span');
+      value.className = 'player-metric__value';
+
+      const numericValue = Number.isFinite(payload?.value)
+        ? Math.max(0, Math.min(100, Number(payload.value)))
+        : null;
+
+      if (numericValue === null) {
+        value.classList.add('player-metric__value--empty');
+        value.textContent = '—';
+      } else {
+        const valueNumber = document.createElement('span');
+        valueNumber.className = 'player-metric__value-number';
+        valueNumber.textContent = formatPercentile(numericValue);
+
+        const suffix = document.createElement('span');
+        suffix.className = 'player-metric__value-suffix';
+        suffix.textContent = 'Percentile';
+
+        value.append(valueNumber, suffix);
+      }
+
+      header.append(label, value);
+
+      const meter = document.createElement('div');
+      meter.className = 'player-metric__meter';
+      if (numericValue === null) {
+        meter.classList.add('player-metric__meter--empty');
+      } else {
+        const fill = document.createElement('span');
+        fill.style.setProperty('--fill', `${numericValue}%`);
+        meter.append(fill);
+      }
+
+      const description = document.createElement('p');
+      description.className = 'player-metric__description';
+      description.textContent =
+        (typeof payload?.note === 'string' && payload.note.trim()) ||
+        (typeof definition.description === 'string' && definition.description.trim()) ||
+        'Percentile visual is warming up.';
+
+      card.append(header, meter, description);
+      metricsContainer.append(card);
+    });
+  }
 
   const highlightTeamPlayer = (playerId) => {
     if (!teamTree) return;
@@ -2735,17 +2856,110 @@ function initPlayerAtlas() {
     nameEl.textContent = player.name;
     metaEl.textContent = renderMeta(player) || 'Active roster profile';
 
-    const teamName = player?.bdl?.teamName || player?.team || '—';
-    const position = player?.bdl?.position || '—';
-    const jersey = player?.bdl?.jersey ? `#${player.bdl.jersey}` : '—';
-    const height = player?.bdl?.height || player?.height || '—';
-    const weight = player?.bdl?.weight || player?.weight || '—';
+    const goatScores = player?.goatScores || {};
+    const recentScore = Number.isFinite(goatScores?.recent)
+      ? goatScores.recent
+      : Number.isFinite(player?.goatRecentScore)
+        ? player.goatRecentScore
+        : null;
+    const recentRank = Number.isFinite(goatScores?.recentRank)
+      ? goatScores.recentRank
+      : Number.isFinite(player?.goatRecentRank)
+        ? player.goatRecentRank
+        : null;
+    const historicScore = Number.isFinite(goatScores?.historical)
+      ? goatScores.historical
+      : Number.isFinite(player?.goatScore)
+        ? player.goatScore
+        : null;
+    const historicRank = Number.isFinite(goatScores?.historicalRank)
+      ? goatScores.historicalRank
+      : Number.isFinite(player?.goatRank)
+        ? player.goatRank
+        : null;
 
-    teamEl.textContent = teamName || '—';
-    positionEl.textContent = position || '—';
-    jerseyEl.textContent = jersey || '—';
-    heightEl.textContent = height || '—';
-    weightEl.textContent = weight || '—';
+    if (goatRecentScoreEl) {
+      goatRecentScoreEl.textContent = Number.isFinite(recentScore)
+        ? helpers.formatNumber(recentScore, 1)
+        : '—';
+    }
+    if (goatRecentRankEl) {
+      goatRecentRankEl.textContent = Number.isFinite(recentRank)
+        ? `No. ${helpers.formatNumber(recentRank, 0)}`
+        : 'No. —';
+    }
+    if (goatHistoricScoreEl) {
+      goatHistoricScoreEl.textContent = Number.isFinite(historicScore)
+        ? helpers.formatNumber(historicScore, 1)
+        : '—';
+    }
+    if (goatHistoricRankEl) {
+      goatHistoricRankEl.textContent = Number.isFinite(historicRank)
+        ? `No. ${helpers.formatNumber(historicRank, 0)}`
+        : 'No. —';
+    }
+
+    if (bioEl) {
+      const biography = typeof player?.bio === 'string' ? player.bio.trim() : '';
+      const resume = typeof player?.goatResume === 'string' ? player.goatResume.trim() : '';
+      let copy = biography || `Scouting capsule for ${player.name}.`;
+      if (resume && !copy.toLowerCase().includes(resume.toLowerCase())) {
+        const punctuated = /[.!?]$/.test(copy) ? copy : `${copy}.`;
+        copy = `${punctuated} GOAT resume: ${resume}${/[.!?]$/.test(resume) ? '' : '.'}`;
+      }
+      bioEl.textContent = copy;
+    }
+
+    if (archetypeEl) {
+      const archetype = player?.archetype || player?.goatTier || '—';
+      archetypeEl.textContent = archetype;
+    }
+
+    const teamName = player?.bdl?.teamName || player?.team || null;
+    const position = player?.bdl?.position || player?.position || null;
+    const jerseySource = player?.bdl?.jersey ?? player?.jerseyNumber ?? null;
+    const jerseyRaw = jerseySource !== null && jerseySource !== undefined ? String(jerseySource).trim() : '';
+    const jersey = jerseyRaw ? (jerseyRaw.startsWith('#') ? jerseyRaw : `#${jerseyRaw}`) : null;
+    const height = player?.bdl?.height || player?.height || null;
+    const weight = player?.bdl?.weight || player?.weight || null;
+
+    if (vitalsEl) {
+      const vitalsParts = [];
+      if (height) vitalsParts.push(height);
+      if (weight) vitalsParts.push(weight);
+      if (position) vitalsParts.push(`Pos ${position}`);
+      if (jersey) vitalsParts.push(jersey);
+      if (teamName) vitalsParts.push(teamName);
+      vitalsEl.textContent = vitalsParts.length ? vitalsParts.join(' • ') : '—';
+    }
+
+    if (originEl) {
+      const origin = player?.origin || player?.born || '—';
+      originEl.textContent = origin;
+    }
+
+    if (draftEl) {
+      const draft = player?.draft || player?.draftStatus || '—';
+      draftEl.textContent = draft;
+    }
+
+    if (teamEl) {
+      teamEl.textContent = teamName || '—';
+    }
+    if (positionEl) {
+      positionEl.textContent = position || '—';
+    }
+    if (jerseyEl) {
+      jerseyEl.textContent = jersey || '—';
+    }
+    if (heightEl) {
+      heightEl.textContent = height || '—';
+    }
+    if (weightEl) {
+      weightEl.textContent = weight || '—';
+    }
+
+    renderPlayerMetricsView(player);
 
     updateRosterTimestamp();
     loadSeasonAverages(player);
@@ -2853,6 +3067,15 @@ function initPlayerAtlas() {
       const data = await profilesResponse.json();
 
       catalog = Array.isArray(data?.metrics) ? data.metrics : [];
+      metricDefinitions = new Map();
+      metricOrder = new Map();
+      catalog.forEach((metric, index) => {
+        if (!metric || typeof metric.id !== 'string') {
+          return;
+        }
+        metricDefinitions.set(metric.id, metric);
+        metricOrder.set(metric.id, index);
+      });
       const roster = Array.isArray(data?.players) ? data.players : [];
 
       let goatSystemData = null;
