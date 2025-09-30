@@ -8,6 +8,7 @@ const PLAYERS_FULL_URL = 'data/history/players.index.json';
 const BIRTHPLACES_URL = 'data/history/player_birthplaces.json';
 const GOAT_URL = 'data/goat_system.json';
 const WORLD_LEGENDS_URL = 'data/world_birth_legends.json';
+const PLAYER_CAREERS_URL = 'data/history/player_careers.json';
 
 const numberFormatter = new Intl.NumberFormat('en-US');
 const decimalFormatter = new Intl.NumberFormat('en-US', { maximumFractionDigits: 1, minimumFractionDigits: 1 });
@@ -97,6 +98,85 @@ async function loadJson(url) {
     throw new Error(`Failed to load ${url}`);
   }
   return response.json();
+}
+
+function normalizeCareerSegment(segment) {
+  const totalsInput = segment?.totals ?? {};
+  const totals = {};
+  for (const key of CAREER_TOTAL_KEYS) {
+    const value = Number(totalsInput[key] ?? 0);
+    totals[key] = Number.isFinite(value) ? value : 0;
+  }
+  const seasonCandidates = Array.isArray(segment?.seasons) ? segment.seasons : [];
+  const seasons = Array.from(
+    new Set(
+      seasonCandidates
+        .map((entry) => Number(entry))
+        .filter((season) => Number.isFinite(season)),
+    ),
+  ).sort((a, b) => a - b);
+  return { totals, seasons };
+}
+
+function buildCareerCaches(document) {
+  const byId = new Map();
+  const byName = new Map();
+
+  const players = document?.players;
+  if (players && typeof players === 'object') {
+    for (const [id, entry] of Object.entries(players)) {
+      const playerId = Number(id);
+      if (!Number.isFinite(playerId)) {
+        continue;
+      }
+      byId.set(playerId, {
+        regular: normalizeCareerSegment(entry?.regular ?? {}),
+        postseason: normalizeCareerSegment(entry?.postseason ?? {}),
+      });
+    }
+  }
+
+  const byNameDocument = document?.byName;
+  if (byNameDocument && typeof byNameDocument === 'object') {
+    for (const [rawName, entry] of Object.entries(byNameDocument)) {
+      if (typeof rawName !== 'string' || !rawName.trim()) {
+        continue;
+      }
+      const key = normalizeName(rawName);
+      if (!key) {
+        continue;
+      }
+      byName.set(key, {
+        regular: normalizeCareerSegment(entry?.regular ?? {}),
+        postseason: normalizeCareerSegment(entry?.postseason ?? {}),
+      });
+    }
+  }
+
+  return { byId, byName };
+}
+
+function formatCareerSnapshotNote() {
+  if (!cachedCareerGeneratedAt) {
+    return "Showing cached career totals from the Ball Don't Lie archive snapshot.";
+  }
+  const timestamp = new Date(cachedCareerGeneratedAt);
+  if (Number.isNaN(timestamp.getTime())) {
+    return "Showing cached career totals from the Ball Don't Lie archive snapshot.";
+  }
+  const formatted = cachedCareerTimestampFormatter.format(timestamp);
+  return `Showing cached career totals captured ${formatted} UTC from the Ball Don't Lie archive snapshot.`;
+}
+
+function renderCachedCareer(totalsContainer, cachedCareer, contextMessage) {
+  if (contextMessage) {
+    totalsContainer.append(createElement('p', 'history-player__hint', contextMessage));
+  }
+  totalsContainer.append(
+    createElement('p', 'history-player__hint', formatCareerSnapshotNote()),
+  );
+  totalsContainer.append(renderTotalsTable('Regular season', cachedCareer.regular));
+  totalsContainer.append(renderTotalsTable('Postseason', cachedCareer.postseason));
 }
 
 function getApiKey() {
@@ -940,12 +1020,20 @@ function renderAtlasSpotlight(entry, config) {
 
 async function bootstrap() {
   try {
-    const [playersMin, playersFullDocument, birthplacesDocument, goatDocument, worldLegends] = await Promise.all([
+    const [
+      playersMin,
+      playersFullDocument,
+      birthplacesDocument,
+      goatDocument,
+      worldLegends,
+      playerCareersDocument,
+    ] = await Promise.all([
       loadJson(PLAYERS_MIN_URL),
       loadJson(PLAYERS_FULL_URL),
       loadJson(BIRTHPLACES_URL),
       loadJson(GOAT_URL),
       loadJson(WORLD_LEGENDS_URL).catch(() => null),
+      loadJson(PLAYER_CAREERS_URL).catch(() => null),
     ]);
 
     const playersFull = Array.isArray(playersFullDocument?.players) ? playersFullDocument.players : [];
@@ -963,6 +1051,98 @@ async function bootstrap() {
     const goatReferences = buildGoatReferences(goatPlayers);
     const countryCodes = buildCountryCodeMap(worldLegends);
     const playersById = new Map(playersFull.map((player) => [player.id, player]));
+    const careerCaches = buildCareerCaches(playerCareersDocument);
+    cachedCareerStats = careerCaches.byId;
+    cachedCareerStatsByName = careerCaches.byName;
+    cachedCareerGeneratedAt =
+      typeof playerCareersDocument?.generatedAt === 'string' ? playerCareersDocument.generatedAt : null;
+
+    let selectionToken = 0;
+
+    function lookupPlayerIdFromName(rawName) {
+      const nameKey = normalizeName(rawName);
+      if (!nameKey) {
+        return null;
+      }
+      for (const player of playersFull) {
+        const candidateKey = normalizeName(`${player.first_name} ${player.last_name}`);
+        if (candidateKey && candidateKey === nameKey) {
+          return player.id;
+        }
+      }
+      return null;
+    }
+
+    async function showPlayerById(playerId) {
+      if (!Number.isFinite(playerId)) {
+        return;
+      }
+      const player = playersById.get(playerId);
+      if (!player) {
+        return;
+      }
+
+      selectionToken += 1;
+      const token = selectionToken;
+      const nameKey = normalizeName(`${player.first_name} ${player.last_name}`);
+      const birthplace = resolveBirthplace(nameKey, birthplaces);
+      const totalsContainer = renderPlayerCard(player, birthplace);
+      const goatEntry = selectGoatEntry(player, goatIndex);
+      renderVisuals(goatEntry, goatReferences);
+      if (!totalsContainer) {
+        return;
+      }
+
+      const cachedCareerById = cachedCareerStats.get(playerId);
+      const cachedCareerByName = nameKey ? cachedCareerStatsByName.get(nameKey) : null;
+      const cachedCareer = cachedCareerById ?? cachedCareerByName ?? null;
+      const renderUnavailable = (message) => {
+        if (selectionToken !== token) return;
+        totalsContainer.innerHTML = '';
+        totalsContainer.append(createElement('p', 'history-player__error', message));
+      };
+
+      const renderCached = (contextMessage) => {
+        if (selectionToken !== token) return;
+        totalsContainer.innerHTML = '';
+        if (cachedCareer) {
+          renderCachedCareer(totalsContainer, cachedCareer, contextMessage);
+        } else if (contextMessage) {
+          totalsContainer.append(createElement('p', 'history-player__error', contextMessage));
+        }
+      };
+
+      totalsContainer.innerHTML = '';
+      const apiKey = getApiKey();
+      if (!apiKey) {
+        renderCached('Career totals are unavailable without the site credentials right now.');
+        return;
+      }
+
+      totalsContainer.append(
+        createElement('p', 'history-player__hint', 'Fetching the career log with site credentials…'),
+      );
+
+      try {
+        const career = await fetchCareerStats(player, apiKey);
+        if (selectionToken !== token) return;
+        totalsContainer.innerHTML = '';
+        totalsContainer.append(renderTotalsTable('Regular season', career.regular));
+        totalsContainer.append(renderTotalsTable('Postseason', career.postseason));
+      } catch (error) {
+        console.error(error);
+        if (selectionToken !== token) return;
+        if (cachedCareer) {
+          renderCachedCareer(
+            totalsContainer,
+            cachedCareer,
+            'Live Ball Don\'t Lie stats are unavailable — showing the cached snapshot instead.',
+          );
+        } else {
+          renderUnavailable('We hit a snag pulling the career stats. Try again in a moment.');
+        }
+      }
+    }
 
     if (selectors.searchInput) {
       selectors.searchInput.addEventListener('input', (event) => {
@@ -978,46 +1158,28 @@ async function bootstrap() {
         if (!button) return;
         const playerId = Number(button.dataset.playerId);
         if (!Number.isFinite(playerId)) return;
-        const player = playersById.get(playerId);
-        if (!player) return;
-        const nameKey = normalizeName(`${player.first_name} ${player.last_name}`);
-        const birthplace = resolveBirthplace(nameKey, birthplaces);
-        const totalsContainer = renderPlayerCard(player, birthplace);
-        const goatEntry = selectGoatEntry(player, goatIndex);
-        renderVisuals(goatEntry, goatReferences);
-        if (!totalsContainer) return;
-        totalsContainer.innerHTML = '';
-        const apiKey = getApiKey();
-        if (!apiKey) {
-          totalsContainer.append(
-            createElement(
-              'p',
-              'history-player__error',
-              "Ball Don't Lie API credentials are not configured for this site. Reach out to the data team to restore access.",
-            ),
-          );
-          return;
-        }
-        totalsContainer.append(
-          createElement('p', 'history-player__hint', 'Fetching the career log with site credentials…'),
-        );
-        try {
-          const career = await fetchCareerStats(player, apiKey);
-          totalsContainer.innerHTML = '';
-          totalsContainer.append(renderTotalsTable('Regular season', career.regular));
-          totalsContainer.append(renderTotalsTable('Postseason', career.postseason));
-        } catch (error) {
-          console.error(error);
-          totalsContainer.innerHTML = '';
-          totalsContainer.append(
-            createElement(
-              'p',
-              'history-player__error',
-              'We hit a snag pulling the career stats. Try again in a moment.',
-            ),
-          );
-        }
+        await showPlayerById(playerId);
       });
+    }
+
+    const initialParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
+    if (initialParams) {
+      const playerIdParam = initialParams.get('playerId');
+      const playerNameParam = initialParams.get('player');
+      let initialPlayerId = null;
+      if (playerIdParam && Number.isFinite(Number(playerIdParam))) {
+        initialPlayerId = Number(playerIdParam);
+      } else if (playerNameParam) {
+        initialPlayerId = lookupPlayerIdFromName(playerNameParam);
+      }
+      if (initialPlayerId && playersById.has(initialPlayerId)) {
+        if (selectors.searchInput) {
+          const player = playersById.get(initialPlayerId);
+          selectors.searchInput.value = `${player.first_name} ${player.last_name}`.trim();
+          renderSearchResults(playersMinList, selectors.searchInput.value);
+        }
+        await showPlayerById(initialPlayerId);
+      }
     }
 
     const atlas = buildAtlas(playersFull, birthplaces, goatIndex, countryCodes);
@@ -1042,3 +1204,32 @@ async function bootstrap() {
 }
 
 bootstrap();
+const CAREER_TOTAL_KEYS = [
+  'games',
+  'minutes',
+  'points',
+  'rebounds',
+  'assists',
+  'steals',
+  'blocks',
+  'turnovers',
+  'fouls',
+  'fgm',
+  'fga',
+  'fg3m',
+  'fg3a',
+  'ftm',
+  'fta',
+  'oreb',
+  'dreb',
+];
+
+const cachedCareerTimestampFormatter = new Intl.DateTimeFormat('en-US', {
+  dateStyle: 'medium',
+  timeStyle: 'short',
+  timeZone: 'UTC',
+});
+
+let cachedCareerStats = new Map();
+let cachedCareerStatsByName = new Map();
+let cachedCareerGeneratedAt = null;
