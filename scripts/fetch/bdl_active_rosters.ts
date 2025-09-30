@@ -1,13 +1,37 @@
 import { promises as fs } from "node:fs";
 import { pathToFileURL } from "node:url";
 import type { SourcePlayerRecord } from "../lib/types.js";
+import { loadSecret } from "../lib/secrets.js";
 
 const API = "https://api.balldontlie.io/v1";
 
+function resolveBdlKey(): string | undefined {
+  const candidates = [
+    process.env.BDL_API_KEY,
+    process.env.BALLDONTLIE_API_KEY,
+    process.env.BALL_DONT_LIE_API_KEY,
+  ];
+
+  for (const value of candidates) {
+    const trimmed = value?.trim();
+    if (trimmed) {
+      return trimmed;
+    }
+  }
+
+  const fileKey = loadSecret("bdl_api_key", {
+    aliases: ["ball_dont_lie_api_key", "balldontlie_api_key", "ball-dont-lie"],
+  });
+
+  return fileKey?.trim() || undefined;
+}
+
 function requireKey(): string {
-  const key = process.env.BALLDONTLIE_API_KEY?.trim();
+  const key = resolveBdlKey();
   if (!key) {
-    throw new Error("Missing BALLDONTLIE_API_KEY");
+    throw new Error(
+      "Missing BDL_API_KEY — set your Ball Don't Lie All-Star key or enable USE_BDL_CACHE=1",
+    );
   }
   return key;
 }
