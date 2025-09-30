@@ -1,4 +1,21 @@
+import { ProxyAgent, setGlobalDispatcher } from "undici";
+
 import { loadSecret } from "../lib/secrets.js";
+
+const proxyUrl =
+  process.env.HTTPS_PROXY ??
+  process.env.https_proxy ??
+  process.env.HTTP_PROXY ??
+  process.env.http_proxy ??
+  null;
+
+if (proxyUrl) {
+  try {
+    setGlobalDispatcher(new ProxyAgent(proxyUrl));
+  } catch (error) {
+    console.warn(`Failed to configure proxy agent for ${proxyUrl}: ${String(error)}`);
+  }
+}
 
 const MAX_ATTEMPTS = 5;
 // Ball Don't Lie free tier allows at most 60 requests per minute.
@@ -83,6 +100,15 @@ function ensureKey(url: URL): string {
   return key ?? "";
 }
 
+function formatBdlAuthHeader(key: string): string {
+  const trimmed = key.trim();
+  if (!trimmed) return trimmed;
+  if (/^Bearer\s+/i.test(trimmed)) {
+    return trimmed;
+  }
+  return `Bearer ${trimmed}`;
+}
+
 function safeUrl(url: URL): string {
   return url.toString();
 }
@@ -93,7 +119,7 @@ async function executeRequest<T>(input: string, init: RequestInit | undefined, a
   const key = ensureKey(url);
 
   if (/\bballdontlie\.io$/i.test(url.hostname) && key) {
-    headers.set("Authorization", key);
+    headers.set("Authorization", formatBdlAuthHeader(key));
   }
 
   const requestInit: RequestInit = {
