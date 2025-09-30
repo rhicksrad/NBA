@@ -2,7 +2,7 @@ import { mkdir, readFile, readdir, rm, writeFile } from "fs/promises";
 import path from "path";
 import { fileURLToPath, pathToFileURL } from "url";
 import { SEASON } from "../lib/season.js";
-import { TeamRecord } from "../lib/types.js";
+import { PlayerRecord, TeamRecord } from "../lib/types.js";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../");
 const CANONICAL_DIR = path.join(ROOT, "data/2025-26/canonical");
@@ -486,6 +486,46 @@ function parsePlayerName(entry: RosterPlayerEntry): string | null {
   return null;
 }
 
+function splitName(name: string | undefined): { first?: string; last?: string } {
+  if (!name) {
+    return {};
+  }
+  const trimmed = name.trim();
+  if (!trimmed.length) {
+    return {};
+  }
+  const parts = trimmed.split(/\s+/);
+  if (parts.length === 1) {
+    return { first: parts[0] };
+  }
+  return {
+    first: parts.slice(0, -1).join(" "),
+    last: parts[parts.length - 1],
+  };
+}
+
+function toRosterEntryFromPlayerRecord(player: PlayerRecord): RosterPlayerEntry {
+  const parsedId = (() => {
+    const raw = player.playerId?.trim();
+    if (!raw) {
+      return undefined;
+    }
+    const numeric = Number.parseInt(raw, 10);
+    return Number.isFinite(numeric) ? numeric : undefined;
+  })();
+
+  const directFirst = player.firstName?.trim();
+  const directLast = player.lastName?.trim();
+  const fullNameParts = splitName(player.name);
+
+  return {
+    id: parsedId,
+    first_name: directFirst ?? fullNameParts.first ?? null,
+    last_name: directLast ?? fullNameParts.last ?? null,
+    position: player.position ?? null,
+  };
+}
+
 function parsePositionTokens(position: string | null | undefined): string[] {
   if (!position) {
     return [];
@@ -569,37 +609,49 @@ function buildTeamRosterBreakdownFromPlayers(players: RosterPlayerEntry[]): Team
   };
 }
 
+async function loadRosterMetadata(): Promise<{ fetchedAt?: string; source?: string }> {
+  try {
+    const filePath = path.join(PUBLIC_DIR, "data/rosters.json");
+    const raw = await readFile(filePath, "utf8");
+    const payload = JSON.parse(raw) as RosterPayload;
+    return {
+      fetchedAt: typeof payload?.fetched_at === "string" ? payload.fetched_at : undefined,
+      source: typeof payload?.source === "string" ? payload.source : undefined,
+    };
+  } catch (error) {
+    console.warn("Unable to load roster metadata from public/data/rosters.json.", error);
+    return {};
+  }
+}
+
 async function loadTeamRosters(): Promise<{
   lookup: Map<string, TeamRosterBreakdown>;
   fetchedAt?: string;
   source?: string;
 }> {
   const rosterLookup = new Map<string, TeamRosterBreakdown>();
+  let fetchedAt: string | undefined;
+  let source: string | undefined;
+
+  const meta = await loadRosterMetadata();
+  fetchedAt = meta.fetchedAt;
+  source = meta.source;
+
   try {
-    const filePath = path.join(PUBLIC_DIR, "data/rosters.json");
-    const raw = await readFile(filePath, "utf8");
-    const payload = JSON.parse(raw) as RosterPayload;
-    const teams = Array.isArray(payload?.teams) ? payload.teams : [];
+    const teams = await loadJson<TeamRecord[]>("teams.json");
     for (const team of teams) {
-      const abbr = team?.abbreviation?.trim();
-      if (!abbr) {
+      const roster = Array.isArray(team?.roster) ? team.roster : [];
+      if (!roster.length) {
         continue;
       }
-      const rosterPlayers = Array.isArray(team?.roster) ? team.roster : [];
-      if (!rosterPlayers.length) {
-        continue;
-      }
-      rosterLookup.set(abbr.toUpperCase(), buildTeamRosterBreakdownFromPlayers(rosterPlayers));
+      const normalized = roster.map(toRosterEntryFromPlayerRecord);
+      rosterLookup.set(team.tricode.toUpperCase(), buildTeamRosterBreakdownFromPlayers(normalized));
     }
-    return {
-      lookup: rosterLookup,
-      fetchedAt: typeof payload?.fetched_at === "string" ? payload.fetched_at : undefined,
-      source: typeof payload?.source === "string" ? payload.source : undefined,
-    };
   } catch (error) {
-    console.warn("Unable to load Ball Don't Lie roster snapshot for preseason previews.", error);
-    return { lookup: rosterLookup };
+    console.warn("Unable to load canonical roster snapshot for preseason previews.", error);
   }
+
+  return { lookup: rosterLookup, fetchedAt, source };
 }
 
 function buildTeamInjurySummary(items: InjuryItemEntry[]): TeamInjurySummary {
