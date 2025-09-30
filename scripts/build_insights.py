@@ -145,6 +145,120 @@ def _sorted_heap(heap: list[tuple[float, dict]], *, reverse: bool = True) -> lis
     return [item for _, item in sorted(heap, key=lambda pair: pair[0], reverse=reverse)]
 
 
+def _normalize_person_id(value: object) -> str | None:
+    """Convert assorted identifier representations to a trimmed string."""
+
+    if value is None:
+        return None
+    if isinstance(value, str):
+        cleaned = value.strip()
+        return cleaned or None
+    if isinstance(value, (int, float)):
+        if isinstance(value, float):
+            if math.isnan(value):  # pragma: no cover - defensive guard
+                return None
+            value = int(value)
+        return str(int(value))
+    return None
+
+
+def _load_active_player_ids_from_rosters() -> tuple[set[str], str] | None:
+    path = PUBLIC_DATA_DIR / "rosters.json"
+    if not path.exists():
+        return None
+
+    try:
+        with path.open(encoding="utf-8") as handle:
+            payload = json.load(handle)
+    except (OSError, json.JSONDecodeError):
+        return None
+
+    ids: set[str] = set()
+    teams = payload.get("teams") if isinstance(payload, dict) else None
+    if not isinstance(teams, list):
+        return None
+
+    for team in teams:
+        if not isinstance(team, dict):
+            continue
+        roster = team.get("roster")
+        if not isinstance(roster, list):
+            continue
+        for player in roster:
+            if not isinstance(player, dict):
+                continue
+            person_id = _normalize_person_id(
+                player.get("id")
+                or player.get("playerId")
+                or player.get("player_id")
+            )
+            if person_id:
+                ids.add(person_id)
+
+    if not ids:
+        return None
+
+    return ids, "public/data/rosters.json"
+
+
+def _load_active_player_ids_from_canonical() -> tuple[set[str], str] | None:
+    data_root = ROOT / "data"
+    candidates = sorted(data_root.glob("*/canonical/players.json"))
+    for path in reversed(candidates):
+        try:
+            with path.open(encoding="utf-8") as handle:
+                payload = json.load(handle)
+        except (OSError, json.JSONDecodeError):
+            continue
+
+        ids: set[str] = set()
+        if isinstance(payload, list):
+            for entry in payload:
+                if not isinstance(entry, dict):
+                    continue
+                person_id = _normalize_person_id(
+                    entry.get("playerId")
+                    or entry.get("personId")
+                    or entry.get("id")
+                    or entry.get("player_id")
+                )
+                if person_id:
+                    ids.add(person_id)
+
+        if ids:
+            try:
+                relative = str(path.relative_to(ROOT))
+            except ValueError:
+                relative = str(path)
+            return ids, relative
+
+    return None
+
+
+def _load_active_player_ids() -> tuple[set[str], str | None]:
+    roster_lookup = _load_active_player_ids_from_rosters()
+    if roster_lookup:
+        return roster_lookup
+
+    canonical_lookup = _load_active_player_ids_from_canonical()
+    if canonical_lookup:
+        return canonical_lookup
+
+    return set(), None
+
+
+def _top_career(entries: list[dict], metric: str, per_game_metric: str, *, size: int = 15) -> list[dict]:
+    return (
+        sorted(
+            entries,
+            key=lambda item: (item.get(metric, 0), item.get(per_game_metric, 0)),
+            reverse=True,
+        )[:size]
+        if entries
+        else []
+    )
+
+
 def _load_player_directory() -> dict[str, dict[str, object]]:
     """Load player metadata from ``Players.csv`` keyed by ``personId``."""
 
@@ -713,6 +827,7 @@ def build_team_performance_snapshot() -> None:
 
 
 def build_player_leaders_snapshot() -> None:
+    active_player_ids, active_player_source = _load_active_player_ids()
     career_totals: dict[str, dict[str, object]] = {}
     points_highs: list[tuple[float, dict]] = []
     assists_highs: list[tuple[float, dict]] = []
@@ -827,9 +942,15 @@ def build_player_leaders_snapshot() -> None:
         }
         career_list.append(entry)
 
-    career_points = sorted(career_list, key=lambda item: (item["points"], item["pointsPerGame"]), reverse=True)[:15]
-    career_assists = sorted(career_list, key=lambda item: (item["assists"], item["assistsPerGame"]), reverse=True)[:15]
-    career_rebounds = sorted(career_list, key=lambda item: (item["rebounds"], item["reboundsPerGame"]), reverse=True)[:15]
+    active_career_list = [entry for entry in career_list if entry["personId"] in active_player_ids]
+
+    career_points = _top_career(career_list, "points", "pointsPerGame")
+    career_assists = _top_career(career_list, "assists", "assistsPerGame")
+    career_rebounds = _top_career(career_list, "rebounds", "reboundsPerGame")
+
+    active_points = _top_career(active_career_list, "points", "pointsPerGame")
+    active_assists = _top_career(active_career_list, "assists", "assistsPerGame")
+    active_rebounds = _top_career(active_career_list, "rebounds", "reboundsPerGame")
 
     payload = {
         "generatedAt": _timestamp(),
@@ -852,6 +973,22 @@ def build_player_leaders_snapshot() -> None:
             "rebounds": _sorted_heap(rebounds_highs),
         },
     }
+
+    if active_points or active_assists or active_rebounds:
+        chase_payload: dict[str, object] = {
+            "leaders": {
+                "points": active_points,
+                "assists": active_assists,
+                "rebounds": active_rebounds,
+            }
+        }
+        if active_player_source:
+            chase_payload["source"] = active_player_source
+        if active_player_ids:
+            chase_payload["playerPoolSize"] = len(active_player_ids)
+        if active_career_list:
+            chase_payload["playersWithStats"] = len(active_career_list)
+        payload["milestoneChase"] = chase_payload
 
     _write_json("player_leaders.json", payload)
 
