@@ -25,7 +25,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: "pnpm"
+          cache: 'pnpm'
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -35,13 +35,20 @@ jobs:
       - name: Install deps
         run: pnpm i --frozen-lockfile
 
+      # Build whatever generates your site files at repo root
       - name: Build data
         run: pnpm build:data
 
+      # Required to prepare Pages environment
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      # Upload the whole site (root), not just ./public
+      # If you build to a dedicated dir (e.g., dist/), point path to that instead.
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: public
+          path: .
 
   deploy:
     environment:
