@@ -44,7 +44,7 @@ function summarizeSample(players: ActiveRosterPlayer[]): string {
 }
 
 async function main(): Promise<void> {
-  const raw = await readFile("data/bdl_active_rosters.json", "utf8");
+  const raw = await readFile("public/data/rosters.json", "utf8");
   const parsed = JSON.parse(raw) as unknown;
   const doc = ensureRosterDoc(parsed);
 

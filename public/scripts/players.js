@@ -2518,6 +2518,8 @@ function initPlayerAtlas() {
     renderResults('');
   };
 
+  const rostersDataUrl = new URL('./public/data/rosters.json', document.baseURI).toString();
+
   const hydrate = async () => {
     try {
       const [
@@ -2531,7 +2533,7 @@ function initPlayerAtlas() {
         fetch('data/goat_system.json').catch(() => null),
         fetch('data/goat_index.json').catch(() => null),
         fetch('data/goat_recent.json').catch(() => null),
-        fetch('data/rosters.json').catch(() => null),
+        fetch(rostersDataUrl, { cache: 'no-store' }).catch(() => null),
       ]);
       if (!profilesResponse?.ok) {
         throw new Error(`Failed to load player profiles: ${profilesResponse?.status}`);
@@ -2662,7 +2664,7 @@ function initPlayerAtlas() {
 
       if (rosterApp) {
         const loadLatestRosters = async () => {
-          const response = await fetch(`data/rosters.json?cb=${Date.now()}`);
+          const response = await fetch(rostersDataUrl, { cache: 'no-store' });
           if (!response?.ok) {
             throw new Error(`Failed to refresh rosters: ${response?.status}`);
           }
