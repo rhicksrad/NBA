@@ -1065,6 +1065,20 @@ function renderMilestoneChase(leadersData, rosterIndex, franchiseData) {
 
   container.innerHTML = '';
 
+  const resolveSeries = (categoryKey) => {
+    const activeSeries = leadersData?.milestoneChase?.leaders?.[categoryKey];
+    if (Array.isArray(activeSeries) && activeSeries.length) {
+      return activeSeries;
+    }
+
+    const fallbackSeries = leadersData?.careerLeaders?.[categoryKey];
+    if (Array.isArray(fallbackSeries)) {
+      return fallbackSeries;
+    }
+
+    return [];
+  };
+
   const activePlayers = new Map();
   const rosterEntries = Array.isArray(rosterIndex?.players) ? rosterIndex.players : [];
   rosterEntries.forEach((player) => {
@@ -1084,7 +1098,7 @@ function renderMilestoneChase(leadersData, rosterIndex, franchiseData) {
   const deck = [];
 
   categories.forEach((category) => {
-    const series = Array.isArray(leadersData?.careerLeaders?.[category.key]) ? leadersData.careerLeaders[category.key] : [];
+    const series = resolveSeries(category.key);
     if (!series.length) {
       return;
     }
