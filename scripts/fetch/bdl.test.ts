@@ -97,9 +97,9 @@ describe("BallDontLieClient.getActivePlayersByTeam", () => {
 
     expect(mockRequest).toHaveBeenCalledTimes(1);
     const [url] = mockRequest.mock.calls[0];
-    expect(url).toContain("/v1/players");
-    expect(url).toContain("active=true");
-    expect(url).toContain("seasons%5B%5D=2025");
+    expect(url).toContain("/v1/players/active");
+    expect(url).toContain("team_ids%5B%5D=42");
+    expect(url).not.toContain("seasons%5B%5D");
     expect(players).toEqual([
       {
         id: 1,
@@ -135,6 +135,7 @@ describe("BallDontLieClient.getActivePlayersByTeam", () => {
     expect(mockRequest).toHaveBeenCalledTimes(1);
     const [url] = mockRequest.mock.calls[0];
     expect(url).toContain("/v1/players/active");
+    expect(url).toContain("team_ids%5B%5D=7");
     expect(url).not.toContain("seasons%5B%5D");
     expect(players).toEqual([
       {
