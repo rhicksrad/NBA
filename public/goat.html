@@ -42,22 +42,9 @@
           </div>
           <div class="goat-leaderboard__layout">
             <div class="goat-table-wrapper">
-              <table class="goat-table" data-goat-table aria-describedby="goat-table-footnote">
-                <thead>
-                  <tr>
-                    <th scope="col">Rank</th>
-                    <th scope="col">Player</th>
-                    <th scope="col">GOAT</th>
-                    <th scope="col">Δ 12 mo.</th>
-                    <th scope="col">Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td colspan="5">Computing pantheon order…</td>
-                  </tr>
-                </tbody>
-              </table>
+              <div class="goat-tree" data-goat-tree aria-describedby="goat-table-footnote">
+                <p class="goat-tree__placeholder">Computing pantheon order…</p>
+              </div>
               <p id="goat-table-footnote" class="goat-table-footnote">
                 Δ indicates the twelve-month swing in GOAT points after factoring fresh data and retroactive era adjustments.
               </p>
@@ -65,7 +52,7 @@
             <aside class="goat-detail" data-goat-detail>
               <header>
                 <h3 data-goat-name>Select a player</h3>
-                <p class="goat-detail__meta" data-goat-meta>Pick a name from the table to see the GOAT recipe.</p>
+                <p class="goat-detail__meta" data-goat-meta>Pick a name from the tier tree to see the GOAT recipe.</p>
               </header>
               <div class="goat-detail__summary">
                 <p class="goat-detail__resume" data-goat-resume></p>
