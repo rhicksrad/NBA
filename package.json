@@ -24,7 +24,9 @@
     "deploy": "echo 'static site build only'",
     "test": "vitest run",
     "verify:bdl": "tsx scripts/dev/verify_bdl.ts",
-    "verify:history": "tsx scripts/history/verify_history_assets.ts"
+    "verify:history": "tsx scripts/history/verify_history_assets.ts",
+    "prepare:bdl-credentials": "tsx scripts/dev/export_bdl_credentials.ts",
+    "dev": "tsx scripts/dev/serve.ts"
   },
   "dependencies": {
     "cheerio": "1.0.0-rc.12",

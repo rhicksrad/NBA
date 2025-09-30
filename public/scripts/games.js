@@ -5,6 +5,7 @@ const PAGE_SIZE = 100;
 const REFRESH_INTERVAL_MS = 150000;
 const NEXT_SEASON_TIPOFF_DATE = '2025-10-04';
 const LAST_COMPLETED_SEASON_FINALE = '2025-06-22';
+const BDL_CREDENTIALS_URL = 'data/credentials/bdl.json';
 
 const stageRank = { live: 0, upcoming: 1, final: 2 };
 
@@ -68,16 +69,94 @@ function formatTimeLabel(date) {
   return date.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' });
 }
 
-function getApiKey() {
-  const meta = document.querySelector('meta[name="bdl-api-key"]');
-  const metaKey = meta?.getAttribute('content')?.trim();
-  if (metaKey) {
-    return metaKey;
+let cachedApiKey;
+let resolvingApiKey = null;
+
+function normalizeApiKey(value) {
+  if (!value) return null;
+  const trimmed = String(value).trim();
+  return trimmed.length ? trimmed : null;
+}
+
+function applyApiKey(key) {
+  if (!key) return;
+  if (typeof window !== 'undefined') {
+    window.BDL_API_KEY = key;
+    window.BALLDONTLIE_API_KEY = key;
+    window.BALL_DONT_LIE_API_KEY = key;
   }
-  if (typeof window !== 'undefined' && window.BDL_API_KEY) {
-    return String(window.BDL_API_KEY);
+  if (typeof document !== 'undefined') {
+    let meta = document.querySelector('meta[name="bdl-api-key"]');
+    if (!meta) {
+      meta = document.createElement('meta');
+      meta.setAttribute('name', 'bdl-api-key');
+      document.head?.append(meta);
+    }
+    meta.setAttribute('content', key);
+  }
+}
+
+async function fetchApiKeyFromFile() {
+  try {
+    const response = await fetch(BDL_CREDENTIALS_URL, { cache: 'no-store', credentials: 'same-origin' });
+    if (!response.ok) {
+      return null;
+    }
+    const payload = await response.json();
+    const candidates = [payload?.authorization, payload?.token, payload?.key];
+    for (const candidate of candidates) {
+      const normalized = normalizeApiKey(candidate);
+      if (normalized) {
+        return normalized;
+      }
+    }
+  } catch (error) {
+    console.warn('Failed to load BDL API credentials for games view', error);
   }
   return null;
+}
+
+async function getApiKey() {
+  if (cachedApiKey !== undefined) {
+    return cachedApiKey;
+  }
+  if (resolvingApiKey) {
+    return resolvingApiKey;
+  }
+
+  resolvingApiKey = (async () => {
+    const meta = document.querySelector('meta[name="bdl-api-key"]');
+    const metaKey = normalizeApiKey(meta?.getAttribute('content'));
+    if (metaKey) {
+      applyApiKey(metaKey);
+      return metaKey;
+    }
+
+    if (typeof window !== 'undefined') {
+      const globalKey =
+        window.BDL_API_KEY || window.BALLDONTLIE_API_KEY || window.BALL_DONT_LIE_API_KEY;
+      const normalizedGlobal = normalizeApiKey(globalKey);
+      if (normalizedGlobal) {
+        applyApiKey(normalizedGlobal);
+        return normalizedGlobal;
+      }
+    }
+
+    const remoteKey = await fetchApiKeyFromFile();
+    if (remoteKey) {
+      applyApiKey(remoteKey);
+      return remoteKey;
+    }
+
+    return null;
+  })();
+
+  try {
+    cachedApiKey = await resolvingApiKey;
+    return cachedApiKey;
+  } finally {
+    resolvingApiKey = null;
+  }
 }
 
 function buildSearchParams(params) {
@@ -108,7 +187,7 @@ async function request(endpoint, params = {}) {
     url.search = search.toString();
   }
   const headers = { Accept: 'application/json' };
-  const apiKey = getApiKey();
+  const apiKey = await getApiKey();
   if (apiKey) {
     headers.Authorization = apiKey;
   }

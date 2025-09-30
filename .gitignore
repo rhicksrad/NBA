@@ -4,6 +4,9 @@ node_modules/
 # Secrets injected during CI or local runs
 secrets/
 
+# Front-end credentials generated from local secrets
+public/data/credentials/*.json
+
 # Python artifacts
 __pycache__/
 *.pyc

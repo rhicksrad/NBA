@@ -6,6 +6,7 @@ const PLAYERS_FULL_URL = 'data/history/players.index.json';
 const BIRTHPLACES_URL = 'data/history/player_birthplaces.json';
 const GOAT_URL = 'data/goat_system.json';
 const WORLD_LEGENDS_URL = 'data/world_birth_legends.json';
+const BDL_CREDENTIALS_URL = 'data/credentials/bdl.json';
 
 const numberFormatter = new Intl.NumberFormat('en-US');
 const decimalFormatter = new Intl.NumberFormat('en-US', { maximumFractionDigits: 1, minimumFractionDigits: 1 });
@@ -97,19 +98,94 @@ async function loadJson(url) {
   return response.json();
 }
 
-function getApiKey() {
-  const meta = document.querySelector('meta[name="bdl-api-key"]');
-  const metaKey = meta?.getAttribute('content')?.trim();
-  if (metaKey) {
-    return metaKey;
-  }
+let cachedApiKey;
+let resolvingApiKey = null;
+
+function normalizeApiKey(value) {
+  if (!value) return null;
+  const trimmed = String(value).trim();
+  return trimmed.length ? trimmed : null;
+}
+
+function applyApiKeyToPage(key) {
+  if (!key) return;
   if (typeof window !== 'undefined') {
-    const globalKey = window.BDL_API_KEY || window.BALLDONTLIE_API_KEY || window.BALL_DONT_LIE_API_KEY;
-    if (globalKey && String(globalKey).trim()) {
-      return String(globalKey).trim();
+    window.BDL_API_KEY = key;
+    window.BALLDONTLIE_API_KEY = key;
+    window.BALL_DONT_LIE_API_KEY = key;
+  }
+  if (typeof document !== 'undefined') {
+    let meta = document.querySelector('meta[name="bdl-api-key"]');
+    if (!meta) {
+      meta = document.createElement('meta');
+      meta.setAttribute('name', 'bdl-api-key');
+      document.head?.append(meta);
     }
+    meta.setAttribute('content', key);
+  }
+}
+
+async function fetchApiKeyFromCredentialsFile() {
+  try {
+    const response = await fetch(BDL_CREDENTIALS_URL, { cache: 'no-store', credentials: 'same-origin' });
+    if (!response.ok) {
+      return null;
+    }
+    const payload = await response.json();
+    const candidates = [payload?.authorization, payload?.token, payload?.key];
+    for (const candidate of candidates) {
+      const normalized = normalizeApiKey(candidate);
+      if (normalized) {
+        return normalized;
+      }
+    }
+  } catch (error) {
+    console.warn('Failed to load BDL API credentials from disk', error);
   }
   return null;
+}
+
+async function getApiKey() {
+  if (cachedApiKey !== undefined) {
+    return cachedApiKey;
+  }
+  if (resolvingApiKey) {
+    return resolvingApiKey;
+  }
+
+  resolvingApiKey = (async () => {
+    const meta = document.querySelector('meta[name="bdl-api-key"]');
+    const metaKey = normalizeApiKey(meta?.getAttribute('content'));
+    if (metaKey) {
+      applyApiKeyToPage(metaKey);
+      return metaKey;
+    }
+
+    if (typeof window !== 'undefined') {
+      const globalKey =
+        window.BDL_API_KEY || window.BALLDONTLIE_API_KEY || window.BALL_DONT_LIE_API_KEY;
+      const normalizedGlobal = normalizeApiKey(globalKey);
+      if (normalizedGlobal) {
+        applyApiKeyToPage(normalizedGlobal);
+        return normalizedGlobal;
+      }
+    }
+
+    const remoteKey = await fetchApiKeyFromCredentialsFile();
+    if (remoteKey) {
+      applyApiKeyToPage(remoteKey);
+      return remoteKey;
+    }
+
+    return null;
+  })();
+
+  try {
+    cachedApiKey = await resolvingApiKey;
+    return cachedApiKey;
+  } finally {
+    resolvingApiKey = null;
+  }
 }
 
 function formatInches(value) {
@@ -949,7 +1025,7 @@ async function bootstrap() {
         renderVisuals(goatEntry, goatReferences);
         if (!totalsContainer) return;
         totalsContainer.innerHTML = '';
-        const apiKey = getApiKey();
+        const apiKey = await getApiKey();
         if (!apiKey) {
           totalsContainer.append(
             createElement(
