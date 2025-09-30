@@ -33,9 +33,60 @@
       </header>
 
       <main>
+        <section class="history-section history-section--search">
+          <div class="history-section__header">
+            <h2>Player archive explorer</h2>
+            <p>
+              Pull every Ball Don't Lie player record to surface career totals, GOAT analytics, and geographic fingerprints in
+              one place.
+            </p>
+          </div>
+
+          <div class="history-archive">
+            <div class="history-search-panel">
+              <form class="history-key" data-history="key-form">
+                <label for="bdl-api-key">Ball Don't Lie API key</label>
+                <div class="history-key__controls">
+                  <input id="bdl-api-key" name="bdl-api-key" type="password" autocomplete="off" data-history="key-input" />
+                  <button type="submit">Save</button>
+                  <button type="button" data-history="key-clear">Clear</button>
+                </div>
+                <p class="history-key__help">
+                  The key is stored in this browser only. Supply an All-Star key to aggregate complete career totals.
+                </p>
+              </form>
+
+              <div class="history-search">
+                <label for="history-player-search">Search historical players</label>
+                <input
+                  id="history-player-search"
+                  type="search"
+                  placeholder="Search by name, e.g. Michael Jordan"
+                  autocomplete="off"
+                  data-history="player-search"
+                />
+                <ul class="history-search__results" data-history="player-results" aria-live="polite"></ul>
+              </div>
+            </div>
+
+            <article class="history-player" data-history="player-card">
+              <p class="history-player__placeholder">Select a player to pull their Ball Don't Lie career log.</p>
+            </article>
+
+            <section class="history-visuals" data-history="player-visuals" aria-live="polite">
+              <header class="history-visuals__header">
+                <h3>GOAT percentile radar</h3>
+                <p>Percentiles derive from the latest internal GOAT index for 6,500+ players.</p>
+              </header>
+              <div class="history-visuals__grid" data-history="visuals-grid"></div>
+            </section>
+          </div>
+        </section>
+
         <section class="history-section">
           <div class="history-section__header">
             <h2>Legends atlas</h2>
+            <p>Atlas rankings lean entirely on Ball Don't Lie player records with GOAT scoring overlays.</p>
           </div>
 
           <div class="history-mosaic history-mosaic--wide history-mosaic--atlas">
@@ -60,136 +111,12 @@
                 <p class="state-spotlight__placeholder">Select a state tile to meet its headline legend.</p>
               </div>
             </aside>
-
-            <figure class="viz-card viz-card--inline viz-card--wide" data-chart-wrapper>
-              <header class="viz-card__title">Average points per game by season</header>
-              <div class="viz-canvas">
-                <canvas data-chart="scoring-averages" aria-describedby="scoring-averages-caption"></canvas>
-              </div>
-              <figcaption id="scoring-averages-caption" class="viz-card__caption">
-                Line traces highlight how regular season and postseason scoring pace has ebbed and surged across every logged season.
-              </figcaption>
-            </figure>
-
-            <figure class="viz-card viz-card--inline" data-chart-wrapper>
-              <header class="viz-card__title">Highest scoring seasons on record</header>
-              <div class="viz-canvas">
-                <canvas data-chart="scoring-leaders" aria-describedby="scoring-leaders-caption"></canvas>
-              </div>
-              <figcaption id="scoring-leaders-caption" class="viz-card__caption">
-                The loudest combined point totals underscore when pace and shot-making pushed games to all-time highs.
-              </figcaption>
-            </figure>
-          </div>
-        </section>
-
-        <section class="history-section">
-          <div class="history-section__header">
-            <h2>Competitive reactor</h2>
-          </div>
-
-          <div class="history-mosaic">
-            <figure class="viz-card viz-card--inline" data-chart-wrapper>
-              <header class="viz-card__title">Game type distribution</header>
-              <div class="viz-canvas">
-                <canvas data-chart="game-type-share" aria-describedby="game-type-share-caption"></canvas>
-              </div>
-              <figcaption id="game-type-share-caption" class="viz-card__caption">
-                A doughnut orbit contrasts regular season volume with postseason, play-in, and showcase slates.</figcaption>
-            </figure>
-
-            <figure class="viz-card viz-card--inline" data-chart-wrapper>
-              <header class="viz-card__title">Largest victory margins</header>
-              <div class="viz-canvas">
-                <canvas data-chart="largest-margins" aria-describedby="largest-margins-caption"></canvas>
-              </div>
-              <figcaption id="largest-margins-caption" class="viz-card__caption">
-                Horizontal bars spotlight the most lopsided scorelines on file with total-point context overlays.</figcaption>
-            </figure>
-
-            <figure class="viz-card viz-card--inline" data-chart-wrapper>
-              <header class="viz-card__title">Scoring bursts scatterfield</header>
-              <div class="viz-canvas">
-                <canvas data-chart="scoring-bursts" aria-describedby="scoring-bursts-caption"></canvas>
-              </div>
-              <figcaption id="scoring-bursts-caption" class="viz-card__caption">
-                Bubble sizes encode attendance while plotting each 350+ point shootout by year and total points.</figcaption>
-            </figure>
-
-            <figure class="viz-card viz-card--inline" data-chart-wrapper>
-              <header class="viz-card__title">Margin vs. total matrix</header>
-              <div class="viz-canvas">
-                <canvas data-chart="margin-vs-total" aria-describedby="margin-vs-total-caption"></canvas>
-              </div>
-              <figcaption id="margin-vs-total-caption" class="viz-card__caption">
-                A scatter plot fuses blowout size and scoring output to surface extreme result combinations.</figcaption>
-            </figure>
-          </div>
-        </section>
-
-        <section class="history-section">
-          <div class="history-section__header">
-            <h2>Attendance observatory</h2>
-          </div>
-
-          <div class="history-mosaic history-mosaic--triptych">
-            <figure class="viz-card viz-card--inline" data-chart-wrapper>
-              <header class="viz-card__title">Attendance orbit</header>
-              <div class="viz-canvas">
-                <canvas data-chart="attendance-orbit" data-chart-ratio="0.8" aria-describedby="attendance-orbit-caption"></canvas>
-              </div>
-              <figcaption id="attendance-orbit-caption" class="viz-card__caption">
-                Polar wedges scale arena turnouts with a badge for the all-time record night.</figcaption>
-            </figure>
-
-            <figure class="viz-card viz-card--inline" data-chart-wrapper>
-              <header class="viz-card__title">Record scoreline stack</header>
-              <div class="viz-canvas">
-                <canvas data-chart="record-sparkline" aria-describedby="record-sparkline-caption"></canvas>
-              </div>
-              <figcaption id="record-sparkline-caption" class="viz-card__caption">
-                A vertical stack ranks the archive's highest combined totals with era-coded gradients.</figcaption>
-            </figure>
-
-            <figure class="viz-card viz-card--inline" data-chart-wrapper>
-              <header class="viz-card__title">Archive coverage gauge</header>
-              <div class="viz-canvas">
-                <canvas data-chart="archive-coverage" data-chart-ratio="0.8" aria-describedby="archive-coverage-caption"></canvas>
-              </div>
-              <figcaption id="archive-coverage-caption" class="viz-card__caption">
-                A dual-ring gauge tracks refresh cadence, seasons indexed, and total coverage span across
-                <span data-history="season-count">--</span> seasons (<span data-history="season-range">--</span>) with the
-                latest ingest on <span data-history="archive-updated">--</span>.
-              </figcaption>
-            </figure>
-          </div>
-
-          <div class="history-matrix">
-            <figure class="history-table-card">
-              <header class="history-table-card__header">
-                <h3>Mega crowds ledger</h3>
-                <span class="history-table-card__meta" data-history="attendance-record">--</span>
-              </header>
-              <div class="table-scroll">
-                <table class="history-table">
-                  <thead>
-                    <tr>
-                      <th scope="col">Date</th>
-                      <th scope="col">Matchup</th>
-                      <th scope="col" class="history-table__numeric">Attendance</th>
-                    </tr>
-                  </thead>
-                  <tbody data-history="attendance-body"></tbody>
-                </table>
-              </div>
-            </figure>
           </div>
         </section>
       </main>
 
       <footer class="page-footer">Preserving history to inform the next generation of NBA data stories.</footer>
     </div>
-    <script src="vendor/chart.umd.js" defer></script>
     <script type="module" src="scripts/history.js"></script>
   </body>
 </html>

@@ -1,57 +1,17 @@
-import { registerCharts, helpers } from './hub-charts.js';
 import { enablePanZoom, enhanceUsaInsets } from './map-utils.js';
 
-const palette = {
-  navy: '#0b2545',
-  royal: '#1156d6',
-  sky: '#1f7bff',
-  gold: '#f4b53f',
-  crimson: '#ef3d5b',
-  teal: 'rgba(17, 86, 214, 0.16)',
-};
+const API_BASE = 'https://api.balldontlie.io/v1';
+const PLAYERS_MIN_URL = 'data/history/players.index.min.json';
+const PLAYERS_FULL_URL = 'data/history/players.index.json';
+const BIRTHPLACES_URL = 'data/history/player_birthplaces.json';
+const GOAT_URL = 'data/goat_system.json';
+const WORLD_LEGENDS_URL = 'data/world_birth_legends.json';
+
+const STORAGE_KEY = 'nba-hub-bdl-key';
 
 const numberFormatter = new Intl.NumberFormat('en-US');
-const percentFormatter = new Intl.NumberFormat('en-US', {
-  style: 'percent',
-  minimumFractionDigits: 1,
-  maximumFractionDigits: 1,
-});
-const scoreFormatter = new Intl.NumberFormat('en-US', {
-  minimumFractionDigits: 1,
-  maximumFractionDigits: 1,
-});
-const dateFormatter = new Intl.DateTimeFormat('en-US', {
-  month: 'short',
-  day: 'numeric',
-  year: 'numeric',
-});
-
-const summaryEls = {
-  totalGames: document.querySelector('[data-history="total-games"]'),
-  firstGame: document.querySelectorAll('[data-history="first-game"]'),
-  latestGame: document.querySelectorAll('[data-history="latest-game"]'),
-  playoffGames: document.querySelector('[data-history="playoff-games"]'),
-  playoffShare: document.querySelector('[data-history="playoff-share"]'),
-  attendanceRecord: document.querySelectorAll('[data-history="attendance-record"]'),
-  franchiseCount: document.querySelector('[data-history="franchise-count"]'),
-  peakExpansionDecade: document.querySelector('[data-history="peak-expansion-decade"]'),
-  peakExpansionTotal: document.querySelector('[data-history="peak-expansion-total"]'),
-  expansionTimeline: document.querySelector('[data-history="expansion-timeline"]'),
-  recordGames: document.querySelector('[data-history="record-games"]'),
-  attendanceBody: document.querySelector('[data-history="attendance-body"]'),
-  archiveUpdated: document.querySelector('[data-history="archive-updated"]'),
-  seasonRange: document.querySelector('[data-history="season-range"]'),
-  seasonCount: document.querySelector('[data-history="season-count"]'),
-};
-
-const atlasEls = {
-  map: document.querySelector('[data-state-map-tiles]'),
-  spotlight: document.querySelector('[data-state-spotlight]'),
-  spotlightHeading: document.querySelector('[data-spotlight-heading]'),
-  title: document.querySelector('[data-atlas-title]'),
-  caption: document.querySelector('[data-atlas-caption]'),
-  modeToggle: document.querySelector('[data-atlas-toggle]'),
-};
+const decimalFormatter = new Intl.NumberFormat('en-US', { maximumFractionDigits: 1, minimumFractionDigits: 1 });
+const percentFormatter = new Intl.NumberFormat('en-US', { style: 'percent', minimumFractionDigits: 1, maximumFractionDigits: 1 });
 
 const stateNames = {
   AL: 'Alabama',
@@ -108,1221 +68,967 @@ const stateNames = {
   PR: 'Puerto Rico',
 };
 
-const mapMarkupCache = new Map();
-let activeAtlasShape = null;
-let activeAtlasConfig = null;
-let currentAtlasMode = 'domestic';
-const atlasData = { domestic: null, international: null };
-
-const atlasModes = {
-  domestic: {
-    id: 'domestic',
-    mapAsset: 'vendor/us-states.svg',
-    sanitizeMarkup(markup) {
-      return markup.replace(/ns0:/g, '');
-    },
-    svgClasses: ['state-map__svg--usa'],
-    title: 'Best NBA star born in each state',
-    caption: 'Select a tile to spotlight the most decorated NBA player born in that state.',
-    placeholder: 'Select a state tile to meet its headline legend.',
-    emptyHeadline: 'No NBA alumni recorded yet.',
-    datasetKey: 'states',
-    entryId: 'state',
-    entryName: 'stateName',
-    shapeAttribute: 'data-state',
-    source: 'data/state_birth_legends.json',
-    switchLabel: 'Explore international mode',
-    switchAriaLabel: 'Switch to international legends view',
-    spotlightHeading: 'State spotlight',
-    getName(id) {
-      return stateNames[id] || id;
-    },
-  },
-  international: {
-    id: 'international',
-    mapAsset: 'vendor/world-countries.svg',
-    svgClasses: ['state-map__svg--world'],
-    title: 'Best NBA star born in each country',
-    caption: 'Select a country outline to spotlight the standout NBA player born there.',
-    placeholder: 'Choose a country to spotlight its standout NBA star.',
-    emptyHeadline: 'No NBA alumni recorded yet.',
-    datasetKey: 'countries',
-    entryId: 'country',
-    entryName: 'countryName',
-    shapeAttribute: 'data-country',
-    source: 'data/world_birth_legends.json',
-    switchLabel: 'Return to United States map',
-    switchAriaLabel: 'Return to the United States legends map',
-    spotlightHeading: 'Country spotlight',
-    getName(id, _entry, shape) {
-      return (shape?.dataset?.name ?? '').trim() || id;
-    },
-  },
+const selectors = {
+  keyForm: document.querySelector('[data-history="key-form"]'),
+  keyInput: document.querySelector('[data-history="key-input"]'),
+  keyClear: document.querySelector('[data-history="key-clear"]'),
+  searchInput: document.querySelector('[data-history="player-search"]'),
+  searchResults: document.querySelector('[data-history="player-results"]'),
+  playerCard: document.querySelector('[data-history="player-card"]'),
+  visualsGrid: document.querySelector('[data-history="visuals-grid"]'),
+  visualsSection: document.querySelector('[data-history="player-visuals"]'),
+  mapRoot: document.querySelector('[data-state-map-tiles]'),
+  atlasTitle: document.querySelector('[data-atlas-title]'),
+  atlasCaption: document.querySelector('[data-atlas-caption]'),
+  atlasToggle: document.querySelector('[data-atlas-toggle]'),
+  atlasSpotlight: document.querySelector('[data-state-spotlight]'),
+  spotlightHeading: document.querySelector('[data-spotlight-heading]'),
 };
 
-function getAtlasConfig(mode) {
-  return atlasModes[mode] ?? atlasModes.domestic;
+function normalizeName(value) {
+  return String(value ?? '')
+    .normalize('NFD')
+    .replace(/[\p{M}]+/gu, '')
+    .replace(/[^\p{L}\p{N}]+/gu, ' ')
+    .trim()
+    .toLowerCase();
 }
 
-async function loadAtlasSvg(config) {
-  const cacheKey = config.mapAsset;
-  if (!mapMarkupCache.has(cacheKey)) {
-    const response = await fetch(config.mapAsset);
-    if (!response.ok) {
-      throw new Error(`Failed to load ${config.id} atlas map`);
-    }
-    let markup = await response.text();
-    if (typeof config.sanitizeMarkup === 'function') {
-      markup = config.sanitizeMarkup(markup);
-    }
-    mapMarkupCache.set(cacheKey, markup);
+async function loadJson(url) {
+  const response = await fetch(url, { cache: 'no-store' });
+  if (!response.ok) {
+    throw new Error(`Failed to load ${url}`);
   }
-  const template = document.createElement('template');
-  template.innerHTML = mapMarkupCache.get(cacheKey).trim();
-  const svg = template.content.firstElementChild;
-  if (svg) {
-    svg.classList.add('state-map__svg');
-    if (Array.isArray(config.svgClasses)) {
-      config.svgClasses.forEach((className) => svg.classList.add(className));
-    }
-    svg.setAttribute('focusable', 'false');
-  }
-  return svg;
+  return response.json();
 }
 
-function selectAtlasShape(shape, entry, config = activeAtlasConfig) {
-  if (activeAtlasShape && activeAtlasShape !== shape) {
-    activeAtlasShape.classList.remove('state-shape--selected');
-    activeAtlasShape.setAttribute('aria-pressed', 'false');
+function getStoredKey() {
+  try {
+    return window.localStorage.getItem(STORAGE_KEY) || '';
+  } catch (error) {
+    console.warn('Unable to read stored BDL key', error);
+    return '';
   }
-  activeAtlasShape = shape || null;
-  if (shape) {
-    shape.classList.add('state-shape--selected');
-    shape.setAttribute('aria-pressed', 'true');
-  }
-  renderAtlasSpotlight(entry || null, config);
 }
 
-function parseDate(value) {
+function saveKey(value) {
+  try {
+    if (value) {
+      window.localStorage.setItem(STORAGE_KEY, value);
+    } else {
+      window.localStorage.removeItem(STORAGE_KEY);
+    }
+  } catch (error) {
+    console.warn('Unable to persist BDL key', error);
+  }
+}
+
+function formatInches(value) {
   if (!value) return null;
-  const normalized = value.includes('T') ? value : value.replace(' ', 'T');
-  const date = new Date(`${normalized}Z`);
-  return Number.isNaN(date.getTime()) ? null : date;
+  if (!value.includes('-')) return value;
+  const [feet, inches] = value.split('-');
+  return `${Number(feet)}'${inches}"`;
 }
 
-function formatDate(value) {
-  const date = value instanceof Date ? value : parseDate(value);
-  if (!date) return '—';
-  return dateFormatter.format(date);
+function formatWeight(value) {
+  if (!value) return null;
+  return `${value} lbs`;
 }
 
-function setText(target, text) {
-  if (!target) return;
-  if (NodeList.prototype.isPrototypeOf(target) || Array.isArray(target)) {
-    target.forEach((node) => {
-      if (node) {
-        node.textContent = text;
-      }
-    });
-    return;
-  }
-  target.textContent = text;
+function joinParts(parts, fallback = '--') {
+  const filtered = parts.filter((part) => part && String(part).trim().length);
+  return filtered.length ? filtered.join(' • ') : fallback;
 }
 
-function renderAtlasSpotlight(entry, config = activeAtlasConfig) {
-  if (!atlasEls.spotlight) return;
-  const modeConfig = config || getAtlasConfig(currentAtlasMode);
-  atlasEls.spotlight.innerHTML = '';
+function parseMinutes(value) {
+  if (!value) return 0;
+  const trimmed = value.trim();
+  if (!trimmed) return 0;
+  const [minutes, seconds] = trimmed.split(':').map((part) => Number(part));
+  if (!Number.isFinite(minutes)) return 0;
+  const secs = Number.isFinite(seconds) ? seconds : 0;
+  return minutes * 60 + secs;
+}
 
-  if (!entry) {
-    const placeholder = document.createElement('p');
-    placeholder.className = 'state-spotlight__placeholder';
-    placeholder.textContent = modeConfig.placeholder;
-    atlasEls.spotlight.append(placeholder);
-    return;
+function sumStat(target, key, value) {
+  target[key] = (target[key] ?? 0) + value;
+}
+
+function formatDuration(seconds) {
+  if (!seconds) return '0:00';
+  const total = Math.round(seconds);
+  const mins = Math.floor(total / 60);
+  const secs = Math.abs(total % 60);
+  return `${mins}:${secs.toString().padStart(2, '0')}`;
+}
+
+function computePerGame(total, games) {
+  if (!games) return 0;
+  return total / games;
+}
+
+function safePercent(value) {
+  if (!Number.isFinite(value)) return null;
+  return percentFormatter.format(Math.max(0, Math.min(value, 1)));
+}
+
+function computePercentile(value, sortedValues, { higherIsBetter = true } = {}) {
+  if (!Number.isFinite(value) || !Array.isArray(sortedValues) || sortedValues.length === 0) {
+    return null;
   }
-
-  const heading = document.createElement('span');
-  heading.className = 'state-spotlight__state';
-  heading.textContent = `${entry[modeConfig.entryName] ?? entry[modeConfig.entryId] ?? ''}`;
-
-  const topPlayers = Array.isArray(entry.topPlayers) ? entry.topPlayers.filter((player) => player && player.name) : [];
-  const spotlightPlayer = topPlayers[0];
-
-  const playerLine = document.createElement('p');
-  if (spotlightPlayer?.name || entry.player) {
-    playerLine.className = 'state-spotlight__player';
-    playerLine.textContent = spotlightPlayer?.name || entry.player;
-  } else {
-    playerLine.className = 'state-spotlight__empty';
-    playerLine.textContent = entry.headline || modeConfig.emptyHeadline;
+  const count = sortedValues.length;
+  let index;
+  if (higherIsBetter) {
+    index = sortedValues.findIndex((entry) => value <= entry);
+    if (index === -1) index = count - 1;
+    return ((index + 1) / count) * 100;
   }
+  index = sortedValues.findIndex((entry) => value >= entry);
+  if (index === -1) index = count - 1;
+  return ((count - index) / count) * 100;
+}
 
-  atlasEls.spotlight.append(heading, playerLine);
+function buildTierScore(tier) {
+  const order = [
+    'Inner Circle',
+    'Legend',
+    'Icon',
+    'All-Star',
+    'Starter',
+    'Rotation',
+    'Reserve',
+    'Prospect',
+    'Development',
+  ];
+  if (!tier) return 0;
+  const index = order.indexOf(tier);
+  if (index === -1) return 0;
+  return order.length - index;
+}
 
-  const formatLocation = (player) => {
-    if (!player) return '';
-    const city = player.birthCity || '';
-    const state = player.birthState || '';
-    const country = player.birthCountry || '';
-    if (modeConfig.id === 'domestic') {
-      if (city && state) return `${city}, ${state}`;
-      if (city) return city;
-      if (state) return state;
-      return '';
-    }
-    if (city && country) return `${city}, ${country}`;
-    return country || city;
+function createElement(tag, className, text) {
+  const el = document.createElement(tag);
+  if (className) el.className = className;
+  if (text !== undefined && text !== null) {
+    el.textContent = text;
+  }
+  return el;
+}
+
+async function fetchStatAggregate(playerId, apiKey, postseason) {
+  const totals = {
+    games: 0,
+    minutes: 0,
+    points: 0,
+    rebounds: 0,
+    assists: 0,
+    steals: 0,
+    blocks: 0,
+    turnovers: 0,
+    fouls: 0,
+    fgm: 0,
+    fga: 0,
+    fg3m: 0,
+    fg3a: 0,
+    ftm: 0,
+    fta: 0,
+    oreb: 0,
+    dreb: 0,
   };
+  const seasons = new Set();
+  let cursor = null;
+  const headers = apiKey ? { Authorization: apiKey } : {};
+  do {
+    const url = new URL(`${API_BASE}/stats`);
+    url.searchParams.set('player_ids[]', String(playerId));
+    url.searchParams.set('per_page', '100');
+    url.searchParams.set('postseason', postseason ? 'true' : 'false');
+    if (cursor) {
+      url.searchParams.set('cursor', cursor);
+    }
+    const response = await fetch(url, { headers });
+    if (!response.ok) {
+      throw new Error(`Ball Don't Lie stats request failed with ${response.status}`);
+    }
+    const payload = await response.json();
+    const data = Array.isArray(payload.data) ? payload.data : [];
+    const nextCursor = payload.meta?.next_cursor;
+    cursor = typeof nextCursor === 'number' || typeof nextCursor === 'string' ? String(nextCursor) : null;
 
-  const spotlightLocation = formatLocation(spotlightPlayer) || entry.birthCity;
-  if (spotlightLocation) {
-    const locale = document.createElement('p');
-    locale.className = 'state-spotlight__meta';
-    locale.textContent = `Born in ${spotlightLocation}`;
-    atlasEls.spotlight.append(locale);
+    for (const entry of data) {
+      totals.games += 1;
+      totals.minutes += parseMinutes(entry.min);
+      sumStat(totals, 'points', entry.pts ?? entry.points ?? 0);
+      sumStat(totals, 'rebounds', entry.reb ?? entry.rebounds ?? 0);
+      sumStat(totals, 'assists', entry.ast ?? entry.assists ?? 0);
+      sumStat(totals, 'steals', entry.stl ?? entry.steals ?? 0);
+      sumStat(totals, 'blocks', entry.blk ?? entry.blocks ?? 0);
+      sumStat(totals, 'turnovers', entry.turnover ?? entry.turnovers ?? 0);
+      sumStat(totals, 'fouls', entry.pf ?? entry.fouls ?? 0);
+      sumStat(totals, 'fgm', entry.fgm ?? 0);
+      sumStat(totals, 'fga', entry.fga ?? 0);
+      sumStat(totals, 'fg3m', entry.fg3m ?? 0);
+      sumStat(totals, 'fg3a', entry.fg3a ?? 0);
+      sumStat(totals, 'ftm', entry.ftm ?? 0);
+      sumStat(totals, 'fta', entry.fta ?? 0);
+      sumStat(totals, 'oreb', entry.oreb ?? 0);
+      sumStat(totals, 'dreb', entry.dreb ?? 0);
+      const season = entry.game?.season;
+      if (typeof season === 'number') {
+        seasons.add(season);
+      }
+    }
+  } while (cursor);
+
+  return { totals, seasons: Array.from(seasons).sort((a, b) => a - b) };
+}
+
+async function fetchCareerStats(playerId, apiKey) {
+  const [regular, postseason] = await Promise.all([
+    fetchStatAggregate(playerId, apiKey, false),
+    fetchStatAggregate(playerId, apiKey, true),
+  ]);
+  return {
+    regular,
+    postseason,
+  };
+}
+
+function renderTotalsTable(title, data) {
+  const { totals, seasons } = data;
+  if (!totals.games) {
+    const wrapper = createElement('div', 'history-player__totals');
+    wrapper.append(createElement('h4', 'history-player__totals-heading', title));
+    wrapper.append(
+      createElement('p', 'history-player__totals-empty', 'No games recorded in the Ball Don\'t Lie archive.'),
+    );
+    return wrapper;
   }
-
-  const spotlightHeadline = spotlightPlayer?.resume || entry.headline;
-  if (spotlightHeadline && (spotlightPlayer?.name || entry.player)) {
-    const headline = document.createElement('p');
-    headline.className = 'state-spotlight__headline';
-    headline.textContent = spotlightHeadline;
-    atlasEls.spotlight.append(headline);
+  const wrapper = createElement('div', 'history-player__totals');
+  wrapper.append(createElement('h4', 'history-player__totals-heading', title));
+  const subhead = createElement(
+    'p',
+    'history-player__totals-meta',
+    `${totals.games} games • ${seasons.length} seasons (${seasons[0]}–${seasons[seasons.length - 1]})`,
+  );
+  wrapper.append(subhead);
+  const table = createElement('table', 'history-player__totals-table');
+  const thead = document.createElement('thead');
+  thead.innerHTML = `
+    <tr>
+      <th scope="col">Stat</th>
+      <th scope="col">Total</th>
+      <th scope="col">Per game</th>
+    </tr>
+  `;
+  table.append(thead);
+  const tbody = document.createElement('tbody');
+  const rows = [
+    ['Minutes', formatDuration(totals.minutes), formatDuration(computePerGame(totals.minutes, totals.games))],
+    ['Points', numberFormatter.format(totals.points), decimalFormatter.format(computePerGame(totals.points, totals.games))],
+    ['Rebounds', numberFormatter.format(totals.rebounds), decimalFormatter.format(computePerGame(totals.rebounds, totals.games))],
+    ['Assists', numberFormatter.format(totals.assists), decimalFormatter.format(computePerGame(totals.assists, totals.games))],
+    ['Steals', numberFormatter.format(totals.steals), decimalFormatter.format(computePerGame(totals.steals, totals.games))],
+    ['Blocks', numberFormatter.format(totals.blocks), decimalFormatter.format(computePerGame(totals.blocks, totals.games))],
+    ['Turnovers', numberFormatter.format(totals.turnovers), decimalFormatter.format(computePerGame(totals.turnovers, totals.games))],
+    ['Personal fouls', numberFormatter.format(totals.fouls), decimalFormatter.format(computePerGame(totals.fouls, totals.games))],
+    ['Field goals', `${numberFormatter.format(totals.fgm)}/${numberFormatter.format(totals.fga)}`, safePercent(totals.fga ? totals.fgm / totals.fga : null) ?? '—'],
+    ['Three-pointers', `${numberFormatter.format(totals.fg3m)}/${numberFormatter.format(totals.fg3a)}`, safePercent(totals.fg3a ? totals.fg3m / totals.fg3a : null) ?? '—'],
+    ['Free throws', `${numberFormatter.format(totals.ftm)}/${numberFormatter.format(totals.fta)}`, safePercent(totals.fta ? totals.ftm / totals.fta : null) ?? '—'],
+  ];
+  for (const [label, total, perGame] of rows) {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <th scope="row">${label}</th>
+      <td>${total}</td>
+      <td>${perGame}</td>
+    `;
+    tbody.append(tr);
   }
+  table.append(tbody);
+  wrapper.append(table);
+  return wrapper;
+}
 
-  const spotlightTeams = spotlightPlayer?.franchises || entry.notableTeams;
-  if (Array.isArray(spotlightTeams) && spotlightTeams.length) {
-    const list = document.createElement('ul');
-    list.className = 'state-spotlight__teams';
-    spotlightTeams.forEach((team) => {
-      if (!team) return;
-      const item = document.createElement('li');
-      item.className = 'state-spotlight__team';
-      item.textContent = team;
-      list.append(item);
+function renderPlayerMetadata(player, birthplace) {
+  const fragments = [];
+  const name = `${player.first_name} ${player.last_name}`.trim();
+  fragments.push(createElement('h3', 'history-player__name', name));
+
+  const infoLine = joinParts([
+    player.position,
+    formatInches(player.height),
+    formatWeight(player.weight),
+  ]);
+  fragments.push(createElement('p', 'history-player__bio', infoLine));
+
+  const secondary = [];
+  if (player.team?.full_name) {
+    secondary.push(player.team.full_name);
+  }
+  if (player.college) {
+    secondary.push(player.college);
+  }
+  if (player.draft_year) {
+    const draftBits = joinParts([
+      `Draft ${player.draft_year}`,
+      player.draft_round ? `Rd ${player.draft_round}` : null,
+      player.draft_number ? `Pick ${player.draft_number}` : null,
+    ]);
+    secondary.push(draftBits);
+  }
+  if (birthplace) {
+    const locationParts = [];
+    if (birthplace.city) locationParts.push(birthplace.city);
+    if (birthplace.stateName) locationParts.push(birthplace.stateName);
+    if (birthplace.country && birthplace.country !== 'USA') locationParts.push(birthplace.country);
+    if (locationParts.length) secondary.push(`Born in ${locationParts.join(', ')}`);
+  }
+  if (secondary.length) {
+    fragments.push(createElement('p', 'history-player__meta', secondary.join(' • ')));
+  }
+  return fragments;
+}
+
+function renderPlayerCard(player, birthplace) {
+  if (!selectors.playerCard) return;
+  selectors.playerCard.innerHTML = '';
+  const header = createElement('header', 'history-player__header');
+  for (const fragment of renderPlayerMetadata(player, birthplace)) {
+    header.append(fragment);
+  }
+  selectors.playerCard.append(header);
+  const totalsContainer = createElement('div', 'history-player__totals-wrapper');
+  selectors.playerCard.append(totalsContainer);
+  return totalsContainer;
+}
+
+function renderVisuals(goatEntry, references) {
+  if (!selectors.visualsGrid || !selectors.visualsSection) return;
+  selectors.visualsGrid.innerHTML = '';
+  if (!goatEntry) {
+    selectors.visualsSection.classList.add('history-visuals--empty');
+    selectors.visualsGrid.append(
+      createElement(
+        'p',
+        'history-visuals__empty',
+        'No GOAT analytics available for this player yet. We update tiers once new tracking data lands.',
+      ),
+    );
+    return;
+  }
+  selectors.visualsSection.classList.remove('history-visuals--empty');
+  const careerLength = (() => {
+    if (!goatEntry.careerSpan) return null;
+    const parts = goatEntry.careerSpan.split('-').map((part) => Number(part));
+    if (parts.length !== 2 || parts.some((part) => !Number.isFinite(part))) return null;
+    return parts[1] - parts[0] + 1;
+  })();
+  const primeLength = (() => {
+    if (!goatEntry.primeWindow) return null;
+    const parts = goatEntry.primeWindow.split('-').map((part) => Number(part));
+    if (parts.length !== 2 || parts.some((part) => !Number.isFinite(part))) return null;
+    return parts[1] - parts[0] + 1;
+  })();
+  const franchiseCount = Array.isArray(goatEntry.franchises) ? goatEntry.franchises.length : null;
+  const visuals = [
+    {
+      label: 'GOAT score',
+      value: goatEntry.goatScore,
+      display: decimalFormatter.format(goatEntry.goatScore ?? 0),
+      percentile: computePercentile(goatEntry.goatScore ?? null, references.goatScore),
+    },
+    {
+      label: 'GOAT rank',
+      value: goatEntry.rank,
+      display: goatEntry.rank ? `#${numberFormatter.format(goatEntry.rank)}` : '—',
+      percentile: computePercentile(goatEntry.rank ?? null, references.goatRank, { higherIsBetter: false }),
+    },
+    {
+      label: 'Impact',
+      value: goatEntry.goatComponents?.impact,
+      display: decimalFormatter.format(goatEntry.goatComponents?.impact ?? 0),
+      percentile: computePercentile(goatEntry.goatComponents?.impact ?? null, references.impact),
+    },
+    {
+      label: 'Stage',
+      value: goatEntry.goatComponents?.stage,
+      display: decimalFormatter.format(goatEntry.goatComponents?.stage ?? 0),
+      percentile: computePercentile(goatEntry.goatComponents?.stage ?? null, references.stage),
+    },
+    {
+      label: 'Longevity',
+      value: goatEntry.goatComponents?.longevity,
+      display: decimalFormatter.format(goatEntry.goatComponents?.longevity ?? 0),
+      percentile: computePercentile(goatEntry.goatComponents?.longevity ?? null, references.longevity),
+    },
+    {
+      label: 'Versatility',
+      value: goatEntry.goatComponents?.versatility,
+      display: decimalFormatter.format(goatEntry.goatComponents?.versatility ?? 0),
+      percentile: computePercentile(goatEntry.goatComponents?.versatility ?? null, references.versatility),
+    },
+    {
+      label: 'Culture',
+      value: goatEntry.goatComponents?.culture,
+      display: decimalFormatter.format(goatEntry.goatComponents?.culture ?? 0),
+      percentile: computePercentile(goatEntry.goatComponents?.culture ?? null, references.culture),
+    },
+    {
+      label: 'Career win %',
+      value: goatEntry.winPct,
+      display: goatEntry.winPct != null ? percentFormatter.format(goatEntry.winPct) : '—',
+      percentile: computePercentile(goatEntry.winPct ?? null, references.winPct),
+    },
+    {
+      label: 'Playoff win %',
+      value: goatEntry.playoffWinPct,
+      display: goatEntry.playoffWinPct != null ? percentFormatter.format(goatEntry.playoffWinPct) : '—',
+      percentile: computePercentile(goatEntry.playoffWinPct ?? null, references.playoffWinPct),
+    },
+    {
+      label: 'Career length',
+      value: careerLength,
+      display: careerLength ? `${careerLength} years` : '—',
+      percentile: computePercentile(careerLength ?? null, references.careerLength),
+    },
+    {
+      label: 'Prime window',
+      value: primeLength,
+      display: primeLength ? `${primeLength} years` : '—',
+      percentile: computePercentile(primeLength ?? null, references.primeLength),
+    },
+    {
+      label: 'Franchise footprint',
+      value: franchiseCount,
+      display: franchiseCount != null ? `${franchiseCount} teams` : '—',
+      percentile: computePercentile(franchiseCount ?? null, references.franchiseCount),
+    },
+  ];
+  for (const metric of visuals) {
+    const card = createElement('article', 'history-visual');
+    card.append(createElement('h4', 'history-visual__label', metric.label));
+    card.append(createElement('p', 'history-visual__value', metric.display));
+    const meter = createElement('div', 'history-visual__meter');
+    const fill = createElement('div', 'history-visual__meter-fill');
+    const percentile = metric.percentile != null ? Math.max(0, Math.min(metric.percentile, 100)) : null;
+    if (percentile != null) {
+      fill.style.width = `${percentile}%`;
+      fill.setAttribute('aria-valuenow', percentile.toFixed(1));
+    } else {
+      fill.style.width = '0%';
+      fill.classList.add('history-visual__meter-fill--empty');
+    }
+    meter.append(fill);
+    card.append(meter);
+    if (percentile != null) {
+      card.append(createElement('p', 'history-visual__percentile', `${percentile.toFixed(1)} percentile`));
+    } else {
+      card.append(createElement('p', 'history-visual__percentile history-visual__percentile--empty', 'Pending data'));
+    }
+    selectors.visualsGrid.append(card);
+  }
+}
+
+function attachKeyHandlers() {
+  if (!selectors.keyForm || !selectors.keyInput) return;
+  selectors.keyInput.value = getStoredKey();
+  selectors.keyForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const value = selectors.keyInput.value.trim();
+    saveKey(value);
+    selectors.keyForm.classList.add('history-key--saved');
+    setTimeout(() => selectors.keyForm?.classList.remove('history-key--saved'), 1500);
+  });
+  if (selectors.keyClear) {
+    selectors.keyClear.addEventListener('click', () => {
+      selectors.keyInput.value = '';
+      saveKey('');
     });
-    if (list.children.length) {
-      atlasEls.spotlight.append(list);
+  }
+}
+
+function renderSearchResults(players, term) {
+  if (!selectors.searchResults) return;
+  selectors.searchResults.innerHTML = '';
+  if (!term || !term.trim()) {
+    selectors.searchResults.append(
+      createElement('li', 'history-search__hint', 'Enter a player name to start searching the Ball Don\'t Lie archive.'),
+    );
+    return;
+  }
+  const normalizedTerm = term.trim().toLowerCase();
+  const matches = players
+    .filter((player) => `${player.first} ${player.last}`.toLowerCase().includes(normalizedTerm))
+    .slice(0, 15);
+  if (!matches.length) {
+    selectors.searchResults.append(createElement('li', 'history-search__hint', 'No players matched that search.'));
+    return;
+  }
+  for (const match of matches) {
+    const item = createElement('li', 'history-search__result');
+    const button = createElement('button', 'history-search__button', `${match.first} ${match.last}`.trim());
+    button.type = 'button';
+    button.dataset.playerId = String(match.id);
+    if (match.position) {
+      button.append(createElement('span', 'history-search__position', match.position));
+    }
+    item.append(button);
+    selectors.searchResults.append(item);
+  }
+}
+
+function resolveBirthplace(nameKey, lookup) {
+  const entries = lookup[nameKey];
+  if (!Array.isArray(entries) || !entries.length) return null;
+  return entries[0];
+}
+
+function buildGoatReferences(goatPlayers) {
+  const refs = {
+    goatScore: [],
+    goatRank: [],
+    impact: [],
+    stage: [],
+    longevity: [],
+    versatility: [],
+    culture: [],
+    winPct: [],
+    playoffWinPct: [],
+    careerLength: [],
+    primeLength: [],
+    franchiseCount: [],
+  };
+  for (const player of goatPlayers) {
+    if (Number.isFinite(player.goatScore)) refs.goatScore.push(player.goatScore);
+    if (Number.isFinite(player.rank)) refs.goatRank.push(player.rank);
+    if (Number.isFinite(player.goatComponents?.impact)) refs.impact.push(player.goatComponents.impact);
+    if (Number.isFinite(player.goatComponents?.stage)) refs.stage.push(player.goatComponents.stage);
+    if (Number.isFinite(player.goatComponents?.longevity)) refs.longevity.push(player.goatComponents.longevity);
+    if (Number.isFinite(player.goatComponents?.versatility)) refs.versatility.push(player.goatComponents.versatility);
+    if (Number.isFinite(player.goatComponents?.culture)) refs.culture.push(player.goatComponents.culture);
+    if (Number.isFinite(player.winPct)) refs.winPct.push(player.winPct);
+    if (Number.isFinite(player.playoffWinPct)) refs.playoffWinPct.push(player.playoffWinPct);
+    if (player.careerSpan) {
+      const parts = player.careerSpan.split('-').map((part) => Number(part));
+      if (parts.length === 2 && parts.every((part) => Number.isFinite(part))) {
+        refs.careerLength.push(parts[1] - parts[0] + 1);
+      }
+    }
+    if (player.primeWindow) {
+      const parts = player.primeWindow.split('-').map((part) => Number(part));
+      if (parts.length === 2 && parts.every((part) => Number.isFinite(part))) {
+        refs.primeLength.push(parts[1] - parts[0] + 1);
+      }
+    }
+    if (Array.isArray(player.franchises)) {
+      refs.franchiseCount.push(player.franchises.length);
+    }
+  }
+  for (const key of Object.keys(refs)) {
+    refs[key].sort((a, b) => a - b);
+  }
+  return refs;
+}
+
+function buildCountryCodeMap(worldLegends) {
+  const map = new Map();
+  if (!worldLegends || !Array.isArray(worldLegends.countries)) {
+    return map;
+  }
+  for (const entry of worldLegends.countries) {
+    if (entry.country && entry.countryName) {
+      map.set(entry.countryName.toLowerCase(), entry.country);
+    }
+  }
+  return map;
+}
+
+function selectGoatEntry(player, goatIndex) {
+  const nameKey = normalizeName(`${player.first_name} ${player.last_name}`);
+  const matches = goatIndex.get(nameKey);
+  if (!matches || !matches.length) return null;
+  if (matches.length === 1) return matches[0];
+  const draftYear = Number(player.draft_year);
+  if (Number.isFinite(draftYear)) {
+    const filtered = matches.filter((entry) => {
+      if (!entry.careerSpan) return false;
+      const [start] = entry.careerSpan.split('-').map((part) => Number(part));
+      if (!Number.isFinite(start)) return false;
+      return Math.abs(start - draftYear) <= 2;
+    });
+    if (filtered.length === 1) return filtered[0];
+    if (filtered.length > 1) return filtered[0];
+  }
+  return matches[0];
+}
+
+function buildAtlas(players, birthplaces, goatIndex, countryCodes) {
+  const domestic = new Map();
+  const international = new Map();
+  for (const player of players) {
+    const nameKey = normalizeName(`${player.first_name} ${player.last_name}`);
+    const birthplace = resolveBirthplace(nameKey, birthplaces);
+    const goatEntry = selectGoatEntry(player, goatIndex);
+    const baseInfo = {
+      id: player.id,
+      name: `${player.first_name} ${player.last_name}`.trim(),
+      goatScore: goatEntry?.goatScore ?? null,
+      goatRank: goatEntry?.rank ?? null,
+      goatTier: goatEntry?.tier ?? null,
+      resume: goatEntry?.resume ?? null,
+      franchises: goatEntry?.franchises ?? null,
+      birthCity: birthplace?.city ?? null,
+      birthState: birthplace?.state ?? null,
+      birthCountry: birthplace?.country ?? player.country ?? null,
+    };
+    if (birthplace?.state) {
+      const bucket = domestic.get(birthplace.state) ?? [];
+      bucket.push(baseInfo);
+      domestic.set(birthplace.state, bucket);
+    }
+    const rawCountry = (birthplace?.country && birthplace.country !== 'USA') ? birthplace.country : player.country;
+    if (rawCountry && rawCountry !== 'USA') {
+      const code = countryCodes.get(rawCountry.toLowerCase()) ?? null;
+      const bucket = international.get(code ?? rawCountry) ?? [];
+      bucket.push({ ...baseInfo, countryName: rawCountry, countryCode: code ?? null });
+      international.set(code ?? rawCountry, bucket);
     }
   }
 
-  if (topPlayers.length) {
-    const ranking = document.createElement('ol');
-    ranking.className = 'state-spotlight__ranking';
-    topPlayers.slice(0, 10).forEach((player, index) => {
-      const item = document.createElement('li');
-      item.className = 'state-spotlight__ranking-item';
-
-      const ordinal = document.createElement('span');
-      ordinal.className = 'state-spotlight__ranking-ordinal';
-      ordinal.textContent = `#${index + 1}`;
-
-      const body = document.createElement('div');
-      body.className = 'state-spotlight__ranking-body';
-
-      const nameLine = document.createElement('p');
-      nameLine.className = 'state-spotlight__ranking-name';
-      nameLine.textContent = player.name || 'Unnamed legend';
-      body.append(nameLine);
-
-      const detailParts = [];
-      if (typeof player.groupRank === 'number') {
-        const scopeLabel = modeConfig.id === 'domestic' ? 'State' : 'Country';
-        detailParts.push(`${scopeLabel} rank #${player.groupRank}`);
-      }
-      if (typeof player.rank === 'number') {
-        detailParts.push(`Global GOAT No. ${player.rank}`);
-      }
-      if (typeof player.goatScore === 'number') {
-        detailParts.push(`${scoreFormatter.format(player.goatScore)} GOAT points`);
-      }
-      const birthplace = formatLocation(player);
-      if (birthplace) {
-        detailParts.push(`Born in ${birthplace}`);
-      }
-      if (detailParts.length) {
-        const detailLine = document.createElement('p');
-        detailLine.className = 'state-spotlight__ranking-meta';
-        detailLine.textContent = detailParts.join(' • ');
-        body.append(detailLine);
-      }
-
-      if (Array.isArray(player.franchises) && player.franchises.length) {
-        const teamList = document.createElement('ul');
-        teamList.className = 'state-spotlight__teams state-spotlight__teams--compact';
-        player.franchises.slice(0, 4).forEach((team) => {
-          if (!team) return;
-          const teamItem = document.createElement('li');
-          teamItem.className = 'state-spotlight__team';
-          teamItem.textContent = team;
-          teamList.append(teamItem);
-        });
-        if (teamList.children.length) {
-          body.append(teamList);
-        }
-      }
-
-      if (player.resume && index < 3) {
-        const resume = document.createElement('p');
-        resume.className = 'state-spotlight__ranking-resume';
-        resume.textContent = player.resume;
-        body.append(resume);
-      }
-
-      item.append(ordinal, body);
-      ranking.append(item);
+  const domesticEntries = [];
+  for (const [code, list] of domestic.entries()) {
+    const playersSorted = list
+      .slice()
+      .sort((a, b) => {
+        const aScore = Number.isFinite(a.goatScore) ? a.goatScore : -Infinity;
+        const bScore = Number.isFinite(b.goatScore) ? b.goatScore : -Infinity;
+        if (bScore !== aScore) return bScore - aScore;
+        return a.name.localeCompare(b.name);
+      })
+      .map((entry, index) => ({ ...entry, groupRank: index + 1 }));
+    const top = playersSorted[0];
+    domesticEntries.push({
+      state: code,
+      stateName: stateNames[code] ?? code,
+      player: top?.name ?? null,
+      birthCity: top?.birthCity ?? null,
+      headline: top?.resume ?? null,
+      notableTeams: Array.isArray(top?.franchises) ? top.franchises : [],
+      topPlayers: playersSorted,
     });
-    atlasEls.spotlight.append(ranking);
   }
+  domesticEntries.sort((a, b) => a.state.localeCompare(b.state));
+
+  const internationalEntries = [];
+  for (const [code, list] of international.entries()) {
+    const playersSorted = list
+      .slice()
+      .sort((a, b) => {
+        const aScore = Number.isFinite(a.goatScore) ? a.goatScore : -Infinity;
+        const bScore = Number.isFinite(b.goatScore) ? b.goatScore : -Infinity;
+        if (bScore !== aScore) return bScore - aScore;
+        return a.name.localeCompare(b.name);
+      })
+      .map((entry, index) => ({ ...entry, groupRank: index + 1 }));
+    const top = playersSorted[0];
+    const codeString = typeof code === 'string' ? code : null;
+    internationalEntries.push({
+      country: codeString ?? null,
+      countryName: top?.countryName ?? (typeof code === 'string' ? code : 'Unknown'),
+      player: top?.name ?? null,
+      birthCity: top?.birthCity ?? null,
+      headline: top?.resume ?? null,
+      notableTeams: Array.isArray(top?.franchises) ? top.franchises : [],
+      topPlayers: playersSorted,
+    });
+  }
+  internationalEntries.sort((a, b) => a.countryName.localeCompare(b.countryName));
+
+  return {
+    domestic: { generatedAt: new Date().toISOString(), states: domesticEntries },
+    international: { generatedAt: new Date().toISOString(), countries: internationalEntries },
+  };
 }
 
-function setAtlasCopy(config) {
-  if (atlasEls.title) {
-    atlasEls.title.textContent = config.title;
-  }
-  if (atlasEls.caption) {
-    atlasEls.caption.textContent = config.caption;
-  }
-  if (atlasEls.spotlightHeading && config.spotlightHeading) {
-    atlasEls.spotlightHeading.textContent = config.spotlightHeading;
-  }
-  if (atlasEls.modeToggle) {
-    atlasEls.modeToggle.textContent = config.switchLabel;
-    atlasEls.modeToggle.setAttribute('aria-label', config.switchAriaLabel || config.switchLabel);
-  }
-}
+async function renderAtlas(mode, atlasData, svgCache) {
+  if (!selectors.mapRoot) return;
+  const config = mode === 'international'
+    ? {
+        id: 'international',
+        mapAsset: 'vendor/world-countries.svg',
+        datasetKey: 'countries',
+        entryId: 'country',
+        entryName: 'countryName',
+        shapeAttribute: 'data-country',
+        title: 'Best NBA star born in each country',
+        caption: 'Select a country outline to spotlight the standout NBA player born there.',
+        spotlightHeading: 'Country spotlight',
+      }
+    : {
+        id: 'domestic',
+        mapAsset: 'vendor/us-states.svg',
+        datasetKey: 'states',
+        entryId: 'state',
+        entryName: 'stateName',
+        shapeAttribute: 'data-state',
+        title: 'Best NBA star born in each state',
+        caption: 'Select a tile to spotlight the most decorated NBA player born in that state.',
+        spotlightHeading: 'State spotlight',
+      };
 
-async function renderAtlas(mode, atlas) {
-  if (!atlasEls.map) return;
-  const config = getAtlasConfig(mode);
-  const entries = Array.isArray(atlas?.[config.datasetKey]) ? atlas[config.datasetKey] : [];
+  const entries = atlasData[config.datasetKey] ?? [];
   const entryById = new Map(entries.map((entry) => [entry[config.entryId], entry]));
 
-  let svg;
-  try {
-    svg = await loadAtlasSvg(config);
-  } catch (error) {
-    console.error(error);
-    atlasEls.map.innerHTML = '';
-    activeAtlasConfig = config;
-    renderAtlasSpotlight(null, config);
-    return;
-  }
-
+  let svg = svgCache.get(config.mapAsset) ?? null;
   if (!svg) {
-    atlasEls.map.innerHTML = '';
-    activeAtlasConfig = config;
-    renderAtlasSpotlight(null, config);
-    return;
+    const response = await fetch(config.mapAsset);
+    if (!response.ok) {
+      throw new Error(`Failed to load ${config.mapAsset}`);
+    }
+    const markup = await response.text();
+    const template = document.createElement('template');
+    template.innerHTML = markup.trim().replace(/ns0:/g, '');
+    const root = template.content.firstElementChild;
+    if (root) {
+      root.classList.add('state-map__svg');
+      svg = root;
+      svgCache.set(config.mapAsset, svg);
+    }
   }
-
-  atlasEls.map.innerHTML = '';
-  atlasEls.map.append(svg);
-  atlasEls.map.dataset.atlasMode = mode;
-
-  if (mode === 'domestic') {
-    enhanceUsaInsets(svg);
+  if (!svg) return;
+  selectors.mapRoot.innerHTML = '';
+  const svgClone = svg.cloneNode(true);
+  selectors.mapRoot.append(svgClone);
+  selectors.mapRoot.dataset.atlasMode = config.id;
+  if (config.id === 'domestic') {
+    enhanceUsaInsets(svgClone);
   }
-
-  enablePanZoom(atlasEls.map, svg, {
-    maxScale: mode === 'domestic' ? 6 : 5,
+  enablePanZoom(selectors.mapRoot, svgClone, {
+    maxScale: config.id === 'domestic' ? 6 : 5,
     minScale: 1,
     zoomStep: 0.35,
   });
 
-  activeAtlasShape = null;
-  activeAtlasConfig = config;
-  let defaultSelection = null;
-
-  const shapes = svg.querySelectorAll(`[${config.shapeAttribute}]`);
-  shapes.forEach((shape) => {
+  const shapes = svgClone.querySelectorAll(`[${config.shapeAttribute}]`);
+  let defaultEntry = null;
+  for (const shape of shapes) {
     const code = shape.getAttribute(config.shapeAttribute);
-    if (!code) return;
-    const entry = entryById.get(code) || null;
-    const locationLabel = entry?.[config.entryName] || config.getName(code, entry, shape) || code;
-
+    const entry = entryById.get(code) ?? null;
+    shape.classList.remove('state-shape--selected', 'state-shape--available', 'state-shape--empty');
     shape.removeAttribute('tabindex');
     shape.removeAttribute('role');
     shape.removeAttribute('aria-pressed');
-    shape.classList.remove('state-shape--available', 'state-shape--selected', 'state-shape--empty');
-
-    const fallbackHeadline = entry?.headline || config.emptyHeadline;
-
     if (entry && entry.player) {
       shape.classList.add('state-shape--available');
       shape.setAttribute('role', 'button');
       shape.setAttribute('tabindex', '0');
       shape.setAttribute('aria-pressed', 'false');
-      const detail = entry.headline ? ` — ${entry.headline}` : '';
-      shape.setAttribute('aria-label', `${locationLabel}: ${entry.player}${detail}`);
-      shape.setAttribute('title', `${entry.player}${detail}`);
-
-      const activate = () => {
-        if (activeAtlasShape === shape) return;
-        selectAtlasShape(shape, entry, config);
-      };
-
-      shape.addEventListener('click', activate);
+      shape.setAttribute('title', entry.player);
+      shape.setAttribute('aria-label', `${entry[config.entryName]}: ${entry.player}`);
+      shape.addEventListener('click', () => selectAtlasEntry(shape, entry, config));
       shape.addEventListener('keydown', (event) => {
         if (event.key === 'Enter' || event.key === ' ') {
           event.preventDefault();
-          activate();
+          selectAtlasEntry(shape, entry, config);
         }
       });
-
-      if (!defaultSelection) {
-        defaultSelection = { entry, shape };
+      if (!defaultEntry) {
+        defaultEntry = { shape, entry };
       }
     } else {
       shape.classList.add('state-shape--empty');
-      shape.setAttribute('role', 'button');
-      shape.setAttribute('tabindex', '0');
-      shape.setAttribute('aria-pressed', 'false');
-      shape.setAttribute('aria-label', `${locationLabel}: ${fallbackHeadline}`);
-      if (entry?.headline) {
-        shape.setAttribute('title', entry.headline);
-      } else if (entry) {
-        shape.setAttribute('title', locationLabel);
-      } else {
-        shape.removeAttribute('title');
-      }
-      shape.addEventListener('click', () => {
-        selectAtlasShape(shape, entry, config);
-      });
-      shape.addEventListener('keydown', (event) => {
-        if (event.key === 'Enter' || event.key === ' ') {
-          event.preventDefault();
-          selectAtlasShape(shape, entry, config);
-        }
-      });
+      shape.setAttribute('title', entry ? entry[config.entryName] ?? code : code ?? 'Unavailable');
+      shape.addEventListener('click', () => selectAtlasEntry(shape, entry, config));
     }
-  });
-
-  setAtlasCopy(config);
-
-  if (defaultSelection) {
-    selectAtlasShape(defaultSelection.shape, defaultSelection.entry, config);
+  }
+  updateAtlasCopy(config);
+  if (defaultEntry) {
+    selectAtlasEntry(defaultEntry.shape, defaultEntry.entry, config);
   } else {
-    selectAtlasShape(null, null, config);
+    renderAtlasSpotlight(null, config);
   }
 }
 
-async function ensureAtlasData(mode) {
-  const config = getAtlasConfig(mode);
-  const cacheKey = config.id;
-  if (atlasData[cacheKey]) {
-    return atlasData[cacheKey];
+let activeShape = null;
+let activeConfig = null;
+
+function selectAtlasEntry(shape, entry, config) {
+  if (activeShape && activeShape !== shape) {
+    activeShape.classList.remove('state-shape--selected');
+    activeShape.setAttribute('aria-pressed', 'false');
   }
-  if (!config.source && !config.datasetKey) {
-    return null;
+  activeShape = shape;
+  activeConfig = config;
+  if (shape) {
+    shape.classList.add('state-shape--selected');
+    shape.setAttribute('aria-pressed', 'true');
   }
-  if (!config.source) {
-    // fall back to already provided data (e.g., bootstrap payload)
-    return null;
-  }
-  const response = await fetch(config.source);
-  if (!response.ok) {
-    throw new Error(`Failed to load ${config.id} legends dataset`);
-  }
-  const payload = await response.json();
-  atlasData[cacheKey] = payload;
-  return payload;
+  renderAtlasSpotlight(entry, config);
 }
 
-async function activateAtlas(mode) {
-  currentAtlasMode = getAtlasConfig(mode).id;
-  let dataset = atlasData[currentAtlasMode] || null;
-  if (!dataset) {
-    try {
-      dataset = await ensureAtlasData(currentAtlasMode);
-    } catch (error) {
-      console.error(error);
-    }
+function updateAtlasCopy(config) {
+  if (selectors.atlasTitle) selectors.atlasTitle.textContent = config.title;
+  if (selectors.atlasCaption) selectors.atlasCaption.textContent = config.caption;
+  if (selectors.spotlightHeading) selectors.spotlightHeading.textContent = config.spotlightHeading;
+  if (selectors.atlasToggle) {
+    selectors.atlasToggle.textContent =
+      config.id === 'domestic' ? 'Explore international mode' : 'Return to United States map';
   }
-  await renderAtlas(currentAtlasMode, dataset);
 }
 
-function setupAtlasToggle() {
-  if (!atlasEls.modeToggle) return;
-  atlasEls.modeToggle.addEventListener('click', async () => {
-    const nextMode = currentAtlasMode === 'domestic' ? 'international' : 'domestic';
-    atlasEls.modeToggle.disabled = true;
-    try {
-      await activateAtlas(nextMode);
-    } finally {
-      atlasEls.modeToggle.disabled = false;
-    }
-  });
-}
-
-function formatTeamName(team) {
-  if (!team) return '';
-  const parts = [team.city, team.name].filter(Boolean);
-  return parts.join(' ');
-}
-
-function formatMatchup(game) {
-  if (!game) return '';
-  const away = formatTeamName(game.away);
-  const home = formatTeamName(game.home);
-  return `${away} at ${home}`;
-}
-
-function updateEraSummary(history) {
-  if (!history?.totals) return;
-  const { totals } = history;
-  const totalGames = totals.games ?? 0;
-  setText(summaryEls.totalGames, helpers.formatNumber(totalGames, 0));
-  const first = formatDate(totals.firstGame);
-  const latest = formatDate(totals.latestGame);
-  setText(summaryEls.firstGame, first);
-  setText(summaryEls.latestGame, latest);
-
-  const playoffEntry = Array.isArray(totals.byType)
-    ? totals.byType.find((item) => item.gameType === 'Playoffs')
-    : null;
-  const playoffGames = playoffEntry?.games ?? 0;
-  setText(summaryEls.playoffGames, helpers.formatNumber(playoffGames, 0));
-  const share = totalGames ? playoffGames / totalGames : 0;
-  setText(summaryEls.playoffShare, percentFormatter.format(share));
-
-  const topAttendance = Array.isArray(history.attendanceLeaders)
-    ? [...history.attendanceLeaders].sort((a, b) => b.attendance - a.attendance)[0]
-    : null;
-  if (topAttendance && summaryEls.attendanceRecord) {
-    const opponent = formatMatchup(topAttendance);
-    const recordDate = formatDate(topAttendance.date);
-    setText(
-      summaryEls.attendanceRecord,
-      `${helpers.formatNumber(topAttendance.attendance, 0)} fans watched ${opponent} on ${recordDate}.`,
+function renderAtlasSpotlight(entry, config) {
+  if (!selectors.atlasSpotlight) return;
+  selectors.atlasSpotlight.innerHTML = '';
+  if (!entry) {
+    selectors.atlasSpotlight.append(
+      createElement('p', 'state-spotlight__placeholder', 'Select a tile to meet its headline legend.'),
     );
+    return;
   }
-}
-
-function populateExpansionTimeline(franchises) {
-  const timelineRoot = summaryEls.expansionTimeline;
-  if (timelineRoot) {
-    timelineRoot.innerHTML = '';
+  const heading = createElement('span', 'state-spotlight__state', entry[config.entryName] ?? entry[config.entryId] ?? '');
+  selectors.atlasSpotlight.append(heading);
+  if (entry.player) {
+    selectors.atlasSpotlight.append(createElement('p', 'state-spotlight__player', entry.player));
   }
-  const decadeEntries = Array.isArray(franchises?.decades) ? franchises.decades : [];
-  const teams = Array.isArray(franchises?.activeFranchises) ? franchises.activeFranchises : [];
-
-  const activeTeams = teams.filter((team) => team && team.isActive && String(team.teamId).length === 10);
-  if (summaryEls.franchiseCount) {
-    setText(summaryEls.franchiseCount, helpers.formatNumber(activeTeams.length, 0));
+  if (entry.birthCity) {
+    selectors.atlasSpotlight.append(createElement('p', 'state-spotlight__meta', `Born in ${entry.birthCity}`));
   }
-
-  let peakDecade = null;
-  let peakTotal = 0;
-
-  decadeEntries
-    .slice()
-    .sort((a, b) => a.decade - b.decade)
-    .forEach((entry) => {
-      const additions = activeTeams
-        .filter((team) => Math.floor(team.seasonFounded / 10) * 10 === entry.decade)
-        .sort((a, b) => a.seasonFounded - b.seasonFounded);
-      const sampleNames = additions.slice(0, 3).map((team) => team.name);
-      if (timelineRoot) {
-        const item = document.createElement('li');
-        item.className = 'timeline__item';
-
-        const header = document.createElement('div');
-        header.className = 'timeline__header';
-        const year = document.createElement('span');
-        year.className = 'timeline__year';
-        year.textContent = `${entry.decade}s`;
-        const count = document.createElement('span');
-        count.className = 'timeline__count';
-        count.textContent = `${entry.total} additions`;
-        header.append(year, count);
-
-        const detail = document.createElement('p');
-        detail.className = 'timeline__detail';
-        detail.textContent = sampleNames.length
-          ? `Key arrivals: ${sampleNames.join(', ')}${additions.length > sampleNames.length ? '…' : ''}`
-          : 'Active rosters stabilized this decade.';
-
-        item.append(header, detail);
-        timelineRoot.append(item);
+  if (entry.headline) {
+    selectors.atlasSpotlight.append(createElement('p', 'state-spotlight__headline', entry.headline));
+  }
+  if (Array.isArray(entry.notableTeams) && entry.notableTeams.length) {
+    const list = createElement('ul', 'state-spotlight__teams');
+    entry.notableTeams.slice(0, 4).forEach((team) => list.append(createElement('li', 'state-spotlight__team', team)));
+    selectors.atlasSpotlight.append(list);
+  }
+  if (Array.isArray(entry.topPlayers) && entry.topPlayers.length) {
+    const ranking = createElement('ol', 'state-spotlight__ranking');
+    entry.topPlayers.slice(0, 10).forEach((player) => {
+      const item = createElement('li', 'state-spotlight__ranking-item');
+      item.append(createElement('span', 'state-spotlight__ranking-ordinal', `#${player.groupRank}`));
+      const body = createElement('div', 'state-spotlight__ranking-body');
+      body.append(createElement('p', 'state-spotlight__ranking-name', player.name ?? 'Unknown')); 
+      const detailParts = [];
+      if (Number.isFinite(player.goatScore)) {
+        detailParts.push(`${decimalFormatter.format(player.goatScore)} GOAT`);
       }
-
-      if (entry.total > peakTotal) {
-        peakTotal = entry.total;
-        peakDecade = `${entry.decade}s`;
+      if (Number.isFinite(player.goatRank)) {
+        detailParts.push(`Global rank #${numberFormatter.format(player.goatRank)}`);
       }
+      if (Array.isArray(player.franchises) && player.franchises.length) {
+        detailParts.push(player.franchises.join(', '));
+      }
+      if (detailParts.length) {
+        body.append(createElement('p', 'state-spotlight__ranking-meta', detailParts.join(' • ')));
+      }
+      item.append(body);
+      ranking.append(item);
     });
-
-  if (peakDecade && summaryEls.peakExpansionDecade) {
-    setText(summaryEls.peakExpansionDecade, peakDecade);
-  }
-  if (summaryEls.peakExpansionTotal) {
-    setText(summaryEls.peakExpansionTotal, helpers.formatNumber(peakTotal, 0));
-  }
-}
-
-function populateRecordGames(history) {
-  if (!summaryEls.recordGames) return;
-  summaryEls.recordGames.innerHTML = '';
-  const records = Array.isArray(history?.highestScoringGames) ? history.highestScoringGames : [];
-  records
-    .slice()
-    .sort((a, b) => b.totalPoints - a.totalPoints)
-    .slice(0, 4)
-    .forEach((game) => {
-      const item = document.createElement('li');
-      item.className = 'record-item';
-      const title = document.createElement('strong');
-      title.className = 'record-item__title';
-      const awayName = formatTeamName(game.away);
-      const homeName = formatTeamName(game.home);
-      title.textContent = `${awayName} ${game.away?.score ?? ''} @ ${homeName} ${game.home?.score ?? ''}`.trim();
-      const meta = document.createElement('span');
-      meta.className = 'record-item__meta';
-      meta.textContent = `${game.gameType} • ${formatDate(game.date)} • ${helpers.formatNumber(game.totalPoints, 0)} total points`;
-      item.append(title, meta);
-      summaryEls.recordGames.append(item);
-    });
-}
-
-function populateAttendanceTable(history) {
-  if (!summaryEls.attendanceBody) return;
-  summaryEls.attendanceBody.innerHTML = '';
-  const rows = Array.isArray(history?.attendanceLeaders) ? history.attendanceLeaders : [];
-  rows
-    .slice()
-    .sort((a, b) => b.attendance - a.attendance)
-    .slice(0, 5)
-    .forEach((game) => {
-      const tr = document.createElement('tr');
-      const dateCell = document.createElement('td');
-      dateCell.textContent = formatDate(game.date);
-      const matchupCell = document.createElement('td');
-      matchupCell.textContent = formatMatchup(game);
-      const attendanceCell = document.createElement('td');
-      attendanceCell.className = 'history-table__numeric';
-      attendanceCell.textContent = numberFormatter.format(game.attendance);
-      tr.append(dateCell, matchupCell, attendanceCell);
-      summaryEls.attendanceBody.append(tr);
-    });
-}
-
-function updateArchiveFacts(history, audit) {
-  if (summaryEls.archiveUpdated) {
-    setText(summaryEls.archiveUpdated, formatDate(history?.generatedAt));
-  }
-  const seasons = Array.isArray(audit?.games?.seasonBreakdown) ? audit.games.seasonBreakdown : [];
-  if (seasons.length && summaryEls.seasonRange) {
-    const firstSeason = seasons[0][0];
-    const lastSeason = seasons[seasons.length - 1][0];
-    setText(summaryEls.seasonRange, `${firstSeason} – ${lastSeason}`);
-    if (summaryEls.seasonCount) {
-      setText(summaryEls.seasonCount, helpers.formatNumber(seasons.length, 0));
-    }
+    selectors.atlasSpotlight.append(ranking);
   }
 }
 
 async function bootstrap() {
+  attachKeyHandlers();
   try {
-    const [history, franchises, audit, atlas] = await Promise.all([
-      fetch('data/historic_games.json').then((response) => (response.ok ? response.json() : null)),
-      fetch('data/active_franchises.json').then((response) => (response.ok ? response.json() : null)),
-      fetch('data/historical_audit.json').then((response) => (response.ok ? response.json() : null)),
-      fetch('data/state_birth_legends.json').then((response) => (response.ok ? response.json() : null)),
+    const [playersMin, playersFullDocument, birthplacesDocument, goatDocument, worldLegends] = await Promise.all([
+      loadJson(PLAYERS_MIN_URL),
+      loadJson(PLAYERS_FULL_URL),
+      loadJson(BIRTHPLACES_URL),
+      loadJson(GOAT_URL),
+      loadJson(WORLD_LEGENDS_URL).catch(() => null),
     ]);
 
-    if (history) {
-      updateEraSummary(history);
-      populateRecordGames(history);
-      populateAttendanceTable(history);
+    const playersFull = Array.isArray(playersFullDocument?.players) ? playersFullDocument.players : [];
+    const playersMinList = Array.isArray(playersMin) ? playersMin : [];
+    const birthplaces = birthplacesDocument?.players ?? {};
+    const goatPlayers = Array.isArray(goatDocument?.players) ? goatDocument.players : [];
+    const goatIndex = new Map();
+    for (const entry of goatPlayers) {
+      const nameKey = normalizeName(entry.name);
+      if (!nameKey) continue;
+      const list = goatIndex.get(nameKey) ?? [];
+      list.push(entry);
+      goatIndex.set(nameKey, list);
+    }
+    const goatReferences = buildGoatReferences(goatPlayers);
+    const countryCodes = buildCountryCodeMap(worldLegends);
+    const playersById = new Map(playersFull.map((player) => [player.id, player]));
+
+    if (selectors.searchInput) {
+      selectors.searchInput.addEventListener('input', (event) => {
+        const term = event.target.value;
+        renderSearchResults(playersMinList, term);
+      });
+      renderSearchResults(playersMinList, '');
     }
 
-    if (franchises) {
-      populateExpansionTimeline(franchises);
+    if (selectors.searchResults) {
+      selectors.searchResults.addEventListener('click', async (event) => {
+        const button = event.target.closest('[data-player-id]');
+        if (!button) return;
+        const playerId = Number(button.dataset.playerId);
+        if (!Number.isFinite(playerId)) return;
+        const player = playersById.get(playerId);
+        if (!player) return;
+        const nameKey = normalizeName(`${player.first_name} ${player.last_name}`);
+        const birthplace = resolveBirthplace(nameKey, birthplaces);
+        const totalsContainer = renderPlayerCard(player, birthplace);
+        const goatEntry = selectGoatEntry(player, goatIndex);
+        renderVisuals(goatEntry, goatReferences);
+        if (!totalsContainer) return;
+        totalsContainer.innerHTML = '';
+        const apiKey = getStoredKey().trim();
+        if (!apiKey) {
+          totalsContainer.append(
+            createElement(
+              'p',
+              'history-player__hint',
+              'Add a Ball Don\'t Lie All-Star key above to unlock full career totals.',
+            ),
+          );
+          return;
+        }
+        totalsContainer.append(createElement('p', 'history-player__hint', 'Fetching Ball Don\'t Lie career log…'));
+        try {
+          const career = await fetchCareerStats(playerId, apiKey);
+          totalsContainer.innerHTML = '';
+          totalsContainer.append(renderTotalsTable('Regular season', career.regular));
+          totalsContainer.append(renderTotalsTable('Postseason', career.postseason));
+        } catch (error) {
+          console.error(error);
+          totalsContainer.innerHTML = '';
+          totalsContainer.append(
+            createElement(
+              'p',
+              'history-player__error',
+              'Unable to load Ball Don\'t Lie stats. Double-check your API key and try again.',
+            ),
+          );
+        }
+      });
     }
 
-    if (history && audit) {
-      updateArchiveFacts(history, audit);
+    const atlas = buildAtlas(playersFull, birthplaces, goatIndex, countryCodes);
+    const svgCache = new Map();
+    await renderAtlas('domestic', atlas.domestic, svgCache);
+    if (selectors.atlasToggle) {
+      selectors.atlasToggle.addEventListener('click', async () => {
+        const nextMode = selectors.mapRoot?.dataset.atlasMode === 'domestic' ? 'international' : 'domestic';
+        selectors.atlasToggle.disabled = true;
+        try {
+          await renderAtlas(nextMode, nextMode === 'domestic' ? atlas.domestic : atlas.international, svgCache);
+        } catch (error) {
+          console.error(error);
+        } finally {
+          selectors.atlasToggle.disabled = false;
+        }
+      });
     }
-
-    if (atlas) {
-      atlasData.domestic = atlas;
-    }
-
-    await renderAtlas('domestic', atlasData.domestic);
   } catch (error) {
     console.error('Failed to initialise history page', error);
   }
 }
 
-registerCharts([
-  {
-    element: document.querySelector('[data-chart="scoring-averages"]'),
-    source: 'data/history_scoring_trends.json',
-    async createConfig(data, helpers) {
-      const seasons = Array.isArray(data?.seasons) ? data.seasons : [];
-      if (!seasons.length) return null;
-      const labels = seasons.map((season) => `${season.season}-${String(season.season + 1).slice(-2)}`);
-      const regular = seasons.map((season) => season.regularSeasonAverage ?? null);
-      const playoffs = seasons.map((season) => season.playoffAverage ?? null);
-
-      return {
-        type: 'line',
-        data: {
-          labels,
-          datasets: [
-            {
-              label: 'Regular season',
-              data: regular,
-              borderColor: palette.royal,
-              backgroundColor: palette.teal,
-              borderWidth: 2,
-              fill: true,
-              pointRadius: 0,
-              tension: 0.25,
-            },
-            {
-              label: 'Playoffs',
-              data: playoffs,
-              borderColor: palette.gold,
-              backgroundColor: 'rgba(244, 181, 63, 0.18)',
-              borderWidth: 2,
-              fill: false,
-              pointRadius: 0,
-              tension: 0.25,
-            },
-          ],
-        },
-        options: {
-          interaction: { mode: 'index', intersect: false },
-          layout: { padding: 8 },
-          plugins: {
-            legend: { position: 'top', align: 'start' },
-            tooltip: {
-              callbacks: {
-                label(context) {
-                  return `${context.dataset.label}: ${helpers.formatNumber(context.parsed.y, 1)} points`;
-                },
-              },
-            },
-          },
-          scales: {
-            x: {
-              grid: { color: 'rgba(11, 37, 69, 0.06)' },
-              ticks: { maxTicksLimit: 10 },
-            },
-            y: {
-              beginAtZero: false,
-              grid: { color: 'rgba(11, 37, 69, 0.08)' },
-              ticks: {
-                callback: (value) => `${helpers.formatNumber(value, 0)} pts`,
-              },
-            },
-          },
-        },
-      };
-    },
-  },
-  {
-    element: document.querySelector('[data-chart="scoring-leaders"]'),
-    source: 'data/history_scoring_trends.json',
-    async createConfig(data, helpers) {
-      const seasons = Array.isArray(data?.seasons) ? data.seasons : [];
-      if (!seasons.length) return null;
-      const ranked = seasons
-        .filter((season) => typeof season.averagePoints === 'number')
-        .sort((a, b) => b.averagePoints - a.averagePoints)
-        .slice(0, 8);
-      if (!ranked.length) return null;
-
-      const labels = ranked.map((season) => `${season.season}-${String(season.season + 1).slice(-2)}`);
-      const totals = ranked.map((season) => season.averagePoints);
-
-      return {
-        type: 'bar',
-        data: {
-          labels,
-          datasets: [
-            {
-              label: 'Avg combined points per game',
-              data: totals,
-              backgroundColor: palette.sky,
-            },
-          ],
-        },
-        options: {
-          indexAxis: 'y',
-          layout: { padding: { top: 8, right: 12, bottom: 8, left: 12 } },
-          plugins: {
-            legend: { display: false },
-            tooltip: {
-              callbacks: {
-                label(context) {
-                  return `${helpers.formatNumber(context.parsed.x, 2)} points per game`;
-                },
-              },
-            },
-          },
-          scales: {
-            x: {
-              beginAtZero: true,
-              grid: { color: 'rgba(11, 37, 69, 0.08)' },
-              ticks: {
-                callback: (value) => `${helpers.formatNumber(value, 0)} pts`,
-              },
-            },
-            y: {
-              grid: { display: false },
-            },
-          },
-        },
-      };
-    },
-  },
-  {
-    element: document.querySelector('[data-chart="game-type-share"]'),
-    source: 'data/historic_games.json',
-    async createConfig(data) {
-      const breakdown = Array.isArray(data?.totals?.byType) ? data.totals.byType.filter((entry) => entry.games > 0) : [];
-      if (!breakdown.length) return null;
-      const labels = breakdown.map((item) => item.gameType);
-      const values = breakdown.map((item) => item.games);
-      const colors = [palette.royal, palette.crimson, palette.gold, palette.sky, '#6f8bc5', '#4fb9c4'];
-      const total = values.reduce((acc, value) => acc + value, 0);
-
-      return {
-        type: 'doughnut',
-        data: {
-          labels,
-          datasets: [
-            {
-              data: values,
-              backgroundColor: colors.slice(0, values.length),
-              borderWidth: 0,
-            },
-          ],
-        },
-        options: {
-          layout: { padding: 8 },
-          plugins: {
-            legend: { position: 'bottom' },
-            tooltip: {
-              callbacks: {
-                label(context) {
-                  const value = context.parsed;
-                  const share = total ? value / total : 0;
-                  return `${context.label}: ${numberFormatter.format(value)} games (${percentFormatter.format(share)})`;
-                },
-              },
-            },
-          },
-          cutout: '60%',
-        },
-      };
-    },
-  },
-  {
-    element: document.querySelector('[data-chart="largest-margins"]'),
-    source: 'data/historic_games.json',
-    async createConfig(data) {
-      const rows = Array.isArray(data?.largestMargins) ? data.largestMargins : [];
-      if (!rows.length) return null;
-      const topRows = helpers.rankAndSlice(rows, 6, (item) => item.margin).sort((a, b) => b.margin - a.margin);
-      const labels = topRows.map((game) => {
-        const date = formatDate(game.date);
-        return `${formatTeamName(game.home)} vs ${formatTeamName(game.away)} (${date.split(', ')[1] ?? date})`;
-      });
-      const margins = topRows.map((game) => game.margin);
-
-      return {
-        type: 'bar',
-        data: {
-          labels,
-          datasets: [
-            {
-              label: 'Margin of victory',
-              data: margins,
-              backgroundColor: palette.crimson,
-            },
-          ],
-        },
-        options: {
-          indexAxis: 'y',
-          layout: { padding: { top: 8, right: 12, bottom: 8, left: 12 } },
-          plugins: {
-            legend: { display: false },
-            tooltip: {
-              callbacks: {
-                label(context) {
-                  const game = topRows[context.dataIndex];
-                  const totalPoints = helpers.formatNumber(game.totalPoints, 0);
-                  return `${context.parsed.x} point win • ${totalPoints} total points`;
-                },
-              },
-            },
-          },
-          scales: {
-            x: {
-              beginAtZero: true,
-              suggestedMax: Math.max(...margins) + 5,
-              grid: { color: 'rgba(11, 37, 69, 0.08)' },
-              ticks: {
-                callback: (value) => `${value} pts`,
-              },
-            },
-            y: {
-              grid: { display: false },
-            },
-          },
-        },
-      };
-    },
-  },
-  {
-    element: document.querySelector('[data-chart="scoring-bursts"]'),
-    source: 'data/historic_games.json',
-    async createConfig(data, helpers) {
-      const games = Array.isArray(data?.highestScoringGames) ? data.highestScoringGames : [];
-      if (!games.length) return null;
-      const ranked = helpers
-        .rankAndSlice(games, 10, (game) => game.totalPoints)
-        .sort((a, b) => {
-          const da = parseDate(a.date)?.getTime() ?? 0;
-          const db = parseDate(b.date)?.getTime() ?? 0;
-          return da - db;
-        });
-
-      const dataset = ranked.map((game) => {
-        const date = parseDate(game.date);
-        const yearValue = date ? date.getUTCFullYear() + date.getUTCMonth() / 12 : 0;
-        const attendance = Number(game.attendance) || 0;
-        return {
-          x: yearValue,
-          y: game.totalPoints,
-          r: Math.max(8, Math.sqrt(attendance) / 35),
-          meta: game,
-        };
-      });
-
-      return {
-        type: 'bubble',
-        data: {
-          datasets: [
-            {
-              label: 'Scoring eruptions',
-              data: dataset,
-              backgroundColor: 'rgba(239, 61, 91, 0.4)',
-              borderColor: palette.crimson,
-              borderWidth: 1.5,
-            },
-          ],
-        },
-        options: {
-          layout: { padding: { top: 8, right: 16, bottom: 8, left: 12 } },
-          scales: {
-            x: {
-              type: 'linear',
-              beginAtZero: false,
-              grid: { color: 'rgba(11, 37, 69, 0.08)' },
-              ticks: {
-                callback: (value) => Math.round(value),
-              },
-              title: {
-                display: true,
-                text: 'Year',
-              },
-            },
-            y: {
-              beginAtZero: false,
-              grid: { color: 'rgba(11, 37, 69, 0.08)' },
-              title: {
-                display: true,
-                text: 'Total points',
-              },
-              ticks: {
-                callback: (value) => helpers.formatNumber(value, 0),
-              },
-            },
-          },
-          plugins: {
-            tooltip: {
-              callbacks: {
-                title(context) {
-                  const meta = context[0]?.raw?.meta;
-                  return meta ? formatDate(meta.date) : '';
-                },
-                label(context) {
-                  const meta = context.raw?.meta;
-                  if (!meta) return '';
-                  const matchup = formatMatchup(meta);
-                  const attendance = meta.attendance ? ` • ${helpers.formatNumber(meta.attendance, 0)} fans` : '';
-                  return `${matchup}: ${helpers.formatNumber(meta.totalPoints, 0)} points${attendance}`;
-                },
-              },
-            },
-            legend: { display: false },
-          },
-        },
-      };
-    },
-  },
-  {
-    element: document.querySelector('[data-chart="margin-vs-total"]'),
-    source: 'data/historic_games.json',
-    async createConfig(data, helpers) {
-      const games = Array.isArray(data?.largestMargins) ? data.largestMargins : [];
-      if (!games.length) return null;
-      const ranked = helpers.rankAndSlice(games, 10, (game) => game.margin);
-      const dataset = ranked.map((game) => {
-        const attendance = Number(game.attendance) || 0;
-        return {
-          x: game.margin,
-          y: game.totalPoints,
-          r: Math.max(7, Math.sqrt(attendance) / 40),
-          meta: game,
-        };
-      });
-
-      return {
-        type: 'scatter',
-        data: {
-          datasets: [
-            {
-              label: 'Margin & scoring blend',
-              data: dataset,
-              backgroundColor: 'rgba(17, 86, 214, 0.3)',
-              borderColor: palette.royal,
-              borderWidth: 1.2,
-            },
-          ],
-        },
-        options: {
-          layout: { padding: { top: 8, right: 14, bottom: 8, left: 12 } },
-          scales: {
-            x: {
-              title: { display: true, text: 'Margin of victory' },
-              grid: { color: 'rgba(11, 37, 69, 0.08)' },
-              ticks: {
-                callback: (value) => `${value} pts`,
-              },
-            },
-            y: {
-              title: { display: true, text: 'Total points' },
-              grid: { color: 'rgba(11, 37, 69, 0.08)' },
-              ticks: {
-                callback: (value) => helpers.formatNumber(value, 0),
-              },
-            },
-          },
-          plugins: {
-            legend: { display: false },
-            tooltip: {
-              callbacks: {
-                label(context) {
-                  const meta = context.raw?.meta;
-                  if (!meta) return '';
-                  const matchup = formatMatchup(meta);
-                  const date = formatDate(meta.date);
-                  return `${matchup} • ${helpers.formatNumber(meta.margin, 0)}-point margin • ${helpers.formatNumber(meta.totalPoints, 0)} total points (${date})`;
-                },
-              },
-            },
-          },
-        },
-      };
-    },
-  },
-  {
-    element: document.querySelector('[data-chart="attendance-orbit"]'),
-    source: 'data/historic_games.json',
-    async createConfig(data, helpers) {
-      const rows = Array.isArray(data?.attendanceLeaders) ? data.attendanceLeaders : [];
-      if (!rows.length) return null;
-      const ranked = helpers.rankAndSlice(rows, 7, (game) => game.attendance).sort((a, b) => b.attendance - a.attendance);
-      const labels = ranked.map((game) => `${formatDate(game.date)} • ${formatMatchup(game)}`);
-      const values = ranked.map((game) => game.attendance ?? 0);
-      const colors = values.map((_, index) => {
-        if (index === 0) {
-          return palette.gold;
-        }
-        const alpha = Math.max(0.32, 0.7 - index * 0.07);
-        return `rgba(17, 86, 214, ${alpha})`;
-      });
-
-      return {
-        type: 'polarArea',
-        data: {
-          labels,
-          datasets: [
-            {
-              data: values,
-              backgroundColor: colors,
-              borderWidth: 1,
-              borderColor: 'rgba(255, 255, 255, 0.6)',
-            },
-          ],
-        },
-        options: {
-          layout: { padding: 8 },
-          scales: {
-            r: {
-              grid: { color: 'rgba(11, 37, 69, 0.08)' },
-              ticks: {
-                callback: (value) => helpers.formatNumber(value, 0),
-              },
-            },
-          },
-          plugins: {
-            legend: { position: 'bottom' },
-            tooltip: {
-              callbacks: {
-                label(context) {
-                  return `${context.label}: ${helpers.formatNumber(context.parsed, 0)} fans`;
-                },
-              },
-            },
-          },
-        },
-      };
-    },
-  },
-  {
-    element: document.querySelector('[data-chart="record-sparkline"]'),
-    source: 'data/historic_games.json',
-    async createConfig(data, helpers) {
-      const games = Array.isArray(data?.highestScoringGames) ? data.highestScoringGames : [];
-      if (!games.length) return null;
-      const ranked = helpers.rankAndSlice(games, 8, (game) => game.totalPoints).sort((a, b) => b.totalPoints - a.totalPoints);
-      const labels = ranked.map((game) => formatDate(game.date));
-      const values = ranked.map((game) => game.totalPoints);
-      const metadata = ranked.map((game) => ({
-        matchup: formatMatchup(game),
-        total: game.totalPoints,
-        margin: game.margin,
-      }));
-
-      return {
-        type: 'bar',
-        data: {
-          labels,
-          datasets: [
-            {
-              label: 'Combined points',
-              data: values,
-              backgroundColor(context) {
-                const index = context.dataIndex;
-                const base = 0.85 - index * 0.06;
-                return `rgba(239, 61, 91, ${Math.max(base, 0.35)})`;
-              },
-              meta: metadata,
-            },
-          ],
-        },
-        options: {
-          indexAxis: 'y',
-          layout: { padding: { top: 8, right: 16, bottom: 8, left: 12 } },
-          scales: {
-            x: {
-              beginAtZero: true,
-              grid: { color: 'rgba(11, 37, 69, 0.08)' },
-              ticks: {
-                callback: (value) => helpers.formatNumber(value, 0),
-              },
-            },
-            y: {
-              grid: { display: false },
-            },
-          },
-          plugins: {
-            legend: { display: false },
-            tooltip: {
-              callbacks: {
-                label(context) {
-                  const meta = context.dataset.meta?.[context.dataIndex];
-                  if (!meta) return '';
-                  const margin = meta.margin ? ` • decided by ${helpers.formatNumber(meta.margin, 0)} points` : '';
-                  return `${meta.matchup}: ${helpers.formatNumber(meta.total, 0)} total points${margin}`;
-                },
-              },
-            },
-          },
-        },
-      };
-    },
-  },
-  {
-    element: document.querySelector('[data-chart="archive-coverage"]'),
-    source: 'data/historical_audit.json',
-    async createConfig(data, helpers) {
-      const seasons = Array.isArray(data?.games?.seasonBreakdown) ? data.games.seasonBreakdown : [];
-      if (!seasons.length) return null;
-      const parseSeason = (season) => {
-        const year = Number.parseInt(String(season).split('-')[0], 10);
-        return Number.isFinite(year) ? year : null;
-      };
-      const firstSeasonYear = parseSeason(seasons[0][0]);
-      const lastSeasonYear = parseSeason(seasons[seasons.length - 1][0]);
-      const coverageSpan =
-        Number.isFinite(firstSeasonYear) && Number.isFinite(lastSeasonYear)
-          ? lastSeasonYear - firstSeasonYear + 1
-          : seasons.length;
-      const seasonsTracked = seasons.length;
-      const coverageGap = Math.max(coverageSpan - seasonsTracked, 0);
-      const totalRows = Number(data?.games?.rowCount) || 0;
-      const invalidRows = Number(data?.games?.invalidDateCount) || 0;
-      const validRows = Math.max(totalRows - invalidRows, 0);
-
-      const coverageLabels = ['Tracked seasons', 'Estimated gap'];
-      const validityLabels = ['Validated rows', 'Flagged rows'];
-
-      return {
-        type: 'doughnut',
-        data: {
-          labels: coverageLabels,
-          datasets: [
-            {
-              label: 'Season coverage',
-              data: [seasonsTracked, coverageGap],
-              backgroundColor: [palette.royal, 'rgba(11, 37, 69, 0.12)'],
-              borderWidth: 0,
-              weight: 0.8,
-            },
-            {
-              label: 'Row validity',
-              data: [validRows, invalidRows],
-              backgroundColor: ['rgba(244, 181, 63, 0.8)', 'rgba(239, 61, 91, 0.65)'],
-              borderWidth: 0,
-              weight: 0.5,
-            },
-          ],
-        },
-        options: {
-          layout: { padding: 8 },
-          cutout: '58%',
-          plugins: {
-            legend: {
-              position: 'bottom',
-              labels: {
-                usePointStyle: true,
-              },
-            },
-            tooltip: {
-              callbacks: {
-                label(context) {
-                  const datasetLabel = context.dataset.label;
-                  const labels = datasetLabel === 'Season coverage' ? coverageLabels : validityLabels;
-                  const label = labels[context.dataIndex] ?? datasetLabel;
-                  return `${label}: ${helpers.formatNumber(context.parsed, 0)}`;
-                },
-              },
-            },
-          },
-        },
-      };
-    },
-  },
-]);
-
-setupAtlasToggle();
 bootstrap();
