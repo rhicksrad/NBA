@@ -51,7 +51,7 @@ type AppState = {
   anchorApplied: boolean;
 };
 
-const rostersDataUrl = new URL("./public/data/rosters.json", document.baseURI).toString();
+const rostersDataUrl = new URL("./data/rosters.json", document.baseURI).toString();
 
 async function loadRosters(): Promise<RostersDoc> {
   const response = await fetch(rostersDataUrl, { cache: "no-store" });
