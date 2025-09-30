@@ -22,6 +22,13 @@ const MAX_ATTEMPTS = 5;
 // Enforce a ~1.1s delay between calls so we stay comfortably under the limit.
 const MIN_DELAY_MS = 1100;
 
+const BDL_HOST_PATTERN = /\bballdontlie\.io$/i;
+const BDL_PROXY_PATTERN = /bdlproxy\./i;
+
+function isBdlHostname(hostname: string): boolean {
+  return BDL_HOST_PATTERN.test(hostname) || BDL_PROXY_PATTERN.test(hostname);
+}
+
 interface QueueTask<T> {
   execute: () => Promise<T>;
   resolve: (value: T | PromiseLike<T>) => void;
@@ -89,18 +96,23 @@ function resolveBdlKey(): string | undefined {
   return fileKey?.trim() || undefined;
 }
 
-function ensureKey(url: URL): string {
+export function requireBallDontLieKey(): string {
   const key = resolveBdlKey();
-  const isBdlHost = /\bballdontlie\.io$/i.test(url.hostname);
-  if (isBdlHost && (!key || key.length === 0)) {
+  if (!key || key.length === 0) {
     throw new Error(
-      "Missing BDL_API_KEY — set your Ball Don't Lie All-Star key or enable USE_BDL_CACHE=1",
+      "Missing BALLDONTLIE_API_KEY — set your Ball Don't Lie All-Star key before running data scripts.",
     );
   }
+  return key;
+}
+
+function ensureKey(url: URL): string {
+  const isBdlHost = isBdlHostname(url.hostname);
+  const key = isBdlHost ? requireBallDontLieKey() : resolveBdlKey();
   return key ?? "";
 }
 
-function formatBdlAuthHeader(key: string): string {
+export function formatBdlAuthHeader(key: string): string {
   const trimmed = key.trim();
   if (!trimmed) return trimmed;
   if (/^Bearer\s+/i.test(trimmed)) {
@@ -118,7 +130,7 @@ async function executeRequest<T>(input: string, init: RequestInit | undefined, a
   const headers = new Headers(init?.headers);
   const key = ensureKey(url);
 
-  if (/\bballdontlie\.io$/i.test(url.hostname) && key) {
+  if (isBdlHostname(url.hostname) && key) {
     headers.set("Authorization", formatBdlAuthHeader(key));
   }
 
@@ -157,7 +169,7 @@ async function executeRequest<T>(input: string, init: RequestInit | undefined, a
     const snippet = body.slice(0, 300);
     let hint = snippet;
     if (response.status === 401) {
-      hint = "missing/invalid BDL_API_KEY or tier mismatch";
+      hint = "missing/invalid BALLDONTLIE_API_KEY or tier mismatch";
     }
     throw new Error(`${response.status} ${response.statusText} for ${safeUrl(url)} — ${hint}`);
   }

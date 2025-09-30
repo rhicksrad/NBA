@@ -25,26 +25,29 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'pnpm'
+          cache: pnpm
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
           version: 9.12.1
+          run_install: false
 
       - name: Install deps
         run: pnpm i --frozen-lockfile
 
-      # Build whatever generates your site files at repo root
-      - name: Build data
-        run: pnpm build:data
+      # Build the whole site so index.html and assets exist at repo root or your dist dir.
+      - name: Build site
+        run: |
+          pnpm build:data
+          # If the site also needs a frontend build, include it here, e.g.:
+          # pnpm build
 
-      # Required to prepare Pages environment
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
-      # Upload the whole site (root), not just ./public
-      # If you build to a dedicated dir (e.g., dist/), point path to that instead.
+      # Upload the directory that actually contains index.html.
+      # If your build outputs to dist/, set path: dist
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:

@@ -4,7 +4,7 @@ on:
   push:
     branches: [main]
   schedule:
-    - cron: "27 7 * * *"  # 07:27 UTC
+    - cron: "27 7 * * *"
   workflow_dispatch:
 
 permissions:
@@ -37,13 +37,19 @@ jobs:
           version: 9.12.1
           run_install: false
 
-      - name: Sanity check tooling
+      - name: Tooling sanity
         run: |
           node -v
           pnpm -v
 
-      - name: Install dependencies
+      - name: Install deps
         run: pnpm i --frozen-lockfile
+
+      - name: Check BDL key presence
+        env:
+          BALLDONTLIE_API_KEY: ${{ secrets.BALLDONTLIE_API_KEY }}
+        run: |
+          test -n "$BALLDONTLIE_API_KEY" || { echo "Missing BALLDONTLIE_API_KEY"; exit 2; }
 
       - name: Stamp date
         id: metadata
@@ -54,7 +60,7 @@ jobs:
           BALLDONTLIE_API_KEY: ${{ secrets.BALLDONTLIE_API_KEY }}
         run: pnpm verify:bdl
 
-      - name: Build previews (no external stats)
+      - name: Build previews
         env:
           USE_NBA_STATS: "0"
           USE_BREF: "0"
@@ -73,6 +79,12 @@ jobs:
           else
             echo "changed=true" >> "$GITHUB_OUTPUT"
           fi
+
+      - name: Git identity for PR commits
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
       - name: Open pull request
         if: steps.changes.outputs.changed == 'true'
