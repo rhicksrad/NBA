@@ -66,18 +66,27 @@
 
           <div class="history-archive">
             <div class="history-search-panel">
-              <p class="history-key__help">
-                The NBA Intelligence Hub hydrates every player card automatically from its consolidated league data warehouse.
-              </p>
-              <div class="history-search">
-                <label for="history-player-search">Search historical players</label>
-                <input
-                  id="history-player-search"
-                  type="search"
-                  placeholder="Search by name, e.g. Michael Jordan"
-                  autocomplete="off"
-                  data-history="player-search"
-                />
+              <header class="history-search-panel__header">
+                <span class="history-search-panel__eyebrow">Archive lookup</span>
+                <h3 class="history-search-panel__title">Search the vault</h3>
+                <p class="history-key__help">
+                  The NBA Intelligence Hub hydrates every player card automatically from its consolidated league data warehouse.
+                </p>
+              </header>
+              <div class="history-search history-search--panel">
+                <div class="history-search__field">
+                  <label for="history-player-search">Search historical players</label>
+                  <div class="history-search__input-wrap">
+                    <input
+                      id="history-player-search"
+                      class="history-search__input"
+                      type="search"
+                      placeholder="Search by name, e.g. Michael Jordan"
+                      autocomplete="off"
+                      data-history="player-search"
+                    />
+                  </div>
+                </div>
                 <ul class="history-search__results" data-history="player-results" aria-live="polite"></ul>
               </div>
             </div>
