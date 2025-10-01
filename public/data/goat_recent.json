@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2025-09-29T21:05:07+00:00",
+  "generatedAt": "2025-10-01T03:10:41+00:00",
   "window": "2022-23 to 2024-25",
   "metric": "Rolling three-year GOAT index",
   "players": [
@@ -10,7 +10,7 @@
       "displayName": "Nikola Jokic",
       "team": "Nuggets",
       "franchise": "DEN",
-      "score": 100.0,
+      "score": 90.0,
       "blurb": "275 games · 185-90 record · 2022-23–2024-25"
     },
     {
@@ -20,88 +20,88 @@
       "displayName": "Shai Gilgeous-Alexander",
       "team": "Thunder",
       "franchise": "OKC",
-      "score": 91.6,
+      "score": 85.3,
       "blurb": "260 games · 177-83 record · 2022-23–2024-25"
     },
     {
       "rank": 3,
-      "personId": "203507",
-      "name": "Giannis Antetokounmpo",
-      "displayName": "Giannis Antetokounmpo",
-      "team": "Bucks",
-      "franchise": "MIL",
-      "score": 88.9,
-      "blurb": "219 games · 137-82 record · 2022-23–2024-25"
-    },
-    {
-      "rank": 4,
       "personId": "1628369",
       "name": "Jayson Tatum",
       "displayName": "Jayson Tatum",
       "team": "Celtics",
       "franchise": "BOS",
-      "score": 83.9,
+      "score": 81.7,
       "blurb": "277 games · 200-77 record · 2022-23–2024-25"
     },
     {
+      "rank": 4,
+      "personId": "203507",
+      "name": "Giannis Antetokounmpo",
+      "displayName": "Giannis Antetokounmpo",
+      "team": "Bucks",
+      "franchise": "MIL",
+      "score": 77.5,
+      "blurb": "219 games · 137-82 record · 2022-23–2024-25"
+    },
+    {
       "rank": 5,
+      "personId": "203954",
+      "name": "Joel Embiid",
+      "displayName": "Joel Embiid",
+      "team": "76ers",
+      "franchise": "PHI",
+      "score": 73.2,
+      "blurb": "143 games · 93-50 record · 2022-23–2024-25"
+    },
+    {
+      "rank": 6,
       "personId": "1629029",
       "name": "Luka Doncic",
       "displayName": "Luka Doncic",
       "team": "Lakers",
       "franchise": "LAL",
-      "score": 81.4,
+      "score": 72.7,
       "blurb": "215 games · 124-91 record · 2022-23–2024-25"
     },
     {
-      "rank": 6,
-      "personId": "203076",
-      "name": "Anthony Davis",
-      "displayName": "Anthony Davis",
-      "team": "Mavericks",
-      "franchise": "DAL",
-      "score": 78.1,
-      "blurb": "220 games · 123-97 record · 2022-23–2024-25"
-    },
-    {
       "rank": 7,
-      "personId": "1627734",
-      "name": "Domantas Sabonis",
-      "displayName": "Domantas Sabonis",
-      "team": "Kings",
-      "franchise": "SAC",
-      "score": 78.0,
-      "blurb": "254 games · 137-117 record · 2022-23–2024-25"
+      "personId": "1628378",
+      "name": "Donovan Mitchell",
+      "displayName": "Donovan Mitchell",
+      "team": "Cavaliers",
+      "franchise": "CLE",
+      "score": 71.1,
+      "blurb": "227 games · 147-80 record · 2022-23–2024-25"
     },
     {
       "rank": 8,
-      "personId": "2544",
-      "name": "LeBron James",
-      "displayName": "LeBron James",
-      "team": "Lakers",
-      "franchise": "LAL",
-      "score": 77.8,
-      "blurb": "234 games · 130-104 record · 2022-23–2024-25"
+      "personId": "1631096",
+      "name": "Chet Holmgren",
+      "displayName": "Chet Holmgren",
+      "team": "Thunder",
+      "franchise": "OKC",
+      "score": 70.1,
+      "blurb": "155 games · 110-45 record · 2023-24–2024-25"
     },
     {
       "rank": 9,
-      "personId": "1630169",
-      "name": "Tyrese Haliburton",
-      "displayName": "Tyrese Haliburton",
-      "team": "Pacers",
-      "franchise": "IND",
-      "score": 77.4,
-      "blurb": "244 games · 142-102 record · 2022-23–2024-25"
+      "personId": "1628401",
+      "name": "Derrick White",
+      "displayName": "Derrick White",
+      "team": "Celtics",
+      "franchise": "BOS",
+      "score": 70.0,
+      "blurb": "293 games · 215-78 record · 2022-23–2024-25"
     },
     {
       "rank": 10,
-      "personId": "201935",
-      "name": "James Harden",
-      "displayName": "James Harden",
-      "team": "Clippers",
-      "franchise": "LAC",
-      "score": 74.9,
-      "blurb": "239 games · 152-87 record · 2022-23–2024-25"
+      "personId": "1627759",
+      "name": "Jaylen Brown",
+      "displayName": "Jaylen Brown",
+      "team": "Celtics",
+      "franchise": "BOS",
+      "score": 69.8,
+      "blurb": "261 games · 185-76 record · 2022-23–2024-25"
     }
   ]
 }
