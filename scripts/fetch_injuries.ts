@@ -220,16 +220,10 @@ export function normalizeInjuryEntry(injury: BdlPlayerInjury, index: number): In
   };
 }
 
-export async function collectMonitorEntries(options: {
-  maxItems?: number;
-  perPage?: number;
-  pageLimit?: number;
-} = {}): Promise<InternalInjuryEntry[]> {
+export async function collectMonitorEntries(options: { maxItems?: number } = {}): Promise<InternalInjuryEntry[]> {
   const maxItems = options.maxItems ?? DEFAULT_MAX_ITEMS;
-  const perPage = options.perPage ?? 100;
-  const pageLimit = options.pageLimit ?? 4;
 
-  const rawInjuries = await fetchPlayerInjuries({ perPage, pageLimit });
+  const rawInjuries = await fetchPlayerInjuries();
   const deduped = new Map<string, InternalInjuryEntry>();
 
   rawInjuries.forEach((injury, index) => {
@@ -274,16 +268,10 @@ export async function collectMonitorEntries(options: {
   return entries.slice(0, maxItems);
 }
 
-export async function buildInjuryMonitorSnapshot(options: {
-  maxItems?: number;
-  perPage?: number;
-  pageLimit?: number;
-} = {}): Promise<InjuryMonitorSnapshot> {
+export async function buildInjuryMonitorSnapshot(options: { maxItems?: number } = {}): Promise<InjuryMonitorSnapshot> {
   const maxItems = options.maxItems ?? DEFAULT_MAX_ITEMS;
   const entries = await collectMonitorEntries({
     maxItems,
-    perPage: options.perPage,
-    pageLimit: options.pageLimit,
   });
 
   const items: InjuryMonitorItem[] = entries.map((entry) => {

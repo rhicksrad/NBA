@@ -3,7 +3,7 @@ import { ProxyAgent, setGlobalDispatcher } from "undici";
 import { loadSecret } from "../lib/secrets.js";
 
 const DEFAULT_UPSTREAM = "https://api.balldontlie.io";
-const PROXY_BASE = process.env.BDL_PROXY_BASE?.trim();
+const PROXY_BASE = process.env.BDL_PROXY_BASE?.trim() || "";
 export const BDL_BASE = PROXY_BASE || DEFAULT_UPSTREAM;
 
 const proxyUrl =
@@ -21,37 +21,19 @@ if (proxyUrl) {
   }
 }
 
-const MAX_ATTEMPTS = 5;
-// Ball Don't Lie free tier allows at most 60 requests per minute.
-// Enforce a ~1.1s delay between calls so we stay comfortably under the limit.
+const MAX_RETRIES = 3;
 const MIN_DELAY_MS = 1100;
 
 const BDL_UPSTREAM_HOST_PATTERN = /\bballdontlie\.io$/i;
-const BDL_PROXY_PATTERN = /bdlproxy\./i;
 
-const configuredProxyHostname = (() => {
-  if (!PROXY_BASE) {
-    return null;
-  }
-  try {
-    return new URL(PROXY_BASE).hostname;
-  } catch (error) {
-    console.warn(
-      `Invalid BDL_PROXY_BASE (${PROXY_BASE}) — falling back to default upstream: ${String(error)}`,
-    );
-    return null;
-  }
-})();
-
-function isProxyHostname(hostname: string): boolean {
-  if (configuredProxyHostname) {
-    return hostname === configuredProxyHostname;
-  }
-  return BDL_PROXY_PATTERN.test(hostname);
+function normalizeBase(value: string): string {
+  return value.endsWith("/") ? value.slice(0, -1) : value;
 }
 
-function isUpstreamHostname(hostname: string): boolean {
-  return BDL_UPSTREAM_HOST_PATTERN.test(hostname);
+const normalizedProxyBase = PROXY_BASE ? normalizeBase(PROXY_BASE) : "";
+
+function resolveBase(): string {
+  return normalizedProxyBase || DEFAULT_UPSTREAM;
 }
 
 interface QueueTask<T> {
@@ -125,20 +107,10 @@ export function requireBallDontLieKey(): string {
   const key = resolveBdlKey();
   if (!key || key.length === 0) {
     throw new Error(
-      "Missing BALLDONTLIE_API_KEY — set it or use BDL_PROXY_BASE to route via the Cloudflare proxy before running data scripts.",
+      "Missing BALLDONTLIE_API_KEY — set it or use BDL_PROXY_BASE to route via proxy.",
     );
   }
   return key;
-}
-
-function ensureKey(url: URL): string | undefined {
-  if (isProxyHostname(url.hostname)) {
-    return undefined;
-  }
-  if (isUpstreamHostname(url.hostname)) {
-    return requireBallDontLieKey();
-  }
-  return resolveBdlKey();
 }
 
 export function formatBdlAuthHeader(key: string): string {
@@ -150,67 +122,95 @@ export function formatBdlAuthHeader(key: string): string {
   return `Bearer ${trimmed}`;
 }
 
-function safeUrl(url: URL): string {
-  return url.toString();
+function resolveRequestUrl(input: RequestInfo | URL): string {
+  if (typeof input === "string") {
+    return input;
+  }
+  if (input instanceof URL) {
+    return input.toString();
+  }
+  if (typeof (input as Request).url === "string") {
+    return (input as Request).url;
+  }
+  throw new Error("Unsupported request input type for Ball Don't Lie request");
 }
 
-async function executeRequest<T>(input: string, init: RequestInit | undefined, attempt: number): Promise<T> {
-  const url = new URL(input);
-  const headers = new Headers(init?.headers);
-  const key = ensureKey(url);
-
-  if (key && isUpstreamHostname(url.hostname)) {
-    headers.set("Authorization", formatBdlAuthHeader(key));
-  }
-
-  const requestInit: RequestInit = {
-    ...init,
-    headers,
-  };
-
-  let response: Response;
-  try {
-    response = await fetch(url, requestInit);
-  } catch (error) {
-    if (attempt >= MAX_ATTEMPTS) {
-      throw error;
-    }
-    const backoff = Math.min(1000 * 2 ** (attempt - 1), 8000) + Math.random() * 250;
-    console.warn(`Network error for ${safeUrl(url)} — retrying in ${Math.round(backoff)}ms (attempt ${attempt + 1}/${MAX_ATTEMPTS})`);
-    await new Promise((resolve) => setTimeout(resolve, backoff));
-    return executeRequest<T>(input, init, attempt + 1);
-  }
-
-  if (response.status === 429 || response.status >= 500) {
-    if (attempt >= MAX_ATTEMPTS) {
-      const body = await response.text();
-      const snippet = body.slice(0, 300);
-      throw new Error(`${response.status} ${response.statusText} for ${safeUrl(url)} — ${snippet}`);
-    }
-    const backoff = Math.min(1000 * 2 ** (attempt - 1), 8000) + Math.random() * 250;
-    console.warn(`${response.status} ${response.statusText} for ${safeUrl(url)} — backing off; attempt ${attempt + 1}/${MAX_ATTEMPTS}`);
-    await new Promise((resolve) => setTimeout(resolve, backoff));
-    return executeRequest<T>(input, init, attempt + 1);
-  }
-
-  if (!response.ok) {
-    const body = await response.text();
-    const snippet = body.slice(0, 300);
-    let hint = snippet;
-    if (response.status === 401) {
-      hint = "missing/invalid BALLDONTLIE_API_KEY or tier mismatch";
-    }
-    throw new Error(`${response.status} ${response.statusText} for ${safeUrl(url)} — ${hint}`);
-  }
-
-  const text = await response.text();
-  try {
-    return JSON.parse(text) as T;
-  } catch (error) {
-    throw new Error(`Failed to parse JSON from ${safeUrl(url)} — ${(error as Error).message}`);
-  }
+function wait(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-export async function request<T>(url: string, init?: RequestInit): Promise<T> {
-  return enqueue(() => executeRequest<T>(url, init, 1));
+export function buildUrl(path: string, search = ""): URL {
+  const base = normalizeBase(resolveBase());
+  const fullPath = path.startsWith("/") ? path : `/${path}`;
+  return new URL(`${base}${fullPath}${search}`);
+}
+
+function shouldAttachAuthorization(hostname: string): boolean {
+  if (!hostname) {
+    return false;
+  }
+  if (!normalizedProxyBase) {
+    return BDL_UPSTREAM_HOST_PATTERN.test(hostname);
+  }
+  return false;
+}
+
+export async function execute<T = unknown>(input: RequestInfo | URL, init: RequestInit = {}): Promise<T> {
+  const urlText = resolveRequestUrl(input);
+  let target: URL;
+  try {
+    target = new URL(urlText);
+  } catch {
+    target = new URL(urlText, resolveBase());
+  }
+
+  const headers = new Headers(init.headers || {});
+  headers.set("Accept", "application/json");
+  if (process.env.CI === "true" && !headers.has("Bdl-Ci")) {
+    headers.set("Bdl-Ci", "1");
+  }
+
+  if (shouldAttachAuthorization(target.hostname) && !headers.has("Authorization")) {
+    headers.set("Authorization", formatBdlAuthHeader(requireBallDontLieKey()));
+  }
+
+  const fetchUrl = target.toString();
+
+  for (let attempt = 0; attempt < MAX_RETRIES; attempt += 1) {
+    try {
+      const response = await fetch(fetchUrl, { ...init, headers });
+      const body = await response.text().catch(() => "");
+
+      if (response.ok) {
+        try {
+          return JSON.parse(body) as T;
+        } catch (error) {
+          const snippet = body.slice(0, 300).replace(/\s+/g, " ");
+          throw new Error(
+            `Failed to parse JSON from ${fetchUrl} — ${(error as Error).message} — ${snippet}`,
+          );
+        }
+      }
+
+      const snippet = body.slice(0, 300).replace(/\s+/g, " ");
+      if ((response.status === 429 || response.status >= 500) && attempt < MAX_RETRIES - 1) {
+        await wait(400 * (attempt + 1));
+        continue;
+      }
+      throw new Error(`${response.status} ${response.statusText} for ${fetchUrl} — ${snippet}`);
+    } catch (error) {
+      if (attempt >= MAX_RETRIES - 1) {
+        const reason = error instanceof Error ? error.message : String(error);
+        throw new Error(`Network error for ${fetchUrl} — ${reason}`);
+      }
+      await wait(400 * (attempt + 1));
+    }
+  }
+
+  throw new Error(`Retries exhausted for ${fetchUrl}`);
+}
+
+export async function request<T>(url: string | URL, init?: RequestInit): Promise<T> {
+  const target = typeof url === "string" ? url : url.toString();
+  return enqueue(() => execute<T>(target, init));
 }
