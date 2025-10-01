@@ -4777,7 +4777,7 @@ section h2 { margin-top: 0; font-size: clamp(1.35rem, 3vw, 1.8rem); letter-spaci
 .player-atlas__teams {
   grid-area: tree;
   display: grid;
-  grid-template-rows: auto auto 1fr auto;
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
   gap: 0.45rem;
   align-content: stretch;
   align-self: stretch;
