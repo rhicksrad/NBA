@@ -1935,7 +1935,7 @@ function initPlayerAtlas() {
     try {
       const params = new URLSearchParams();
       params.set('season', String(LATEST_COMPLETED_SEASON));
-      params.append('player_ids[]', cacheKey);
+      params.set('player_id', cacheKey);
       const payload = await bdl(`/v1/season_averages?${params.toString()}`, { cache: 'no-store' });
       const record = Array.isArray(payload?.data) ? payload.data[0] : null;
       if (!record) {
