@@ -1551,17 +1551,26 @@ section {
 
 .preseason-map__layout {
   display: grid;
-  gap: clamp(1rem, 2.4vw, 1.5rem);
+  gap: clamp(1rem, 2.6vw, 1.7rem);
   align-items: start;
-  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
 }
 
 .preseason-map__canvas {
   min-width: 0;
+  display: grid;
+  padding: clamp(0.6rem, 1.8vw, 1.1rem);
+  border-radius: calc(var(--radius-lg) - 4px);
+  border: 1px solid color-mix(in srgb, var(--royal) 18%, transparent);
+  background:
+    radial-gradient(circle at 18% 12%, rgba(31, 123, 255, 0.22), transparent 55%),
+    radial-gradient(circle at 82% 18%, rgba(244, 181, 63, 0.18), transparent 60%),
+    color-mix(in srgb, rgba(255, 255, 255, 0.94) 72%, rgba(242, 246, 255, 0.92) 28%);
+  box-shadow: var(--shadow-soft);
 }
 
 .preseason-map__map {
   min-height: 0;
+  width: 100%;
 }
 
 .preseason-map__panel {
@@ -1572,6 +1581,8 @@ section {
   border: 1px solid color-mix(in srgb, var(--royal) 12%, transparent);
   background: color-mix(in srgb, rgba(255, 255, 255, 0.95) 70%, rgba(242, 246, 255, 0.92) 30%);
   box-shadow: var(--shadow-soft);
+  max-width: min(100%, 920px);
+  margin-inline: auto;
 }
 
 .preseason-map__empty {
@@ -1668,15 +1679,6 @@ section {
   font-weight: 600;
 }
 
-@media (max-width: 1080px) {
-  .preseason-map__layout {
-    grid-template-columns: 1fr;
-  }
-
-  .preseason-map__panel {
-    order: 3;
-  }
-}
 
 .spotlight-itinerary {
   display: grid;
