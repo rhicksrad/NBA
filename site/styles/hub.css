@@ -2541,6 +2541,12 @@ section h2 { margin-top: 0; font-size: clamp(1.35rem, 3vw, 1.8rem); letter-spaci
   z-index: 1;
 }
 
+.hero--goat .hero__intro {
+  max-width: none;
+  margin: 0;
+  text-align: left;
+}
+
 .hero--goat .hero__intro h1 {
   font-size: clamp(1.75rem, 3.6vw, 2.35rem);
   line-height: 1.1;
@@ -4315,18 +4321,20 @@ section h2 { margin-top: 0; font-size: clamp(1.35rem, 3vw, 1.8rem); letter-spaci
 
 .team-explorer__intro {
   display: grid;
-  gap: clamp(0.8rem, 2vw, 1.2rem);
-  max-width: 680px;
+  gap: clamp(0.7rem, 1.6vw, 1.05rem);
+  max-width: min(100%, clamp(780px, 70vw, 1020px));
 }
 
 .team-explorer__intro h2 {
-  font-size: clamp(1.9rem, 3.8vw, 2.4rem);
+  font-size: clamp(2rem, 4.1vw, 2.75rem);
+  text-wrap: pretty;
 }
 
 .team-explorer__intro p {
   color: color-mix(in srgb, var(--text-subtle) 75%, var(--navy) 25%);
-  font-size: 1.05rem;
-  line-height: 1.7;
+  font-size: clamp(1.02rem, 2vw, 1.12rem);
+  line-height: 1.6;
+  text-wrap: pretty;
 }
 
 .team-explorer__legend {
@@ -5628,17 +5636,6 @@ section h2 { margin-top: 0; font-size: clamp(1.35rem, 3vw, 1.8rem); letter-spaci
 @media (max-width: 720px) {
   .player-atlas__teams {
     max-height: none;
-  }
-  .player-atlas__teams-goat-entry {
-    grid-template-columns: auto 1fr;
-  }
-  .player-atlas__teams-goat-team {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.25rem;
-  }
-  .player-atlas__teams-goat-metrics {
-    gap: 0.35rem 0.65rem;
   }
   .player-card__header { flex-direction: column; align-items: flex-start; }
   .player-card__stats-grid { grid-template-columns: minmax(0, 1fr); }
