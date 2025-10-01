@@ -3199,7 +3199,7 @@ section h2 { margin-top: 0; font-size: clamp(1.35rem, 3vw, 1.8rem); letter-spaci
 }
 
 .history-section--search {
-  margin-top: 2rem;
+  margin-top: clamp(0.5rem, 1.5vw, 1rem);
 }
 
 .history-archive {
