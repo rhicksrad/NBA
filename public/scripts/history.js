@@ -6,11 +6,15 @@ const EARLIEST_SEASON = 1979;
 const PLAYERS_MIN_URL = 'data/history/players.index.min.json';
 const PLAYERS_FULL_URL = 'data/history/players.index.json';
 const BIRTHPLACES_URL = 'data/history/player_birthplaces.json';
-const GOAT_URL = 'data/goat_system.json';
 const WORLD_LEGENDS_URL = 'data/world_birth_legends.json';
 const STATE_LEGENDS_URL = 'data/state_birth_legends.json';
 const GOAT_BIRTH_INDEX_URL = 'data/goat_birth_index.json';
 const PLAYER_CAREERS_URL = 'data/history/player_careers.json';
+const GOAT_DATA_SOURCES = [
+  { url: 'data/goat_system.json', label: 'GOAT system snapshot' },
+  { url: 'data/goat_index.json', label: 'GOAT index export' },
+  { url: 'data/goat_recent.json', label: 'GOAT recent snapshot' },
+];
 
 const numberFormatter = new Intl.NumberFormat('en-US');
 const decimalFormatter = new Intl.NumberFormat('en-US', { maximumFractionDigits: 1, minimumFractionDigits: 1 });
@@ -100,6 +104,55 @@ async function loadJson(url) {
     throw new Error(`Failed to load ${url}`);
   }
   return response.json();
+}
+
+function parseGeneratedAt(value) {
+  if (typeof value !== 'string') return Number.NEGATIVE_INFINITY;
+  const timestamp = new Date(value);
+  const time = timestamp.getTime();
+  return Number.isNaN(time) ? Number.NEGATIVE_INFINITY : time;
+}
+
+async function loadLatestGoatDocument() {
+  const results = await Promise.all(
+    GOAT_DATA_SOURCES.map((source) =>
+      loadJson(source.url)
+        .then((data) => ({ source, data, failed: false }))
+        .catch((error) => ({ source, error, failed: true })),
+    ),
+  );
+
+  const available = [];
+  let lastError = null;
+
+  for (const result of results) {
+    if (result.failed) {
+      console.warn(`GOAT data source unavailable (${result.source.label}):`, result.error);
+      lastError = result.error;
+      continue;
+    }
+    const { source, data } = result;
+    if (data && typeof data === 'object' && Array.isArray(data.players) && data.players.length) {
+      available.push({ source, data, generatedAt: parseGeneratedAt(data.generatedAt) });
+    } else {
+      console.warn(`GOAT data source missing players (${source.label})`);
+      lastError = new Error(`GOAT data source ${source.url} missing players`);
+    }
+  }
+
+  if (!available.length) {
+    throw lastError ?? new Error('Unable to load GOAT data from configured sources');
+  }
+
+  available.sort((a, b) => b.generatedAt - a.generatedAt);
+  const [latest, ...fallbacks] = available;
+  if (fallbacks.length && latest.generatedAt === Number.NEGATIVE_INFINITY) {
+    console.warn('GOAT data missing generatedAt timestamps; defaulting to first available source.');
+  } else if (fallbacks.length && latest.source.url !== GOAT_DATA_SOURCES[0].url) {
+    console.info(`Falling back to GOAT data from ${latest.source.label} (${latest.source.url}).`);
+  }
+
+  return latest.data;
 }
 
 function normalizeCareerSegment(segment) {
@@ -823,11 +876,13 @@ function buildAtlas(players, birthplaces, goatIndex, countryCodes) {
     const nameKey = normalizeName(`${player.first_name} ${player.last_name}`);
     const birthplace = resolveBirthplace(nameKey, birthplaces);
     const goatEntry = selectGoatEntry(player, goatIndex);
+    const goatScore = Number.isFinite(goatEntry?.goatScore) ? goatEntry.goatScore : null;
+    const goatRank = Number.isFinite(goatEntry?.rank) ? goatEntry.rank : null;
     const baseInfo = {
       id: player.id,
       name: `${player.first_name} ${player.last_name}`.trim(),
-      goatScore: goatEntry?.goatScore ?? null,
-      goatRank: goatEntry?.rank ?? null,
+      goatScore,
+      goatRank,
       goatTier: goatEntry?.tier ?? null,
       resume: goatEntry?.resume ?? null,
       franchises: goatEntry?.franchises ?? null,
@@ -865,6 +920,8 @@ function buildAtlas(players, birthplaces, goatIndex, countryCodes) {
       state: code,
       stateName: stateNames[code] ?? code,
       player: top?.name ?? null,
+      goatScore: top?.goatScore ?? null,
+      goatRank: top?.goatRank ?? null,
       birthCity: top?.birthCity ?? null,
       headline: top?.resume ?? null,
       notableTeams: Array.isArray(top?.franchises) ? top.franchises : [],
@@ -890,6 +947,8 @@ function buildAtlas(players, birthplaces, goatIndex, countryCodes) {
       country: codeString ?? null,
       countryName: top?.countryName ?? (typeof code === 'string' ? code : 'Unknown'),
       player: top?.name ?? null,
+      goatScore: top?.goatScore ?? null,
+      goatRank: top?.goatRank ?? null,
       birthCity: top?.birthCity ?? null,
       headline: top?.resume ?? null,
       notableTeams: Array.isArray(top?.franchises) ? top.franchises : [],
@@ -902,6 +961,94 @@ function buildAtlas(players, birthplaces, goatIndex, countryCodes) {
     domestic: { generatedAt: new Date().toISOString(), states: domesticEntries },
     international: { generatedAt: new Date().toISOString(), countries: internationalEntries },
   };
+}
+
+function mergeAtlasPlayers(latestPlayers, curatedPlayers) {
+  if (!Array.isArray(latestPlayers)) return [];
+  if (!Array.isArray(curatedPlayers) || !curatedPlayers.length) return latestPlayers;
+
+  const curatedById = new Map();
+  const curatedByName = new Map();
+
+  for (const entry of curatedPlayers) {
+    if (!entry || typeof entry !== 'object') continue;
+    if (entry.personId && Number.isFinite(Number(entry.personId))) {
+      curatedById.set(Number(entry.personId), entry);
+    }
+    const nameKey = normalizeName(entry.name);
+    if (nameKey) {
+      curatedByName.set(nameKey, entry);
+    }
+  }
+
+  return latestPlayers.map((player) => {
+    const candidate =
+      (Number.isFinite(player.id) && curatedById.get(player.id)) ||
+      curatedByName.get(normalizeName(player.name));
+    if (!candidate) return player;
+    const curatedRank = Number.isFinite(candidate.goatRank)
+      ? candidate.goatRank
+      : Number.isFinite(candidate.rank)
+        ? Number(candidate.rank)
+        : null;
+    const curatedScore = Number(candidate.goatScore ?? candidate.score);
+    return {
+      ...player,
+      goatScore: Number.isFinite(player.goatScore)
+        ? player.goatScore
+        : Number.isFinite(curatedScore)
+          ? curatedScore
+          : player.goatScore,
+      goatRank: Number.isFinite(player.goatRank)
+        ? player.goatRank
+        : curatedRank,
+      resume: candidate.resume ?? player.resume,
+      franchises:
+        Array.isArray(candidate.franchises) && candidate.franchises.length
+          ? candidate.franchises
+          : player.franchises,
+    };
+  });
+}
+
+function mergeAtlasEntries(latestEntries, curatedEntries, entryId) {
+  if (!Array.isArray(latestEntries)) return [];
+  const curatedById = new Map();
+  if (Array.isArray(curatedEntries)) {
+    for (const entry of curatedEntries) {
+      if (!entry || typeof entry !== 'object') continue;
+      const key = entry[entryId];
+      if (key != null) {
+        curatedById.set(key, entry);
+      }
+    }
+  }
+
+  return latestEntries.map((entry) => {
+    const curated = curatedById.get(entry[entryId]);
+    if (!curated) return entry;
+    const mergedTopPlayers = mergeAtlasPlayers(entry.topPlayers, curated.topPlayers);
+    const topPlayer = mergedTopPlayers[0] ?? null;
+    return {
+      ...entry,
+      headline: curated.headline ?? entry.headline,
+      notableTeams:
+        Array.isArray(curated.notableTeams) && curated.notableTeams.length
+          ? curated.notableTeams
+          : entry.notableTeams,
+      goatScore: Number.isFinite(entry.goatScore)
+        ? entry.goatScore
+        : Number.isFinite(topPlayer?.goatScore)
+          ? topPlayer.goatScore
+          : entry.goatScore,
+      goatRank: Number.isFinite(entry.goatRank)
+        ? entry.goatRank
+        : Number.isFinite(topPlayer?.goatRank)
+          ? topPlayer.goatRank
+          : entry.goatRank,
+      topPlayers: mergedTopPlayers,
+    };
+  });
 }
 
 async function renderAtlas(mode, atlasData, svgCache) {
@@ -1039,10 +1186,35 @@ function renderAtlasSpotlight(entry, config) {
     );
     return;
   }
+  const topPlayer = Array.isArray(entry.topPlayers) && entry.topPlayers.length ? entry.topPlayers[0] : null;
   const heading = createElement('span', 'state-spotlight__state', entry[config.entryName] ?? entry[config.entryId] ?? '');
   selectors.atlasSpotlight.append(heading);
   if (entry.player) {
     selectors.atlasSpotlight.append(createElement('p', 'state-spotlight__player', entry.player));
+  }
+  const fallbackScore = Number(topPlayer?.goatScore);
+  const fallbackRank = Number(topPlayer?.goatRank ?? topPlayer?.rank);
+  const primaryScore = Number.isFinite(entry.goatScore)
+    ? entry.goatScore
+    : Number.isFinite(fallbackScore)
+      ? fallbackScore
+      : null;
+  const primaryRank = Number.isFinite(entry.goatRank)
+    ? entry.goatRank
+    : Number.isFinite(fallbackRank)
+      ? fallbackRank
+      : null;
+  const metricsParts = [];
+  if (Number.isFinite(primaryScore)) {
+    metricsParts.push(`${decimalFormatter.format(primaryScore)} GOAT`);
+  }
+  if (Number.isFinite(primaryRank)) {
+    metricsParts.push(`Global rank #${numberFormatter.format(primaryRank)}`);
+  }
+  if (metricsParts.length) {
+    selectors.atlasSpotlight.append(
+      createElement('p', 'state-spotlight__metrics', metricsParts.join(' • ')),
+    );
   }
   if (entry.birthCity) {
     selectors.atlasSpotlight.append(createElement('p', 'state-spotlight__meta', `Born in ${entry.birthCity}`));
@@ -1061,13 +1233,21 @@ function renderAtlasSpotlight(entry, config) {
       const item = createElement('li', 'state-spotlight__ranking-item');
       item.append(createElement('span', 'state-spotlight__ranking-ordinal', `#${player.groupRank}`));
       const body = createElement('div', 'state-spotlight__ranking-body');
-      body.append(createElement('p', 'state-spotlight__ranking-name', player.name ?? 'Unknown')); 
+      body.append(createElement('p', 'state-spotlight__ranking-name', player.name ?? 'Unknown'));
       const detailParts = [];
-      if (Number.isFinite(player.goatScore)) {
-        detailParts.push(`${decimalFormatter.format(player.goatScore)} GOAT`);
+      const playerScore = Number.isFinite(player.goatScore)
+        ? player.goatScore
+        : Number(player.goatScore);
+      if (Number.isFinite(playerScore)) {
+        detailParts.push(`${decimalFormatter.format(playerScore)} GOAT`);
       }
-      if (Number.isFinite(player.goatRank)) {
-        detailParts.push(`Global rank #${numberFormatter.format(player.goatRank)}`);
+      const playerRank = Number.isFinite(player.goatRank)
+        ? player.goatRank
+        : Number.isFinite(Number(player.rank))
+          ? Number(player.rank)
+          : null;
+      if (Number.isFinite(playerRank)) {
+        detailParts.push(`Global rank #${numberFormatter.format(playerRank)}`);
       }
       if (Array.isArray(player.franchises) && player.franchises.length) {
         detailParts.push(player.franchises.join(', '));
@@ -1097,7 +1277,7 @@ async function bootstrap() {
       loadJson(PLAYERS_MIN_URL),
       loadJson(PLAYERS_FULL_URL),
       loadJson(BIRTHPLACES_URL),
-      loadJson(GOAT_URL),
+      loadLatestGoatDocument(),
       loadJson(WORLD_LEGENDS_URL).catch(() => null),
       loadJson(PLAYER_CAREERS_URL).catch(() => null),
       loadJson(STATE_LEGENDS_URL).catch(() => null),
@@ -1249,14 +1429,22 @@ async function bootstrap() {
     }
 
     const atlas = buildAtlas(playersFull, birthplaces, goatIndex, countryCodes);
-    const domesticAtlas =
-      stateLegendsDocument && Array.isArray(stateLegendsDocument.states) && stateLegendsDocument.states.length
-        ? stateLegendsDocument
-        : atlas.domestic;
-    const internationalAtlas =
-      worldLegends && Array.isArray(worldLegends.countries) && worldLegends.countries.length
-        ? worldLegends
-        : atlas.international;
+    const domesticAtlas = {
+      generatedAt: atlas.domestic.generatedAt,
+      states: mergeAtlasEntries(
+        atlas.domestic.states,
+        Array.isArray(stateLegendsDocument?.states) ? stateLegendsDocument.states : [],
+        'state',
+      ),
+    };
+    const internationalAtlas = {
+      generatedAt: atlas.international.generatedAt,
+      countries: mergeAtlasEntries(
+        atlas.international.countries,
+        Array.isArray(worldLegends?.countries) ? worldLegends.countries : [],
+        'country',
+      ),
+    };
     const svgCache = new Map();
     await renderAtlas('domestic', domesticAtlas, svgCache);
     if (selectors.atlasToggle) {

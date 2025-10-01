@@ -3748,6 +3748,13 @@ section h2 { margin-top: 0; font-size: clamp(1.35rem, 3vw, 1.8rem); letter-spaci
   color: var(--navy);
 }
 
+.state-spotlight__metrics {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--navy);
+}
+
 .state-spotlight__headline {
   margin: 0;
   font-size: 0.95rem;
