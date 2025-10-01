@@ -233,15 +233,38 @@ function computePercentile(value, sortedValues, { higherIsBetter = true } = {}) 
     return null;
   }
   const count = sortedValues.length;
-  let index;
   if (higherIsBetter) {
-    index = sortedValues.findIndex((entry) => value <= entry);
-    if (index === -1) index = count - 1;
-    return ((index + 1) / count) * 100;
+    let low = 0;
+    let high = count;
+    while (low < high) {
+      const mid = Math.floor((low + high) / 2);
+      if (sortedValues[mid] <= value) {
+        low = mid + 1;
+      } else {
+        high = mid;
+      }
+    }
+    return (low / count) * 100;
   }
-  index = sortedValues.findIndex((entry) => value >= entry);
-  if (index === -1) index = count - 1;
-  return ((count - index) / count) * 100;
+  let low = 0;
+  let high = count;
+  while (low < high) {
+    const mid = Math.floor((low + high) / 2);
+    if (sortedValues[mid] < value) {
+      low = mid + 1;
+    } else {
+      high = mid;
+    }
+  }
+  const greaterOrEqual = count - low;
+  return (greaterOrEqual / count) * 100;
+}
+
+function normalizePercentile(percentile) {
+  if (percentile == null) return null;
+  const bounded = Math.max(0, Math.min(percentile, 100));
+  const display = bounded === 100 ? 100 : Math.floor(bounded * 10) / 10;
+  return { bounded, display };
 }
 
 function buildTierScore(tier) {
@@ -592,18 +615,20 @@ function renderVisuals(goatEntry, references) {
     card.append(createElement('p', 'history-visual__value', metric.display));
     const meter = createElement('div', 'history-visual__meter');
     const fill = createElement('div', 'history-visual__meter-fill');
-    const percentile = metric.percentile != null ? Math.max(0, Math.min(metric.percentile, 100)) : null;
-    if (percentile != null) {
-      fill.style.width = `${percentile}%`;
-      fill.setAttribute('aria-valuenow', percentile.toFixed(1));
+    const percentileInfo = normalizePercentile(metric.percentile);
+    if (percentileInfo) {
+      fill.style.width = `${percentileInfo.bounded}%`;
+      fill.setAttribute('aria-valuenow', percentileInfo.display.toFixed(1));
     } else {
       fill.style.width = '0%';
       fill.classList.add('history-visual__meter-fill--empty');
     }
     meter.append(fill);
     card.append(meter);
-    if (percentile != null) {
-      card.append(createElement('p', 'history-visual__percentile', `${percentile.toFixed(1)} percentile`));
+    if (percentileInfo) {
+      card.append(
+        createElement('p', 'history-visual__percentile', `${percentileInfo.display.toFixed(1)} percentile`),
+      );
     } else {
       card.append(createElement('p', 'history-visual__percentile history-visual__percentile--empty', 'Pending data'));
     }
