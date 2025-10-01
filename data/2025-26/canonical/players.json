@@ -130,6 +130,16 @@
     "source": "ball_dont_lie"
   },
   {
+    "name": "Akoldah Gak",
+    "playerId": "1058092439",
+    "position": "F",
+    "firstName": "Akoldah",
+    "lastName": "Gak",
+    "teamId": "1610612764",
+    "teamTricode": "WAS",
+    "source": "ball_dont_lie"
+  },
+  {
     "name": "Alex Caruso",
     "playerId": "89",
     "position": "G",
@@ -1630,6 +1640,16 @@
     "source": "ball_dont_lie"
   },
   {
+    "name": "DJ Rodman",
+    "playerId": "1058094827",
+    "position": "G",
+    "firstName": "DJ",
+    "lastName": "Rodman",
+    "teamId": "1610612766",
+    "teamTricode": "CHA",
+    "source": "ball_dont_lie"
+  },
+  {
     "name": "DJ Steward",
     "playerId": "17553996",
     "position": "G",
@@ -2237,6 +2257,16 @@
     "lastName": "Tyson",
     "teamId": "1610612743",
     "teamTricode": "DEN",
+    "source": "ball_dont_lie"
+  },
+  {
+    "name": "Ibou Badji",
+    "playerId": "39613724",
+    "position": "C",
+    "firstName": "Ibou",
+    "lastName": "Badji",
+    "teamId": "1610612766",
+    "teamTricode": "CHA",
     "source": "ball_dont_lie"
   },
   {
@@ -2897,6 +2927,16 @@
     "lastName": "Small",
     "teamId": "1610612763",
     "teamTricode": "MEM",
+    "source": "ball_dont_lie"
+  },
+  {
+    "name": "Javonte Cooke",
+    "playerId": "1058091815",
+    "position": "G",
+    "firstName": "Javonte",
+    "lastName": "Cooke",
+    "teamId": "1610612757",
+    "teamTricode": "POR",
     "source": "ball_dont_lie"
   },
   {
@@ -4110,6 +4150,16 @@
     "source": "ball_dont_lie"
   },
   {
+    "name": "Liam Robbins",
+    "playerId": "1028266759",
+    "position": "C",
+    "firstName": "Liam",
+    "lastName": "Robbins",
+    "teamId": "1610612757",
+    "teamTricode": "POR",
+    "source": "ball_dont_lie"
+  },
+  {
     "name": "Lindy Waters III",
     "playerId": "27924547",
     "position": "F",
@@ -4277,6 +4327,16 @@
     "lastName": "Smart",
     "teamId": "1610612747",
     "teamTricode": "LAL",
+    "source": "ball_dont_lie"
+  },
+  {
+    "name": "MarJon Beauchamp",
+    "playerId": "38017676",
+    "position": "F",
+    "firstName": "MarJon",
+    "lastName": "Beauchamp",
+    "teamId": "1610612757",
+    "teamTricode": "POR",
     "source": "ball_dont_lie"
   },
   {
@@ -5297,6 +5357,16 @@
     "lastName": "Jr.",
     "teamId": "1610612738",
     "teamTricode": "BOS",
+    "source": "ball_dont_lie"
+  },
+  {
+    "name": "RJ Nembhard Jr.",
+    "playerId": "17554003",
+    "position": "G",
+    "firstName": "RJ Nembhard",
+    "lastName": "Jr.",
+    "teamId": "1610612741",
+    "teamTricode": "CHI",
     "source": "ball_dont_lie"
   },
   {

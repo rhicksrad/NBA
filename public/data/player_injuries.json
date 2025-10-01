@@ -1,5 +1,5 @@
 {
-  "fetched_at": "2025-09-30T18:34:55.266Z",
+  "fetched_at": "2025-10-01T00:44:51.399Z",
   "source": "Ball Don't Lie",
   "items": [
     {
@@ -14,6 +14,17 @@
       "report_label": "Sep 23"
     },
     {
+      "player": "Max Strus",
+      "status": "Out",
+      "status_level": "caution",
+      "player_id": 666908,
+      "team_tricode": "CLE",
+      "team_name": "Cleveland Cavaliers",
+      "return_date": "Dec 1",
+      "description": "Sep 30: Strus (foot) is no longer wearing a walking boot on Tuesday, but still has a lengthy recovery process ahead, Chris Fedor of The Cleveland Plain Dealer reports.",
+      "report_label": "Sep 30"
+    },
+    {
       "player": "Darius Garland",
       "status": "Out",
       "status_level": "caution",
@@ -23,17 +34,6 @@
       "return_date": "Nov 1",
       "description": "Sep 23: Cleveland president of basketball operations Koby Altman said Tuesday that Garland (toe) remains without a timetable to return to action, Spencer Davies of SI.com reports.",
       "report_label": "Sep 23"
-    },
-    {
-      "player": "Max Strus",
-      "status": "Out",
-      "status_level": "caution",
-      "player_id": 666908,
-      "team_tricode": "CLE",
-      "team_name": "Cleveland Cavaliers",
-      "return_date": "Dec 1",
-      "description": "Aug 26: Strus will miss approximately 3-to-4 months after undergoing surgery to repair a Jones fracture in his left foot, Shams Charania of ESPN reports.",
-      "report_label": "Aug 26"
     },
     {
       "player": "Kyrie Irving",
@@ -97,9 +97,9 @@
       "player_id": 666633,
       "team_tricode": "MIA",
       "team_name": "Miami Heat",
-      "return_date": "Nov 2",
-      "description": "Sep 19: Herro (foot/ankle) is expected to take eight weeks to recover after undergoing successful surgery Friday, Shams Charania of ESPN reports.",
-      "report_label": "Sep 19"
+      "return_date": "Nov 17",
+      "description": "Sep 30: Herro (foot/ankle) said Tuesday that he's ahead of schedule in his recovery and expects to be back in 8-12 weeks, Wes Goldberg of the Locked On Podcast Network reports.",
+      "report_label": "Sep 30"
     },
     {
       "player": "Dejounte Murray",
