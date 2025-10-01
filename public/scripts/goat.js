@@ -19,6 +19,129 @@ const heroStats = {
   multiFranchiseCount: 0,
 };
 
+const FALLBACK_SOURCE_PANELS = [
+  {
+    label: 'Prime Impact & Possession Value',
+    description: 'Possession-weighted scoring, playmaking, and stocks blended with BDI opponent-adjusted impact.',
+    sources: [
+      {
+        name: "Ball Don't Lie API game logs (PlayerStatistics.7z)",
+        contribution: 'Points, assists, rebounds, steals, blocks, and minutes per game.',
+        fields: ['points', 'assists', 'reboundsTotal', 'steals', 'blocks', 'numMinutes'],
+      },
+      {
+        name: 'BDI API pantheon feed',
+        contribution: 'Opponent-adjusted impact baseline used for cross-era calibration.',
+        fields: ['goatComponents.impact'],
+        lastUpdated: '2025-09-27T18:42:00Z',
+      },
+    ],
+  },
+  {
+    label: 'Stage Dominance',
+    description: 'Championship equity from playoff wins, Finals performance, and BDI postseason deltas.',
+    sources: [
+      {
+        name: "Ball Don't Lie API game logs (PlayerStatistics.7z)",
+        contribution: 'Playoff wins, Finals games, and close-out opportunities.',
+        fields: ['gameType', 'gameLabel', 'win'],
+      },
+      {
+        name: 'BDI API pantheon feed',
+        contribution: 'Stage dominance priors and twelve-month movement flags.',
+        fields: ['goatComponents.stage', 'delta'],
+        lastUpdated: '2025-09-27T18:42:00Z',
+      },
+      {
+        name: 'Finals MVP ledger (data/awards/finals_mvp.json)',
+        contribution: 'Finals MVP counts that significantly amplify stage equity.',
+        fields: ['player', 'year'],
+      },
+    ],
+  },
+  {
+    label: 'Longevity & Availability',
+    description: 'Career minutes, appearances, and durability context aligned with BDI aging curves.',
+    sources: [
+      {
+        name: "Ball Don't Lie API game logs (PlayerStatistics.7z)",
+        contribution: 'Total minutes, games played, and availability counts.',
+        fields: ['numMinutes', 'personId'],
+      },
+      {
+        name: 'Players.csv registry',
+        contribution: 'Draft years to anchor entry seasons when game logs are incomplete.',
+        fields: ['draftYear'],
+      },
+      {
+        name: 'BDI API pantheon feed',
+        contribution: 'Longevity coefficients ensuring modern and classic careers share the same scale.',
+        fields: ['goatComponents.longevity'],
+        lastUpdated: '2025-09-27T18:42:00Z',
+      },
+    ],
+  },
+  {
+    label: 'Versatility & Scalability',
+    description: 'Positional flexibility, on-ball creation, and multi-team adaptability factors.',
+    sources: [
+      {
+        name: "Ball Don't Lie API game logs (PlayerStatistics.7z)",
+        contribution: 'Assist, rebound, steal, and block rates per game.',
+        fields: ['assists', 'reboundsTotal', 'steals', 'blocks'],
+      },
+      {
+        name: 'Players.csv registry',
+        contribution: 'Declared guard/forward/center flags for positional counts.',
+        fields: ['guard', 'forward', 'center'],
+      },
+      {
+        name: 'TeamHistories.csv',
+        contribution: 'Franchise abbreviations that normalize team switches across eras.',
+        fields: ['teamCity', 'teamName', 'teamAbbrev'],
+      },
+      {
+        name: 'BDI API pantheon feed',
+        contribution: 'Versatility anchors derived from historical lineup data.',
+        fields: ['goatComponents.versatility'],
+        lastUpdated: '2025-09-27T18:42:00Z',
+      },
+    ],
+  },
+  {
+    label: 'Cultural Capital',
+    description: 'Leadership credit rooted in championships, global reach, and BDI cultural resonance.',
+    sources: [
+      {
+        name: "Ball Don't Lie API game logs (PlayerStatistics.7z)",
+        contribution: 'Win totals and postseason success that underpin leadership value.',
+        fields: ['win', 'gameType'],
+      },
+      {
+        name: 'Players.csv registry',
+        contribution: 'Country of origin and draft position for international and pedigree bonuses.',
+        fields: ['country', 'draftNumber'],
+      },
+      {
+        name: 'TeamHistories.csv',
+        contribution: 'Franchise context for multi-market influence scoring.',
+        fields: ['teamCity', 'teamName', 'teamAbbrev'],
+      },
+      {
+        name: 'BDI API pantheon feed',
+        contribution: 'Cultural capital baseline and story-driven adjustments.',
+        fields: ['goatComponents.culture'],
+        lastUpdated: '2025-09-27T18:42:00Z',
+      },
+      {
+        name: 'Finals MVP ledger (data/awards/finals_mvp.json)',
+        contribution: 'Finals MVP hardware used to elevate leadership and legacy credit.',
+        fields: ['player', 'year'],
+      },
+    ],
+  },
+];
+
 function formatWeightPercentage(weight) {
   if (typeof weight !== 'number' || Number.isNaN(weight)) {
     return '—';
@@ -323,72 +446,118 @@ function buildSourceNotes(weights) {
   const container = document.querySelector('[data-goat-sources]');
   if (!container) return;
 
+  const hasWeights = Array.isArray(weights) && weights.length;
+  const entries = hasWeights ? weights : FALLBACK_SOURCE_PANELS;
+
   container.innerHTML = '';
 
-  if (!Array.isArray(weights) || !weights.length) {
-    const dt = document.createElement('dt');
-    dt.textContent = 'Awaiting GOAT data';
-    const dd = document.createElement('dd');
-    dd.textContent = 'The source inventory populates as soon as the monthly GOAT snapshot finishes loading.';
-    container.append(dt, dd);
+  if (!entries.length) {
+    const panel = document.createElement('article');
+    panel.className = 'goat-source-panel goat-source-panel--placeholder';
+
+    const header = document.createElement('header');
+    header.className = 'goat-source-panel__header';
+
+    const title = document.createElement('h4');
+    title.className = 'goat-source-panel__title';
+    title.textContent = 'Awaiting GOAT data';
+    header.appendChild(title);
+
+    panel.appendChild(header);
+
+    const description = document.createElement('p');
+    description.className = 'goat-source-panel__description';
+    description.textContent = 'The source inventory populates as soon as the monthly GOAT snapshot finishes loading.';
+    panel.appendChild(description);
+
+    container.appendChild(panel);
     return;
   }
 
-  weights.forEach((weight) => {
-    const term = document.createElement('dt');
-    term.textContent = weight.label ?? weight.key ?? 'Component';
-    container.appendChild(term);
+  entries.forEach((entry) => {
+    if (!entry) return;
 
-    const detail = document.createElement('dd');
-    detail.className = 'goat-sources-card__details';
+    const panel = document.createElement('article');
+    panel.className = 'goat-source-panel';
 
-    if (typeof weight.description === 'string' && weight.description.trim().length) {
-      const description = document.createElement('p');
-      description.className = 'goat-sources-card__description';
-      description.textContent = weight.description.trim();
-      detail.appendChild(description);
+    const header = document.createElement('header');
+    header.className = 'goat-source-panel__header';
+
+    const title = document.createElement('h4');
+    title.className = 'goat-source-panel__title';
+    title.textContent = entry.label ?? entry.key ?? 'Component';
+    header.appendChild(title);
+
+    const weightPercent =
+      hasWeights && typeof entry.weight === 'number' && Number.isFinite(entry.weight)
+        ? formatWeightPercentage(entry.weight)
+        : null;
+    const weightText = weightPercent && weightPercent !== '—' ? `${weightPercent}% weight` : entry.weightShare;
+
+    if (typeof weightText === 'string' && weightText.trim().length) {
+      const chip = document.createElement('span');
+      chip.className = 'goat-source-panel__weight';
+      chip.textContent = weightText.trim();
+      header.appendChild(chip);
     }
 
-    if (Array.isArray(weight.sources) && weight.sources.length) {
-      const list = document.createElement('ul');
-      list.className = 'goat-sources-card__source-list';
+    panel.appendChild(header);
 
-      weight.sources.forEach((source) => {
+    if (typeof entry.description === 'string' && entry.description.trim().length) {
+      const description = document.createElement('p');
+      description.className = 'goat-source-panel__description';
+      description.textContent = entry.description.trim();
+      panel.appendChild(description);
+    }
+
+    const sources = Array.isArray(entry.sources) ? entry.sources : [];
+    if (sources.length) {
+      const list = document.createElement('ul');
+      list.className = 'goat-source-panel__list';
+
+      sources.forEach((source) => {
         if (!source) return;
         const item = document.createElement('li');
-        const label = document.createElement('strong');
-        label.textContent = typeof source.name === 'string' && source.name.trim().length ? source.name.trim() : 'Source';
-        item.appendChild(label);
+        item.className = 'goat-source-panel__list-item';
 
-        const details = [];
+        const name = document.createElement('span');
+        name.className = 'goat-source-panel__source-name';
+        name.textContent =
+          typeof source.name === 'string' && source.name.trim().length ? source.name.trim() : 'Source';
+        item.appendChild(name);
+
+        const detailParts = [];
         if (typeof source.contribution === 'string' && source.contribution.trim().length) {
-          details.push(source.contribution.trim());
+          detailParts.push(source.contribution.trim());
         }
         if (Array.isArray(source.fields) && source.fields.length) {
-          details.push(`Fields: ${source.fields.join(', ')}`);
+          detailParts.push(`Fields: ${source.fields.join(', ')}`);
         } else if (typeof source.fields === 'string' && source.fields.trim().length) {
-          details.push(`Fields: ${source.fields.trim()}`);
+          detailParts.push(`Fields: ${source.fields.trim()}`);
         }
         if (typeof source.lastUpdated === 'string' && source.lastUpdated.trim().length) {
-          details.push(`Last updated: ${source.lastUpdated.trim()}`);
+          detailParts.push(`Last updated: ${source.lastUpdated.trim()}`);
         }
 
-        if (details.length) {
-          item.appendChild(document.createTextNode(` — ${details.join(' · ')}`));
+        if (detailParts.length) {
+          const meta = document.createElement('span');
+          meta.className = 'goat-source-panel__source-meta';
+          meta.textContent = detailParts.join(' · ');
+          item.appendChild(meta);
         }
 
         list.appendChild(item);
       });
 
-      detail.appendChild(list);
-    } else {
+      panel.appendChild(list);
+    } else if (hasWeights) {
       const note = document.createElement('p');
-      note.className = 'goat-sources-card__description';
+      note.className = 'goat-source-panel__description';
       note.textContent = 'Detailed sourcing will publish with the next GOAT refresh.';
-      detail.appendChild(note);
+      panel.appendChild(note);
     }
 
-    container.appendChild(detail);
+    container.appendChild(panel);
   });
 }
 
