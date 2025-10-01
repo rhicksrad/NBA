@@ -1,6 +1,6 @@
 # Washington Wizards
 
-The core trio of AJ Johnson, Alexandre Sarr, and Anthony Gill gives the staff a clear identity to start from.
+The core trio of AJ Johnson, Akoldah Gak, and Alexandre Sarr gives the staff a clear identity to start from.
 The front office kept the core intact and will lean on internal development.
 No rotation regulars departed, so continuity remains a strength.
 
