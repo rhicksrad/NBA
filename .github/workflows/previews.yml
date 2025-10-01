@@ -4,7 +4,7 @@ on:
   push:
     branches: [ main ]
   schedule:
-    - cron: "27 7 * * *"
+    - cron: "27 7 * * *"   # runs at 07:27 UTC daily
   workflow_dispatch:
 
 permissions:
@@ -34,12 +34,7 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
-          run_install: false
-
-      - name: Tooling sanity
-        run: |
-          node -v
-          pnpm -v
+          run_install: false   # pnpm version comes from package.json: packageManager
 
       - name: Install deps
         run: pnpm i --frozen-lockfile
@@ -51,18 +46,21 @@ jobs:
       - name: Verify Ball Don't Lie API access
         env:
           BDL_PROXY_BASE: https://bdlproxy.hicksrch.workers.dev/bdl
-          VERIFY_ALLOW_5XX: "true"
+          VERIFY_ALLOW_5XX: "true"   # soft-pass a single upstream 5xx after one retry
         run: pnpm verify:bdl
 
+      # 'pnpm previews' already calls build:data + gen:previews + validate:previews
       - name: Build previews
         env:
           USE_NBA_STATS: "0"
           USE_BREF: "0"
           BDL_PROXY_BASE: https://bdlproxy.hicksrch.workers.dev/bdl
+          ALLOW_INJURY_FAILURE: "true"   # don't fail pipeline if /player_injuries keeps 500'ing
         run: pnpm previews
 
-      - name: Validate previews
-        run: pnpm validate:previews
+      # Optional: remove this if your 'previews' script already validates
+      # - name: Validate previews
+      #   run: pnpm validate:previews
 
       - name: Detect changes
         id: changes
@@ -90,3 +88,4 @@ jobs:
           branch: "chore/auto-previews-${{ github.run_id }}"
           base: "main"
           delete-branch: true
+
