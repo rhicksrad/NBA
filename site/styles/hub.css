@@ -3159,7 +3159,7 @@ section h2 { margin-top: 0; font-size: clamp(1.35rem, 3vw, 1.8rem); letter-spaci
 
 @media (min-width: 1024px) {
   .history-archive {
-    grid-template-columns: minmax(260px, 340px) minmax(340px, 1fr);
+    grid-template-columns: minmax(260px, 340px) minmax(380px, 1fr) minmax(260px, 340px);
     align-items: start;
   }
 }
