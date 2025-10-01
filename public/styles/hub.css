@@ -3154,19 +3154,37 @@ section h2 { margin-top: 0; font-size: clamp(1.35rem, 3vw, 1.8rem); letter-spaci
 
 .history-archive {
   display: grid;
-  gap: 2rem;
+  gap: clamp(1.25rem, 3vw, 1.75rem);
+  grid-template-areas:
+    "search"
+    "visuals"
+    "player";
+}
+
+.history-search-panel {
+  grid-area: search;
+  display: grid;
+  gap: 1.5rem;
+}
+
+.history-player {
+  grid-area: player;
+}
+
+.history-visuals {
+  grid-area: visuals;
 }
 
 @media (min-width: 1024px) {
   .history-archive {
     grid-template-columns: minmax(260px, 340px) minmax(340px, 1fr);
+    grid-template-areas:
+      "search player"
+      "visuals player";
+    column-gap: clamp(2rem, 3.2vw, 2.8rem);
+    row-gap: clamp(1rem, 2vw, 1.5rem);
     align-items: start;
   }
-}
-
-.history-search-panel {
-  display: grid;
-  gap: 1.5rem;
 }
 
 .history-key {
