@@ -700,12 +700,16 @@ registerCharts([
       }
 
       const labels = prepared.map((entry) => entry.label);
-      const averages = prepared.map((entry) => Number.parseFloat(entry.average.toFixed(2)));
+      const rawAverages = prepared.map((entry) => entry.average);
+      const averages = rawAverages.map((value) => Number.parseFloat(value.toFixed(2)));
       const minAverage = Math.min(...averages);
       const maxAverage = Math.max(...averages);
-      const padding = 1.25;
-      const suggestedMin = Math.max(0, Math.floor(minAverage - padding));
-      const suggestedMax = Math.ceil(maxAverage + padding);
+      let domainMin = minAverage;
+      let domainMax = maxAverage;
+      if (domainMin === domainMax) {
+        domainMin = Math.max(0, Number.parseFloat((domainMin - 1).toFixed(2)));
+        domainMax = Number.parseFloat((domainMax + 1).toFixed(2));
+      }
 
       return {
         type: 'bar',
@@ -759,9 +763,10 @@ registerCharts([
             x: {
               grid: { color: 'rgba(11, 37, 69, 0.08)' },
               title: { display: true, text: 'Average listed height' },
-              suggestedMin,
-              suggestedMax,
+              min: domainMin,
+              max: domainMax,
               ticks: {
+                includeBounds: true,
                 callback: (value) => {
                   const numeric = typeof value === 'number' ? value : Number.parseFloat(value);
                   return formatHeight(numeric);
@@ -771,55 +776,6 @@ registerCharts([
             y: {
               grid: { display: false },
               ticks: { autoSkip: false },
-            },
-          },
-        },
-      };
-    },
-  },
-  {
-    element: document.querySelector('[data-chart="position-orbits"]'),
-    source: 'data/players_overview.json',
-    async createConfig(data) {
-      const totals = data?.totals;
-      const segments = [
-        { label: 'Guards', value: totals?.guards ?? 0, color: palette.sky },
-        { label: 'Forwards', value: totals?.forwards ?? 0, color: palette.violet },
-        { label: 'Centers', value: totals?.centers ?? 0, color: palette.gold },
-      ].filter((segment) => segment.value > 0);
-      if (!segments.length) return null;
-      const totalPlayers = segments.reduce((sum, segment) => sum + segment.value, 0);
-
-      return {
-        type: 'doughnut',
-        data: {
-          labels: segments.map((segment) => segment.label),
-          datasets: [
-            {
-              data: segments.map((segment) => segment.value),
-              backgroundColor: segments.map((segment) => segment.color),
-              borderColor: '#ffffff',
-              borderWidth: 2,
-              hoverOffset: 12,
-            },
-          ],
-        },
-        options: {
-          cutout: '55%',
-          layout: { padding: { top: 10, bottom: 10, left: 6, right: 6 } },
-          plugins: {
-            legend: {
-              position: 'right',
-              labels: { usePointStyle: true, padding: 16 },
-            },
-            tooltip: {
-              callbacks: {
-                label(context) {
-                  const value = context.parsed;
-                  const share = totalPlayers ? (value / totalPlayers) * 100 : 0;
-                  return `${context.label}: ${helpers.formatNumber(value, 0)} players (${helpers.formatNumber(share, 1)}%)`;
-                },
-              },
             },
           },
         },
