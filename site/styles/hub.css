@@ -3435,22 +3435,8 @@ section h2 { margin-top: 0; font-size: clamp(1.35rem, 3vw, 1.8rem); letter-spaci
 }
 
 .history-search__input-wrap {
-  position: relative;
   display: flex;
   align-items: center;
-}
-
-.history-search__input-wrap::before {
-  content: "";
-  position: absolute;
-  left: 1rem;
-  width: 1rem;
-  height: 1rem;
-  pointer-events: none;
-  background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27%230b2545%27%20stroke-width%3D%272%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Ccircle%20cx%3D%2711%27%20cy%3D%2711%27%20r%3D%277%27/%3E%3Cline%20x1%3D%2716.65%27%20y1%3D%2716.65%27%20x2%3D%2721%27%20y2%3D%2721%27/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-size: contain;
-  opacity: 0.6;
 }
 
 .history-search input[type='search'] {
@@ -3462,10 +3448,6 @@ section h2 { margin-top: 0; font-size: clamp(1.35rem, 3vw, 1.8rem); letter-spaci
   color: var(--navy);
   background: #fff;
   transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
-}
-
-.history-search__input {
-  padding-left: 2.65rem;
 }
 
 .history-search input[type='search']:focus {
