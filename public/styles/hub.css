@@ -1459,6 +1459,11 @@ section {
   color: var(--text-subtle);
 }
 
+.lab-module__note--subtle {
+  color: color-mix(in srgb, var(--text-subtle) 78%, var(--text-muted, #6b7a90) 22%);
+  font-size: 0.8rem;
+}
+
 .lab-module__source {
   margin: 0.65rem 0 0;
   font-size: 0.75rem;
@@ -1499,6 +1504,22 @@ section {
   min-height: 220px;
   display: flex;
   align-items: stretch;
+}
+
+.lab-module__viz-grid {
+  display: grid;
+  gap: clamp(0.75rem, 1.6vw, 1.15rem);
+}
+
+.lab-module__viz-grid--two {
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  align-items: stretch;
+}
+
+@media (max-width: 720px) {
+  .lab-module__viz-grid--two {
+    grid-template-columns: 1fr;
+  }
 }
 
 .lab-module--tall .viz-canvas {

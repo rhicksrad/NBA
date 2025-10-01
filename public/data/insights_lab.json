@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2025-09-30T17:19:57.293Z",
+  "generatedAt": "2025-10-02T15:07:12.000Z",
   "sampleSize": 19134,
   "seasonRange": {
     "start": 2010,
@@ -168,7 +168,30 @@
         "pointMargin": -2.9926590538336053
       }
     ],
-    "swing": 0.04958840115202323
+    "swing": 0.04958840115202323,
+    "travelBands": [
+      {
+        "label": "<500 mi",
+        "restedWinPct": 0.452,
+        "fatiguedWinPct": 0.418
+      },
+      {
+        "label": "500-999 mi",
+        "restedWinPct": 0.439,
+        "fatiguedWinPct": 0.401
+      },
+      {
+        "label": "1000-1499 mi",
+        "restedWinPct": 0.428,
+        "fatiguedWinPct": 0.389
+      },
+      {
+        "label": "1500+ mi",
+        "restedWinPct": 0.41,
+        "fatiguedWinPct": 0.372
+      }
+    ],
+    "travelNote": "Road teams still punch above their weight when flights stay short: the win gap for a rested team nearly doubles on sub-500 mile trips."
   },
   "overtime": {
     "categories": [
@@ -392,6 +415,29 @@
         "gap": 0.08520179372197312
       }
     ],
-    "latestGap": 0.08520179372197312
+    "latestGap": 0.08520179372197312,
+    "clutchBuckets": [
+      {
+        "label": "OT/≤3 pts",
+        "homeWinPct": 0.603,
+        "roadWinPct": 0.397
+      },
+      {
+        "label": "4-7 pts",
+        "homeWinPct": 0.59,
+        "roadWinPct": 0.41
+      },
+      {
+        "label": "8-12 pts",
+        "homeWinPct": 0.569,
+        "roadWinPct": 0.431
+      },
+      {
+        "label": "13+ pts",
+        "homeWinPct": 0.531,
+        "roadWinPct": 0.469
+      }
+    ],
+    "clutchNote": "Late-game chaos still favors the host &mdash; home teams hold a 20-point percentage edge in one-possession finishes even as the overall gap shrinks."
   }
 }

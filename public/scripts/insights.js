@@ -80,6 +80,9 @@ function updateHero(data) {
   setMetric('rest-gap', restText);
   setMetric('rest-gap-detail', restText);
 
+  const restTravelNote = data?.restImpact?.travelNote ?? null;
+  setMetric('rest-travel-note', restTravelNote);
+
   const closeShare = data?.closeMargins?.closeShare;
   const closeText = Number.isFinite(closeShare)
     ? `${helpers.formatNumber(closeShare * 100, 1)}% of games ≤5 pts`
@@ -137,6 +140,9 @@ function updateHero(data) {
       )}%`
     : null;
   setMetric('home-road-note', splitText);
+
+  const clutchNote = data?.homeRoadSplits?.clutchNote ?? null;
+  setMetric('home-clutch-note', clutchNote);
 }
 
 function buildSeasonalChart(dataRef) {
@@ -152,28 +158,24 @@ function buildSeasonalChart(dataRef) {
   }
 
   const labels = [];
-  const overall = [];
   const regular = [];
   const playoff = [];
   const hasDivider = regularMonths.length && playoffMonths.length;
 
   regularMonths.forEach((entry) => {
     labels.push(`${entry.month ?? 'Month'} · Reg`);
-    overall.push(entry.averagePoints ?? entry.regularSeasonAverage ?? null);
     regular.push(entry.regularSeasonAverage ?? null);
     playoff.push(null);
   });
 
   if (hasDivider) {
     labels.push(' ');
-    overall.push(null);
     regular.push(null);
     playoff.push(null);
   }
 
   playoffMonths.forEach((entry) => {
     labels.push(`${entry.month ?? 'Month'} · Playoffs`);
-    overall.push(entry.averagePoints ?? entry.playoffAverage ?? null);
     regular.push(null);
     playoff.push(entry.playoffAverage ?? null);
   });
@@ -183,16 +185,6 @@ function buildSeasonalChart(dataRef) {
     data: {
       labels,
       datasets: [
-        {
-          label: 'All games',
-          data: overall,
-          borderColor: '#1156d6',
-          backgroundColor: 'rgba(17, 86, 214, 0.16)',
-          borderWidth: 2,
-          tension: 0.3,
-          spanGaps: false,
-          fill: 'origin',
-        },
         {
           label: 'Regular season',
           data: regular,
@@ -295,6 +287,59 @@ function buildRestImpactChart(dataRef) {
         x: {
           grid: { color: 'rgba(239, 61, 91, 0.05)' },
         },
+      },
+    },
+  };
+}
+
+function buildRestTravelChart(dataRef) {
+  const bands = Array.isArray(dataRef?.restImpact?.travelBands) ? dataRef.restImpact.travelBands : [];
+  if (!bands.length) {
+    return fallbackConfig('Travel rest splits unavailable');
+  }
+
+  const labels = bands.map((entry) => entry.label ?? 'Band');
+  const rested = bands.map((entry) => (Number.isFinite(entry?.restedWinPct) ? entry.restedWinPct * 100 : null));
+  const fatigued = bands.map((entry) => (Number.isFinite(entry?.fatiguedWinPct) ? entry.fatiguedWinPct * 100 : null));
+
+  return {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: 'Rested road win %',
+          data: rested,
+          backgroundColor: 'rgba(17, 86, 214, 0.85)',
+          borderRadius: 16,
+          maxBarThickness: 44,
+        },
+        {
+          label: 'Fatigued road win %',
+          data: fatigued,
+          backgroundColor: 'rgba(239, 61, 91, 0.78)',
+          borderRadius: 16,
+          maxBarThickness: 44,
+        },
+      ],
+    },
+    options: {
+      maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      scales: {
+        y: {
+          beginAtZero: true,
+          suggestedMax: 60,
+          ticks: { callback: (value) => `${helpers.formatNumber(value, 0)}%` },
+          title: { display: true, text: 'Road win percentage' },
+          grid: { color: 'rgba(17, 86, 214, 0.12)' },
+        },
+        x: {
+          grid: { color: 'rgba(17, 86, 214, 0.05)' },
+        },
+      },
+      plugins: {
+        legend: { position: 'bottom' },
       },
     },
   };
@@ -565,6 +610,63 @@ function buildHomeRoadChart(dataRef) {
   };
 }
 
+function buildHomeClutchChart(dataRef) {
+  const clutchBuckets = Array.isArray(dataRef?.homeRoadSplits?.clutchBuckets)
+    ? dataRef.homeRoadSplits.clutchBuckets
+    : [];
+  if (!clutchBuckets.length) {
+    return fallbackConfig('Clutch venue splits unavailable');
+  }
+
+  const labels = clutchBuckets.map((entry) => entry.label ?? 'Bucket');
+  const homeShare = clutchBuckets.map((entry) => (Number.isFinite(entry?.homeWinPct) ? entry.homeWinPct * 100 : null));
+  const roadShare = clutchBuckets.map((entry) => (Number.isFinite(entry?.roadWinPct) ? entry.roadWinPct * 100 : null));
+
+  return {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: 'Home win %',
+          data: homeShare,
+          backgroundColor: 'rgba(17, 86, 214, 0.85)',
+          borderRadius: 14,
+          stack: 'venue',
+        },
+        {
+          label: 'Road win %',
+          data: roadShare,
+          backgroundColor: 'rgba(239, 61, 91, 0.78)',
+          borderRadius: 14,
+          stack: 'venue',
+        },
+      ],
+    },
+    options: {
+      maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      scales: {
+        y: {
+          beginAtZero: true,
+          max: 100,
+          ticks: { callback: (value) => `${helpers.formatNumber(value, 0)}%` },
+          title: { display: true, text: 'Win percentage' },
+          grid: { color: 'rgba(17, 86, 214, 0.1)' },
+          stacked: true,
+        },
+        x: {
+          grid: { color: 'rgba(17, 86, 214, 0.05)' },
+          stacked: true,
+        },
+      },
+      plugins: {
+        legend: { position: 'bottom' },
+      },
+    },
+  };
+}
+
 async function bootstrap() {
   let data;
   try {
@@ -579,17 +681,28 @@ async function bootstrap() {
   }
 
   updateHero(data);
-  ['seasonal-scoring', 'rest-impact', 'close-margins', 'overtime-breakdown', 'season-averages', 'home-road-splits'].forEach((key) => {
+  [
+    'seasonal-scoring',
+    'rest-impact',
+    'rest-travel',
+    'close-margins',
+    'overtime-breakdown',
+    'season-averages',
+    'home-road-splits',
+    'home-clutch',
+  ].forEach((key) => {
     setSourceStamp(key, data?.generatedAt);
   });
 
   registerCharts([
     { element: '#seasonal-scoring', source: DATA_URL, createConfig: () => buildSeasonalChart(data) },
     { element: '#rest-impact', source: DATA_URL, createConfig: () => buildRestImpactChart(data) },
+    { element: '#rest-travel', source: DATA_URL, createConfig: () => buildRestTravelChart(data) },
     { element: '#close-margins', source: DATA_URL, createConfig: () => buildCloseMarginsChart(data) },
     { element: '#overtime-breakdown', source: DATA_URL, createConfig: () => buildOvertimeChart(data) },
     { element: '#season-averages', source: DATA_URL, createConfig: () => buildSeasonAveragesChart(data) },
     { element: '#home-road-splits', source: DATA_URL, createConfig: () => buildHomeRoadChart(data) },
+    { element: '#home-clutch', source: DATA_URL, createConfig: () => buildHomeClutchChart(data) },
   ]);
 }
 
