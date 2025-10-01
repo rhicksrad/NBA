@@ -133,7 +133,12 @@ async function loadLatestGoatDocument() {
     }
     const { source, data } = result;
     if (data && typeof data === 'object' && Array.isArray(data.players) && data.players.length) {
-      available.push({ source, data, generatedAt: parseGeneratedAt(data.generatedAt) });
+      available.push({
+        source,
+        data,
+        generatedAt: parseGeneratedAt(data.generatedAt),
+        playerCount: data.players.length,
+      });
     } else {
       console.warn(`GOAT data source missing players (${source.label})`);
       lastError = new Error(`GOAT data source ${source.url} missing players`);
@@ -144,15 +149,37 @@ async function loadLatestGoatDocument() {
     throw lastError ?? new Error('Unable to load GOAT data from configured sources');
   }
 
-  available.sort((a, b) => b.generatedAt - a.generatedAt);
-  const [latest, ...fallbacks] = available;
-  if (fallbacks.length && latest.generatedAt === Number.NEGATIVE_INFINITY) {
-    console.warn('GOAT data missing generatedAt timestamps; defaulting to first available source.');
-  } else if (fallbacks.length && latest.source.url !== GOAT_DATA_SOURCES[0].url) {
-    console.info(`Falling back to GOAT data from ${latest.source.label} (${latest.source.url}).`);
+  const byFreshness = [...available].sort((a, b) => b.generatedAt - a.generatedAt);
+  const freshest = byFreshness[0];
+  const maxCoverage = Math.max(...available.map((entry) => entry.playerCount));
+  // Prefer fresher exports so long as they contain at least half of the deepest
+  // roster (and never less than 500 players) to avoid truncated releases wiping
+  // out the history visualisations.
+  const coverageThreshold = Math.max(500, Math.floor(maxCoverage * 0.5));
+  const preferredByFreshness = byFreshness.find((entry) => entry.playerCount >= coverageThreshold);
+
+  if (preferredByFreshness) {
+    if (preferredByFreshness.source.url !== freshest.source.url) {
+      console.info(
+        `Falling back to broader GOAT data from ${preferredByFreshness.source.label} (${preferredByFreshness.source.url}) due to limited coverage in fresher exports.`,
+      );
+    } else if (byFreshness.length > 1 && preferredByFreshness.generatedAt === Number.NEGATIVE_INFINITY) {
+      console.warn('GOAT data missing generatedAt timestamps; defaulting to first available source.');
+    }
+    return preferredByFreshness.data;
   }
 
-  return latest.data;
+  const byCoverage = [...available].sort((a, b) => {
+    if (b.playerCount !== a.playerCount) return b.playerCount - a.playerCount;
+    return b.generatedAt - a.generatedAt;
+  });
+  const bestCoverage = byCoverage[0];
+  if (bestCoverage.source.url !== freshest.source.url) {
+    console.info(
+      `Falling back to GOAT data from ${bestCoverage.source.label} (${bestCoverage.source.url}) to maximise player coverage.`,
+    );
+  }
+  return bestCoverage.data;
 }
 
 function normalizeCareerSegment(segment) {
