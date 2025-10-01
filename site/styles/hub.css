@@ -5146,30 +5146,30 @@ section h2 { margin-top: 0; font-size: clamp(1.35rem, 3vw, 1.8rem); letter-spaci
   padding: 0;
   list-style: none;
   display: grid;
-  gap: 0.55rem;
+  gap: 0.35rem;
 }
 .player-atlas__teams-goat-entry {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 0.55rem;
-  align-items: start;
-  padding: 0.55rem 0.65rem;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.35rem 0.45rem;
   border-radius: var(--radius-md);
   border: 1px solid color-mix(in srgb, var(--border) 62%, transparent);
-  background: linear-gradient(140deg, rgba(17, 86, 214, 0.12), rgba(244, 181, 63, 0.1));
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.18);
+  background: linear-gradient(150deg, rgba(17, 86, 214, 0.1), rgba(244, 181, 63, 0.08));
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.15);
+  font-size: 0.74rem;
 }
 .player-atlas__teams-goat-rank {
   display: grid;
   place-items: center;
-  width: 2rem;
-  height: 2rem;
-  border-radius: 12px;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 10px;
   font-weight: 700;
-  font-size: 0.95rem;
+  font-size: 0.85rem;
   color: var(--surface);
   background: linear-gradient(135deg, var(--royal), var(--sky));
-  box-shadow: 0 6px 12px rgba(17, 86, 214, 0.18);
+  box-shadow: 0 5px 10px rgba(17, 86, 214, 0.18);
 }
 .player-atlas__teams-goat-entry:nth-child(1) .player-atlas__teams-goat-rank {
   background: linear-gradient(135deg, var(--gold), #ffdd77);
@@ -5177,50 +5177,50 @@ section h2 { margin-top: 0; font-size: clamp(1.35rem, 3vw, 1.8rem); letter-spaci
 }
 .player-atlas__teams-goat-entry:nth-child(2) .player-atlas__teams-goat-rank,
 .player-atlas__teams-goat-entry:nth-child(3) .player-atlas__teams-goat-rank {
-  background: linear-gradient(
-    135deg,
-    color-mix(in srgb, var(--royal) 55%, var(--sky) 45%),
-    var(--sky)
-  );
+  background: linear-gradient(135deg, color-mix(in srgb, var(--royal) 55%, var(--sky) 45%), var(--sky));
 }
-.player-atlas__teams-goat-body {
-  display: grid;
-  gap: 0.4rem;
-}
-.player-atlas__teams-goat-team {
+.player-atlas__teams-goat-line {
   display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 0.4rem;
+  align-items: center;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+  color: var(--navy);
 }
 .player-atlas__teams-goat-name {
   font-weight: 700;
-  font-size: 0.85rem;
+  font-size: 0.78rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--navy);
 }
-.player-atlas__teams-goat-roster {
-  font-size: 0.72rem;
-  color: color-mix(in srgb, var(--text-subtle) 78%, var(--navy) 22%);
+.player-atlas__teams-goat-roster,
+.player-atlas__teams-goat-average,
+.player-atlas__teams-goat-total,
+.player-atlas__teams-goat-coverage {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.08rem 0.4rem;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.68rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
-.player-atlas__teams-goat-metrics {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.45rem 0.85rem;
-  font-size: 0.78rem;
-  color: color-mix(in srgb, var(--text-subtle) 78%, var(--navy) 22%);
+.player-atlas__teams-goat-roster {
+  background: color-mix(in srgb, rgba(17, 86, 214, 0.12) 60%, rgba(244, 181, 63, 0.12) 40%);
+  color: color-mix(in srgb, var(--navy) 72%, var(--royal) 28%);
 }
 .player-atlas__teams-goat-average {
-  font-weight: 700;
-  color: color-mix(in srgb, var(--royal) 68%, var(--navy) 32%);
+  background: color-mix(in srgb, rgba(17, 86, 214, 0.2) 70%, rgba(255, 255, 255, 0.08) 30%);
+  color: color-mix(in srgb, var(--royal) 72%, var(--navy) 28%);
 }
 .player-atlas__teams-goat-total {
-  font-weight: 700;
-  color: color-mix(in srgb, var(--gold) 70%, var(--navy) 30%);
+  background: color-mix(in srgb, rgba(244, 181, 63, 0.22) 70%, rgba(255, 255, 255, 0.08) 30%);
+  color: color-mix(in srgb, var(--gold) 72%, var(--navy) 28%);
 }
 .player-atlas__teams-goat-coverage {
-  font-weight: 600;
+  background: color-mix(in srgb, rgba(239, 61, 91, 0.2) 70%, rgba(255, 255, 255, 0.08) 30%);
+  color: color-mix(in srgb, var(--coral) 68%, var(--navy) 32%);
 }
 .player-atlas__teams-goat-empty {
   margin: 0;

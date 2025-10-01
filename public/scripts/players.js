@@ -1794,6 +1794,57 @@ function initPlayerAtlas() {
   let isUsingFallbackRoster = false;
   const defaultEmptyText = empty?.textContent?.trim() ?? '';
   const defaultTeamGoatEmptyText = teamGoatEmpty?.textContent?.trim() ?? 'Team GOAT averages are warming up.';
+
+  const resolveAssetUrls = (path) => {
+    if (typeof path !== 'string') {
+      return [];
+    }
+    const trimmed = path.trim();
+    if (!trimmed) {
+      return [];
+    }
+    const normalized = trimmed.replace(/^\.?\//, '');
+    const candidates = [];
+    try {
+      const primary = new URL(`./${normalized}`, document.baseURI).toString();
+      candidates.push(primary);
+    } catch (primaryError) {
+      console.warn('Unable to resolve asset relative to base', path, primaryError);
+    }
+    try {
+      const originBase = `${window.location.origin}/`;
+      const fallback = new URL(normalized, originBase).toString();
+      if (!candidates.includes(fallback)) {
+        candidates.push(fallback);
+      }
+    } catch (fallbackError) {
+      console.warn('Unable to resolve asset relative to origin', path, fallbackError);
+    }
+    return candidates;
+  };
+
+  const fetchAssetWithFallback = async (path, init = {}) => {
+    const urls = resolveAssetUrls(path);
+    if (!urls.length) {
+      throw new Error(`Unable to resolve asset path: ${path}`);
+    }
+    let lastError = null;
+    for (const url of urls) {
+      try {
+        const response = await fetch(url, init);
+        if (response.ok) {
+          return response;
+        }
+        lastError = new Error(`Request for ${url} failed with status ${response.status}`);
+      } catch (error) {
+        lastError = error instanceof Error ? error : new Error(String(error));
+      }
+    }
+    if (lastError) {
+      throw lastError;
+    }
+    throw new Error(`Unable to fetch asset: ${path}`);
+  };
   const normalizePlayerId = (value) => {
     if (value === null || value === undefined) {
       return null;
@@ -2383,52 +2434,56 @@ function initPlayerAtlas() {
       rank.className = 'player-atlas__teams-goat-rank';
       rank.textContent = helpers.formatNumber(index + 1, 0);
 
-      const body = document.createElement('div');
-      body.className = 'player-atlas__teams-goat-body';
-
-      const heading = document.createElement('div');
-      heading.className = 'player-atlas__teams-goat-team';
+      const line = document.createElement('div');
+      line.className = 'player-atlas__teams-goat-line';
 
       const name = document.createElement('span');
       name.className = 'player-atlas__teams-goat-name';
-      name.textContent = entry.teamAbbr || entry.teamName;
+      const teamLabel = entry.teamAbbr || entry.teamName;
+      name.textContent = `\u00a0${teamLabel}`;
       name.title = entry.teamName;
 
       const rosterLabel = document.createElement('span');
       rosterLabel.className = 'player-atlas__teams-goat-roster';
-      rosterLabel.textContent = `${helpers.formatNumber(entry.rosterSize, 0)} ${
-        entry.rosterSize === 1 ? 'player' : 'players'
-      }`;
-
-      heading.append(name, rosterLabel);
-
-      const metrics = document.createElement('div');
-      metrics.className = 'player-atlas__teams-goat-metrics';
+      rosterLabel.textContent = `\u00a0${helpers.formatNumber(entry.rosterSize, 0)}p`;
+      rosterLabel.title = `${helpers.formatNumber(entry.rosterSize, 0)} players`;
 
       const average = document.createElement('span');
       average.className = 'player-atlas__teams-goat-average';
-      average.textContent = `${helpers.formatNumber(entry.average, 1)} GOAT / spot`;
+      average.textContent = `\u00a0${helpers.formatNumber(entry.average, 1)}G/s`;
+      average.title = 'Average GOAT score per roster spot';
 
       const total = document.createElement('span');
       total.className = 'player-atlas__teams-goat-total';
-      total.textContent = `${helpers.formatNumber(entry.goatTotal, 1)} total GOAT`;
+      total.textContent = `\u00a0${helpers.formatNumber(entry.goatTotal, 1)} Tot`;
+      total.title = 'Total GOAT score for active roster';
 
-      metrics.append(average, total);
+      line.append(name, rosterLabel, average, total);
 
-      const coverage = document.createElement('span');
-      coverage.className = 'player-atlas__teams-goat-coverage';
-      if (entry.graded === entry.rosterSize) {
-        coverage.textContent = 'Full GOAT coverage';
-      } else {
-        coverage.textContent = `${helpers.formatNumber(entry.graded, 0)} of ${helpers.formatNumber(
-          entry.rosterSize,
-          0,
-        )} graded`;
+      if (entry.graded !== entry.rosterSize) {
+        const coverage = document.createElement('span');
+        coverage.className = 'player-atlas__teams-goat-coverage';
+        coverage.textContent = `\u00a0${helpers.formatNumber(entry.graded, 0)}g`;
+        coverage.title = `${helpers.formatNumber(entry.graded, 0)} players with GOAT grades`;
+        line.append(coverage);
       }
-      metrics.append(coverage);
 
-      body.append(heading, metrics);
-      item.append(rank, body);
+      line.setAttribute(
+        'aria-label',
+        [
+          teamLabel,
+          `${helpers.formatNumber(entry.rosterSize, 0)} players`,
+          `${helpers.formatNumber(entry.average, 1)} GOAT per spot`,
+          `${helpers.formatNumber(entry.goatTotal, 1)} total GOAT`,
+          entry.graded !== entry.rosterSize
+            ? `${helpers.formatNumber(entry.graded, 0)} players graded`
+            : null,
+        ]
+          .filter(Boolean)
+          .join(' '),
+      );
+
+      item.append(rank, line);
       teamGoatList.append(item);
     });
 
@@ -3011,8 +3066,6 @@ function initPlayerAtlas() {
     renderResults('');
   };
 
-  const rostersDataUrl = new URL('./data/rosters.json', document.baseURI).toString();
-
   const hydrate = async () => {
     try {
       const [
@@ -3022,11 +3075,11 @@ function initPlayerAtlas() {
         goatRecentResponse,
         rostersResponse,
       ] = await Promise.all([
-        fetch('data/player_profiles.json'),
-        fetch('data/goat_system.json').catch(() => null),
-        fetch('data/goat_index.json').catch(() => null),
-        fetch('data/goat_recent.json').catch(() => null),
-        fetch(rostersDataUrl, { cache: 'no-store' }).catch(() => null),
+        fetchAssetWithFallback('data/player_profiles.json'),
+        fetchAssetWithFallback('data/goat_system.json').catch(() => null),
+        fetchAssetWithFallback('data/goat_index.json').catch(() => null),
+        fetchAssetWithFallback('data/goat_recent.json').catch(() => null),
+        fetchAssetWithFallback('data/rosters.json', { cache: 'no-store' }).catch(() => null),
       ]);
       if (!profilesResponse?.ok) {
         throw new Error(`Failed to load player profiles: ${profilesResponse?.status}`);
