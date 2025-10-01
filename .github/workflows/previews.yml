@@ -29,7 +29,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: pnpm
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -51,7 +50,6 @@ jobs:
       - name: Verify Ball Don't Lie API access
         env:
           BDL_PROXY_BASE: https://bdlproxy.hicksrch.workers.dev/bdl
-          VERIFY_ALLOW_5XX: "true"
         run: pnpm verify:bdl
 
       - name: Build previews
