@@ -2077,6 +2077,7 @@ function initPlayerAtlas() {
   let activeIndex = -1;
   let isLoaded = false;
   let hasError = false;
+  let hasShowcasedInitialPlayer = false;
   let goatLookup = { byId: new Map(), byName: new Map(), recent: [] };
   let atlasMetrics = { byId: new Map(), byName: new Map() };
   let metricDefinitions = new Map();
@@ -2884,6 +2885,7 @@ function initPlayerAtlas() {
 
   const selectPlayer = (player) => {
     if (!player) return;
+    hasShowcasedInitialPlayer = true;
     searchInput.value = player.name;
     setClearVisibility(true);
     matches = [];
@@ -3014,6 +3016,59 @@ function initPlayerAtlas() {
     loadSeasonAverages(player);
 
     profile.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  const getShowcaseCandidates = () =>
+    players.filter((candidate) => {
+      if (!candidate) {
+        return false;
+      }
+
+      const bdlId = candidate?.bdl?.id;
+      if (bdlId === null || bdlId === undefined) {
+        return false;
+      }
+
+      const metricsRecord =
+        candidate.metrics && typeof candidate.metrics === 'object' && candidate.metrics !== null
+          ? Object.values(candidate.metrics)
+          : [];
+      const hasPercentiles = metricsRecord.some((entry) => Number.isFinite(entry?.value));
+      if (!hasPercentiles) {
+        return false;
+      }
+
+      const goatDetails = candidate?.goatScores || {};
+      const hasGoatSignal =
+        Number.isFinite(candidate?.goatScore) ||
+        Number.isFinite(goatDetails?.historical) ||
+        Number.isFinite(goatDetails?.recent);
+
+      return hasGoatSignal;
+    });
+
+  const showcaseInitialPlayer = () => {
+    if (hasShowcasedInitialPlayer) {
+      return;
+    }
+    if (profile && profile.hidden === false) {
+      return;
+    }
+    if (searchInput && searchInput.value.trim()) {
+      return;
+    }
+
+    const candidates = getShowcaseCandidates();
+    if (!candidates.length) {
+      return;
+    }
+
+    const selection = candidates[Math.floor(Math.random() * candidates.length)] ?? null;
+    if (!selection) {
+      return;
+    }
+
+    selectPlayer(selection);
   };
 
   const selectPlayerByBdlId = (bdlId) => {
@@ -3262,6 +3317,7 @@ function initPlayerAtlas() {
             if (doc && Array.isArray(doc?.teams)) {
               applyPrimaryFeedDoc(doc);
             }
+            showcaseInitialPlayer();
           },
           selectPlayerByBdlId,
           getSelectableBdlIds: () => Array.from(playersByBdlId.keys()),
@@ -3284,6 +3340,7 @@ function initPlayerAtlas() {
         } else {
           resetStatusMessages();
         }
+        showcaseInitialPlayer();
       }
     } catch (err) {
       console.error(err);

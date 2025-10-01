@@ -61,24 +61,31 @@ async function loadRosters(): Promise<RostersDoc> {
   return (await response.json()) as RostersDoc;
 }
 
-const app = document.getElementById("players-app");
+const playersAppRoot = document.getElementById("players-app");
 
-if (!app) {
+if (!playersAppRoot) {
   throw new Error("Missing #players-app container");
 }
 
-const params = new URLSearchParams(window.location.search);
-const initialTeam = (params.get("team") ?? "").toUpperCase();
-const initialSearch = params.get("search") ?? "";
+// If the new player atlas markup is present, the modern client will handle rendering.
+// Skip loading the legacy roster explorer so it doesn't overwrite the atlas DOM.
+const shouldSkipLegacyRoster = playersAppRoot.querySelector("[data-player-profile]") !== null;
 
-const state: AppState = {
-  doc: null,
-  loading: true,
-  error: null,
-  searchTerm: initialSearch,
-  teamFilter: initialTeam,
-  anchorApplied: false,
-};
+if (!shouldSkipLegacyRoster) {
+  const app = playersAppRoot;
+
+  const params = new URLSearchParams(window.location.search);
+  const initialTeam = (params.get("team") ?? "").toUpperCase();
+  const initialSearch = params.get("search") ?? "";
+
+  const state: AppState = {
+    doc: null,
+    loading: true,
+    error: null,
+    searchTerm: initialSearch,
+    teamFilter: initialTeam,
+    anchorApplied: false,
+  };
 
 function escapeHtml(value: string): string {
   return value.replace(/[&<>"']/g, (char) => {
@@ -427,4 +434,7 @@ async function fetchRosters() {
   }
 }
 
-fetchRosters();
+  fetchRosters();
+} else {
+  playersAppRoot.dataset.legacyRosterSuppressed = "true";
+}
