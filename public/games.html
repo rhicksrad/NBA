@@ -109,6 +109,24 @@
               <div class="lab-module__meta">
                 <span class="lab-chip">Powered by the live games feed</span>
                 <span class="lab-chip lab-chip--accent" data-metric="scoreboard-summary">—</span>
+                <div class="team-mode-toggle scoreboard-view-toggle" role="group" aria-label="Scoreboard view">
+                  <button
+                    type="button"
+                    class="team-mode-toggle__button"
+                    data-scoreboard-view="all"
+                    aria-pressed="true"
+                  >
+                    All games
+                  </button>
+                  <button
+                    type="button"
+                    class="team-mode-toggle__button"
+                    data-scoreboard-view="upcoming"
+                    aria-pressed="false"
+                  >
+                    Upcoming only
+                  </button>
+                </div>
               </div>
             </header>
             <div class="scoreboard-grid" data-scoreboard aria-live="polite"></div>

@@ -6,7 +6,8 @@ const PAGE_SIZE = 100;
 const REFRESH_INTERVAL_MS = 150000;
 const NEXT_SEASON_TIPOFF_DATE = '2025-10-04';
 const LAST_COMPLETED_SEASON_FINALE = '2024-06-17';
-const EARLIEST_ARCHIVE_DATE = '2012-10-30';
+const FUTURE_SCHEDULE_END = '2026-06-30';
+const EARLIEST_ARCHIVE_DATE = '1946-11-01';
 
 const stageRank = { live: 0, upcoming: 1, final: 2 };
 
@@ -14,6 +15,7 @@ const scoreboardContainer = document.querySelector('[data-scoreboard]');
 const startDateInput = document.querySelector('[data-game-date-start]');
 const endDateInput = document.querySelector('[data-game-date-end]');
 const refreshButton = document.querySelector('[data-manual-refresh]');
+const scoreboardViewButtons = document.querySelectorAll('[data-scoreboard-view]');
 
 const metricTargets = {
   gamesTotal: document.querySelector('[data-metric="games-total"]'),
@@ -32,18 +34,25 @@ const metricTargets = {
 
 function determineMaxSelectableDate() {
   const today = getTodayIso();
-  if (today >= NEXT_SEASON_TIPOFF_DATE) {
-    return today;
+  if (FUTURE_SCHEDULE_END && today <= FUTURE_SCHEDULE_END) {
+    return FUTURE_SCHEDULE_END;
   }
-  return LAST_COMPLETED_SEASON_FINALE;
+  return today;
 }
 
 function determineInitialDate() {
   const today = getTodayIso();
+  const maxSelectable = determineMaxSelectableDate();
   if (today >= NEXT_SEASON_TIPOFF_DATE) {
+    if (maxSelectable && today > maxSelectable) {
+      return maxSelectable;
+    }
     return today;
   }
-  return determineMaxSelectableDate();
+  if (maxSelectable && LAST_COMPLETED_SEASON_FINALE > maxSelectable) {
+    return maxSelectable;
+  }
+  return LAST_COMPLETED_SEASON_FINALE;
 }
 
 function determineInitialRange() {
@@ -52,6 +61,7 @@ function determineInitialRange() {
 }
 
 let activeRange = determineInitialRange();
+let scoreboardView = 'all';
 let latestGames = [];
 let lastUpdated = null;
 let refreshTimer = null;
@@ -442,6 +452,41 @@ function renderScoreboardState(message) {
   scoreboardContainer.appendChild(state);
 }
 
+function normalizeScoreboardView(value) {
+  return value === 'upcoming' ? 'upcoming' : 'all';
+}
+
+function updateScoreboardViewButtons() {
+  if (!scoreboardViewButtons || !scoreboardViewButtons.length) {
+    return;
+  }
+  scoreboardViewButtons.forEach((button) => {
+    const view = normalizeScoreboardView(button.getAttribute('data-scoreboard-view'));
+    const isActive = view === scoreboardView;
+    button.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+  });
+}
+
+function filterGamesForView(games) {
+  if (!Array.isArray(games)) {
+    return [];
+  }
+  if (scoreboardView === 'upcoming') {
+    return games.filter((game) => game.stage === 'upcoming');
+  }
+  return games;
+}
+
+function setScoreboardView(nextView) {
+  const normalized = normalizeScoreboardView(nextView);
+  if (normalized === scoreboardView) {
+    return;
+  }
+  scoreboardView = normalized;
+  updateScoreboardViewButtons();
+  renderScoreboard(latestGames);
+}
+
 function createTeamRow(team, game, role) {
   const row = document.createElement('div');
   row.className = 'scoreboard-card__row';
@@ -538,11 +583,16 @@ function renderScoreboard(games) {
     return;
   }
   clearScoreboard();
-  if (!games.length) {
-    renderScoreboardState(`No games found for ${formatRangeLabel(activeRange)}.`);
+  const filtered = filterGamesForView(games);
+  if (!filtered.length) {
+    const emptyMessage =
+      scoreboardView === 'upcoming'
+        ? `No upcoming games for ${formatRangeLabel(activeRange)}.`
+        : `No games found for ${formatRangeLabel(activeRange)}.`;
+    renderScoreboardState(emptyMessage);
     return;
   }
-  const sorted = [...games].sort((a, b) => {
+  const sorted = [...filtered].sort((a, b) => {
     const stageDelta = (stageRank[a.stage] ?? 3) - (stageRank[b.stage] ?? 3);
     if (stageDelta !== 0) {
       return stageDelta;
@@ -573,6 +623,7 @@ function updateMetrics(games) {
   setMetric('gamesTotal', totalGames ? helpers.formatNumber(totalGames, 0) : '0');
   setMetric('dateLabel', formatRangeLabel(activeRange));
 
+  const upcomingCount = games.filter((game) => game.stage === 'upcoming').length;
   const liveCount = games.filter((game) => game.stage === 'live').length;
   setMetric('liveCount', helpers.formatNumber(liveCount, 0));
 
@@ -624,6 +675,7 @@ function updateMetrics(games) {
 
   if (totalGames) {
     const summaryParts = [];
+    summaryParts.push(`${helpers.formatNumber(upcomingCount, 0)} upcoming`);
     summaryParts.push(`${helpers.formatNumber(liveCount, 0)} live`);
     summaryParts.push(`${helpers.formatNumber(finals.length, 0)} final${finals.length === 1 ? '' : 's'}`);
     setMetric('scoreboardSummary', summaryParts.join(' · '));
@@ -1101,6 +1153,21 @@ function initControls() {
     refreshButton.addEventListener('click', () => {
       loadGames();
     });
+  }
+  if (scoreboardViewButtons && scoreboardViewButtons.length) {
+    const preset = Array.from(scoreboardViewButtons).find(
+      (button) => button.getAttribute('aria-pressed') === 'true',
+    );
+    if (preset) {
+      scoreboardView = normalizeScoreboardView(preset.getAttribute('data-scoreboard-view'));
+    }
+    scoreboardViewButtons.forEach((button) => {
+      const view = button.getAttribute('data-scoreboard-view');
+      button.addEventListener('click', () => {
+        setScoreboardView(view);
+      });
+    });
+    updateScoreboardViewButtons();
   }
 }
 
