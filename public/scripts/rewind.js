@@ -1,4 +1,5 @@
 import { registerCharts, helpers } from './hub-charts.js';
+import { bdl } from '../assets/js/bdl.js';
 
 const palette = {
   royal: '#1156d6',
@@ -36,12 +37,220 @@ const scheduleDataPromise = fetch('data/season_24_25_schedule.json').then((respo
   return response.json();
 });
 
-const highlightDataPromise = fetch('data/season_24_25_rewind.json').then((response) => {
+const localHighlightDataPromise = fetch('data/season_24_25_rewind.json').then((response) => {
   if (!response.ok) {
     throw new Error(`Failed to load rewind highlight data: ${response.status}`);
   }
   return response.json();
 });
+
+function parseGameDate(game) {
+  if (!game) return null;
+  const iso = typeof game.datetime === 'string' && game.datetime ? game.datetime : `${game.date}T00:00:00Z`;
+  const parsed = iso ? new Date(iso) : null;
+  if (!parsed || Number.isNaN(parsed.getTime())) {
+    return null;
+  }
+  return parsed;
+}
+
+function mapTeam(team) {
+  if (!team) return null;
+  return {
+    id: team.id,
+    name: team.full_name ?? team.name ?? '',
+    shortName: team.city ?? team.name ?? '',
+    abbreviation: team.abbreviation ?? '',
+    city: team.city ?? null,
+    fullName: team.full_name ?? null,
+  };
+}
+
+function computePossessions(totals) {
+  if (!totals) return null;
+  const fga = Number(totals.fga ?? 0);
+  const fta = Number(totals.fta ?? 0);
+  const oreb = Number(totals.oreb ?? 0);
+  const turnover = Number(totals.turnover ?? 0);
+  return fga + 0.44 * fta - oreb + turnover;
+}
+
+async function fetchGameTeamTotals(gameId, teamIds) {
+  const params = new URLSearchParams({
+    'game_ids[]': String(gameId),
+    per_page: '100',
+  });
+  const response = await bdl(`/v1/stats?${params.toString()}`);
+  const rows = Array.isArray(response?.data) ? response.data : [];
+  const totals = new Map();
+  teamIds.forEach((id) => {
+    totals.set(id, { pts: 0, fga: 0, fta: 0, oreb: 0, turnover: 0 });
+  });
+
+  rows.forEach((row) => {
+    const teamId = row?.team?.id;
+    if (!totals.has(teamId)) return;
+    const bucket = totals.get(teamId);
+    bucket.pts += Number(row.pts ?? 0);
+    bucket.fga += Number(row.fga ?? 0);
+    bucket.fta += Number(row.fta ?? 0);
+    bucket.oreb += Number(row.oreb ?? 0);
+    bucket.turnover += Number(row.turnover ?? 0);
+  });
+
+  return totals;
+}
+
+async function fetchSeasonPostseasonGames(season) {
+  const params = new URLSearchParams({
+    'seasons[]': String(season),
+    postseason: 'true',
+    per_page: '100',
+  });
+  const response = await bdl(`/v1/games?${params.toString()}`);
+  const games = Array.isArray(response?.data) ? response.data : [];
+  return games.filter((game) => Boolean(game?.postseason));
+}
+
+function resolveSeasonCandidates() {
+  const now = new Date();
+  const base = now.getUTCFullYear() - 1;
+  return [base, base - 1];
+}
+
+async function fetchFinalsHighlight() {
+  const seasons = resolveSeasonCandidates();
+  for (const season of seasons) {
+    if (!Number.isFinite(season) || season < 1947) continue;
+    try {
+      const games = await fetchSeasonPostseasonGames(season);
+      if (!games.length) {
+        continue;
+      }
+
+      const orderedGames = games
+        .map((game) => ({ game, date: parseGameDate(game) }))
+        .filter((entry) => entry.date)
+        .sort((a, b) => a.date.getTime() - b.date.getTime())
+        .map((entry) => entry.game);
+
+      if (!orderedGames.length) {
+        continue;
+      }
+
+      const lastGame = orderedGames[orderedGames.length - 1];
+      const homeWin = (lastGame.home_team_score ?? 0) > (lastGame.visitor_team_score ?? 0);
+      const championTeam = homeWin ? lastGame.home_team : lastGame.visitor_team;
+      const opponentTeam = homeWin ? lastGame.visitor_team : lastGame.home_team;
+      if (!championTeam || !opponentTeam) {
+        continue;
+      }
+
+      const championId = championTeam.id;
+      const opponentId = opponentTeam.id;
+      if (championId == null || opponentId == null) {
+        continue;
+      }
+
+      const finalsGames = orderedGames.filter((game) => {
+        const homeId = game?.home_team?.id;
+        const visitorId = game?.visitor_team?.id;
+        if (homeId == null || visitorId == null) return false;
+        return (
+          (homeId === championId && visitorId === opponentId) ||
+          (homeId === opponentId && visitorId === championId)
+        );
+      });
+
+      if (!finalsGames.length) {
+        continue;
+      }
+
+      let championWins = 0;
+      const netRatings = [];
+
+      for (let index = 0; index < finalsGames.length; index += 1) {
+        const game = finalsGames[index];
+        const championIsHome = game.home_team?.id === championId;
+        const championScore = championIsHome ? game.home_team_score ?? 0 : game.visitor_team_score ?? 0;
+        const opponentScore = championIsHome ? game.visitor_team_score ?? 0 : game.home_team_score ?? 0;
+        if (championScore > opponentScore) {
+          championWins += 1;
+        }
+
+        let netRating = null;
+        try {
+          const totals = await fetchGameTeamTotals(game.id, [championId, opponentId]);
+          const championTotals = totals.get(championId);
+          const opponentTotals = totals.get(opponentId);
+          const championPossessions = computePossessions(championTotals);
+          const opponentPossessions = computePossessions(opponentTotals);
+          const possessions =
+            championPossessions != null && opponentPossessions != null
+              ? (championPossessions + opponentPossessions) / 2
+              : null;
+          if (possessions && Number.isFinite(possessions) && possessions !== 0) {
+            netRating = ((championScore - opponentScore) / possessions) * 100;
+          }
+        } catch (error) {
+          console.error('Failed to compute net rating for finals game', game?.id, error);
+        }
+
+        netRatings.push({
+          game: `G${index + 1}`,
+          [FINALS_CHAMPION_KEY]: netRating,
+          [FINALS_OPPONENT_KEY]: typeof netRating === 'number' ? -netRating : netRating,
+        });
+      }
+
+      const opponentWins = finalsGames.length - championWins;
+      const seriesScore = `${championWins} – ${opponentWins}`;
+      const generatedAt = parseGameDate(lastGame)?.toISOString() ?? null;
+
+      return {
+        generatedAt,
+        finals: {
+          season,
+          champion: mapTeam(championTeam),
+          opponent: mapTeam(opponentTeam),
+          netRatings,
+          seriesScore,
+        },
+      };
+    } catch (error) {
+      console.error('Failed to fetch finals data for season', season, error);
+    }
+  }
+
+  return null;
+}
+
+const highlightDataPromise = (async () => {
+  const [localResult, finalsResult] = await Promise.allSettled([
+    localHighlightDataPromise,
+    fetchFinalsHighlight(),
+  ]);
+
+  const data = localResult.status === 'fulfilled' ? localResult.value : {};
+
+  if (localResult.status === 'rejected') {
+    console.error('Failed to load static rewind highlight data', localResult.reason);
+  }
+
+  if (finalsResult.status === 'fulfilled' && finalsResult.value) {
+    const { generatedAt, finals } = finalsResult.value;
+    if (generatedAt) {
+      data.generatedAt = generatedAt;
+    }
+    if (finals) {
+      data.finals = { ...(data.finals ?? {}), ...finals };
+    }
+  } else if (finalsResult.status === 'rejected') {
+    console.error('Failed to load BDL finals highlight data', finalsResult.reason);
+  }
+
+  return data;
+})();
 
 function formatSigned(value, digits = 1, suffix = '') {
   if (typeof value !== 'number' || Number.isNaN(value)) {
@@ -937,24 +1146,52 @@ function populateHighlightPanels(data) {
   const netRatings = Array.isArray(finals.netRatings) ? finals.netRatings : [];
   const games = netRatings.length;
 
+  const { championLabel, opponentLabel } = getFinalsTeamLabels(finals);
+  const seriesScore = typeof finals?.seriesScore === 'string' ? finals.seriesScore : null;
+  const finalsHeadline =
+    championLabel && opponentLabel && seriesScore ? `${championLabel} ${seriesScore} ${opponentLabel}` : null;
+  setStat('stat-finals-headline', finalsHeadline, (value) => value);
+
   if (games) {
-    const aggregate = netRatings.reduce((sum, entry) => sum + (entry[FINALS_CHAMPION_KEY] ?? 0), 0);
-    const combinedNet = aggregate / games;
-    setStat('stat-finals-net', combinedNet, (value) => formatSigned(value, 1));
+    const championValues = netRatings
+      .map((entry) => entry[FINALS_CHAMPION_KEY])
+      .filter((value) => typeof value === 'number' && Number.isFinite(value));
+
     setStat('stat-finals-games', games, (value) => helpers.formatNumber(value, 0));
 
-    const closerWindow = netRatings.slice(-2);
-    if (closerWindow.length) {
-      const closerNet =
-        closerWindow.reduce((sum, entry) => sum + (entry[FINALS_CHAMPION_KEY] ?? 0), 0) / closerWindow.length;
-      setStat('stat-finals-closer', closerNet, (value) => formatSigned(value, 1));
-      setStat('stat-finals-closer-games', closerWindow.length, (value) => helpers.formatNumber(value, 0));
+    if (championValues.length) {
+      const combinedNet = championValues.reduce((sum, value) => sum + value, 0) / championValues.length;
+      setStat('stat-finals-net', combinedNet, (value) => formatSigned(value, 1));
+    } else {
+      setStat('stat-finals-net', null);
     }
 
-    const peak = netRatings.reduce((best, entry) =>
-      (entry[FINALS_CHAMPION_KEY] ?? -Infinity) > (best?.[FINALS_CHAMPION_KEY] ?? -Infinity) ? entry : best,
-      null
-    );
+    const closerWindow = netRatings.slice(-2);
+    const closerValues = closerWindow
+      .map((entry) => entry[FINALS_CHAMPION_KEY])
+      .filter((value) => typeof value === 'number' && Number.isFinite(value));
+
+    if (closerValues.length) {
+      const closerNet = closerValues.reduce((sum, value) => sum + value, 0) / closerValues.length;
+      setStat('stat-finals-closer', closerNet, (value) => formatSigned(value, 1));
+      setStat('stat-finals-closer-games', closerWindow.length, (value) => helpers.formatNumber(value, 0));
+    } else {
+      setStat('stat-finals-closer', null);
+      setStat('stat-finals-closer-games', null);
+    }
+
+    const peak = netRatings.reduce((best, entry) => {
+      const value = entry?.[FINALS_CHAMPION_KEY];
+      if (typeof value !== 'number' || !Number.isFinite(value)) {
+        return best;
+      }
+      const bestValue = best?.[FINALS_CHAMPION_KEY];
+      if (typeof bestValue !== 'number' || !Number.isFinite(bestValue) || value > bestValue) {
+        return entry;
+      }
+      return best;
+    }, null);
+
     setStat('stat-finals-peak-game', peak?.game, (value) => value);
     setStat('stat-finals-peak-margin', peak?.[FINALS_CHAMPION_KEY], (value) => formatSigned(value, 1));
   } else {

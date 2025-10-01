@@ -1,23 +1,23 @@
 {
   "generatedAt": "2025-06-15T18:32:00Z",
   "finals": {
-    "seriesScore": "4-1",
+    "seriesScore": "4 – 1",
     "champion": {
-      "name": "Oklahoma City Thunder",
-      "shortName": "Oklahoma City",
-      "abbreviation": "OKC"
+      "name": "Boston Celtics",
+      "shortName": "Boston",
+      "abbreviation": "BOS"
     },
     "opponent": {
-      "name": "Indiana Pacers",
-      "shortName": "Indiana",
-      "abbreviation": "IND"
+      "name": "Dallas Mavericks",
+      "shortName": "Dallas",
+      "abbreviation": "DAL"
     },
     "netRatings": [
-      {"game": "G1", "champion": 7.8, "opponent": -7.8},
-      {"game": "G2", "champion": -4.1, "opponent": 4.1},
-      {"game": "G3", "champion": 11.6, "opponent": -11.6},
-      {"game": "G4", "champion": 6.4, "opponent": -6.4},
-      {"game": "G5", "champion": 14.9, "opponent": -14.9}
+      {"game": "G1", "champion": 19.38, "opponent": -19.38},
+      {"game": "G2", "champion": 7.39, "opponent": -7.39},
+      {"game": "G3", "champion": 7.56, "opponent": -7.56},
+      {"game": "G4", "champion": -39.92, "opponent": 39.92},
+      {"game": "G5", "champion": 20.05, "opponent": -20.05}
     ],
     "quarterDifferentials": [
       {"quarter": "Q1", "champion": 2.9, "opponent": -2.9},
