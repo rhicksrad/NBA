@@ -811,12 +811,17 @@ a:hover, a:focus { color: var(--sky); }
 
 @media (min-width: 880px) {
   .hero--lab {
-    grid-template-columns: minmax(0, 1fr) minmax(260px, 1fr);
+    grid-template-columns: minmax(0, 1fr);
     align-items: start;
+    justify-items: start;
   }
 
   .hero--lab h1 {
     white-space: nowrap;
+  }
+
+  .hero--lab .hero__intro {
+    max-width: min(660px, 100%);
   }
 
   .hero--lab .hero__lead {
@@ -824,12 +829,12 @@ a:hover, a:focus { color: var(--sky); }
   }
 
   .hero--lab .hero-metrics {
-    margin-top: 0;
-    align-self: start;
+    margin-top: clamp(0.6rem, 1.5vw, 0.9rem);
+    align-self: stretch;
   }
 
   .hero--lab .hero-metrics--lab {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   }
 }
 
