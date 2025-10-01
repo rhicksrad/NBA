@@ -3166,7 +3166,7 @@ section h2 { margin-top: 0; font-size: clamp(1.35rem, 3vw, 1.8rem); letter-spaci
 
 .history-search-panel {
   display: grid;
-  gap: 1.5rem;
+  gap: 1rem;
 }
 
 .history-key {
