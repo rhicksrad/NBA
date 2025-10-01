@@ -1879,22 +1879,27 @@ function initializeRosterApp({
           ? ''
           : '<li class="roster-player roster-player--empty">No players match this filter.</li>';
 
-        const subtitleParts = [];
-        if (team?.abbreviation) {
-          subtitleParts.push(team.abbreviation);
-        }
-        if (Array.isArray(team?.roster)) {
-          subtitleParts.push(`${team.roster.length} players`);
-        }
-        const subtitle = subtitleParts.join(' • ');
-
         const sectionTitle = team?.full_name || team?.abbreviation || 'Team';
+        const abbreviation = team?.abbreviation || sectionTitle;
+        const rosterCount = Array.isArray(team?.roster) ? team.roster.length : null;
+        const countDisplay = rosterCount === null ? '—' : String(rosterCount);
+        const countMarkup = [
+          `<span class="roster-team__count${rosterCount === null ? ' roster-team__count--empty' : ''}" aria-hidden="true">${escapeHtml(
+            countDisplay,
+          )}</span>`,
+          rosterCount === null ? '' : `<span class="visually-hidden">${escapeHtml(`${rosterCount} players`)}</span>`,
+        ]
+          .filter(Boolean)
+          .join('');
 
         return `
-          <details class="roster-team" data-team-anchor="${escapeHtml(team?.abbreviation ?? sectionTitle)}">
-            <summary class="roster-team__header">
-              <h3>${escapeHtml(sectionTitle)}</h3>
-              <p>${escapeHtml(subtitle || '')}</p>
+          <details class="roster-team" data-team-anchor="${escapeHtml(abbreviation)}">
+            <summary class="roster-team__header" title="${escapeHtml(sectionTitle)}">
+              <span class="roster-team__identity">
+                <span class="visually-hidden">${escapeHtml(sectionTitle)} roster</span>
+                <span class="roster-team__abbr" aria-hidden="true">${escapeHtml(abbreviation)}</span>
+              </span>
+              ${countMarkup}
             </summary>
             <ul class="roster-list">
               ${items || emptyState}
@@ -2490,6 +2495,47 @@ function initPlayerAtlas() {
     }
   };
 
+  const FALLBACK_TEAM_NAME = 'Unaffiliated pool';
+
+  const deriveTeamAbbreviation = (teamName, members = []) => {
+    const abbrCandidate = members
+      .map((player) => {
+        if (player?.bdl?.teamAbbr) return player.bdl.teamAbbr;
+        if (player?.bdl?.team?.abbreviation) return player.bdl.team.abbreviation;
+        if (player?.teamAbbr) return player.teamAbbr;
+        return null;
+      })
+      .find((value) => typeof value === 'string' && value.trim().length);
+
+    if (abbrCandidate) {
+      return abbrCandidate.trim().slice(0, 4).toUpperCase();
+    }
+
+    if (teamName === FALLBACK_TEAM_NAME) {
+      return 'FA';
+    }
+
+    const sanitized = typeof teamName === 'string' ? teamName.replace(/[^A-Za-z0-9\s]/g, ' ').trim() : '';
+    if (!sanitized) {
+      return 'UNK';
+    }
+
+    const words = sanitized.split(/\s+/).filter(Boolean);
+    if (words.length === 1) {
+      return words[0].slice(0, 3).toUpperCase();
+    }
+
+    const acronym = words
+      .map((word) => {
+        const letter = word.match(/[A-Za-z]/);
+        return letter ? letter[0].toUpperCase() : '';
+      })
+      .join('')
+      .slice(0, 4);
+
+    return acronym || sanitized.slice(0, 3).toUpperCase();
+  };
+
   const renderTeamBrowser = (roster) => {
     if (!teamTree) return;
     teamTree.innerHTML = '';
@@ -2502,11 +2548,10 @@ function initPlayerAtlas() {
       return;
     }
 
-    const fallbackTeam = 'Unaffiliated pool';
     const groups = new Map();
 
     roster.forEach((player) => {
-      const teamName = player?.bdl?.teamName?.trim() || player?.team?.trim() || fallbackTeam;
+      const teamName = player?.bdl?.teamName?.trim() || player?.team?.trim() || FALLBACK_TEAM_NAME;
       if (!groups.has(teamName)) {
         groups.set(teamName, []);
       }
@@ -2520,20 +2565,33 @@ function initPlayerAtlas() {
       const panel = document.createElement('details');
       panel.className = 'player-atlas__team';
       panel.dataset.team = teamName;
+      const teamAbbr = deriveTeamAbbreviation(teamName, members);
+      panel.dataset.teamAbbr = teamAbbr;
 
       const summary = document.createElement('summary');
       summary.className = 'player-atlas__team-summary';
+      summary.title = teamName;
 
-      const title = document.createElement('span');
-      title.className = 'player-atlas__team-name';
-      title.textContent = teamName;
+      const identity = document.createElement('span');
+      identity.className = 'player-atlas__team-identity';
+
+      const srLabel = document.createElement('span');
+      srLabel.className = 'visually-hidden';
+      srLabel.textContent = `${teamName} roster`;
+
+      const abbr = document.createElement('span');
+      abbr.className = 'player-atlas__team-name';
+      abbr.textContent = teamAbbr;
+      abbr.setAttribute('aria-hidden', 'true');
+
+      identity.append(srLabel, abbr);
 
       const count = document.createElement('span');
       count.className = 'player-atlas__team-count';
       count.textContent = `${members.length}`;
       count.setAttribute('aria-label', `${members.length} ${members.length === 1 ? 'player' : 'players'}`);
 
-      summary.append(title, count);
+      summary.append(identity, count);
       panel.append(summary);
 
       const list = document.createElement('ul');
