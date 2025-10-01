@@ -126,6 +126,26 @@
                     <dd data-player-archetype>—</dd>
                   </div>
                   <div class="player-card__fact">
+                    <dt>Team</dt>
+                    <dd data-player-team>—</dd>
+                  </div>
+                  <div class="player-card__fact">
+                    <dt>Position</dt>
+                    <dd data-player-position>—</dd>
+                  </div>
+                  <div class="player-card__fact">
+                    <dt>Jersey</dt>
+                    <dd data-player-jersey>—</dd>
+                  </div>
+                  <div class="player-card__fact">
+                    <dt>Height</dt>
+                    <dd data-player-height>—</dd>
+                  </div>
+                  <div class="player-card__fact">
+                    <dt>Weight</dt>
+                    <dd data-player-weight>—</dd>
+                  </div>
+                  <div class="player-card__fact">
                     <dt>Vitals</dt>
                     <dd data-player-vitals>—</dd>
                   </div>
@@ -139,6 +159,52 @@
                   </div>
                 </dl>
               </div>
+              <section
+                class="player-card__stats"
+                data-player-stats
+                aria-live="polite"
+                aria-busy="false"
+              >
+                <header class="player-card__stats-header">
+                  <h3>
+                    Season averages
+                    <span class="player-card__stats-season" data-player-stats-season>—</span>
+                  </h3>
+                  <p class="player-card__stats-meta" data-player-stats-meta></p>
+                </header>
+                <p class="player-card__stats-empty" data-player-stats-empty hidden>
+                  Season averages are not available right now.
+                </p>
+                <p class="player-card__stats-error" data-player-stats-error hidden>
+                  We couldn't load season averages right now.
+                </p>
+                <dl class="player-card__stats-grid">
+                  <div class="player-card__stat">
+                    <dt class="player-card__stat-label">Games</dt>
+                    <dd class="player-card__stat-value" data-player-stat-games>—</dd>
+                  </div>
+                  <div class="player-card__stat">
+                    <dt class="player-card__stat-label">Points</dt>
+                    <dd class="player-card__stat-value" data-player-stat-points>—</dd>
+                  </div>
+                  <div class="player-card__stat">
+                    <dt class="player-card__stat-label">Rebounds</dt>
+                    <dd class="player-card__stat-value" data-player-stat-rebounds>—</dd>
+                  </div>
+                  <div class="player-card__stat">
+                    <dt class="player-card__stat-label">Assists</dt>
+                    <dd class="player-card__stat-value" data-player-stat-assists>—</dd>
+                  </div>
+                  <div class="player-card__stat">
+                    <dt class="player-card__stat-label">Steals</dt>
+                    <dd class="player-card__stat-value" data-player-stat-steals>—</dd>
+                  </div>
+                  <div class="player-card__stat">
+                    <dt class="player-card__stat-label">Blocks</dt>
+                    <dd class="player-card__stat-value" data-player-stat-blocks>—</dd>
+                  </div>
+                </dl>
+              </section>
               <section
                 class="player-card__visuals-section"
                 aria-labelledby="player-card-visuals-title"
