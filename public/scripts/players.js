@@ -1791,6 +1791,7 @@ function initPlayerAtlas() {
   let metricDefinitions = new Map();
   let metricOrder = new Map();
   let currentRostersDoc = null;
+  let isUsingFallbackRoster = false;
   const defaultEmptyText = empty?.textContent?.trim() ?? '';
   const defaultTeamGoatEmptyText = teamGoatEmpty?.textContent?.trim() ?? 'Team GOAT averages are warming up.';
   const normalizePlayerId = (value) => {
@@ -1798,6 +1799,31 @@ function initPlayerAtlas() {
       return null;
     }
     return String(value);
+  };
+  const populatePlayersByBdlId = (sourcePlayers) => {
+    playersByBdlId.clear();
+    if (!Array.isArray(sourcePlayers)) {
+      return;
+    }
+    sourcePlayers.forEach((player) => {
+      if (!player) {
+        return;
+      }
+      const candidate =
+        player?.bdl?.id !== undefined && player?.bdl?.id !== null
+          ? player.bdl.id
+          : player?.personId !== undefined && player?.personId !== null
+            ? player.personId
+            : null;
+      if (candidate === null || candidate === undefined) {
+        return;
+      }
+      const key = String(candidate).trim();
+      if (!key) {
+        return;
+      }
+      playersByBdlId.set(key, player);
+    });
   };
   const ensurePlayerSearchTokens = (player) => {
     player.searchTokens = buildPlayerTokens(player);
@@ -1973,6 +1999,10 @@ function initPlayerAtlas() {
   };
 
   const updateRosterTimestamp = () => {
+    if (isUsingFallbackRoster) {
+      updatedEl.textContent = 'Live roster snapshot unavailable — showing scouting atlas roster data.';
+      return;
+    }
     if (!currentRostersDoc) {
       updatedEl.textContent = 'Active roster snapshot not yet available.';
       return;
@@ -2065,6 +2095,14 @@ function initPlayerAtlas() {
       matches = [];
       activeIndex = -1;
     }
+  };
+
+  const applyFallbackRoster = () => {
+    isUsingFallbackRoster = true;
+    currentRostersDoc = null;
+    setActivePlayers(allPlayers);
+    populatePlayersByBdlId(players);
+    updateRosterTimestamp();
   };
 
   const renderMeta = (player) => {
@@ -2511,13 +2549,14 @@ function initPlayerAtlas() {
   };
 
   const applyPrimaryFeedDoc = (doc) => {
-    currentRostersDoc = doc ?? null;
-    updateRosterTimestamp();
-    playersByBdlId.clear();
-    if (!doc || !Array.isArray(doc.teams)) {
-      setActivePlayers([]);
+    if (!doc || !Array.isArray(doc.teams) || doc.teams.length === 0) {
+      applyFallbackRoster();
       return;
     }
+
+    isUsingFallbackRoster = false;
+    currentRostersDoc = doc ?? null;
+    updateRosterTimestamp();
 
     const nameBuckets = new Map();
     allPlayers.forEach((player) => {
@@ -2613,11 +2652,6 @@ function initPlayerAtlas() {
         };
 
         ensurePlayerSearchTokens(playerRecord);
-
-        if (member?.id !== undefined && member?.id !== null) {
-          playersByBdlId.set(String(member.id), playerRecord);
-        }
-
         if (isNewRecord) {
           extras.push(playerRecord);
         }
@@ -2642,6 +2676,7 @@ function initPlayerAtlas() {
     }
 
     setActivePlayers(atlasPlayers);
+    populatePlayersByBdlId(players);
   };
 
   const updateActiveOption = () => {
@@ -3119,8 +3154,7 @@ function initPlayerAtlas() {
       if (rostersDoc) {
         applyPrimaryFeedDoc(rostersDoc);
       } else {
-        playersByBdlId.clear();
-        setActivePlayers([]);
+        applyFallbackRoster();
       }
 
       isLoaded = true;
