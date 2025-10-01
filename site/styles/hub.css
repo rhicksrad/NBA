@@ -732,6 +732,12 @@ a:hover, a:focus { color: var(--sky); }
   font-weight: 800;
   letter-spacing: -0.01em;
 }
+.hero__lead {
+  margin: 0;
+  color: var(--text-subtle);
+  font-size: clamp(0.96rem, 2.3vw, 1.12rem);
+  line-height: 1.55;
+}
 .hero__lede {
   margin: 0;
   color: var(--text-subtle);
@@ -777,11 +783,53 @@ a:hover, a:focus { color: var(--sky); }
 .hero--lab .hero__intro {
   margin: 0;
   text-align: left;
-  gap: 0.6rem;
+  gap: clamp(0.5rem, 1.6vw, 0.85rem);
+  max-width: none;
+  align-items: start;
 }
 
 .hero--lab h1 {
   margin: 0;
+}
+
+.hero--lab .games-toolbar {
+  margin-top: clamp(0.4rem, 1.4vw, 0.8rem);
+}
+
+@media (min-width: 1024px) {
+  .hero--lab {
+    grid-template-columns: minmax(0, 1.38fr) minmax(0, 1fr);
+  }
+
+  .hero--lab .hero__intro {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    column-gap: clamp(1.1rem, 2.6vw, 1.8rem);
+    row-gap: clamp(0.45rem, 1vw, 0.7rem);
+  }
+
+  .hero--lab .hero__intro .eyebrow {
+    flex: 0 0 100%;
+    margin-bottom: clamp(0.25rem, 0.9vw, 0.5rem);
+  }
+
+  .hero--lab .hero__intro h1 {
+    flex: 0 1 auto;
+    margin: 0;
+  }
+
+  .hero--lab .hero__intro .hero__lead {
+    flex: 1 1 280px;
+    max-width: none;
+  }
+
+  .hero--lab .games-toolbar {
+    flex: 0 0 auto;
+    margin: 0 0 0 auto;
+    width: min(100%, 320px);
+    align-self: stretch;
+  }
 }
 
 .power-board {

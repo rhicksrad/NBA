@@ -744,7 +744,7 @@ a:hover, a:focus { color: var(--sky); }
 }
 
 .hero--lab {
-  padding: clamp(2rem, 4.2vw, 2.8rem) clamp(1.4rem, 3.4vw, 2.1rem);
+  padding: clamp(1.7rem, 3.6vw, 2.5rem) clamp(1.2rem, 3vw, 1.9rem);
   border-radius: var(--radius-lg);
   border: 1px solid color-mix(in srgb, var(--royal) 18%, transparent);
   background:
@@ -754,7 +754,8 @@ a:hover, a:focus { color: var(--sky); }
     color-mix(in srgb, rgba(255, 255, 255, 0.94) 70%, rgba(242, 246, 255, 0.92) 30%);
   box-shadow: 0 26px 48px rgba(11, 37, 69, 0.2);
   display: grid;
-  gap: clamp(1.1rem, 2.5vw, 1.9rem);
+  gap: clamp(0.95rem, 2.1vw, 1.6rem);
+  align-items: start;
   position: relative;
   overflow: hidden;
 }
@@ -777,11 +778,63 @@ a:hover, a:focus { color: var(--sky); }
 .hero--lab .hero__intro {
   margin: 0;
   text-align: left;
-  gap: 0.6rem;
+  gap: clamp(0.5rem, 1.6vw, 0.85rem);
+  max-width: none;
+  align-items: start;
 }
 
 .hero--lab h1 {
   margin: 0;
+}
+
+.hero__lead {
+  margin: 0;
+  color: var(--text-subtle);
+  font-size: clamp(0.96rem, 2.3vw, 1.12rem);
+  line-height: 1.55;
+}
+
+@media (min-width: 820px) {
+  .hero--lab {
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    column-gap: clamp(1.2rem, 2.5vw, 1.8rem);
+  }
+}
+
+@media (min-width: 1024px) {
+  .hero--lab {
+    grid-template-columns: minmax(0, 1.38fr) minmax(0, 1fr);
+  }
+
+  .hero--lab .hero__intro {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    column-gap: clamp(1.1rem, 2.6vw, 1.8rem);
+    row-gap: clamp(0.45rem, 1vw, 0.7rem);
+  }
+
+  .hero--lab .hero__intro .eyebrow {
+    flex: 0 0 100%;
+    margin-bottom: clamp(0.25rem, 0.9vw, 0.5rem);
+  }
+
+  .hero--lab .hero__intro h1 {
+    flex: 0 1 auto;
+    margin: 0;
+  }
+
+  .hero--lab .hero__intro .hero__lead {
+    flex: 1 1 280px;
+    max-width: none;
+  }
+
+  .hero--lab .games-toolbar {
+    flex: 0 0 auto;
+    margin: 0 0 0 auto;
+    width: min(100%, 320px);
+    align-self: stretch;
+  }
 }
 
 .power-board {
@@ -6090,6 +6143,10 @@ section h2 { margin-top: 0; font-size: clamp(1.35rem, 3vw, 1.8rem); letter-spaci
   flex-wrap: wrap;
   align-items: center;
   gap: 0.75rem;
+}
+
+.hero--lab .games-toolbar {
+  margin-top: clamp(0.4rem, 1.4vw, 0.8rem);
 }
 
 .games-toolbar label {
