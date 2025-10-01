@@ -1747,6 +1747,9 @@ function initPlayerAtlas() {
   const statBlocksEl = atlas.querySelector('[data-player-stat-blocks]');
   const teamBrowser = atlas.querySelector('[data-player-teams]');
   const teamTree = atlas.querySelector('[data-player-team-tree]');
+  const teamGoatPanel = atlas.querySelector('[data-player-teams-goat]');
+  const teamGoatList = atlas.querySelector('[data-player-teams-goat-list]');
+  const teamGoatEmpty = atlas.querySelector('[data-player-teams-goat-empty]');
   const recentLeaderboard = document.querySelector('[data-recent-leaderboard]');
   const recentPlaceholder = document.querySelector('[data-recent-placeholder]');
 
@@ -1783,13 +1786,13 @@ function initPlayerAtlas() {
   let activeIndex = -1;
   let isLoaded = false;
   let hasError = false;
-  let hasShowcasedInitialPlayer = false;
   let goatLookup = { byId: new Map(), byName: new Map(), recent: [] };
   let atlasMetrics = { byId: new Map(), byName: new Map() };
   let metricDefinitions = new Map();
   let metricOrder = new Map();
   let currentRostersDoc = null;
   const defaultEmptyText = empty?.textContent?.trim() ?? '';
+  const defaultTeamGoatEmptyText = teamGoatEmpty?.textContent?.trim() ?? 'Team GOAT averages are warming up.';
   const normalizePlayerId = (value) => {
     if (value === null || value === undefined) {
       return null;
@@ -2084,6 +2087,25 @@ function initPlayerAtlas() {
     return parts.join(' • ');
   };
 
+  const resolvePlayerGoatScore = (player) => {
+    if (!player) {
+      return null;
+    }
+    const goatScores = player?.goatScores || {};
+    const candidates = [
+      goatScores?.historical,
+      player?.goatScore,
+      goatScores?.recent,
+      player?.goatRecentScore,
+    ];
+    for (const value of candidates) {
+      if (Number.isFinite(value)) {
+        return Number(value);
+      }
+    }
+    return null;
+  };
+
   function renderPlayerMetricsView(player) {
     if (!metricsContainer) {
       return;
@@ -2252,6 +2274,133 @@ function initPlayerAtlas() {
     return acronym || sanitized.slice(0, 3).toUpperCase();
   };
 
+  const renderTeamGoatLeaderboard = (teamEntries) => {
+    if (!teamGoatPanel || !teamGoatList) {
+      return;
+    }
+
+    teamGoatList.innerHTML = '';
+
+    if (!Array.isArray(teamEntries) || !teamEntries.length) {
+      teamGoatPanel.hidden = true;
+      if (teamGoatEmpty) {
+        teamGoatEmpty.hidden = false;
+        teamGoatEmpty.textContent = defaultTeamGoatEmptyText;
+      }
+      return;
+    }
+
+    const leaderboard = teamEntries
+      .map(([teamName, roster]) => {
+        const members = Array.isArray(roster) ? roster : [];
+        const rosterSize = members.length;
+        if (!rosterSize) {
+          return null;
+        }
+        let goatTotal = 0;
+        let graded = 0;
+        members.forEach((player) => {
+          const value = resolvePlayerGoatScore(player);
+          if (Number.isFinite(value)) {
+            goatTotal += value;
+            graded += 1;
+          }
+        });
+        const average = rosterSize ? goatTotal / rosterSize : 0;
+        return {
+          teamName,
+          teamAbbr: deriveTeamAbbreviation(teamName, members),
+          rosterSize,
+          goatTotal,
+          graded,
+          average,
+        };
+      })
+      .filter(Boolean);
+
+    if (!leaderboard.length) {
+      teamGoatPanel.hidden = true;
+      if (teamGoatEmpty) {
+        teamGoatEmpty.hidden = false;
+        teamGoatEmpty.textContent = defaultTeamGoatEmptyText;
+      }
+      return;
+    }
+
+    leaderboard.sort((a, b) => {
+      if (b.average !== a.average) {
+        return b.average - a.average;
+      }
+      if (b.goatTotal !== a.goatTotal) {
+        return b.goatTotal - a.goatTotal;
+      }
+      return a.teamName.localeCompare(b.teamName);
+    });
+
+    leaderboard.forEach((entry, index) => {
+      const item = document.createElement('li');
+      item.className = 'player-atlas__teams-goat-entry';
+
+      const rank = document.createElement('span');
+      rank.className = 'player-atlas__teams-goat-rank';
+      rank.textContent = helpers.formatNumber(index + 1, 0);
+
+      const body = document.createElement('div');
+      body.className = 'player-atlas__teams-goat-body';
+
+      const heading = document.createElement('div');
+      heading.className = 'player-atlas__teams-goat-team';
+
+      const name = document.createElement('span');
+      name.className = 'player-atlas__teams-goat-name';
+      name.textContent = entry.teamAbbr || entry.teamName;
+      name.title = entry.teamName;
+
+      const rosterLabel = document.createElement('span');
+      rosterLabel.className = 'player-atlas__teams-goat-roster';
+      rosterLabel.textContent = `${helpers.formatNumber(entry.rosterSize, 0)} ${
+        entry.rosterSize === 1 ? 'player' : 'players'
+      }`;
+
+      heading.append(name, rosterLabel);
+
+      const metrics = document.createElement('div');
+      metrics.className = 'player-atlas__teams-goat-metrics';
+
+      const average = document.createElement('span');
+      average.className = 'player-atlas__teams-goat-average';
+      average.textContent = `${helpers.formatNumber(entry.average, 1)} GOAT / spot`;
+
+      const total = document.createElement('span');
+      total.className = 'player-atlas__teams-goat-total';
+      total.textContent = `${helpers.formatNumber(entry.goatTotal, 1)} total GOAT`;
+
+      metrics.append(average, total);
+
+      const coverage = document.createElement('span');
+      coverage.className = 'player-atlas__teams-goat-coverage';
+      if (entry.graded === entry.rosterSize) {
+        coverage.textContent = 'Full GOAT coverage';
+      } else {
+        coverage.textContent = `${helpers.formatNumber(entry.graded, 0)} of ${helpers.formatNumber(
+          entry.rosterSize,
+          0,
+        )} graded`;
+      }
+      metrics.append(coverage);
+
+      body.append(heading, metrics);
+      item.append(rank, body);
+      teamGoatList.append(item);
+    });
+
+    teamGoatPanel.hidden = false;
+    if (teamGoatEmpty) {
+      teamGoatEmpty.hidden = true;
+      teamGoatEmpty.textContent = defaultTeamGoatEmptyText;
+    }
+  };
+
   const renderTeamBrowser = (roster) => {
     if (!teamTree) return;
     teamTree.innerHTML = '';
@@ -2261,6 +2410,7 @@ function initPlayerAtlas() {
       if (teamBrowser) {
         teamBrowser.hidden = true;
       }
+      renderTeamGoatLeaderboard([]);
       return;
     }
 
@@ -2354,6 +2504,7 @@ function initPlayerAtlas() {
     if (teamBrowser) {
       teamBrowser.hidden = false;
     }
+    renderTeamGoatLeaderboard(Array.from(groups.entries()));
     if (activePlayerId) {
       highlightTeamPlayer(activePlayerId);
     }
@@ -2610,7 +2761,6 @@ function initPlayerAtlas() {
 
   const selectPlayer = (player) => {
     if (!player) return;
-    hasShowcasedInitialPlayer = true;
     if (searchInput) {
       searchInput.value = player.name;
     }
@@ -2741,59 +2891,6 @@ function initPlayerAtlas() {
     loadSeasonAverages(player);
 
     profile.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  };
-
-  const getShowcaseCandidates = () =>
-    players.filter((candidate) => {
-      if (!candidate) {
-        return false;
-      }
-
-      const bdlId = candidate?.bdl?.id;
-      if (bdlId === null || bdlId === undefined) {
-        return false;
-      }
-
-      const metricsRecord =
-        candidate.metrics && typeof candidate.metrics === 'object' && candidate.metrics !== null
-          ? Object.values(candidate.metrics)
-          : [];
-      const hasPercentiles = metricsRecord.some((entry) => Number.isFinite(entry?.value));
-      if (!hasPercentiles) {
-        return false;
-      }
-
-      const goatDetails = candidate?.goatScores || {};
-      const hasGoatSignal =
-        Number.isFinite(candidate?.goatScore) ||
-        Number.isFinite(goatDetails?.historical) ||
-        Number.isFinite(goatDetails?.recent);
-
-      return hasGoatSignal;
-    });
-
-  const showcaseInitialPlayer = () => {
-    if (hasShowcasedInitialPlayer) {
-      return;
-    }
-    if (profile && profile.hidden === false) {
-      return;
-    }
-    if (searchInput && searchInput.value.trim()) {
-      return;
-    }
-
-    const candidates = getShowcaseCandidates();
-    if (!candidates.length) {
-      return;
-    }
-
-    const selection = candidates[Math.floor(Math.random() * candidates.length)] ?? null;
-    if (!selection) {
-      return;
-    }
-
-    selectPlayer(selection);
   };
 
   const selectPlayerByBdlId = (bdlId) => {
@@ -3050,11 +3147,17 @@ function initPlayerAtlas() {
             renderResults(pendingQuery);
           } else {
             resetStatusMessages();
+            if (document.activeElement !== searchInput) {
+              try {
+                searchInput.focus({ preventScroll: true });
+              } catch (focusError) {
+                searchInput.focus();
+              }
+            }
           }
         } else {
           resetStatusMessages();
         }
-        showcaseInitialPlayer();
       }
     } catch (err) {
       console.error(err);
