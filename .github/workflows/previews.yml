@@ -4,7 +4,7 @@ on:
   push:
     branches: [ main ]
   schedule:
-    - cron: "27 7 * * *"   # runs at 07:27 UTC daily
+    - cron: "27 7 * * *"
   workflow_dispatch:
 
 permissions:
@@ -20,11 +20,29 @@ jobs:
     runs-on: ubuntu-latest
     environment: previews
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: ./.github/actions/setup-pnpm
-      - run: pnpm i --frozen-lockfile
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
+      - name: Tooling sanity
+        run: |
+          node -v
+          pnpm -v
+
+      - name: Install deps
+        run: pnpm i --frozen-lockfile
 
       - name: Stamp date
         id: metadata
@@ -41,8 +59,10 @@ jobs:
           USE_NBA_STATS: "0"
           USE_BREF: "0"
           BDL_PROXY_BASE: https://bdlproxy.hicksrch.workers.dev/bdl
-          ALLOW_INJURY_FAILURE: "true"
         run: pnpm previews
+
+      - name: Validate previews
+        run: pnpm validate:previews
 
       - name: Detect changes
         id: changes
@@ -66,7 +86,7 @@ jobs:
         with:
           commit-message: "chore(previews): refresh canonical data and regenerate previews for ${{ steps.metadata.outputs.date }}"
           title: "Auto refresh previews ${{ steps.metadata.outputs.date }}"
-          body: "Auto-generated previews."
+          body: "Auto-generated previews. CI fails if stale names are detected."
           branch: "chore/auto-previews-${{ github.run_id }}"
           base: "main"
           delete-branch: true
