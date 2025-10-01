@@ -2251,14 +2251,19 @@ function initPlayerAtlas() {
   const highlightTeamPlayer = (playerId) => {
     if (!teamTree) return;
     if (!teamButtons.length) {
-      teamButtons = Array.from(teamTree.querySelectorAll('[data-player-id]'));
+      teamButtons = Array.from(teamTree.querySelectorAll('.player-atlas__team-player'));
     }
     const normalizedId = normalizePlayerId(playerId);
+    const normalizedBdlId = normalizedId && normalizedId.startsWith('bdl-') ? normalizedId.slice(4) : null;
     let activeButton = null;
     teamButtons.forEach((button) => {
-      const isActive = Boolean(normalizedId) && button.dataset.playerId === normalizedId;
-      button.classList.toggle('is-active', isActive);
-      if (isActive) {
+      const candidateId = normalizePlayerId(button.dataset.playerId);
+      const candidateBdlId = button.dataset.bdlId ? String(button.dataset.bdlId) : null;
+      const matches =
+        (normalizedId && candidateId && candidateId === normalizedId) ||
+        (normalizedBdlId && candidateBdlId && candidateBdlId === normalizedBdlId);
+      button.classList.toggle('is-active', Boolean(matches));
+      if (matches) {
         activeButton = button;
       }
     });
@@ -2379,56 +2384,34 @@ function initPlayerAtlas() {
       const item = document.createElement('li');
       item.className = 'player-atlas__teams-goat-entry';
 
-      const rank = document.createElement('span');
-      rank.className = 'player-atlas__teams-goat-rank';
-      rank.textContent = helpers.formatNumber(index + 1, 0);
+      const srLabel = document.createElement('span');
+      srLabel.className = 'visually-hidden';
+      const coverageLabel =
+        entry.graded === entry.rosterSize
+          ? 'All roster spots graded.'
+          : `${helpers.formatNumber(entry.graded, 0)} of ${helpers.formatNumber(entry.rosterSize, 0)} players graded.`;
+      srLabel.textContent = `Rank ${helpers.formatNumber(index + 1, 0)}. ${entry.teamName}. Average ${helpers.formatNumber(
+        entry.average,
+        1,
+      )} GOAT per spot, ${helpers.formatNumber(entry.goatTotal, 1)} total GOAT. ${coverageLabel}`;
 
-      const body = document.createElement('div');
-      body.className = 'player-atlas__teams-goat-body';
+      const abbr = entry.teamAbbr || deriveTeamAbbreviation(entry.teamName, []);
+      const line = document.createElement('span');
+      line.className = 'player-atlas__teams-goat-line';
+      const parts = [
+        helpers.formatNumber(index + 1, 0),
+        abbr,
+        `${helpers.formatNumber(entry.rosterSize, 0)}p`,
+        `${helpers.formatNumber(entry.average, 1)}G/s`,
+        `${helpers.formatNumber(entry.goatTotal, 1)} Tot`,
+      ];
+      line.textContent = parts.join(' ');
+      line.title = `${entry.teamName} — Avg ${helpers.formatNumber(entry.average, 1)} GOAT per spot, ${helpers.formatNumber(
+        entry.goatTotal,
+        1,
+      )} total`;
 
-      const heading = document.createElement('div');
-      heading.className = 'player-atlas__teams-goat-team';
-
-      const name = document.createElement('span');
-      name.className = 'player-atlas__teams-goat-name';
-      name.textContent = entry.teamAbbr || entry.teamName;
-      name.title = entry.teamName;
-
-      const rosterLabel = document.createElement('span');
-      rosterLabel.className = 'player-atlas__teams-goat-roster';
-      rosterLabel.textContent = `${helpers.formatNumber(entry.rosterSize, 0)} ${
-        entry.rosterSize === 1 ? 'player' : 'players'
-      }`;
-
-      heading.append(name, rosterLabel);
-
-      const metrics = document.createElement('div');
-      metrics.className = 'player-atlas__teams-goat-metrics';
-
-      const average = document.createElement('span');
-      average.className = 'player-atlas__teams-goat-average';
-      average.textContent = `${helpers.formatNumber(entry.average, 1)} GOAT / spot`;
-
-      const total = document.createElement('span');
-      total.className = 'player-atlas__teams-goat-total';
-      total.textContent = `${helpers.formatNumber(entry.goatTotal, 1)} total GOAT`;
-
-      metrics.append(average, total);
-
-      const coverage = document.createElement('span');
-      coverage.className = 'player-atlas__teams-goat-coverage';
-      if (entry.graded === entry.rosterSize) {
-        coverage.textContent = 'Full GOAT coverage';
-      } else {
-        coverage.textContent = `${helpers.formatNumber(entry.graded, 0)} of ${helpers.formatNumber(
-          entry.rosterSize,
-          0,
-        )} graded`;
-      }
-      metrics.append(coverage);
-
-      body.append(heading, metrics);
-      item.append(rank, body);
+      item.append(srLabel, line);
       teamGoatList.append(item);
     });
 
@@ -2501,44 +2484,62 @@ function initPlayerAtlas() {
       const list = document.createElement('ul');
       list.className = 'player-atlas__team-roster';
 
-      members
-        .slice()
-        .sort((a, b) => a.name.localeCompare(b.name))
-        .forEach((player) => {
-          const item = document.createElement('li');
-          item.className = 'player-atlas__team-entry';
+        members
+          .slice()
+          .sort((a, b) => a.name.localeCompare(b.name))
+          .forEach((player) => {
+            const item = document.createElement('li');
+            item.className = 'player-atlas__team-entry';
 
-          const button = document.createElement('button');
-          button.type = 'button';
-          button.className = 'player-atlas__team-player';
-          button.dataset.playerId = normalizePlayerId(player.id);
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.className = 'player-atlas__team-player';
+            const normalizedId = normalizePlayerId(player?.id);
+            const bdlId =
+              player?.bdl?.id !== undefined && player?.bdl?.id !== null
+                ? player.bdl.id
+                : player?.personId ?? null;
 
-          const name = document.createElement('span');
-          name.className = 'player-atlas__team-player-name';
-          name.textContent = player.name;
+            if (normalizedId) {
+              button.dataset.playerId = normalizedId;
+            } else if (bdlId !== null && bdlId !== undefined) {
+              button.dataset.playerId = `bdl-${bdlId}`;
+            }
 
-          button.append(name);
+            if (bdlId !== null && bdlId !== undefined) {
+              button.dataset.bdlId = String(bdlId);
+            }
 
-          const positionLabel = player?.bdl?.position || null;
-          const jerseyLabel = player?.bdl?.jersey || null;
-          const metaBits = [positionLabel, jerseyLabel ? `#${jerseyLabel}` : null].filter(Boolean);
-          if (metaBits.length) {
-            const meta = document.createElement('span');
-            meta.className = 'player-atlas__team-player-meta';
-            meta.textContent = metaBits.join(' • ');
-            button.append(meta);
-          }
+            if (!button.dataset.playerId && !button.dataset.bdlId) {
+              return;
+            }
 
-          item.append(button);
-          list.append(item);
-        });
+            const name = document.createElement('span');
+            name.className = 'player-atlas__team-player-name';
+            name.textContent = player.name;
+
+            button.append(name);
+
+            const positionLabel = player?.bdl?.position || null;
+            const jerseyLabel = player?.bdl?.jersey || null;
+            const metaBits = [positionLabel, jerseyLabel ? `#${jerseyLabel}` : null].filter(Boolean);
+            if (metaBits.length) {
+              const meta = document.createElement('span');
+              meta.className = 'player-atlas__team-player-meta';
+              meta.textContent = metaBits.join(' • ');
+              button.append(meta);
+            }
+
+            item.append(button);
+            list.append(item);
+          });
 
       panel.append(list);
       fragment.append(panel);
     });
 
     teamTree.append(fragment);
-    teamButtons = Array.from(teamTree.querySelectorAll('[data-player-id]'));
+    teamButtons = Array.from(teamTree.querySelectorAll('.player-atlas__team-player'));
     if (teamBrowser) {
       teamBrowser.hidden = false;
     }
@@ -2810,7 +2811,16 @@ function initPlayerAtlas() {
     if (empty) empty.hidden = true;
 
     profile.hidden = false;
-    const normalizedId = normalizePlayerId(player?.id);
+    let normalizedId = normalizePlayerId(player?.id);
+    if (!normalizedId) {
+      const fallbackBdl =
+        player?.bdl?.id !== undefined && player?.bdl?.id !== null
+          ? player.bdl.id
+          : player?.personId ?? null;
+      if (fallbackBdl !== null && fallbackBdl !== undefined) {
+        normalizedId = `bdl-${fallbackBdl}`;
+      }
+    }
     profile.dataset.playerId = normalizedId ?? '';
     activePlayerId = normalizedId;
     highlightTeamPlayer(activePlayerId);
@@ -2989,15 +2999,27 @@ function initPlayerAtlas() {
   };
 
   const handleTeamClick = (event) => {
-    const button = event.target.closest('[data-player-id]');
+    const button = event.target.closest('.player-atlas__team-player');
     if (!button || !teamTree?.contains(button)) {
       return;
     }
-    const playerId = button.dataset.playerId;
-    if (!playerId) return;
-    const player = playersById.get(normalizePlayerId(playerId));
-    if (player) {
-      selectPlayer(player);
+    const candidateId = normalizePlayerId(button.dataset.playerId);
+    if (candidateId) {
+      const player = playersById.get(candidateId);
+      if (player) {
+        selectPlayer(player);
+        return;
+      }
+    }
+    const bdlId = button.dataset.bdlId;
+    if (bdlId && selectPlayerByBdlId(bdlId)) {
+      return;
+    }
+    if (candidateId && candidateId.startsWith('bdl-')) {
+      const fallbackBdl = candidateId.slice(4);
+      if (fallbackBdl && selectPlayerByBdlId(fallbackBdl)) {
+        return;
+      }
     }
   };
 
