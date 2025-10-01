@@ -64,12 +64,67 @@
             </p>
           </header>
           <div class="player-atlas__layout">
+            <section
+              class="player-atlas__search player-atlas__panel"
+              aria-labelledby="player-atlas-search-label"
+            >
+              <div class="player-atlas__searchbox">
+                <label class="player-atlas__label" id="player-atlas-search-label" for="player-atlas-search">
+                  Search the scouting atlas
+                </label>
+                <div class="player-atlas__field">
+                  <input
+                    id="player-atlas-search"
+                    class="player-atlas__input"
+                    type="search"
+                    inputmode="search"
+                    autocomplete="off"
+                    spellcheck="false"
+                    enterkeyhint="search"
+                    placeholder="Search by player, jersey, or franchise"
+                    data-player-search
+                    aria-autocomplete="list"
+                    aria-controls="player-atlas-search-results"
+                    aria-expanded="false"
+                  />
+                  <button type="button" class="player-atlas__clear" data-player-clear hidden>
+                    Clear
+                  </button>
+                </div>
+                <ul
+                  id="player-atlas-search-results"
+                  class="player-atlas__results"
+                  role="listbox"
+                  data-player-results
+                  hidden
+                ></ul>
+              </div>
+              <p class="player-atlas__hint" data-player-hint>
+                Start typing a player's name, jersey number, or franchise to surface his scouting capsule.
+              </p>
+              <p class="player-atlas__empty" data-player-empty hidden>
+                No matches found. Try another player, jersey number, or team.
+              </p>
+              <p class="player-atlas__error" data-player-error hidden>
+                We couldn't load the scouting atlas right now. Refresh to try again soon.
+              </p>
+            </section>
             <div class="player-atlas__teams" data-player-teams hidden>
               <h3 class="player-atlas__teams-title">Browse by franchise</h3>
               <p class="player-atlas__teams-copy">
                 Expand a team to scan its 2025-26 roster and jump straight to a player's scouting card.
               </p>
               <div class="player-atlas__teams-tree" data-player-team-tree></div>
+              <aside class="player-atlas__teams-goat" data-player-teams-goat hidden>
+                <h4 class="player-atlas__teams-goat-title">GOAT roster averages</h4>
+                <p class="player-atlas__teams-goat-copy">
+                  Ranking each franchise by average GOAT score per roster spot, normalized for current roster sizes.
+                </p>
+                <ol class="player-atlas__teams-goat-list" data-player-teams-goat-list></ol>
+                <p class="player-atlas__teams-goat-empty" data-player-teams-goat-empty hidden>
+                  Team GOAT averages are warming up.
+                </p>
+              </aside>
             </div>
             <article class="player-card" data-player-profile hidden aria-live="polite">
               <header class="player-card__header">
