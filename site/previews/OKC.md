@@ -1,6 +1,6 @@
 # Oklahoma City Thunder
 
-Oklahoma City enters camp fresh off a 57-win and +6.3 SRS finish that sets a title-or-bust tone. guard Aaron Wiggins, wing Jalen Williams, and big Branden Carlson headline the returning core.
+Oklahoma City enters camp fresh off a 57-win and +6.3 SRS finish that sets a title-or-bust tone. guard Shai Gilgeous-Alexander, wing Jalen Williams, and big Chet Holmgren headline the returning core.
 The roster lists 9 guards, 5 wing/forwards, 4 centers, and 3 combo pieces, with perimeter creation from Aaron Wiggins and Ajay Mitchell, switchable wings such as Jalen Williams and Kenrich Williams, interior size via Branden Carlson and Chet Holmgren, and hybrid depth from Brooks Barnhizer and Chris Youngblood shaping the rotation battles.
 From there, honing playoff-ready counters is the chief priority. Aaron Wiggins's lead guard reps will determine how dynamic the offense looks.
 

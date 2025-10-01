@@ -12,6 +12,26 @@ export interface PlayerRecord {
   isNewAddition?: boolean;
 }
 
+export interface PlayerScoringAverage {
+  playerId: string;
+  pointsPerGame: number;
+  gamesPlayed: number;
+  name?: string | null;
+  firstName?: string | null;
+  lastName?: string | null;
+}
+
+export interface PlayerScoringDataset {
+  season?: string;
+  generatedAt?: string;
+  players?: PlayerScoringAverage[];
+}
+
+export interface PlayerScoringIndex {
+  byId: Record<string, PlayerScoringAverage>;
+  byName: Record<string, PlayerScoringAverage>;
+}
+
 export interface TeamRecord {
   teamId: string;
   tricode: string;
@@ -131,6 +151,7 @@ export interface LeagueContext {
   players: PlayerRecord[];
   injuries: InjuryRecord[];
   rankings: RankedTeam[];
+  playerScoring: PlayerScoringIndex;
 }
 
 export interface RankedTeam {

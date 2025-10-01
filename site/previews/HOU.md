@@ -1,6 +1,6 @@
 # Houston Rockets
 
-Houston enters camp fresh off a 41-win and +1.4 SRS finish that sets a playoff chase tone. guard Aaron Holiday, wing Amen Thompson, and big Alperen Sengun headline the returning core.
+Houston enters camp fresh off a 41-win and +1.4 SRS finish that sets a playoff chase tone. wing Kevin Durant, big Alperen Sengun, and guard Fred VanVleet headline the returning core.
 The roster lists 6 guards, 9 wing/forwards, and 3 centers, with perimeter creation from Aaron Holiday and Fred VanVleet, switchable wings such as Amen Thompson and Cameron Matthews, and interior size via Alperen Sengun and Clint Capela shaping the rotation battles.
 From there, the staff will refine lineup versatility to climb the standings. Aaron Holiday's lead guard reps will determine how dynamic the offense looks.
 

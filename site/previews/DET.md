@@ -1,6 +1,6 @@
 # Detroit Pistons
 
-Detroit enters camp fresh off a 14-win and -9.3 SRS finish that sets a development tone. guard Aaron Estrada, wing Ausar Thompson, and big Charles Bediako headline the returning core.
+Detroit enters camp fresh off a 14-win and -9.3 SRS finish that sets a development tone. wing Cade Cunningham, guard Jaden Ivey, and wing Tolu Smith headline the returning core.
 The roster lists 7 guards, 11 wing/forwards, 3 centers, and 1 combo piece, with perimeter creation from Aaron Estrada and Caris LeVert, switchable wings such as Ausar Thompson and Bobi Klintman, interior size via Charles Bediako and Isaiah Stewart, and hybrid depth from Daniss Jenkins shaping the rotation battles.
 From there, building chemistry and developmental reps sits at the top of the agenda. Aaron Estrada's lead guard reps will determine how dynamic the offense looks.
 

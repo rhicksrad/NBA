@@ -1,8 +1,20 @@
-import { LeagueContext, PlayerRecord, TeamRecord } from "../../scripts/lib/types.js";
+import { readFileSync } from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+import {
+  LeagueContext,
+  PlayerRecord,
+  PlayerScoringAverage,
+  PlayerScoringDataset,
+  PlayerScoringIndex,
+  TeamRecord,
+} from "../../scripts/lib/types.js";
 
 export interface TeamPreviewContent {
   heading: string;
   introParagraphs: string[];
+  returningCore: string[];
+  returningCoreDescriptors: string[];
   coreStrength: string;
   primaryRisk: string;
   swingFactor: string;
@@ -15,6 +27,60 @@ const RISK_WORDS: Record<"low" | "medium" | "high", string> = {
   high: "elevated",
 };
 
+const TEMPLATE_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../");
+const SCORING_PATH = path.join(TEMPLATE_ROOT, "data/2025-26/canonical/player_scoring_averages.json");
+
+let FALLBACK_SCORING: PlayerScoringIndex | null = null;
+
+function loadFallbackScoring(): PlayerScoringIndex {
+  if (FALLBACK_SCORING) {
+    return FALLBACK_SCORING;
+  }
+  try {
+    const raw = readFileSync(SCORING_PATH, "utf8");
+    const payload = JSON.parse(raw) as PlayerScoringDataset;
+    const index: PlayerScoringIndex = { byId: {}, byName: {} };
+    const players = Array.isArray(payload?.players) ? payload.players : [];
+    for (const entry of players) {
+      const playerId = typeof entry?.playerId === "string" ? entry.playerId.trim() : "";
+      if (!playerId) {
+        continue;
+      }
+      const record: PlayerScoringAverage = {
+        playerId,
+        pointsPerGame: typeof entry.pointsPerGame === "number" && Number.isFinite(entry.pointsPerGame)
+          ? entry.pointsPerGame
+          : 0,
+        gamesPlayed: typeof entry.gamesPlayed === "number" && Number.isFinite(entry.gamesPlayed)
+          ? Math.max(0, Math.round(entry.gamesPlayed))
+          : 0,
+        name: entry.name ?? null,
+        firstName: entry.firstName ?? null,
+        lastName: entry.lastName ?? null,
+      };
+      index.byId[playerId] = record;
+      const nameKeys = new Set<string>();
+      const combined = record.name ?? `${record.firstName ?? ""} ${record.lastName ?? ""}`;
+      nameKeys.add(normalizeNameKey(combined));
+      nameKeys.add(normalizeNameKey(`${record.lastName ?? ""} ${record.firstName ?? ""}`));
+      for (const key of nameKeys) {
+        if (!key) {
+          continue;
+        }
+        const existing = index.byName[key];
+        if (!existing || record.pointsPerGame > existing.pointsPerGame) {
+          index.byName[key] = record;
+        }
+      }
+    }
+    FALLBACK_SCORING = index;
+  } catch (error) {
+    console.warn("Unable to load fallback scoring averages.", error);
+    FALLBACK_SCORING = { byId: {}, byName: {} };
+  }
+  return FALLBACK_SCORING;
+}
+
 type PositionBucket = "guard" | "wing" | "big" | "flex";
 
 interface RosterBuckets {
@@ -22,6 +88,17 @@ interface RosterBuckets {
   wings: PlayerRecord[];
   bigs: PlayerRecord[];
   flex: PlayerRecord[];
+}
+
+interface AnchorPiece {
+  descriptor: string;
+  playerName: string | null;
+}
+
+interface AnchorSummary {
+  summary: string;
+  descriptors: string[];
+  players: string[];
 }
 
 function formatList(values: string[]): string {
@@ -108,6 +185,38 @@ function buildDuplicateNameSet(players: PlayerRecord[]): Set<string> {
   return new Set([...counts.entries()].filter(([, count]) => count > 1).map(([name]) => name));
 }
 
+function normalizeNameKey(value?: string | null): string {
+  if (!value) {
+    return "";
+  }
+  return value
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z]/g, "");
+}
+
+function scoringRecordForPlayer(player: PlayerRecord, scoring: PlayerScoringIndex): PlayerScoringAverage | undefined {
+  const id = player.playerId?.trim();
+  if (id && scoring.byId[id]) {
+    return scoring.byId[id];
+  }
+  const candidateKeys = new Set<string>();
+  candidateKeys.add(normalizeNameKey(player.name));
+  candidateKeys.add(normalizeNameKey(`${player.firstName ?? ""} ${player.lastName ?? ""}`));
+  candidateKeys.add(normalizeNameKey(`${player.lastName ?? ""} ${player.firstName ?? ""}`));
+  for (const key of candidateKeys) {
+    if (!key) {
+      continue;
+    }
+    const record = scoring.byName[key];
+    if (record) {
+      return record;
+    }
+  }
+  return undefined;
+}
+
 function pickPrimaryPlayer(players: PlayerRecord[], duplicates: Set<string>): PlayerRecord | undefined {
   for (const player of players) {
     if (player.name && !duplicates.has(player.name)) {
@@ -117,37 +226,135 @@ function pickPrimaryPlayer(players: PlayerRecord[], duplicates: Set<string>): Pl
   return players[0];
 }
 
-function describeAnchors(team: TeamRecord, duplicates: Set<string>): string {
+function buildScoringAnchorPieces(team: TeamRecord, ctx: LeagueContext): AnchorPiece[] {
+  const roster = normalizedRoster(team);
+  if (roster.length === 0) {
+    return [];
+  }
+  const scoring = ctx.playerScoring ?? loadFallbackScoring();
+  const enriched = roster.map((player, index) => {
+    const record = scoringRecordForPlayer(player, scoring);
+    const points = record?.pointsPerGame ?? 0;
+    const games = record?.gamesPlayed ?? 0;
+    return { player, points, games, index };
+  });
+  const sorted = [...enriched].sort((a, b) => {
+    if (b.points !== a.points) {
+      return b.points - a.points;
+    }
+    if (b.games !== a.games) {
+      return b.games - a.games;
+    }
+    return a.index - b.index;
+  });
+  const withStats = sorted.filter((entry) => entry.points > 0 || entry.games > 0);
+  const queue = [...withStats];
+  for (const entry of sorted) {
+    if (!withStats.includes(entry)) {
+      queue.push(entry);
+    }
+  }
+  const targetCount = Math.min(3, roster.length);
+  const seen = new Set<string>();
+  const selected: typeof sorted = [];
+  for (const entry of queue) {
+    if (selected.length >= targetCount) {
+      break;
+    }
+    const name = entry.player.name;
+    if (!name) {
+      continue;
+    }
+    const key = entry.player.playerId ?? name;
+    if (seen.has(key)) {
+      continue;
+    }
+    seen.add(key);
+    selected.push(entry);
+  }
+  const pieces = selected
+    .map((entry) => {
+      const name = entry.player.name ?? null;
+      if (!name) {
+        return null;
+      }
+      const bucket = classifyPosition(entry.player.position);
+      const label = bucket === "guard" ? "guard" : bucket === "wing" ? "wing" : bucket === "big" ? "big" : null;
+      const descriptor = label ? `${label} ${name}` : name;
+      return { descriptor, playerName: name } satisfies AnchorPiece;
+    })
+    .filter((value): value is AnchorPiece => Boolean(value));
+  return pieces;
+}
+
+function buildFallbackAnchors(team: TeamRecord, duplicates: Set<string>): AnchorSummary {
   const buckets = bucketRoster(team);
-  const pieces: string[] = [];
+  const pieces: AnchorPiece[] = [];
   const guard = pickPrimaryPlayer(buckets.guards, duplicates);
   const wing = pickPrimaryPlayer(buckets.wings, duplicates);
   const big = pickPrimaryPlayer(buckets.bigs, duplicates);
   if (guard) {
-    pieces.push(`guard ${guard.name}`);
+    pieces.push({ descriptor: `guard ${guard.name}`, playerName: guard.name ?? null });
   }
   if (wing) {
-    pieces.push(`wing ${wing.name}`);
+    pieces.push({ descriptor: `wing ${wing.name}`, playerName: wing.name ?? null });
   }
   if (big) {
-    pieces.push(`big ${big.name}`);
+    pieces.push({ descriptor: `big ${big.name}`, playerName: big.name ?? null });
   }
   if (pieces.length === 0) {
     const roster = normalizedRoster(team);
     if (roster.length === 0) {
-      return "The roster is still being finalized around training-camp invites.";
+      return {
+        summary: "The roster is still being finalized around training-camp invites.",
+        descriptors: [],
+        players: [],
+      };
     }
     if (roster.length === 1) {
-      return `${roster[0].name} is the first pillar for the staff to build around.`;
+      const solo = roster[0].name ?? null;
+      return {
+        summary: `${solo ?? "A core piece"} is the first pillar for the staff to build around.`,
+        descriptors: solo ? [solo] : [],
+        players: solo ? [solo] : [],
+      };
     }
     const fallbackNames = roster
       .map((player) => player.name)
       .filter((name): name is string => Boolean(name))
       .slice(0, 2);
-    return `The staff is leaning on ${formatList(fallbackNames)} as table-setters.`;
+    return {
+      summary: `The staff is leaning on ${formatList(fallbackNames)} as table-setters.`,
+      descriptors: fallbackNames,
+      players: fallbackNames,
+    };
   }
-  const anchorSummary = formatList(pieces);
-  return `${anchorSummary} headline the returning core.`;
+  const descriptors = pieces.map((piece) => piece.descriptor);
+  const players = pieces
+    .map((piece) => piece.playerName)
+    .filter((name): name is string => Boolean(name));
+  const anchorSummary = formatList(descriptors);
+  return {
+    summary: `${anchorSummary} headline the returning core.`,
+    descriptors,
+    players,
+  };
+}
+
+function describeAnchors(team: TeamRecord, ctx: LeagueContext, duplicates: Set<string>): AnchorSummary {
+  const scoringPieces = buildScoringAnchorPieces(team, ctx);
+  if (scoringPieces.length > 0) {
+    const descriptors = scoringPieces.map((piece) => piece.descriptor);
+    const players = scoringPieces
+      .map((piece) => piece.playerName)
+      .filter((name): name is string => Boolean(name));
+    return {
+      summary: `${formatList(descriptors)} headline the returning core.`,
+      descriptors,
+      players,
+    };
+  }
+  return buildFallbackAnchors(team, duplicates);
 }
 
 function formatWins(wins?: number): string | null {
@@ -166,7 +373,7 @@ function formatSrs(srs?: number): string | null {
   return `${prefix}${rounded} SRS`;
 }
 
-function seasonPerformanceParagraph(team: TeamRecord, duplicates: Set<string>): string {
+function seasonPerformanceParagraph(team: TeamRecord, anchor: AnchorSummary): string {
   const winsText = formatWins(team.lastSeasonWins);
   const srsText = formatSrs(team.lastSeasonSRS);
   const metrics = [winsText, srsText].filter(Boolean).join(" and ");
@@ -192,7 +399,7 @@ function seasonPerformanceParagraph(team: TeamRecord, duplicates: Set<string>): 
   const contextPart = metrics
     ? `fresh off a ${metrics} finish that sets a ${descriptor} tone`
     : `tracking a ${descriptor} approach after last season`;
-  return `${team.market} enters camp ${contextPart}. ${describeAnchors(team, duplicates)}`;
+  return `${team.market} enters camp ${contextPart}. ${anchor.summary}`;
 }
 
 function selectHighlightNames(
@@ -385,13 +592,16 @@ function swingFactor(team: TeamRecord, duplicates: Set<string>): string {
 
 export function buildTeamPreviewContent(team: TeamRecord, ctx: LeagueContext): TeamPreviewContent {
   const duplicates = buildDuplicateNameSet(ctx.players);
+  const anchors = describeAnchors(team, ctx, duplicates);
   return {
     heading: `${team.market} ${team.name}`,
     introParagraphs: [
-      seasonPerformanceParagraph(team, duplicates),
+      seasonPerformanceParagraph(team, anchors),
       summarizeAdditions(team, duplicates),
       summarizeLosses(team, ctx, duplicates),
     ],
+    returningCore: anchors.players,
+    returningCoreDescriptors: anchors.descriptors,
     coreStrength: coreStrength(team),
     primaryRisk: primaryRisk(team, ctx),
     swingFactor: swingFactor(team, duplicates),

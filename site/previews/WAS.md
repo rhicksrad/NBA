@@ -1,6 +1,6 @@
 # Washington Wizards
 
-Washington enters camp fresh off a 15-win and -8.8 SRS finish that sets a development tone. guard AJ Johnson, wing Akoldah Gak, and big Alexandre Sarr headline the returning core.
+Washington enters camp fresh off a 15-win and -8.8 SRS finish that sets a development tone. guard CJ McCollum, guard Bilal Coulibaly, and wing Khris Middleton headline the returning core.
 The roster lists 7 guards, 14 wing/forwards, 1 center, and 2 combo pieces, with perimeter creation from AJ Johnson and Bilal Coulibaly, switchable wings such as Akoldah Gak and Anthony Gill, interior size via Alexandre Sarr, and hybrid depth from Jonathan Pierre and Keshon Gilbert shaping the rotation battles.
 From there, building chemistry and developmental reps sits at the top of the agenda. AJ Johnson's lead guard reps will determine how dynamic the offense looks.
 

@@ -1,6 +1,6 @@
 # Phoenix Suns
 
-Phoenix enters camp fresh off a 49-win and +2.4 SRS finish that sets a upper-tier playoff tone. guard Collin Gillespie, wing CJ Huntley, and big Khaman Maluach headline the returning core.
+Phoenix enters camp fresh off a 49-win and +2.4 SRS finish that sets a upper-tier playoff tone. guard Devin Booker, guard Jalen Green, and big Mark Williams headline the returning core.
 The roster lists 8 guards, 8 wing/forwards, 3 centers, and 3 combo pieces, with perimeter creation from Collin Gillespie and Damion Baugh, switchable wings such as CJ Huntley and Dillon Brooks, interior size via Khaman Maluach and Mark Williams, and hybrid depth from Jordan Goodwin and Moses Wood shaping the rotation battles.
 From there, the staff will refine lineup versatility to climb the standings. Collin Gillespie's lead guard reps will determine how dynamic the offense looks.
 
