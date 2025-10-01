@@ -310,6 +310,24 @@ function parseDateOnly(value) {
   return parsed;
 }
 
+function extractStatusIsoDate(status) {
+  if (typeof status !== 'string') {
+    return null;
+  }
+  const trimmed = status.trim();
+  if (!trimmed) {
+    return null;
+  }
+  if (isValidIsoDate(trimmed)) {
+    return trimmed;
+  }
+  const parsed = parseDateTime(trimmed);
+  if (!parsed) {
+    return null;
+  }
+  return parsed.toISOString().slice(0, 10);
+}
+
 function computeStage(status, period) {
   const normalized = (status ?? '').toString().toLowerCase();
   if (normalized.includes('final')) {
@@ -532,7 +550,17 @@ function createScoreboardCard(game) {
 
   const statusSpan = document.createElement('span');
   statusSpan.className = 'scoreboard-card__status';
-  statusSpan.textContent = formatGameStatus(game);
+  const isoStatus = game.stage === 'upcoming' ? extractStatusIsoDate(game.status) : null;
+  const statusLabel = isoStatus ?? formatGameStatus(game);
+  statusSpan.textContent = statusLabel;
+  if (isoStatus) {
+    statusSpan.setAttribute('data-iso-date', isoStatus);
+    const friendly = formatDateLabel(isoStatus);
+    if (friendly && friendly !== isoStatus) {
+      statusSpan.setAttribute('title', friendly);
+      statusSpan.setAttribute('aria-label', friendly);
+    }
+  }
   header.appendChild(statusSpan);
 
   const metaText = formatGameMeta(game);
