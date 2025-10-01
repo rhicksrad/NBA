@@ -2499,6 +2499,22 @@ section h2 { margin-top: 0; font-size: clamp(1.35rem, 3vw, 1.8rem); letter-spaci
   z-index: 1;
 }
 
+.hero--goat .hero__intro {
+  max-width: none;
+  margin: 0;
+  text-align: left;
+}
+
+.hero--goat .hero__intro h1 {
+  white-space: nowrap;
+}
+
+@media (max-width: 720px) {
+  .hero--goat .hero__intro h1 {
+    white-space: normal;
+  }
+}
+
 .hero__metrics {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
