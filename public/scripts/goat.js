@@ -193,13 +193,6 @@ function renderGoatEquation(weights) {
 
       item.append(weightStrong, document.createTextNode(' × '), componentLabel);
 
-      if (typeof weight.description === 'string' && weight.description.trim().length) {
-        const description = document.createElement('span');
-        description.className = 'goat-formula-card__description';
-        description.textContent = ` — ${weight.description.trim()}`;
-        item.append(description);
-      }
-
       listTarget.append(item);
     });
   }

@@ -2677,11 +2677,55 @@ section h2 { margin-top: 0; font-size: clamp(1.35rem, 3vw, 1.8rem); letter-spaci
 
 .goat-methodology { display: grid; gap: 1.8rem; margin-block: 3rem; }
 
-.goat-methodology__layout {
+.goat-methodology-panel {
   display: grid;
-  gap: 1.5rem;
+  gap: 1.6rem;
+  padding: 1.6rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid color-mix(in srgb, var(--royal) 18%, transparent);
+  background: color-mix(in srgb, rgba(255, 255, 255, 0.94) 72%, rgba(17, 86, 214, 0.08) 28%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.62);
+}
+
+.goat-methodology-panel__overview {
+  display: grid;
+  gap: 1.4rem;
   grid-template-columns: minmax(240px, 1fr) minmax(300px, 1.2fr);
   align-items: stretch;
+}
+
+.goat-methodology-panel__body {
+  display: grid;
+  gap: 1.8rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.goat-methodology-panel__weights,
+.goat-methodology-panel__sources {
+  display: grid;
+  gap: 1rem;
+}
+
+.goat-methodology-panel__weights-header,
+.goat-methodology-panel__sources-header {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.goat-methodology-panel__weights-title,
+.goat-methodology-panel__sources-title {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--navy);
+}
+
+.goat-methodology-panel__weights-copy,
+.goat-methodology-panel__sources-copy {
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: var(--text-subtle);
 }
 
 .goat-formula-card {
@@ -2733,49 +2777,19 @@ section h2 { margin-top: 0; font-size: clamp(1.35rem, 3vw, 1.8rem); letter-spaci
   color: var(--navy);
 }
 
-.goat-formula-card__description {
-  color: var(--text-subtle);
-}
-
 .goat-formula-card__footnote {
   margin: 0;
   font-size: 0.82rem;
   color: var(--text-subtle);
 }
 
-.goat-methodology__grid {
+.goat-weight-collection {
   display: grid;
   gap: 1rem;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  grid-column: 1 / -1;
 }
 
-.goat-sources-card {
-  grid-column: 1 / -1;
-  padding: 1.35rem 1.4rem;
-  border-radius: var(--radius-md);
-  border: 1px solid color-mix(in srgb, var(--royal) 16%, transparent);
-  background: color-mix(in srgb, rgba(255, 255, 255, 0.94) 72%, rgba(17, 86, 214, 0.1) 28%);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.62);
-  display: grid;
-  gap: 1.1rem;
-}
-
-.goat-sources-card__title {
-  margin: 0;
-  font-size: 1.08rem;
-  font-weight: 700;
-  color: var(--navy);
-}
-
-.goat-sources-card__lede {
-  margin: 0.4rem 0 0;
-  font-size: 0.92rem;
-  line-height: 1.55;
-  color: var(--text-subtle);
-}
-
-.goat-sources-card__panels {
+.goat-source-collection {
   display: grid;
   gap: 1rem;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -3283,7 +3297,12 @@ section h2 { margin-top: 0; font-size: clamp(1.35rem, 3vw, 1.8rem); letter-spaci
   .hero__metrics {
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   }
-  .goat-methodology__layout {
+  .goat-methodology-panel { padding: 1.3rem; }
+  .goat-methodology-panel__overview {
+    grid-template-columns: 1fr;
+  }
+  .goat-methodology-panel__body {
+    gap: 1.4rem;
     grid-template-columns: 1fr;
   }
   .goat-detail__list { grid-template-columns: 1fr; }
