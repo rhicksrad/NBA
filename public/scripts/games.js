@@ -42,17 +42,20 @@ function determineMaxSelectableDate() {
 
 function determineInitialDate() {
   const today = getTodayIso();
-  const maxSelectable = determineMaxSelectableDate();
-  if (today >= NEXT_SEASON_TIPOFF_DATE) {
-    if (maxSelectable && today > maxSelectable) {
-      return maxSelectable;
+  const bounds = getSelectableBounds();
+  const clampedToday = clampDate(today, bounds);
+  if (clampedToday) {
+    return clampedToday;
+  }
+  if (bounds) {
+    if (bounds.max) {
+      return bounds.max;
     }
-    return today;
+    if (bounds.min) {
+      return bounds.min;
+    }
   }
-  if (maxSelectable && LAST_COMPLETED_SEASON_FINALE > maxSelectable) {
-    return maxSelectable;
-  }
-  return LAST_COMPLETED_SEASON_FINALE;
+  return today;
 }
 
 function determineInitialRange() {
