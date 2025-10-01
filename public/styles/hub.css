@@ -4315,18 +4315,20 @@ section h2 { margin-top: 0; font-size: clamp(1.35rem, 3vw, 1.8rem); letter-spaci
 
 .team-explorer__intro {
   display: grid;
-  gap: clamp(0.8rem, 2vw, 1.2rem);
-  max-width: 680px;
+  gap: clamp(0.7rem, 1.6vw, 1.05rem);
+  max-width: min(100%, clamp(780px, 70vw, 1020px));
 }
 
 .team-explorer__intro h2 {
-  font-size: clamp(1.9rem, 3.8vw, 2.4rem);
+  font-size: clamp(2rem, 4.1vw, 2.75rem);
+  text-wrap: pretty;
 }
 
 .team-explorer__intro p {
   color: color-mix(in srgb, var(--text-subtle) 75%, var(--navy) 25%);
-  font-size: 1.05rem;
-  line-height: 1.7;
+  font-size: clamp(1.02rem, 2vw, 1.12rem);
+  line-height: 1.6;
+  text-wrap: pretty;
 }
 
 .team-explorer__legend {
