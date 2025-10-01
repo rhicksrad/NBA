@@ -18,35 +18,19 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-pnpm
+      - run: pnpm i --frozen-lockfile
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: pnpm
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          run_install: false
-
-      - name: Install deps
-        run: pnpm i --frozen-lockfile
-
-      # Build your data via the Cloudflare proxy (no secrets in CI)
       - name: Build data
         run: pnpm build:data
         env:
           BDL_PROXY_BASE: https://bdlproxy.hicksrch.workers.dev/bdl
           ALLOW_INJURY_FAILURE: "true"
 
-      # Build static assets into public/assets/*
       - name: Build site
         run: pnpm build
 
-      # Optional: generate previews and validate before deploy
       - name: Generate previews
         run: pnpm gen:previews
 
@@ -54,13 +38,11 @@ jobs:
         run: pnpm validate:previews
 
       - name: Ensure site root exists
-        run: |
-          test -f public/index.html || { echo "public/index.html missing"; exit 1; }
+        run: test -f public/index.html
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
-      # Upload only the static site, not the repo root
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
@@ -76,4 +58,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-

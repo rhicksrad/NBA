@@ -20,24 +20,11 @@ jobs:
     runs-on: ubuntu-latest
     environment: previews
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: pnpm
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          run_install: false   # pnpm version comes from package.json: packageManager
-
-      - name: Install deps
-        run: pnpm i --frozen-lockfile
+      - uses: ./.github/actions/setup-pnpm
+      - run: pnpm i --frozen-lockfile
 
       - name: Stamp date
         id: metadata
@@ -46,21 +33,16 @@ jobs:
       - name: Verify Ball Don't Lie API access
         env:
           BDL_PROXY_BASE: https://bdlproxy.hicksrch.workers.dev/bdl
-          VERIFY_ALLOW_5XX: "true"   # soft-pass a single upstream 5xx after one retry
+          VERIFY_ALLOW_5XX: "true"
         run: pnpm verify:bdl
 
-      # 'pnpm previews' already calls build:data + gen:previews + validate:previews
       - name: Build previews
         env:
           USE_NBA_STATS: "0"
           USE_BREF: "0"
           BDL_PROXY_BASE: https://bdlproxy.hicksrch.workers.dev/bdl
-          ALLOW_INJURY_FAILURE: "true"   # don't fail pipeline if /player_injuries keeps 500'ing
+          ALLOW_INJURY_FAILURE: "true"
         run: pnpm previews
-
-      # Optional: remove this if your 'previews' script already validates
-      # - name: Validate previews
-      #   run: pnpm validate:previews
 
       - name: Detect changes
         id: changes
@@ -84,8 +66,7 @@ jobs:
         with:
           commit-message: "chore(previews): refresh canonical data and regenerate previews for ${{ steps.metadata.outputs.date }}"
           title: "Auto refresh previews ${{ steps.metadata.outputs.date }}"
-          body: "Auto-generated previews. CI fails if stale names are detected."
+          body: "Auto-generated previews."
           branch: "chore/auto-previews-${{ github.run_id }}"
           base: "main"
           delete-branch: true
-
