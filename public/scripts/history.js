@@ -1,4 +1,4 @@
-import { bdl } from '../assets/js/bdl.js';
+import { fetchSeasonAggregate } from '../assets/js/bdl.js';
 import { enablePanZoom, enhanceUsaInsets } from './map-utils.js';
 
 const LATEST_COMPLETED_SEASON = 2024;
@@ -391,12 +391,37 @@ function multiplyStat(value, games) {
   return Math.round(numericValue * numericGames);
 }
 
-async function fetchSeasonAggregate(player, postseason) {
-  const playerId = player?.id;
-  if (!Number.isFinite(playerId)) {
-    throw new Error('Invalid player identifier for season aggregate request.');
+async function loadPrewarmedCareer(playerId) {
+  const url = `data/bdl/season_averages/${playerId}.json`;
+  try {
+    const response = await fetch(url, { cache: 'no-store' });
+    if (!response.ok) return null;
+    return await response.json();
+  } catch {
+    return null;
   }
-  const totals = {
+}
+
+function normalizeSeasonAverageRow(payload) {
+  if (!payload) return null;
+  if (Array.isArray(payload?.data)) {
+    return payload.data[0] ?? null;
+  }
+  if (Array.isArray(payload)) {
+    return payload[0] ?? null;
+  }
+  return null;
+}
+
+function seasonHasGames(payload) {
+  const row = normalizeSeasonAverageRow(payload);
+  if (!row) return false;
+  const games = Number(row.games_played ?? row.games ?? row.gamesPlayed ?? 0);
+  return Number.isFinite(games) && games > 0;
+}
+
+function createEmptyTotals() {
+  return {
     games: 0,
     minutes: 0,
     points: 0,
@@ -415,21 +440,113 @@ async function fetchSeasonAggregate(player, postseason) {
     oreb: 0,
     dreb: 0,
   };
-  const seasons = new Set();
+}
+
+function buildTotalsFromRecords(records, key) {
+  const totals = createEmptyTotals();
+  const seasonSet = new Set();
+  for (const record of records) {
+    const payload = key === 'post' ? record.post : record.reg;
+    const row = normalizeSeasonAverageRow(payload);
+    if (!row) continue;
+    const games = Number(row.games_played ?? row.games ?? row.gamesPlayed ?? 0);
+    if (!Number.isFinite(games) || games <= 0) continue;
+    totals.games += games;
+    totals.minutes += multiplyStat(parseMinutes(row.min), games);
+    sumStat(totals, 'points', multiplyStat(row.pts ?? row.points ?? 0, games));
+    sumStat(totals, 'rebounds', multiplyStat(row.reb ?? row.rebounds ?? 0, games));
+    sumStat(totals, 'assists', multiplyStat(row.ast ?? row.assists ?? 0, games));
+    sumStat(totals, 'steals', multiplyStat(row.stl ?? row.steals ?? 0, games));
+    sumStat(totals, 'blocks', multiplyStat(row.blk ?? row.blocks ?? 0, games));
+    sumStat(totals, 'turnovers', multiplyStat(row.turnover ?? row.turnovers ?? 0, games));
+    sumStat(totals, 'fouls', multiplyStat(row.pf ?? row.fouls ?? 0, games));
+    sumStat(totals, 'fgm', multiplyStat(row.fgm ?? 0, games));
+    sumStat(totals, 'fga', multiplyStat(row.fga ?? 0, games));
+    sumStat(totals, 'fg3m', multiplyStat(row.fg3m ?? 0, games));
+    sumStat(totals, 'fg3a', multiplyStat(row.fg3a ?? 0, games));
+    sumStat(totals, 'ftm', multiplyStat(row.ftm ?? 0, games));
+    sumStat(totals, 'fta', multiplyStat(row.fta ?? 0, games));
+    sumStat(totals, 'oreb', multiplyStat(row.oreb ?? 0, games));
+    sumStat(totals, 'dreb', multiplyStat(row.dreb ?? 0, games));
+    const seasonValue = Number(row.season ?? record.season);
+    if (Number.isFinite(seasonValue)) {
+      seasonSet.add(seasonValue);
+    }
+  }
+  const seasonList = Array.from(seasonSet).sort((a, b) => a - b);
+  return { totals, seasons: seasonList };
+}
+
+function buildCareerTotals(records) {
+  const sorted = [...records].sort((a, b) => a.season - b.season);
+  return {
+    regular: buildTotalsFromRecords(sorted, 'reg'),
+    postseason: buildTotalsFromRecords(sorted, 'post'),
+  };
+}
+
+async function fetchCareerStats(player, { onCached } = {}) {
+  const playerId = player?.id;
+  if (!Number.isFinite(playerId)) {
+    throw new Error('Cannot fetch career stats without a valid player id.');
+  }
+
   const { start, end } = resolveSeasonRange(player);
+  const currentYear = new Date().getFullYear();
+  const prewarmed = await loadPrewarmedCareer(playerId);
+  const recordsBySeason = new Map();
+  if (Array.isArray(prewarmed)) {
+    for (const entry of prewarmed) {
+      const season = Number(entry?.season);
+      if (!Number.isFinite(season)) continue;
+      const reg = entry.reg ?? entry.regular ?? entry;
+      const post = entry.post ?? entry.postseason ?? null;
+      recordsBySeason.set(season, { season, reg, post });
+    }
+  }
+
+  const callback = typeof onCached === 'function' ? onCached : null;
+  const historicalRecords = [];
+  for (const [season, record] of recordsBySeason.entries()) {
+    if (season < start || season > end || season >= currentYear) continue;
+    if (seasonHasGames(record.reg) || seasonHasGames(record.post)) {
+      historicalRecords.push({ season, reg: record.reg, post: record.post });
+    }
+  }
+
+  let needsHydration = false;
+  for (let season = start; season <= end; season += 1) {
+    const isHistorical = season < currentYear;
+    if (!isHistorical || !recordsBySeason.has(season)) {
+      needsHydration = true;
+      break;
+    }
+  }
+
+  if (callback && historicalRecords.length) {
+    callback(buildCareerTotals(historicalRecords), { needsHydration });
+  }
+
+  const collected = [];
+  let seenGames = historicalRecords.length > 0;
   let emptyStreak = 0;
 
   for (let season = start; season <= end; season += 1) {
-    const params = new URLSearchParams();
-    params.set('season', String(season));
-    params.set('player_id', String(playerId));
-    if (postseason) {
-      params.set('postseason', 'true');
+    const isHistorical = season < currentYear;
+    let record = recordsBySeason.get(season);
+    if (!record || !isHistorical) {
+      const [reg, post] = await Promise.all([
+        fetchSeasonAggregate({ season, playerId, postseason: false }),
+        fetchSeasonAggregate({ season, playerId, postseason: true }),
+      ]);
+      record = { season, reg, post };
+      recordsBySeason.set(season, record);
     }
-    const payload = await bdl(`/v1/season_averages?${params.toString()}`, { cache: 'no-store' });
-    const record = Array.isArray(payload.data) ? payload.data[0] ?? null : null;
-    if (!record) {
-      if (totals.games > 0) {
+
+    if (!record) continue;
+    const hasData = seasonHasGames(record.reg) || seasonHasGames(record.post);
+    if (!hasData) {
+      if (seenGames) {
         emptyStreak += 1;
         if (emptyStreak >= 3) {
           break;
@@ -438,52 +555,12 @@ async function fetchSeasonAggregate(player, postseason) {
       continue;
     }
 
+    seenGames = true;
     emptyStreak = 0;
-    const games = Number(record.games_played ?? record.games ?? 0);
-    if (!Number.isFinite(games) || games <= 0) {
-      continue;
-    }
-
-    totals.games += games;
-    totals.minutes += multiplyStat(parseMinutes(record.min), games);
-    sumStat(totals, 'points', multiplyStat(record.pts ?? record.points ?? 0, games));
-    sumStat(totals, 'rebounds', multiplyStat(record.reb ?? record.rebounds ?? 0, games));
-    sumStat(totals, 'assists', multiplyStat(record.ast ?? record.assists ?? 0, games));
-    sumStat(totals, 'steals', multiplyStat(record.stl ?? record.steals ?? 0, games));
-    sumStat(totals, 'blocks', multiplyStat(record.blk ?? record.blocks ?? 0, games));
-    sumStat(totals, 'turnovers', multiplyStat(record.turnover ?? record.turnovers ?? 0, games));
-    sumStat(totals, 'fouls', multiplyStat(record.pf ?? record.fouls ?? 0, games));
-    sumStat(totals, 'fgm', multiplyStat(record.fgm ?? 0, games));
-    sumStat(totals, 'fga', multiplyStat(record.fga ?? 0, games));
-    sumStat(totals, 'fg3m', multiplyStat(record.fg3m ?? 0, games));
-    sumStat(totals, 'fg3a', multiplyStat(record.fg3a ?? 0, games));
-    sumStat(totals, 'ftm', multiplyStat(record.ftm ?? 0, games));
-    sumStat(totals, 'fta', multiplyStat(record.fta ?? 0, games));
-    sumStat(totals, 'oreb', multiplyStat(record.oreb ?? 0, games));
-    sumStat(totals, 'dreb', multiplyStat(record.dreb ?? 0, games));
-    const seasonValue = Number(record.season ?? season);
-    if (Number.isFinite(seasonValue)) {
-      seasons.add(seasonValue);
-    }
+    collected.push({ season: record.season, reg: record.reg, post: record.post });
   }
 
-  const seasonList = Array.from(seasons).sort((a, b) => a - b);
-  return { totals, seasons: seasonList };
-}
-
-async function fetchCareerStats(player) {
-  const playerId = player?.id;
-  if (!Number.isFinite(playerId)) {
-    throw new Error('Cannot fetch career stats without a valid player id.');
-  }
-  const [regular, postseason] = await Promise.all([
-    fetchSeasonAggregate(player, false),
-    fetchSeasonAggregate(player, true),
-  ]);
-  return {
-    regular,
-    postseason,
-  };
+  return buildCareerTotals(collected);
 }
 
 function renderTotalsTable(title, data) {
@@ -1396,8 +1473,22 @@ async function bootstrap() {
         createElement('p', 'history-player__hint', "Fetching the live career log from Ball Don't Lie…"),
       );
 
+      let renderedPrewarmed = false;
+
       try {
-        const career = await fetchCareerStats(player);
+        const career = await fetchCareerStats(player, {
+          onCached: (partialCareer, { needsHydration } = {}) => {
+            if (selectionToken !== token) return;
+            renderedPrewarmed = true;
+            totalsContainer.innerHTML = '';
+            const hint = needsHydration
+              ? 'Loaded prewarmed Ball Don\'t Lie archive — checking the latest season…'
+              : 'Loaded prewarmed Ball Don\'t Lie archive.';
+            totalsContainer.append(createElement('p', 'history-player__hint', hint));
+            totalsContainer.append(renderTotalsTable('Regular season', partialCareer.regular));
+            totalsContainer.append(renderTotalsTable('Postseason', partialCareer.postseason));
+          },
+        });
         if (selectionToken !== token) return;
         totalsContainer.innerHTML = '';
         totalsContainer.append(renderTotalsTable('Regular season', career.regular));
@@ -1405,7 +1496,15 @@ async function bootstrap() {
       } catch (error) {
         console.error(error);
         if (selectionToken !== token) return;
-        if (cachedCareer) {
+        if (renderedPrewarmed) {
+          totalsContainer.append(
+            createElement(
+              'p',
+              'history-player__hint',
+              'Live Ball Don\'t Lie refresh is currently unavailable — showing the prewarmed archive above.',
+            ),
+          );
+        } else if (cachedCareer) {
           renderCachedCareer(
             totalsContainer,
             cachedCareer,

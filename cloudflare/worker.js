@@ -49,23 +49,82 @@ export default {
     }
 
     const upstream = new URL("https://api.balldontlie.io" + url.pathname.replace(/^\/bdl/, "") + url.search);
-    const upstreamReq = new Request(upstream.toString(), {
-      method: "GET",
-      headers: { "Authorization": `Bearer ${env.BDL_API_KEY}`, "Accept": "application/json" }
-    });
+    const isSeasonAverages = upstream.pathname.endsWith("/season_averages");
+    const seasonParam = upstream.searchParams.get("season");
+    const currentYear = new Date().getFullYear();
+    const isHistoricalSeason = isSeasonAverages && seasonParam && Number(seasonParam) < currentYear;
 
     const cache = caches.default;
     const cacheKey = new Request(upstream.toString(), { method: "GET" });
 
-    const up = await fetch(upstreamReq);
-    let res = new Response(up.body, up);
-    if (up.ok) {
-      res.headers.set("Cache-Control", "public, max-age=60");
-      ctx.waitUntil(cache.put(cacheKey, res.clone()));
-    } else {
-      res.headers.delete("Cache-Control"); // never cache failures
-      res.headers.set("x-proxy", "bdlproxy");
+    if (request.method === "GET" && isHistoricalSeason) {
+      const cached = await cache.match(cacheKey);
+      if (cached) {
+        const cachedHeaders = new Headers(cached.headers);
+        const cachedResponse = new Response(cached.body, {
+          status: cached.status,
+          headers: cachedHeaders
+        });
+        return cors(cachedResponse);
+      }
     }
-    return cors(res);
+
+    const apiKey = env.BALLDONTLIE_API_KEY ?? env.BDL_API_KEY ?? "";
+    const headers = new Headers({ Accept: "application/json" });
+    if (apiKey) {
+      headers.set("Authorization", `Bearer ${apiKey}`);
+    }
+
+    const upstreamResponse = await fetch(upstream.toString(), {
+      method: request.method,
+      headers
+    });
+
+    if (upstreamResponse.status === 429) {
+      const retryHeaders = new Headers(upstreamResponse.headers);
+      if (!retryHeaders.has("Retry-After")) {
+        retryHeaders.set("Retry-After", "1");
+      }
+      const retryResponse = new Response(upstreamResponse.body, {
+        status: 429,
+        headers: retryHeaders
+      });
+      return cors(retryResponse);
+    }
+
+    const responseHeaders = new Headers(upstreamResponse.headers);
+    let response = new Response(upstreamResponse.body, {
+      status: upstreamResponse.status,
+      headers: responseHeaders
+    });
+
+    if (upstreamResponse.ok) {
+      if (request.method === "GET" && isHistoricalSeason) {
+        responseHeaders.set(
+          "Cache-Control",
+          "public, max-age=86400, stale-while-revalidate=604800"
+        );
+        response = new Response(upstreamResponse.body, {
+          status: upstreamResponse.status,
+          headers: responseHeaders
+        });
+        ctx.waitUntil(cache.put(cacheKey, response.clone()));
+      } else {
+        responseHeaders.set("Cache-Control", "public, max-age=60");
+        response = new Response(upstreamResponse.body, {
+          status: upstreamResponse.status,
+          headers: responseHeaders
+        });
+      }
+    } else {
+      responseHeaders.delete("Cache-Control");
+      responseHeaders.set("x-proxy", "bdlproxy");
+      response = new Response(upstreamResponse.body, {
+        status: upstreamResponse.status,
+        headers: responseHeaders
+      });
+    }
+
+    return cors(response);
   }
 };
