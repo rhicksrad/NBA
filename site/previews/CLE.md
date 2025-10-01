@@ -1,11 +1,11 @@
 # Cleveland Cavaliers
 
-The core trio of Chaney Johnson, Craig Porter, and Darius Brown gives the staff a clear identity to start from.
-The front office kept the core intact and will lean on internal development.
-No rotation regulars departed, so continuity remains a strength.
+Cleveland enters camp fresh off a 48-win and +3.5 SRS finish that sets a upper-tier playoff tone. guard Craig Porter, wing De'Andre Hunter, and big Evan Mobley headline the returning core.
+The roster lists 8 guards, 9 wing/forwards, 3 centers, and 2 combo pieces, with perimeter creation from Craig Porter and Darius Garland, switchable wings such as De'Andre Hunter and Dean Wade, interior size via Evan Mobley and Jarrett Allen, and hybrid depth from Chaney Johnson and Darius Brown shaping the rotation battles.
+From there, the staff will refine lineup versatility to climb the standings. Craig Porter's lead guard reps will determine how dynamic the offense looks.
 
-**Core strength:** Solid metrics and a dependable defensive spine give this group a high nightly floor.
-**Primary risk:** The margin for error is slim if the shooting variance swings the wrong way.
+**Core strength:** A balanced attack with multiple creators keeps the nightly floor high and the ceiling real.
+**Primary risk:** The margin for error tightens if perimeter shooting variance swings the wrong way.
 **Swing factor:** Craig Porter's lead guard reps will determine how dynamic the offense looks.
 
 _Season: 2025-26_

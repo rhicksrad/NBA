@@ -1,11 +1,11 @@
 # Milwaukee Bucks
 
-The core trio of A.J. Green, Amir Coffey, and Andre Jackson Jr. gives the staff a clear identity to start from.
-The front office kept the core intact and will lean on internal development.
-No rotation regulars departed, so continuity remains a strength.
+Milwaukee enters camp fresh off a 49-win and +3 SRS finish that sets a upper-tier playoff tone. guard A.J. Green, wing Bobby Portis, and big Myles Turner headline the returning core.
+The roster lists 10 guards, 8 wing/forwards, 1 center, and 3 combo pieces, with perimeter creation from A.J. Green and Amir Coffey, switchable wings such as Bobby Portis and Chris Livingston, interior size via Myles Turner, and hybrid depth from Cormac Ryan and Gary Trent Jr. shaping the rotation battles.
+From there, the staff will refine lineup versatility to climb the standings. A.J. Green's lead guard reps will determine how dynamic the offense looks.
 
-**Core strength:** Solid metrics and a dependable defensive spine give this group a high nightly floor.
-**Primary risk:** The margin for error is slim if the shooting variance swings the wrong way.
+**Core strength:** A balanced attack with multiple creators keeps the nightly floor high and the ceiling real.
+**Primary risk:** Frontcourt depth is thin, so foul trouble or injuries inside could quickly snowball.
 **Swing factor:** A.J. Green's lead guard reps will determine how dynamic the offense looks.
 
 _Season: 2025-26_
