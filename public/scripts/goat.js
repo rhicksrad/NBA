@@ -198,31 +198,36 @@ function renderGoatEquation(weights) {
   }
 }
 
-function updateGeneratedTimestamp(data, sourceUrl) {
-  const target = document.querySelector('[data-goat-generated]');
+function formatGeneratedTimestamp(rawTimestamp) {
+  if (!rawTimestamp) {
+    return null;
+  }
+
+  const parsed = new Date(rawTimestamp);
+  if (Number.isNaN(parsed.valueOf())) {
+    return rawTimestamp;
+  }
+
+  return new Intl.DateTimeFormat('en-US', {
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
+    timeZoneName: 'short',
+  }).format(parsed);
+}
+
+function updateGeneratedTimestamp(data, sourceUrl, { selector = '[data-goat-generated]' } = {}) {
+  const target = document.querySelector(selector);
   if (!target) {
     return;
   }
 
-  const rawTimestamp = data?.generatedAt;
-  if (!rawTimestamp) {
+  const formatted = formatGeneratedTimestamp(data?.generatedAt);
+  if (!formatted) {
     target.textContent = 'Latest refresh pending from GOAT data feeds.';
     return;
-  }
-
-  const parsed = new Date(rawTimestamp);
-  let formatted;
-  if (Number.isNaN(parsed.valueOf())) {
-    formatted = rawTimestamp;
-  } else {
-    formatted = new Intl.DateTimeFormat('en-US', {
-      month: 'long',
-      day: 'numeric',
-      year: 'numeric',
-      hour: 'numeric',
-      minute: '2-digit',
-      timeZoneName: 'short',
-    }).format(parsed);
   }
 
   let sourceSuffix = '';
@@ -554,8 +559,16 @@ function buildSourceNotes(weights) {
   });
 }
 
-function buildLeaderboard(players) {
-  const container = document.querySelector('[data-goat-tree]');
+function buildLeaderboard(
+  players,
+  {
+    treeSelector = '[data-goat-tree]',
+    placeholderText = 'Pantheon order will populate soon.',
+    playerAttribute = 'data-goat-player',
+    groupPlayers = groupPlayersByTier,
+  } = {},
+) {
+  const container = document.querySelector(treeSelector);
   if (!container) return null;
 
   container.innerHTML = '';
@@ -565,28 +578,26 @@ function buildLeaderboard(players) {
   if (!players.length) {
     const placeholder = document.createElement('p');
     placeholder.className = 'goat-tree__placeholder';
-    placeholder.textContent = 'Pantheon order will populate soon.';
+    placeholder.textContent = placeholderText;
     container.appendChild(placeholder);
     return null;
   }
 
-  const grouped = groupPlayersByTier(players);
+  const grouped = groupPlayers(players);
   let initialPlayerName = null;
 
-  grouped.forEach((group, index) => {
+  grouped.forEach((group) => {
     const details = document.createElement('details');
     details.className = 'goat-tier';
     details.dataset.tier = group.tier;
-    if (index === 0) {
-      details.open = true;
-    }
 
     const summary = document.createElement('summary');
     summary.className = 'goat-tier__summary';
 
     const label = document.createElement('span');
     label.className = 'goat-tier__summary-label';
-    label.textContent = TIER_LABEL_OVERRIDES.get(group.tier) ?? group.tier;
+    const labelText = group.label ?? TIER_LABEL_OVERRIDES.get(group.tier) ?? group.tier;
+    label.textContent = labelText;
 
     const count = group.players.length;
     const playerWord = count === 1 ? 'player' : 'players';
@@ -617,7 +628,9 @@ function buildLeaderboard(players) {
       const button = document.createElement('button');
       button.type = 'button';
       button.className = 'goat-tier__player';
-      button.setAttribute('data-goat-player', '');
+      if (playerAttribute) {
+        button.setAttribute(playerAttribute, '');
+      }
       button.dataset.player = player.name;
       button.setAttribute('aria-pressed', 'false');
       button.title = `View GOAT profile for ${player.name}`;
@@ -678,6 +691,258 @@ function buildLeaderboard(players) {
   });
 
   return initialPlayerName;
+}
+
+function groupRecentPlayers(players, groupSize = 10) {
+  if (!Array.isArray(players) || !players.length) {
+    return [];
+  }
+
+  const sorted = players
+    .slice()
+    .sort((a, b) => (a.rank ?? Infinity) - (b.rank ?? Infinity));
+
+  const groups = [];
+  for (let index = 0; index < sorted.length; index += groupSize) {
+    const subset = sorted.slice(index, index + groupSize);
+    if (!subset.length) {
+      continue;
+    }
+    const startRank = subset[0].rank ?? index + 1;
+    const endRank = subset[subset.length - 1].rank ?? startRank;
+    const tierLabel = startRank === endRank ? `Rank ${startRank}` : `Ranks ${startRank}-${endRank}`;
+    groups.push({
+      tier: tierLabel,
+      label: tierLabel,
+      players: subset,
+      bestRank: startRank,
+    });
+  }
+
+  return groups;
+}
+
+function normalizeRecentPlayers(players, windowLabel) {
+  if (!Array.isArray(players) || !players.length) {
+    return [];
+  }
+
+  return players
+    .map((entry) => {
+      if (!entry || typeof entry !== 'object') {
+        return null;
+      }
+
+      const name = typeof entry.name === 'string' && entry.name.trim().length ? entry.name.trim() : entry.displayName;
+      if (typeof name !== 'string' || !name.trim().length) {
+        return null;
+      }
+
+      const rawRank = Number(entry.rank ?? entry.goatRecentRank);
+      const rank = Number.isFinite(rawRank) ? rawRank : null;
+
+      const rawScore = typeof entry.score === 'number' ? entry.score : Number.parseFloat(entry.score);
+      const goatScore = Number.isFinite(rawScore) ? rawScore : null;
+
+      const detailParts =
+        typeof entry.blurb === 'string'
+          ? entry.blurb
+              .split('·')
+              .map((part) => part.trim())
+              .filter(Boolean)
+          : [];
+
+      return {
+        rank,
+        name,
+        goatScore,
+        delta: null,
+        status: 'Active',
+        franchises:
+          typeof entry.franchise === 'string' && entry.franchise.trim().length
+            ? [entry.franchise.trim()]
+            : [],
+        resume: typeof entry.blurb === 'string' ? entry.blurb : '',
+        recentDetailParts: detailParts,
+        recentWindow: typeof windowLabel === 'string' && windowLabel.trim().length
+          ? windowLabel.trim()
+          : detailParts[detailParts.length - 1] ?? null,
+        team: typeof entry.team === 'string' ? entry.team.trim() : '',
+      };
+    })
+    .filter(Boolean);
+}
+
+function selectRecentPlayer(player, { windowLabel } = {}) {
+  const name = document.querySelector('[data-goat-recent-name]');
+  if (name) {
+    name.textContent = player.name;
+  }
+
+  const meta = document.querySelector('[data-goat-recent-meta]');
+  if (meta) {
+    const details = [];
+    if (player.team) {
+      details.push(player.team);
+    }
+    if (Array.isArray(player.franchises) && player.franchises.length) {
+      details.push(player.franchises.join(' · '));
+    }
+    if (Number.isFinite(player.rank)) {
+      details.push(`#${player.rank}`);
+    }
+    const windowText = windowLabel ?? player.recentWindow;
+    if (windowText) {
+      details.push(windowText);
+    }
+    meta.textContent = details.join(' · ') || 'Recent window spotlight.';
+  }
+
+  const resume = document.querySelector('[data-goat-recent-resume]');
+  if (resume) {
+    resume.textContent = player.resume ?? '';
+  }
+
+  const list = document.querySelector('[data-goat-recent-components]');
+  if (list) {
+    list.innerHTML = '';
+    const entries = [];
+    if (Number.isFinite(player.goatScore)) {
+      entries.push({ term: 'GOAT score', value: `${helpers.formatNumber(player.goatScore, 1)} GOAT` });
+    }
+    if (player.team) {
+      entries.push({ term: 'Team', value: player.team });
+    }
+    if (Array.isArray(player.franchises) && player.franchises.length) {
+      entries.push({ term: 'Franchise', value: player.franchises.join(' · ') });
+    }
+    const windowText = windowLabel ?? player.recentWindow;
+    if (windowText) {
+      entries.push({ term: 'Window', value: windowText });
+    }
+    const detailParts = Array.isArray(player.recentDetailParts) ? player.recentDetailParts : [];
+    if (detailParts.length) {
+      entries.push({ term: 'Recent run', value: detailParts.join(' · ') });
+    }
+
+    if (!entries.length) {
+      const placeholder = document.createElement('p');
+      placeholder.className = 'goat-detail__placeholder';
+      placeholder.textContent = 'Recent breakdown coming soon.';
+      list.appendChild(placeholder);
+    } else {
+      entries.forEach(({ term, value }) => {
+        if (!term || !value) return;
+        const dt = document.createElement('dt');
+        dt.textContent = term;
+        const dd = document.createElement('dd');
+        dd.textContent = value;
+        list.append(dt, dd);
+      });
+    }
+  }
+
+  const footer = document.querySelector('[data-goat-recent-footer]');
+  if (footer) {
+    const parts = [];
+    if (Number.isFinite(player.rank)) {
+      parts.push(`Rolling rank: #${player.rank}`);
+    }
+    if (Number.isFinite(player.goatScore)) {
+      parts.push(`Score ${helpers.formatNumber(player.goatScore, 1)} GOAT`);
+    }
+    const windowText = windowLabel ?? player.recentWindow;
+    if (windowText) {
+      parts.push(windowText);
+    }
+    footer.textContent = parts.join(' · ');
+  }
+}
+
+function updateRecentLeaderboardMeta(data) {
+  const target = document.querySelector('[data-goat-recent-generated]');
+  if (!target) {
+    return;
+  }
+
+  const windowLabel = typeof data?.window === 'string' && data.window.trim().length ? data.window.trim() : null;
+  const formatted = formatGeneratedTimestamp(data?.generatedAt);
+
+  const parts = [];
+  if (windowLabel) {
+    parts.push(`Window: ${windowLabel}`);
+  }
+  if (formatted) {
+    parts.push(`Last generated ${formatted}`);
+  }
+
+  if (!parts.length) {
+    target.textContent = 'Rolling window refresh pending.';
+  } else {
+    target.textContent = parts.join(' · ');
+  }
+}
+
+async function loadRecentLeaderboardSection() {
+  const treeSelector = '[data-goat-recent-tree]';
+  const container = document.querySelector(treeSelector);
+  if (!container) {
+    return;
+  }
+
+  try {
+    const response = await fetch('data/goat_recent.json');
+    if (!response?.ok) {
+      throw new Error(`Recent GOAT data unavailable (${response?.status ?? 'network error'})`);
+    }
+
+    const payload = await response.json();
+    updateRecentLeaderboardMeta(payload);
+
+    const rawPlayers = Array.isArray(payload?.players) ? payload.players : [];
+    if (!rawPlayers.length) {
+      container.innerHTML = '';
+      const placeholder = document.createElement('p');
+      placeholder.className = 'goat-tree__placeholder';
+      placeholder.textContent = 'Current leaderboard will populate once data loads.';
+      container.appendChild(placeholder);
+      return;
+    }
+
+    const normalized = normalizeRecentPlayers(rawPlayers, payload.window);
+    if (!normalized.length) {
+      container.innerHTML = '';
+      const placeholder = document.createElement('p');
+      placeholder.className = 'goat-tree__placeholder';
+      placeholder.textContent = 'Current leaderboard will populate once data loads.';
+      container.appendChild(placeholder);
+      return;
+    }
+
+    const initialPlayerName = buildLeaderboard(normalized, {
+      treeSelector,
+      placeholderText: 'Current leaderboard will populate once data loads.',
+      playerAttribute: 'data-goat-recent-player',
+      groupPlayers: (records) => groupRecentPlayers(records),
+    });
+
+    wireInteractions(normalized, [], initialPlayerName, {
+      playerSelector: '[data-goat-recent-player]',
+      expandDefault: false,
+      onSelect: (player) => selectRecentPlayer(player, { windowLabel: payload.window }),
+    });
+  } catch (error) {
+    console.warn('Unable to load recent GOAT leaderboard', error);
+    container.innerHTML = '';
+    const placeholder = document.createElement('p');
+    placeholder.className = 'goat-tree__placeholder';
+    placeholder.textContent = 'Current leaderboard is unavailable right now.';
+    container.appendChild(placeholder);
+    const meta = document.querySelector('[data-goat-recent-generated]');
+    if (meta) {
+      meta.textContent = 'Current leaderboard unavailable. Try refreshing later.';
+    }
+  }
 }
 
 function renderComponents(player, weights) {
@@ -754,13 +1019,26 @@ function selectPlayer(player, weights = []) {
   renderComponents(player, weights);
 }
 
-function wireInteractions(players, weights, initialPlayerName) {
-  const buttons = Array.from(document.querySelectorAll('[data-goat-player]'));
+function wireInteractions(players, weights, initialPlayerName, options = {}) {
+  const {
+    playerSelector = '[data-goat-player]',
+    expandDefault = false,
+    onSelect,
+  } = options;
+
+  const buttons = Array.from(document.querySelectorAll(playerSelector));
   if (!buttons.length) {
     return;
   }
 
-  const applySelection = (button, player) => {
+  const selectHandler =
+    typeof onSelect === 'function'
+      ? onSelect
+      : (player) => {
+          selectPlayer(player, weights);
+        };
+
+  const applySelection = (button, player, { expandTier = true } = {}) => {
     buttons.forEach((peer) => {
       peer.classList.remove('is-selected');
       peer.setAttribute('aria-pressed', 'false');
@@ -768,17 +1046,17 @@ function wireInteractions(players, weights, initialPlayerName) {
     button.classList.add('is-selected');
     button.setAttribute('aria-pressed', 'true');
     const tierSection = button.closest('details');
-    if (tierSection) {
+    if (tierSection && expandTier) {
       tierSection.open = true;
     }
-    selectPlayer(player, weights);
+    selectHandler(player, { weights, button });
   };
 
   buttons.forEach((button) => {
     button.addEventListener('click', () => {
       const player = players.find((item) => item.name === button.dataset.player);
       if (player) {
-        applySelection(button, player);
+        applySelection(button, player, { expandTier: true });
       }
     });
   });
@@ -790,7 +1068,7 @@ function wireInteractions(players, weights, initialPlayerName) {
   if (defaultButton) {
     const defaultPlayer = players.find((item) => item.name === defaultButton.dataset.player);
     if (defaultPlayer) {
-      applySelection(defaultButton, defaultPlayer);
+      applySelection(defaultButton, defaultPlayer, { expandTier: expandDefault });
     }
   }
 }
@@ -849,7 +1127,7 @@ async function init() {
     renderGoatEquation(weights);
     if (players.length) {
       const initialPlayerName = buildLeaderboard(players);
-      wireInteractions(players, weights, initialPlayerName);
+      wireInteractions(players, weights, initialPlayerName, { expandDefault: false });
       updateHeroMetrics(players);
     }
 
@@ -1522,6 +1800,8 @@ async function init() {
     registerCharts(chartDefinitions);
   } catch (error) {
     console.error(error);
+  } finally {
+    await loadRecentLeaderboardSection();
   }
 }
 
