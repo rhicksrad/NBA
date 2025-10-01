@@ -1024,7 +1024,8 @@ registerCharts([
     element: document.querySelector('[data-chart="triple-double-cloud"]'),
     source: 'data/player_season_insights.json',
     async createConfig(data) {
-      const leaders = helpers.rankAndSlice(Array.isArray(data?.tripleDoubleLeaders) ? data.tripleDoubleLeaders : [], 12, (item) => item.tripleDoubles ?? 0);
+      const leaderSeries = Array.isArray(data?.tripleDoubleLeaders) ? data.tripleDoubleLeaders : [];
+      const leaders = [...leaderSeries].sort((a, b) => (b?.tripleDoubles ?? 0) - (a?.tripleDoubles ?? 0));
       if (!leaders.length) return null;
 
       const points = leaders.map((leader, index) => {
@@ -1096,7 +1097,8 @@ registerCharts([
     element: document.querySelector('[data-chart="scoring-eruptions"]'),
     source: 'data/player_leaders.json',
     async createConfig(data) {
-      const games = Array.isArray(data?.singleGameHighs?.points) ? data.singleGameHighs.points.slice(0, 20) : [];
+      const gamesSource = Array.isArray(data?.singleGameHighs?.points) ? data.singleGameHighs.points : [];
+      const games = [...gamesSource].sort((a, b) => (b?.points ?? 0) - (a?.points ?? 0));
       if (!games.length) return null;
       const points = games.map((game, index) => {
         const rebounds = Number.isFinite(game?.rebounds) ? game.rebounds : 0;
@@ -1153,74 +1155,6 @@ registerCharts([
               suggestedMin: 40,
               suggestedMax: 110,
               grid: { color: 'rgba(11, 37, 69, 0.08)' },
-            },
-          },
-        },
-      };
-    },
-  },
-  {
-    element: document.querySelector('[data-chart="career-constellation"]'),
-    source: 'data/player_leaders.json',
-    async createConfig(data) {
-      const leaders = (Array.isArray(data?.careerLeaders?.points) ? data.careerLeaders.points : []).slice(0, 4);
-      if (!leaders.length) return null;
-      const metrics = [
-        { key: 'pointsPerGame', label: 'Points/G', formatter: (value) => `${helpers.formatNumber(value, 2)} PPG` },
-        { key: 'assistsPerGame', label: 'Assists/G', formatter: (value) => `${helpers.formatNumber(value, 2)} APG` },
-        { key: 'reboundsPerGame', label: 'Rebounds/G', formatter: (value) => `${helpers.formatNumber(value, 2)} RPG` },
-        { key: 'winPct', label: 'Win %', formatter: (value) => `${helpers.formatNumber((value ?? 0) * 100, 1)}% win` },
-      ];
-
-      const maxima = metrics.map((metric) =>
-        leaders.reduce((max, leader) => Math.max(max, Number(leader?.[metric.key]) || 0), 0)
-      );
-      if (!maxima.some((value) => value > 0)) return null;
-
-      const datasets = leaders.map((leader, index) => {
-        const rawValues = metrics.map((metric) => Number(leader?.[metric.key]) || 0);
-        return {
-          label: leader.name,
-          data: rawValues.map((value, metricIndex) =>
-            Number(((value / (maxima[metricIndex] || 1)) * 100).toFixed(2))
-          ),
-          rawValues,
-          borderColor: accents[index % accents.length],
-          backgroundColor: `${accents[index % accents.length]}29`,
-          borderWidth: 2,
-          fill: true,
-          pointRadius: 3,
-          pointHoverRadius: 5,
-        };
-      });
-
-      return {
-        type: 'radar',
-        data: {
-          labels: metrics.map((metric) => metric.label),
-          datasets,
-        },
-        options: {
-          scales: {
-            r: {
-              angleLines: { color: 'rgba(11, 37, 69, 0.12)' },
-              grid: { color: 'rgba(11, 37, 69, 0.12)' },
-              suggestedMin: 0,
-              suggestedMax: 105,
-              ticks: { display: false },
-            },
-          },
-          plugins: {
-            legend: { position: 'bottom' },
-            tooltip: {
-              callbacks: {
-                label(context) {
-                  const dataset = context.dataset;
-                  const metric = metrics[context.dataIndex];
-                  const rawValue = dataset.rawValues?.[context.dataIndex] ?? 0;
-                  return `${dataset.label}: ${metric.formatter(rawValue)}`;
-                },
-              },
             },
           },
         },

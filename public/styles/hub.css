@@ -5987,7 +5987,22 @@ section h2 { margin-top: 0; font-size: clamp(1.35rem, 3vw, 1.8rem); letter-spaci
   --viz-grid-min: clamp(220px, 26vw, 300px);
 }
 
+.players-lab__grid[data-viz-grid="momentum"] {
+  --viz-grid-min: clamp(260px, 32vw, 360px);
+  grid-auto-rows: minmax(320px, auto);
+}
+
+@media (min-width: 960px) {
+  .players-lab__grid[data-viz-grid="momentum"] .viz-card:last-child {
+    grid-column: span 2;
+  }
+}
+
 @media (max-width: 720px) {
+  .players-lab__grid[data-viz-grid="momentum"] .viz-card:last-child {
+    grid-column: auto;
+  }
+
   .viz-grid {
     grid-template-columns: minmax(0, 1fr);
     grid-auto-rows: auto;
