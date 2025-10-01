@@ -634,6 +634,150 @@ registerCharts([
     },
   },
   {
+    element: document.querySelector('[data-chart="team-height-averages"]'),
+    source: 'data/rosters.json',
+    async createConfig(data) {
+      const teams = Array.isArray(data?.teams) ? data.teams : [];
+      if (!teams.length) return null;
+
+      const parseHeightInches = (value) => {
+        if (typeof value !== 'string') {
+          return null;
+        }
+        const trimmed = value.trim();
+        const match = trimmed.match(/^(\d+)\s*-\s*(\d+)$/);
+        if (!match) {
+          return null;
+        }
+        const feet = Number.parseInt(match[1], 10);
+        const inches = Number.parseInt(match[2], 10);
+        if (!Number.isFinite(feet) || !Number.isFinite(inches)) {
+          return null;
+        }
+        const total = feet * 12 + inches;
+        return total >= 50 ? total : null;
+      };
+
+      const formatHeight = (inches) => {
+        if (!Number.isFinite(inches)) {
+          return '';
+        }
+        const feet = Math.floor(inches / 12);
+        const remainder = inches - feet * 12;
+        const rounded = Math.round(remainder * 10) / 10;
+        const wholeInches = Math.round(rounded);
+        const displayInches = Math.abs(rounded - wholeInches) < 0.05
+          ? helpers.formatNumber(wholeInches, 0)
+          : helpers.formatNumber(rounded, 1);
+        return `${helpers.formatNumber(feet, 0)}' ${displayInches}"`;
+      };
+
+      const prepared = teams
+        .map((team) => {
+          const roster = Array.isArray(team?.roster) ? team.roster : [];
+          const measurements = roster
+            .map((member) => parseHeightInches(member?.height))
+            .filter((value) => Number.isFinite(value));
+          const sampleSize = measurements.length;
+          if (!sampleSize) {
+            return null;
+          }
+          const total = measurements.reduce((sum, value) => sum + value, 0);
+          const average = total / sampleSize;
+          return {
+            label: team?.abbreviation || team?.full_name || 'Team',
+            teamName: team?.full_name || team?.abbreviation || 'Team',
+            average,
+            sampleSize,
+            totalRoster: roster.length,
+          };
+        })
+        .filter(Boolean)
+        .sort((a, b) => a.average - b.average);
+
+      if (!prepared.length) {
+        return null;
+      }
+
+      const labels = prepared.map((entry) => entry.label);
+      const averages = prepared.map((entry) => Number.parseFloat(entry.average.toFixed(2)));
+      const minAverage = Math.min(...averages);
+      const maxAverage = Math.max(...averages);
+      const padding = 1.25;
+      const suggestedMin = Math.max(0, Math.floor(minAverage - padding));
+      const suggestedMax = Math.ceil(maxAverage + padding);
+
+      return {
+        type: 'bar',
+        data: {
+          labels,
+          datasets: [
+            {
+              label: 'Average roster height (inches)',
+              data: averages,
+              backgroundColor: (context) =>
+                createVerticalGradient(context, ['rgba(108, 79, 224, 0.55)', 'rgba(108, 79, 224, 0.08)']),
+              borderColor: 'rgba(108, 79, 224, 0.6)',
+              borderWidth: 1.5,
+              hoverBackgroundColor: 'rgba(108, 79, 224, 0.72)',
+              maxBarThickness: 22,
+            },
+          ],
+        },
+        options: {
+          indexAxis: 'y',
+          layout: { padding: { top: 12, bottom: 12, left: 12, right: 16 } },
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                title(contexts) {
+                  if (!Array.isArray(contexts) || !contexts.length) {
+                    return '';
+                  }
+                  const { dataIndex } = contexts[0];
+                  const entry = prepared[dataIndex];
+                  return entry?.teamName ?? contexts[0].label ?? '';
+                },
+                label(context) {
+                  const entry = prepared[context.dataIndex];
+                  if (!entry) {
+                    return null;
+                  }
+                  const averageText = formatHeight(entry.average);
+                  const sampleText =
+                    entry.sampleSize === entry.totalRoster || !entry.totalRoster
+                      ? `${helpers.formatNumber(entry.sampleSize, 0)} players`
+                      : `${helpers.formatNumber(entry.sampleSize, 0)} of ${helpers.formatNumber(entry.totalRoster, 0)} players`;
+                  return `Avg height: ${averageText} · ${sampleText}`;
+                },
+              },
+              displayColors: false,
+            },
+          },
+          scales: {
+            x: {
+              grid: { color: 'rgba(11, 37, 69, 0.08)' },
+              title: { display: true, text: 'Average listed height' },
+              suggestedMin,
+              suggestedMax,
+              ticks: {
+                callback: (value) => {
+                  const numeric = typeof value === 'number' ? value : Number.parseFloat(value);
+                  return formatHeight(numeric);
+                },
+              },
+            },
+            y: {
+              grid: { display: false },
+              ticks: { autoSkip: false },
+            },
+          },
+        },
+      };
+    },
+  },
+  {
     element: document.querySelector('[data-chart="position-orbits"]'),
     source: 'data/players_overview.json',
     async createConfig(data) {
