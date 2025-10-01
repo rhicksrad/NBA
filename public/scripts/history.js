@@ -8,6 +8,8 @@ const PLAYERS_FULL_URL = 'data/history/players.index.json';
 const BIRTHPLACES_URL = 'data/history/player_birthplaces.json';
 const GOAT_URL = 'data/goat_system.json';
 const WORLD_LEGENDS_URL = 'data/world_birth_legends.json';
+const STATE_LEGENDS_URL = 'data/state_birth_legends.json';
+const GOAT_BIRTH_INDEX_URL = 'data/goat_birth_index.json';
 const PLAYER_CAREERS_URL = 'data/history/player_careers.json';
 
 const numberFormatter = new Intl.NumberFormat('en-US');
@@ -730,6 +732,71 @@ function buildCountryCodeMap(worldLegends) {
   return map;
 }
 
+function buildBirthplaceLookup(rawLookup, goatBirthPlayers) {
+  const merged = {};
+  if (rawLookup && typeof rawLookup === 'object') {
+    for (const [key, entries] of Object.entries(rawLookup)) {
+      if (!Array.isArray(entries)) continue;
+      merged[key] = entries.map((entry) => ({ ...entry }));
+    }
+  }
+
+  if (Array.isArray(goatBirthPlayers)) {
+    for (const player of goatBirthPlayers) {
+      if (!player || typeof player !== 'object') continue;
+      const nameKey = normalizeName(player.name);
+      if (!nameKey) continue;
+
+      const city = typeof player.birthCity === 'string' && player.birthCity.trim().length
+        ? player.birthCity.trim()
+        : null;
+      const state = typeof player.birthState === 'string' && player.birthState.trim().length
+        ? player.birthState.trim().toUpperCase()
+        : null;
+      const stateName = state ? stateNames[state] ?? state : null;
+      const countryCodeRaw = typeof player.birthCountryCode === 'string' && player.birthCountryCode.trim().length
+        ? player.birthCountryCode.trim().toUpperCase()
+        : null;
+      const countryRaw = typeof player.birthCountry === 'string' && player.birthCountry.trim().length
+        ? player.birthCountry.trim()
+        : null;
+      const country = countryCodeRaw === 'US' ? 'USA' : countryRaw ?? countryCodeRaw ?? null;
+
+      if (!city && !state && !country) {
+        continue;
+      }
+
+      const record = {
+        city: city ?? null,
+        stateName: stateName ?? null,
+        state: state ?? null,
+        country: country ?? null,
+        source: 'goat_birth_index.json',
+      };
+      if (countryCodeRaw) {
+        record.countryCode = countryCodeRaw;
+      }
+
+      const existing = Array.isArray(merged[nameKey]) ? merged[nameKey].slice() : [];
+      const existingIndex = existing.findIndex((entry) => entry && entry.source === record.source);
+      if (existingIndex >= 0) {
+        const current = { ...existing[existingIndex] };
+        if (record.city) current.city = record.city;
+        if (record.stateName) current.stateName = record.stateName;
+        if (record.state) current.state = record.state;
+        if (record.country) current.country = record.country;
+        if (record.countryCode) current.countryCode = record.countryCode;
+        existing[existingIndex] = current;
+        merged[nameKey] = existing;
+      } else {
+        merged[nameKey] = [record, ...existing];
+      }
+    }
+  }
+
+  return merged;
+}
+
 function selectGoatEntry(player, goatIndex) {
   const nameKey = normalizeName(`${player.first_name} ${player.last_name}`);
   const matches = goatIndex.get(nameKey);
@@ -1024,6 +1091,8 @@ async function bootstrap() {
       goatDocument,
       worldLegends,
       playerCareersDocument,
+      stateLegendsDocument,
+      goatBirthIndexDocument,
     ] = await Promise.all([
       loadJson(PLAYERS_MIN_URL),
       loadJson(PLAYERS_FULL_URL),
@@ -1031,11 +1100,16 @@ async function bootstrap() {
       loadJson(GOAT_URL),
       loadJson(WORLD_LEGENDS_URL).catch(() => null),
       loadJson(PLAYER_CAREERS_URL).catch(() => null),
+      loadJson(STATE_LEGENDS_URL).catch(() => null),
+      loadJson(GOAT_BIRTH_INDEX_URL).catch(() => null),
     ]);
 
     const playersFull = Array.isArray(playersFullDocument?.players) ? playersFullDocument.players : [];
     const playersMinList = Array.isArray(playersMin) ? playersMin : [];
-    const birthplaces = birthplacesDocument?.players ?? {};
+    const goatBirthPlayers = Array.isArray(goatBirthIndexDocument?.players)
+      ? goatBirthIndexDocument.players
+      : [];
+    const birthplaces = buildBirthplaceLookup(birthplacesDocument?.players ?? {}, goatBirthPlayers);
     const goatPlayers = Array.isArray(goatDocument?.players) ? goatDocument.players : [];
     const goatIndex = new Map();
     for (const entry of goatPlayers) {
@@ -1175,14 +1249,22 @@ async function bootstrap() {
     }
 
     const atlas = buildAtlas(playersFull, birthplaces, goatIndex, countryCodes);
+    const domesticAtlas =
+      stateLegendsDocument && Array.isArray(stateLegendsDocument.states) && stateLegendsDocument.states.length
+        ? stateLegendsDocument
+        : atlas.domestic;
+    const internationalAtlas =
+      worldLegends && Array.isArray(worldLegends.countries) && worldLegends.countries.length
+        ? worldLegends
+        : atlas.international;
     const svgCache = new Map();
-    await renderAtlas('domestic', atlas.domestic, svgCache);
+    await renderAtlas('domestic', domesticAtlas, svgCache);
     if (selectors.atlasToggle) {
       selectors.atlasToggle.addEventListener('click', async () => {
         const nextMode = selectors.mapRoot?.dataset.atlasMode === 'domestic' ? 'international' : 'domestic';
         selectors.atlasToggle.disabled = true;
         try {
-          await renderAtlas(nextMode, nextMode === 'domestic' ? atlas.domestic : atlas.international, svgCache);
+          await renderAtlas(nextMode, nextMode === 'domestic' ? domesticAtlas : internationalAtlas, svgCache);
         } catch (error) {
           console.error(error);
         } finally {
