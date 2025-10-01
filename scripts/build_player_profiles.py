@@ -47,6 +47,7 @@ DEFAULT_TEAM_HISTORIES = ROOT / "TeamHistories.csv"
 DEFAULT_OUTPUT = ROOT / "public" / "data" / "player_profiles.json"
 DEFAULT_GOAT_RECENT_OUTPUT = ROOT / "public" / "data" / "goat_recent.json"
 DEFAULT_GOAT_SYSTEM = ROOT / "public" / "data" / "goat_system.json"
+DEFAULT_GOAT_INDEX = ROOT / "public" / "data" / "goat_index.json"
 DEFAULT_LEAGUE_DIRECTORY = ROOT / "public" / "data" / "league_directory.json"
 DEFAULT_BIRTHPLACE_FILES = [
     ROOT / "data" / "nba_birthplaces.csv",
@@ -156,6 +157,43 @@ TEAM_METADATA = [
     {"team_id": "1610612764", "tricode": "WAS"},
 ]
 
+BDL_TEAM_ID_TO_TRICODE = {
+    1: "ATL",
+    2: "BOS",
+    3: "BKN",
+    4: "CHA",
+    5: "CHI",
+    6: "CLE",
+    7: "DAL",
+    8: "DEN",
+    9: "DET",
+    10: "GSW",
+    11: "HOU",
+    12: "IND",
+    13: "LAC",
+    14: "LAL",
+    15: "MEM",
+    16: "MIA",
+    17: "MIL",
+    18: "MIN",
+    19: "NOP",
+    20: "NYK",
+    21: "OKC",
+    22: "ORL",
+    23: "PHI",
+    24: "PHX",
+    25: "POR",
+    26: "SAC",
+    27: "SAS",
+    28: "TOR",
+    29: "UTA",
+    30: "WAS",
+}
+
+BDL_TEAM_ABBR_TO_TRICODE = {abbr: tricode for tricode in BDL_TEAM_ID_TO_TRICODE.values() for abbr in [tricode]}
+
+KNOWN_TRICODES = {meta["tricode"].upper() for meta in TEAM_METADATA}
+
 TEAM_ID_TO_TRICODE = {meta["team_id"]: meta["tricode"] for meta in TEAM_METADATA}
 TEAM_TRICODE_TO_ID = {meta["tricode"]: meta["team_id"] for meta in TEAM_METADATA}
 
@@ -173,6 +211,8 @@ class ActivePlayer:
     last_name: str
     team_id: str
     team_tricode: str | None = None
+    bdl_id: str | None = None
+    bdl_team_id: str | None = None
 
     @property
     def full_name(self) -> str:
@@ -297,7 +337,10 @@ def _parse_int(value: Any) -> int | None:
     number = _parse_float(value)
     if number is None:
         return None
-    return int(round(number))
+    integer = int(round(number))
+    if integer <= 0:
+        return None
+    return integer
 
 
 def _format_height(raw: Any) -> str | None:
@@ -311,7 +354,7 @@ def _format_height(raw: Any) -> str | None:
 
 def _format_weight(raw: Any) -> str | None:
     pounds = _parse_float(raw)
-    if pounds is None or pounds < 100:
+    if pounds is None or pounds < 100 or pounds > 420:
         return None
     return f"{int(round(pounds))} lbs"
 
@@ -336,7 +379,7 @@ def _format_birthdate(raw: str | None, location: str | None) -> str | None:
 
 def _format_draft(payload: dict[str, Any]) -> str | None:
     year = _parse_int(payload.get("draftYear"))
-    if not year:
+    if not year or year < 1947 or year > ACTIVE_SEASON_END_YEAR:
         return None
     pick = _parse_int(payload.get("draftNumber"))
     round_number = _parse_int(payload.get("draftRound"))
@@ -355,7 +398,7 @@ def _format_draft(payload: dict[str, Any]) -> str | None:
 
 def _determine_era(roster_payload: dict[str, Any]) -> str:
     draft_year = _parse_int(roster_payload.get("draftYear"))
-    if draft_year:
+    if draft_year and 1947 <= draft_year <= ACTIVE_SEASON_END_YEAR:
         decade = (draft_year // 10) * 10
         return f"{decade}s"
     return "2020s"
@@ -534,8 +577,24 @@ def _resolve_active_player(
     return row.person_id, first_name, last_name
 
 
+def _map_bdl_team_to_tricode(team_id: int | None, abbreviation: str | None) -> str | None:
+    abbr = (abbreviation or "").strip().upper()
+    if abbr:
+        mapped = BDL_TEAM_ABBR_TO_TRICODE.get(abbr)
+        if mapped:
+            return mapped
+        if abbr in KNOWN_TRICODES:
+            return abbr
+
+    if team_id is not None:
+        return BDL_TEAM_ID_TO_TRICODE.get(team_id)
+
+    return None
+
+
 def _load_active_players_from_roster_snapshot(
     path: Path,
+    roster_index: dict[str, list[RosterRow]] | None = None,
 ) -> list[ActivePlayer]:
     try:
         payload = json.loads(path.read_text(encoding="utf-8"))
@@ -543,6 +602,8 @@ def _load_active_players_from_roster_snapshot(
         raise
     except (OSError, json.JSONDecodeError) as exc:
         raise RuntimeError(f"Failed to read roster snapshot at {path}: {exc}") from exc
+
+    roster_index = roster_index or {}
 
     teams = payload.get("teams")
     if not isinstance(teams, list):
@@ -556,14 +617,23 @@ def _load_active_players_from_roster_snapshot(
 
         abbr = (team.get("abbreviation") or "").strip().upper()
         team_id_raw = team.get("id")
+        bdl_team_id: str | None = None
+        numeric_team_id: int | None = None
         if isinstance(team_id_raw, int):
-            team_id = str(team_id_raw)
-        elif isinstance(team_id_raw, str) and team_id_raw.strip():
-            team_id = team_id_raw.strip()
+            numeric_team_id = team_id_raw
         else:
-            team_id = TEAM_TRICODE_TO_ID.get(abbr, "0")
-        if not team_id:
-            team_id = "0"
+            try:
+                numeric_team_id = int(str(team_id_raw).strip())
+            except (TypeError, ValueError):
+                numeric_team_id = None
+        if numeric_team_id is not None:
+            bdl_team_id = str(numeric_team_id)
+        elif isinstance(team_id_raw, str) and team_id_raw.strip():
+            bdl_team_id = team_id_raw.strip()
+
+        tricode = _map_bdl_team_to_tricode(numeric_team_id, abbr)
+        team_tricode_value = tricode or (abbr or None)
+        team_id = TEAM_TRICODE_TO_ID.get((team_tricode_value or ""), "0") or "0"
 
         roster_entries = team.get("roster")
         if not isinstance(roster_entries, list):
@@ -574,31 +644,54 @@ def _load_active_players_from_roster_snapshot(
                 continue
 
             player_id_raw = entry.get("id")
+            bdl_player_id: str | None = None
             if isinstance(player_id_raw, int):
-                person_id = str(player_id_raw)
+                bdl_player_id = str(player_id_raw)
             elif isinstance(player_id_raw, str) and player_id_raw.strip():
-                person_id = player_id_raw.strip()
-            else:
-                continue
+                bdl_player_id = player_id_raw.strip()
 
-            first_name = (entry.get("first_name") or "").strip()
-            last_name = (entry.get("last_name") or "").strip()
+            first_name = (entry.get("first_name") or entry.get("firstName") or "").strip()
+            last_name = (entry.get("last_name") or entry.get("lastName") or "").strip()
             if not first_name and not last_name:
                 continue
 
-            team_tricode = abbr or None
+            display_name = f"{first_name} {last_name}".strip()
+            resolved_person_id: str | None = None
+            resolved_first = first_name
+            resolved_last = last_name
+            if display_name:
+                resolved = _resolve_active_player(display_name, roster_index)
+                if resolved:
+                    resolved_person_id, resolved_first, resolved_last = resolved
+
+            if resolved_person_id:
+                person_id = resolved_person_id
+            elif bdl_player_id:
+                person_id = bdl_player_id
+            else:
+                continue
+
+            team_tricode = team_tricode_value
             candidate = ActivePlayer(
                 person_id=person_id,
-                first_name=first_name or "",
-                last_name=last_name or "",
+                first_name=resolved_first or first_name or "",
+                last_name=resolved_last or last_name or "",
                 team_id=team_id,
                 team_tricode=team_tricode,
+                bdl_id=bdl_player_id,
+                bdl_team_id=bdl_team_id,
             )
 
             existing = players.get(person_id)
             if existing:
                 replace = existing.team_id == "0" and candidate.team_id != "0"
                 if not replace:
+                    if not existing.bdl_id and candidate.bdl_id:
+                        existing.bdl_id = candidate.bdl_id
+                    if not existing.bdl_team_id and candidate.bdl_team_id:
+                        existing.bdl_team_id = candidate.bdl_team_id
+                    if not existing.team_tricode and candidate.team_tricode:
+                        existing.team_tricode = candidate.team_tricode
                     continue
             players[person_id] = candidate
 
@@ -783,44 +876,105 @@ def _load_birthplaces(paths: list[Path]) -> dict[str, str]:
     return mapping
 
 
-def _load_goat_scores(path: Path) -> tuple[dict[str, dict[str, Any]], dict[str, dict[str, Any]]]:
-    """Build lookup tables for GOAT system data keyed by personId and normalized name."""
+def _load_goat_scores(
+    system_path: Path, index_path: Path | None = None
+) -> tuple[dict[str, dict[str, Any]], dict[str, dict[str, Any]]]:
+    """Build lookup tables for GOAT scores using the freshest index data available."""
 
-    if not path.exists():
-        return {}, {}
+    def _read_payload(path: Path | None) -> dict[str, Any]:
+        if not path or not path.exists():
+            return {}
+        try:
+            return json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            return {}
 
-    try:
-        data = json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError):
-        return {}, {}
+    def _clean_text(value: Any) -> str | None:
+        if value is None:
+            return None
+        text = str(value).strip()
+        return text or None
 
-    players = data.get("players")
-    if not isinstance(players, list):
-        return {}, {}
+    def _compose_record(primary: dict[str, Any], fallback: dict[str, Any] | None) -> dict[str, Any]:
+        record = {
+            "score": _parse_float(primary.get("goatScore")),
+            "rank": _parse_int(primary.get("rank")),
+            "tier": _clean_text(primary.get("tier")),
+            "resume": _clean_text(primary.get("resume")),
+        }
+        if record["score"] is None and fallback is not None:
+            record["score"] = _parse_float(fallback.get("goatScore"))
+        if record["rank"] is None and fallback is not None:
+            record["rank"] = _parse_int(fallback.get("rank"))
+        if record["tier"] is None and fallback is not None:
+            record["tier"] = _clean_text(fallback.get("tier"))
+        if (record["resume"] is None or record["resume"] == "") and fallback is not None:
+            record["resume"] = _clean_text(fallback.get("resume"))
+        return record
+
+    system_payload = _read_payload(system_path)
+    index_payload = _read_payload(index_path)
+
+    system_players = system_payload.get("players")
+    index_players = index_payload.get("players")
+
+    system_list = system_players if isinstance(system_players, list) else []
+    index_list = index_players if isinstance(index_players, list) else []
+
+    system_by_name = {}
+    for entry in system_list:
+        if not isinstance(entry, dict):
+            continue
+        name_key = _normalize_name_key(entry.get("name") or "")
+        if not name_key:
+            continue
+        system_by_name[name_key] = entry
 
     by_id: dict[str, dict[str, Any]] = {}
     by_name: dict[str, dict[str, Any]] = {}
-    for entry in players:
+    seen_names: set[str] = set()
+
+    primary_iterable = index_list if index_list else system_list
+
+    for entry in primary_iterable:
         if not isinstance(entry, dict):
             continue
-
-        person_id_raw = entry.get("personId")
-        person_id = str(person_id_raw).strip() if person_id_raw is not None else ""
         name = (entry.get("name") or "").strip()
-        if not person_id and not name:
+        name_key = _normalize_name_key(name)
+        if not name_key:
             continue
+        fallback = system_by_name.get(name_key) if index_list else None
+        record = _compose_record(entry, fallback)
 
-        record: dict[str, Any] = {
-            "score": _parse_float(entry.get("goatScore")),
-            "rank": _parse_int(entry.get("rank")),
-            "tier": (entry.get("tier") or "").strip() or None,
-            "resume": (entry.get("resume") or "").strip() or None,
-        }
+        person_id = None
+        if fallback is not None:
+            fallback_id = fallback.get("personId")
+            if fallback_id not in (None, ""):
+                person_id = str(fallback_id).strip()
+        if person_id is None:
+            candidate_id = entry.get("personId")
+            if candidate_id not in (None, ""):
+                person_id = str(candidate_id).strip()
 
         if person_id:
             by_id[person_id] = record
-        if name:
-            by_name[_normalize_name_key(name)] = record
+        if name_key:
+            by_name[name_key] = record
+        seen_names.add(name_key)
+
+    if index_list:
+        for entry in system_list:
+            if not isinstance(entry, dict):
+                continue
+            name_key = _normalize_name_key(entry.get("name") or "")
+            if not name_key or name_key in seen_names:
+                continue
+            record = _compose_record(entry, None)
+            person_id_raw = entry.get("personId")
+            if person_id_raw not in (None, ""):
+                by_id[str(person_id_raw).strip()] = record
+            by_name[name_key] = record
+            seen_names.add(name_key)
 
     return by_id, by_name
 
@@ -916,10 +1070,12 @@ def build_player_profiles(
     team_histories: Path = DEFAULT_TEAM_HISTORIES,
     birthplace_files: list[Path] = DEFAULT_BIRTHPLACE_FILES,
     goat_system: Path = DEFAULT_GOAT_SYSTEM,
+    goat_index: Path = DEFAULT_GOAT_INDEX,
     league_directory: Path = DEFAULT_LEAGUE_DIRECTORY,
     season_end_year: int | None = None,
 ) -> tuple[dict[str, Any], dict[str, Any]]:
     roster_lookup = _load_roster(players_csv)
+    roster_index = _build_name_index(roster_lookup)
 
     players: list[ActivePlayer] | None = None
     if league_directory and league_directory.exists():
@@ -933,14 +1089,26 @@ def build_player_profiles(
             )
     if rosters_snapshot and rosters_snapshot.exists():
         try:
-            snapshot_players = _load_active_players_from_roster_snapshot(rosters_snapshot)
+            snapshot_players = _load_active_players_from_roster_snapshot(
+                rosters_snapshot, roster_index
+            )
             if players is None:
                 players = snapshot_players
             else:
                 by_id = {player.person_id: player for player in players}
                 for candidate in snapshot_players:
-                    if candidate.person_id not in by_id:
-                        by_id[candidate.person_id] = candidate
+                    existing = by_id.get(candidate.person_id)
+                    if existing:
+                        if candidate.bdl_id:
+                            existing.bdl_id = candidate.bdl_id
+                        if candidate.bdl_team_id:
+                            existing.bdl_team_id = candidate.bdl_team_id
+                        if candidate.team_tricode and not existing.team_tricode:
+                            existing.team_tricode = candidate.team_tricode
+                        if existing.team_id == "0" and candidate.team_id != "0":
+                            existing.team_id = candidate.team_id
+                        continue
+                    by_id[candidate.person_id] = candidate
                 players = sorted(
                     by_id.values(),
                     key=lambda p: (
@@ -965,7 +1133,7 @@ def build_player_profiles(
 
     teams = _load_team_lookup(team_histories)
     birthplaces = _load_birthplaces(birthplace_files)
-    goat_by_id, goat_by_name = _load_goat_scores(goat_system)
+    goat_by_id, goat_by_name = _load_goat_scores(goat_system, goat_index)
     recent_goat = compute_recent_goat_scores(
         iter_player_statistics_rows(), {player.person_id for player in players}
     )
@@ -1029,6 +1197,15 @@ def build_player_profiles(
             if goat_tier:
                 keywords.update(part for part in goat_tier.lower().split() if part)
 
+        bdl_payload: dict[str, Any] = {}
+        if player.bdl_id:
+            bdl_payload["id"] = player.bdl_id
+            keywords.add(player.bdl_id)
+        if player.bdl_team_id:
+            bdl_payload["teamId"] = player.bdl_team_id
+        if player.team_tricode:
+            bdl_payload["teamAbbr"] = player.team_tricode
+
         keywords = sorted(keywords)
 
         recent_meta = recent_goat.get(player.person_id, {})
@@ -1053,6 +1230,9 @@ def build_player_profiles(
             "keywords": keywords,
             "metrics": {},
         }
+
+        if bdl_payload:
+            profile["bdl"] = bdl_payload
 
         recent_score = recent_meta.get("score") if isinstance(recent_meta, dict) else None
         recent_rank = recent_meta.get("rank") if isinstance(recent_meta, dict) else None
@@ -1103,6 +1283,12 @@ def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         help="Path to GOAT system rankings feed.",
     )
     parser.add_argument(
+        "--goat-index",
+        type=Path,
+        default=DEFAULT_GOAT_INDEX,
+        help="Path to the GOAT index rankings feed.",
+    )
+    parser.add_argument(
         "--league-directory",
         type=Path,
         default=DEFAULT_LEAGUE_DIRECTORY,
@@ -1131,6 +1317,7 @@ def main(argv: list[str] | None = None) -> None:
         players_csv=args.players_csv,
         team_histories=args.team_histories,
         goat_system=args.goat_system,
+        goat_index=args.goat_index,
         league_directory=args.league_directory,
         season_end_year=args.season_end_year,
     )

@@ -355,6 +355,97 @@ function normalizeName(value) {
     .trim();
 }
 
+function parseGeneratedAtTimestamp(source) {
+  if (!source) {
+    return null;
+  }
+  const raw = typeof source === 'object' ? source.generatedAt : source;
+  if (typeof raw !== 'string' || !raw.trim()) {
+    return null;
+  }
+  const timestamp = Date.parse(raw);
+  return Number.isNaN(timestamp) ? null : timestamp;
+}
+
+function mergeGoatHistoricalSources(systemData, indexData) {
+  const systemPlayers = Array.isArray(systemData?.players) ? systemData.players : [];
+  const indexPlayers = Array.isArray(indexData?.players) ? indexData.players : [];
+
+  if (!systemPlayers.length && !indexPlayers.length) {
+    return { players: [] };
+  }
+
+  if (!indexPlayers.length) {
+    return systemData ?? { players: systemPlayers };
+  }
+
+  const systemByName = new Map();
+  systemPlayers.forEach((player) => {
+    if (!player || typeof player !== 'object') {
+      return;
+    }
+    const nameKey = normalizeName(player.name);
+    if (nameKey) {
+      systemByName.set(nameKey, player);
+    }
+  });
+
+  const seenNames = new Set();
+  const mergedPlayers = indexPlayers
+    .filter((player) => player && typeof player === 'object')
+    .map((player) => {
+      const nameKey = normalizeName(player.name);
+      if (nameKey) {
+        seenNames.add(nameKey);
+      }
+      const fallback = nameKey ? systemByName.get(nameKey) : null;
+      const merged = { ...player };
+      if ((merged.personId === null || merged.personId === undefined) && fallback?.personId) {
+        merged.personId = fallback.personId;
+      }
+      if (!merged.resume && fallback?.resume) {
+        merged.resume = fallback.resume;
+      }
+      if (!merged.tier && fallback?.tier) {
+        merged.tier = fallback.tier;
+      }
+      if (!Array.isArray(merged.franchises) && Array.isArray(fallback?.franchises)) {
+        merged.franchises = fallback.franchises;
+      }
+      if (merged.delta === undefined && fallback?.delta !== undefined) {
+        merged.delta = fallback.delta;
+      }
+      return merged;
+    });
+
+  systemPlayers.forEach((player) => {
+    if (!player || typeof player !== 'object') {
+      return;
+    }
+    const nameKey = normalizeName(player.name);
+    if (!nameKey || seenNames.has(nameKey)) {
+      return;
+    }
+    mergedPlayers.push(player);
+    seenNames.add(nameKey);
+  });
+
+  const timestamps = [parseGeneratedAtTimestamp(indexData), parseGeneratedAtTimestamp(systemData)].filter((value) =>
+    Number.isFinite(value),
+  );
+  let generatedAt = indexData?.generatedAt ?? systemData?.generatedAt;
+  if (timestamps.length) {
+    generatedAt = new Date(Math.max(...timestamps)).toISOString();
+  }
+
+  return {
+    ...(systemData || {}),
+    ...(indexData || {}),
+    generatedAt,
+    players: mergedPlayers,
+  };
+}
+
 function renderRecentLeaderboard(records, listElement, placeholderElement) {
   if (!listElement) {
     return;
@@ -1587,8 +1678,15 @@ function formatBdlWeight(weight) {
   if (!trimmed) {
     return null;
   }
-  if (/^\d+(\.\d+)?$/.test(trimmed)) {
-    return `${trimmed} lbs`;
+  if (!/\d/.test(trimmed)) {
+    return null;
+  }
+  const numeric = Number.parseFloat(trimmed.replace(/lbs?$/i, ''));
+  if (Number.isFinite(numeric)) {
+    if (numeric < 100 || numeric > 420) {
+      return null;
+    }
+    return `${Math.round(numeric)} lbs`;
   }
   return trimmed;
 }
@@ -2842,9 +2940,9 @@ function initPlayerAtlas() {
         }
       }
 
-      const goatHistoricalSource = goatSystemData ?? goatIndexData;
+      const goatHistoricalSource = mergeGoatHistoricalSources(goatSystemData, goatIndexData);
       goatLookup = buildGoatScoreLookup(goatHistoricalSource, goatRecentData);
-      atlasMetrics = buildAtlasMetrics(catalog, goatSystemData ?? goatHistoricalSource);
+      atlasMetrics = buildAtlasMetrics(catalog, goatHistoricalSource);
       renderRecentLeaderboard(goatLookup.recent, recentLeaderboard, recentPlaceholder);
 
       const resolveGoatScores = (personId, name) => {
