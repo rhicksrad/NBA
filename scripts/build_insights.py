@@ -162,6 +162,65 @@ def _normalize_person_id(value: object) -> str | None:
     return None
 
 
+_PLAYERS_INDEX_LOOKUP_CACHE: tuple[dict[tuple[str, str], str], dict[str, str]] | None = None
+
+
+def _load_players_index_lookup() -> tuple[dict[tuple[str, str], str], dict[str, str]]:
+    global _PLAYERS_INDEX_LOOKUP_CACHE
+    if _PLAYERS_INDEX_LOOKUP_CACHE is not None:
+        return _PLAYERS_INDEX_LOOKUP_CACHE
+
+    path = PUBLIC_DATA_DIR / "players_index.json"
+    if not path.exists():
+        _PLAYERS_INDEX_LOOKUP_CACHE = ({}, {})
+        return _PLAYERS_INDEX_LOOKUP_CACHE
+
+    try:
+        with path.open(encoding="utf-8") as handle:
+            payload = json.load(handle)
+    except (OSError, json.JSONDecodeError):
+        _PLAYERS_INDEX_LOOKUP_CACHE = ({}, {})
+        return _PLAYERS_INDEX_LOOKUP_CACHE
+
+    players = payload.get("players") if isinstance(payload, dict) else None
+    if not isinstance(players, list):
+        _PLAYERS_INDEX_LOOKUP_CACHE = ({}, {})
+        return _PLAYERS_INDEX_LOOKUP_CACHE
+
+    player_directory = _load_player_directory()
+    known_ids = set(player_directory.keys())
+
+    by_team: dict[tuple[str, str], str] = {}
+    by_name: dict[str, str] = {}
+    for entry in players:
+        if not isinstance(entry, dict):
+            continue
+        person_id = _normalize_person_id(entry.get("id") or entry.get("personId"))
+        if not person_id or (known_ids and person_id not in known_ids):
+            continue
+        name_key = _normalize_name_key(str(entry.get("name", "")))
+        if name_key:
+            by_name.setdefault(name_key, person_id)
+        team_abbr = (entry.get("team_abbr") or "").strip().upper()
+        if name_key and team_abbr:
+            by_team[(name_key, team_abbr)] = person_id
+
+    _PLAYERS_INDEX_LOOKUP_CACHE = (by_team, by_name)
+    return _PLAYERS_INDEX_LOOKUP_CACHE
+
+
+def _load_active_player_ids_from_players_index() -> tuple[set[str], str] | None:
+    by_team, by_name = _load_players_index_lookup()
+    if not by_team and not by_name:
+        return None
+
+    ids = set(by_name.values())
+    if not ids:
+        return None
+
+    return ids, "public/data/players_index.json"
+
+
 def _load_active_player_ids_from_rosters() -> tuple[set[str], str] | None:
     path = PUBLIC_DATA_DIR / "rosters.json"
     if not path.exists():
@@ -173,10 +232,12 @@ def _load_active_player_ids_from_rosters() -> tuple[set[str], str] | None:
     except (OSError, json.JSONDecodeError):
         return None
 
-    ids: set[str] = set()
     teams = payload.get("teams") if isinstance(payload, dict) else None
     if not isinstance(teams, list):
         return None
+
+    by_team, by_name = _load_players_index_lookup()
+    ids: set[str] = set()
 
     for team in teams:
         if not isinstance(team, dict):
@@ -184,14 +245,18 @@ def _load_active_player_ids_from_rosters() -> tuple[set[str], str] | None:
         roster = team.get("roster")
         if not isinstance(roster, list):
             continue
+        team_abbr = (team.get("abbreviation") or "").strip().upper()
         for player in roster:
             if not isinstance(player, dict):
                 continue
-            person_id = _normalize_person_id(
-                player.get("id")
-                or player.get("playerId")
-                or player.get("player_id")
+            name_key = _normalize_name_key(
+                f"{(player.get('first_name') or '').strip()} {(player.get('last_name') or '').strip()}"
             )
+            person_id = None
+            if name_key and team_abbr:
+                person_id = by_team.get((name_key, team_abbr))
+            if not person_id and name_key:
+                person_id = by_name.get(name_key)
             if person_id:
                 ids.add(person_id)
 
@@ -236,6 +301,10 @@ def _load_active_player_ids_from_canonical() -> tuple[set[str], str] | None:
 
 
 def _load_active_player_ids() -> tuple[set[str], str | None]:
+    index_lookup = _load_active_player_ids_from_players_index()
+    if index_lookup:
+        return index_lookup
+
     roster_lookup = _load_active_player_ids_from_rosters()
     if roster_lookup:
         return roster_lookup
