@@ -43,26 +43,20 @@ jobs:
       - name: Install deps
         run: pnpm i --frozen-lockfile
 
-      - name: Check BDL key presence
-        env:
-          BALLDONTLIE_API_KEY: ${{ secrets.BALLDONTLIE_API_KEY }}
-        run: |
-          test -n "$BALLDONTLIE_API_KEY" || { echo "Missing BALLDONTLIE_API_KEY" >&2; exit 2; }
-
       - name: Stamp date
         id: metadata
         run: echo "date=$(date -u +'%Y-%m-%d')" >> "$GITHUB_OUTPUT"
 
       - name: Verify Ball Don't Lie API access
         env:
-          BALLDONTLIE_API_KEY: ${{ secrets.BALLDONTLIE_API_KEY }}
+          BDL_PROXY_BASE: https://bdlproxy.hicksrch.workers.dev/bdl
         run: pnpm verify:bdl
 
       - name: Build previews
         env:
           USE_NBA_STATS: "0"
           USE_BREF: "0"
-          BALLDONTLIE_API_KEY: ${{ secrets.BALLDONTLIE_API_KEY }}
+          BDL_PROXY_BASE: https://bdlproxy.hicksrch.workers.dev/bdl
         run: pnpm previews
 
       - name: Validate previews
