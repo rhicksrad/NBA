@@ -2509,7 +2509,7 @@ section h2 { margin-top: 0; font-size: clamp(1.35rem, 3vw, 1.8rem); letter-spaci
 
 .hero--goat {
   position: relative;
-  padding: clamp(2.8rem, 6vw, 3.8rem) clamp(1.4rem, 5vw, 2.8rem);
+  padding: clamp(1.9rem, 4.6vw, 2.8rem) clamp(1.1rem, 4.4vw, 2.2rem);
   border-radius: var(--radius-lg);
   border: 1px solid color-mix(in srgb, var(--royal) 18%, transparent);
   background:
@@ -2517,11 +2517,11 @@ section h2 { margin-top: 0; font-size: clamp(1.35rem, 3vw, 1.8rem); letter-spaci
     radial-gradient(110% 110% at 82% 12%, rgba(239, 61, 91, 0.18), transparent 65%),
     linear-gradient(135deg, rgba(17, 86, 214, 0.1), rgba(244, 181, 63, 0.12)),
     color-mix(in srgb, rgba(255, 255, 255, 0.88) 70%, rgba(242, 246, 255, 0.88) 30%);
-  box-shadow: 0 28px 48px rgba(11, 37, 69, 0.18);
+  box-shadow: 0 22px 40px rgba(11, 37, 69, 0.16);
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   align-items: center;
-  gap: clamp(2rem, 4vw, 3.2rem);
+  gap: clamp(1.4rem, 3.2vw, 2.4rem);
 }
 
 .hero--goat::after {
@@ -2539,6 +2539,18 @@ section h2 { margin-top: 0; font-size: clamp(1.35rem, 3vw, 1.8rem); letter-spaci
 .hero--goat > * {
   position: relative;
   z-index: 1;
+}
+
+.hero--goat .hero__intro h1 {
+  font-size: clamp(1.75rem, 3.6vw, 2.35rem);
+  line-height: 1.1;
+  white-space: nowrap;
+}
+
+@media (max-width: 720px) {
+  .hero--goat .hero__intro h1 {
+    white-space: normal;
+  }
 }
 
 .hero__metrics {
@@ -2778,7 +2790,11 @@ section h2 { margin-top: 0; font-size: clamp(1.35rem, 3vw, 1.8rem); letter-spaci
   background: linear-gradient(90deg, rgba(17, 86, 214, 0.9), rgba(244, 181, 63, 0.95));
 }
 
-.goat-leaderboard { display: grid; gap: 2rem; margin-block: 3rem; }
+.goat-leaderboard {
+  display: grid;
+  gap: 2rem;
+  margin-block: clamp(1.4rem, 4vw, 2.4rem);
+}
 
 .goat-leaderboard__layout {
   display: grid;
