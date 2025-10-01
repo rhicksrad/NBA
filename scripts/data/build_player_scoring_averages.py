@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Build per-player scoring averages for the 2024-25 season."""
+
 from __future__ import annotations
 
 import json
@@ -9,14 +10,15 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Dict
 
+# Compute project root and enable first-party imports.
 ROOT = Path(__file__).resolve().parents[2]
-if str(ROOT) not in sys.path:
-    sys.path.insert(0, str(ROOT))
+sys.path.insert(0, str(ROOT))
 
 from scripts.build_insights import (  # noqa: E402
     PlayerStatisticsStreamError,
     iter_player_statistics_rows,
 )
+
 TARGET_SEASON_START = 2024
 OUTPUT_PATH = ROOT / "data" / "2025-26" / "canonical" / "player_scoring_averages.json"
 
@@ -49,7 +51,8 @@ def main() -> None:
     try:
         rows = iter_player_statistics_rows()
     except PlayerStatisticsStreamError as exc:  # pragma: no cover - defensive guard
-        raise SystemExit(str(exc))
+        # Preserve original cause for debugging (Ruff B904).
+        raise SystemExit(str(exc)) from exc
 
     for row in rows:
         game_type = (row.get("gameType") or "").strip().lower()
@@ -99,7 +102,10 @@ def main() -> None:
             }
         )
 
-    players.sort(key=lambda item: (item["pointsPerGame"], item["gamesPlayed"], item["playerId"]), reverse=True)
+    players.sort(
+        key=lambda item: (item["pointsPerGame"], item["gamesPlayed"], item["playerId"]),
+        reverse=True,
+    )
 
     payload = {
         "season": "2024-25",
