@@ -1,6 +1,6 @@
 # New York Knicks
 
-New York enters camp fresh off a 50-win and +5.6 SRS finish that sets a upper-tier playoff tone. guard Garrison Mathews, wing Guerschon Yabusele, and big Alex Len headline the returning core.
+New York enters camp fresh off a 50-win and +5.6 SRS finish that sets a upper-tier playoff tone. guard Jalen Brunson, big Karl-Anthony Towns, and wing OG Anunoby headline the returning core.
 The roster lists 9 guards, 7 wing/forwards, 5 centers, and 1 combo piece, with perimeter creation from Garrison Mathews and Jalen Brunson, switchable wings such as Guerschon Yabusele and Matt Ryan, interior size via Alex Len and Ariel Hukporti, and hybrid depth from Boo Buie III shaping the rotation battles.
 From there, the staff will refine lineup versatility to climb the standings. Garrison Mathews's lead guard reps will determine how dynamic the offense looks.
 

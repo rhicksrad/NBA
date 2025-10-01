@@ -11,6 +11,8 @@ import {
   InjuryRecord,
   LeagueContext,
   PlayerRecord,
+  PlayerScoringDataset,
+  PlayerScoringIndex,
   RankedTeam,
   TeamRecord,
 } from "../lib/types.js";
@@ -82,10 +84,65 @@ function escapeHtml(value: string): string {
     .replace(/'/g, "&#39;");
 }
 
+function normalizeName(value: string | null | undefined): string {
+  if (!value) {
+    return "";
+  }
+  return value
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z]/g, "");
+}
+
 async function loadJson<T>(fileName: string): Promise<T> {
   const filePath = path.join(CANONICAL_DIR, fileName);
   const raw = await readFile(filePath, "utf8");
   return JSON.parse(raw) as T;
+}
+
+async function loadPlayerScoring(): Promise<PlayerScoringIndex> {
+  const lookup: PlayerScoringIndex = { byId: {}, byName: {} };
+  try {
+    const filePath = path.join(CANONICAL_DIR, "player_scoring_averages.json");
+    const raw = await readFile(filePath, "utf8");
+    const payload = JSON.parse(raw) as PlayerScoringDataset;
+    const players = Array.isArray(payload?.players) ? payload.players : [];
+    for (const entry of players) {
+      const playerId = typeof entry?.playerId === "string" ? entry.playerId.trim() : "";
+      if (!playerId) {
+        continue;
+      }
+      const points = typeof entry.pointsPerGame === "number" && Number.isFinite(entry.pointsPerGame) ? entry.pointsPerGame : 0;
+      const games = typeof entry.gamesPlayed === "number" && Number.isFinite(entry.gamesPlayed) ? entry.gamesPlayed : 0;
+      const record = {
+        playerId,
+        pointsPerGame: points,
+        gamesPlayed: Math.max(0, Math.round(games)),
+        name: typeof entry.name === "string" ? entry.name : null,
+        firstName: typeof entry.firstName === "string" ? entry.firstName : null,
+        lastName: typeof entry.lastName === "string" ? entry.lastName : null,
+      };
+      lookup.byId[playerId] = record;
+      const nameKeys = new Set<string>();
+      const combinedName = record.name ?? `${record.firstName ?? ""} ${record.lastName ?? ""}`;
+      nameKeys.add(normalizeName(combinedName));
+      nameKeys.add(normalizeName(`${record.lastName ?? ""} ${record.firstName ?? ""}`));
+      for (const key of nameKeys) {
+        if (!key) {
+          continue;
+        }
+        const existing = lookup.byName[key];
+        if (!existing || record.pointsPerGame > existing.pointsPerGame) {
+          lookup.byName[key] = record;
+        }
+      }
+    }
+    // Loaded dataset successfully
+  } catch (error) {
+    console.warn("Unable to load player scoring averages for preseason previews.", error);
+  }
+  return lookup;
 }
 
 async function ensureSiteDirs(): Promise<void> {
@@ -316,6 +373,7 @@ export async function generatePreviews(): Promise<void> {
   const teams = await loadJson<TeamRecord[]>("teams.json");
   const players = await loadJson<PlayerRecord[]>("players.json");
   const injuries = await loadJson<InjuryRecord[]>("injuries.json");
+  const playerScoring = await loadPlayerScoring();
   const rankings = rankTeams({ teams, players, injuries });
 
   const context: LeagueContext = {
@@ -324,6 +382,7 @@ export async function generatePreviews(): Promise<void> {
     players,
     injuries,
     rankings,
+    playerScoring,
   };
 
   const rankingLookup = new Map(rankings.map((entry) => [entry.tricode, entry]));
