@@ -1,5 +1,7 @@
 const base = (process.env.BDL_PROXY_BASE || "").replace(/\/$/, "");
-const url = `${base || "https://api.balldontlie.io"}/v1/players/active?per_page=100`;
+// Use a stable, lightweight endpoint for health checks.
+const url = `${base || "https://api.balldontlie.io"}/v1/teams?per_page=1`;
+const soft = process.env.VERIFY_ALLOW_5XX === "true";
 
 async function check(u: string): Promise<boolean> {
   try {
@@ -12,6 +14,10 @@ async function check(u: string): Promise<boolean> {
       const r2 = await fetch(u);
       if (r2.ok) return true;
       console.error(`Retry failed: ${r2.status} ${r2.statusText}`);
+      if (soft) {
+        console.warn("Soft-failing BDL verify due to upstream 5xx");
+        return true;
+      }
     }
     return false;
   } catch (error) {

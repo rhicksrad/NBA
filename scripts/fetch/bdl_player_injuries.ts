@@ -1,6 +1,6 @@
 import { buildUrl, execute } from "./http.js";
 
-const PAGE_SIZE = 50;
+const PAGE_SIZE = 25;
 
 export interface BdlPlayerSummary {
   id?: number;
@@ -40,18 +40,15 @@ export async function fetchPlayerInjuries(): Promise<BdlPlayerInjury[]> {
   const out: BdlPlayerInjury[] = [];
   let cursor: number | string | null | undefined = undefined;
 
-  for (let page = 1; page <= 2000; page += 1) {
+  for (let i = 0; i < 4000; i += 1) {
     const qs =
-      cursor != null
-        ? `?per_page=${PAGE_SIZE}&cursor=${cursor}`
-        : `?per_page=${PAGE_SIZE}&page=${page}`;
-    const url = buildUrl("/v1/player_injuries", qs);
-    const res = await execute<PlayerInjuryPage>(url);
+      cursor != null ? `?per_page=${PAGE_SIZE}&cursor=${cursor}` : `?per_page=${PAGE_SIZE}`;
+    const res = await execute<PlayerInjuryPage>(buildUrl("/v1/player_injuries", qs));
     const batch = Array.isArray(res?.data) ? res.data : [];
     out.push(...batch);
 
     const next = res?.meta?.next_cursor ?? null;
-    if ((!next && batch.length < PAGE_SIZE) || batch.length === 0) {
+    if (!next || batch.length === 0) {
       break;
     }
     cursor = next ?? undefined;
