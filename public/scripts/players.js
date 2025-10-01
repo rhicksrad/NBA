@@ -1747,9 +1747,12 @@ function initPlayerAtlas() {
   const statBlocksEl = atlas.querySelector('[data-player-stat-blocks]');
   const teamBrowser = atlas.querySelector('[data-player-teams]');
   const teamTree = atlas.querySelector('[data-player-team-tree]');
-  const teamGoatPanel = atlas.querySelector('[data-player-teams-goat]');
-  const teamGoatList = atlas.querySelector('[data-player-teams-goat-list]');
-  const teamGoatEmpty = atlas.querySelector('[data-player-teams-goat-empty]');
+  const teamGoatPanel =
+    atlas.querySelector('[data-player-teams-goat]') || document.querySelector('[data-player-teams-goat]');
+  const teamGoatList =
+    atlas.querySelector('[data-player-teams-goat-list]') || document.querySelector('[data-player-teams-goat-list]');
+  const teamGoatEmpty =
+    atlas.querySelector('[data-player-teams-goat-empty]') || document.querySelector('[data-player-teams-goat-empty]');
   const recentLeaderboard = document.querySelector('[data-recent-leaderboard]');
   const recentPlaceholder = document.querySelector('[data-recent-placeholder]');
 
