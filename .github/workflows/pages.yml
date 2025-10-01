@@ -25,6 +25,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: pnpm
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -43,6 +44,7 @@ jobs:
         run: pnpm build:data
         env:
           BDL_PROXY_BASE: https://bdlproxy.hicksrch.workers.dev/bdl
+          ALLOW_INJURY_FAILURE: "true"
 
       - name: Configure Pages
         uses: actions/configure-pages@v5

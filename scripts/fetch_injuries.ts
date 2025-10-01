@@ -335,11 +335,17 @@ export async function writeInjuryMonitorSnapshot(
 }
 
 async function main() {
+  const allowSoftFail = process.env.ALLOW_INJURY_FAILURE === "true";
   try {
     await writeInjuryMonitorSnapshot();
   } catch (error) {
-    console.error("Failed to build injury monitor snapshot:", error);
-    process.exitCode = 1;
+    if (allowSoftFail) {
+      console.warn(error instanceof Error ? error.message : String(error));
+      console.warn("Continuing without injury snapshot due to ALLOW_INJURY_FAILURE=true");
+    } else {
+      console.error("Failed to build injury monitor snapshot:", error);
+      process.exitCode = 1;
+    }
   }
 }
 

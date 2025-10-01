@@ -1,13 +1,8 @@
-function cors(response) {
-  const headers = new Headers(response.headers);
-  headers.set("Access-Control-Allow-Origin", "*");
-  headers.set("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS");
-  headers.set("Access-Control-Allow-Headers", "Content-Type, Bdl-Ci");
-  return new Response(response.body, {
-    status: response.status,
-    statusText: response.statusText,
-    headers,
-  });
+function cors(res) {
+  res.headers.set("Access-Control-Allow-Origin", "*");
+  res.headers.set("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS");
+  res.headers.set("Access-Control-Allow-Headers", "Content-Type,Bdl-Ci");
+  return res;
 }
 
 async function checkLimit(env, key) {
@@ -17,11 +12,9 @@ async function checkLimit(env, key) {
     }
     const id = env.RATE_LIMIT.idFromName(key);
     const stub = env.RATE_LIMIT.get(id);
-    const res = await stub.fetch("https://limit/check");
-    if (!res.ok) {
-      return { allowed: true, remaining: 60, reset: Date.now() + 60_000 };
-    }
-    return await res.json();
+    const r = await stub.fetch("https://limit/check");
+    if (!r.ok) return { allowed: true, remaining: 60, reset: Date.now() + 60_000 };
+    return await r.json();
   } catch {
     return { allowed: true, remaining: 60, reset: Date.now() + 60_000 };
   }
@@ -30,118 +23,49 @@ async function checkLimit(env, key) {
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
+    if (request.method === "OPTIONS") return cors(new Response(null, { status: 204 }));
+    if (!/^\/bdl(\/|$)/.test(url.pathname)) return new Response("Not found", { status: 404 });
+    if (request.method !== "GET" && request.method !== "HEAD") return new Response("Method not allowed", { status: 405 });
 
-    if (request.method === "OPTIONS") {
-      return cors(new Response(null, { status: 204 }));
-    }
-
-    if (!/^\/bdl(\/|$)/.test(url.pathname)) {
-      const notFound = new Response("Not found", { status: 404 });
-      notFound.headers.set("x-proxy", "bdlproxy");
-      return cors(notFound);
-    }
-
-    if (request.method !== "GET" && request.method !== "HEAD") {
-      const methodError = new Response("Method not allowed", { status: 405 });
-      methodError.headers.set("x-proxy", "bdlproxy");
-      return cors(methodError);
-    }
-
+    // Optional CI bypass for IP gates
     const isCi = request.headers.get("Bdl-Ci") === "1";
 
+    // Per-IP limiter (skip if not bound or CI)
     if (!isCi) {
       const ip = request.headers.get("CF-Connecting-IP") || "0.0.0.0";
       const group = url.pathname.split("/").slice(0, 4).join("/");
       const { allowed, remaining, reset } = await checkLimit(env, `${ip}:${group}`);
       if (!allowed) {
-        const retryAfter = Math.max(1, Math.ceil((reset - Date.now()) / 1000));
-        const limited = new Response("Too Many Requests", {
+        return cors(new Response("Too Many Requests", {
           status: 429,
           headers: {
-            "Retry-After": String(retryAfter),
+            "Retry-After": String(Math.max(1, Math.ceil((reset - Date.now()) / 1000))),
             "X-RateLimit-Limit": "60",
             "X-RateLimit-Remaining": String(remaining),
-            "X-RateLimit-Reset": String(Math.floor(reset / 1000)),
-          },
-        });
-        limited.headers.set("x-proxy", "bdlproxy");
-        return cors(limited);
+            "X-RateLimit-Reset": String(Math.floor(reset / 1000))
+          }
+        }));
       }
     }
 
-    const upstreamPath = url.pathname.replace(/^\/bdl/, "");
-    const upstreamUrl = new URL(`https://api.balldontlie.io${upstreamPath}${url.search}`);
-
-    const cache = caches.default;
-    const cacheKey = new Request(upstreamUrl.toString(), { method: "GET" });
-    const method = request.method;
-
-    if (method === "GET" || method === "HEAD") {
-      const cached = await cache.match(cacheKey);
-      if (cached && cached.ok) {
-        const headers = new Headers(cached.headers);
-        headers.set("x-proxy", "bdlproxy");
-        const cachedResponse =
-          method === "HEAD"
-            ? new Response(null, {
-                status: cached.status,
-                statusText: cached.statusText,
-                headers,
-              })
-            : new Response(cached.body, {
-                status: cached.status,
-                statusText: cached.statusText,
-                headers,
-              });
-        return cors(cachedResponse);
-      }
-    }
-
-    const upstreamReq = new Request(upstreamUrl.toString(), {
+    const upstream = new URL("https://api.balldontlie.io" + url.pathname.replace(/^\/bdl/, "") + url.search);
+    const upstreamReq = new Request(upstream.toString(), {
       method: "GET",
-      headers: {
-        Authorization: `Bearer ${env.BDL_API_KEY}`,
-        Accept: "application/json",
-      },
+      headers: { "Authorization": `Bearer ${env.BDL_API_KEY}`, "Accept": "application/json" }
     });
 
-    const upstreamRes = await fetch(upstreamReq);
-    const cloneForCache = upstreamRes.clone();
+    const cache = caches.default;
+    const cacheKey = new Request(upstream.toString(), { method: "GET" });
 
-    const headers = new Headers(upstreamRes.headers);
-    headers.set("x-proxy", "bdlproxy");
-
-    if (upstreamRes.ok) {
-      headers.set("Cache-Control", "public, max-age=60");
+    const up = await fetch(upstreamReq);
+    let res = new Response(up.body, up);
+    if (up.ok) {
+      res.headers.set("Cache-Control", "public, max-age=60");
+      ctx.waitUntil(cache.put(cacheKey, res.clone()));
     } else {
-      headers.delete("Cache-Control");
+      res.headers.delete("Cache-Control"); // never cache failures
+      res.headers.set("x-proxy", "bdlproxy");
     }
-
-    const proxied =
-      method === "HEAD"
-        ? new Response(null, {
-            status: upstreamRes.status,
-            statusText: upstreamRes.statusText,
-            headers,
-          })
-        : new Response(upstreamRes.body, {
-            status: upstreamRes.status,
-            statusText: upstreamRes.statusText,
-            headers,
-          });
-
-    if (upstreamRes.ok) {
-      const cacheHeaders = new Headers(cloneForCache.headers);
-      cacheHeaders.set("Cache-Control", "public, max-age=60");
-      cacheHeaders.set("x-proxy", "bdlproxy");
-      const cacheResponse = new Response(cloneForCache.body, {
-        status: cloneForCache.status,
-        statusText: cloneForCache.statusText,
-        headers: cacheHeaders,
-      });
-      ctx.waitUntil(cache.put(cacheKey, cacheResponse));
-    }
-
-    return cors(proxied);
-  },
+    return cors(res);
+  }
 };
