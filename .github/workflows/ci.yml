@@ -10,7 +10,7 @@ permissions:
   contents: read
 
 jobs:
-  lint-and-test:
+  ci:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -22,6 +22,7 @@ jobs:
           node-version: 20
           cache: pnpm
 
+      # IMPORTANT: don't pass a conflicting version; let it read packageManager from package.json
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
@@ -30,27 +31,21 @@ jobs:
       - name: Install Node deps
         run: pnpm i --frozen-lockfile
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-          cache: "pip"
-          cache-dependency-path: |
-            requirements.txt
-            requirements-dev.txt
-            pyproject.toml
-            setup.cfg
+      # Build the data via your Cloudflare proxy; allow injuries to soft-fail
+      - name: Build data
+        run: pnpm build:data
+        env:
+          BDL_PROXY_BASE: https://bdlproxy.hicksrch.workers.dev/bdl
+          ALLOW_INJURY_FAILURE: "true"
 
-      - name: Install deps
-        run: |
-          python -m pip install --upgrade pip
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-          if [ -f requirements-dev.txt ]; then pip install -r requirements-dev.txt; fi
-          # Ensure tools exist even if not pinned in your files
-          python -m pip install --upgrade ruff pytest
+      # Lightweight upstream health check; tolerant of a transient 5xx
+      - name: Verify BDL
+        run: pnpm verify:bdl
+        env:
+          BDL_PROXY_BASE: https://bdlproxy.hicksrch.workers.dev/bdl
+          VERIFY_ALLOW_5XX: "true"
 
-      - name: Ruff (lint)
-        run: ruff check . --output-format=github
+      # Optional: your unit tests (vitest)
+      - name: Tests
+        run: pnpm test
 
-      - name: Pytest
-        run: pytest -q
