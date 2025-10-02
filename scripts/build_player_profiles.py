@@ -1092,9 +1092,13 @@ def _build_recent_goat_leaderboard(
             entry["franchises"] = franchises
         if status:
             entry["status"] = status
+        entry["_sourceRank"] = entry["rank"]
         leaderboard.append(entry)
 
-    leaderboard.sort(key=lambda item: (item["rank"], -item["score"]))
+    leaderboard.sort(key=lambda item: (-item["score"], item["_sourceRank"], item["name"]))
+    for index, entry in enumerate(leaderboard, start=1):
+        entry["rank"] = index
+        entry.pop("_sourceRank", None)
     if limit > 0:
         return leaderboard[:limit]
     return leaderboard
