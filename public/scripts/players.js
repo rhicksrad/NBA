@@ -2355,7 +2355,10 @@ function initPlayerAtlas() {
       if (parentSection && !parentSection.open) {
         parentSection.open = true;
       }
-      activeButton.scrollIntoView({ block: 'nearest' });
+      const isTreeScrollable = teamTree.scrollHeight > teamTree.clientHeight;
+      if (isTreeScrollable) {
+        activeButton.scrollIntoView({ block: 'nearest' });
+      }
     }
   };
 
