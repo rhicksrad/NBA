@@ -664,6 +664,8 @@ function buildLeaderboard(
   const grouped = groupPlayers(sortedPlayers);
   let initialPlayerName = null;
 
+  let displayIndex = 1;
+
   grouped.forEach((group) => {
     const details = document.createElement('details');
     details.className = 'goat-tier';
@@ -700,6 +702,8 @@ function buildLeaderboard(
     list.setAttribute('role', 'list');
 
     group.players.forEach((player) => {
+      const sequentialRank = displayIndex++;
+      player.displayRank = sequentialRank;
       const item = document.createElement('li');
       item.className = 'goat-tier__item';
 
@@ -715,7 +719,11 @@ function buildLeaderboard(
 
       const rank = document.createElement('span');
       rank.className = 'goat-tier__player-rank';
-      rank.textContent = Number.isFinite(player.rank) ? player.rank : '—';
+      rank.textContent = Number.isFinite(player.displayRank)
+        ? player.displayRank
+        : Number.isFinite(player.rank)
+        ? player.rank
+        : '—';
 
       const nameBlock = document.createElement('div');
       nameBlock.className = 'goat-tier__player-name';
@@ -917,6 +925,8 @@ function mergeRecentLeaderboardEntries(primaryEntries = [], derivedEntries = [])
     return 0;
   });
 
+  ensureSequentialRanks(merged, 'rank');
+
   return merged;
 }
 
@@ -1111,8 +1121,13 @@ function selectRecentPlayer(player, { windowLabel } = {}) {
     if (Array.isArray(player.franchises) && player.franchises.length) {
       details.push(player.franchises.join(' · '));
     }
-    if (Number.isFinite(player.rank)) {
-      details.push(`#${player.rank}`);
+    const effectiveRank = Number.isFinite(player.displayRank)
+      ? player.displayRank
+      : Number.isFinite(player.rank)
+      ? player.rank
+      : null;
+    if (Number.isFinite(effectiveRank)) {
+      details.push(`#${effectiveRank}`);
     }
     const windowText = windowLabel ?? player.recentWindow;
     if (windowText) {
