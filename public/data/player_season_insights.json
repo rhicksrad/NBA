@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2025-10-02T01:15:02.553338+00:00",
+  "generatedAt": "2025-10-02T01:29:22.430427+00:00",
   "totals": {
     "playerGameRows": 1627438,
     "playersTracked": 5428,
@@ -8,8 +8,8 @@
       "start": 1946,
       "end": 2025
     },
-    "tripleDoubleGames": 3517,
-    "playersWithTripleDouble": 476,
+    "tripleDoubleGames": 3618,
+    "playersWithTripleDouble": 498,
     "averagePlayerLine": {
       "points": 9.19,
       "assists": 1.96,
@@ -17,7 +17,7 @@
     },
     "mostTripleDoubleSeason": {
       "season": 2021,
-      "tripleDoubles": 192
+      "tripleDoubles": 194
     }
   },
   "seasonAverages": {
@@ -599,7 +599,7 @@
     {
       "personId": "77376",
       "name": "Lafayette Lever",
-      "tripleDoubles": 45,
+      "tripleDoubles": 46,
       "seasonsWithTripleDouble": 6,
       "careerSpan": {
         "start": 1982,
@@ -613,7 +613,7 @@
     {
       "personId": "203110",
       "name": "Draymond Green",
-      "tripleDoubles": 43,
+      "tripleDoubles": 44,
       "seasonsWithTripleDouble": 8,
       "careerSpan": {
         "start": 2012,
@@ -695,6 +695,20 @@
       }
     },
     {
+      "personId": "17",
+      "name": "Clyde Drexler",
+      "tripleDoubles": 28,
+      "seasonsWithTripleDouble": 9,
+      "careerSpan": {
+        "start": 1983,
+        "end": 1998
+      },
+      "bestSeason": {
+        "season": 1985,
+        "tripleDoubles": 5
+      }
+    },
+    {
       "personId": "76750",
       "name": "Walt Frazier",
       "tripleDoubles": 27,
@@ -720,20 +734,6 @@
       "bestSeason": {
         "season": 1969,
         "tripleDoubles": 4
-      }
-    },
-    {
-      "personId": "17",
-      "name": "Clyde Drexler",
-      "tripleDoubles": 26,
-      "seasonsWithTripleDouble": 9,
-      "careerSpan": {
-        "start": 1983,
-        "end": 1998
-      },
-      "bestSeason": {
-        "season": 1985,
-        "tripleDoubles": 5
       }
     },
     {
@@ -804,6 +804,20 @@
       "bestSeason": {
         "season": 2021,
         "tripleDoubles": 3
+      }
+    },
+    {
+      "personId": "76003",
+      "name": "Kareem Abdul-Jabbar",
+      "tripleDoubles": 22,
+      "seasonsWithTripleDouble": 11,
+      "careerSpan": {
+        "start": 1969,
+        "end": 1989
+      },
+      "bestSeason": {
+        "season": 1976,
+        "tripleDoubles": 4
       }
     },
     {
@@ -1101,6 +1115,34 @@
       }
     },
     {
+      "personId": "165",
+      "name": "Hakeem Olajuwon",
+      "tripleDoubles": 15,
+      "seasonsWithTripleDouble": 9,
+      "careerSpan": {
+        "start": 1984,
+        "end": 2002
+      },
+      "bestSeason": {
+        "season": 1990,
+        "tripleDoubles": 4
+      }
+    },
+    {
+      "personId": "764",
+      "name": "David Robinson",
+      "tripleDoubles": 15,
+      "seasonsWithTripleDouble": 5,
+      "careerSpan": {
+        "start": 1989,
+        "end": 2003
+      },
+      "bestSeason": {
+        "season": 1993,
+        "tripleDoubles": 4
+      }
+    },
+    {
       "personId": "78437",
       "name": "Darrell Walker",
       "tripleDoubles": 15,
@@ -1112,20 +1154,6 @@
       "bestSeason": {
         "season": 1990,
         "tripleDoubles": 9
-      }
-    },
-    {
-      "personId": "76003",
-      "name": "Kareem Abdul-Jabbar",
-      "tripleDoubles": 15,
-      "seasonsWithTripleDouble": 9,
-      "careerSpan": {
-        "start": 1969,
-        "end": 1989
-      },
-      "bestSeason": {
-        "season": 1976,
-        "tripleDoubles": 4
       }
     },
     {
@@ -1181,6 +1209,20 @@
       },
       "bestSeason": {
         "season": 2018,
+        "tripleDoubles": 3
+      }
+    },
+    {
+      "personId": "134",
+      "name": "Kevin Johnson",
+      "tripleDoubles": 13,
+      "seasonsWithTripleDouble": 7,
+      "careerSpan": {
+        "start": 1987,
+        "end": 2000
+      },
+      "bestSeason": {
+        "season": 1989,
         "tripleDoubles": 3
       }
     },
@@ -1241,20 +1283,6 @@
       }
     },
     {
-      "personId": "134",
-      "name": "Kevin Johnson",
-      "tripleDoubles": 12,
-      "seasonsWithTripleDouble": 6,
-      "careerSpan": {
-        "start": 1987,
-        "end": 2000
-      },
-      "bestSeason": {
-        "season": 1989,
-        "tripleDoubles": 3
-      }
-    },
-    {
       "personId": "76011",
       "name": "Alvan Adams",
       "tripleDoubles": 12,
@@ -1308,6 +1336,34 @@
       "bestSeason": {
         "season": 2013,
         "tripleDoubles": 3
+      }
+    },
+    {
+      "personId": "87",
+      "name": "Dikembe Mutombo",
+      "tripleDoubles": 10,
+      "seasonsWithTripleDouble": 5,
+      "careerSpan": {
+        "start": 1991,
+        "end": 2009
+      },
+      "bestSeason": {
+        "season": 1994,
+        "tripleDoubles": 3
+      }
+    },
+    {
+      "personId": "302",
+      "name": "Mookie Blaylock",
+      "tripleDoubles": 10,
+      "seasonsWithTripleDouble": 6,
+      "careerSpan": {
+        "start": 1989,
+        "end": 2002
+      },
+      "bestSeason": {
+        "season": 1994,
+        "tripleDoubles": 4
       }
     },
     {
@@ -1604,7 +1660,7 @@
       "avgAssists": 2.41,
       "avgRebounds": 4.83,
       "avgMinutes": 21.79,
-      "tripleDoubles": 21
+      "tripleDoubles": 27
     },
     {
       "season": 1974,
@@ -1613,7 +1669,7 @@
       "avgAssists": 2.32,
       "avgRebounds": 4.71,
       "avgMinutes": 21.58,
-      "tripleDoubles": 25
+      "tripleDoubles": 27
     },
     {
       "season": 1975,
@@ -1622,7 +1678,7 @@
       "avgAssists": 2.3,
       "avgRebounds": 4.65,
       "avgMinutes": 22.2,
-      "tripleDoubles": 23
+      "tripleDoubles": 25
     },
     {
       "season": 1976,
@@ -1631,7 +1687,7 @@
       "avgAssists": 2.26,
       "avgRebounds": 4.62,
       "avgMinutes": 23.06,
-      "tripleDoubles": 21
+      "tripleDoubles": 22
     },
     {
       "season": 1977,
@@ -1640,7 +1696,7 @@
       "avgAssists": 2.4,
       "avgRebounds": 4.66,
       "avgMinutes": 23.6,
-      "tripleDoubles": 17
+      "tripleDoubles": 19
     },
     {
       "season": 1978,
@@ -1649,7 +1705,7 @@
       "avgAssists": 2.53,
       "avgRebounds": 4.68,
       "avgMinutes": 24.16,
-      "tripleDoubles": 12
+      "tripleDoubles": 16
     },
     {
       "season": 1979,
@@ -1658,7 +1714,7 @@
       "avgAssists": 2.59,
       "avgRebounds": 4.6,
       "avgMinutes": 24.32,
-      "tripleDoubles": 27
+      "tripleDoubles": 29
     },
     {
       "season": 1980,
@@ -1667,7 +1723,7 @@
       "avgAssists": 2.58,
       "avgRebounds": 4.45,
       "avgMinutes": 24.31,
-      "tripleDoubles": 24
+      "tripleDoubles": 25
     },
     {
       "season": 1981,
@@ -1676,7 +1732,7 @@
       "avgAssists": 2.45,
       "avgRebounds": 4.27,
       "avgMinutes": 23.82,
-      "tripleDoubles": 26
+      "tripleDoubles": 27
     },
     {
       "season": 1982,
@@ -1685,7 +1741,7 @@
       "avgAssists": 2.51,
       "avgRebounds": 4.29,
       "avgMinutes": 23.51,
-      "tripleDoubles": 44
+      "tripleDoubles": 47
     },
     {
       "season": 1983,
@@ -1694,7 +1750,7 @@
       "avgAssists": 2.52,
       "avgRebounds": 4.26,
       "avgMinutes": 23.34,
-      "tripleDoubles": 36
+      "tripleDoubles": 39
     },
     {
       "season": 1984,
@@ -1703,7 +1759,7 @@
       "avgAssists": 2.5,
       "avgRebounds": 4.16,
       "avgMinutes": 23.39,
-      "tripleDoubles": 43
+      "tripleDoubles": 44
     },
     {
       "season": 1985,
@@ -1712,7 +1768,7 @@
       "avgAssists": 2.56,
       "avgRebounds": 4.24,
       "avgMinutes": 23.42,
-      "tripleDoubles": 52
+      "tripleDoubles": 57
     },
     {
       "season": 1986,
@@ -1721,7 +1777,7 @@
       "avgAssists": 2.54,
       "avgRebounds": 4.27,
       "avgMinutes": 23.62,
-      "tripleDoubles": 46
+      "tripleDoubles": 49
     },
     {
       "season": 1987,
@@ -1730,7 +1786,7 @@
       "avgAssists": 2.56,
       "avgRebounds": 4.29,
       "avgMinutes": 23.71,
-      "tripleDoubles": 62
+      "tripleDoubles": 64
     },
     {
       "season": 1988,
@@ -1739,7 +1795,7 @@
       "avgAssists": 2.5,
       "avgRebounds": 4.25,
       "avgMinutes": 23.72,
-      "tripleDoubles": 57
+      "tripleDoubles": 59
     },
     {
       "season": 1989,
@@ -1748,7 +1804,7 @@
       "avgAssists": 2.46,
       "avgRebounds": 4.26,
       "avgMinutes": 23.63,
-      "tripleDoubles": 82
+      "tripleDoubles": 85
     },
     {
       "season": 1990,
@@ -1757,7 +1813,7 @@
       "avgAssists": 2.47,
       "avgRebounds": 4.24,
       "avgMinutes": 23.72,
-      "tripleDoubles": 55
+      "tripleDoubles": 63
     },
     {
       "season": 1991,
@@ -1766,7 +1822,7 @@
       "avgAssists": 2.4,
       "avgRebounds": 4.29,
       "avgMinutes": 23.97,
-      "tripleDoubles": 37
+      "tripleDoubles": 39
     },
     {
       "season": 1992,
@@ -1775,7 +1831,7 @@
       "avgAssists": 2.44,
       "avgRebounds": 4.27,
       "avgMinutes": 23.87,
-      "tripleDoubles": 37
+      "tripleDoubles": 38
     },
     {
       "season": 1993,
@@ -1784,7 +1840,7 @@
       "avgAssists": 2.41,
       "avgRebounds": 4.23,
       "avgMinutes": 23.85,
-      "tripleDoubles": 36
+      "tripleDoubles": 42
     },
     {
       "season": 1994,
@@ -1793,7 +1849,7 @@
       "avgAssists": 2.36,
       "avgRebounds": 4.18,
       "avgMinutes": 23.76,
-      "tripleDoubles": 26
+      "tripleDoubles": 29
     },
     {
       "season": 1995,
@@ -1802,7 +1858,7 @@
       "avgAssists": 2.28,
       "avgRebounds": 4.09,
       "avgMinutes": 23.94,
-      "tripleDoubles": 36
+      "tripleDoubles": 39
     },
     {
       "season": 1996,
@@ -1811,7 +1867,7 @@
       "avgAssists": 2.1,
       "avgRebounds": 3.87,
       "avgMinutes": 22.59,
-      "tripleDoubles": 36
+      "tripleDoubles": 42
     },
     {
       "season": 1997,
@@ -1820,7 +1876,7 @@
       "avgAssists": 1.85,
       "avgRebounds": 3.47,
       "avgMinutes": 19.9,
-      "tripleDoubles": 47
+      "tripleDoubles": 48
     },
     {
       "season": 1998,
@@ -1829,7 +1885,7 @@
       "avgAssists": 1.85,
       "avgRebounds": 3.46,
       "avgMinutes": 19.89,
-      "tripleDoubles": 14
+      "tripleDoubles": 18
     },
     {
       "season": 1999,
@@ -1838,7 +1894,7 @@
       "avgAssists": 1.74,
       "avgRebounds": 3.49,
       "avgMinutes": 19.56,
-      "tripleDoubles": 29
+      "tripleDoubles": 30
     },
     {
       "season": 2000,
@@ -1847,7 +1903,7 @@
       "avgAssists": 1.83,
       "avgRebounds": 3.55,
       "avgMinutes": 19.81,
-      "tripleDoubles": 45
+      "tripleDoubles": 46
     },
     {
       "season": 2001,
@@ -1856,7 +1912,7 @@
       "avgAssists": 1.84,
       "avgRebounds": 3.57,
       "avgMinutes": 19.82,
-      "tripleDoubles": 36
+      "tripleDoubles": 37
     },
     {
       "season": 2002,
@@ -1865,7 +1921,7 @@
       "avgAssists": 1.79,
       "avgRebounds": 3.54,
       "avgMinutes": 19.78,
-      "tripleDoubles": 45
+      "tripleDoubles": 47
     },
     {
       "season": 2003,
@@ -1874,7 +1930,7 @@
       "avgAssists": 1.79,
       "avgRebounds": 3.52,
       "avgMinutes": 19.55,
-      "tripleDoubles": 42
+      "tripleDoubles": 43
     },
     {
       "season": 2004,
@@ -1901,7 +1957,7 @@
       "avgAssists": 1.71,
       "avgRebounds": 3.39,
       "avgMinutes": 19.76,
-      "tripleDoubles": 48
+      "tripleDoubles": 49
     },
     {
       "season": 2007,
@@ -1910,7 +1966,7 @@
       "avgAssists": 1.78,
       "avgRebounds": 3.45,
       "avgMinutes": 19.74,
-      "tripleDoubles": 40
+      "tripleDoubles": 41
     },
     {
       "season": 2008,
@@ -1919,7 +1975,7 @@
       "avgAssists": 1.77,
       "avgRebounds": 3.48,
       "avgMinutes": 19.77,
-      "tripleDoubles": 33
+      "tripleDoubles": 34
     },
     {
       "season": 2009,
@@ -1946,7 +2002,7 @@
       "avgAssists": 1.76,
       "avgRebounds": 3.43,
       "avgMinutes": 19.68,
-      "tripleDoubles": 26
+      "tripleDoubles": 27
     },
     {
       "season": 2012,
@@ -1955,7 +2011,7 @@
       "avgAssists": 1.65,
       "avgRebounds": 3.3,
       "avgMinutes": 18.53,
-      "tripleDoubles": 34
+      "tripleDoubles": 38
     },
     {
       "season": 2013,
@@ -1964,7 +2020,7 @@
       "avgAssists": 1.71,
       "avgRebounds": 3.32,
       "avgMinutes": 18.55,
-      "tripleDoubles": 46
+      "tripleDoubles": 47
     },
     {
       "season": 2014,
@@ -1982,7 +2038,7 @@
       "avgAssists": 1.67,
       "avgRebounds": 3.34,
       "avgMinutes": 18.01,
-      "tripleDoubles": 60
+      "tripleDoubles": 62
     },
     {
       "season": 2016,
@@ -1991,7 +2047,7 @@
       "avgAssists": 1.7,
       "avgRebounds": 3.33,
       "avgMinutes": 18.03,
-      "tripleDoubles": 96
+      "tripleDoubles": 98
     },
     {
       "season": 2017,
@@ -2000,7 +2056,7 @@
       "avgAssists": 1.74,
       "avgRebounds": 3.32,
       "avgMinutes": 18.1,
-      "tripleDoubles": 124
+      "tripleDoubles": 125
     },
     {
       "season": 2018,
@@ -2009,7 +2065,7 @@
       "avgAssists": 1.8,
       "avgRebounds": 3.36,
       "avgMinutes": 17.96,
-      "tripleDoubles": 119
+      "tripleDoubles": 120
     },
     {
       "season": 2019,
@@ -2036,7 +2092,7 @@
       "avgAssists": 1.8,
       "avgRebounds": 3.3,
       "avgMinutes": 17.47,
-      "tripleDoubles": 192
+      "tripleDoubles": 194
     },
     {
       "season": 2022,
@@ -2063,7 +2119,7 @@
       "avgAssists": 1.96,
       "avgRebounds": 3.24,
       "avgMinutes": 17.58,
-      "tripleDoubles": 175
+      "tripleDoubles": 176
     },
     {
       "season": 2025,

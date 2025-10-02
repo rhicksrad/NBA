@@ -1239,6 +1239,8 @@ def build_player_season_insights_snapshot() -> None:
         points = _to_float(row.get("points")) or 0.0
         assists = _to_float(row.get("assists")) or 0.0
         rebounds = _to_float(row.get("reboundsTotal")) or 0.0
+        steals = _to_float(row.get("steals")) or 0.0
+        blocks = _to_float(row.get("blocks")) or 0.0
         minutes = _to_float(row.get("numMinutes")) or 0.0
 
         totals["games"] = int(totals.get("games", 0)) + 1
@@ -1256,7 +1258,10 @@ def build_player_season_insights_snapshot() -> None:
         season_totals_entry["rebounds"] += rebounds
         season_totals_entry["minutes"] += minutes
 
-        triple_double = points >= 10 and assists >= 10 and rebounds >= 10
+        categories_above_threshold = sum(
+            1 for value in (points, assists, rebounds, steals, blocks) if value >= 10
+        )
+        triple_double = categories_above_threshold >= 3
         if triple_double:
             totals["tripleDoubles"] = int(totals.get("tripleDoubles", 0)) + 1
             triple_double_counts[person_id] += 1
