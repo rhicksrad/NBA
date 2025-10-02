@@ -1,5 +1,6 @@
 import { registerCharts, helpers } from './hub-charts.js';
 import { rankByGoatScore, toNum } from '@/lib/rank';
+import { groupByTier, orderedTierNames } from '@/lib/tiers';
 
 const palette = {
   royal: '#1156d6',
@@ -284,20 +285,6 @@ function updateGeneratedTimestamp(data, sourceUrl, { selector = '[data-goat-gene
   target.textContent = `Last generated ${formatted}${sourceSuffix}`;
 }
 
-const TIER_PRIORITY = new Map([
-  ['Inner Circle', 0],
-  ['Pantheon', 1],
-  ['Ascendant', 2],
-  ['Legendary Core', 3],
-  ['All-Time Great', 4],
-  ['Hall of Fame', 5],
-  ['All-Star', 6],
-  ['Starter', 7],
-  ['Reserve', 8],
-  ['Rotation', 9],
-  ['Prospect', 10],
-]);
-
 const TIER_LABEL_OVERRIDES = new Map([
   ['Hall of Fame', 'All-NBA'],
 ]);
@@ -385,18 +372,6 @@ function formatDelta(value) {
   return `${sign}${helpers.formatNumber(value, 1)}`;
 }
 
-function tierSortValue(tier, bestRank = Infinity) {
-  const normalized = typeof tier === 'string' && tier.trim().length ? tier : 'Uncategorized';
-  const priority = TIER_PRIORITY.get(normalized);
-  if (typeof priority === 'number') {
-    return priority;
-  }
-  if (Number.isFinite(bestRank)) {
-    return 100 + bestRank / 100;
-  }
-  return 200;
-}
-
 function ensureSequentialRanks(records, rankKey = 'rank') {
   if (!Array.isArray(records) || !records.length) {
     return;
@@ -426,36 +401,39 @@ function ensureSequentialRanks(records, rankKey = 'rank') {
   });
 }
 
-function groupPlayersByTier(players) {
-  const tierMap = new Map();
+function normalizeTierName(tier) {
+  if (typeof tier !== 'string') {
+    return 'Uncategorized';
+  }
+  const trimmed = tier.trim();
+  if (!trimmed.length) {
+    return 'Uncategorized';
+  }
+  return TIER_GROUP_ALIASES.get(trimmed) ?? trimmed;
+}
 
-  players.forEach((player) => {
-    const rawTier = typeof player.tier === 'string' && player.tier.trim().length ? player.tier : 'Uncategorized';
-    const tier = TIER_GROUP_ALIASES.get(rawTier) ?? rawTier;
-    if (!tierMap.has(tier)) {
-      tierMap.set(tier, []);
-    }
-    tierMap.get(tier).push(player);
+function groupPlayersByTier(players) {
+  if (!Array.isArray(players) || !players.length) {
+    return [];
+  }
+
+  const normalizedPlayers = players.map((player) => {
+    const originalTier = typeof player?.tier === 'string' ? player.tier : null;
+    return {
+      ...player,
+      tier: normalizeTierName(originalTier),
+      originalTier,
+    };
   });
 
-  return Array.from(tierMap.entries())
-    .map(([tier, tierPlayers]) => {
-      const bestRank = tierPlayers.reduce((min, player) => {
-        const candidate = Number.isFinite(player?.rank) ? player.rank : Infinity;
-        return candidate < min ? candidate : min;
-      }, Infinity);
-      return { tier, players: tierPlayers, bestRank };
-    })
-    .sort((a, b) => {
-      const tierDifference = tierSortValue(a.tier, a.bestRank) - tierSortValue(b.tier, b.bestRank);
-      if (tierDifference !== 0) {
-        return tierDifference;
-      }
-      if (a.bestRank !== b.bestRank) {
-        return a.bestRank - b.bestRank;
-      }
-      return a.tier.localeCompare(b.tier);
-    });
+  const tierMap = groupByTier(normalizedPlayers);
+  const tierOrder = orderedTierNames(normalizedPlayers);
+
+  return tierOrder.map((tier) => {
+    const tierPlayers = tierMap.get(tier) ?? [];
+    const bestRank = Number.isFinite(tierPlayers[0]?.rank) ? tierPlayers[0].rank : Infinity;
+    return { tier, players: tierPlayers, bestRank };
+  });
 }
 
 function buildWeightCards(weights) {
@@ -644,7 +622,6 @@ function buildLeaderboard(
 
   const grouped = groupPlayers(normalizedPlayers);
   let initialPlayerName = null;
-  let traversalIndex = 0;
 
   grouped.forEach((group) => {
     const details = document.createElement('details');
@@ -667,7 +644,7 @@ function buildLeaderboard(
     summaryMeta.className = 'goat-tier__summary-count';
     summaryMeta.textContent =
       Number.isFinite(topScore) && topScore !== Number.NEGATIVE_INFINITY
-        ? `${count} ${playerWord} · top ${helpers.formatNumber(topScore, 1)}`
+        ? `${count} ${playerWord} · TOP ${helpers.formatNumber(topScore, 1)}`
         : `${count} ${playerWord}`;
 
     summary.append(label, summaryMeta);
@@ -677,8 +654,7 @@ function buildLeaderboard(
     list.className = 'goat-tier__list';
     list.setAttribute('role', 'list');
 
-    group.players.forEach((player) => {
-      traversalIndex += 1;
+    group.players.forEach((player, index) => {
       const item = document.createElement('li');
       item.className = 'goat-tier__item';
 
@@ -694,8 +670,17 @@ function buildLeaderboard(
 
       const rank = document.createElement('span');
       rank.className = 'goat-tier__player-rank';
-      const effectiveRank = Number.isFinite(player.rank) ? player.rank : traversalIndex;
-      rank.textContent = Number.isFinite(effectiveRank) ? effectiveRank : '—';
+      const localRank = index + 1;
+      const globalRank = Number.isFinite(player.rank) ? player.rank : null;
+      rank.textContent = Number.isFinite(localRank) ? localRank : '—';
+      rank.dataset.localRank = String(localRank);
+      if (globalRank !== null) {
+        rank.dataset.globalRank = String(globalRank);
+        rank.title = `Global #${globalRank}`;
+        button.dataset.globalRank = String(globalRank);
+      } else {
+        rank.title = 'Global rank unavailable';
+      }
 
       const nameBlock = document.createElement('div');
       nameBlock.className = 'goat-tier__player-name';
@@ -765,7 +750,15 @@ function groupRecentPlayers(players, groupSize = 10) {
     if (typeof group.tier === 'string' && group.tier.trim().length && group.tier !== 'Uncategorized') {
       return true;
     }
-    return group.players.some((player) => typeof player.tier === 'string' && player.tier.trim().length);
+    return group.players.some((player) => {
+      const rawTier =
+        typeof player.originalTier === 'string' && player.originalTier.trim().length
+          ? player.originalTier.trim()
+          : typeof player.tier === 'string'
+          ? player.tier.trim()
+          : '';
+      return rawTier.length > 0 && rawTier !== 'Uncategorized';
+    });
   });
 
   if (hasDefinedTiers) {
