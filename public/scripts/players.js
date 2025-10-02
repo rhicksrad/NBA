@@ -1097,18 +1097,40 @@ registerCharts([
     element: document.querySelector('[data-chart="scoring-eruptions"]'),
     source: 'data/player_leaders.json',
     async createConfig(data) {
-      const gamesSource = Array.isArray(data?.singleGameHighs?.points) ? data.singleGameHighs.points : [];
+      const topGames = Array.isArray(data?.singleGameHighs?.points) ? data.singleGameHighs.points : [];
+      const buildGameKey = (entry) => {
+        if (!entry || typeof entry !== 'object') return '';
+        const person = entry.personId ?? entry.name ?? '';
+        const gameId = entry.gameId ?? '';
+        const date = entry.gameDate ?? '';
+        return `${person}::${gameId || date}`;
+      };
+      const highlightColors = new Map(
+        topGames.map((game, index) => [buildGameKey(game), accents[index % accents.length]])
+      );
+      const gamesSource = Array.isArray(data?.singleGameHighs?.points50Plus)
+        ? data.singleGameHighs.points50Plus
+        : topGames;
       const games = [...gamesSource].sort((a, b) => (b?.points ?? 0) - (a?.points ?? 0));
       if (!games.length) return null;
-      const points = games.map((game, index) => {
+      const baseColor = 'rgba(31, 123, 255, 0.32)';
+      const defaultBorder = 'rgba(11, 37, 69, 0.12)';
+      const highlightBorder = 'rgba(11, 37, 69, 0.3)';
+      const points = games.map((game) => {
         const rebounds = Number.isFinite(game?.rebounds) ? game.rebounds : 0;
         const assists = Number.isFinite(game?.assists) ? game.assists : 0;
+        const key = buildGameKey(game);
+        const accentColor = highlightColors.get(key);
+        const highlight = Boolean(accentColor);
+        const baseRadius = Math.sqrt(rebounds + assists + 1);
         return {
           x: Number(game?.minutes) || 0,
           y: Number(game?.points) || 0,
-          r: Math.max(6, Math.sqrt(rebounds + assists + 1) * 2.4),
+          radius: Math.max(highlight ? 6 : 4, baseRadius * (highlight ? 2.4 : 1.6)),
+          highlight,
           game,
-          backgroundColor: accents[index % accents.length],
+          backgroundColor: accentColor ?? baseColor,
+          borderColor: highlight ? highlightBorder : defaultBorder,
         };
       });
 
@@ -1117,13 +1139,18 @@ registerCharts([
         data: {
           datasets: [
             {
-              label: 'Single game highs',
+              label: '50+ point games',
               data: points,
               parsing: false,
-              pointBackgroundColor: points.map((point) => point.backgroundColor),
-              pointBorderColor: 'rgba(11, 37, 69, 0.2)',
-              pointBorderWidth: 1,
+              pointBackgroundColor: (context) => context.raw?.backgroundColor ?? baseColor,
+              pointBorderColor: (context) => context.raw?.borderColor ?? defaultBorder,
+              pointBorderWidth: (context) => (context.raw?.highlight ? 1.6 : 0.8),
               pointHoverBorderWidth: 2,
+              pointRadius: (context) => context.raw?.radius ?? 4,
+              pointHoverRadius: (context) => {
+                const base = context.raw?.radius ?? 4;
+                return Math.max(base + 2, base * 1.15);
+              },
             },
           ],
         },
