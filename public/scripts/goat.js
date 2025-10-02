@@ -640,16 +640,20 @@ function buildLeaderboard(
   }
 
   const sortedPlayers = playerList.slice().sort((a, b) => {
+    const scoreA = Number.isFinite(a?.goatScore) ? a.goatScore : null;
+    const scoreB = Number.isFinite(b?.goatScore) ? b.goatScore : null;
+    if (scoreA !== null || scoreB !== null) {
+      if (scoreA === null) return 1;
+      if (scoreB === null) return -1;
+      if (scoreA !== scoreB) {
+        return scoreB - scoreA;
+      }
+    }
+
     const rankA = Number.isFinite(a?.rank) ? a.rank : Infinity;
     const rankB = Number.isFinite(b?.rank) ? b.rank : Infinity;
     if (rankA !== rankB) {
       return rankA - rankB;
-    }
-
-    const scoreA = Number.isFinite(a?.goatScore) ? a.goatScore : -Infinity;
-    const scoreB = Number.isFinite(b?.goatScore) ? b.goatScore : -Infinity;
-    if (scoreA !== scoreB) {
-      return scoreB - scoreA;
     }
 
     const nameA = typeof a?.name === 'string' ? a.name.toLowerCase() : '';
