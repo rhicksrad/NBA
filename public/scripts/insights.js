@@ -118,8 +118,8 @@ function updateHero(data) {
     : null;
   setMetric('season-range', rangeText);
   const calendarNote = Number.isFinite(seasonRangeStart) && Number.isFinite(seasonRangeEnd)
-    ? `Regular-season months appear on the left; playoff months are on the right. Ball Don't Lie seasons ${seasonRangeStart}-${seasonRangeEnd}.`
-    : 'Regular-season months appear on the left; playoff months are on the right.';
+    ? `Regular-season months (Oct–Apr) appear on the left in season order; playoff months (Apr–Jun, with bubble exceptions) are on the right. Ball Don't Lie seasons ${seasonRangeStart}-${seasonRangeEnd}.`
+    : 'Regular-season months (Oct–Apr) appear on the left in season order; playoff months (Apr–Jun, with bubble exceptions) are on the right.';
   setMetric('seasonal-calendar-note', calendarNote);
 
   const latestGap = data?.homeRoadSplits?.latestGap;
@@ -151,8 +151,21 @@ function buildSeasonalChart(dataRef) {
     return fallbackConfig('Monthly scoring data unavailable');
   }
 
-  const regularMonths = months.filter((entry) => Number.isFinite(entry?.regularSeasonAverage));
-  const playoffMonths = months.filter((entry) => Number.isFinite(entry?.playoffAverage));
+  const monthOrder = ['Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'];
+  const monthRank = new Map(monthOrder.map((label, index) => [label, index]));
+
+  const byRank = (a, b) => {
+    const rankA = monthRank.has(a?.month) ? monthRank.get(a.month) : Number.POSITIVE_INFINITY;
+    const rankB = monthRank.has(b?.month) ? monthRank.get(b.month) : Number.POSITIVE_INFINITY;
+    return rankA - rankB;
+  };
+
+  const regularMonths = months
+    .filter((entry) => Number.isFinite(entry?.regularSeasonAverage))
+    .sort(byRank);
+  const playoffMonths = months
+    .filter((entry) => Number.isFinite(entry?.playoffAverage))
+    .sort(byRank);
   if (!regularMonths.length && !playoffMonths.length) {
     return fallbackConfig('Monthly scoring data unavailable');
   }
