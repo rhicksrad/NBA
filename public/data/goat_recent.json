@@ -11,7 +11,13 @@
       "team": "Nuggets",
       "franchise": "DEN",
       "score": 90.0,
-      "blurb": "275 games · 185-90 record · 2022-23–2024-25"
+      "blurb": "275 games · 185-90 record · 2022-23–2024-25",
+      "tier": "Ascendant",
+      "resume": "19,312 pts · 6,255 ast · 9,601 reb in 898 games · Three MVPs in four years with all-time offensive EPM runs and a 2023 title.",
+      "franchises": [
+        "DEN"
+      ],
+      "status": "Active"
     },
     {
       "rank": 2,
@@ -21,7 +27,14 @@
       "team": "Thunder",
       "franchise": "OKC",
       "score": 85.3,
-      "blurb": "260 games · 177-83 record · 2022-23–2024-25"
+      "blurb": "260 games · 177-83 record · 2022-23–2024-25",
+      "tier": "Starter",
+      "resume": "12,802 pts · 2,703 ast · 2,541 reb in 547 games",
+      "franchises": [
+        "LAC",
+        "OKC"
+      ],
+      "status": "Active"
     },
     {
       "rank": 3,
@@ -31,7 +44,13 @@
       "team": "Celtics",
       "franchise": "BOS",
       "score": 81.7,
-      "blurb": "277 games · 200-77 record · 2022-23–2024-25"
+      "blurb": "277 games · 200-77 record · 2022-23–2024-25",
+      "tier": "All-Star",
+      "resume": "17,143 pts · 2,920 ast · 5,459 reb in 757 games",
+      "franchises": [
+        "BOS"
+      ],
+      "status": "Active"
     },
     {
       "rank": 4,
@@ -41,7 +60,13 @@
       "team": "Bucks",
       "franchise": "MIL",
       "score": 77.5,
-      "blurb": "219 games · 137-82 record · 2022-23–2024-25"
+      "blurb": "219 games · 137-82 record · 2022-23–2024-25",
+      "tier": "Ascendant",
+      "resume": "23,555 pts · 4,868 ast · 9,889 reb in 1,027 games · Two MVPs, a DPOY, and a 50-point Finals closeout before turning 30.",
+      "franchises": [
+        "MIL"
+      ],
+      "status": "Active"
     },
     {
       "rank": 5,
@@ -51,7 +76,13 @@
       "team": "76ers",
       "franchise": "PHI",
       "score": 73.2,
-      "blurb": "143 games · 93-50 record · 2022-23–2024-25"
+      "blurb": "143 games · 93-50 record · 2022-23–2024-25",
+      "tier": "Starter",
+      "resume": "14,311 pts · 1,870 ast · 5,762 reb in 613 games",
+      "franchises": [
+        "PHI"
+      ],
+      "status": "Active"
     },
     {
       "rank": 6,
@@ -61,7 +92,14 @@
       "team": "Lakers",
       "franchise": "LAL",
       "score": 72.7,
-      "blurb": "215 games · 124-91 record · 2022-23–2024-25"
+      "blurb": "215 games · 124-91 record · 2022-23–2024-25",
+      "tier": "All-Star",
+      "resume": "14,898 pts · 4,207 ast · 4,483 reb in 538 games",
+      "franchises": [
+        "DAL",
+        "LAL"
+      ],
+      "status": "Active"
     },
     {
       "rank": 7,
@@ -71,7 +109,14 @@
       "team": "Cavaliers",
       "franchise": "CLE",
       "score": 71.1,
-      "blurb": "227 games · 147-80 record · 2022-23–2024-25"
+      "blurb": "227 games · 147-80 record · 2022-23–2024-25",
+      "tier": "Starter",
+      "resume": "15,506 pts · 2,926 ast · 2,719 reb in 642 games",
+      "franchises": [
+        "CLE",
+        "UTA"
+      ],
+      "status": "Active"
     },
     {
       "rank": 8,
@@ -81,7 +126,13 @@
       "team": "Thunder",
       "franchise": "OKC",
       "score": 70.1,
-      "blurb": "155 games · 110-45 record · 2023-24–2024-25"
+      "blurb": "155 games · 110-45 record · 2023-24–2024-25",
+      "tier": "Starter",
+      "resume": "2,449 pts · 316 ast · 1,214 reb in 161 games",
+      "franchises": [
+        "OKC"
+      ],
+      "status": "Active"
     },
     {
       "rank": 9,
@@ -91,7 +142,14 @@
       "team": "Celtics",
       "franchise": "BOS",
       "score": 70.0,
-      "blurb": "293 games · 215-78 record · 2022-23–2024-25"
+      "blurb": "293 games · 215-78 record · 2022-23–2024-25",
+      "tier": "Starter",
+      "resume": "7,811 pts · 2,397 ast · 2,195 reb in 643 games",
+      "franchises": [
+        "BOS",
+        "SAN"
+      ],
+      "status": "Active"
     },
     {
       "rank": 10,
@@ -101,7 +159,13 @@
       "team": "Celtics",
       "franchise": "BOS",
       "score": 69.8,
-      "blurb": "261 games · 185-76 record · 2022-23–2024-25"
+      "blurb": "261 games · 185-76 record · 2022-23–2024-25",
+      "tier": "Starter",
+      "resume": "14,495 pts · 1,993 ast · 4,096 reb in 797 games",
+      "franchises": [
+        "BOS"
+      ],
+      "status": "Active"
     }
   ]
 }

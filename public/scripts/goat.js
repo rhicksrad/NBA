@@ -19,6 +19,9 @@ const heroStats = {
   multiFranchiseCount: 0,
 };
 
+const goatPlayersById = new Map();
+const goatPlayersByName = new Map();
+
 const FALLBACK_SOURCE_PANELS = [
   {
     label: 'Prime Impact & Possession Value',
@@ -141,6 +144,45 @@ const FALLBACK_SOURCE_PANELS = [
     ],
   },
 ];
+
+function normalizeNameKey(name) {
+  if (typeof name !== 'string') {
+    return null;
+  }
+  const text = name.trim().toLowerCase();
+  return text.length ? text : null;
+}
+
+function indexGoatPlayers(players) {
+  goatPlayersById.clear();
+  goatPlayersByName.clear();
+
+  if (!Array.isArray(players)) {
+    return;
+  }
+
+  players.forEach((player) => {
+    if (!player || typeof player !== 'object') {
+      return;
+    }
+
+    const rawId = player.personId ?? player.playerId;
+    const personId =
+      typeof rawId === 'string'
+        ? rawId.trim()
+        : typeof rawId === 'number'
+        ? String(rawId)
+        : null;
+    if (personId) {
+      goatPlayersById.set(personId, player);
+    }
+
+    const nameKey = normalizeNameKey(player.name ?? player.displayName);
+    if (nameKey) {
+      goatPlayersByName.set(nameKey, player);
+    }
+  });
+}
 
 function formatWeightPercentage(weight) {
   if (typeof weight !== 'number' || Number.isNaN(weight)) {
@@ -698,10 +740,22 @@ function groupRecentPlayers(players, groupSize = 10) {
     return [];
   }
 
-  const sorted = players
-    .slice()
-    .sort((a, b) => (a.rank ?? Infinity) - (b.rank ?? Infinity));
+  const tierGroups = groupPlayersByTier(players);
+  const hasDefinedTiers = tierGroups.some((group) => {
+    if (!group || !Array.isArray(group.players) || !group.players.length) {
+      return false;
+    }
+    if (typeof group.tier === 'string' && group.tier.trim().length && group.tier !== 'Uncategorized') {
+      return true;
+    }
+    return group.players.some((player) => typeof player.tier === 'string' && player.tier.trim().length);
+  });
 
+  if (hasDefinedTiers) {
+    return tierGroups;
+  }
+
+  const sorted = players.slice().sort((a, b) => (a.rank ?? Infinity) - (b.rank ?? Infinity));
   const groups = [];
   for (let index = 0; index < sorted.length; index += groupSize) {
     const subset = sorted.slice(index, index + groupSize);
@@ -738,6 +792,18 @@ function normalizeRecentPlayers(players, windowLabel) {
         return null;
       }
 
+      const rawId = entry.personId ?? entry.id ?? entry.playerId;
+      const personId =
+        typeof rawId === 'string'
+          ? rawId.trim()
+          : typeof rawId === 'number'
+          ? String(rawId)
+          : null;
+
+      const nameKey = normalizeNameKey(name);
+      const goatMeta =
+        (personId && goatPlayersById.get(personId)) || (nameKey ? goatPlayersByName.get(nameKey) : null);
+
       const rawRank = Number(entry.rank ?? entry.goatRecentRank);
       const rank = Number.isFinite(rawRank) ? rawRank : null;
 
@@ -752,22 +818,69 @@ function normalizeRecentPlayers(players, windowLabel) {
               .filter(Boolean)
           : [];
 
+      const normalizedTeam = typeof entry.team === 'string' ? entry.team.trim() : '';
+
+      const entryTier = typeof entry.tier === 'string' && entry.tier.trim().length ? entry.tier.trim() : null;
+      const goatTier =
+        typeof goatMeta?.tier === 'string' && goatMeta.tier.trim().length ? goatMeta.tier.trim() : null;
+      const tier = entryTier ?? goatTier ?? null;
+
+      const entryFranchises = Array.isArray(entry.franchises)
+        ? entry.franchises.map((value) => (typeof value === 'string' ? value.trim() : null)).filter(Boolean)
+        : [];
+      const goatFranchises = Array.isArray(goatMeta?.franchises)
+        ? goatMeta.franchises.map((value) => (typeof value === 'string' ? value.trim() : null)).filter(Boolean)
+        : [];
+      const franchises = [];
+      const addFranchise = (value) => {
+        if (typeof value !== 'string') return;
+        const trimmed = value.trim();
+        if (!trimmed || franchises.includes(trimmed)) {
+          return;
+        }
+        franchises.push(trimmed);
+      };
+      entryFranchises.forEach(addFranchise);
+      goatFranchises.forEach(addFranchise);
+      addFranchise(typeof entry.franchise === 'string' ? entry.franchise : null);
+
+      const resumeText =
+        typeof entry.resume === 'string' && entry.resume.trim().length
+          ? entry.resume.trim()
+          : typeof goatMeta?.resume === 'string' && goatMeta.resume.trim().length
+          ? goatMeta.resume.trim()
+          : typeof entry.blurb === 'string'
+          ? entry.blurb
+          : '';
+
+      let statusText =
+        typeof entry.status === 'string' && entry.status.trim().length
+          ? entry.status.trim()
+          : typeof goatMeta?.status === 'string' && goatMeta.status.trim().length
+          ? goatMeta.status.trim()
+          : 'Active';
+      const normalizedStatus = statusText.toLowerCase();
+      if (normalizedTeam.toLowerCase() === 'free agent') {
+        statusText = 'Free Agent';
+      } else if (['legend', 'retired'].includes(normalizedStatus)) {
+        statusText = 'Active';
+      }
+
       return {
         rank,
         name,
+        personId: personId ?? null,
         goatScore,
         delta: null,
-        status: 'Active',
-        franchises:
-          typeof entry.franchise === 'string' && entry.franchise.trim().length
-            ? [entry.franchise.trim()]
-            : [],
-        resume: typeof entry.blurb === 'string' ? entry.blurb : '',
+        tier,
+        status: statusText,
+        franchises,
+        resume: resumeText,
         recentDetailParts: detailParts,
         recentWindow: typeof windowLabel === 'string' && windowLabel.trim().length
           ? windowLabel.trim()
           : detailParts[detailParts.length - 1] ?? null,
-        team: typeof entry.team === 'string' ? entry.team.trim() : '',
+        team: normalizedTeam,
       };
     })
     .filter(Boolean);
@@ -1115,6 +1228,8 @@ async function init() {
     const { payload: data, source: goatDataSource } = await loadGoatData();
     const weights = Array.isArray(data?.weights) ? data.weights : [];
     const players = Array.isArray(data?.players) ? data.players : [];
+
+    indexGoatPlayers(players);
 
     updateGeneratedTimestamp(data, goatDataSource);
 
