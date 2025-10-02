@@ -606,6 +606,19 @@ function createScoreboardCard(game) {
   if (footer.childNodes.length) {
     card.appendChild(footer);
   }
+  if (Number.isFinite(game?.id)) {
+    const actions = document.createElement('div');
+    actions.className = 'scoreboard-card__actions';
+    const link = document.createElement('a');
+    link.className = 'scoreboard-card__link';
+    link.href = `game-preview.html?gameId=${game.id}`;
+    const visitorLabel = game.visitor?.name || game.visitor?.abbreviation || 'Road team';
+    const homeLabel = game.home?.name || game.home?.abbreviation || 'Home team';
+    link.textContent = 'Matchup preview';
+    link.setAttribute('aria-label', `Open matchup preview for ${visitorLabel} at ${homeLabel}`);
+    actions.appendChild(link);
+    card.appendChild(actions);
+  }
   return card;
 }
 
