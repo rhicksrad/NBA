@@ -5023,7 +5023,7 @@ section h2 { margin-top: 0; font-size: clamp(1.35rem, 3vw, 1.8rem); letter-spaci
 }
 .player-atlas__layout {
   display: grid;
-  grid-template-columns: minmax(0, clamp(13.5rem, 22vw, 17rem)) minmax(0, 1fr);
+  grid-template-columns: minmax(0, clamp(30rem, 40vw, 36rem)) minmax(0, 1fr);
   grid-template-areas:
     'search search'
     'tree card';
@@ -5167,8 +5167,9 @@ section h2 { margin-top: 0; font-size: clamp(1.35rem, 3vw, 1.8rem); letter-spaci
     linear-gradient(160deg, rgba(17, 86, 214, 0.06), rgba(244, 181, 63, 0.04)),
     color-mix(in srgb, rgba(255, 255, 255, 0.92) 70%, rgba(242, 246, 255, 0.88) 30%);
   box-shadow: var(--shadow-soft);
-  width: min(100%, clamp(13.5rem, 20vw, 16.5rem));
-  max-height: clamp(18rem, 70vh, 32rem);
+  width: 100%;
+  max-width: 100%;
+  max-height: none;
 }
 .player-atlas__teams[hidden] { display: none; }
 .player-atlas__teams-title {
@@ -5183,18 +5184,15 @@ section h2 { margin-top: 0; font-size: clamp(1.35rem, 3vw, 1.8rem); letter-spaci
   color: color-mix(in srgb, var(--text-subtle) 78%, var(--navy) 22%);
 }
 .player-atlas__teams-tree {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(10, minmax(0, 1fr));
   gap: 0.3rem;
   min-height: 0;
-  overflow-y: auto;
-  padding-right: 0.2rem;
-  scrollbar-gutter: stable both-edges;
-  overscroll-behavior: contain;
+  align-content: start;
 }
 
 .player-atlas__teams-tree > * {
-  flex: 0 0 auto;
+  min-width: 0;
 }
 .player-atlas__teams-tree:focus-visible { outline: none; }
 .player-atlas__team {
@@ -5787,7 +5785,7 @@ section h2 { margin-top: 0; font-size: clamp(1.35rem, 3vw, 1.8rem); letter-spaci
   .player-atlas__teams {
     width: 100%;
     max-width: 100%;
-    max-height: min(55vh, 28rem);
+    max-height: none;
   }
 }
 
