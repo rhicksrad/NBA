@@ -1,5 +1,8 @@
 import { bdl } from '../assets/js/bdl.js';
 
+const ROSTER_SNAPSHOT_URL = 'data/rosters.json';
+let rosterSnapshotPromise = null;
+
 const params = new URLSearchParams(window.location.search);
 const rawGameId = params.get('gameId') || params.get('id');
 
@@ -72,6 +75,64 @@ function parseDateOnly(value) {
     return null;
   }
   return parsed;
+}
+
+async function loadRosterSnapshot() {
+  if (!rosterSnapshotPromise) {
+    rosterSnapshotPromise = fetch(ROSTER_SNAPSHOT_URL, { cache: 'no-store' })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Roster snapshot request failed with status ${response.status}`);
+        }
+        return response.json();
+      })
+      .catch((error) => {
+        console.warn('Unable to load roster snapshot', error);
+        return null;
+      });
+  }
+  return rosterSnapshotPromise;
+}
+
+function buildRosterFromSnapshot(snapshot, teamId) {
+  if (!snapshot || !Number.isFinite(teamId)) {
+    return null;
+  }
+  const teams = Array.isArray(snapshot.teams) ? snapshot.teams : [];
+  if (!teams.length) {
+    return null;
+  }
+  const targetTeam = teams.find((team) => Number.isFinite(team.id) && team.id === teamId);
+  if (!targetTeam) {
+    return null;
+  }
+  const roster = Array.isArray(targetTeam.roster) ? targetTeam.roster : [];
+  if (!roster.length) {
+    return null;
+  }
+  const unique = new Map();
+  roster.forEach((player) => {
+    if (!player) {
+      return;
+    }
+    const id = Number.isFinite(player.id) ? player.id : null;
+    if (!id || unique.has(id)) {
+      return;
+    }
+    const first = typeof player.first_name === 'string' ? player.first_name.trim() : '';
+    const last = typeof player.last_name === 'string' ? player.last_name.trim() : '';
+    const name = `${first} ${last}`.trim() || 'Player';
+    const position =
+      typeof player.position === 'string' && player.position.trim() ? player.position.trim() : '—';
+    const jersey =
+      typeof player.jersey_number === 'string' && player.jersey_number.trim()
+        ? player.jersey_number.trim()
+        : null;
+    unique.set(id, { id, name, position, jersey });
+  });
+  const entries = Array.from(unique.values());
+  entries.sort((a, b) => a.name.localeCompare(b.name));
+  return entries;
 }
 
 function formatSeasonLabel(season) {
@@ -218,6 +279,11 @@ async function fetchPaginated(path) {
 async function fetchRoster(teamId, season) {
   if (!Number.isFinite(teamId)) {
     return [];
+  }
+  const snapshot = await loadRosterSnapshot();
+  const snapshotRoster = buildRosterFromSnapshot(snapshot, teamId);
+  if (snapshotRoster && snapshotRoster.length) {
+    return snapshotRoster;
   }
   const seasonParam = Number.isFinite(season) ? `&seasons[]=${season}` : '';
   const path = `/v1/players?per_page=100&team_ids[]=${teamId}${seasonParam}`;
