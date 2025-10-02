@@ -6820,6 +6820,24 @@ section h2 { margin-top: 0; font-size: clamp(1.35rem, 3vw, 1.8rem); letter-spaci
   margin: 0;
 }
 
+.scoreboard-card__actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.scoreboard-card__link {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: color-mix(in srgb, var(--royal) 80%, var(--navy) 20%);
+  text-decoration: none;
+}
+
+.scoreboard-card__link:hover,
+.scoreboard-card__link:focus {
+  color: color-mix(in srgb, var(--royal) 92%, var(--navy) 8%);
+  text-decoration: underline;
+}
+
 .games-caption-meta {
   display: inline-block;
   margin-left: 0.75rem;
