@@ -1202,17 +1202,6 @@
         "source": "ball_dont_lie"
       },
       {
-        "key": "17554003",
-        "name": "RJ Nembhard Jr.",
-        "playerId": "17554003",
-        "position": "G",
-        "firstName": "RJ Nembhard",
-        "lastName": "Jr.",
-        "teamId": "1610612741",
-        "teamTricode": "CHI",
-        "source": "ball_dont_lie"
-      },
-      {
         "key": "3547274",
         "name": "Tre Jones",
         "playerId": "3547274",
@@ -2268,6 +2257,17 @@
     "name": "Warriors",
     "roster": [
       {
+        "key": "219",
+        "name": "Al Horford",
+        "playerId": "219",
+        "position": "C-F",
+        "firstName": "Al",
+        "lastName": "Horford",
+        "teamId": "1610612744",
+        "teamTricode": "GSW",
+        "source": "ball_dont_lie"
+      },
+      {
         "key": "1057396605",
         "name": "Alex Toohey",
         "playerId": "1057396605",
@@ -2318,6 +2318,17 @@
         "position": "",
         "firstName": "Chance",
         "lastName": "McMillian",
+        "teamId": "1610612744",
+        "teamTricode": "GSW",
+        "source": "ball_dont_lie"
+      },
+      {
+        "key": "313",
+        "name": "De'Anthony Melton",
+        "playerId": "313",
+        "position": "G",
+        "firstName": "De'Anthony",
+        "lastName": "Melton",
         "teamId": "1610612744",
         "teamTricode": "GSW",
         "source": "ball_dont_lie"
@@ -2400,6 +2411,17 @@
         "source": "ball_dont_lie"
       },
       {
+        "key": "17553979",
+        "name": "Jonathan Kuminga",
+        "playerId": "17553979",
+        "position": "F",
+        "firstName": "Jonathan",
+        "lastName": "Kuminga",
+        "teamId": "1610612744",
+        "teamTricode": "GSW",
+        "source": "ball_dont_lie"
+      },
+      {
         "key": "1057968644",
         "name": "LJ Cryer",
         "playerId": "1057968644",
@@ -2450,6 +2472,17 @@
         "position": "C",
         "firstName": "Quinten",
         "lastName": "Post",
+        "teamId": "1610612744",
+        "teamTricode": "GSW",
+        "source": "ball_dont_lie"
+      },
+      {
+        "key": "114",
+        "name": "Seth Curry",
+        "playerId": "114",
+        "position": "G",
+        "firstName": "Seth",
+        "lastName": "Curry",
         "teamId": "1610612744",
         "teamTricode": "GSW",
         "source": "ball_dont_lie"
