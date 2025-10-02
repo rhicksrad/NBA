@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2025-09-30T19:50:02.578372+00:00",
+  "generatedAt": "2025-10-02T01:15:02.553338+00:00",
   "totals": {
     "playerGameRows": 1627438,
     "playersTracked": 5428,
@@ -594,6 +594,762 @@
       "bestSeason": {
         "season": 2024,
         "tripleDoubles": 12
+      }
+    },
+    {
+      "personId": "77376",
+      "name": "Lafayette Lever",
+      "tripleDoubles": 45,
+      "seasonsWithTripleDouble": 6,
+      "careerSpan": {
+        "start": 1982,
+        "end": 1994
+      },
+      "bestSeason": {
+        "season": 1987,
+        "tripleDoubles": 17
+      }
+    },
+    {
+      "personId": "203110",
+      "name": "Draymond Green",
+      "tripleDoubles": 43,
+      "seasonsWithTripleDouble": 8,
+      "careerSpan": {
+        "start": 2012,
+        "end": 2025
+      },
+      "bestSeason": {
+        "season": 2016,
+        "tripleDoubles": 10
+      }
+    },
+    {
+      "personId": "200765",
+      "name": "Rajon Rondo",
+      "tripleDoubles": 42,
+      "seasonsWithTripleDouble": 12,
+      "careerSpan": {
+        "start": 2006,
+        "end": 2022
+      },
+      "bestSeason": {
+        "season": 2012,
+        "tripleDoubles": 11
+      }
+    },
+    {
+      "personId": "1627732",
+      "name": "Ben Simmons",
+      "tripleDoubles": 36,
+      "seasonsWithTripleDouble": 6,
+      "careerSpan": {
+        "start": 2016,
+        "end": 2025
+      },
+      "bestSeason": {
+        "season": 2018,
+        "tripleDoubles": 14
+      }
+    },
+    {
+      "personId": "76970",
+      "name": "John Havlicek",
+      "tripleDoubles": 34,
+      "seasonsWithTripleDouble": 7,
+      "careerSpan": {
+        "start": 1962,
+        "end": 1978
+      },
+      "bestSeason": {
+        "season": 1970,
+        "tripleDoubles": 11
+      }
+    },
+    {
+      "personId": "893",
+      "name": "Michael Jordan",
+      "tripleDoubles": 30,
+      "seasonsWithTripleDouble": 8,
+      "careerSpan": {
+        "start": 1984,
+        "end": 2003
+      },
+      "bestSeason": {
+        "season": 1989,
+        "tripleDoubles": 16
+      }
+    },
+    {
+      "personId": "255",
+      "name": "Grant Hill",
+      "tripleDoubles": 29,
+      "seasonsWithTripleDouble": 5,
+      "careerSpan": {
+        "start": 1994,
+        "end": 2013
+      },
+      "bestSeason": {
+        "season": 1997,
+        "tripleDoubles": 14
+      }
+    },
+    {
+      "personId": "76750",
+      "name": "Walt Frazier",
+      "tripleDoubles": 27,
+      "seasonsWithTripleDouble": 9,
+      "careerSpan": {
+        "start": 1967,
+        "end": 1979
+      },
+      "bestSeason": {
+        "season": 1969,
+        "tripleDoubles": 9
+      }
+    },
+    {
+      "personId": "76127",
+      "name": "Elgin Baylor",
+      "tripleDoubles": 27,
+      "seasonsWithTripleDouble": 11,
+      "careerSpan": {
+        "start": 1958,
+        "end": 1971
+      },
+      "bestSeason": {
+        "season": 1969,
+        "tripleDoubles": 4
+      }
+    },
+    {
+      "personId": "17",
+      "name": "Clyde Drexler",
+      "tripleDoubles": 26,
+      "seasonsWithTripleDouble": 9,
+      "careerSpan": {
+        "start": 1983,
+        "end": 1998
+      },
+      "bestSeason": {
+        "season": 1985,
+        "tripleDoubles": 5
+      }
+    },
+    {
+      "personId": "787",
+      "name": "Charles Barkley",
+      "tripleDoubles": 24,
+      "seasonsWithTripleDouble": 10,
+      "careerSpan": {
+        "start": 1984,
+        "end": 2000
+      },
+      "bestSeason": {
+        "season": 1993,
+        "tripleDoubles": 7
+      }
+    },
+    {
+      "personId": "185",
+      "name": "Chris Webber",
+      "tripleDoubles": 23,
+      "seasonsWithTripleDouble": 11,
+      "careerSpan": {
+        "start": 1993,
+        "end": 2008
+      },
+      "bestSeason": {
+        "season": 1995,
+        "tripleDoubles": 4
+      }
+    },
+    {
+      "personId": "76828",
+      "name": "Tom Gola",
+      "tripleDoubles": 23,
+      "seasonsWithTripleDouble": 7,
+      "careerSpan": {
+        "start": 1955,
+        "end": 1966
+      },
+      "bestSeason": {
+        "season": 1960,
+        "tripleDoubles": 10
+      }
+    },
+    {
+      "personId": "202710",
+      "name": "Jimmy Butler",
+      "tripleDoubles": 22,
+      "seasonsWithTripleDouble": 8,
+      "careerSpan": {
+        "start": 2011,
+        "end": 2025
+      },
+      "bestSeason": {
+        "season": 2021,
+        "tripleDoubles": 6
+      }
+    },
+    {
+      "personId": "200768",
+      "name": "Kyle Lowry",
+      "tripleDoubles": 22,
+      "seasonsWithTripleDouble": 13,
+      "careerSpan": {
+        "start": 2006,
+        "end": 2025
+      },
+      "bestSeason": {
+        "season": 2021,
+        "tripleDoubles": 3
+      }
+    },
+    {
+      "personId": "1627749",
+      "name": "Dejounte Murray",
+      "tripleDoubles": 21,
+      "seasonsWithTripleDouble": 5,
+      "careerSpan": {
+        "start": 2016,
+        "end": 2025
+      },
+      "bestSeason": {
+        "season": 2021,
+        "tripleDoubles": 10
+      }
+    },
+    {
+      "personId": "101108",
+      "name": "Chris Paul",
+      "tripleDoubles": 21,
+      "seasonsWithTripleDouble": 11,
+      "careerSpan": {
+        "start": 2005,
+        "end": 2025
+      },
+      "bestSeason": {
+        "season": 2008,
+        "tripleDoubles": 5
+      }
+    },
+    {
+      "personId": "977",
+      "name": "Kobe Bryant",
+      "tripleDoubles": 21,
+      "seasonsWithTripleDouble": 10,
+      "careerSpan": {
+        "start": 1996,
+        "end": 2016
+      },
+      "bestSeason": {
+        "season": 2004,
+        "tripleDoubles": 5
+      }
+    },
+    {
+      "personId": "937",
+      "name": "Scottie Pippen",
+      "tripleDoubles": 21,
+      "seasonsWithTripleDouble": 8,
+      "careerSpan": {
+        "start": 1987,
+        "end": 2004
+      },
+      "bestSeason": {
+        "season": 1993,
+        "tripleDoubles": 5
+      }
+    },
+    {
+      "personId": "77952",
+      "name": "Micheal Ray Richardson",
+      "tripleDoubles": 21,
+      "seasonsWithTripleDouble": 5,
+      "careerSpan": {
+        "start": 1978,
+        "end": 1986
+      },
+      "bestSeason": {
+        "season": 1980,
+        "tripleDoubles": 6
+      }
+    },
+    {
+      "personId": "201142",
+      "name": "Kevin Durant",
+      "tripleDoubles": 20,
+      "seasonsWithTripleDouble": 10,
+      "careerSpan": {
+        "start": 2007,
+        "end": 2025
+      },
+      "bestSeason": {
+        "season": 2018,
+        "tripleDoubles": 4
+      }
+    },
+    {
+      "personId": "78003",
+      "name": "Guy Rodgers",
+      "tripleDoubles": 20,
+      "seasonsWithTripleDouble": 10,
+      "careerSpan": {
+        "start": 1958,
+        "end": 1970
+      },
+      "bestSeason": {
+        "season": 1962,
+        "tripleDoubles": 4
+      }
+    },
+    {
+      "personId": "708",
+      "name": "Kevin Garnett",
+      "tripleDoubles": 19,
+      "seasonsWithTripleDouble": 9,
+      "careerSpan": {
+        "start": 1995,
+        "end": 2016
+      },
+      "bestSeason": {
+        "season": 2003,
+        "tripleDoubles": 4
+      }
+    },
+    {
+      "personId": "349",
+      "name": "Mark Jackson",
+      "tripleDoubles": 19,
+      "seasonsWithTripleDouble": 11,
+      "careerSpan": {
+        "start": 1987,
+        "end": 2004
+      },
+      "bestSeason": {
+        "season": 1997,
+        "tripleDoubles": 4
+      }
+    },
+    {
+      "personId": "78049",
+      "name": "Bill Russell",
+      "tripleDoubles": 19,
+      "seasonsWithTripleDouble": 8,
+      "careerSpan": {
+        "start": 1956,
+        "end": 1969
+      },
+      "bestSeason": {
+        "season": 1966,
+        "tripleDoubles": 5
+      }
+    },
+    {
+      "personId": "1630581",
+      "name": "Josh Giddey",
+      "tripleDoubles": 18,
+      "seasonsWithTripleDouble": 4,
+      "careerSpan": {
+        "start": 2021,
+        "end": 2025
+      },
+      "bestSeason": {
+        "season": 2025,
+        "tripleDoubles": 5
+      }
+    },
+    {
+      "personId": "600003",
+      "name": "Bob Cousy",
+      "tripleDoubles": 18,
+      "seasonsWithTripleDouble": 7,
+      "careerSpan": {
+        "start": 1950,
+        "end": 1970
+      },
+      "bestSeason": {
+        "season": 1959,
+        "tripleDoubles": 5
+      }
+    },
+    {
+      "personId": "203901",
+      "name": "Elfrid Payton",
+      "tripleDoubles": 17,
+      "seasonsWithTripleDouble": 6,
+      "careerSpan": {
+        "start": 2014,
+        "end": 2025
+      },
+      "bestSeason": {
+        "season": 2019,
+        "tripleDoubles": 5
+      }
+    },
+    {
+      "personId": "56",
+      "name": "Gary Payton",
+      "tripleDoubles": 17,
+      "seasonsWithTripleDouble": 9,
+      "careerSpan": {
+        "start": 1990,
+        "end": 2007
+      },
+      "bestSeason": {
+        "season": 2000,
+        "tripleDoubles": 5
+      }
+    },
+    {
+      "personId": "78497",
+      "name": "Jerry West",
+      "tripleDoubles": 17,
+      "seasonsWithTripleDouble": 10,
+      "careerSpan": {
+        "start": 1960,
+        "end": 1974
+      },
+      "bestSeason": {
+        "season": 1961,
+        "tripleDoubles": 5
+      }
+    },
+    {
+      "personId": "1628404",
+      "name": "Josh Hart",
+      "tripleDoubles": 16,
+      "seasonsWithTripleDouble": 2,
+      "careerSpan": {
+        "start": 2017,
+        "end": 2025
+      },
+      "bestSeason": {
+        "season": 2024,
+        "tripleDoubles": 9
+      }
+    },
+    {
+      "personId": "78406",
+      "name": "Norm Van Lier",
+      "tripleDoubles": 16,
+      "seasonsWithTripleDouble": 5,
+      "careerSpan": {
+        "start": 1969,
+        "end": 1979
+      },
+      "bestSeason": {
+        "season": 1971,
+        "tripleDoubles": 6
+      }
+    },
+    {
+      "personId": "78530",
+      "name": "Lenny Wilkens",
+      "tripleDoubles": 16,
+      "seasonsWithTripleDouble": 8,
+      "careerSpan": {
+        "start": 1960,
+        "end": 1975
+      },
+      "bestSeason": {
+        "season": 1969,
+        "tripleDoubles": 4
+      }
+    },
+    {
+      "personId": "76902",
+      "name": "Richie Guerin",
+      "tripleDoubles": 16,
+      "seasonsWithTripleDouble": 6,
+      "careerSpan": {
+        "start": 1956,
+        "end": 1970
+      },
+      "bestSeason": {
+        "season": 1961,
+        "tripleDoubles": 6
+      }
+    },
+    {
+      "personId": "203944",
+      "name": "Julius Randle",
+      "tripleDoubles": 15,
+      "seasonsWithTripleDouble": 8,
+      "careerSpan": {
+        "start": 2014,
+        "end": 2025
+      },
+      "bestSeason": {
+        "season": 2021,
+        "tripleDoubles": 5
+      }
+    },
+    {
+      "personId": "952",
+      "name": "Antoine Walker",
+      "tripleDoubles": 15,
+      "seasonsWithTripleDouble": 6,
+      "careerSpan": {
+        "start": 1996,
+        "end": 2008
+      },
+      "bestSeason": {
+        "season": 2002,
+        "tripleDoubles": 4
+      }
+    },
+    {
+      "personId": "78437",
+      "name": "Darrell Walker",
+      "tripleDoubles": 15,
+      "seasonsWithTripleDouble": 3,
+      "careerSpan": {
+        "start": 1983,
+        "end": 1993
+      },
+      "bestSeason": {
+        "season": 1990,
+        "tripleDoubles": 9
+      }
+    },
+    {
+      "personId": "76003",
+      "name": "Kareem Abdul-Jabbar",
+      "tripleDoubles": 15,
+      "seasonsWithTripleDouble": 9,
+      "careerSpan": {
+        "start": 1969,
+        "end": 1989
+      },
+      "bestSeason": {
+        "season": 1976,
+        "tripleDoubles": 4
+      }
+    },
+    {
+      "personId": "76487",
+      "name": "Billy Cunningham",
+      "tripleDoubles": 14,
+      "seasonsWithTripleDouble": 5,
+      "careerSpan": {
+        "start": 1965,
+        "end": 1975
+      },
+      "bestSeason": {
+        "season": 1972,
+        "tripleDoubles": 4
+      }
+    },
+    {
+      "personId": "1629630",
+      "name": "Ja Morant",
+      "tripleDoubles": 13,
+      "seasonsWithTripleDouble": 5,
+      "careerSpan": {
+        "start": 2019,
+        "end": 2025
+      },
+      "bestSeason": {
+        "season": 2022,
+        "tripleDoubles": 5
+      }
+    },
+    {
+      "personId": "201939",
+      "name": "Stephen Curry",
+      "tripleDoubles": 13,
+      "seasonsWithTripleDouble": 10,
+      "careerSpan": {
+        "start": 2009,
+        "end": 2025
+      },
+      "bestSeason": {
+        "season": 2022,
+        "tripleDoubles": 2
+      }
+    },
+    {
+      "personId": "201933",
+      "name": "Blake Griffin",
+      "tripleDoubles": 13,
+      "seasonsWithTripleDouble": 7,
+      "careerSpan": {
+        "start": 2009,
+        "end": 2023
+      },
+      "bestSeason": {
+        "season": 2018,
+        "tripleDoubles": 3
+      }
+    },
+    {
+      "personId": "926",
+      "name": "Alvin Robertson",
+      "tripleDoubles": 13,
+      "seasonsWithTripleDouble": 5,
+      "careerSpan": {
+        "start": 1984,
+        "end": 1996
+      },
+      "bestSeason": {
+        "season": 1990,
+        "tripleDoubles": 5
+      }
+    },
+    {
+      "personId": "1630595",
+      "name": "Cade Cunningham",
+      "tripleDoubles": 12,
+      "seasonsWithTripleDouble": 4,
+      "careerSpan": {
+        "start": 2021,
+        "end": 2025
+      },
+      "bestSeason": {
+        "season": 2024,
+        "tripleDoubles": 6
+      }
+    },
+    {
+      "personId": "1884",
+      "name": "Baron Davis",
+      "tripleDoubles": 12,
+      "seasonsWithTripleDouble": 7,
+      "careerSpan": {
+        "start": 1999,
+        "end": 2012
+      },
+      "bestSeason": {
+        "season": 2002,
+        "tripleDoubles": 3
+      }
+    },
+    {
+      "personId": "1885",
+      "name": "Lamar Odom",
+      "tripleDoubles": 12,
+      "seasonsWithTripleDouble": 7,
+      "careerSpan": {
+        "start": 1999,
+        "end": 2013
+      },
+      "bestSeason": {
+        "season": 2001,
+        "tripleDoubles": 3
+      }
+    },
+    {
+      "personId": "134",
+      "name": "Kevin Johnson",
+      "tripleDoubles": 12,
+      "seasonsWithTripleDouble": 6,
+      "careerSpan": {
+        "start": 1987,
+        "end": 2000
+      },
+      "bestSeason": {
+        "season": 1989,
+        "tripleDoubles": 3
+      }
+    },
+    {
+      "personId": "76011",
+      "name": "Alvan Adams",
+      "tripleDoubles": 12,
+      "seasonsWithTripleDouble": 5,
+      "careerSpan": {
+        "start": 1975,
+        "end": 1988
+      },
+      "bestSeason": {
+        "season": 1985,
+        "tripleDoubles": 3
+      }
+    },
+    {
+      "personId": "2200",
+      "name": "Pau Gasol",
+      "tripleDoubles": 11,
+      "seasonsWithTripleDouble": 8,
+      "careerSpan": {
+        "start": 2001,
+        "end": 2019
+      },
+      "bestSeason": {
+        "season": 2013,
+        "tripleDoubles": 3
+      }
+    },
+    {
+      "personId": "1630163",
+      "name": "LaMelo Ball",
+      "tripleDoubles": 10,
+      "seasonsWithTripleDouble": 3,
+      "careerSpan": {
+        "start": 2020,
+        "end": 2025
+      },
+      "bestSeason": {
+        "season": 2022,
+        "tripleDoubles": 4
+      }
+    },
+    {
+      "personId": "1718",
+      "name": "Paul Pierce",
+      "tripleDoubles": 10,
+      "seasonsWithTripleDouble": 5,
+      "careerSpan": {
+        "start": 1999,
+        "end": 2017
+      },
+      "bestSeason": {
+        "season": 2013,
+        "tripleDoubles": 3
+      }
+    },
+    {
+      "personId": "77326",
+      "name": "Sam Lacey",
+      "tripleDoubles": 10,
+      "seasonsWithTripleDouble": 6,
+      "careerSpan": {
+        "start": 1970,
+        "end": 1983
+      },
+      "bestSeason": {
+        "season": 1981,
+        "tripleDoubles": 3
+      }
+    },
+    {
+      "personId": "77418",
+      "name": "Jerry Lucas",
+      "tripleDoubles": 10,
+      "seasonsWithTripleDouble": 6,
+      "careerSpan": {
+        "start": 1963,
+        "end": 1974
+      },
+      "bestSeason": {
+        "season": 1972,
+        "tripleDoubles": 4
+      }
+    },
+    {
+      "personId": "600016",
+      "name": "Maurice Stokes",
+      "tripleDoubles": 10,
+      "seasonsWithTripleDouble": 3,
+      "careerSpan": {
+        "start": 1955,
+        "end": 1958
+      },
+      "bestSeason": {
+        "season": 1957,
+        "tripleDoubles": 6
       }
     }
   ],

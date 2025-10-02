@@ -1320,7 +1320,9 @@ def build_player_season_insights_snapshot() -> None:
     )[:12]
 
     triple_double_leaders = []
-    for person_id, count in triple_double_counts.most_common(12):
+    for person_id, count in triple_double_counts.most_common():
+        if count < 10:
+            break
         meta = player_meta.get(person_id, {})
         name = f"{meta.get('firstName', '')} {meta.get('lastName', '')}".strip()
         triple_double_leaders.append(
