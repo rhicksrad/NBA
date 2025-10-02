@@ -1,4 +1,5 @@
 import { registerCharts, helpers } from './hub-charts.js';
+import { rankByGoatScore, toNum } from '@/lib/rank';
 
 const palette = {
   royal: '#1156d6',
@@ -439,14 +440,11 @@ function groupPlayersByTier(players) {
 
   return Array.from(tierMap.entries())
     .map(([tier, tierPlayers]) => {
-      const sortedPlayers = tierPlayers.slice().sort((a, b) => (a.rank ?? Infinity) - (b.rank ?? Infinity));
-      const bestRank = sortedPlayers.reduce((min, player) => {
-        if (Number.isFinite(player.rank) && player.rank < min) {
-          return player.rank;
-        }
-        return min;
+      const bestRank = tierPlayers.reduce((min, player) => {
+        const candidate = Number.isFinite(player?.rank) ? player.rank : Infinity;
+        return candidate < min ? candidate : min;
       }, Infinity);
-      return { tier, players: sortedPlayers, bestRank };
+      return { tier, players: tierPlayers, bestRank };
     })
     .sort((a, b) => {
       const tierDifference = tierSortValue(a.tier, a.bestRank) - tierSortValue(b.tier, b.bestRank);
@@ -639,36 +637,14 @@ function buildLeaderboard(
     return null;
   }
 
-  const sortedPlayers = playerList.slice().sort((a, b) => {
-    const scoreA = Number.isFinite(a?.goatScore) ? a.goatScore : null;
-    const scoreB = Number.isFinite(b?.goatScore) ? b.goatScore : null;
-    if (scoreA !== null || scoreB !== null) {
-      if (scoreA === null) return 1;
-      if (scoreB === null) return -1;
-      if (scoreA !== scoreB) {
-        return scoreB - scoreA;
-      }
-    }
+  const normalizedPlayers = playerList.map((player) => ({
+    ...player,
+    goatScore: toNum(player.goatScore),
+  }));
 
-    const rankA = Number.isFinite(a?.rank) ? a.rank : Infinity;
-    const rankB = Number.isFinite(b?.rank) ? b.rank : Infinity;
-    if (rankA !== rankB) {
-      return rankA - rankB;
-    }
-
-    const nameA = typeof a?.name === 'string' ? a.name.toLowerCase() : '';
-    const nameB = typeof b?.name === 'string' ? b.name.toLowerCase() : '';
-    if (nameA < nameB) return -1;
-    if (nameA > nameB) return 1;
-    return 0;
-  });
-
-  ensureSequentialRanks(sortedPlayers, 'rank');
-
-  const grouped = groupPlayers(sortedPlayers);
+  const grouped = groupPlayers(normalizedPlayers);
   let initialPlayerName = null;
-
-  let displayIndex = 1;
+  let traversalIndex = 0;
 
   grouped.forEach((group) => {
     const details = document.createElement('details');
@@ -685,18 +661,14 @@ function buildLeaderboard(
 
     const count = group.players.length;
     const playerWord = count === 1 ? 'player' : 'players';
-    const numericScores = group.players
-      .map((player) => (Number.isFinite(player.goatScore) ? player.goatScore : null))
-      .filter((value) => value !== null);
+    const topScore = count ? toNum(group.players[0].goatScore) : Number.NEGATIVE_INFINITY;
 
     const summaryMeta = document.createElement('span');
     summaryMeta.className = 'goat-tier__summary-count';
-    if (numericScores.length) {
-      const topScore = Math.max(...numericScores);
-      summaryMeta.textContent = `${count} ${playerWord} · top ${helpers.formatNumber(topScore, 1)}`;
-    } else {
-      summaryMeta.textContent = `${count} ${playerWord}`;
-    }
+    summaryMeta.textContent =
+      Number.isFinite(topScore) && topScore !== Number.NEGATIVE_INFINITY
+        ? `${count} ${playerWord} · top ${helpers.formatNumber(topScore, 1)}`
+        : `${count} ${playerWord}`;
 
     summary.append(label, summaryMeta);
     details.appendChild(summary);
@@ -706,8 +678,7 @@ function buildLeaderboard(
     list.setAttribute('role', 'list');
 
     group.players.forEach((player) => {
-      const sequentialRank = displayIndex++;
-      player.displayRank = sequentialRank;
+      traversalIndex += 1;
       const item = document.createElement('li');
       item.className = 'goat-tier__item';
 
@@ -723,11 +694,8 @@ function buildLeaderboard(
 
       const rank = document.createElement('span');
       rank.className = 'goat-tier__player-rank';
-      rank.textContent = Number.isFinite(player.displayRank)
-        ? player.displayRank
-        : Number.isFinite(player.rank)
-        ? player.rank
-        : '—';
+      const effectiveRank = Number.isFinite(player.rank) ? player.rank : traversalIndex;
+      rank.textContent = Number.isFinite(effectiveRank) ? effectiveRank : '—';
 
       const nameBlock = document.createElement('div');
       nameBlock.className = 'goat-tier__player-name';
@@ -758,7 +726,8 @@ function buildLeaderboard(
 
       const score = document.createElement('span');
       score.className = 'goat-tier__player-score goat-score';
-      score.textContent = Number.isFinite(player.goatScore) ? helpers.formatNumber(player.goatScore, 1) : '—';
+      const numericScore = toNum(player.goatScore);
+      score.textContent = Number.isFinite(numericScore) ? helpers.formatNumber(numericScore, 1) : '—';
 
       const delta = document.createElement('span');
       delta.className = 'goat-tier__player-delta goat-delta';
@@ -803,15 +772,16 @@ function groupRecentPlayers(players, groupSize = 10) {
     return tierGroups;
   }
 
-  const sorted = players.slice().sort((a, b) => (a.rank ?? Infinity) - (b.rank ?? Infinity));
   const groups = [];
-  for (let index = 0; index < sorted.length; index += groupSize) {
-    const subset = sorted.slice(index, index + groupSize);
+  for (let index = 0; index < players.length; index += groupSize) {
+    const subset = players.slice(index, index + groupSize);
     if (!subset.length) {
       continue;
     }
-    const startRank = subset[0].rank ?? index + 1;
-    const endRank = subset[subset.length - 1].rank ?? startRank;
+    const startRank = Number.isFinite(subset[0]?.rank) ? subset[0].rank : index + 1;
+    const endRank = Number.isFinite(subset[subset.length - 1]?.rank)
+      ? subset[subset.length - 1].rank
+      : startRank;
     const tierLabel = startRank === endRank ? `Rank ${startRank}` : `Ranks ${startRank}-${endRank}`;
     groups.push({
       tier: tierLabel,
@@ -1125,11 +1095,7 @@ function selectRecentPlayer(player, { windowLabel } = {}) {
     if (Array.isArray(player.franchises) && player.franchises.length) {
       details.push(player.franchises.join(' · '));
     }
-    const effectiveRank = Number.isFinite(player.displayRank)
-      ? player.displayRank
-      : Number.isFinite(player.rank)
-      ? player.rank
-      : null;
+    const effectiveRank = Number.isFinite(player.rank) ? player.rank : null;
     if (Number.isFinite(effectiveRank)) {
       details.push(`#${effectiveRank}`);
     }
@@ -1149,8 +1115,9 @@ function selectRecentPlayer(player, { windowLabel } = {}) {
   if (list) {
     list.innerHTML = '';
     const entries = [];
-    if (Number.isFinite(player.goatScore)) {
-      entries.push({ term: 'GOAT score', value: `${helpers.formatNumber(player.goatScore, 1)} GOAT` });
+    const numericScore = toNum(player.goatScore);
+    if (Number.isFinite(numericScore)) {
+      entries.push({ term: 'GOAT score', value: `${helpers.formatNumber(numericScore, 1)} GOAT` });
     }
     if (player.team) {
       entries.push({ term: 'Team', value: player.team });
@@ -1190,8 +1157,9 @@ function selectRecentPlayer(player, { windowLabel } = {}) {
     if (Number.isFinite(player.rank)) {
       parts.push(`Rolling rank: #${player.rank}`);
     }
-    if (Number.isFinite(player.goatScore)) {
-      parts.push(`Score ${helpers.formatNumber(player.goatScore, 1)} GOAT`);
+    const numericScore = toNum(player.goatScore);
+    if (Number.isFinite(numericScore)) {
+      parts.push(`Score ${helpers.formatNumber(numericScore, 1)} GOAT`);
     }
     const windowText = windowLabel ?? player.recentWindow;
     if (windowText) {
@@ -1421,7 +1389,10 @@ function updateHeroMetrics(players) {
   if (!players.length) {
     return;
   }
-  const totalScore = players.reduce((sum, player) => sum + (Number.isFinite(player.goatScore) ? player.goatScore : 0), 0);
+  const totalScore = players.reduce((sum, player) => {
+    const score = toNum(player.goatScore);
+    return Number.isFinite(score) ? sum + score : sum;
+  }, 0);
   const average = totalScore / players.length;
   const activeCount = players.filter((player) => (player.status ?? '').toLowerCase() === 'active').length;
   const multiFranchise = players.filter((player) => Array.isArray(player.franchises) && player.franchises.length >= 3);
@@ -1458,9 +1429,13 @@ async function init() {
   try {
     const { payload: data, source: goatDataSource } = await loadGoatData();
     const weights = Array.isArray(data?.weights) ? data.weights : [];
-    const players = Array.isArray(data?.players) ? data.players : [];
+    const rawPlayers = Array.isArray(data?.players) ? data.players : [];
+    const rankedPlayers = rankByGoatScore(rawPlayers).map((player) => ({
+      ...player,
+      goatScore: toNum(player.goatScore),
+    }));
 
-    indexGoatPlayers(players);
+    indexGoatPlayers(rankedPlayers);
 
     updateGeneratedTimestamp(data, goatDataSource);
 
@@ -1471,10 +1446,10 @@ async function init() {
       buildSourceNotes([]);
     }
     renderGoatEquation(weights);
-    if (players.length) {
-      const initialPlayerName = buildLeaderboard(players);
-      wireInteractions(players, weights, initialPlayerName, { expandDefault: false });
-      updateHeroMetrics(players);
+    if (rankedPlayers.length) {
+      const initialPlayerName = buildLeaderboard(rankedPlayers);
+      wireInteractions(rankedPlayers, weights, initialPlayerName, { expandDefault: false });
+      updateHeroMetrics(rankedPlayers);
     }
 
     const gaugeDefinitions = [
@@ -1484,10 +1459,11 @@ async function init() {
         async createConfig(source) {
           const playersSource = Array.isArray(source?.players) ? source.players : [];
           if (!playersSource.length) return null;
-          const average = playersSource.reduce(
-            (sum, player) => sum + (Number.isFinite(player.goatScore) ? player.goatScore : 0),
-            0,
-          ) / playersSource.length;
+          const average =
+            playersSource.reduce((sum, player) => {
+              const score = toNum(player.goatScore);
+              return Number.isFinite(score) ? sum + score : sum;
+            }, 0) / playersSource.length;
           const safeAverage = Math.max(0, Math.min(100, average));
           return {
             type: 'doughnut',
