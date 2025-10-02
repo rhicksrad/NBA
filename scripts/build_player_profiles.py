@@ -56,7 +56,7 @@ DEFAULT_BIRTHPLACE_FILES = [
 
 ACTIVE_SEASON_END_YEAR = 2026
 
-RECENT_LEADERBOARD_LIMIT = 10
+RECENT_LEADERBOARD_LIMIT = 0
 GOAT_RECENT_METRIC = "Rolling three-year GOAT index"
 
 METRICS_CATALOG = [
@@ -895,12 +895,26 @@ def _load_goat_scores(
         text = str(value).strip()
         return text or None
 
+    def _clean_franchises(value: Any) -> list[str]:
+        if not isinstance(value, list):
+            return []
+        franchises: list[str] = []
+        for item in value:
+            if not isinstance(item, str):
+                continue
+            text = item.strip()
+            if text:
+                franchises.append(text)
+        return franchises
+
     def _compose_record(primary: dict[str, Any], fallback: dict[str, Any] | None) -> dict[str, Any]:
         record = {
             "score": _parse_float(primary.get("goatScore")),
             "rank": _parse_int(primary.get("rank")),
             "tier": _clean_text(primary.get("tier")),
             "resume": _clean_text(primary.get("resume")),
+            "status": _clean_text(primary.get("status")),
+            "franchises": _clean_franchises(primary.get("franchises")),
         }
         if record["score"] is None and fallback is not None:
             record["score"] = _parse_float(fallback.get("goatScore"))
@@ -910,6 +924,10 @@ def _load_goat_scores(
             record["tier"] = _clean_text(fallback.get("tier"))
         if (record["resume"] is None or record["resume"] == "") and fallback is not None:
             record["resume"] = _clean_text(fallback.get("resume"))
+        if (record["status"] is None or record["status"] == "") and fallback is not None:
+            record["status"] = _clean_text(fallback.get("status"))
+        if not record["franchises"] and fallback is not None:
+            record["franchises"] = _clean_franchises(fallback.get("franchises"))
         return record
 
     system_payload = _read_payload(system_path)
@@ -999,12 +1017,14 @@ def _build_recent_goat_leaderboard(
     recent_scores: dict[str, dict[str, Any]],
     team_lookup: dict[str, dict[str, str]],
     *,
+    goat_scores: dict[str, dict[str, Any]] | None = None,
     limit: int = RECENT_LEADERBOARD_LIMIT,
 ) -> list[dict[str, Any]]:
     if not recent_scores:
         return []
 
     index = {player.person_id: player for player in players}
+    goat_scores = goat_scores or {}
     leaderboard: list[dict[str, Any]] = []
     for person_id, record in recent_scores.items():
         score = record.get("score")
@@ -1036,6 +1056,24 @@ def _build_recent_goat_leaderboard(
         team_meta = resolved_meta or team_lookup.get(player.team_id, team_lookup.get("0", {}))
         team_name = record_team_name or team_meta.get("nickname") or team_meta.get("full") or "Free Agent"
         franchise = resolved_tricode or player.team_tricode
+        goat_meta = goat_scores.get(person_id) or {}
+
+        def _clean_text_value(value: Any) -> str | None:
+            if value is None:
+                return None
+            text = str(value).strip()
+            return text or None
+
+        tier = _clean_text_value(goat_meta.get("tier"))
+        resume = _clean_text_value(goat_meta.get("resume"))
+        franchises_raw = goat_meta.get("franchises") if isinstance(goat_meta.get("franchises"), list) else []
+        franchises = [text.strip() for text in franchises_raw if isinstance(text, str) and text.strip()]
+        status = _clean_text_value(goat_meta.get("status")) or "Active"
+        if status.lower() in {"legend", "retired"}:
+            status = "Active"
+        if team_name.lower() == "free agent" or player.team_id == "0":
+            status = "Free Agent"
+
         entry = {
             "rank": int(rank),
             "personId": person_id,
@@ -1046,6 +1084,14 @@ def _build_recent_goat_leaderboard(
             "score": float(score),
             "blurb": _format_recent_blurb(record),
         }
+        if tier:
+            entry["tier"] = tier
+        if resume:
+            entry["resume"] = resume
+        if franchises:
+            entry["franchises"] = franchises
+        if status:
+            entry["status"] = status
         leaderboard.append(entry)
 
     leaderboard.sort(key=lambda item: (item["rank"], -item["score"]))
@@ -1245,7 +1291,11 @@ def build_player_profiles(
 
     profiles.sort(key=lambda item: item["name"].lower())
     recent_leaderboard = _build_recent_goat_leaderboard(
-        players, recent_goat, teams, limit=RECENT_LEADERBOARD_LIMIT
+        players,
+        recent_goat,
+        teams,
+        goat_scores=goat_by_id,
+        limit=RECENT_LEADERBOARD_LIMIT,
     )
     recent_payload = _build_recent_goat_payload(recent_leaderboard)
     payload = {
