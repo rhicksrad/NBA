@@ -656,7 +656,8 @@ def build_players_overview() -> None:
     country_counts: Counter[str] = Counter()
     college_counts: Counter[str] = Counter()
     height_buckets: Counter[int] = Counter()
-    tallest: list[tuple[float, dict[str, object]]] = []
+    skyline_players: list[dict[str, object]] = []
+    skyline_ids: set[str] = set()
     drafted = 0
     undrafted = 0
     draft_years: list[int] = []
@@ -720,7 +721,19 @@ def build_players_overview() -> None:
                     "country": country or None,
                     "positions": positions,
                 }
-                _push_top(tallest, height, player_entry, size=12)
+
+                if height >= 84:
+                    skyline_key = _normalize_person_id(player_entry.get("personId"))
+                    if skyline_key:
+                        if skyline_key in skyline_ids:
+                            # Skip duplicate person entries that occasionally surface in the raw CSV
+                            # when players have multiple roster stints.
+                            pass
+                        else:
+                            skyline_ids.add(skyline_key)
+                            skyline_players.append(player_entry)
+                    else:
+                        skyline_players.append(player_entry)
 
     average_height = sum(heights) / len(heights) if heights else 0.0
     average_weight = sum(weights) / len(weights) if weights else 0.0
@@ -762,7 +775,14 @@ def build_players_overview() -> None:
             {"bucketStart": bucket, "label": f"{bucket}-{bucket + 1}\"", "players": count}
             for bucket, count in sorted(height_buckets.items())
         ],
-        "tallestPlayers": _sorted_heap(tallest),
+        "tallestPlayers": sorted(
+            skyline_players,
+            key=lambda entry: (
+                -(float(entry.get("heightInches") or 0.0)),
+                -(float(entry.get("weightPounds") or 0.0)),
+                entry.get("name") or "",
+            ),
+        ),
         "draftSummary": {
             "draftedPlayers": drafted,
             "undraftedPlayers": undrafted,
