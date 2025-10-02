@@ -340,6 +340,21 @@ const GOAT_DATA_SOURCES = [
   { url: 'data/goat_index.json', label: 'GOAT index' },
 ];
 
+async function loadJson(url, { label } = {}) {
+  try {
+    const response = await fetch(url);
+    if (!response?.ok) {
+      const descriptor = label ?? url;
+      console.warn(`Unable to load ${descriptor}:`, response?.status, response?.statusText);
+      return null;
+    }
+    return await response.json();
+  } catch (error) {
+    console.warn(`Failed to fetch ${label ?? url}`, error);
+    return null;
+  }
+}
+
 async function loadGoatData() {
   let lastError = null;
   for (const source of GOAT_DATA_SOURCES) {
@@ -776,6 +791,180 @@ function groupRecentPlayers(players, groupSize = 10) {
   return groups;
 }
 
+function hasMeaningfulRecentValue(value) {
+  if (value === undefined || value === null) {
+    return false;
+  }
+  if (typeof value === 'string') {
+    return value.trim().length > 0;
+  }
+  if (Array.isArray(value)) {
+    return value.length > 0;
+  }
+  return true;
+}
+
+function mergeRecentRecords(base, incoming) {
+  const result = { ...base };
+  Object.entries(incoming).forEach(([key, value]) => {
+    if (!hasMeaningfulRecentValue(value)) {
+      return;
+    }
+    if (key === 'rank' || key === 'score') {
+      const numeric = Number(value);
+      if (Number.isFinite(numeric)) {
+        result[key] = numeric;
+      }
+      return;
+    }
+    if (key === 'personId') {
+      result.personId = String(value).trim();
+      return;
+    }
+    result[key] = value;
+  });
+  return result;
+}
+
+function normalizeRecentEntryKey(entry) {
+  if (!entry || typeof entry !== 'object') {
+    return null;
+  }
+
+  const rawId = entry.personId ?? entry.personID ?? entry.id ?? entry.playerId;
+  if (typeof rawId === 'number' && Number.isFinite(rawId)) {
+    const normalized = String(rawId);
+    entry.personId = normalized;
+    return `id:${normalized}`;
+  }
+  if (typeof rawId === 'string' && rawId.trim().length) {
+    const normalized = rawId.trim();
+    entry.personId = normalized;
+    return `id:${normalized}`;
+  }
+
+  const nameKey = normalizeNameKey(entry.name ?? entry.displayName);
+  return nameKey ? `name:${nameKey}` : null;
+}
+
+function mergeRecentLeaderboardEntries(primaryEntries = [], derivedEntries = []) {
+  const map = new Map();
+
+  const ingest = (entries) => {
+    entries.forEach((item) => {
+      if (!item || typeof item !== 'object') {
+        return;
+      }
+      const candidate = { ...item };
+      const key = normalizeRecentEntryKey(candidate);
+      if (!key) {
+        return;
+      }
+      const existing = map.get(key);
+      if (existing) {
+        map.set(key, mergeRecentRecords(existing, candidate));
+      } else {
+        map.set(key, mergeRecentRecords({}, candidate));
+      }
+    });
+  };
+
+  ingest(derivedEntries);
+  ingest(primaryEntries);
+
+  const merged = Array.from(map.values()).filter((entry) => {
+    const hasRank = Number.isFinite(Number(entry.rank));
+    const hasScore = Number.isFinite(Number(entry.score));
+    return hasRank && hasScore;
+  });
+
+  merged.sort((a, b) => {
+    const rankA = Number(a.rank);
+    const rankB = Number(b.rank);
+    if (rankA !== rankB) {
+      return rankA - rankB;
+    }
+    const scoreA = Number(a.score);
+    const scoreB = Number(b.score);
+    if (scoreA !== scoreB) {
+      return scoreB - scoreA;
+    }
+    const nameA = (a.name ?? '').toString().toLowerCase();
+    const nameB = (b.name ?? '').toString().toLowerCase();
+    if (nameA < nameB) return -1;
+    if (nameA > nameB) return 1;
+    return 0;
+  });
+
+  return merged;
+}
+
+function deriveRecentPlayersFromProfiles(profiles = []) {
+  if (!Array.isArray(profiles) || !profiles.length) {
+    return [];
+  }
+
+  return profiles
+    .map((profile) => {
+      if (!profile || typeof profile !== 'object') {
+        return null;
+      }
+
+      const rawRank = Number(profile.goatRecentRank);
+      const rawScore = Number(profile.goatRecentScore);
+      if (!Number.isFinite(rawRank) || !Number.isFinite(rawScore)) {
+        return null;
+      }
+
+      const rawId = profile.personId ?? profile.id;
+      let personId = null;
+      if (typeof rawId === 'number' && Number.isFinite(rawId)) {
+        personId = String(rawId);
+      } else if (typeof rawId === 'string' && rawId.trim().length) {
+        personId = rawId.trim();
+      }
+
+      const name = typeof profile.name === 'string' && profile.name.trim().length ? profile.name.trim() : null;
+      if (!personId || !name) {
+        return null;
+      }
+
+      const team = typeof profile.team === 'string' && profile.team.trim().length ? profile.team.trim() : 'Free Agent';
+      const rawFranchise = typeof profile?.bdl?.teamAbbr === 'string' ? profile.bdl.teamAbbr.trim() : '';
+      const franchise = rawFranchise.length ? rawFranchise : null;
+
+      const entry = {
+        rank: rawRank,
+        score: rawScore,
+        personId,
+        name,
+        displayName: name,
+        team,
+        blurb: '',
+      };
+
+      if (franchise) {
+        entry.franchise = franchise;
+        entry.franchises = [franchise];
+      }
+
+      if (typeof profile.goatTier === 'string' && profile.goatTier.trim().length) {
+        entry.tier = profile.goatTier.trim();
+      }
+
+      if (typeof profile.goatResume === 'string' && profile.goatResume.trim().length) {
+        entry.resume = profile.goatResume.trim();
+      }
+
+      if (team.toLowerCase() === 'free agent') {
+        entry.status = 'Free Agent';
+      }
+
+      return entry;
+    })
+    .filter(Boolean);
+}
+
 function normalizeRecentPlayers(players, windowLabel) {
   if (!Array.isArray(players) || !players.length) {
     return [];
@@ -1004,16 +1193,18 @@ async function loadRecentLeaderboardSection() {
   }
 
   try {
-    const response = await fetch('data/goat_recent.json');
-    if (!response?.ok) {
-      throw new Error(`Recent GOAT data unavailable (${response?.status ?? 'network error'})`);
-    }
+    const [payload, profiles] = await Promise.all([
+      loadJson('data/goat_recent.json', { label: 'recent GOAT leaderboard' }),
+      loadJson('data/player_profiles.json', { label: 'player profiles' }),
+    ]);
 
-    const payload = await response.json();
-    updateRecentLeaderboardMeta(payload);
+    updateRecentLeaderboardMeta(payload ?? {});
 
-    const rawPlayers = Array.isArray(payload?.players) ? payload.players : [];
-    if (!rawPlayers.length) {
+    const primaryPlayers = Array.isArray(payload?.players) ? payload.players : [];
+    const profilePlayers = Array.isArray(profiles?.players) ? deriveRecentPlayersFromProfiles(profiles.players) : [];
+    const mergedPlayers = mergeRecentLeaderboardEntries(primaryPlayers, profilePlayers);
+
+    if (!mergedPlayers.length) {
       container.innerHTML = '';
       const placeholder = document.createElement('p');
       placeholder.className = 'goat-tree__placeholder';
@@ -1022,7 +1213,7 @@ async function loadRecentLeaderboardSection() {
       return;
     }
 
-    const normalized = normalizeRecentPlayers(rawPlayers, payload.window);
+    const normalized = normalizeRecentPlayers(mergedPlayers, payload?.window);
     if (!normalized.length) {
       container.innerHTML = '';
       const placeholder = document.createElement('p');
@@ -1042,7 +1233,7 @@ async function loadRecentLeaderboardSection() {
     wireInteractions(normalized, [], initialPlayerName, {
       playerSelector: '[data-goat-recent-player]',
       expandDefault: false,
-      onSelect: (player) => selectRecentPlayer(player, { windowLabel: payload.window }),
+      onSelect: (player) => selectRecentPlayer(player, { windowLabel: payload?.window }),
     });
   } catch (error) {
     console.warn('Unable to load recent GOAT leaderboard', error);
