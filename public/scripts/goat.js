@@ -630,9 +630,8 @@ function buildLeaderboard(
 
   container.innerHTML = '';
 
-  ensureSequentialRanks(players, 'rank');
-
-  if (!players.length) {
+  const playerList = Array.isArray(players) ? players : [];
+  if (!playerList.length) {
     const placeholder = document.createElement('p');
     placeholder.className = 'goat-tree__placeholder';
     placeholder.textContent = placeholderText;
@@ -640,7 +639,29 @@ function buildLeaderboard(
     return null;
   }
 
-  const grouped = groupPlayers(players);
+  const sortedPlayers = playerList.slice().sort((a, b) => {
+    const rankA = Number.isFinite(a?.rank) ? a.rank : Infinity;
+    const rankB = Number.isFinite(b?.rank) ? b.rank : Infinity;
+    if (rankA !== rankB) {
+      return rankA - rankB;
+    }
+
+    const scoreA = Number.isFinite(a?.goatScore) ? a.goatScore : -Infinity;
+    const scoreB = Number.isFinite(b?.goatScore) ? b.goatScore : -Infinity;
+    if (scoreA !== scoreB) {
+      return scoreB - scoreA;
+    }
+
+    const nameA = typeof a?.name === 'string' ? a.name.toLowerCase() : '';
+    const nameB = typeof b?.name === 'string' ? b.name.toLowerCase() : '';
+    if (nameA < nameB) return -1;
+    if (nameA > nameB) return 1;
+    return 0;
+  });
+
+  ensureSequentialRanks(sortedPlayers, 'rank');
+
+  const grouped = groupPlayers(sortedPlayers);
   let initialPlayerName = null;
 
   grouped.forEach((group) => {
