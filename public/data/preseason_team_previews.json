@@ -1,6 +1,6 @@
 {
   "season": "2025-26",
-  "generatedAt": "2025-10-02T00:36:36.275Z",
+  "generatedAt": "2025-10-02T00:39:44.306Z",
   "previews": [
     {
       "tricode": "ATL",
@@ -129,7 +129,7 @@
       "heading": "Chicago Bulls",
       "introParagraphs": [
         "Chicago enters camp fresh off a 39-win and -0.4 SRS finish that sets a retooling tone. guard Coby White, big Nikola Vucevic, and guard Josh Giddey headline the returning core.",
-        "The roster lists 9 guards, 9 wing/forwards, and 4 centers, with perimeter creation from Ayo Dosunmu and Coby White, switchable wings such as Dalen Terry and Emanuel Miller, and interior size via Jalen Smith and Lachlan Olbrich shaping the rotation battles.",
+        "The roster lists 8 guards, 9 wing/forwards, and 4 centers, with perimeter creation from Ayo Dosunmu and Coby White, switchable wings such as Dalen Terry and Emanuel Miller, and interior size via Jalen Smith and Lachlan Olbrich shaping the rotation battles.",
         "From there, establishing a firmer identity on both ends becomes the focal point. Ayo Dosunmu's lead guard reps will determine how dynamic the offense looks."
       ],
       "returningCore": [
@@ -278,21 +278,21 @@
       "name": "Warriors",
       "heading": "Golden State Warriors",
       "introParagraphs": [
-        "Golden State enters camp fresh off a 46-win and +1.7 SRS finish that sets a playoff chase tone. guard Stephen Curry, wing Jimmy Butler, and guard Brandin Podziemski headline the returning core.",
-        "The roster lists 7 guards, 7 wing/forwards, 2 centers, and 5 combo pieces, with perimeter creation from Brandin Podziemski and Buddy Hield, switchable wings such as Alex Toohey and Blake Hinson, interior size via Marques Bolden and Quinten Post, and hybrid depth from Chance McMillian and Gary Payton II shaping the rotation battles.",
+        "Golden State enters camp fresh off a 46-win and +1.7 SRS finish that sets a playoff chase tone. guard Stephen Curry, wing Jimmy Butler, and wing Jonathan Kuminga headline the returning core.",
+        "The roster lists 9 guards, 8 wing/forwards, 3 centers, and 5 combo pieces, with perimeter creation from Brandin Podziemski and Buddy Hield, switchable wings such as Alex Toohey and Blake Hinson, interior size via Al Horford and Marques Bolden, and hybrid depth from Chance McMillian and Gary Payton II shaping the rotation battles.",
         "From there, the staff will refine lineup versatility to climb the standings. Brandin Podziemski's lead guard reps will determine how dynamic the offense looks."
       ],
       "returningCore": [
         "Stephen Curry",
         "Jimmy Butler",
-        "Brandin Podziemski"
+        "Jonathan Kuminga"
       ],
       "returningCoreDescriptors": [
         "guard Stephen Curry",
         "wing Jimmy Butler",
-        "guard Brandin Podziemski"
+        "wing Jonathan Kuminga"
       ],
-      "coreStrength": "Familiar lineups and defined roles should keep the performance steady even as tweaks are tested.",
+      "coreStrength": "Depth across the positional spectrum lets the staff mix-and-match without sacrificing identity.",
       "primaryRisk": "The margin for error tightens if perimeter shooting variance swings the wrong way.",
       "swingFactor": "Brandin Podziemski's lead guard reps will determine how dynamic the offense looks.",
       "seasonLabel": "2025-26",
