@@ -560,6 +560,20 @@ registerCharts([
         ? weighted.reduce((sum, player) => sum + player.weightPounds, 0) / weighted.length
         : 280;
 
+      const formatHeightLabel = (value) => {
+        if (!Number.isFinite(value)) {
+          return '';
+        }
+        const feet = Math.floor(value / 12);
+        const remainder = value - feet * 12;
+        const rounded = Math.round(remainder * 10) / 10;
+        const wholeInches = Math.round(rounded);
+        const displayInches = Math.abs(rounded - wholeInches) < 0.05
+          ? helpers.formatNumber(wholeInches, 0)
+          : helpers.formatNumber(rounded, 1);
+        return `${helpers.formatNumber(feet, 0)}' ${displayInches}"`;
+      };
+
       const dataset = players.map((player, index) => {
         const height = Number.isFinite(player?.heightInches) ? player.heightInches : null;
         if (!height) {
@@ -573,12 +587,24 @@ registerCharts([
           r: Math.max(7, Math.sqrt(Math.max(weight - 200, 30)) * 1.4),
           player,
           listedWeight,
+          formattedHeight: formatHeightLabel(height),
           backgroundColor: accents[index % accents.length],
         };
       });
 
       const points = dataset.filter(Boolean);
       if (!points.length) return null;
+
+      const heights = points.map((point) => point.x);
+      const weights = points.map((point) => point.y);
+      const minHeight = Math.min(...heights);
+      const maxHeight = Math.max(...heights);
+      const minWeight = Math.min(...weights);
+      const maxWeight = Math.max(...weights);
+      const xMin = Math.max(80, Math.floor(minHeight - 1));
+      const xMax = Math.min(100, Math.ceil(maxHeight + 1));
+      const yMin = Math.max(160, Math.floor(minWeight - 15));
+      const yMax = Math.min(440, Math.ceil(maxWeight + 15));
 
       return {
         type: 'bubble',
@@ -601,13 +627,13 @@ registerCharts([
             tooltip: {
               callbacks: {
                 label(context) {
-                  const { player, listedWeight } = context.raw || {};
+                  const { player, listedWeight, formattedHeight } = context.raw || {};
                   if (!player) return null;
-                  const height = helpers.formatNumber(player.heightInches, 0);
+                  const height = formattedHeight || `${helpers.formatNumber(player.heightInches, 0)}"`;
                   const weightText = listedWeight
                     ? `${helpers.formatNumber(listedWeight, 0)} lbs`
                     : 'weight not listed';
-                  return `${player.name} · ${height}" · ${weightText}`;
+                  return `${player.name} · ${height} · ${weightText}`;
                 },
               },
             },
@@ -616,14 +642,14 @@ registerCharts([
             x: {
               title: { display: true, text: 'Height (inches)' },
               grid: { color: 'rgba(11, 37, 69, 0.08)' },
-              min: 82,
-              max: 92,
+              min: xMin,
+              max: xMax,
             },
             y: {
               title: { display: true, text: 'Weight (pounds)' },
               grid: { color: 'rgba(11, 37, 69, 0.08)' },
-              suggestedMin: 190,
-              suggestedMax: 370,
+              suggestedMin: yMin,
+              suggestedMax: yMax,
               ticks: {
                 callback: (value) => `${helpers.formatNumber(value, 0)}`,
               },
