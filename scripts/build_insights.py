@@ -981,6 +981,7 @@ def build_player_leaders_snapshot() -> None:
     active_player_ids, active_player_source = _load_active_player_ids()
     career_totals: dict[str, dict[str, object]] = {}
     points_highs: list[tuple[float, dict]] = []
+    points_50_plus: dict[tuple[str | None, str], dict] = {}
     assists_highs: list[tuple[float, dict]] = []
     rebounds_highs: list[tuple[float, dict]] = []
     total_rows = 0
@@ -1071,6 +1072,11 @@ def build_player_leaders_snapshot() -> None:
         _push_top(assists_highs, assists, single_game_record, size=12)
         _push_top(rebounds_highs, rebounds, single_game_record, size=12)
 
+        if points >= 50.0:
+            key = (single_game_record.get("gameId"), person_id)
+            if key not in points_50_plus:
+                points_50_plus[key] = single_game_record
+
     career_list = []
     for stats in career_totals.values():
         games = stats["games"] or 1
@@ -1120,6 +1126,15 @@ def build_player_leaders_snapshot() -> None:
         },
         "singleGameHighs": {
             "points": _sorted_heap(points_highs),
+            "points50Plus": sorted(
+                points_50_plus.values(),
+                key=lambda record: (
+                    record.get("points") or 0.0,
+                    record.get("minutes") or 0.0,
+                    record.get("gameDate") or "",
+                ),
+                reverse=True,
+            ),
             "assists": _sorted_heap(assists_highs),
             "rebounds": _sorted_heap(rebounds_highs),
         },
