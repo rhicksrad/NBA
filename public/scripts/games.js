@@ -9,6 +9,39 @@ const LAST_COMPLETED_SEASON_FINALE = '2024-06-17';
 const FUTURE_SCHEDULE_END = '2026-06-30';
 const EARLIEST_ARCHIVE_DATE = '1946-11-01';
 
+const NBA_TEAM_IDS = new Set([
+  1610612737,
+  1610612738,
+  1610612739,
+  1610612740,
+  1610612741,
+  1610612742,
+  1610612743,
+  1610612744,
+  1610612745,
+  1610612746,
+  1610612747,
+  1610612748,
+  1610612749,
+  1610612750,
+  1610612751,
+  1610612752,
+  1610612753,
+  1610612754,
+  1610612755,
+  1610612756,
+  1610612757,
+  1610612758,
+  1610612759,
+  1610612760,
+  1610612761,
+  1610612762,
+  1610612763,
+  1610612764,
+  1610612765,
+  1610612766,
+]);
+
 const stageRank = { live: 0, upcoming: 1, final: 2 };
 
 const scoreboardContainer = document.querySelector('[data-scoreboard]');
@@ -69,6 +102,14 @@ let latestGames = [];
 let lastUpdated = null;
 let refreshTimer = null;
 let loading = false;
+
+function isNbaTeamId(value) {
+  const numeric = Number(value);
+  if (!Number.isInteger(numeric)) {
+    return false;
+  }
+  return NBA_TEAM_IDS.has(numeric);
+}
 
 function deriveSeasonFromDate(date) {
   if (!(date instanceof Date) || Number.isNaN(date.getTime())) {
@@ -339,39 +380,36 @@ async function fetchGamesForRange(startDate, endDate) {
     return [];
   }
 
-  const seasonTypes = [null, 'Pre Season'];
   const seasons = deriveSeasonsForRange(start, end);
   const seen = new Map();
+  let cursor;
 
-  // Sequentially fetch for each season bucket to ensure preseason contests appear alongside regular games
-  // without dropping any existing logic for other season types.
-  for (const seasonType of seasonTypes) {
-    let cursor;
-    do {
-      const params = {
-        dates: isoDates,
-        per_page: PAGE_SIZE,
-        cursor,
-      };
-      if (seasons.length) {
-        params.seasons = seasons;
+  do {
+    const params = {
+      dates: isoDates,
+      per_page: PAGE_SIZE,
+      cursor,
+      postseason: 'false',
+    };
+    if (seasons.length) {
+      params.seasons = seasons;
+    }
+
+    // eslint-disable-next-line no-await-in-loop
+    const payload = await request('games', params);
+    const data = Array.isArray(payload?.data) ? payload.data : [];
+    data.forEach((raw) => {
+      const normalized = normalizeGame(raw, start);
+      if (!isNbaTeamId(normalized?.home?.id) || !isNbaTeamId(normalized?.visitor?.id)) {
+        return;
       }
-      if (seasonType) {
-        params.season_type = seasonType;
+      const key = createGameKey(normalized);
+      if (!seen.has(key)) {
+        seen.set(key, normalized);
       }
-      // eslint-disable-next-line no-await-in-loop
-      const payload = await request('games', params);
-      const data = Array.isArray(payload?.data) ? payload.data : [];
-      data.forEach((raw) => {
-        const normalized = normalizeGame(raw, start);
-        const key = createGameKey(normalized);
-        if (!seen.has(key)) {
-          seen.set(key, normalized);
-        }
-      });
-      cursor = payload?.meta?.next_cursor ?? null;
-    } while (cursor);
-  }
+    });
+    cursor = payload?.meta?.next_cursor ?? null;
+  } while (cursor);
 
   return Array.from(seen.values());
 }
@@ -469,6 +507,10 @@ function normalizeGame(raw, fallbackIsoDate) {
   };
 }
 
+function normalizeStatusText(value) {
+  return typeof value === 'string' ? value.trim() : '';
+}
+
 function formatPeriodLabel(game) {
   if (game.stage === 'final') {
     return 'Final';
@@ -486,15 +528,42 @@ function formatPeriodLabel(game) {
 }
 
 function formatGameStatus(game) {
+  const status = normalizeStatusText(game.status);
+  const normalized = status.toLowerCase();
+  const clock = game.time ? game.time.replace(/\s+/g, '') : '';
+  const periodLabel = formatPeriodLabel(game);
+
+  if (game.stage === 'final' || normalized.includes('final')) {
+    return 'Final';
+  }
+
+  if (normalized.includes('scheduled')) {
+    return 'Scheduled';
+  }
+
+  if (normalized.includes('progress')) {
+    if (periodLabel && clock) {
+      return `${status} • ${periodLabel} ${clock}`;
+    }
+    if (periodLabel) {
+      return `${status} • ${periodLabel}`;
+    }
+    if (clock) {
+      return `${status} • ${clock}`;
+    }
+    return status || 'In Progress';
+  }
+
   if (game.stage === 'upcoming') {
-    return game.status || formatTimeLabel(game.tipoff) || 'Scheduled';
+    return status || formatTimeLabel(game.tipoff) || 'Scheduled';
   }
+
   if (game.stage === 'live') {
-    const periodLabel = formatPeriodLabel(game) || 'Live';
-    const clock = game.time ? game.time.replace(/\s+/g, '') : '';
-    return clock ? `${periodLabel} • ${clock}` : periodLabel;
+    const label = periodLabel || status || 'In Progress';
+    return clock ? `${label} • ${clock}` : label;
   }
-  return 'Final';
+
+  return status || 'Final';
 }
 
 function formatMarginString(game) {
@@ -729,14 +798,29 @@ function renderScoreboard(games) {
     return;
   }
   clearScoreboard();
-  const filtered = filterGamesForView(games);
-  if (!filtered.length) {
-    const emptyMessage =
-      scoreboardView === 'upcoming'
-        ? `No upcoming games for ${formatRangeLabel(activeRange)}.`
-        : `No games found for ${formatRangeLabel(activeRange)}.`;
-    renderScoreboardState(emptyMessage);
+  if (!Array.isArray(games) || !games.length) {
+    renderScoreboardState('No NBA games for this date.');
     return;
+  }
+  let filtered = filterGamesForView(games);
+  let note = null;
+  if (!filtered.length) {
+    if (scoreboardView === 'upcoming') {
+      filtered = games;
+      note = 'No upcoming games. Showing all matchups for this date.';
+    } else {
+      filtered = games;
+    }
+  }
+  if (!filtered.length) {
+    renderScoreboardState('No NBA games for this date.');
+    return;
+  }
+  if (note) {
+    const noteElement = document.createElement('p');
+    noteElement.className = 'scoreboard-state';
+    noteElement.textContent = note;
+    scoreboardContainer.appendChild(noteElement);
   }
   const sorted = [...filtered].sort((a, b) => {
     const stageDelta = (stageRank[a.stage] ?? 3) - (stageRank[b.stage] ?? 3);
@@ -1254,7 +1338,7 @@ async function loadGames(options = {}) {
     console.error('Unable to load live games data', error);
     const rawMessage = typeof error?.message === 'string' ? error.message : '';
     const unauthorized = rawMessage.includes('401');
-    const message = unauthorized ? 'Authorization failed' : 'Refresh failed';
+    const message = unauthorized ? 'Authorization failed. Check BALLDONTLIE_API_KEY.' : 'Refresh failed';
     setFetchMessage(message, 'error');
     if (previousGames && previousGames.length) {
       latestGames = previousGames;
