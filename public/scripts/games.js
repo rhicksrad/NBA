@@ -99,6 +99,21 @@ function deriveSeasonsForRange(startIso, endIso) {
   return seasons;
 }
 
+function enumerateIsoDates(startIso, endIso) {
+  const startDate = parseDateOnly(startIso);
+  const endDate = parseDateOnly(endIso);
+  if (!startDate || !endDate) {
+    return [];
+  }
+  const days = [];
+  const cursor = new Date(startDate.getTime());
+  while (cursor.getTime() <= endDate.getTime()) {
+    days.push(cursor.toISOString().slice(0, 10));
+    cursor.setUTCDate(cursor.getUTCDate() + 1);
+  }
+  return days;
+}
+
 function getTodayIso() {
   const now = new Date();
   const month = String(now.getMonth() + 1).padStart(2, '0');
@@ -319,6 +334,11 @@ async function fetchGamesForRange(startDate, endDate) {
     return [];
   }
 
+  const isoDates = enumerateIsoDates(start, end);
+  if (!isoDates.length) {
+    return [];
+  }
+
   const seasonTypes = [null, 'Pre Season'];
   const seasons = deriveSeasonsForRange(start, end);
   const seen = new Map();
@@ -329,8 +349,7 @@ async function fetchGamesForRange(startDate, endDate) {
     let cursor;
     do {
       const params = {
-        start_date: start,
-        end_date: end,
+        dates: isoDates,
         per_page: PAGE_SIZE,
         cursor,
       };
@@ -338,7 +357,7 @@ async function fetchGamesForRange(startDate, endDate) {
         params.seasons = seasons;
       }
       if (seasonType) {
-        params.season_types = [seasonType];
+        params.season_type = seasonType;
       }
       // eslint-disable-next-line no-await-in-loop
       const payload = await request('games', params);
