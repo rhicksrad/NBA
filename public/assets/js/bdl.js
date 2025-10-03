@@ -1,4 +1,61 @@
-export const API = 'https://bdlproxy.hicksrch.workers.dev/bdl';
+export const API = 'https://api.balldontlie.io';
+
+let apiKeyPromise;
+
+async function resolveApiKey() {
+  if (apiKeyPromise) {
+    return apiKeyPromise;
+  }
+
+  apiKeyPromise = (async () => {
+    const envKey =
+      (typeof process !== 'undefined' &&
+        (process.env.BALLDONTLIE_API_KEY || process.env.BDL_API_KEY || process.env.BALL_DONT_LIE_API_KEY)) ||
+      '';
+    if (envKey && envKey.trim()) {
+      return envKey.trim();
+    }
+
+    if (typeof window === 'undefined') {
+      try {
+        const [{ readFile }, pathModule, urlModule] = await Promise.all([
+          import('node:fs/promises'),
+          import('node:path'),
+          import('node:url'),
+        ]);
+        const currentDir = pathModule.dirname(urlModule.fileURLToPath(import.meta.url));
+        const fallbackPath = pathModule.resolve(currentDir, '../../data/bdl-key.json');
+        const raw = await readFile(fallbackPath, 'utf8');
+        const parsed = JSON.parse(raw);
+        const key = typeof parsed?.key === 'string' ? parsed.key.trim() : '';
+        if (key) {
+          return key;
+        }
+      } catch (error) {
+        if (error && error.code !== 'ENOENT') {
+          console.warn('Unable to read Ball Don\'t Lie fallback key', error);
+        }
+      }
+    } else {
+      try {
+        const response = await fetch(new URL('../../data/bdl-key.json', import.meta.url), { cache: 'no-store' });
+        if (response.ok) {
+          const payload = await response.json();
+          const key = typeof payload?.key === 'string' ? payload.key.trim() : '';
+          if (key) {
+            return key;
+          }
+        }
+      } catch (error) {
+        console.warn('Unable to load Ball Don\'t Lie fallback key', error);
+      }
+    }
+
+    return '';
+  })();
+
+  return apiKeyPromise;
+}
 
 function makeLimiter({ maxConcurrent = 1, minIntervalMs = 300 } = {}) {
   let active = 0;
@@ -79,6 +136,13 @@ async function fetchJsonWithRetry(url, init = {}) {
     method: init.method ?? 'GET'
   };
 
+  const apiKey = await resolveApiKey();
+  if (apiKey) {
+    headers.set('Authorization', `Bearer ${apiKey}`);
+  }
+
+  let unauthorizedLogged = false;
+
   for (let attempt = 1; attempt <= 6; attempt += 1) {
     const response = await fetch(url, baseInit);
     if (response.status === 429) {
@@ -87,6 +151,21 @@ async function fetchJsonWithRetry(url, init = {}) {
       const jitter = Math.floor(Math.random() * 400);
       await new Promise((resolve) => setTimeout(resolve, backoff + jitter));
       continue;
+    }
+    if (response.status === 401) {
+      if (!unauthorizedLogged) {
+        unauthorizedLogged = true;
+        console.error('Ball Don\'t Lie authorization failed. Verify BALLDONTLIE_API_KEY.');
+      }
+      const text = await response.text().catch(() => '');
+      const path = (() => {
+        try {
+          return new URL(url).pathname;
+        } catch {
+          return url;
+        }
+      })();
+      throw new Error(`BDL 401 for ${path}${text ? `: ${text.slice(0, 120)}` : ''}`);
     }
     if (!response.ok) {
       const text = await response.text().catch(() => '');
