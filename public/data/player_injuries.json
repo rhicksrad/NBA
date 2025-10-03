@@ -1,5 +1,5 @@
 {
-  "fetched_at": "2025-10-02T00:39:38.745Z",
+  "fetched_at": "2025-10-03T01:15:11.012Z",
   "source": "Ball Don't Lie",
   "items": [
     {
@@ -47,6 +47,17 @@
       "report_label": "Sep 29"
     },
     {
+      "player": "De'Anthony Melton",
+      "status": "Out",
+      "status_level": "caution",
+      "player_id": 313,
+      "team_tricode": "GSW",
+      "team_name": "Golden State Warriors",
+      "return_date": "Oct 30",
+      "description": "Oct 1: Melton (knee) will be re-evaluated in about four weeks, Sam Gordon of the San Francisco Chronicle reports.",
+      "report_label": "Oct 1"
+    },
+    {
       "player": "Fred VanVleet",
       "status": "Out",
       "status_level": "caution",
@@ -86,7 +97,7 @@
       "player_id": 1028025754,
       "team_tricode": "MEM",
       "team_name": "Memphis Grizzlies",
-      "return_date": "Nov 1",
+      "return_date": "Nov 7",
       "description": "Sep 26: Edey has been cleared to begin ramping up basketball activities and is expected to return to play in six to nine weeks.",
       "report_label": "Sep 26"
     },
@@ -100,17 +111,6 @@
       "return_date": "Nov 17",
       "description": "Sep 30: Herro (foot/ankle) said Tuesday that he's ahead of schedule in his recovery and expects to be back in 8-12 weeks, Wes Goldberg of the Locked On Podcast Network reports.",
       "report_label": "Sep 30"
-    },
-    {
-      "player": "Dejounte Murray",
-      "status": "Out",
-      "status_level": "caution",
-      "player_id": 334,
-      "team_tricode": "NOP",
-      "team_name": "New Orleans Pelicans",
-      "return_date": "Jan 1",
-      "description": "Sep 25: ESPN's Shams Charania reported Wednesday that Murray (Achilles) could return right after New Years, according to Pelicans Film Room.",
-      "report_label": "Sep 25"
     }
   ],
   "note": "Source: Ball Don't Lie player injuries feed. Displaying the 10 most relevant recent reports."
