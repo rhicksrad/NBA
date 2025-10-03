@@ -389,6 +389,7 @@ async function fetchGamesForRange(startDate, endDate) {
       dates: isoDates,
       per_page: PAGE_SIZE,
       cursor,
+      season_type: ['Regular Season', 'Pre Season', 'Preseason'],
       postseason: 'false',
     };
     if (seasons.length) {
@@ -400,7 +401,8 @@ async function fetchGamesForRange(startDate, endDate) {
     const data = Array.isArray(payload?.data) ? payload.data : [];
     data.forEach((raw) => {
       const normalized = normalizeGame(raw, start);
-      if (!isNbaTeamId(normalized?.home?.id) || !isNbaTeamId(normalized?.visitor?.id)) {
+      const hasNbaSide = isNbaTeamId(normalized?.home?.id) || isNbaTeamId(normalized?.visitor?.id);
+      if (!hasNbaSide) {
         return;
       }
       const key = createGameKey(normalized);
@@ -487,7 +489,10 @@ function normalizeGame(raw, fallbackIsoDate) {
   const totalPoints = home.score + visitor.score;
   const seasonTypeRaw = typeof raw?.season_type === 'string' ? raw.season_type.trim() : '';
   const seasonTypeNormalized = seasonTypeRaw.toLowerCase();
-  const preseason = seasonTypeNormalized.includes('pre');
+  const preseason =
+    seasonTypeNormalized.includes('pre') ||
+    /\bpre[-\s]?season\b/i.test(seasonTypeRaw) ||
+    /\bpre[-\s]?season\b/i.test(status);
 
   return {
     id: raw?.id,
