@@ -70,6 +70,35 @@ let lastUpdated = null;
 let refreshTimer = null;
 let loading = false;
 
+function deriveSeasonFromDate(date) {
+  if (!(date instanceof Date) || Number.isNaN(date.getTime())) {
+    return null;
+  }
+  const year = date.getUTCFullYear();
+  const month = date.getUTCMonth() + 1;
+  return month >= 7 ? year : year - 1;
+}
+
+function deriveSeasonsForRange(startIso, endIso) {
+  const startDate = parseDateOnly(startIso);
+  const endDate = parseDateOnly(endIso);
+  if (!startDate || !endDate) {
+    return [];
+  }
+  const startSeason = deriveSeasonFromDate(startDate);
+  const endSeason = deriveSeasonFromDate(endDate);
+  if (startSeason === null || endSeason === null) {
+    return [];
+  }
+  const minSeason = Math.min(startSeason, endSeason);
+  const maxSeason = Math.max(startSeason, endSeason);
+  const seasons = [];
+  for (let season = minSeason; season <= maxSeason; season += 1) {
+    seasons.push(season);
+  }
+  return seasons;
+}
+
 function getTodayIso() {
   const now = new Date();
   const month = String(now.getMonth() + 1).padStart(2, '0');
@@ -291,6 +320,7 @@ async function fetchGamesForRange(startDate, endDate) {
   }
 
   const seasonTypes = [null, 'Pre Season'];
+  const seasons = deriveSeasonsForRange(start, end);
   const seen = new Map();
 
   // Sequentially fetch for each season bucket to ensure preseason contests appear alongside regular games
@@ -304,8 +334,11 @@ async function fetchGamesForRange(startDate, endDate) {
         per_page: PAGE_SIZE,
         cursor,
       };
+      if (seasons.length) {
+        params.seasons = seasons;
+      }
       if (seasonType) {
-        params.season_type = seasonType;
+        params.season_types = [seasonType];
       }
       // eslint-disable-next-line no-await-in-loop
       const payload = await request('games', params);
