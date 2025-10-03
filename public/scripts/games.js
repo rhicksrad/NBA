@@ -264,27 +264,55 @@ async function request(endpoint, params = {}) {
   return bdl(path, { cache: 'no-store' });
 }
 
+function createGameKey(game) {
+  const numericId = Number(game?.id);
+  if (Number.isFinite(numericId) && numericId > 0) {
+    return `id-${numericId}`;
+  }
+  const isoDate = typeof game?.isoDate === 'string' ? game.isoDate : 'date-tba';
+  const visitor = game?.visitor?.abbreviation || game?.visitor?.name || 'visitor';
+  const home = game?.home?.abbreviation || game?.home?.name || 'home';
+  return `${isoDate}|${visitor}|${home}`;
+}
+
 async function fetchGamesForRange(startDate, endDate) {
   const { start, end } = sanitizeRange({ start: startDate, end: endDate });
   if (!start || !end) {
     return [];
   }
-  const games = [];
-  let cursor;
-  do {
-    const payload = await request('games', {
-      start_date: start,
-      end_date: end,
-      per_page: PAGE_SIZE,
-      cursor,
-    });
-    const data = Array.isArray(payload?.data) ? payload.data : [];
-    data.forEach((raw) => {
-      games.push(normalizeGame(raw, start));
-    });
-    cursor = payload?.meta?.next_cursor ?? null;
-  } while (cursor);
-  return games;
+
+  const seasonTypes = [null, 'Pre Season'];
+  const seen = new Map();
+
+  // Sequentially fetch for each season bucket to ensure preseason contests appear alongside regular games
+  // without dropping any existing logic for other season types.
+  for (const seasonType of seasonTypes) {
+    let cursor;
+    do {
+      const params = {
+        start_date: start,
+        end_date: end,
+        per_page: PAGE_SIZE,
+        cursor,
+      };
+      if (seasonType) {
+        params.season_type = seasonType;
+      }
+      // eslint-disable-next-line no-await-in-loop
+      const payload = await request('games', params);
+      const data = Array.isArray(payload?.data) ? payload.data : [];
+      data.forEach((raw) => {
+        const normalized = normalizeGame(raw, start);
+        const key = createGameKey(normalized);
+        if (!seen.has(key)) {
+          seen.set(key, normalized);
+        }
+      });
+      cursor = payload?.meta?.next_cursor ?? null;
+    } while (cursor);
+  }
+
+  return Array.from(seen.values());
 }
 
 function parseDateTime(value) {
@@ -358,6 +386,9 @@ function normalizeGame(raw, fallbackIsoDate) {
   const visitor = normalizeTeam(raw?.visitor_team, raw?.visitor_team_score);
   const margin = home.score - visitor.score;
   const totalPoints = home.score + visitor.score;
+  const seasonTypeRaw = typeof raw?.season_type === 'string' ? raw.season_type.trim() : '';
+  const seasonTypeNormalized = seasonTypeRaw.toLowerCase();
+  const preseason = seasonTypeNormalized.includes('pre');
 
   return {
     id: raw?.id,
@@ -367,6 +398,8 @@ function normalizeGame(raw, fallbackIsoDate) {
     time,
     stage: computeStage(status, period),
     postseason: Boolean(raw?.postseason),
+    preseason,
+    seasonType: seasonTypeRaw,
     tipoff,
     home,
     visitor,
@@ -430,6 +463,9 @@ function formatGameMeta(game) {
   const total = formatTotalString(game);
   if (game.postseason) {
     return total ? `${total} • Postseason` : 'Postseason';
+  }
+  if (game.preseason) {
+    return total ? `${total} • Preseason` : 'Preseason';
   }
   return total ?? '';
 }
@@ -600,18 +636,23 @@ function createScoreboardCard(game) {
     const postseasonSpan = document.createElement('span');
     postseasonSpan.textContent = 'Postseason matchup';
     footer.appendChild(postseasonSpan);
+  } else if (game.preseason) {
+    const preseasonSpan = document.createElement('span');
+    preseasonSpan.textContent = 'Preseason matchup';
+    footer.appendChild(preseasonSpan);
   }
 
   card.append(header, rows);
   if (footer.childNodes.length) {
     card.appendChild(footer);
   }
-  if (Number.isFinite(game?.id)) {
+  const numericId = Number(game?.id);
+  if (Number.isFinite(numericId) && numericId > 0) {
     const actions = document.createElement('div');
     actions.className = 'scoreboard-card__actions';
     const link = document.createElement('a');
     link.className = 'scoreboard-card__link';
-    link.href = `game-preview.html?gameId=${game.id}`;
+    link.href = `game-preview.html?gameId=${numericId}`;
     const visitorLabel = game.visitor?.name || game.visitor?.abbreviation || 'Road team';
     const homeLabel = game.home?.name || game.home?.abbreviation || 'Home team';
     link.textContent = 'Matchup preview';
