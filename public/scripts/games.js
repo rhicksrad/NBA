@@ -389,8 +389,6 @@ async function fetchGamesForRange(startDate, endDate) {
       dates: isoDates,
       per_page: PAGE_SIZE,
       cursor,
-      season_type: ['Regular Season', 'Pre Season', 'Preseason'],
-      postseason: 'false',
     };
     if (seasons.length) {
       params.seasons = seasons;
@@ -401,10 +399,11 @@ async function fetchGamesForRange(startDate, endDate) {
     const data = Array.isArray(payload?.data) ? payload.data : [];
     data.forEach((raw) => {
       const normalized = normalizeGame(raw, start);
-      const hasNbaSide = isNbaTeamId(normalized?.home?.id) || isNbaTeamId(normalized?.visitor?.id);
-      if (!hasNbaSide) {
-        return;
-      }
+
+      // Keep games where at least one side is an NBA team (preseason exhibitions included).
+      const hasNbaSide =
+        isNbaTeamId(normalized?.home?.id) || isNbaTeamId(normalized?.visitor?.id);
+      if (!hasNbaSide) return;
       const key = createGameKey(normalized);
       if (!seen.has(key)) {
         seen.set(key, normalized);
