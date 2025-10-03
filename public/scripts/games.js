@@ -85,9 +85,16 @@ function formatDateLabel(value) {
   if (!isValidIsoDate(value)) {
     return value ?? '—';
   }
-  const [year, month, day] = value.split('-').map((part) => Number.parseInt(part, 10));
-  const date = new Date(Date.UTC(year, month - 1, day));
-  return date.toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' });
+  const date = parseDateOnly(value);
+  if (!date) {
+    return value;
+  }
+  return date.toLocaleDateString(undefined, {
+    weekday: 'long',
+    month: 'long',
+    day: 'numeric',
+    timeZone: 'UTC',
+  });
 }
 
 function formatRangeLabel(range) {
@@ -112,11 +119,13 @@ function formatRangeLabel(range) {
     month: 'short',
     day: 'numeric',
     year: 'numeric',
+    timeZone: 'UTC',
   });
   const endLabel = endDate.toLocaleDateString(undefined, {
     month: 'short',
     day: 'numeric',
     year: 'numeric',
+    timeZone: 'UTC',
   });
   return `${startLabel} – ${endLabel}`;
 }
