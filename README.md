@@ -18,15 +18,9 @@ rhicksrad.github.io
 insights.html experimental “Insights Lab” prototypes. 
 rhicksrad.github.io
 
-Pages load shared assets from /assets/js and JSON from /public/data. No hardcoded rosters or previews in HTML.
+Pages load shared assets from /assets/js and JSON from /public/data. No hardcoded rosters in HTML.
 
 Agents & rules (summary; see agents.md for full policy)
-
-Never write or edit previews manually. Always run scripts.
-
-Read from canonical JSON only. Fix mappings in data/2025-26/manual/overrides.yaml, then regenerate.
-
-If validation fails, fix data and re-run. Do not bypass.
 
 Active season: 2025–26. Most recently completed: 2024–25. Make this explicit in outputs.
 
@@ -38,29 +32,7 @@ Node 20, pnpm 9.
 
 pnpm install
 
-Previews: pnpm previews (wraps build:data, gen:previews, validate:previews)
-
 Local dev: serve /public so pages can fetch /public/data/*.json.
-
-Previews pipeline (2025–26 preseason)
-
-Purpose: deterministic TS pipeline that assembles canonical rosters, renders Markdown previews, and updates the conviction board.
-
-Inputs: canonical JSON under data/2025-26/canonical/ plus manual overrides.
-
-Outputs:
-
-site/previews/ rendered team previews
-
-site/index.html updates for the board
-
-Troubleshooting:
-
-Wrong player mapping → edit data/2025-26/manual/overrides.yaml, re-run pnpm previews. Do not hand-edit Markdown.
-
-CI staleness failures mean a preview references a player not on that team’s canonical roster. Fix data, regenerate.
-
-Network fetches fall back to last-good snapshots; use overrides to patch missing entries.
 
 Rosters data (players page)
 
@@ -90,8 +62,6 @@ Build site assets
 Upload Pages artifact
 
 Deploy job publishes artifact to GitHub Pages.
-
-Nightly previews job opens a PR when diffs exist; do not auto-merge on validation failure.
 
 Snapshots
 
@@ -167,6 +137,4 @@ Keep season framing explicit in all outputs.
 export BALLDONTLIE_API_KEY=sk_xxx
 pnpm i --frozen-lockfile
 pnpm verify:bdl
-pnpm previews
-pnpm validate:previews
 ```

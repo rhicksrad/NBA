@@ -280,7 +280,6 @@ const preseasonCore = document.querySelector('[data-preseason-core]');
 const preseasonRisk = document.querySelector('[data-preseason-risk]');
 const preseasonSwing = document.querySelector('[data-preseason-swing]');
 const preseasonSeason = document.querySelector('[data-preseason-season]');
-const preseasonLink = document.querySelector('[data-preseason-link]');
 
 let preseasonMapViewport = null;
 let preseasonMarkers = [];
@@ -401,11 +400,6 @@ function renderPreseasonDetail(team, preview) {
     preseasonSeason.textContent = `${label} layered on the 2024-25 baseline.`;
   }
 
-  if (preseasonLink) {
-    const target = preview.tricode ?? team.abbreviation;
-    preseasonLink.href = target ? `../site/previews/${target}.html` : '#';
-    preseasonLink.setAttribute('aria-label', `Open full preseason outlook for ${preview.heading ?? team.name ?? 'team'}`);
-  }
 }
 
 function handlePreseasonMarkerClick(event) {
@@ -611,313 +605,6 @@ function hydrateHero(teamData) {
     item.append(marker, body);
     list.appendChild(item);
   });
-}
-
-function formatTourVenue(entry) {
-  const location = [entry?.city, entry?.state].filter(Boolean).join(', ');
-  if (entry?.arena && location) {
-    return `${entry.arena} · ${location}`;
-  }
-  if (entry?.arena) {
-    return entry.arena;
-  }
-  return location || 'Venue TBA';
-}
-
-function renderPreseasonTour(openersData) {
-  const list = document.querySelector('[data-tour-list]');
-  const footnote = document.querySelector('[data-tour-footnote]');
-  if (!list && !footnote) {
-    return;
-  }
-
-  const rawGames = Array.isArray(openersData?.games) ? openersData.games.slice() : [];
-  const games = groupPreseasonGames(rawGames);
-  games.sort((a, b) => {
-    const dateA = a.date ? new Date(a.date).getTime() : Number.POSITIVE_INFINITY;
-    const dateB = b.date ? new Date(b.date).getTime() : Number.POSITIVE_INFINITY;
-    if (Number.isFinite(dateA) && Number.isFinite(dateB) && dateA !== dateB) {
-      return dateA - dateB;
-    }
-    if (Number.isFinite(dateA) && !Number.isFinite(dateB)) {
-      return -1;
-    }
-    if (!Number.isFinite(dateA) && Number.isFinite(dateB)) {
-      return 1;
-    }
-    const [aHome] = getDisplayParticipants(a);
-    const [bHome] = getDisplayParticipants(b);
-    return (aHome?.name ?? '').localeCompare(bHome?.name ?? '');
-  });
-
-  if (list) {
-    list.innerHTML = '';
-    if (!games.length) {
-      const placeholder = document.createElement('li');
-      placeholder.className = 'tour-board__placeholder';
-      placeholder.textContent = 'Preseason openers will populate once the league finalizes exhibition dates.';
-      list.appendChild(placeholder);
-    } else {
-      games.forEach((game) => {
-        const hasPreview = Boolean(game.gameId);
-        const item = document.createElement('li');
-        item.className = 'tour-board__item';
-
-        const card = document.createElement(hasPreview ? 'a' : 'div');
-        card.className = 'tour-board__link';
-
-        const participants = Array.isArray(game.participants) ? game.participants : [];
-        const homeParticipant = participants.find((participant) => participant.homeAway === 'home') || null;
-        const roadParticipant = participants.find((participant) => participant.homeAway === 'away') || null;
-        const [displayHome, displayRoad] = getDisplayParticipants(game);
-        const matchupLabel = [displayHome?.name, displayRoad?.name].filter(Boolean).join(' vs. ');
-
-        if (hasPreview) {
-          const previewId = String(game.gameId || '').toLowerCase();
-          card.href = `previews/preseason-${previewId}.html`;
-          card.setAttribute(
-            'aria-label',
-            `${matchupLabel || 'Preseason opener'} preseason opener preview`,
-          );
-        } else {
-          card.setAttribute('aria-label', `${matchupLabel || 'Preseason opener'} details pending`);
-          card.setAttribute('role', 'group');
-        }
-
-        const date = document.createElement('time');
-        date.className = 'tour-board__date';
-        if (game.date) {
-          date.dateTime = game.date;
-          date.textContent = formatDateLabel(game.date, { month: 'short', day: 'numeric' });
-        } else {
-          date.textContent = 'TBD';
-        }
-
-        const marker = document.createElement('div');
-        marker.className = 'tour-board__marker';
-        marker.appendChild(date);
-
-        const tag = document.createElement('span');
-        tag.className = 'tour-board__tag';
-        if (homeParticipant?.name) {
-          const hostLabel = homeParticipant.abbreviation || homeParticipant.name;
-          tag.textContent = `Home: ${hostLabel}`;
-        } else if (roadParticipant?.name) {
-          const visitorLabel = roadParticipant.abbreviation || roadParticipant.name;
-          tag.textContent = `Road: ${visitorLabel}`;
-        } else {
-          tag.textContent = 'Matchup pending';
-        }
-        marker.appendChild(tag);
-
-        const identity = document.createElement('div');
-        identity.className = 'tour-board__identity';
-
-        const matchup = document.createElement('div');
-        matchup.className = 'tour-board__matchup';
-
-        const homeNode = createTourTeamNode(displayHome, 'Preseason opener');
-        matchup.appendChild(homeNode);
-
-        const divider = document.createElement('span');
-        divider.className = 'tour-board__matchup-divider';
-        divider.textContent = 'vs.';
-        matchup.appendChild(divider);
-
-        const roadNode = createTourTeamNode(displayRoad, 'Opponent TBA');
-        matchup.appendChild(roadNode);
-
-        identity.appendChild(matchup);
-
-        const body = document.createElement('div');
-        body.className = 'tour-board__body';
-        body.appendChild(identity);
-
-        const note = document.createElement('p');
-        note.className = 'tour-board__note';
-        const label = (game.label ?? '').trim();
-        const labelText = label ? label : 'Preseason opener';
-        note.textContent = labelText;
-
-        const venue = document.createElement('p');
-        venue.className = 'tour-board__meta';
-        venue.textContent = formatTourVenue(game);
-
-        body.append(note, venue);
-
-        card.append(marker, body);
-        item.appendChild(card);
-        list.appendChild(item);
-      });
-    }
-  }
-
-  if (footnote) {
-    if (games.length) {
-      const total = helpers.formatNumber(games.length, 0);
-      const updatedRaw = openersData?.generatedAt ? new Date(openersData.generatedAt) : null;
-      const updated = updatedRaw instanceof Date && !Number.isNaN(updatedRaw.getTime())
-        ? new Intl.DateTimeFormat('en-US', {
-            month: 'short',
-            day: 'numeric',
-            hour: 'numeric',
-            minute: '2-digit',
-            timeZone: 'UTC',
-            timeZoneName: 'short',
-          }).format(updatedRaw)
-        : 'recently';
-      footnote.textContent = `${total} preseason openers logged — data refreshed ${updated}. Tap any row to explore its preview capsule.`;
-    } else {
-      footnote.textContent = 'Preseason openers populate after the league locks each exhibition tip.';
-    }
-  }
-}
-
-function createTourTeamNode(team, fallbackText) {
-  const wrapper = document.createElement('div');
-  wrapper.className = 'tour-board__team';
-
-  const name = team?.name ?? fallbackText;
-  if (team?.name) {
-    wrapper.appendChild(createTeamLogo(team.name, 'team-logo team-logo--small'));
-  }
-
-  const label = document.createElement('h3');
-  label.className = 'tour-board__team-name';
-  label.textContent = name ?? 'TBD';
-  wrapper.appendChild(label);
-
-  return wrapper;
-}
-
-function getDisplayParticipants(game) {
-  const participants = Array.isArray(game?.participants) ? game.participants : [];
-  const home = participants.find((participant) => participant.homeAway === 'home') || null;
-  const road = participants.find((participant) => participant.homeAway === 'away' && participant !== home) || null;
-  if (home && road) {
-    return [home, road];
-  }
-  const fallbacks = participants.filter((participant) => participant !== home && participant !== road);
-  const first = home || fallbacks[0] || road || null;
-  const second = road || fallbacks.find((participant) => participant !== first) || null;
-  return [first, second];
-}
-
-function groupPreseasonGames(games) {
-  const map = new Map();
-
-  games.forEach((entry) => {
-    if (!entry || typeof entry !== 'object') {
-      return;
-    }
-
-    const participants = [
-      entry.teamId || entry.teamName || '',
-      entry.opponentId || entry.opponentName || '',
-    ]
-      .map((value) => String(value || '').trim().toLowerCase())
-      .filter(Boolean)
-      .sort()
-      .join('|');
-
-    const key = [entry.gameId, entry.date, participants, entry.arena, entry.city, entry.state]
-      .map((value) => String(value || '').trim().toLowerCase())
-      .filter(Boolean)
-      .join('::');
-
-    const fallbackKey = key || `${entry.teamName ?? ''}::${entry.opponentName ?? ''}::${entry.date ?? ''}`;
-    const bucketKey = fallbackKey.toLowerCase();
-    let bucket = map.get(bucketKey);
-    if (!bucket) {
-      bucket = {
-        gameId: entry.gameId ?? null,
-        date: entry.date ?? null,
-        arena: entry.arena ?? '',
-        city: entry.city ?? '',
-        state: entry.state ?? '',
-        label: entry.label ?? '',
-        participantsMap: new Map(),
-      };
-      map.set(bucketKey, bucket);
-    } else {
-      if (!bucket.gameId && entry.gameId) {
-        bucket.gameId = entry.gameId;
-      }
-      if (!bucket.date && entry.date) {
-        bucket.date = entry.date;
-      }
-      if (!bucket.arena && entry.arena) {
-        bucket.arena = entry.arena;
-      }
-      if (!bucket.city && entry.city) {
-        bucket.city = entry.city;
-      }
-      if (!bucket.state && entry.state) {
-        bucket.state = entry.state;
-      }
-      if (!bucket.label && entry.label) {
-        bucket.label = entry.label;
-      }
-    }
-
-    addParticipantToBucket(bucket, {
-      id: entry.teamId ?? null,
-      name: entry.teamName ?? null,
-      abbreviation: entry.teamAbbreviation ?? null,
-    }, entry.homeAway === 'home' ? 'home' : entry.homeAway === 'away' ? 'away' : null);
-
-    const opponentRole = entry.homeAway === 'home' ? 'away' : entry.homeAway === 'away' ? 'home' : null;
-    addParticipantToBucket(
-      bucket,
-      {
-        id: entry.opponentId ?? null,
-        name: entry.opponentName ?? null,
-        abbreviation: entry.opponentAbbreviation ?? null,
-      },
-      opponentRole,
-    );
-  });
-
-  return Array.from(map.values()).map((bucket) => {
-    const participants = Array.from(bucket.participantsMap.values());
-    return {
-      gameId: bucket.gameId,
-      date: bucket.date,
-      arena: bucket.arena,
-      city: bucket.city,
-      state: bucket.state,
-      label: bucket.label,
-      participants,
-    };
-  });
-}
-
-function addParticipantToBucket(bucket, participant, role) {
-  if (!participant?.name) {
-    return;
-  }
-
-  const key = (participant.id ?? participant.name ?? '').toString().toLowerCase();
-  const existing = bucket.participantsMap.get(key) ?? {
-    id: participant.id ?? null,
-    name: participant.name ?? null,
-    abbreviation: participant.abbreviation ?? null,
-    homeAway: null,
-  };
-
-  if (!existing.abbreviation && participant.abbreviation) {
-    existing.abbreviation = participant.abbreviation;
-  }
-
-  if (role) {
-    if (!existing.homeAway) {
-      existing.homeAway = role;
-    } else if (existing.homeAway !== role) {
-      existing.homeAway = 'neutral';
-    }
-  }
-
-  bucket.participantsMap.set(key, existing);
 }
 
 function renderSeasonLead(scheduleData) {
@@ -1817,19 +1504,10 @@ async function bootstrap() {
 
   renderPreseasonMap();
 
-  const [
-    scheduleData,
-    teamData,
-    storyData,
-    preseasonOpeners,
-    playerLeaders,
-    rosterIndex,
-    franchiseData,
-  ] = await Promise.all([
+  const [scheduleData, teamData, storyData, playerLeaders, rosterIndex, franchiseData] = await Promise.all([
     fetchJsonSafe(scheduleSource),
     fetchJsonSafe('data/team_performance.json'),
     fetchJsonSafe('data/storytelling_walkthroughs.json'),
-    fetchJsonSafe('data/preseason_openers.json'),
     fetchJsonSafe('data/player_leaders.json'),
     fetchJsonSafe('data/players_index.json'),
     fetchJsonSafe('data/active_franchises.json'),
@@ -1839,7 +1517,6 @@ async function bootstrap() {
   renderPaceRadar();
   hydrateHero(teamData);
   renderSeasonLead(scheduleData);
-  renderPreseasonTour(preseasonOpeners);
   renderContenderGrid(teamData);
   renderBackToBack(scheduleData);
   renderMilestoneChase(playerLeaders, rosterIndex, franchiseData);
