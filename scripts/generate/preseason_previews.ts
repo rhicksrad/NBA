@@ -41,6 +41,7 @@ interface PreseasonGame {
   home: ScheduleParticipant;
   coverage?: ScheduleCoverage;
   preview?: PreseasonPreviewOverride;
+  postgame?: PreseasonPostgame;
 }
 
 interface PreseasonSchedule {
@@ -68,6 +69,43 @@ interface PreseasonPreviewOverride {
   narrativeHeading?: string;
   narrativeQuestions?: string[];
   closingNote?: string;
+}
+
+interface PostgameScoreEntry {
+  points: number;
+  record?: string;
+  label?: string;
+}
+
+interface PostgameScore {
+  away: PostgameScoreEntry;
+  home: PostgameScoreEntry;
+}
+
+interface PostgamePerformer {
+  name: string;
+  line?: string;
+}
+
+interface PostgamePerformerGroup {
+  team?: string;
+  players: PostgamePerformer[];
+}
+
+interface PostgameTopPerformers {
+  away?: PostgamePerformerGroup;
+  home?: PostgamePerformerGroup;
+}
+
+interface PreseasonPostgame {
+  mode: "final";
+  headline: string;
+  subhead?: string;
+  summary?: string[];
+  highlights?: string[];
+  topPerformers?: PostgameTopPerformers;
+  score: PostgameScore;
+  footnote?: string;
 }
 
 interface TeamContext {
@@ -2089,6 +2127,437 @@ ${storySection}
 </html>`;
 }
 
+interface RenderPostgameOptions {
+  dataAttribution?: string;
+}
+
+function formatPostgameScoreline(
+  game: PreseasonGame,
+  away: TeamContext | undefined,
+  home: TeamContext | undefined,
+  score: PostgameScore,
+): string {
+  const awayLabel =
+    score.away.label ?? away?.displayName ?? game.away.name ?? game.away.tricode ?? "Away";
+  const homeLabel =
+    score.home.label ?? home?.displayName ?? game.home.name ?? game.home.tricode ?? "Home";
+  return `${awayLabel} ${score.away.points}, ${homeLabel} ${score.home.points}`;
+}
+
+function renderPostgameSummary(summary?: string[]): string {
+  if (!summary || summary.length === 0) {
+    return "";
+  }
+  const paragraphs = summary.map((paragraph) => `<p>${paragraph}</p>`).join("\n        ");
+  return `
+      <section class="postgame-section postgame-summary">
+        <h2>Game flow</h2>
+        ${paragraphs}
+      </section>`;
+}
+
+function renderPostgameHighlights(highlights?: string[]): string {
+  if (!highlights || highlights.length === 0) {
+    return "";
+  }
+  const items = highlights.map((item) => `<li>${item}</li>`).join("\n          ");
+  return `
+      <section class="postgame-section postgame-highlights">
+        <h2>Key takeaways</h2>
+        <ul>
+          ${items}
+        </ul>
+      </section>`;
+}
+
+function renderPostgamePerformerGroup(
+  group: PostgamePerformerGroup | undefined,
+  defaultLabel: string,
+): string {
+  if (!group || group.players.length === 0) {
+    return "";
+  }
+  const heading = group.team ?? `${defaultLabel} standouts`;
+  const items = group.players
+    .map((player) => {
+      const detail = player.line ? ` — ${player.line}` : "";
+      return `<li><strong>${player.name}</strong>${detail}</li>`;
+    })
+    .join("\n              ");
+  return `<article class="postgame-performers__group">
+            <h3>${heading}</h3>
+            <ul>
+              ${items}
+            </ul>
+          </article>`;
+}
+
+function renderPostgamePerformers(
+  topPerformers: PostgameTopPerformers | undefined,
+  away: TeamContext,
+  home: TeamContext,
+): string {
+  if (!topPerformers) {
+    return "";
+  }
+  const groups = [
+    renderPostgamePerformerGroup(topPerformers.away, away.displayName),
+    renderPostgamePerformerGroup(topPerformers.home, home.displayName),
+  ].filter(Boolean);
+  if (!groups.length) {
+    return "";
+  }
+  return `
+      <section class="postgame-section postgame-performers">
+        ${groups.join("\n        ")}
+      </section>`;
+}
+
+function renderPostgamePage(
+  game: PreseasonGame,
+  away: TeamContext,
+  home: TeamContext,
+  postgame: PreseasonPostgame,
+  options: RenderPostgameOptions,
+): string {
+  const label = labelLine(game);
+  const etString = formatDateTime(game.tipoff, "America/New_York");
+  const utcString = formatDateTime(game.tipoff, "UTC");
+  const venueLine = formatVenueLine(game.venue);
+  const neutralNote = neutralSuffix(game.venue, game.notes);
+  const scoreline = formatPostgameScoreline(game, away, home, postgame.score);
+  const resultLabel = `Final · ${scoreline}`;
+  const awayLabel = postgame.score.away.label ?? away.displayName;
+  const homeLabel = postgame.score.home.label ?? home.displayName;
+  const awayPoints = postgame.score.away.points;
+  const homePoints = postgame.score.home.points;
+  const winner =
+    awayPoints === homePoints ? undefined : awayPoints > homePoints ? "away" : "home";
+  const awayRecord = postgame.score.away.record
+    ? `<span class="postgame-team__record">${postgame.score.away.record}</span>`
+    : "";
+  const homeRecord = postgame.score.home.record
+    ? `<span class="postgame-team__record">${postgame.score.home.record}</span>`
+    : "";
+  const awayClass = winner === "away" ? " postgame-team--winner" : "";
+  const homeClass = winner === "home" ? " postgame-team--winner" : "";
+  const awayTag = winner === "away" ? "Winner" : "Final";
+  const homeTag = winner === "home" ? "Winner" : "Final";
+  const summarySection = renderPostgameSummary(postgame.summary);
+  const highlightsSection = renderPostgameHighlights(postgame.highlights);
+  const performersSection = renderPostgamePerformers(postgame.topPerformers, away, home);
+  const footnoteParts: string[] = [];
+  if (postgame.footnote) {
+    footnoteParts.push(postgame.footnote);
+  }
+  if (options.dataAttribution) {
+    footnoteParts.push(options.dataAttribution);
+  }
+  const footnoteMarkup = footnoteParts.length
+    ? `<div class="postgame-footer__notes">${footnoteParts
+        .map((note) => `<span>${note}</span>`)
+        .join('<span class="postgame-footer__divider">·</span>')}</div>`
+    : "";
+  const neutralLine = neutralNote ? ` · ${neutralNote}` : "";
+  const subheadMarkup = postgame.subhead
+    ? `<p class="postgame-header__lead">${postgame.subhead}</p>`
+    : "";
+
+  return `<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Final: ${scoreline}</title>
+    <link rel="stylesheet" href="../styles/hub.css" />
+    <style>
+      body {
+        margin: 0;
+        padding: clamp(1rem, 2.5vw, 2.4rem);
+        display: flex;
+        justify-content: center;
+        background: color-mix(in srgb, var(--surface-alt) 78%, rgba(14, 34, 68, 0.08) 22%);
+      }
+
+      .postgame-shell {
+        width: min(1040px, 100%);
+        display: grid;
+        gap: clamp(1.2rem, 2.6vw, 2.2rem);
+        background: color-mix(in srgb, rgba(255, 255, 255, 0.96) 76%, rgba(242, 246, 255, 0.92) 24%);
+        border-radius: var(--radius-lg);
+        border: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
+        padding: clamp(1.4rem, 2.8vw, 2.35rem);
+        box-shadow: 0 28px 42px rgba(11, 37, 69, 0.08);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .postgame-shell::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle at 18% 16%, rgba(17, 86, 214, 0.12), transparent 45%),
+          radial-gradient(circle at 84% 12%, rgba(239, 61, 91, 0.1), transparent 50%),
+          linear-gradient(160deg, rgba(17, 86, 214, 0.08), rgba(244, 181, 63, 0.06));
+        opacity: 0.45;
+        pointer-events: none;
+      }
+
+      .postgame-shell > * {
+        position: relative;
+      }
+
+      .postgame-header {
+        display: grid;
+        gap: clamp(0.45rem, 1.2vw, 0.85rem);
+        align-content: start;
+      }
+
+      .postgame-header .chip {
+        font-size: 0.7rem;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+      }
+
+      .postgame-header__label {
+        margin: 0;
+        font-size: 0.95rem;
+        color: color-mix(in srgb, var(--navy) 72%, rgba(14, 34, 68, 0.4) 28%);
+      }
+
+      .postgame-header h1 {
+        margin: 0;
+        font-size: clamp(1.6rem, 3vw, 2.2rem);
+        color: var(--navy);
+      }
+
+      .postgame-header__lead {
+        margin: 0;
+        font-size: 1.05rem;
+        color: color-mix(in srgb, var(--navy) 74%, rgba(14, 34, 68, 0.45) 26%);
+      }
+
+      .postgame-scoreboard {
+        display: grid;
+        gap: clamp(1rem, 2vw, 1.6rem);
+        padding: clamp(1.1rem, 2.1vw, 1.65rem);
+        border-radius: var(--radius-lg);
+        border: 1px solid color-mix(in srgb, var(--border) 68%, transparent);
+        background: color-mix(in srgb, var(--surface) 88%, rgba(17, 86, 214, 0.06) 12%);
+      }
+
+      .postgame-scoreboard__teams {
+        display: grid;
+        gap: clamp(0.9rem, 2vw, 1.4rem);
+      }
+
+      @media (min-width: 640px) {
+        .postgame-scoreboard__teams {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      .postgame-team {
+        display: grid;
+        gap: 0.35rem;
+        align-content: start;
+        padding: clamp(0.9rem, 2vw, 1.3rem);
+        border-radius: var(--radius-md);
+        background: color-mix(in srgb, rgba(255, 255, 255, 0.9) 82%, rgba(242, 246, 255, 0.88) 18%);
+        border: 1px solid color-mix(in srgb, var(--border) 60%, transparent);
+      }
+
+      .postgame-team header {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+      }
+
+      .postgame-team__name {
+        font-size: 1.05rem;
+        font-weight: 600;
+        color: var(--navy);
+      }
+
+      .postgame-team__record {
+        font-size: 0.85rem;
+        color: var(--text-subtle);
+      }
+
+      .postgame-team__points {
+        margin: 0;
+        font-size: clamp(2.4rem, 5vw, 3rem);
+        font-weight: 700;
+        color: var(--navy);
+      }
+
+      .postgame-team__tag {
+        font-size: 0.7rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: color-mix(in srgb, var(--navy) 68%, rgba(14, 34, 68, 0.4) 32%);
+      }
+
+      .postgame-team--winner {
+        border-color: color-mix(in srgb, var(--royal) 60%, transparent);
+        box-shadow: 0 12px 24px rgba(21, 82, 240, 0.16);
+      }
+
+      .postgame-team--winner .postgame-team__points {
+        color: var(--royal);
+      }
+
+      .postgame-scoreboard__meta {
+        display: grid;
+        gap: 0.35rem;
+        font-size: 0.95rem;
+        color: color-mix(in srgb, var(--navy) 68%, rgba(14, 34, 68, 0.42) 32%);
+      }
+
+      .postgame-scoreboard__result {
+        font-weight: 600;
+        color: var(--navy);
+        font-size: 1.05rem;
+      }
+
+      .postgame-section {
+        display: grid;
+        gap: 0.75rem;
+      }
+
+      .postgame-section h2 {
+        margin: 0;
+        font-size: 1.2rem;
+        color: var(--navy);
+      }
+
+      .postgame-section p {
+        margin: 0;
+        font-size: 1rem;
+        line-height: 1.6;
+        color: color-mix(in srgb, var(--navy) 78%, rgba(14, 34, 68, 0.32) 22%);
+      }
+
+      .postgame-highlights ul,
+      .postgame-performers ul {
+        margin: 0;
+        padding-left: 1.2rem;
+        display: grid;
+        gap: 0.5rem;
+        font-size: 0.98rem;
+        color: color-mix(in srgb, var(--navy) 78%, rgba(14, 34, 68, 0.32) 22%);
+      }
+
+      .postgame-performers {
+        display: grid;
+        gap: clamp(0.9rem, 2vw, 1.4rem);
+      }
+
+      @media (min-width: 720px) {
+        .postgame-performers {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      .postgame-performers__group {
+        border: 1px solid color-mix(in srgb, var(--border) 62%, transparent);
+        border-radius: var(--radius-md);
+        padding: clamp(0.9rem, 2vw, 1.25rem);
+        background: color-mix(in srgb, rgba(255, 255, 255, 0.92) 78%, rgba(242, 246, 255, 0.9) 22%);
+      }
+
+      .postgame-performers__group h3 {
+        margin: 0 0 0.5rem;
+        font-size: 1.05rem;
+        color: var(--navy);
+      }
+
+      .postgame-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        font-size: 0.85rem;
+        color: var(--text-subtle);
+      }
+
+      .postgame-footer a {
+        color: var(--royal);
+        text-decoration: none;
+        font-weight: 600;
+      }
+
+      .postgame-footer a:hover {
+        text-decoration: underline;
+      }
+
+      .postgame-footer__notes {
+        display: flex;
+        gap: 0.35rem;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+
+      .postgame-footer__divider {
+        color: color-mix(in srgb, var(--text-subtle) 68%, transparent);
+      }
+    </style>
+  </head>
+  <body>
+    <main class="postgame-shell">
+      <header class="postgame-header">
+        <span class="chip">Preseason Final</span>
+        <p class="postgame-header__label">${label}</p>
+        <h1>${postgame.headline}</h1>
+        ${subheadMarkup}
+      </header>
+
+      <section class="postgame-scoreboard">
+        <div class="postgame-scoreboard__teams">
+          <article class="postgame-team${awayClass}">
+            <header>
+              <span class="postgame-team__name">${awayLabel}</span>
+              ${awayRecord}
+            </header>
+            <p class="postgame-team__points">${awayPoints}</p>
+            <span class="postgame-team__tag">${awayTag}</span>
+          </article>
+          <article class="postgame-team${homeClass}">
+            <header>
+              <span class="postgame-team__name">${homeLabel}</span>
+              ${homeRecord}
+            </header>
+            <p class="postgame-team__points">${homePoints}</p>
+            <span class="postgame-team__tag">${homeTag}</span>
+          </article>
+        </div>
+        <div class="postgame-scoreboard__meta">
+          <p class="postgame-scoreboard__result">${resultLabel}</p>
+          <p>${label}</p>
+          <p>${venueLine}${neutralLine}</p>
+          <p>${etString}</p>
+          <p>${utcString} (UTC)</p>
+        </div>
+      </section>
+
+${summarySection}
+
+${highlightsSection}
+
+${performersSection}
+
+      <footer class="postgame-footer">
+        ${footnoteMarkup}
+        <a href="./index.html">← Back to preseason schedule</a>
+      </footer>
+    </main>
+  </body>
+</html>`;
+}
+
 function labelLine(game: PreseasonGame): string {
   if (game.subLabel) {
     return `${game.label} · ${game.subLabel}`;
@@ -2096,15 +2565,23 @@ function labelLine(game: PreseasonGame): string {
   return game.label;
 }
 
-function renderIndex(schedule: PreseasonSchedule, awayContexts: Map<string, TeamContext>, homeContexts: Map<string, TeamContext>): string {
+function renderIndex(
+  schedule: PreseasonSchedule,
+  awayContexts: Map<string, TeamContext>,
+  homeContexts: Map<string, TeamContext>,
+): string {
   const rows = schedule.games
     .map((game) => {
       const away = awayContexts.get(game.id);
       const home = homeContexts.get(game.id);
-      const etString = formatDateTime(game.tipoff, "America/New_York");
+      const awayName = away?.displayName ?? game.away.name ?? game.away.tricode ?? "Away";
+      const homeName = home?.displayName ?? game.home.name ?? game.home.tricode ?? "Home";
       const slug = slugify(game.id);
-      const matchup = `${away?.displayName ?? "Away"} at ${home?.displayName ?? "Home"}`;
-      return `<li><a href="preseason-${slug}.html">${matchup}</a> — ${etString}</li>`;
+      const descriptor =
+        game.postgame?.mode === "final"
+          ? `Final · ${formatPostgameScoreline(game, away, home, game.postgame.score)}`
+          : formatDateTime(game.tipoff, "America/New_York");
+      return `<li><a href="preseason-${slug}.html">${awayName} at ${homeName}</a> — ${descriptor}</li>`;
     })
     .join("\n        ");
 
@@ -2157,8 +2634,8 @@ function renderIndex(schedule: PreseasonSchedule, awayContexts: Map<string, Team
   </head>
   <body>
     <main>
-      <h1>${SEASON} preseason previews</h1>
-      <p>The opening week of exhibition action features international showcases and early tests for every rotation hopeful. Explore each matchup preview below.</p>
+      <h1>${SEASON} preseason previews & finals</h1>
+      <p>Follow each exhibition matchup from procedural preview through its locked recap. Once a game reaches its final horn, the postgame story stays put.</p>
       <ul>
         ${rows}
       </ul>
@@ -2282,26 +2759,40 @@ async function generatePreseasonPreviews(): Promise<void> {
     awayIndex.set(game.id, away);
     homeIndex.set(game.id, home);
 
-    const generatedPreview = buildGeneratedPreview(game, away, home, formatVenueLine(game.venue), dataMeta);
-    const manualPreview = game.preview;
-    const summaryTagline = manualPreview?.summaryTagline ?? generatedPreview.summaryTagline;
-    const matchupSnapshotItems = manualPreview?.matchupSnapshotItems ?? generatedPreview.matchupSnapshotItems;
-    const storylines = mergeStorylines(generatedPreview.storylines, manualPreview?.storylines);
-    const narrativeHeading = manualPreview?.narrativeHeading ?? generatedPreview.narrativeHeading;
-    const narrativeQuestions = manualPreview?.narrativeQuestions ?? generatedPreview.narrativeQuestions;
-    const closingNote = manualPreview?.closingNote ?? generatedPreview.closingNote;
-
     const slug = slugify(game.id);
     const filePath = path.join(PREVIEWS_DIR, `preseason-${slug}.html`);
-    const html = renderGamePage(game, away, home, metricExtents, {
-      summaryTagline,
-      matchupSnapshotItems,
-      storylines,
-      narrativeQuestions,
-      narrativeHeading,
-      closingNote,
-      dataAttribution,
-    });
+    const html =
+      game.postgame?.mode === "final"
+        ? renderPostgamePage(game, away, home, game.postgame, { dataAttribution })
+        : (() => {
+            const generatedPreview = buildGeneratedPreview(
+              game,
+              away,
+              home,
+              formatVenueLine(game.venue),
+              dataMeta,
+            );
+            const manualPreview = game.preview;
+            const summaryTagline = manualPreview?.summaryTagline ?? generatedPreview.summaryTagline;
+            const matchupSnapshotItems =
+              manualPreview?.matchupSnapshotItems ?? generatedPreview.matchupSnapshotItems;
+            const storylines = mergeStorylines(generatedPreview.storylines, manualPreview?.storylines);
+            const narrativeHeading =
+              manualPreview?.narrativeHeading ?? generatedPreview.narrativeHeading;
+            const narrativeQuestions =
+              manualPreview?.narrativeQuestions ?? generatedPreview.narrativeQuestions;
+            const closingNote = manualPreview?.closingNote ?? generatedPreview.closingNote;
+
+            return renderGamePage(game, away, home, metricExtents, {
+              summaryTagline,
+              matchupSnapshotItems,
+              storylines,
+              narrativeQuestions,
+              narrativeHeading,
+              closingNote,
+              dataAttribution,
+            });
+          })();
     await writeFile(filePath, `${html}\n`, "utf8");
   }
 

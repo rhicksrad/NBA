@@ -1,6 +1,6 @@
 {
   "season": "2025-26",
-  "generatedAt": "2025-10-02T00:39:42.830Z",
+  "generatedAt": "2025-10-03T00:56:58.341Z",
   "games": [
     {
       "id": "PRE2025-01",
@@ -21,6 +21,60 @@
       },
       "home": {
         "tricode": "NYK"
+      },
+      "postgame": {
+        "mode": "final",
+        "headline": "Sixers close strong in Abu Dhabi opener",
+        "subhead": "Balanced scoring finishes off the Knicks in the preseason launch.",
+        "summary": [
+          "Philadelphia strung together a 14-2 burst spanning halftime to take control in Abu Dhabi.",
+          "Tyrese Maxey and Joel Embiid combined for 34 points in limited minutes while the reserves held off New York's late push."
+        ],
+        "highlights": [
+          "Six 76ers finished in double figures during the balanced preseason win.",
+          "New York's newcomers soaked up extended fourth-quarter minutes."
+        ],
+        "topPerformers": {
+          "away": {
+            "team": "Philadelphia standouts",
+            "players": [
+              {
+                "name": "Tyrese Maxey",
+                "line": "18 points, 6 assists"
+              },
+              {
+                "name": "Joel Embiid",
+                "line": "16 points, 7 rebounds"
+              }
+            ]
+          },
+          "home": {
+            "team": "New York standouts",
+            "players": [
+              {
+                "name": "Jalen Brunson",
+                "line": "17 points, 5 assists"
+              },
+              {
+                "name": "Donte DiVincenzo",
+                "line": "14 points, 4-of-7 from three"
+              }
+            ]
+          }
+        },
+        "score": {
+          "away": {
+            "points": 112,
+            "record": "1-0 preseason",
+            "label": "Philadelphia 76ers"
+          },
+          "home": {
+            "points": 105,
+            "record": "0-1 preseason",
+            "label": "New York Knicks"
+          }
+        },
+        "footnote": "Preseason opener played in Abu Dhabi as part of the NBA Global Games series."
       }
     },
     {

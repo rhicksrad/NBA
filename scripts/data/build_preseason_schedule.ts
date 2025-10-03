@@ -51,6 +51,43 @@ interface RawPreview {
   closingNote?: unknown;
 }
 
+interface RawPostgameScoreEntry {
+  points?: unknown;
+  record?: unknown;
+  label?: unknown;
+}
+
+interface RawPostgameScore {
+  away?: unknown;
+  home?: unknown;
+}
+
+interface RawPostgamePerformer {
+  name?: unknown;
+  line?: unknown;
+}
+
+interface RawPostgamePerformerGroup {
+  team?: unknown;
+  players?: unknown;
+}
+
+interface RawPostgameTopPerformers {
+  away?: unknown;
+  home?: unknown;
+}
+
+interface RawPostgame {
+  mode?: unknown;
+  headline?: unknown;
+  subhead?: unknown;
+  summary?: unknown;
+  highlights?: unknown;
+  topPerformers?: unknown;
+  score?: unknown;
+  footnote?: unknown;
+}
+
 interface RawGame {
   id?: unknown;
   tipoff?: unknown;
@@ -64,6 +101,7 @@ interface RawGame {
   preview?: unknown;
   useBdl?: unknown;
   bdlId?: unknown;
+  postgame?: unknown;
 }
 
 interface ScheduleParticipant {
@@ -97,6 +135,7 @@ interface PreseasonGame {
   home: ScheduleParticipant;
   coverage?: ScheduleCoverage;
   preview?: PreseasonPreviewOverride;
+  postgame?: PreseasonPostgame;
 }
 
 interface PreseasonSchedule {
@@ -126,6 +165,43 @@ interface PreseasonPreviewOverride {
   closingNote?: string;
 }
 
+interface PostgameScoreEntry {
+  points: number;
+  record?: string;
+  label?: string;
+}
+
+interface PostgameScore {
+  away: PostgameScoreEntry;
+  home: PostgameScoreEntry;
+}
+
+interface PostgamePerformer {
+  name: string;
+  line?: string;
+}
+
+interface PostgamePerformerGroup {
+  team?: string;
+  players: PostgamePerformer[];
+}
+
+interface PostgameTopPerformers {
+  away?: PostgamePerformerGroup;
+  home?: PostgamePerformerGroup;
+}
+
+interface PreseasonPostgame {
+  mode: "final";
+  headline: string;
+  subhead?: string;
+  summary?: string[];
+  highlights?: string[];
+  topPerformers?: PostgameTopPerformers;
+  score: PostgameScore;
+  footnote?: string;
+}
+
 function ensureString(value: unknown): string | undefined {
   if (typeof value === "string") {
     const trimmed = value.trim();
@@ -137,6 +213,23 @@ function ensureString(value: unknown): string | undefined {
 function ensureBoolean(value: unknown): boolean | undefined {
   if (typeof value === "boolean") {
     return value;
+  }
+  return undefined;
+}
+
+function ensureNumber(value: unknown): number | undefined {
+  if (typeof value === "number" && Number.isFinite(value)) {
+    return value;
+  }
+  if (typeof value === "string") {
+    const trimmed = value.trim();
+    if (!trimmed) {
+      return undefined;
+    }
+    const parsed = Number(trimmed);
+    if (Number.isFinite(parsed)) {
+      return parsed;
+    }
   }
   return undefined;
 }
@@ -299,6 +392,109 @@ function normalizePreview(raw: unknown): PreseasonPreviewOverride | undefined {
   };
 }
 
+function normalizePostgameScoreEntry(raw: unknown, role: "away" | "home"): PostgameScoreEntry {
+  if (!raw || typeof raw !== "object") {
+    throw new Error(`Postgame score for ${role} must be provided`);
+  }
+  const source = raw as RawPostgameScoreEntry;
+  const points = ensureNumber(source.points);
+  if (points === undefined) {
+    throw new Error(`Postgame score for ${role} requires a points value`);
+  }
+  const record = ensureString(source.record);
+  const label = ensureString(source.label);
+  return { points, record, label };
+}
+
+function normalizePostgameScore(raw: unknown): PostgameScore {
+  if (!raw || typeof raw !== "object") {
+    throw new Error("Postgame score must be defined when postgame data is provided");
+  }
+  const source = raw as RawPostgameScore;
+  const away = normalizePostgameScoreEntry(source.away, "away");
+  const home = normalizePostgameScoreEntry(source.home, "home");
+  return { away, home };
+}
+
+function normalizePostgamePerformer(raw: unknown): PostgamePerformer | undefined {
+  if (!raw || typeof raw !== "object") {
+    return undefined;
+  }
+  const source = raw as RawPostgamePerformer;
+  const name = ensureString(source.name);
+  if (!name) {
+    return undefined;
+  }
+  const line = ensureString(source.line);
+  return { name, line };
+}
+
+function normalizePostgamePerformerGroup(raw: unknown): PostgamePerformerGroup | undefined {
+  if (!raw || typeof raw !== "object") {
+    return undefined;
+  }
+  const source = raw as RawPostgamePerformerGroup;
+  const team = ensureString(source.team);
+  const playersRaw = Array.isArray(source.players) ? source.players : [];
+  const players = playersRaw
+    .map((player) => normalizePostgamePerformer(player))
+    .filter((player): player is PostgamePerformer => Boolean(player));
+  if (!players.length) {
+    return undefined;
+  }
+  return { team, players };
+}
+
+function normalizePostgameTopPerformers(raw: unknown): PostgameTopPerformers | undefined {
+  if (!raw || typeof raw !== "object") {
+    return undefined;
+  }
+  const source = raw as RawPostgameTopPerformers;
+  const away = normalizePostgamePerformerGroup(source.away);
+  const home = normalizePostgamePerformerGroup(source.home);
+  if (!away && !home) {
+    return undefined;
+  }
+  return {
+    away: away ?? undefined,
+    home: home ?? undefined,
+  };
+}
+
+function normalizePostgame(raw: unknown): PreseasonPostgame | undefined {
+  if (!raw || typeof raw !== "object") {
+    return undefined;
+  }
+  const source = raw as RawPostgame;
+  const modeLabel = ensureString(source.mode)?.toLowerCase();
+  const modeValue = modeLabel ?? "final";
+  if (modeValue !== "final") {
+    throw new Error(`Unsupported postgame mode ${modeLabel}`);
+  }
+  const mode: "final" = "final";
+  const headline = ensureString(source.headline);
+  if (!headline) {
+    throw new Error("Postgame headline is required when postgame data is provided");
+  }
+  const score = normalizePostgameScore(source.score);
+  const subhead = ensureString(source.subhead);
+  const summary = ensureStringArray(source.summary);
+  const highlights = ensureStringArray(source.highlights);
+  const topPerformers = normalizePostgameTopPerformers(source.topPerformers);
+  const footnote = ensureString(source.footnote);
+
+  return {
+    mode,
+    headline,
+    subhead,
+    summary: summary && summary.length ? summary : undefined,
+    highlights: highlights && highlights.length ? highlights : undefined,
+    topPerformers,
+    score,
+    footnote,
+  };
+}
+
 interface BdlFallbackGame {
   id: string;
   tipoff: string;
@@ -371,6 +567,7 @@ function normalizeGame(raw: RawGame, bdlLookup?: Map<string, BdlGame>): Preseaso
   const home = normalizeParticipant(raw.home, "home", bdlFallback?.home);
   const coverage = normalizeCoverage(raw.coverage);
   const preview = normalizePreview(raw.preview);
+  const postgame = normalizePostgame(raw.postgame);
 
   return {
     id,
@@ -383,6 +580,7 @@ function normalizeGame(raw: RawGame, bdlLookup?: Map<string, BdlGame>): Preseaso
     home,
     coverage,
     preview,
+    postgame,
   };
 }
 

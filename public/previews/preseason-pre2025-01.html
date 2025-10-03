@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Preseason Preview: Philadelphia 76ers at New York Knicks</title>
+    <title>Final: Philadelphia 76ers 112, New York Knicks 105</title>
     <link rel="stylesheet" href="../styles/hub.css" />
     <style>
       body {
@@ -14,11 +14,11 @@
         background: color-mix(in srgb, var(--surface-alt) 78%, rgba(14, 34, 68, 0.08) 22%);
       }
 
-      .preview-shell {
+      .postgame-shell {
         width: min(1040px, 100%);
         display: grid;
-        gap: clamp(1.1rem, 2.6vw, 2.15rem);
-        background: color-mix(in srgb, rgba(255, 255, 255, 0.95) 74%, rgba(242, 246, 255, 0.92) 26%);
+        gap: clamp(1.2rem, 2.6vw, 2.2rem);
+        background: color-mix(in srgb, rgba(255, 255, 255, 0.96) 76%, rgba(242, 246, 255, 0.92) 24%);
         border-radius: var(--radius-lg);
         border: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
         padding: clamp(1.4rem, 2.8vw, 2.35rem);
@@ -27,1130 +27,293 @@
         overflow: hidden;
       }
 
-      .preview-shell::before {
+      .postgame-shell::before {
         content: "";
         position: absolute;
         inset: 0;
-        background: radial-gradient(circle at 12% 18%, rgba(17, 86, 214, 0.12), transparent 45%),
-          radial-gradient(circle at 88% 12%, rgba(239, 61, 91, 0.1), transparent 50%),
+        background: radial-gradient(circle at 18% 16%, rgba(17, 86, 214, 0.12), transparent 45%),
+          radial-gradient(circle at 84% 12%, rgba(239, 61, 91, 0.1), transparent 50%),
           linear-gradient(160deg, rgba(17, 86, 214, 0.08), rgba(244, 181, 63, 0.06));
         opacity: 0.45;
         pointer-events: none;
       }
 
-      .preview-shell > * {
+      .postgame-shell > * {
         position: relative;
       }
 
-      .preview-header {
+      .postgame-header {
         display: grid;
-        gap: clamp(0.35rem, 1vw, 0.6rem);
-        padding: clamp(1.1rem, 2.2vw, 1.6rem);
-        border-radius: var(--radius-lg);
-        border: 1px solid color-mix(in srgb, var(--border) 65%, transparent);
-        background: color-mix(in srgb, var(--surface) 82%, rgba(17, 86, 214, 0.06) 18%);
+        gap: clamp(0.45rem, 1.2vw, 0.85rem);
         align-content: start;
       }
 
-      @media (min-width: 720px) {
-        .preview-header {
-          grid-template-columns: repeat(2, minmax(0, 1fr));
-          gap: clamp(0.45rem, 1vw, 0.75rem);
-        }
-
-        .preview-header .chip,
-        .preview-header h1,
-        .preview-header .lead {
-          grid-column: 1 / -1;
-        }
-      }
-
-      .preview-header .chip {
+      .postgame-header .chip {
         font-size: 0.7rem;
         letter-spacing: 0.16em;
         text-transform: uppercase;
       }
 
-      .preview-header time,
-      .preview-header p:not(.lead) {
+      .postgame-header__label {
         margin: 0;
-        font-size: 0.92rem;
-        color: color-mix(in srgb, var(--navy) 72%, rgba(14, 34, 68, 0.38) 28%);
+        font-size: 0.95rem;
+        color: color-mix(in srgb, var(--navy) 72%, rgba(14, 34, 68, 0.4) 28%);
       }
 
-      .preview-header h1 {
+      .postgame-header h1 {
         margin: 0;
-        font-size: clamp(1.65rem, 3.6vw, 2.15rem);
-        line-height: 1.08;
-        letter-spacing: -0.01em;
+        font-size: clamp(1.6rem, 3vw, 2.2rem);
         color: var(--navy);
       }
 
-      .preview-header .lead {
-        font-size: 0.98rem;
+      .postgame-header__lead {
+        margin: 0;
+        font-size: 1.05rem;
+        color: color-mix(in srgb, var(--navy) 74%, rgba(14, 34, 68, 0.45) 26%);
+      }
+
+      .postgame-scoreboard {
+        display: grid;
+        gap: clamp(1rem, 2vw, 1.6rem);
+        padding: clamp(1.1rem, 2.1vw, 1.65rem);
+        border-radius: var(--radius-lg);
+        border: 1px solid color-mix(in srgb, var(--border) 68%, transparent);
+        background: color-mix(in srgb, var(--surface) 88%, rgba(17, 86, 214, 0.06) 12%);
+      }
+
+      .postgame-scoreboard__teams {
+        display: grid;
+        gap: clamp(0.9rem, 2vw, 1.4rem);
+      }
+
+      @media (min-width: 640px) {
+        .postgame-scoreboard__teams {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      .postgame-team {
+        display: grid;
+        gap: 0.35rem;
+        align-content: start;
+        padding: clamp(0.9rem, 2vw, 1.3rem);
+        border-radius: var(--radius-md);
+        background: color-mix(in srgb, rgba(255, 255, 255, 0.9) 82%, rgba(242, 246, 255, 0.88) 18%);
+        border: 1px solid color-mix(in srgb, var(--border) 60%, transparent);
+      }
+
+      .postgame-team header {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+      }
+
+      .postgame-team__name {
+        font-size: 1.05rem;
+        font-weight: 600;
+        color: var(--navy);
+      }
+
+      .postgame-team__record {
+        font-size: 0.85rem;
         color: var(--text-subtle);
       }
 
-      .preview-summary {
-        display: grid;
-        gap: clamp(0.85rem, 2.2vw, 1.4rem);
-        padding: clamp(1.05rem, 2.4vw, 1.6rem);
-        border-radius: var(--radius-lg);
-        border: 1px solid color-mix(in srgb, var(--border) 65%, transparent);
-        background: color-mix(in srgb, var(--surface) 86%, rgba(17, 86, 214, 0.04) 14%);
-      }
-
-      .preview-summary__header {
-        display: grid;
-        gap: 0.3rem;
-      }
-
-      .preview-summary__title {
+      .postgame-team__points {
         margin: 0;
-        font-size: 0.78rem;
+        font-size: clamp(2.4rem, 5vw, 3rem);
+        font-weight: 700;
+        color: var(--navy);
+      }
+
+      .postgame-team__tag {
+        font-size: 0.7rem;
         letter-spacing: 0.14em;
         text-transform: uppercase;
         color: color-mix(in srgb, var(--navy) 68%, rgba(14, 34, 68, 0.4) 32%);
       }
 
-      .preview-summary__tagline {
-        margin: 0;
-        font-size: 0.93rem;
-        color: var(--text-subtle);
-        max-width: 60ch;
+      .postgame-team--winner {
+        border-color: color-mix(in srgb, var(--royal) 60%, transparent);
+        box-shadow: 0 12px 24px rgba(21, 82, 240, 0.16);
       }
 
-      .preview-summary__grid {
-        display: grid;
-        gap: clamp(0.85rem, 2.4vw, 1.4rem);
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      }
-
-      .preview-summary__card {
-        display: grid;
-        gap: 0.55rem;
-        padding: clamp(0.9rem, 2.2vw, 1.3rem);
-        border-radius: var(--radius-lg);
-        border: 1px solid color-mix(in srgb, var(--border) 65%, transparent);
-        background: color-mix(in srgb, rgba(255, 255, 255, 0.95) 72%, rgba(242, 246, 255, 0.92) 28%);
-        box-shadow: 0 18px 28px rgba(11, 37, 69, 0.06);
-      }
-
-      .preview-summary__card h2 {
-        margin: 0;
-        font-size: 0.98rem;
-        color: var(--navy);
-      }
-
-      .preview-summary__card p {
-        margin: 0;
-        font-size: 0.93rem;
-        color: var(--text-subtle);
-      }
-
-      .preview-summary__list {
-        margin: 0.3rem 0 0 0;
-        padding: 0;
-        list-style: none;
-        display: grid;
-        gap: 0.4rem;
-        font-size: 0.93rem;
-        color: var(--text-subtle);
-      }
-
-      .preview-summary__list li {
-        margin: 0;
-        padding-left: 1rem;
-        position: relative;
-      }
-
-      .preview-summary__list li::before {
-        content: "•";
-        position: absolute;
-        left: 0;
+      .postgame-team--winner .postgame-team__points {
         color: var(--royal);
-        font-weight: 700;
       }
 
-      .preview-body {
-        display: grid;
-        gap: clamp(1rem, 2.6vw, 1.7rem);
-      }
-
-      @media (min-width: 960px) {
-        .preview-body {
-          grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
-          align-items: start;
-        }
-      }
-
-      .preview-card {
-        display: grid;
-        gap: clamp(0.7rem, 2vw, 1.2rem);
-        padding: clamp(1rem, 2.4vw, 1.6rem);
-        border-radius: var(--radius-lg);
-        border: 1px solid color-mix(in srgb, var(--border) 68%, transparent);
-        background: color-mix(in srgb, var(--surface) 90%, rgba(17, 86, 214, 0.04) 10%);
-        box-shadow: 0 22px 32px rgba(11, 37, 69, 0.07);
-      }
-
-      .preview-card--story {
-        background: color-mix(in srgb, var(--surface) 88%, rgba(239, 61, 91, 0.05) 12%);
-      }
-
-      .preview-card--visuals {
-        background: color-mix(in srgb, var(--surface) 88%, rgba(17, 86, 214, 0.06) 12%);
-      }
-
-      .preview-story h2 {
-        margin: 0;
-        font-size: 1.18rem;
-        color: var(--navy);
-      }
-
-      .preview-story__lead {
-        margin: 0;
-        font-size: 1rem;
-        color: var(--text-strong);
-      }
-
-      .preview-story__paragraph {
-        margin: 0;
-        color: var(--text-subtle);
-        font-size: 0.95rem;
-      }
-
-      .preview-story__lead + .preview-story__paragraph,
-      .preview-story__paragraph + .preview-story__paragraph {
-        margin-top: 0.6rem;
-      }
-
-      .preview-story__list {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-        display: grid;
-        gap: 0.6rem;
-      }
-
-      .preview-story__list li {
-        margin: 0;
-        position: relative;
-        padding-left: 1.5rem;
-        font-weight: 600;
-        color: var(--text-strong);
-      }
-
-      .preview-story__list li::before {
-        content: "";
-        position: absolute;
-        left: 0;
-        top: 0.4rem;
-        width: 0.55rem;
-        height: 0.55rem;
-        border-radius: 50%;
-        background: linear-gradient(135deg, rgba(17, 86, 214, 0.85), rgba(244, 181, 63, 0.75));
-        box-shadow: 0 0 0 3px color-mix(in srgb, rgba(17, 86, 214, 0.1) 60%, rgba(255, 255, 255, 0.92) 40%);
-      }
-
-      .preview-story__list--numbered {
-        counter-reset: storyline;
-        gap: 1rem;
-      }
-
-      .preview-story__list--numbered li {
-        padding-left: 2.35rem;
-        font-weight: 400;
-      }
-
-      .preview-story__list--numbered li::before {
-        counter-increment: storyline;
-        content: counter(storyline);
-        display: grid;
-        place-items: center;
-        width: 1.4rem;
-        height: 1.4rem;
-        border-radius: 999px;
-        background: linear-gradient(135deg, rgba(17, 86, 214, 0.92), rgba(239, 61, 91, 0.85));
-        color: #fff;
-        font-weight: 700;
-        top: 0;
-        box-shadow: 0 0 0 3px color-mix(in srgb, rgba(17, 86, 214, 0.1) 60%, rgba(255, 255, 255, 0.92) 40%);
-      }
-
-      .preview-story__item-title {
-        margin: 0;
-        font-size: 1.05rem;
-        color: var(--navy);
-      }
-
-      .preview-story__item-title + .preview-story__lead,
-      .preview-story__item-title + .preview-story__paragraph {
-        margin-top: 0.45rem;
-      }
-
-      .preview-story__item-bullets {
-        margin: 0.75rem 0 0 0;
-        padding-left: 1.2rem;
+      .postgame-scoreboard__meta {
         display: grid;
         gap: 0.35rem;
-        color: var(--text-subtle);
-        list-style: disc;
-      }
-
-      .preview-story__item-bullets li {
-        margin: 0;
-        padding: 0;
-        position: static;
-        font-weight: 500;
-        color: var(--text-subtle);
-        font-size: 0.93rem;
-      }
-
-      .preview-story__item-bullets li::before {
-        content: none;
-      }
-
-      .preview-story__narratives {
-        margin-top: 1.2rem;
-        display: grid;
-        gap: 0.65rem;
-      }
-
-      .preview-story__narratives h3 {
-        margin: 0;
-        font-size: 0.88rem;
-        letter-spacing: 0.12em;
-        text-transform: uppercase;
-        color: color-mix(in srgb, var(--navy) 68%, rgba(14, 34, 68, 0.4) 32%);
-      }
-
-      .preview-story__note {
-        margin: 1.1rem 0 0 0;
-        color: var(--text-subtle);
-        font-style: italic;
-        font-size: 0.9rem;
-      }
-
-      .preview-visuals {
-        display: grid;
-        gap: clamp(0.9rem, 2.4vw, 1.4rem);
-      }
-
-      .preview-visuals__header {
-        display: grid;
-        gap: 0.45rem;
-      }
-
-      .preview-visuals__header h2 {
-        margin: 0;
-      }
-
-      .preview-visuals__header p {
-        margin: 0;
-        color: var(--text-subtle);
         font-size: 0.95rem;
+        color: color-mix(in srgb, var(--navy) 68%, rgba(14, 34, 68, 0.42) 32%);
       }
 
-      .preview-visuals__grid {
+      .postgame-scoreboard__result {
+        font-weight: 600;
+        color: var(--navy);
+        font-size: 1.05rem;
+      }
+
+      .postgame-section {
         display: grid;
-        gap: clamp(1rem, 3vw, 1.6rem);
+        gap: 0.75rem;
       }
 
-      @media (min-width: 900px) {
-        .preview-visuals__grid {
+      .postgame-section h2 {
+        margin: 0;
+        font-size: 1.2rem;
+        color: var(--navy);
+      }
+
+      .postgame-section p {
+        margin: 0;
+        font-size: 1rem;
+        line-height: 1.6;
+        color: color-mix(in srgb, var(--navy) 78%, rgba(14, 34, 68, 0.32) 22%);
+      }
+
+      .postgame-highlights ul,
+      .postgame-performers ul {
+        margin: 0;
+        padding-left: 1.2rem;
+        display: grid;
+        gap: 0.5rem;
+        font-size: 0.98rem;
+        color: color-mix(in srgb, var(--navy) 78%, rgba(14, 34, 68, 0.32) 22%);
+      }
+
+      .postgame-performers {
+        display: grid;
+        gap: clamp(0.9rem, 2vw, 1.4rem);
+      }
+
+      @media (min-width: 720px) {
+        .postgame-performers {
           grid-template-columns: repeat(2, minmax(0, 1fr));
         }
       }
 
-      .preview-visuals__team {
-        display: grid;
-        gap: 0.9rem;
+      .postgame-performers__group {
+        border: 1px solid color-mix(in srgb, var(--border) 62%, transparent);
+        border-radius: var(--radius-md);
+        padding: clamp(0.9rem, 2vw, 1.25rem);
+        background: color-mix(in srgb, rgba(255, 255, 255, 0.92) 78%, rgba(242, 246, 255, 0.9) 22%);
       }
 
-      .preview-visuals__team-header {
-        display: flex;
-        align-items: baseline;
-        justify-content: space-between;
-        gap: 0.75rem;
-        flex-wrap: wrap;
-      }
-
-      .preview-visuals__team-header h3 {
-        margin: 0;
-        font-size: 1.15rem;
+      .postgame-performers__group h3 {
+        margin: 0 0 0.5rem;
+        font-size: 1.05rem;
         color: var(--navy);
       }
 
-      .preview-visuals__chip {
-        font-size: 0.7rem;
-        letter-spacing: 0.08em;
-      }
-
-      .preview-visuals__empty {
-        margin: 0;
-        font-size: 0.95rem;
-        color: var(--text-subtle);
-      }
-
-      footer {
+      .postgame-footer {
         display: flex;
         justify-content: space-between;
+        align-items: center;
         flex-wrap: wrap;
         gap: 0.75rem;
         font-size: 0.85rem;
         color: var(--text-subtle);
       }
 
-      footer a {
+      .postgame-footer a {
         color: var(--royal);
         text-decoration: none;
         font-weight: 600;
       }
 
-      footer a:hover {
+      .postgame-footer a:hover {
         text-decoration: underline;
+      }
+
+      .postgame-footer__notes {
+        display: flex;
+        gap: 0.35rem;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+
+      .postgame-footer__divider {
+        color: color-mix(in srgb, var(--text-subtle) 68%, transparent);
       }
     </style>
   </head>
   <body>
-    <main class="preview-shell">
-      <header class="preview-header">
-        <span class="chip">Preseason Preview</span>
-        <time datetime="2025-10-02T16:00:00.000Z">Thursday, October 2, 2025 at 12:00 PM EDT</time>
-        <p>Thursday, October 2, 2025 at 4:00 PM UTC (UTC)</p>
-        <h1>Philadelphia 76ers at New York Knicks</h1>
-        <p><strong>Etihad Arena · Abu Dhabi, United Arab Emirates</strong> · Neutral Site</p>
-        <p class="lead">NBA Abu Dhabi Game</p>
+    <main class="postgame-shell">
+      <header class="postgame-header">
+        <span class="chip">Preseason Final</span>
+        <p class="postgame-header__label">Preseason · NBA Abu Dhabi Game</p>
+        <h1>Sixers close strong in Abu Dhabi opener</h1>
+        <p class="postgame-header__lead">Balanced scoring finishes off the Knicks in the preseason launch.</p>
       </header>
 
-      <section class="preview-summary">
-        <header class="preview-summary__header">
-          <h2 class="preview-summary__title">Game essentials</h2>
-          <p class="preview-summary__tagline">Philadelphia 76ers test guards Eric Gordon, Hunter Sallis, and Jared McCain as camp reps ramp up. New York Knicks spotlight guards Garrison Mathews, Jalen Brunson, and Jordan Clarkson while tracking chemistry.</p>
-        </header>
-        <div class="preview-summary__grid">
-          <section class="preview-summary__card">
-            <h2>Matchup snapshot</h2>
-
-            <ul class="preview-summary__list">
-              <li>Philadelphia 76ers vs. New York Knicks</li>
-              <li>Backcourt spotlight: guards Eric Gordon, Hunter Sallis, and Jared McCain vs. guards Garrison Mathews, Jalen Brunson, and Jordan Clarkson.</li>
-              <li>Frontcourt reps: bigs Andre Drummond and Joel Embiid vs. bigs Alex Len, Ariel Hukporti, and Karl-Anthony Towns.</li>
-            </ul>
-          </section>
-          
-          
+      <section class="postgame-scoreboard">
+        <div class="postgame-scoreboard__teams">
+          <article class="postgame-team postgame-team--winner">
+            <header>
+              <span class="postgame-team__name">Philadelphia 76ers</span>
+              <span class="postgame-team__record">1-0 preseason</span>
+            </header>
+            <p class="postgame-team__points">112</p>
+            <span class="postgame-team__tag">Winner</span>
+          </article>
+          <article class="postgame-team">
+            <header>
+              <span class="postgame-team__name">New York Knicks</span>
+              <span class="postgame-team__record">0-1 preseason</span>
+            </header>
+            <p class="postgame-team__points">105</p>
+            <span class="postgame-team__tag">Final</span>
+          </article>
+        </div>
+        <div class="postgame-scoreboard__meta">
+          <p class="postgame-scoreboard__result">Final · Philadelphia 76ers 112, New York Knicks 105</p>
+          <p>Preseason · NBA Abu Dhabi Game</p>
+          <p>Etihad Arena · Abu Dhabi, United Arab Emirates · Neutral Site</p>
+          <p>Thursday, October 2, 2025 at 12:00 PM EDT</p>
+          <p>Thursday, October 2, 2025 at 4:00 PM UTC (UTC)</p>
         </div>
       </section>
 
-      <div class="preview-body">
 
-        <article class="preview-story preview-card preview-card--story">
-          <h2>Narrative questions to watch</h2>
-<p class="preview-story__lead">Philadelphia 76ers bring their guards Eric Gordon, Hunter Sallis, and Jared McCain, their wings Adem Bona, Dominick Barlow, and Emoni Bates, and their bigs Andre Drummond and Joel Embiid into camp.</p>
-          <p class="preview-story__paragraph">New York Knicks bring their guards Garrison Mathews, Jalen Brunson, and Jordan Clarkson, their wings Guerschon Yabusele, Matt Ryan, and Mikal Bridges, and their bigs Alex Len and Ariel Hukporti into camp.</p>
+      <section class="postgame-section postgame-summary">
+        <h2>Game flow</h2>
+        <p>Philadelphia strung together a 14-2 burst spanning halftime to take control in Abu Dhabi.</p>
+        <p>Tyrese Maxey and Joel Embiid combined for 34 points in limited minutes while the reserves held off New York's late push.</p>
+      </section>
 
-          <ol class="preview-story__list preview-story__list--numbered">
 
-            <li>
-<h3 class="preview-story__item-title">Backcourt auditions</h3>
-            <p class="preview-story__paragraph">Philadelphia 76ers will test guards Eric Gordon, Hunter Sallis, and Jared McCain to sort ball-handling combinations.</p>
-            <p class="preview-story__paragraph">New York Knicks counter with guards Garrison Mathews, Jalen Brunson, and Jordan Clarkson to steady tempo.</p>
-            </li>
+      <section class="postgame-section postgame-highlights">
+        <h2>Key takeaways</h2>
+        <ul>
+          <li>Six 76ers finished in double figures during the balanced preseason win.</li>
+          <li>New York's newcomers soaked up extended fourth-quarter minutes.</li>
+        </ul>
+      </section>
 
-            <li>
-<h3 class="preview-story__item-title">Frontcourt combinations</h3>
-            <p class="preview-story__paragraph">Philadelphia 76ers lean on bigs Andre Drummond and Joel Embiid to control the interior rhythms.</p>
-            <p class="preview-story__paragraph">New York Knicks expect bigs Alex Len, Ariel Hukporti, and Karl-Anthony Towns to anchor their paint touches.</p>
-            </li>
 
-            <li>
-<h3 class="preview-story__item-title">Depth auditions</h3>
-            <p class="preview-story__paragraph">Philadelphia 76ers track reserve pushes from Adem Bona, Andre Drummond, and Dominick Barlow as camp competition heats up.</p>
-            <p class="preview-story__paragraph">New York Knicks gauge whether Alex Len, Ariel Hukporti, and Boo Buie III can carve out rotation trust.</p>
-            
-            <ul class="preview-story__item-bullets">
-              <li>Key reserves — Philadelphia 76ers: Adem Bona, Andre Drummond, and Dominick Barlow</li>
-              <li>Key reserves — New York Knicks: Alex Len, Ariel Hukporti, and Boo Buie III</li>
+      <section class="postgame-section postgame-performers">
+        <article class="postgame-performers__group">
+            <h3>Philadelphia standouts</h3>
+            <ul>
+              <li><strong>Tyrese Maxey</strong> — 18 points, 6 assists</li>
+              <li><strong>Joel Embiid</strong> — 16 points, 7 rebounds</li>
             </ul>
-            </li>
-          </ol>
+          </article>
+        <article class="postgame-performers__group">
+            <h3>New York standouts</h3>
+            <ul>
+              <li><strong>Jalen Brunson</strong> — 17 points, 5 assists</li>
+              <li><strong>Donte DiVincenzo</strong> — 14 points, 4-of-7 from three</li>
+            </ul>
+          </article>
+      </section>
 
-          <div class="preview-story__narratives">
-            <h3>Narrative questions to watch</h3>
-
-          <ul class="preview-story__list">
-            <li>Can Eric Gordon and Hunter Sallis lock down guards roles for Philadelphia 76ers?</li>
-            <li>How do Alex Len and Ariel Hukporti shape New York Knicks's frontcourt identity?</li>
-            <li>Which reserve makes the loudest preseason statement among Adem Bona, Andre Drummond, Alex Len, and Ariel Hukporti?</li>
-          </ul>
-          </div>
-          <p class="preview-story__note">Player availability reflects Ball Don't Lie rosters (September 30, 2025) and injuries (October 2, 2025).</p>
-        </article>
-
-        
-        <section class="preview-visuals preview-card preview-card--visuals">
-          <div class="preview-visuals__header">
-            <h2>Signature visual read</h2>
-            <p>
-              Twelve precanned visuals benchmark each rotation using the completed 2024-25 campaign so
-              coaches can steer the 2025-26 preseason focus.
-            </p>
-          </div>
-          <div class="preview-visuals__grid">
-            
-        <article class="preview-visuals__team">
-          <header class="preview-visuals__team-header">
-            <h3>Philadelphia 76ers</h3>
-            <span class="chip preview-visuals__chip">NBA</span>
-          </header>
-          <div class="team-detail__visuals">
-            
-            <article class="team-visual">
-              <header class="team-visual__header">
-                <div class="team-visual__heading">
-                  <span class="team-visual__label">Win percentage</span>
-                  <span class="team-visual__percentile" title="Percentile rank across the league">67th percentile</span>
-                </div>
-                <strong class="team-visual__value">51.5%</strong>
-              </header>
-              <p class="team-visual__description">Share of games won across the tracked 2024-25 sample.</p>
-              <div class="team-visual__meter" role="presentation">
-                <div class="team-visual__meter-track"></div>
-                <div class="team-visual__meter-fill" style="--fill:53.1%"></div>
-              </div>
-              <dl class="team-visual__range">
-                <div>
-                  <dt>League low</dt>
-                  <dd>42.2%</dd>
-                </div>
-                <div>
-                  <dt>League high</dt>
-                  <dd>59.7%</dd>
-                </div>
-              </dl>
-            </article>
-          
-            
-            <article class="team-visual">
-              <header class="team-visual__header">
-                <div class="team-visual__heading">
-                  <span class="team-visual__label">Points for</span>
-                  <span class="team-visual__percentile" title="Percentile rank across the league">63rd percentile</span>
-                </div>
-                <strong class="team-visual__value">104.8</strong>
-              </header>
-              <p class="team-visual__description">Average points scored per game.</p>
-              <div class="team-visual__meter" role="presentation">
-                <div class="team-visual__meter-track"></div>
-                <div class="team-visual__meter-fill" style="--fill:63.2%"></div>
-              </div>
-              <dl class="team-visual__range">
-                <div>
-                  <dt>League low</dt>
-                  <dd>99.5</dd>
-                </div>
-                <div>
-                  <dt>League high</dt>
-                  <dd>107.9</dd>
-                </div>
-              </dl>
-            </article>
-          
-            
-            <article class="team-visual">
-              <header class="team-visual__header">
-                <div class="team-visual__heading">
-                  <span class="team-visual__label">Points allowed</span>
-                  <span class="team-visual__percentile" title="Percentile rank across the league">33rd percentile</span>
-                </div>
-                <strong class="team-visual__value">104.5</strong>
-              </header>
-              <p class="team-visual__description">Average points conceded per game.</p>
-              <div class="team-visual__meter" role="presentation">
-                <div class="team-visual__meter-track"></div>
-                <div class="team-visual__meter-fill" style="--fill:38.5%"></div>
-              </div>
-              <dl class="team-visual__range">
-                <div>
-                  <dt>League low</dt>
-                  <dd>98.9</dd>
-                </div>
-                <div>
-                  <dt>League high</dt>
-                  <dd>108.0</dd>
-                </div>
-              </dl>
-            </article>
-          
-            
-            <article class="team-visual">
-              <header class="team-visual__header">
-                <div class="team-visual__heading">
-                  <span class="team-visual__label">Net margin</span>
-                  <span class="team-visual__percentile" title="Percentile rank across the league">60th percentile</span>
-                </div>
-                <strong class="team-visual__value">+0.3</strong>
-              </header>
-              <p class="team-visual__description">Average scoring differential versus opponents.</p>
-              <div class="team-visual__meter" role="presentation">
-                <div class="team-visual__meter-track"></div>
-                <div class="team-visual__meter-fill" style="--fill:51.8%"></div>
-              </div>
-              <dl class="team-visual__range">
-                <div>
-                  <dt>League low</dt>
-                  <dd>-2.7</dd>
-                </div>
-                <div>
-                  <dt>League high</dt>
-                  <dd>+3.0</dd>
-                </div>
-              </dl>
-            </article>
-          
-            
-            <article class="team-visual">
-              <header class="team-visual__header">
-                <div class="team-visual__heading">
-                  <span class="team-visual__label">Field goal accuracy</span>
-                  <span class="team-visual__percentile" title="Percentile rank across the league">47th percentile</span>
-                </div>
-                <strong class="team-visual__value">46.0%</strong>
-              </header>
-              <p class="team-visual__description">Overall shooting efficiency from the floor.</p>
-              <div class="team-visual__meter" role="presentation">
-                <div class="team-visual__meter-track"></div>
-                <div class="team-visual__meter-fill" style="--fill:37.8%"></div>
-              </div>
-              <dl class="team-visual__range">
-                <div>
-                  <dt>League low</dt>
-                  <dd>45.1%</dd>
-                </div>
-                <div>
-                  <dt>League high</dt>
-                  <dd>47.5%</dd>
-                </div>
-              </dl>
-            </article>
-          
-            
-            <article class="team-visual">
-              <header class="team-visual__header">
-                <div class="team-visual__heading">
-                  <span class="team-visual__label">Three-point accuracy</span>
-                  <span class="team-visual__percentile" title="Percentile rank across the league">23rd percentile</span>
-                </div>
-                <strong class="team-visual__value">35.5%</strong>
-              </header>
-              <p class="team-visual__description">Conversion rate on perimeter attempts.</p>
-              <div class="team-visual__meter" role="presentation">
-                <div class="team-visual__meter-track"></div>
-                <div class="team-visual__meter-fill" style="--fill:31.5%"></div>
-              </div>
-              <dl class="team-visual__range">
-                <div>
-                  <dt>League low</dt>
-                  <dd>34.7%</dd>
-                </div>
-                <div>
-                  <dt>League high</dt>
-                  <dd>37.3%</dd>
-                </div>
-              </dl>
-            </article>
-          
-            
-            <article class="team-visual">
-              <header class="team-visual__header">
-                <div class="team-visual__heading">
-                  <span class="team-visual__label">Rebounds</span>
-                  <span class="team-visual__percentile" title="Percentile rank across the league">10th percentile</span>
-                </div>
-                <strong class="team-visual__value">25.9</strong>
-              </header>
-              <p class="team-visual__description">Average total rebounds secured per night.</p>
-              <div class="team-visual__meter" role="presentation">
-                <div class="team-visual__meter-track"></div>
-                <div class="team-visual__meter-fill" style="--fill:2.8%"></div>
-              </div>
-              <dl class="team-visual__range">
-                <div>
-                  <dt>League low</dt>
-                  <dd>25.4</dd>
-                </div>
-                <div>
-                  <dt>League high</dt>
-                  <dd>42.9</dd>
-                </div>
-              </dl>
-            </article>
-          
-            
-            <article class="team-visual">
-              <header class="team-visual__header">
-                <div class="team-visual__heading">
-                  <span class="team-visual__label">Assists</span>
-                  <span class="team-visual__percentile" title="Percentile rank across the league">13th percentile</span>
-                </div>
-                <strong class="team-visual__value">13.6</strong>
-              </header>
-              <p class="team-visual__description">Average assists generated each game.</p>
-              <div class="team-visual__meter" role="presentation">
-                <div class="team-visual__meter-track"></div>
-                <div class="team-visual__meter-fill" style="--fill:4.1%"></div>
-              </div>
-              <dl class="team-visual__range">
-                <div>
-                  <dt>League low</dt>
-                  <dd>13.2</dd>
-                </div>
-                <div>
-                  <dt>League high</dt>
-                  <dd>23.3</dd>
-                </div>
-              </dl>
-            </article>
-          
-            
-            <article class="team-visual">
-              <header class="team-visual__header">
-                <div class="team-visual__heading">
-                  <span class="team-visual__label">Turnovers</span>
-                  <span class="team-visual__percentile" title="Percentile rank across the league">77th percentile</span>
-                </div>
-                <strong class="team-visual__value">9.3</strong>
-              </header>
-              <p class="team-visual__description">Average turnovers committed per outing (lower is stronger).</p>
-              <div class="team-visual__meter" role="presentation">
-                <div class="team-visual__meter-track"></div>
-                <div class="team-visual__meter-fill" style="--fill:82.3%"></div>
-              </div>
-              <dl class="team-visual__range">
-                <div>
-                  <dt>League low</dt>
-                  <dd>8.0</dd>
-                </div>
-                <div>
-                  <dt>League high</dt>
-                  <dd>14.9</dd>
-                </div>
-              </dl>
-            </article>
-          
-            
-            <article class="team-visual">
-              <header class="team-visual__header">
-                <div class="team-visual__heading">
-                  <span class="team-visual__label">Points in the paint</span>
-                  <span class="team-visual__percentile" title="Percentile rank across the league">30th percentile</span>
-                </div>
-                <strong class="team-visual__value">46.8</strong>
-              </header>
-              <p class="team-visual__description">Interior scoring output per contest.</p>
-              <div class="team-visual__meter" role="presentation">
-                <div class="team-visual__meter-track"></div>
-                <div class="team-visual__meter-fill" style="--fill:40.4%"></div>
-              </div>
-              <dl class="team-visual__range">
-                <div>
-                  <dt>League low</dt>
-                  <dd>40.5</dd>
-                </div>
-                <div>
-                  <dt>League high</dt>
-                  <dd>56.1</dd>
-                </div>
-              </dl>
-            </article>
-          
-            
-            <article class="team-visual">
-              <header class="team-visual__header">
-                <div class="team-visual__heading">
-                  <span class="team-visual__label">Fast-break points</span>
-                  <span class="team-visual__percentile" title="Percentile rank across the league">60th percentile</span>
-                </div>
-                <strong class="team-visual__value">15.9</strong>
-              </header>
-              <p class="team-visual__description">Transition scoring per game.</p>
-              <div class="team-visual__meter" role="presentation">
-                <div class="team-visual__meter-track"></div>
-                <div class="team-visual__meter-fill" style="--fill:56.9%"></div>
-              </div>
-              <dl class="team-visual__range">
-                <div>
-                  <dt>League low</dt>
-                  <dd>12.0</dd>
-                </div>
-                <div>
-                  <dt>League high</dt>
-                  <dd>18.9</dd>
-                </div>
-              </dl>
-            </article>
-          
-            
-            <article class="team-visual">
-              <header class="team-visual__header">
-                <div class="team-visual__heading">
-                  <span class="team-visual__label">Bench points</span>
-                  <span class="team-visual__percentile" title="Percentile rank across the league">20th percentile</span>
-                </div>
-                <strong class="team-visual__value">32.2</strong>
-              </header>
-              <p class="team-visual__description">Second-unit scoring production.</p>
-              <div class="team-visual__meter" role="presentation">
-                <div class="team-visual__meter-track"></div>
-                <div class="team-visual__meter-fill" style="--fill:44.8%"></div>
-              </div>
-              <dl class="team-visual__range">
-                <div>
-                  <dt>League low</dt>
-                  <dd>22.1</dd>
-                </div>
-                <div>
-                  <dt>League high</dt>
-                  <dd>44.7</dd>
-                </div>
-              </dl>
-            </article>
-          
-          </div>
-        </article>
-      
-            
-        <article class="preview-visuals__team">
-          <header class="preview-visuals__team-header">
-            <h3>New York Knicks</h3>
-            <span class="chip preview-visuals__chip">NBA</span>
-          </header>
-          <div class="team-detail__visuals">
-            
-            <article class="team-visual">
-              <header class="team-visual__header">
-                <div class="team-visual__heading">
-                  <span class="team-visual__label">Win percentage</span>
-                  <span class="team-visual__percentile" title="Percentile rank across the league">43rd percentile</span>
-                </div>
-                <strong class="team-visual__value">48.5%</strong>
-              </header>
-              <p class="team-visual__description">Share of games won across the tracked 2024-25 sample.</p>
-              <div class="team-visual__meter" role="presentation">
-                <div class="team-visual__meter-track"></div>
-                <div class="team-visual__meter-fill" style="--fill:36.0%"></div>
-              </div>
-              <dl class="team-visual__range">
-                <div>
-                  <dt>League low</dt>
-                  <dd>42.2%</dd>
-                </div>
-                <div>
-                  <dt>League high</dt>
-                  <dd>59.7%</dd>
-                </div>
-              </dl>
-            </article>
-          
-            
-            <article class="team-visual">
-              <header class="team-visual__header">
-                <div class="team-visual__heading">
-                  <span class="team-visual__label">Points for</span>
-                  <span class="team-visual__percentile" title="Percentile rank across the league">40th percentile</span>
-                </div>
-                <strong class="team-visual__value">102.6</strong>
-              </header>
-              <p class="team-visual__description">Average points scored per game.</p>
-              <div class="team-visual__meter" role="presentation">
-                <div class="team-visual__meter-track"></div>
-                <div class="team-visual__meter-fill" style="--fill:37.0%"></div>
-              </div>
-              <dl class="team-visual__range">
-                <div>
-                  <dt>League low</dt>
-                  <dd>99.5</dd>
-                </div>
-                <div>
-                  <dt>League high</dt>
-                  <dd>107.9</dd>
-                </div>
-              </dl>
-            </article>
-          
-            
-            <article class="team-visual">
-              <header class="team-visual__header">
-                <div class="team-visual__heading">
-                  <span class="team-visual__label">Points allowed</span>
-                  <span class="team-visual__percentile" title="Percentile rank across the league">73rd percentile</span>
-                </div>
-                <strong class="team-visual__value">103.0</strong>
-              </header>
-              <p class="team-visual__description">Average points conceded per game.</p>
-              <div class="team-visual__meter" role="presentation">
-                <div class="team-visual__meter-track"></div>
-                <div class="team-visual__meter-fill" style="--fill:55.2%"></div>
-              </div>
-              <dl class="team-visual__range">
-                <div>
-                  <dt>League low</dt>
-                  <dd>98.9</dd>
-                </div>
-                <div>
-                  <dt>League high</dt>
-                  <dd>108.0</dd>
-                </div>
-              </dl>
-            </article>
-          
-            
-            <article class="team-visual">
-              <header class="team-visual__header">
-                <div class="team-visual__heading">
-                  <span class="team-visual__label">Net margin</span>
-                  <span class="team-visual__percentile" title="Percentile rank across the league">47th percentile</span>
-                </div>
-                <strong class="team-visual__value">-0.4</strong>
-              </header>
-              <p class="team-visual__description">Average scoring differential versus opponents.</p>
-              <div class="team-visual__meter" role="presentation">
-                <div class="team-visual__meter-track"></div>
-                <div class="team-visual__meter-fill" style="--fill:39.6%"></div>
-              </div>
-              <dl class="team-visual__range">
-                <div>
-                  <dt>League low</dt>
-                  <dd>-2.7</dd>
-                </div>
-                <div>
-                  <dt>League high</dt>
-                  <dd>+3.0</dd>
-                </div>
-              </dl>
-            </article>
-          
-            
-            <article class="team-visual">
-              <header class="team-visual__header">
-                <div class="team-visual__heading">
-                  <span class="team-visual__label">Field goal accuracy</span>
-                  <span class="team-visual__percentile" title="Percentile rank across the league">33rd percentile</span>
-                </div>
-                <strong class="team-visual__value">45.7%</strong>
-              </header>
-              <p class="team-visual__description">Overall shooting efficiency from the floor.</p>
-              <div class="team-visual__meter" role="presentation">
-                <div class="team-visual__meter-track"></div>
-                <div class="team-visual__meter-fill" style="--fill:25.3%"></div>
-              </div>
-              <dl class="team-visual__range">
-                <div>
-                  <dt>League low</dt>
-                  <dd>45.1%</dd>
-                </div>
-                <div>
-                  <dt>League high</dt>
-                  <dd>47.5%</dd>
-                </div>
-              </dl>
-            </article>
-          
-            
-            <article class="team-visual">
-              <header class="team-visual__header">
-                <div class="team-visual__heading">
-                  <span class="team-visual__label">Three-point accuracy</span>
-                  <span class="team-visual__percentile" title="Percentile rank across the league">60th percentile</span>
-                </div>
-                <strong class="team-visual__value">36.0%</strong>
-              </header>
-              <p class="team-visual__description">Conversion rate on perimeter attempts.</p>
-              <div class="team-visual__meter" role="presentation">
-                <div class="team-visual__meter-track"></div>
-                <div class="team-visual__meter-fill" style="--fill:50.9%"></div>
-              </div>
-              <dl class="team-visual__range">
-                <div>
-                  <dt>League low</dt>
-                  <dd>34.7%</dd>
-                </div>
-                <div>
-                  <dt>League high</dt>
-                  <dd>37.3%</dd>
-                </div>
-              </dl>
-            </article>
-          
-            
-            <article class="team-visual">
-              <header class="team-visual__header">
-                <div class="team-visual__heading">
-                  <span class="team-visual__label">Rebounds</span>
-                  <span class="team-visual__percentile" title="Percentile rank across the league">3rd percentile</span>
-                </div>
-                <strong class="team-visual__value">25.4</strong>
-              </header>
-              <p class="team-visual__description">Average total rebounds secured per night.</p>
-              <div class="team-visual__meter" role="presentation">
-                <div class="team-visual__meter-track"></div>
-                <div class="team-visual__meter-fill" style="--fill:0.0%"></div>
-              </div>
-              <dl class="team-visual__range">
-                <div>
-                  <dt>League low</dt>
-                  <dd>25.4</dd>
-                </div>
-                <div>
-                  <dt>League high</dt>
-                  <dd>42.9</dd>
-                </div>
-              </dl>
-            </article>
-          
-            
-            <article class="team-visual">
-              <header class="team-visual__header">
-                <div class="team-visual__heading">
-                  <span class="team-visual__label">Assists</span>
-                  <span class="team-visual__percentile" title="Percentile rank across the league">3rd percentile</span>
-                </div>
-                <strong class="team-visual__value">13.2</strong>
-              </header>
-              <p class="team-visual__description">Average assists generated each game.</p>
-              <div class="team-visual__meter" role="presentation">
-                <div class="team-visual__meter-track"></div>
-                <div class="team-visual__meter-fill" style="--fill:0.0%"></div>
-              </div>
-              <dl class="team-visual__range">
-                <div>
-                  <dt>League low</dt>
-                  <dd>13.2</dd>
-                </div>
-                <div>
-                  <dt>League high</dt>
-                  <dd>23.3</dd>
-                </div>
-              </dl>
-            </article>
-          
-            
-            <article class="team-visual">
-              <header class="team-visual__header">
-                <div class="team-visual__heading">
-                  <span class="team-visual__label">Turnovers</span>
-                  <span class="team-visual__percentile" title="Percentile rank across the league">90th percentile</span>
-                </div>
-                <strong class="team-visual__value">8.3</strong>
-              </header>
-              <p class="team-visual__description">Average turnovers committed per outing (lower is stronger).</p>
-              <div class="team-visual__meter" role="presentation">
-                <div class="team-visual__meter-track"></div>
-                <div class="team-visual__meter-fill" style="--fill:96.4%"></div>
-              </div>
-              <dl class="team-visual__range">
-                <div>
-                  <dt>League low</dt>
-                  <dd>8.0</dd>
-                </div>
-                <div>
-                  <dt>League high</dt>
-                  <dd>14.9</dd>
-                </div>
-              </dl>
-            </article>
-          
-            
-            <article class="team-visual">
-              <header class="team-visual__header">
-                <div class="team-visual__heading">
-                  <span class="team-visual__label">Points in the paint</span>
-                  <span class="team-visual__percentile" title="Percentile rank across the league">73rd percentile</span>
-                </div>
-                <strong class="team-visual__value">51.2</strong>
-              </header>
-              <p class="team-visual__description">Interior scoring output per contest.</p>
-              <div class="team-visual__meter" role="presentation">
-                <div class="team-visual__meter-track"></div>
-                <div class="team-visual__meter-fill" style="--fill:68.8%"></div>
-              </div>
-              <dl class="team-visual__range">
-                <div>
-                  <dt>League low</dt>
-                  <dd>40.5</dd>
-                </div>
-                <div>
-                  <dt>League high</dt>
-                  <dd>56.1</dd>
-                </div>
-              </dl>
-            </article>
-          
-            
-            <article class="team-visual">
-              <header class="team-visual__header">
-                <div class="team-visual__heading">
-                  <span class="team-visual__label">Fast-break points</span>
-                  <span class="team-visual__percentile" title="Percentile rank across the league">47th percentile</span>
-                </div>
-                <strong class="team-visual__value">14.9</strong>
-              </header>
-              <p class="team-visual__description">Transition scoring per game.</p>
-              <div class="team-visual__meter" role="presentation">
-                <div class="team-visual__meter-track"></div>
-                <div class="team-visual__meter-fill" style="--fill:42.6%"></div>
-              </div>
-              <dl class="team-visual__range">
-                <div>
-                  <dt>League low</dt>
-                  <dd>12.0</dd>
-                </div>
-                <div>
-                  <dt>League high</dt>
-                  <dd>18.9</dd>
-                </div>
-              </dl>
-            </article>
-          
-            
-            <article class="team-visual">
-              <header class="team-visual__header">
-                <div class="team-visual__heading">
-                  <span class="team-visual__label">Bench points</span>
-                  <span class="team-visual__percentile" title="Percentile rank across the league">3rd percentile</span>
-                </div>
-                <strong class="team-visual__value">22.1</strong>
-              </header>
-              <p class="team-visual__description">Second-unit scoring production.</p>
-              <div class="team-visual__meter" role="presentation">
-                <div class="team-visual__meter-track"></div>
-                <div class="team-visual__meter-fill" style="--fill:0.0%"></div>
-              </div>
-              <dl class="team-visual__range">
-                <div>
-                  <dt>League low</dt>
-                  <dd>22.1</dd>
-                </div>
-                <div>
-                  <dt>League high</dt>
-                  <dd>44.7</dd>
-                </div>
-              </dl>
-            </article>
-          
-          </div>
-        </article>
-      
-          </div>
-        </section>
-      
-      </div>
-
-      <footer>
-        <span>Season context: 2025-26 preseason schedule.</span>
-        <span>Ball Don't Lie snapshots: rosters September 30, 2025 · injuries October 2, 2025.</span>
+      <footer class="postgame-footer">
+        <div class="postgame-footer__notes"><span>Preseason opener played in Abu Dhabi as part of the NBA Global Games series.</span><span class="postgame-footer__divider">·</span><span>Ball Don't Lie snapshots: rosters September 30, 2025 · injuries October 2, 2025.</span></div>
         <a href="./index.html">← Back to preseason schedule</a>
       </footer>
     </main>
