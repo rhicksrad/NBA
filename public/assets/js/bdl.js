@@ -1,61 +1,4 @@
-export const API = 'https://api.balldontlie.io';
-
-let apiKeyPromise;
-
-async function resolveApiKey() {
-  if (apiKeyPromise) {
-    return apiKeyPromise;
-  }
-
-  apiKeyPromise = (async () => {
-    const envKey =
-      (typeof process !== 'undefined' &&
-        (process.env.BALLDONTLIE_API_KEY || process.env.BDL_API_KEY || process.env.BALL_DONT_LIE_API_KEY)) ||
-      '';
-    if (envKey && envKey.trim()) {
-      return envKey.trim();
-    }
-
-    if (typeof window === 'undefined') {
-      try {
-        const [{ readFile }, pathModule, urlModule] = await Promise.all([
-          import('node:fs/promises'),
-          import('node:path'),
-          import('node:url'),
-        ]);
-        const currentDir = pathModule.dirname(urlModule.fileURLToPath(import.meta.url));
-        const fallbackPath = pathModule.resolve(currentDir, '../../data/bdl-key.json');
-        const raw = await readFile(fallbackPath, 'utf8');
-        const parsed = JSON.parse(raw);
-        const key = typeof parsed?.key === 'string' ? parsed.key.trim() : '';
-        if (key) {
-          return key;
-        }
-      } catch (error) {
-        if (error && error.code !== 'ENOENT') {
-          console.warn('Unable to read Ball Don\'t Lie fallback key', error);
-        }
-      }
-    } else {
-      try {
-        const response = await fetch(new URL('../../data/bdl-key.json', import.meta.url), { cache: 'no-store' });
-        if (response.ok) {
-          const payload = await response.json();
-          const key = typeof payload?.key === 'string' ? payload.key.trim() : '';
-          if (key) {
-            return key;
-          }
-        }
-      } catch (error) {
-        console.warn('Unable to load Ball Don\'t Lie fallback key', error);
-      }
-    }
-
-    return '';
-  })();
-
-  return apiKeyPromise;
-}
+export const BDL_BASE = 'https://bdlproxy.hicksrch.workers.dev/bdl';
 
 function makeLimiter({ maxConcurrent = 1, minIntervalMs = 300 } = {}) {
   let active = 0;
@@ -120,6 +63,13 @@ function parseRetryAfter(value) {
   return null;
 }
 
+function normalizePath(path) {
+  if (typeof path !== 'string' || !path) {
+    return '/';
+  }
+  return path.startsWith('/') ? path : `/${path}`;
+}
+
 async function fetchJsonWithRetry(url, init = {}) {
   const headers = new Headers({ Accept: 'application/json' });
   if (init.headers instanceof Headers) {
@@ -133,13 +83,8 @@ async function fetchJsonWithRetry(url, init = {}) {
   const baseInit = {
     ...init,
     headers,
-    method: init.method ?? 'GET'
+    method: init.method ?? 'GET',
   };
-
-  const apiKey = await resolveApiKey();
-  if (apiKey) {
-    headers.set('Authorization', `Bearer ${apiKey}`);
-  }
 
   let unauthorizedLogged = false;
 
@@ -155,7 +100,7 @@ async function fetchJsonWithRetry(url, init = {}) {
     if (response.status === 401) {
       if (!unauthorizedLogged) {
         unauthorizedLogged = true;
-        console.error('Ball Don\'t Lie authorization failed. Verify BALLDONTLIE_API_KEY.');
+        console.error('Ball Don\'t Lie proxy authorization failed. Verify server-side key configuration.');
       }
       const text = await response.text().catch(() => '');
       const path = (() => {
@@ -184,7 +129,8 @@ async function fetchJsonWithRetry(url, init = {}) {
 }
 
 export async function bdl(path, init = {}) {
-  const url = `${API}${path}`;
+  const normalizedPath = normalizePath(path);
+  const url = `${BDL_BASE}${normalizedPath}`;
   const memoKey = shouldMemoize(init) ? url : null;
   if (memoKey && memo.has(memoKey)) {
     return memo.get(memoKey);
