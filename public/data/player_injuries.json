@@ -1,5 +1,5 @@
 {
-  "fetched_at": "2025-10-02T00:39:38.745Z",
+  "fetched_at": "2025-10-09T13:54:58.861Z",
   "source": "Ball Don't Lie",
   "items": [
     {
@@ -14,6 +14,17 @@
       "report_label": "Sep 23"
     },
     {
+      "player": "Darius Garland",
+      "status": "Out",
+      "status_level": "caution",
+      "player_id": 666581,
+      "team_tricode": "CLE",
+      "team_name": "Cleveland Cavaliers",
+      "return_date": "Nov 1",
+      "description": "Oct 7: Garland (toe) went through a light individual workout after Tuesday's shootaround, Chris Fedor of The Cleveland Plain Dealer reports.",
+      "report_label": "Oct 7"
+    },
+    {
       "player": "Max Strus",
       "status": "Out",
       "status_level": "caution",
@@ -23,17 +34,6 @@
       "return_date": "Dec 1",
       "description": "Sep 30: Strus (foot) is no longer wearing a walking boot on Tuesday, but still has a lengthy recovery process ahead, Chris Fedor of The Cleveland Plain Dealer reports.",
       "report_label": "Sep 30"
-    },
-    {
-      "player": "Darius Garland",
-      "status": "Out",
-      "status_level": "caution",
-      "player_id": 666581,
-      "team_tricode": "CLE",
-      "team_name": "Cleveland Cavaliers",
-      "return_date": "Nov 1",
-      "description": "Sep 23: Cleveland president of basketball operations Koby Altman said Tuesday that Garland (toe) remains without a timetable to return to action, Spencer Davies of SI.com reports.",
-      "report_label": "Sep 23"
     },
     {
       "player": "Kyrie Irving",
@@ -47,6 +47,17 @@
       "report_label": "Sep 29"
     },
     {
+      "player": "De'Anthony Melton",
+      "status": "Out",
+      "status_level": "caution",
+      "player_id": 313,
+      "team_tricode": "GSW",
+      "team_name": "Golden State Warriors",
+      "return_date": "Oct 30",
+      "description": "Oct 1: Melton (knee) will be re-evaluated in about four weeks, Sam Gordon of the San Francisco Chronicle reports.",
+      "report_label": "Oct 1"
+    },
+    {
       "player": "Fred VanVleet",
       "status": "Out",
       "status_level": "caution",
@@ -56,6 +67,17 @@
       "return_date": "Apr 12",
       "description": "Sep 22: VanVleet suffered a torn ACL and may be out for the entire 2025-26 campaign, Shams Charania of ESPN reports.",
       "report_label": "Sep 22"
+    },
+    {
+      "player": "Kam Jones",
+      "status": "Out",
+      "status_level": "caution",
+      "player_id": 1057389374,
+      "team_tricode": "IND",
+      "team_name": "Indiana Pacers",
+      "return_date": "Oct 29",
+      "description": "Oct 6: Jones (back) is likely going to be sidelined for a few weeks, Tony East of WTHR Channel 13 Indianapolis reports.",
+      "report_label": "Oct 6"
     },
     {
       "player": "Tyrese Haliburton",
@@ -86,31 +108,9 @@
       "player_id": 1028025754,
       "team_tricode": "MEM",
       "team_name": "Memphis Grizzlies",
-      "return_date": "Nov 1",
+      "return_date": "Nov 7",
       "description": "Sep 26: Edey has been cleared to begin ramping up basketball activities and is expected to return to play in six to nine weeks.",
       "report_label": "Sep 26"
-    },
-    {
-      "player": "Tyler Herro",
-      "status": "Out",
-      "status_level": "caution",
-      "player_id": 666633,
-      "team_tricode": "MIA",
-      "team_name": "Miami Heat",
-      "return_date": "Nov 17",
-      "description": "Sep 30: Herro (foot/ankle) said Tuesday that he's ahead of schedule in his recovery and expects to be back in 8-12 weeks, Wes Goldberg of the Locked On Podcast Network reports.",
-      "report_label": "Sep 30"
-    },
-    {
-      "player": "Dejounte Murray",
-      "status": "Out",
-      "status_level": "caution",
-      "player_id": 334,
-      "team_tricode": "NOP",
-      "team_name": "New Orleans Pelicans",
-      "return_date": "Jan 1",
-      "description": "Sep 25: ESPN's Shams Charania reported Wednesday that Murray (Achilles) could return right after New Years, according to Pelicans Film Room.",
-      "report_label": "Sep 25"
     }
   ],
   "note": "Source: Ball Don't Lie player injuries feed. Displaying the 10 most relevant recent reports."
