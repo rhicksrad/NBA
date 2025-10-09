@@ -5,16 +5,41 @@ const API_PREFIX = '/v1';
 const PAGE_SIZE = 100;
 const REFRESH_INTERVAL_MS = 150000;
 const NEXT_SEASON_TIPOFF_DATE = '2025-10-04';
-const LAST_COMPLETED_SEASONu_FINALE = '2024-06-17';
+const LAST_COMPLETED_SEASON_FINALE = '2024-06-17';
 const FUTURE_SCHEDULE_END = '2026-06-30';
 const EARLIEST_ARCHIVE_DATE = '1946-11-01';
 
 const NBA_TEAM_IDS = new Set([
-  1610612737, 1610612738, 1610612739, 1610612740, 1610612741, 1610612742,
-  1610612743, 1610612744, 1610612745, 1610612746, 1610612747, 1610612748,
-  1610612749, 1610612750, 1610612751, 1610612752, 1610612753, 1610612754,
-  1610612755, 1610612756, 1610612757, 1610612758, 1610612759, 1610612760,
-  1610612761, 1610612762, 1610612763, 1610612764, 1610612765, 1610612766,
+  1610612737,
+  1610612738,
+  1610612739,
+  1610612740,
+  1610612741,
+  1610612742,
+  1610612743,
+  1610612744,
+  1610612745,
+  1610612746,
+  1610612747,
+  1610612748,
+  1610612749,
+  1610612750,
+  1610612751,
+  1610612752,
+  1610612753,
+  1610612754,
+  1610612755,
+  1610612756,
+  1610612757,
+  1610612758,
+  1610612759,
+  1610612760,
+  1610612761,
+  1610612762,
+  1610612763,
+  1610612764,
+  1610612765,
+  1610612766,
 ]);
 
 const stageRank = { live: 0, upcoming: 1, final: 2 };
@@ -52,10 +77,16 @@ function determineInitialDate() {
   const today = getTodayIso();
   const bounds = getSelectableBounds();
   const clampedToday = clampDate(today, bounds);
-  if (clampedToday) return clampedToday;
+  if (clampedToday) {
+    return clampedToday;
+  }
   if (bounds) {
-    if (bounds.max) return bounds.max;
-    if (bounds.min) return bounds.min;
+    if (bounds.max) {
+      return bounds.max;
+    }
+    if (bounds.min) {
+      return bounds.min;
+    }
   }
   return today;
 }
@@ -74,12 +105,16 @@ let loading = false;
 
 function isNbaTeamId(value) {
   const numeric = Number(value);
-  if (!Number.isInteger(numeric)) return false;
+  if (!Number.isInteger(numeric)) {
+    return false;
+  }
   return NBA_TEAM_IDS.has(numeric);
 }
 
 function deriveSeasonFromDate(date) {
-  if (!(date instanceof Date) || Number.isNaN(date.getTime())) return null;
+  if (!(date instanceof Date) || Number.isNaN(date.getTime())) {
+    return null;
+  }
   const year = date.getUTCFullYear();
   const month = date.getUTCMonth() + 1;
   return month >= 7 ? year : year - 1;
@@ -88,10 +123,14 @@ function deriveSeasonFromDate(date) {
 function deriveSeasonsForRange(startIso, endIso) {
   const startDate = parseDateOnly(startIso);
   const endDate = parseDateOnly(endIso);
-  if (!startDate || !endDate) return [];
+  if (!startDate || !endDate) {
+    return [];
+  }
   const startSeason = deriveSeasonFromDate(startDate);
   const endSeason = deriveSeasonFromDate(endDate);
-  if (startSeason === null || endSeason === null) return [];
+  if (startSeason === null || endSeason === null) {
+    return [];
+  }
   const minSeason = Math.min(startSeason, endSeason);
   const maxSeason = Math.max(startSeason, endSeason);
   const seasons = [];
@@ -104,7 +143,9 @@ function deriveSeasonsForRange(startIso, endIso) {
 function enumerateIsoDates(startIso, endIso) {
   const startDate = parseDateOnly(startIso);
   const endDate = parseDateOnly(endIso);
-  if (!startDate || !endDate) return [];
+  if (!startDate || !endDate) {
+    return [];
+  }
   const days = [];
   const cursor = new Date(startDate.getTime());
   while (cursor.getTime() <= endDate.getTime()) {
@@ -126,9 +167,13 @@ function isValidIsoDate(value) {
 }
 
 function formatDateLabel(value) {
-  if (!isValidIsoDate(value)) return value ?? '—';
+  if (!isValidIsoDate(value)) {
+    return value ?? '—';
+  }
   const date = parseDateOnly(value);
-  if (!date) return value;
+  if (!date) {
+    return value;
+  }
   return date.toLocaleDateString(undefined, {
     weekday: 'long',
     month: 'long',
@@ -139,14 +184,22 @@ function formatDateLabel(value) {
 
 function formatRangeLabel(range) {
   if (!range || !isValidIsoDate(range.start) || !isValidIsoDate(range.end)) {
-    if (range?.start && isValidIsoDate(range.start)) return formatDateLabel(range.start);
-    if (range?.end && isValidIsoDate(range.end)) return formatDateLabel(range.end);
+    if (range?.start && isValidIsoDate(range.start)) {
+      return formatDateLabel(range.start);
+    }
+    if (range?.end && isValidIsoDate(range.end)) {
+      return formatDateLabel(range.end);
+    }
     return '—';
   }
-  if (range.start === range.end) return formatDateLabel(range.start);
+  if (range.start === range.end) {
+    return formatDateLabel(range.start);
+  }
   const startDate = parseDateOnly(range.start);
   const endDate = parseDateOnly(range.end);
-  if (!startDate || !endDate) return `${range.start} – ${range.end}`;
+  if (!startDate || !endDate) {
+    return `${range.start} – ${range.end}`;
+  }
   const startLabel = startDate.toLocaleDateString(undefined, {
     month: 'short',
     day: 'numeric',
@@ -163,20 +216,33 @@ function formatRangeLabel(range) {
 }
 
 function formatTimeLabel(date) {
-  if (!(date instanceof Date) || Number.isNaN(date.getTime())) return null;
+  if (!(date instanceof Date) || Number.isNaN(date.getTime())) {
+    return null;
+  }
   return date.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' });
 }
 
 function getSelectableBounds() {
-  return { min: EARLIEST_ARCHIVE_DATE, max: determineMaxSelectableDate() };
+  return {
+    min: EARLIEST_ARCHIVE_DATE,
+    max: determineMaxSelectableDate(),
+  };
 }
 
 function clampDate(value, bounds) {
-  if (!bounds) return isValidIsoDate(value) ? value : null;
-  if (!isValidIsoDate(value)) return null;
+  if (!bounds) {
+    return isValidIsoDate(value) ? value : null;
+  }
+  if (!isValidIsoDate(value)) {
+    return null;
+  }
   let next = value;
-  if (bounds.min && next < bounds.min) next = bounds.min;
-  if (bounds.max && next > bounds.max) next = bounds.max;
+  if (bounds.min && next < bounds.min) {
+    next = bounds.min;
+  }
+  if (bounds.max && next > bounds.max) {
+    next = bounds.max;
+  }
   return next;
 }
 
@@ -184,16 +250,25 @@ function sanitizeRange(range, options = {}) {
   const bounds = getSelectableBounds();
   let start = clampDate(range?.start, bounds);
   let end = clampDate(range?.end, bounds);
-  if (!start && end) start = end;
-  if (!end && start) end = start;
+  if (!start && end) {
+    start = end;
+  }
+  if (!end && start) {
+    end = start;
+  }
   if (!start && !end) {
     const fallback = clampDate(determineInitialDate(), bounds) ?? determineInitialDate();
-    start = fallback; end = fallback;
+    start = fallback;
+    end = fallback;
   }
   if (start > end) {
-    if (options.bias === 'start') end = start;
-    else if (options.bias === 'end') start = end;
-    else end = start;
+    if (options.bias === 'start') {
+      end = start;
+    } else if (options.bias === 'end') {
+      start = end;
+    } else {
+      end = start;
+    }
   }
   return { start, end };
 }
@@ -207,12 +282,16 @@ function applyRangeToInputs() {
   const bounds = getSelectableBounds();
   if (startDateInput) {
     startDateInput.value = activeRange.start ?? '';
-    if (bounds.min) startDateInput.setAttribute('min', bounds.min);
+    if (bounds.min) {
+      startDateInput.setAttribute('min', bounds.min);
+    }
     const maxCandidate = activeRange.end ?? bounds.max;
     if (maxCandidate) {
       const effectiveMax = bounds.max && maxCandidate > bounds.max ? bounds.max : maxCandidate;
       startDateInput.setAttribute('max', effectiveMax);
-    } else if (bounds.max) startDateInput.setAttribute('max', bounds.max);
+    } else if (bounds.max) {
+      startDateInput.setAttribute('max', bounds.max);
+    }
   }
   if (endDateInput) {
     endDateInput.value = activeRange.end ?? '';
@@ -220,8 +299,12 @@ function applyRangeToInputs() {
     if (minCandidate) {
       const effectiveMin = bounds.min && minCandidate < bounds.min ? bounds.min : minCandidate;
       endDateInput.setAttribute('min', effectiveMin);
-    } else if (bounds.min) endDateInput.setAttribute('min', bounds.min);
-    if (bounds.max) endDateInput.setAttribute('max', bounds.max);
+    } else if (bounds.min) {
+      endDateInput.setAttribute('min', bounds.min);
+    }
+    if (bounds.max) {
+      endDateInput.setAttribute('max', bounds.max);
+    }
   }
 }
 
@@ -238,7 +321,9 @@ function updateActiveRange(nextRange, options = {}) {
 }
 
 function isTodayWithinRange(range) {
-  if (!range || !isValidIsoDate(range.start) || !isValidIsoDate(range.end)) return false;
+  if (!range || !isValidIsoDate(range.start) || !isValidIsoDate(range.end)) {
+    return false;
+  }
   const today = getTodayIso();
   return range.start <= today && today <= range.end;
 }
@@ -246,11 +331,15 @@ function isTodayWithinRange(range) {
 function buildSearchParams(params) {
   const search = new URLSearchParams();
   Object.entries(params).forEach(([key, value]) => {
-    if (value === undefined || value === null) return;
+    if (value === undefined || value === null) {
+      return;
+    }
     if (Array.isArray(value)) {
       const paramKey = key.endsWith('[]') ? key : `${key}[]`;
       value.forEach((entry) => {
-        if (entry === undefined || entry === null) return;
+        if (entry === undefined || entry === null) {
+          return;
+        }
         search.append(paramKey, String(entry));
       });
     } else {
@@ -271,7 +360,9 @@ async function request(endpoint, params = {}) {
 
 function createGameKey(game) {
   const numericId = Number(game?.id);
-  if (Number.isFinite(numericId) && numericId > 0) return `id-${numericId}`;
+  if (Number.isFinite(numericId) && numericId > 0) {
+    return `id-${numericId}`;
+  }
   const isoDate = typeof game?.isoDate === 'string' ? game.isoDate : 'date-tba';
   const visitor = game?.visitor?.abbreviation || game?.visitor?.name || 'visitor';
   const home = game?.home?.abbreviation || game?.home?.name || 'home';
@@ -280,10 +371,14 @@ function createGameKey(game) {
 
 async function fetchGamesForRange(startDate, endDate) {
   const { start, end } = sanitizeRange({ start: startDate, end: endDate });
-  if (!start || !end) return [];
+  if (!start || !end) {
+    return [];
+  }
 
   const isoDates = enumerateIsoDates(start, end);
-  if (!isoDates.length) return [];
+  if (!isoDates.length) {
+    return [];
+  }
 
   const seasons = deriveSeasonsForRange(start, end);
   const seen = new Map();
@@ -294,20 +389,25 @@ async function fetchGamesForRange(startDate, endDate) {
       dates: isoDates,
       per_page: PAGE_SIZE,
       cursor,
-      // Intentionally omit `postseason` so preseason is not filtered out.
     };
-    if (seasons.length) params.seasons = seasons;
+    if (seasons.length) {
+      params.seasons = seasons;
+    }
 
     // eslint-disable-next-line no-await-in-loop
     const payload = await request('games', params);
     const data = Array.isArray(payload?.data) ? payload.data : [];
     data.forEach((raw) => {
       const normalized = normalizeGame(raw, start);
-      // Keep NBA vs NBA and NBA vs non-NBA. Drop non-NBA vs non-NBA.
-      const hasNbaSide = isNbaTeamId(normalized?.home?.id) || isNbaTeamId(normalized?.visitor?.id);
+
+      // Keep games where at least one side is an NBA team (preseason exhibitions included).
+      const hasNbaSide =
+        isNbaTeamId(normalized?.home?.id) || isNbaTeamId(normalized?.visitor?.id);
       if (!hasNbaSide) return;
       const key = createGameKey(normalized);
-      if (!seen.has(key)) seen.set(key, normalized);
+      if (!seen.has(key)) {
+        seen.set(key, normalized);
+      }
     });
     cursor = payload?.meta?.next_cursor ?? null;
   } while (cursor);
@@ -316,34 +416,54 @@ async function fetchGamesForRange(startDate, endDate) {
 }
 
 function parseDateTime(value) {
-  if (!value || typeof value !== 'string') return null;
+  if (!value || typeof value !== 'string') {
+    return null;
+  }
   const normalized = value.includes('T') ? value : value.replace(' ', 'T');
   const parsed = new Date(normalized);
-  if (Number.isNaN(parsed.getTime())) return null;
+  if (Number.isNaN(parsed.getTime())) {
+    return null;
+  }
   return parsed;
 }
 
 function parseDateOnly(value) {
-  if (!value || typeof value !== 'string') return null;
+  if (!value || typeof value !== 'string') {
+    return null;
+  }
   const parsed = new Date(`${value}T00:00:00Z`);
-  if (Number.isNaN(parsed.getTime())) return null;
+  if (Number.isNaN(parsed.getTime())) {
+    return null;
+  }
   return parsed;
 }
 
 function extractStatusIsoDate(status) {
-  if (typeof status !== 'string') return null;
+  if (typeof status !== 'string') {
+    return null;
+  }
   const trimmed = status.trim();
-  if (!trimmed) return null;
-  if (isValidIsoDate(trimmed)) return trimmed;
+  if (!trimmed) {
+    return null;
+  }
+  if (isValidIsoDate(trimmed)) {
+    return trimmed;
+  }
   const parsed = parseDateTime(trimmed);
-  if (!parsed) return null;
+  if (!parsed) {
+    return null;
+  }
   return parsed.toISOString().slice(0, 10);
 }
 
 function computeStage(status, period) {
   const normalized = (status ?? '').toString().toLowerCase();
-  if (normalized.includes('final')) return 'final';
-  if (period === 0) return 'upcoming';
+  if (normalized.includes('final')) {
+    return 'final';
+  }
+  if (period === 0) {
+    return 'upcoming';
+  }
   return 'live';
 }
 
@@ -362,12 +482,10 @@ function normalizeGame(raw, fallbackIsoDate) {
   const period = Number.isFinite(Number(raw?.period)) ? Number(raw.period) : 0;
   const time = typeof raw?.time === 'string' ? raw.time.trim() : '';
   const tipoff = parseDateTime(raw?.datetime) ?? parseDateOnly(raw?.date);
-  const home = normalizeTeam(raw?.home_team ?? raw?.homeTeam, raw?.home_team_score ?? raw?.homeTeamScore);
-  const visitor = normalizeTeam(raw?.visitor_team ?? raw?.visitorTeam, raw?.visitor_team_score ?? raw?.visitorTeamScore);
+  const home = normalizeTeam(raw?.home_team, raw?.home_team_score);
+  const visitor = normalizeTeam(raw?.visitor_team, raw?.visitor_team_score);
   const margin = home.score - visitor.score;
   const totalPoints = home.score + visitor.score;
-
-  // Some providers don’t send season_type for preseason; detect robustly.
   const seasonTypeRaw = typeof raw?.season_type === 'string' ? raw.season_type.trim() : '';
   const seasonTypeNormalized = seasonTypeRaw.toLowerCase();
   const preseason =
@@ -376,7 +494,7 @@ function normalizeGame(raw, fallbackIsoDate) {
     /\bpre[-\s]?season\b/i.test(status);
 
   return {
-    id: raw?.id ?? null,
+    id: raw?.id,
     isoDate: typeof raw?.date === 'string' ? raw.date : fallbackIsoDate,
     status,
     period,
@@ -384,7 +502,7 @@ function normalizeGame(raw, fallbackIsoDate) {
     stage: computeStage(status, period),
     postseason: Boolean(raw?.postseason),
     preseason,
-    seasonType: seasonTypeRaw || '',
+    seasonType: seasonTypeRaw,
     tipoff,
     home,
     visitor,
@@ -398,9 +516,13 @@ function normalizeStatusText(value) {
 }
 
 function formatPeriodLabel(game) {
-  if (game.stage === 'final') return 'Final';
+  if (game.stage === 'final') {
+    return 'Final';
+  }
   const period = Number.isFinite(game?.period) ? Number(game.period) : 0;
-  if (period <= 0) return '';
+  if (period <= 0) {
+    return '';
+  }
   if (period === 1) return '1st Qtr';
   if (period === 2) return '2nd Qtr';
   if (period === 3) return '3rd Qtr';
@@ -415,34 +537,55 @@ function formatGameStatus(game) {
   const clock = game.time ? game.time.replace(/\s+/g, '') : '';
   const periodLabel = formatPeriodLabel(game);
 
-  if (game.stage === 'final' || normalized.includes('final')) return 'Final';
-  if (normalized.includes('scheduled')) return 'Scheduled';
+  if (game.stage === 'final' || normalized.includes('final')) {
+    return 'Final';
+  }
+
+  if (normalized.includes('scheduled')) {
+    return 'Scheduled';
+  }
 
   if (normalized.includes('progress')) {
-    if (periodLabel && clock) return `${status} • ${periodLabel} ${clock}`;
-    if (periodLabel) return `${status} • ${periodLabel}`;
-    if (clock) return `${status} • ${clock}`;
+    if (periodLabel && clock) {
+      return `${status} • ${periodLabel} ${clock}`;
+    }
+    if (periodLabel) {
+      return `${status} • ${periodLabel}`;
+    }
+    if (clock) {
+      return `${status} • ${clock}`;
+    }
     return status || 'In Progress';
   }
 
-  if (game.stage === 'upcoming') return status || formatTimeLabel(game.tipoff) || 'Scheduled';
+  if (game.stage === 'upcoming') {
+    return status || formatTimeLabel(game.tipoff) || 'Scheduled';
+  }
+
   if (game.stage === 'live') {
     const label = periodLabel || status || 'In Progress';
     return clock ? `${label} • ${clock}` : label;
   }
+
   return status || 'Final';
 }
 
 function formatMarginString(game) {
-  if (!Number.isFinite(game?.margin)) return null;
-  if (game.margin === 0) return 'Level game';
+  if (!Number.isFinite(game?.margin)) {
+    return null;
+  }
+  if (game.margin === 0) {
+    return 'Level game';
+  }
   const leader = game.margin > 0 ? game.home : game.visitor;
   const prefix = game.margin > 0 ? '+' : '−';
   return `${leader.abbreviation || leader.name}: ${prefix}${helpers.formatNumber(Math.abs(game.margin), 0)} pts`;
 }
 
 function formatTotalString(game) {
-  if (!Number.isFinite(game?.totalPoints) || game.totalPoints <= 0) return null;
+  if (!Number.isFinite(game?.totalPoints) || game.totalPoints <= 0) {
+    return null;
+  }
   return `${helpers.formatNumber(game.totalPoints, 0)} pts total`;
 }
 
@@ -452,8 +595,12 @@ function formatGameMeta(game) {
     return tip ? `Local tip ${tip}` : '';
   }
   const total = formatTotalString(game);
-  if (game.postseason) return total ? `${total} • Postseason` : 'Postseason';
-  if (game.preseason) return total ? `${total} • Preseason` : 'Preseason';
+  if (game.postseason) {
+    return total ? `${total} • Postseason` : 'Postseason';
+  }
+  if (game.preseason) {
+    return total ? `${total} • Preseason` : 'Preseason';
+  }
   return total ?? '';
 }
 
@@ -470,7 +617,9 @@ function formatPeriodDetail(game) {
 }
 
 function formatSignedMargin(value) {
-  if (!Number.isFinite(value)) return null;
+  if (!Number.isFinite(value)) {
+    return null;
+  }
   const magnitude = helpers.formatNumber(Math.abs(value), 0);
   if (value > 0) return `+${magnitude}`;
   if (value < 0) return `−${magnitude}`;
@@ -478,11 +627,15 @@ function formatSignedMargin(value) {
 }
 
 function clearScoreboard() {
-  if (scoreboardContainer) scoreboardContainer.innerHTML = '';
+  if (scoreboardContainer) {
+    scoreboardContainer.innerHTML = '';
+  }
 }
 
 function renderScoreboardState(message) {
-  if (!scoreboardContainer) return;
+  if (!scoreboardContainer) {
+    return;
+  }
   clearScoreboard();
   const state = document.createElement('p');
   state.className = 'scoreboard-state';
@@ -495,7 +648,9 @@ function normalizeScoreboardView(value) {
 }
 
 function updateScoreboardViewButtons() {
-  if (!scoreboardViewButtons || !scoreboardViewButtons.length) return;
+  if (!scoreboardViewButtons || !scoreboardViewButtons.length) {
+    return;
+  }
   scoreboardViewButtons.forEach((button) => {
     const view = normalizeScoreboardView(button.getAttribute('data-scoreboard-view'));
     const isActive = view === scoreboardView;
@@ -504,14 +659,20 @@ function updateScoreboardViewButtons() {
 }
 
 function filterGamesForView(games) {
-  if (!Array.isArray(games)) return [];
-  if (scoreboardView === 'upcoming') return games.filter((game) => game.stage === 'upcoming');
+  if (!Array.isArray(games)) {
+    return [];
+  }
+  if (scoreboardView === 'upcoming') {
+    return games.filter((game) => game.stage === 'upcoming');
+  }
   return games;
 }
 
 function setScoreboardView(nextView) {
   const normalized = normalizeScoreboardView(nextView);
-  if (normalized === scoreboardView) return;
+  if (normalized === scoreboardView) {
+    return;
+  }
   scoreboardView = normalized;
   updateScoreboardViewButtons();
   renderScoreboard(latestGames);
@@ -540,7 +701,9 @@ function createTeamRow(team, game, role) {
   score.textContent = helpers.formatNumber(scoreValue, 0);
   if (formatSignedMargin(game.margin) !== null) {
     const isLeader = (game.margin > 0 && role === 'home') || (game.margin < 0 && role === 'visitor');
-    if (isLeader && game.margin !== 0) score.classList.add('scoreboard-card__score--lead');
+    if (isLeader && game.margin !== 0) {
+      score.classList.add('scoreboard-card__score--lead');
+    }
   }
 
   row.append(teamWrapper, score);
@@ -614,8 +777,9 @@ function createScoreboardCard(game) {
   }
 
   card.append(header, rows);
-  if (footer.childNodes.length) card.appendChild(footer);
-
+  if (footer.childNodes.length) {
+    card.appendChild(footer);
+  }
   const numericId = Number(game?.id);
   if (Number.isFinite(numericId) && numericId > 0) {
     const actions = document.createElement('div');
@@ -634,7 +798,9 @@ function createScoreboardCard(game) {
 }
 
 function renderScoreboard(games) {
-  if (!scoreboardContainer) return;
+  if (!scoreboardContainer) {
+    return;
+  }
   clearScoreboard();
   if (!Array.isArray(games) || !games.length) {
     renderScoreboardState('No NBA games for this date.');
@@ -662,10 +828,14 @@ function renderScoreboard(games) {
   }
   const sorted = [...filtered].sort((a, b) => {
     const stageDelta = (stageRank[a.stage] ?? 3) - (stageRank[b.stage] ?? 3);
-    if (stageDelta !== 0) return stageDelta;
+    if (stageDelta !== 0) {
+      return stageDelta;
+    }
     const timeA = a.tipoff instanceof Date ? a.tipoff.getTime() : 0;
     const timeB = b.tipoff instanceof Date ? b.tipoff.getTime() : 0;
-    if (timeA !== timeB) return timeA - timeB;
+    if (timeA !== timeB) {
+      return timeA - timeB;
+    }
     return (a.id ?? 0) - (b.id ?? 0);
   });
   sorted.forEach((game) => {
@@ -675,7 +845,9 @@ function renderScoreboard(games) {
 
 function setMetric(key, value, fallback = '—') {
   const target = metricTargets[key];
-  if (!target) return;
+  if (!target) {
+    return;
+  }
   const output = value === null || value === undefined || value === '' ? fallback : value;
   target.textContent = output;
 }
@@ -763,51 +935,89 @@ function updateMetrics(games) {
 }
 
 function setRefreshTimestamp(date) {
-  if (!metricTargets.refreshLabel) return;
+  if (!metricTargets.refreshLabel) {
+    return;
+  }
   const label = date instanceof Date && !Number.isNaN(date.getTime()) ? formatTimeLabel(date) : null;
   metricTargets.refreshLabel.textContent = label ?? '—';
 }
 
 function setFetchMessage(message = '', type = 'idle') {
   const target = metricTargets.fetchState;
-  if (!target) return;
+  if (!target) {
+    return;
+  }
   target.textContent = message;
   target.classList.remove('is-error', 'is-success');
-  if (type === 'error') target.classList.add('is-error');
-  else if (type === 'success') target.classList.add('is-success');
+  if (type === 'error') {
+    target.classList.add('is-error');
+  } else if (type === 'success') {
+    target.classList.add('is-success');
+  }
 }
 
 function fallbackChart(message) {
   return {
     type: 'doughnut',
-    data: { labels: [''], datasets: [{ data: [1], backgroundColor: ['rgba(17, 86, 214, 0.12)'], borderWidth: 0 }] },
+    data: {
+      labels: [''],
+      datasets: [
+        {
+          data: [1],
+          backgroundColor: ['rgba(17, 86, 214, 0.12)'],
+          borderWidth: 0,
+        },
+      ],
+    },
     options: {
       maintainAspectRatio: false,
-      plugins: { legend: { display: false }, tooltip: { enabled: false }, title: { display: true, text: message } },
+      plugins: {
+        legend: { display: false },
+        tooltip: { enabled: false },
+        title: { display: true, text: message },
+      },
     },
   };
 }
 
 function buildStatusChart(games) {
   const counts = { upcoming: 0, live: 0, final: 0 };
-  games.forEach((game) => { if (counts[game.stage] !== undefined) counts[game.stage] += 1; });
+  games.forEach((game) => {
+    if (counts[game.stage] !== undefined) {
+      counts[game.stage] += 1;
+    }
+  });
   const total = counts.upcoming + counts.live + counts.final;
-  if (!total) return fallbackChart('No games scheduled');
+  if (!total) {
+    return fallbackChart('No games scheduled');
+  }
   return {
     type: 'doughnut',
     data: {
       labels: ['Upcoming', 'Live', 'Final'],
-      datasets: [{ data: [counts.upcoming, counts.live, counts.final], backgroundColor: [
-        'rgba(17, 86, 214, 0.78)', 'rgba(239, 61, 91, 0.82)', 'rgba(11, 37, 69, 0.85)'], borderWidth: 0 }],
+      datasets: [
+        {
+          data: [counts.upcoming, counts.live, counts.final],
+          backgroundColor: ['rgba(17, 86, 214, 0.78)', 'rgba(239, 61, 91, 0.82)', 'rgba(11, 37, 69, 0.85)'],
+          borderWidth: 0,
+        },
+      ],
     },
-    options: { maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } },
+    options: {
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'bottom' },
+      },
+    },
   };
 }
 
 function buildTipoffChart(games) {
   const buckets = new Map();
   games.forEach((game) => {
-    if (!(game.tipoff instanceof Date) || Number.isNaN(game.tipoff.getTime())) return;
+    if (!(game.tipoff instanceof Date) || Number.isNaN(game.tipoff.getTime())) {
+      return;
+    }
     const hour = game.tipoff.getHours();
     const label = game.tipoff.toLocaleTimeString(undefined, { hour: 'numeric' });
     const key = `${hour}-${label}`;
@@ -816,30 +1026,41 @@ function buildTipoffChart(games) {
     buckets.set(key, entry);
   });
   const slots = Array.from(buckets.values()).sort((a, b) => a.hour - b.hour);
-  if (!slots.length) return fallbackChart('Tipoff data pending');
+  if (!slots.length) {
+    return fallbackChart('Tipoff data pending');
+  }
   return {
     type: 'line',
     data: {
       labels: slots.map((slot) => slot.label),
-      datasets: [{
-        label: 'Games',
-        data: slots.map((slot) => slot.count),
-        borderColor: '#1156d6',
-        backgroundColor: 'rgba(17, 86, 214, 0.22)',
-        tension: 0.35,
-        fill: true,
-        pointBackgroundColor: '#ffffff',
-        pointBorderColor: '#1156d6',
-        pointHoverRadius: 6,
-      }],
+      datasets: [
+        {
+          label: 'Games',
+          data: slots.map((slot) => slot.count),
+          borderColor: '#1156d6',
+          backgroundColor: 'rgba(17, 86, 214, 0.22)',
+          tension: 0.35,
+          fill: true,
+          pointBackgroundColor: '#ffffff',
+          pointBorderColor: '#1156d6',
+          pointHoverRadius: 6,
+        },
+      ],
     },
     options: {
       maintainAspectRatio: false,
       plugins: { legend: { display: false } },
       interaction: { mode: 'nearest', intersect: false },
       scales: {
-        y: { beginAtZero: true, ticks: { precision: 0 }, title: { display: true, text: 'Games' }, grid: { color: 'rgba(17, 86, 214, 0.12)' } },
-        x: { grid: { display: false } },
+        y: {
+          beginAtZero: true,
+          ticks: { precision: 0 },
+          title: { display: true, text: 'Games' },
+          grid: { color: 'rgba(17, 86, 214, 0.12)' },
+        },
+        x: {
+          grid: { display: false },
+        },
       },
     },
   };
@@ -857,19 +1078,45 @@ function buildMarginChart(games) {
   const counts = buckets.map(() => 0);
   relevant.forEach((game) => {
     const margin = Math.abs(Number.isFinite(game.margin) ? game.margin : 0);
-    const index = buckets.findIndex((bucket, i) => (i === buckets.length - 1 ? margin >= bucket.min : margin >= bucket.min && margin < bucket.max));
-    if (index >= 0) counts[index] += 1;
+    const index = buckets.findIndex((bucket, bucketIndex) => {
+      if (bucketIndex === buckets.length - 1) {
+        return margin >= bucket.min;
+      }
+      return margin >= bucket.min && margin < bucket.max;
+    });
+    if (index >= 0) {
+      counts[index] += 1;
+    }
   });
-  if (!counts.some((c) => c > 0)) return fallbackChart('Margins not available yet');
+  if (!counts.some((count) => count > 0)) {
+    return fallbackChart('Margins not available yet');
+  }
   return {
     type: 'bar',
-    data: { labels: buckets.map((b) => b.label), datasets: [{ label: 'Games', data: counts, backgroundColor: 'rgba(17, 86, 214, 0.78)', borderRadius: 12 }] },
+    data: {
+      labels: buckets.map((bucket) => bucket.label),
+      datasets: [
+        {
+          label: 'Games',
+          data: counts,
+          backgroundColor: 'rgba(17, 86, 214, 0.78)',
+          borderRadius: 12,
+        },
+      ],
+    },
     options: {
       maintainAspectRatio: false,
       plugins: { legend: { display: false } },
       scales: {
-        y: { beginAtZero: true, ticks: { precision: 0 }, title: { display: true, text: 'Game count' }, grid: { color: 'rgba(17, 86, 214, 0.12)' } },
-        x: { grid: { display: false } },
+        y: {
+          beginAtZero: true,
+          ticks: { precision: 0 },
+          title: { display: true, text: 'Game count' },
+          grid: { color: 'rgba(17, 86, 214, 0.12)' },
+        },
+        x: {
+          grid: { display: false },
+        },
       },
     },
   };
@@ -878,32 +1125,64 @@ function buildMarginChart(games) {
 function buildScoringChart(games) {
   const teams = [];
   games.forEach((game) => {
-    if (game.home.score > 0) teams.push({ label: game.home.abbreviation || game.home.name, name: game.home.name, points: game.home.score, opponent: game.visitor });
-    if (game.visitor.score > 0) teams.push({ label: game.visitor.abbreviation || game.visitor.name, name: game.visitor.name, points: game.visitor.score, opponent: game.home });
+    if (game.home.score > 0) {
+      teams.push({
+        label: game.home.abbreviation || game.home.name,
+        name: game.home.name,
+        points: game.home.score,
+        opponent: game.visitor,
+      });
+    }
+    if (game.visitor.score > 0) {
+      teams.push({
+        label: game.visitor.abbreviation || game.visitor.name,
+        name: game.visitor.name,
+        points: game.visitor.score,
+        opponent: game.home,
+      });
+    }
   });
   const top = teams.sort((a, b) => b.points - a.points).slice(0, 6);
-  if (!top.length) return fallbackChart('Scoring data building');
+  if (!top.length) {
+    return fallbackChart('Scoring data building');
+  }
   const colors = ['#1156d6', '#ef3d5b', '#1f7bff', '#f4b53f', '#6c4fe0', '#11b5c6'];
   return {
     type: 'bar',
     data: {
-      labels: top.map((t) => t.label),
-      datasets: [{ label: 'Points', data: top.map((t) => t.points), backgroundColor: top.map((_, i) => colors[i % colors.length]) }],
+      labels: top.map((team) => team.label),
+      datasets: [
+        {
+          label: 'Points',
+          data: top.map((team) => team.points),
+          backgroundColor: top.map((_, index) => colors[index % colors.length]),
+        },
+      ],
     },
     options: {
       indexAxis: 'y',
       maintainAspectRatio: false,
       plugins: {
         legend: { display: false },
-        tooltip: { callbacks: { label(context) {
-          const team = top[context.dataIndex];
-          const opponent = team.opponent.abbreviation || team.opponent.name;
-          return `${context.formattedValue} vs ${opponent}`;
-        } } },
+        tooltip: {
+          callbacks: {
+            label(context) {
+              const team = top[context.dataIndex];
+              const opponent = team.opponent.abbreviation || team.opponent.name;
+              return `${context.formattedValue} vs ${opponent}`;
+            },
+          },
+        },
       },
       scales: {
-        x: { beginAtZero: true, title: { display: true, text: 'Points' }, grid: { color: 'rgba(17, 86, 214, 0.12)' } },
-        y: { grid: { display: false } },
+        x: {
+          beginAtZero: true,
+          title: { display: true, text: 'Points' },
+          grid: { color: 'rgba(17, 86, 214, 0.12)' },
+        },
+        y: {
+          grid: { display: false },
+        },
       },
     },
   };
@@ -911,8 +1190,14 @@ function buildScoringChart(games) {
 
 function buildBalanceChart(games) {
   const relevant = games.filter((game) => game.home.score > 0 || game.visitor.score > 0);
-  if (!relevant.length) return fallbackChart('Score data pending');
-  const stageColors = { live: 'rgba(239, 61, 91, 0.85)', final: 'rgba(17, 86, 214, 0.85)', upcoming: 'rgba(154, 165, 196, 0.7)' };
+  if (!relevant.length) {
+    return fallbackChart('Score data pending');
+  }
+  const stageColors = {
+    live: 'rgba(239, 61, 91, 0.85)',
+    final: 'rgba(17, 86, 214, 0.85)',
+    upcoming: 'rgba(154, 165, 196, 0.7)',
+  };
   const points = relevant.map((game) => ({
     x: Math.max(game.visitor.score, 0),
     y: Math.max(game.home.score, 0),
@@ -921,28 +1206,60 @@ function buildBalanceChart(games) {
     margin: game.margin,
     total: game.totalPoints,
   }));
-  const colors = points.map((p) => stageColors[p.stage] ?? 'rgba(17, 86, 214, 0.6)');
+  const colors = points.map((point) => stageColors[point.stage] ?? 'rgba(17, 86, 214, 0.6)');
   return {
     type: 'scatter',
-    data: { datasets: [{ label: 'Score pairs', data: points, parsing: false, pointBackgroundColor: colors, pointBorderColor: colors, pointRadius: 6, pointHoverRadius: 7 }] },
+    data: {
+      datasets: [
+        {
+          label: 'Score pairs',
+          data: points,
+          parsing: false,
+          pointBackgroundColor: colors,
+          pointBorderColor: colors,
+          pointRadius: 6,
+          pointHoverRadius: 7,
+        },
+      ],
+    },
     options: {
       maintainAspectRatio: false,
       plugins: {
         legend: { display: false },
-        tooltip: { callbacks: { label(context) {
-          const raw = context.raw || {};
-          const details = [];
-          if (raw.label) details.push(raw.label);
-          if (raw.stage) details.push(raw.stage.charAt(0).toUpperCase() + raw.stage.slice(1));
-          const margin = formatSignedMargin(raw.margin);
-          if (margin) details.push(`Margin ${margin}`);
-          if (Number.isFinite(raw.total) && raw.total > 0) details.push(`Total ${helpers.formatNumber(raw.total, 0)}`);
-          return details;
-        } } },
+        tooltip: {
+          callbacks: {
+            label(context) {
+              const raw = context.raw || {};
+              const details = [];
+              if (raw.label) {
+                details.push(raw.label);
+              }
+              if (raw.stage) {
+                details.push(raw.stage.charAt(0).toUpperCase() + raw.stage.slice(1));
+              }
+              const margin = formatSignedMargin(raw.margin);
+              if (margin) {
+                details.push(`Margin ${margin}`);
+              }
+              if (Number.isFinite(raw.total) && raw.total > 0) {
+                details.push(`Total ${helpers.formatNumber(raw.total, 0)}`);
+              }
+              return details;
+            },
+          },
+        },
       },
       scales: {
-        x: { beginAtZero: true, title: { display: true, text: 'Visitor points' }, grid: { color: 'rgba(17, 86, 214, 0.08)' } },
-        y: { beginAtZero: true, title: { display: true, text: 'Home points' }, grid: { color: 'rgba(17, 86, 214, 0.12)' } },
+        x: {
+          beginAtZero: true,
+          title: { display: true, text: 'Visitor points' },
+          grid: { color: 'rgba(17, 86, 214, 0.08)' },
+        },
+        y: {
+          beginAtZero: true,
+          title: { display: true, text: 'Home points' },
+          grid: { color: 'rgba(17, 86, 214, 0.12)' },
+        },
       },
     },
   };
@@ -951,11 +1268,36 @@ function buildBalanceChart(games) {
 function rebuildCharts() {
   destroyCharts();
   registerCharts([
-    { element: '#status-breakdown', async createConfig() { return buildStatusChart(latestGames); } },
-    { element: '#tipoff-curve',    async createConfig() { return buildTipoffChart(latestGames); } },
-    { element: '#margin-spread',   async createConfig() { return buildMarginChart(latestGames); } },
-    { element: '#scoring-leaders', async createConfig() { return buildScoringChart(latestGames); } },
-    { element: '#score-balance',   async createConfig() { return buildBalanceChart(latestGames); } },
+    {
+      element: '#status-breakdown',
+      async createConfig() {
+        return buildStatusChart(latestGames);
+      },
+    },
+    {
+      element: '#tipoff-curve',
+      async createConfig() {
+        return buildTipoffChart(latestGames);
+      },
+    },
+    {
+      element: '#margin-spread',
+      async createConfig() {
+        return buildMarginChart(latestGames);
+      },
+    },
+    {
+      element: '#scoring-leaders',
+      async createConfig() {
+        return buildScoringChart(latestGames);
+      },
+    },
+    {
+      element: '#score-balance',
+      async createConfig() {
+        return buildBalanceChart(latestGames);
+      },
+    },
   ]);
 }
 
@@ -966,18 +1308,26 @@ function scheduleAutoRefresh() {
   }
   sanitizeActiveRange();
   if (isTodayWithinRange(activeRange)) {
-    refreshTimer = window.setInterval(() => { loadGames({ silent: true }); }, REFRESH_INTERVAL_MS);
+    refreshTimer = window.setInterval(() => {
+      loadGames({ silent: true });
+    }, REFRESH_INTERVAL_MS);
   }
 }
 
 async function loadGames(options = {}) {
-  if (loading) return;
+  if (loading) {
+    return;
+  }
   sanitizeActiveRange();
   loading = true;
   const { silent = false } = options;
   const previousGames = latestGames;
-  if (refreshButton) refreshButton.disabled = true;
-  if (!silent && (!previousGames || !previousGames.length)) renderScoreboardState('Loading games…');
+  if (refreshButton) {
+    refreshButton.disabled = true;
+  }
+  if (!silent && (!previousGames || !previousGames.length)) {
+    renderScoreboardState('Loading games…');
+  }
   setFetchMessage('Refreshing…');
   try {
     const games = await fetchGamesForRange(activeRange.start, activeRange.end);
@@ -1004,7 +1354,9 @@ async function loadGames(options = {}) {
     }
   } finally {
     loading = false;
-    if (refreshButton) refreshButton.disabled = false;
+    if (refreshButton) {
+      refreshButton.disabled = false;
+    }
   }
 }
 
@@ -1013,7 +1365,10 @@ function initControls() {
     startDateInput.addEventListener('change', (event) => {
       const bounds = getSelectableBounds();
       const nextValue = clampDate(event.target.value, bounds);
-      if (!nextValue) { applyRangeToInputs(); return; }
+      if (!nextValue) {
+        applyRangeToInputs();
+        return;
+      }
       updateActiveRange({ start: nextValue }, { bias: 'start' });
     });
   }
@@ -1021,19 +1376,30 @@ function initControls() {
     endDateInput.addEventListener('change', (event) => {
       const bounds = getSelectableBounds();
       const nextValue = clampDate(event.target.value, bounds);
-      if (!nextValue) { applyRangeToInputs(); return; }
+      if (!nextValue) {
+        applyRangeToInputs();
+        return;
+      }
       updateActiveRange({ end: nextValue }, { bias: 'end' });
     });
   }
   if (refreshButton) {
-    refreshButton.addEventListener('click', () => { loadGames(); });
+    refreshButton.addEventListener('click', () => {
+      loadGames();
+    });
   }
   if (scoreboardViewButtons && scoreboardViewButtons.length) {
-    const preset = Array.from(scoreboardViewButtons).find((button) => button.getAttribute('aria-pressed') === 'true');
-    if (preset) scoreboardView = normalizeScoreboardView(preset.getAttribute('data-scoreboard-view'));
+    const preset = Array.from(scoreboardViewButtons).find(
+      (button) => button.getAttribute('aria-pressed') === 'true',
+    );
+    if (preset) {
+      scoreboardView = normalizeScoreboardView(preset.getAttribute('data-scoreboard-view'));
+    }
     scoreboardViewButtons.forEach((button) => {
       const view = button.getAttribute('data-scoreboard-view');
-      button.addEventListener('click', () => { setScoreboardView(view); });
+      button.addEventListener('click', () => {
+        setScoreboardView(view);
+      });
     });
     updateScoreboardViewButtons();
   }
