@@ -672,7 +672,14 @@ function buildLeaderboard(
       rank.className = 'goat-tier__player-rank';
       const localRank = index + 1;
       const globalRank = Number.isFinite(player.rank) ? player.rank : null;
-      rank.textContent = Number.isFinite(localRank) ? localRank : '—';
+      const displayRank =
+        globalRank !== null && Number.isFinite(globalRank)
+          ? globalRank
+          : Number.isFinite(localRank)
+          ? localRank
+          : null;
+
+      rank.textContent = displayRank !== null ? displayRank : '—';
       rank.dataset.localRank = String(localRank);
       if (globalRank !== null) {
         rank.dataset.globalRank = String(globalRank);
@@ -680,6 +687,8 @@ function buildLeaderboard(
         button.dataset.globalRank = String(globalRank);
       } else {
         rank.title = 'Global rank unavailable';
+        delete rank.dataset.globalRank;
+        delete button.dataset.globalRank;
       }
 
       const nameBlock = document.createElement('div');
