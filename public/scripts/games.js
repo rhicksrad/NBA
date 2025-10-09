@@ -8,6 +8,7 @@ const NEXT_SEASON_TIPOFF_DATE = '2025-10-04';
 const LAST_COMPLETED_SEASON_FINALE = '2024-06-17';
 const FUTURE_SCHEDULE_END = '2026-06-30';
 const EARLIEST_ARCHIVE_DATE = '1946-11-01';
+const DEMO_GAME_DATES = ['2024-01-15', '2023-12-25', '2024-03-10', '2024-04-14', '2024-06-06'];
 
 const NBA_TEAM_IDS = new Set([
   1610612737,
@@ -42,6 +43,12 @@ const NBA_TEAM_IDS = new Set([
   1610612766,
 ]);
 
+const BDL_TEAM_IDS = new Set([
+  1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+  11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+  21, 22, 23, 24, 25, 26, 27, 28, 29, 30,
+]);
+
 const stageRank = { live: 0, upcoming: 1, final: 2 };
 
 const scoreboardContainer = document.querySelector('[data-scoreboard]');
@@ -73,12 +80,73 @@ function determineMaxSelectableDate() {
   return today;
 }
 
+function isLocalDevHost() {
+  if (typeof window === 'undefined' || !window.location) {
+    return false;
+  }
+  const hostname = window.location.hostname || '';
+  if (!hostname) {
+    return false;
+  }
+  if (hostname === 'localhost' || hostname === '0.0.0.0') {
+    return true;
+  }
+  if (hostname === '::1') {
+    return true;
+  }
+  return hostname.startsWith('127.');
+}
+
+function isOffseasonIsoDate(dateIso) {
+  if (!isValidIsoDate(dateIso)) {
+    return false;
+  }
+  const finale = parseDateOnly(LAST_COMPLETED_SEASON_FINALE);
+  const tipoff = parseDateOnly(NEXT_SEASON_TIPOFF_DATE);
+  const target = parseDateOnly(dateIso);
+  if (!finale || !tipoff || !target) {
+    return false;
+  }
+  return target.getTime() > finale.getTime() && target.getTime() < tipoff.getTime();
+}
+
+function shouldUseDemoSlate(todayIso) {
+  if (isOffseasonIsoDate(todayIso)) {
+    return true;
+  }
+  return isLocalDevHost();
+}
+
+function pickDemoDate(bounds) {
+  const eligible = DEMO_GAME_DATES.filter((date) => {
+    if (!isValidIsoDate(date)) {
+      return false;
+    }
+    if (bounds?.min && date < bounds.min) {
+      return false;
+    }
+    if (bounds?.max && date > bounds.max) {
+      return false;
+    }
+    return true;
+  });
+  if (!eligible.length) {
+    return null;
+  }
+  const index = Math.floor(Math.random() * eligible.length);
+  return eligible[index];
+}
+
 function determineInitialDate() {
   const today = getTodayIso();
   const bounds = getSelectableBounds();
   const clampedToday = clampDate(today, bounds);
-  if (clampedToday) {
+  if (clampedToday && !shouldUseDemoSlate(today)) {
     return clampedToday;
+  }
+  const demoDate = pickDemoDate(bounds);
+  if (demoDate) {
+    return demoDate;
   }
   if (bounds) {
     if (bounds.max) {
@@ -108,7 +176,10 @@ function isNbaTeamId(value) {
   if (!Number.isInteger(numeric)) {
     return false;
   }
-  return NBA_TEAM_IDS.has(numeric);
+  if (NBA_TEAM_IDS.has(numeric)) {
+    return true;
+  }
+  return BDL_TEAM_IDS.has(numeric);
 }
 
 function deriveSeasonFromDate(date) {
@@ -1342,7 +1413,9 @@ async function loadGames(options = {}) {
     console.error('Unable to load live games data', error);
     const rawMessage = typeof error?.message === 'string' ? error.message : '';
     const unauthorized = rawMessage.includes('401');
-    const message = unauthorized ? 'Authorization failed. Check BALLDONTLIE_API_KEY.' : 'Refresh failed';
+    const message = unauthorized
+      ? 'Authorization failed via proxy. Please notify the site operator.'
+      : 'Refresh failed';
     setFetchMessage(message, 'error');
     if (previousGames && previousGames.length) {
       latestGames = previousGames;
