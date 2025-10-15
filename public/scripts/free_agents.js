@@ -1,151 +1,448 @@
-const BDL_BASE = "https://bdlproxy.hicksrch.workers.dev"; // your Worker host
+import { bdl } from '../assets/js/bdl.js';
 
-async function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
-async function fetchBDL(path, retries = 3) {
-  const url = `${BDL_BASE}${path}${path.includes("?") ? "&" : "?"}_=${Date.now()}`; // cache-bust
-  for (let i = 0; i <= retries; i++) {
-    const r = await fetch(url, { credentials: "omit", cache: "no-store" });
-    if (r.status !== 429) return r;
-    await sleep(500 * 2 ** i);
+const ROSTER_SNAPSHOT_URL = new URL('../data/rosters.json', import.meta.url);
+const MAX_STATS_PAGES = 320;
+const MAX_CANDIDATES = 120;
+const MIN_GAMES_PLAYED = 15;
+const MIN_MINUTES_PER_GAME = 12;
+const MAX_SEASON_PROBES = 4;
+
+const PRECOMPUTED_BOARD_URL = new URL('../data/free_agents_live.json', import.meta.url);
+
+const integerFormatter = new Intl.NumberFormat('en-US', {
+  maximumFractionDigits: 0,
+});
+
+function formatNumber(value, fractionDigits = 1) {
+  if (!Number.isFinite(value)) {
+    return '—';
   }
-  throw new Error("BDL 429 after retries");
+  return value.toLocaleString('en-US', {
+    minimumFractionDigits: fractionDigits,
+    maximumFractionDigits: fractionDigits,
+  });
 }
 
-async function* listActivePlayers(perPage = 100) {
+function formatInteger(value) {
+  if (!Number.isFinite(value)) {
+    return '—';
+  }
+  return integerFormatter.format(value);
+}
+
+function parseMinutes(value) {
+  if (typeof value === 'number') {
+    return value;
+  }
+  if (typeof value !== 'string' || value.length === 0) {
+    return 0;
+  }
+  if (value.includes(':')) {
+    const [min, sec] = value.split(':');
+    const minutes = Number.parseInt(min, 10);
+    const seconds = Number.parseInt(sec, 10);
+    if (Number.isFinite(minutes) && Number.isFinite(seconds)) {
+      return minutes + seconds / 60;
+    }
+  }
+  const numeric = Number.parseFloat(value);
+  return Number.isFinite(numeric) ? numeric : 0;
+}
+
+function formatSeasonLabel(season) {
+  const next = String(season + 1);
+  return `${season}-${next.slice(-2)}`;
+}
+
+async function fetchRosterSnapshot() {
+  if (typeof window === 'undefined' || typeof document === 'undefined') {
+    const { readFile } = await import('node:fs/promises');
+    const raw = await readFile(ROSTER_SNAPSHOT_URL, 'utf-8');
+    const snapshot = JSON.parse(raw);
+    const rosterIds = new Set();
+    for (const team of snapshot?.teams ?? []) {
+      for (const player of team?.roster ?? []) {
+        if (player?.id != null) {
+          rosterIds.add(player.id);
+        }
+      }
+    }
+    return { snapshot, rosterIds };
+  }
+
+  const response = await fetch(ROSTER_SNAPSHOT_URL, { cache: 'no-store' });
+  if (!response.ok) {
+    throw new Error(`Failed to load roster snapshot (${response.status})`);
+  }
+  const snapshot = await response.json();
+  const rosterIds = new Set();
+  for (const team of snapshot?.teams ?? []) {
+    for (const player of team?.roster ?? []) {
+      if (player?.id != null) {
+        rosterIds.add(player.id);
+      }
+    }
+  }
+  return { snapshot, rosterIds };
+}
+
+async function loadPrecomputedBoard() {
+  if (typeof window === 'undefined' || typeof document === 'undefined') {
+    return null;
+  }
+
+  try {
+    const response = await fetch(PRECOMPUTED_BOARD_URL, { cache: 'no-store' });
+    if (!response.ok) {
+      if (response.status === 404) return null;
+      throw new Error(`Failed to load precomputed board (${response.status})`);
+    }
+    const payload = await response.json();
+    if (!payload || !Array.isArray(payload.entries) || payload.entries.length === 0) {
+      return null;
+    }
+    return {
+      entries: payload.entries,
+      season: payload.season ?? null,
+      seasonLabel: payload.seasonLabel ?? payload.season_label ?? null,
+      rosterSnapshotFetchedAt: payload.rosterSnapshotFetchedAt ?? payload.roster_snapshot_fetched_at ?? null,
+      generatedAt: payload.generated_at ?? null,
+    };
+  } catch (error) {
+    console.warn('Unable to load precomputed free agent board', error);
+    return null;
+  }
+}
+
+async function seasonHasStats(season) {
+  const params = new URLSearchParams({ per_page: '1', postseason: 'false' });
+  params.append('seasons[]', String(season));
+  const payload = await bdl(`/v1/stats?${params.toString()}`);
+  return Array.isArray(payload?.data) && payload.data.length > 0;
+}
+
+async function resolveTargetSeason(snapshotSeasonStartYear) {
+  const now = new Date();
+  const fallback = now.getUTCFullYear() - (now.getUTCMonth() < 9 ? 1 : 0);
+  let probe = Number.isFinite(snapshotSeasonStartYear)
+    ? snapshotSeasonStartYear - 1
+    : fallback;
+
+  for (let attempt = 0; attempt < MAX_SEASON_PROBES; attempt += 1) {
+    if (probe < 1979) break;
+    if (await seasonHasStats(probe)) {
+      return probe;
+    }
+    probe -= 1;
+  }
+  return probe;
+}
+
+function createAggregate(player) {
+  return {
+    profile: player,
+    totals: {
+      points: 0,
+      assists: 0,
+      rebounds: 0,
+      steals: 0,
+      blocks: 0,
+      minutes: 0,
+    },
+    games: 0,
+    lastTeam: null,
+    lastGameDate: null,
+  };
+}
+
+function updateLastTeam(aggregate, entry) {
+  const gameDate = entry?.game?.date ? Date.parse(entry.game.date) : Number.NaN;
+  if (Number.isNaN(gameDate)) {
+    return;
+  }
+  if (!aggregate.lastGameDate || gameDate >= aggregate.lastGameDate) {
+    aggregate.lastGameDate = gameDate;
+    aggregate.lastTeam = entry?.team ?? aggregate.lastTeam;
+  }
+}
+
+async function fetchFreeAgentAggregates({ season, rosterIds, maxPages = MAX_STATS_PAGES }) {
+  const aggregates = new Map();
   let cursor;
-  while (true) {
-    const qs = new URLSearchParams({ per_page: String(perPage) });
-    if (cursor) qs.set("cursor", cursor);
-    const res = await fetchBDL(`/bdl/v1/players/active?${qs}`);
-    if (!res.ok) throw new Error(`BDL ${res.status} players/active`);
-    const json = await res.json();
-    for (const p of json.data) yield p;
-    cursor = json.meta?.next_cursor;
+  for (let page = 0; page < maxPages; page += 1) {
+    const params = new URLSearchParams({ per_page: '100', postseason: 'false' });
+    params.append('seasons[]', String(season));
+    if (cursor) params.set('cursor', cursor);
+    const response = await bdl(`/v1/stats?${params.toString()}`);
+
+    for (const entry of response?.data ?? []) {
+      const player = entry?.player;
+      const playerId = player?.id;
+      if (playerId == null || rosterIds.has(playerId)) continue;
+
+      const aggregate = aggregates.get(playerId) ?? createAggregate(player);
+      const totals = aggregate.totals;
+      totals.points += Number(entry?.pts) || 0;
+      totals.assists += Number(entry?.ast) || 0;
+      totals.rebounds += Number(entry?.reb) || 0;
+      totals.steals += Number(entry?.stl) || 0;
+      totals.blocks += Number(entry?.blk) || 0;
+      totals.minutes += parseMinutes(entry?.min);
+      aggregate.games += 1;
+      updateLastTeam(aggregate, entry);
+      aggregates.set(playerId, aggregate);
+    }
+
+    cursor = response?.meta?.next_cursor;
+    if (typeof window === 'undefined' || typeof document === 'undefined') {
+      if (page === 0 || (page + 1) % 25 === 0 || !cursor) {
+        console.log(`Aggregated ${aggregates.size} players after ${page + 1} pages (cursor=${cursor ?? 'end'})`);
+      }
+    }
     if (!cursor) break;
   }
+  return aggregates;
 }
 
-// Pull authoritative “rostered right now” IDs by name search refresh.
-// This corrects upstream lag in /players/active team=null records.
-async function refreshPlayerTeamById(id) {
-  const res = await fetchBDL(`/bdl/v1/players?player_ids[]=${id}&per_page=1`);
-  if (!res.ok) return null;
-  const { data } = await res.json();
-  return data?.[0] || null;
+function computeImpactScore(metrics) {
+  if (!metrics) return 0;
+  const {
+    points = 0,
+    assists = 0,
+    rebounds = 0,
+    steals = 0,
+    blocks = 0,
+    games = 0,
+    minutes = 0,
+  } = metrics;
+  const durability = Math.min(games, 82) / 82;
+  const workload = minutes > 0 ? minutes / 36 : 0;
+  const productivity =
+    points * 1.1 +
+    assists * 0.9 +
+    rebounds * 0.6 +
+    steals * 1.2 +
+    blocks * 1.0;
+  return Number.parseFloat((productivity + durability * 4 + workload).toFixed(3));
 }
 
-// Optional: double-check with a specific search to fix known mismatches (like DeRozan).
-async function searchByNameOnce(name) {
-  const res = await fetchBDL(`/bdl/v1/players?search=${encodeURIComponent(name)}&per_page=5`);
-  if (!res.ok) return [];
-  const { data } = await res.json();
-  return data || [];
+function deriveMetricsFromAggregate(aggregate) {
+  if (!aggregate || aggregate.games === 0) return null;
+  const { totals, games } = aggregate;
+  const perGame = (value) => (games > 0 ? value / games : 0);
+  return {
+    points: perGame(totals.points),
+    assists: perGame(totals.assists),
+    rebounds: perGame(totals.rebounds),
+    steals: perGame(totals.steals),
+    blocks: perGame(totals.blocks),
+    minutes: perGame(totals.minutes),
+    games,
+  };
 }
 
-// Build a set of current rostered IDs by sweeping teams → players.
-async function rosterIdSet() {
-  const ids = new Set();
-  // 30 NBA team IDs per BDL; use players filter by team_ids to avoid hitting a separate roster endpoint
-  const TEAM_IDS = [
-    1610612737,1610612738,1610612739,1610612740,1610612741,1610612742,1610612743,1610612744,1610612745,1610612746,
-    1610612747,1610612748,1610612749,1610612750,1610612751,1610612752,1610612753,1610612754,1610612755,1610612756,
-    1610612757,1610612758,1610612759,1610612760,1610612761,1610612762,1610612763,1610612764,1610612765,1610612766
-  ];
-  // Chunk to stay under URL limits
-  for (let i = 0; i < TEAM_IDS.length; i += 8) {
-    const chunk = TEAM_IDS.slice(i, i + 8);
-    let cursor;
-    do {
-      const qs = new URLSearchParams({ per_page: "100" });
-      for (const id of chunk) qs.append("team_ids[]", String(id));
-      if (cursor) qs.set("cursor", cursor);
-      const r = await fetchBDL(`/bdl/v1/players?${qs.toString()}`);
-      if (!r.ok) throw new Error(`BDL ${r.status} players team sweep`);
-      const j = await r.json();
-      for (const p of j.data) ids.add(p.id);
-      cursor = j.meta?.next_cursor;
-    } while (cursor);
+function resolveTeamLabel(profile, seedSnapshot) {
+  const fromPlayers = profile?.team;
+  if (fromPlayers?.full_name) {
+    return {
+      name: fromPlayers.full_name,
+      abbreviation: fromPlayers.abbreviation || '',
+    };
   }
-  return ids;
+  const fromSeed = seedSnapshot?.lastTeam;
+  if (fromSeed?.full_name) {
+    return {
+      name: fromSeed.full_name,
+      abbreviation: fromSeed.abbreviation || '',
+    };
+  }
+  return { name: 'Free agent pool', abbreviation: '' };
+}
+
+function createMetric(label, value) {
+  const wrapper = document.createElement('div');
+  const dt = document.createElement('dt');
+  dt.textContent = label;
+  const dd = document.createElement('dd');
+  dd.textContent = value;
+  wrapper.append(dt, dd);
+  return wrapper;
+}
+
+function renderIdentity(player) {
+  const identity = document.createElement('div');
+  identity.className = 'free-agent-radar__identity';
+
+  const name = document.createElement('h3');
+  name.className = 'free-agent-radar__name';
+  name.textContent = player.name;
+  identity.append(name);
+
+  if (player.position) {
+    const pos = document.createElement('span');
+    pos.className = 'free-agent-radar__position';
+    pos.textContent = player.position;
+    identity.append(pos);
+  }
+
+  return identity;
+}
+
+function renderScore(score) {
+  const scoreNode = document.createElement('div');
+  scoreNode.className = 'free-agent-radar__score';
+
+  const label = document.createElement('span');
+  label.className = 'free-agent-radar__score-label';
+  label.textContent = 'Impact score';
+
+  const value = document.createElement('span');
+  value.className = 'free-agent-radar__score-value';
+  value.textContent = formatNumber(score, 1);
+
+  scoreNode.append(label, value);
+  return scoreNode;
+}
+
+function renderMeta(teamLabel, metrics, seasonLabel) {
+  const meta = document.createElement('p');
+  meta.className = 'free-agent-radar__meta';
+  const parts = [];
+  parts.push(`Last team: ${teamLabel}`);
+  if (Number.isFinite(metrics.minutes) && metrics.minutes > 0) {
+    parts.push(`${formatNumber(metrics.minutes, 1)} minutes/night`);
+  }
+  parts.push(`${formatInteger(metrics.games)} games in ${seasonLabel}`);
+  meta.textContent = parts.join(' · ');
+  return meta;
+}
+
+function renderMetrics(metrics) {
+  const list = document.createElement('dl');
+  list.className = 'free-agent-radar__metrics';
+  list.append(
+    createMetric('Points', formatNumber(metrics.points, 1)),
+    createMetric('Assists', formatNumber(metrics.assists, 1)),
+    createMetric('Rebounds', formatNumber(metrics.rebounds, 1)),
+  );
+  return list;
+}
+
+function renderRow(entry, index) {
+  const item = document.createElement('li');
+  item.className = 'free-agent-radar__item';
+
+  const rank = document.createElement('span');
+  rank.className = 'free-agent-radar__rank';
+  rank.textContent = String(index + 1);
+  item.append(rank);
+
+  const body = document.createElement('div');
+  body.className = 'free-agent-radar__body';
+  body.append(renderIdentity(entry), renderMeta(entry.teamLabel, entry.metrics, entry.seasonLabel), renderMetrics(entry.metrics));
+  item.append(body);
+
+  item.append(renderScore(entry.score));
+  return item;
+}
+
+function buildCandidateRecord(id, aggregate, season) {
+  const metrics = deriveMetricsFromAggregate(aggregate);
+  if (!metrics) return null;
+  if (metrics.games < MIN_GAMES_PLAYED || metrics.minutes < MIN_MINUTES_PER_GAME) {
+    return null;
+  }
+  const score = computeImpactScore(metrics);
+  const team = resolveTeamLabel(aggregate.profile, { lastTeam: aggregate.lastTeam, player: aggregate.profile });
+  const seasonLabel = formatSeasonLabel(season);
+  const name = `${aggregate.profile?.first_name ?? ''} ${aggregate.profile?.last_name ?? ''}`.trim();
+  return {
+    id,
+    name,
+    position: aggregate.profile?.position || '',
+    teamLabel: team.abbreviation ? `${team.name} (${team.abbreviation})` : team.name,
+    metrics,
+    score,
+    seasonLabel,
+  };
 }
 
 export async function getActiveFreeAgents() {
-  // 1) primary source: /players/active where team==null
+  const { snapshot, rosterIds } = await fetchRosterSnapshot();
+  const season = await resolveTargetSeason(snapshot?.season_start_year);
+  const aggregates = await fetchFreeAgentAggregates({ season, rosterIds });
+
   const candidates = [];
-  for await (const p of listActivePlayers(100)) {
-    if (!p.team) candidates.push(p);
+  for (const [id, aggregate] of aggregates) {
+    const record = buildCandidateRecord(id, aggregate, season);
+    if (record) {
+      candidates.push(record);
+    }
   }
 
-  // 2) reconcile against current roster truth to catch stale team==null (e.g., DeRozan)
-  const rostered = await rosterIdSet();
-
-  // 3) per-player refresh for any “big name” or obviously wrong entries
-  const mustRefreshByName = new Map([
-    // Known mismatch examples; extend if you find others.
-    [201942, "DeMar DeRozan"], // ID stable across BDL; adjust if different in your data
-  ]);
-
-  const refreshed = await Promise.all(
-    candidates.map(async p => {
-      if (rostered.has(p.id)) return { ...p, __exclude_reason: "on_roster_set" };
-      // Quick one-shot refresh by ID
-      const fresh = await refreshPlayerTeamById(p.id);
-      if (fresh?.team) return { ...fresh, __exclude_reason: "team_present_after_refresh" };
-      // Name-based rescue for known mismatches
-      if (mustRefreshByName.has(p.id)) {
-        const hits = await searchByNameOnce(mustRefreshByName.get(p.id));
-        const exact = hits.find(h => h.id === p.id) || hits[0];
-        if (exact?.team) return { ...exact, __exclude_reason: "team_present_after_name_search" };
-      }
-      return p;
-    })
-  );
-
-  // 4) final list: only those still lacking a team after reconciliation
-  const freeAgents = refreshed.filter(p => !p.team && !p.__exclude_reason);
-
-  // Optional: annotate with lightweight recency signal
-  const season = new Date().getUTCFullYear(); // crude, ok for display
-  async function appearedThisSeason(id) {
-    const r = await fetchBDL(`/bdl/v1/stats?player_ids[]=${id}&per_page=1&season=${season}`);
-    if (!r.ok) return false;
-    const j = await r.json();
-    return Array.isArray(j.data) && j.data.length > 0;
-  }
-  const enriched = await Promise.all(freeAgents.map(async p => ({
-    ...p,
-    appeared_this_season: await appearedThisSeason(p.id).catch(() => false),
-  })));
-
-  return enriched;
+  candidates.sort((a, b) => b.score - a.score || b.metrics.points - a.metrics.points);
+  const entries = candidates.slice(0, MAX_CANDIDATES);
+  return {
+    entries,
+    season,
+    seasonLabel: formatSeasonLabel(season),
+    rosterSnapshotFetchedAt: snapshot?.fetched_at ?? null,
+  };
 }
 
-// UI glue
 export async function renderFreeAgents() {
-  const list = document.querySelector("[data-free-agent-list]");
-  const sub = document.querySelector("[data-free-agent-subtitle]");
-  const foot = document.querySelector("[data-free-agent-footnote]");
+  const list = document.querySelector('[data-free-agent-list]');
+  const subtitle = document.querySelector('[data-free-agent-subtitle]');
+  const footnote = document.querySelector('[data-free-agent-footnote]');
+  if (!list || !subtitle || !footnote) return;
+
   try {
-    const fa = await getActiveFreeAgents();
-    list.innerHTML = "";
-    if (fa.length === 0) {
-      list.innerHTML = `<li class="free-agent-radar__placeholder">No notable free agents right now.</li>`;
-      sub.textContent = "Sourced from Ball Don't Lie and reconciled with current rosters.";
-      foot.textContent = "We refresh hourly with cache-busting to avoid stale responses.";
+    const precomputed = await loadPrecomputedBoard();
+    const { entries: freeAgents, seasonLabel, rosterSnapshotFetchedAt, generatedAt } =
+      precomputed ?? (await getActiveFreeAgents());
+    list.innerHTML = '';
+
+    if (freeAgents.length === 0) {
+      const empty = document.createElement('li');
+      empty.className = 'free-agent-radar__placeholder';
+      empty.textContent = 'No free agent production signals available at the moment.';
+      list.append(empty);
+      subtitle.textContent = 'Ball Don\'t Lie returned an empty free agent board — monitoring for the next update.';
+      footnote.textContent = '';
       return;
     }
-    for (const p of fa.slice(0, 20)) {
-      const li = document.createElement("li");
-      li.className = "free-agent-radar__item";
-      const name = `${p.first_name} ${p.last_name}`;
-      li.textContent = `${name}${p.appeared_this_season ? " · logged minutes this season" : ""}`;
-      list.appendChild(li);
-    }
-    sub.textContent = "Active free agents after live roster reconciliation.";
-    foot.textContent = `Source: Ball Don't Lie via Worker proxy at ${new Date().toLocaleString()}`;
-  } catch (e) {
-    list.innerHTML = `<li class="free-agent-radar__placeholder">Free agent board failed: ${String(e)}</li>`;
-    sub.textContent = "Falling back disabled to avoid stale names.";
-    foot.textContent = "";
+
+    freeAgents.slice(0, 20).forEach((entry, index) => {
+      list.append(renderRow(entry, index));
+    });
+
+    const resolvedLabel = seasonLabel ?? freeAgents[0]?.seasonLabel ?? null;
+    subtitle.textContent = resolvedLabel
+      ? `Ranking unsigned players by ${resolvedLabel} regular-season output (Ball Don\'t Lie).`
+      : "Ranking unsigned players by their latest regular-season production (Ball Don't Lie).";
+    const updatedAtSource = rosterSnapshotFetchedAt ?? generatedAt ?? null;
+    const updatedAt = updatedAtSource ? new Date(updatedAtSource) : new Date();
+    const timestamp = new Intl.DateTimeFormat('en-US', {
+      month: 'short',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: '2-digit',
+      timeZoneName: 'short',
+    }).format(updatedAt);
+    const freshnessLabel = rosterSnapshotFetchedAt
+      ? `roster snapshot updated ${timestamp}`
+      : generatedAt
+        ? `board generated ${timestamp}`
+        : `refreshed ${timestamp}`;
+    footnote.textContent = `Source: Ball Don\'t Lie free agent feed via Worker proxy — ${freshnessLabel}.`;
+  } catch (error) {
+    list.innerHTML = '';
+    const fallback = document.createElement('li');
+    fallback.className = 'free-agent-radar__placeholder';
+    fallback.textContent = `Free agent board failed: ${error instanceof Error ? error.message : String(error)}`;
+    list.append(fallback);
+    subtitle.textContent = 'Live data required — no cached board shown.';
+    footnote.textContent = '';
+    console.error('Free agent radar failed to render', error);
   }
 }

@@ -55,7 +55,7 @@ function makeLimiter({ maxConcurrent = 1, minIntervalMs = 300 } = {}) {
     });
 }
 
-const limit = makeLimiter({ maxConcurrent: 1, minIntervalMs: 300 });
+const limit = makeLimiter({ maxConcurrent: 1, minIntervalMs: 500 });
 const memo = new Map();
 
 function shouldMemoize(init = {}) {
