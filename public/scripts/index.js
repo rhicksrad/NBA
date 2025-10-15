@@ -218,8 +218,11 @@ function normalizeInteger(value) {
 const FREE_AGENT_MAX_ITEMS = 10;
 const FREE_AGENT_FETCH_LIMIT = 40;
 const FREE_AGENT_SEASON_CANDIDATES = determineSeasonCandidates();
-const FREE_AGENT_ENDPOINT_BASE = '/nba/v1/free_agents';
+const FREE_AGENT_ACTIVE_ENDPOINT = '/v1/players/active';
 const FREE_AGENT_FALLBACK_PATH = 'data/free_agents_fallback.json';
+const FREE_AGENT_PAGE_SIZE = 100;
+const FREE_AGENT_MAX_PAGES = 12;
+const ACTIVE_PLAYER_FLAG_KEYS = ['active', 'is_active', 'on_team', 'on_roster'];
 
 function determineSeasonCandidates() {
   const now = new Date();
@@ -240,6 +243,37 @@ function formatSeasonText(season) {
 function normalizeFloat(value) {
   const numeric = Number(value);
   return Number.isFinite(numeric) ? numeric : null;
+}
+
+function hasTeamAssignment(entry) {
+  if (!entry || typeof entry !== 'object') {
+    return false;
+  }
+  const team = entry.team;
+  if (!team || typeof team !== 'object') {
+    return false;
+  }
+  const identifiers = [team.id, team.team_id, team.abbreviation, team.tricode];
+  return identifiers.some((value) => typeof value === 'number' || (typeof value === 'string' && value.trim().length));
+}
+
+function isActiveFlagged(entry) {
+  return ACTIVE_PLAYER_FLAG_KEYS.some((key) => entry && typeof entry === 'object' && entry[key] === false);
+}
+
+function filterUnsignedActivePlayers(entries) {
+  if (!Array.isArray(entries) || !entries.length) {
+    return [];
+  }
+  return entries.filter((entry) => {
+    if (!entry || typeof entry !== 'object') {
+      return false;
+    }
+    if (isActiveFlagged(entry)) {
+      return false;
+    }
+    return !hasTeamAssignment(entry);
+  });
 }
 
 function normalizeFreeAgentPayload(payload) {
@@ -354,6 +388,9 @@ async function fetchFreeAgentCandidates({ limit = FREE_AGENT_FETCH_LIMIT } = {})
 
   const addEntries = (entries) => {
     entries.forEach((entry) => {
+      if (collected.length >= limit) {
+        return;
+      }
       const candidate = normalizeFreeAgentCandidate(entry);
       if (!candidate || seen.has(candidate.id)) {
         return;
@@ -363,40 +400,32 @@ async function fetchFreeAgentCandidates({ limit = FREE_AGENT_FETCH_LIMIT } = {})
     });
   };
 
-  const queryEndpoint = async (buildPath, { season } = {}) => {
-    let cursor = null;
-    let pages = 0;
-    do {
-      const path = buildPath({ cursor, season });
-      try {
-        attempted = true;
-        const payload = await bdl(path, { cache: 'no-store' });
-        const entries = normalizeFreeAgentPayload(payload);
-        if (!entries.length) {
-          break;
-        }
-        addEntries(entries);
-        cursor = payload?.meta?.next_cursor ?? null;
-        pages += 1;
-      } catch (error) {
-        console.warn('Free agent endpoint failed', path, error);
-        lastError = error;
-        break;
-      }
-    } while (cursor && collected.length < limit && pages < 6);
-  };
-
-  for (const season of FREE_AGENT_SEASON_CANDIDATES) {
-    if (collected.length >= limit) {
+  let cursor = null;
+  let pages = 0;
+  do {
+    const params = new URLSearchParams({ per_page: String(FREE_AGENT_PAGE_SIZE) });
+    if (cursor) {
+      params.set('cursor', cursor);
+    }
+    const path = `${FREE_AGENT_ACTIVE_ENDPOINT}?${params.toString()}`;
+    try {
+      attempted = true;
+      const payload = await bdl(path, { cache: 'no-store' });
+      const pool = normalizeFreeAgentPayload(payload);
+      const freeAgents = filterUnsignedActivePlayers(pool);
+      addEntries(freeAgents);
+      cursor = payload?.meta?.next_cursor ?? null;
+      pages += 1;
+    } catch (error) {
+      console.warn('Free agent endpoint failed', path, error);
+      lastError = error;
       break;
     }
-    await queryEndpoint(
-      ({ cursor, season: seasonValue }) =>
-        `${FREE_AGENT_ENDPOINT_BASE}?season=${seasonValue}&per_page=100${
-          cursor ? `&cursor=${cursor}` : ''
-        }`,
-      { season }
-    );
+  } while (cursor && collected.length < limit && pages < FREE_AGENT_MAX_PAGES);
+
+  if (collected.length) {
+    await annotateFreeAgentActivity(collected, FREE_AGENT_SEASON_CANDIDATES[0]);
+    return collected.slice(0, limit);
   }
 
   if (!collected.length && (lastError || attempted)) {
@@ -408,6 +437,54 @@ async function fetchFreeAgentCandidates({ limit = FREE_AGENT_FETCH_LIMIT } = {})
   }
 
   return collected.slice(0, limit);
+}
+
+async function annotateFreeAgentActivity(candidates, season) {
+  if (!Array.isArray(candidates) || !candidates.length) {
+    return;
+  }
+  const numericSeason = Number(season);
+  if (!Number.isFinite(numericSeason)) {
+    return;
+  }
+
+  for (const candidate of candidates) {
+    if (!candidate || typeof candidate !== 'object' || !Number.isFinite(Number(candidate.id))) {
+      continue;
+    }
+
+    const path = `/v1/stats?player_ids[]=${candidate.id}&season=${numericSeason}&per_page=1`;
+    try {
+      const payload = await bdl(path, { cache: 'no-store' });
+      const data = Array.isArray(payload?.data) ? payload.data : [];
+      const entry = data[0];
+      const appeared = Boolean(entry);
+      if (appeared) {
+        if (!candidate.marketTier) {
+          candidate.marketTier = 'recently waived';
+        }
+        if (candidate.marketScore == null) {
+          candidate.marketScore = 8;
+        }
+        const team = entry.team || null;
+        if (team && !candidate.teamName) {
+          candidate.teamName = team.full_name || team.name || null;
+        }
+        if (team && !candidate.teamAbbr) {
+          candidate.teamAbbr = team.abbreviation || team.tricode || null;
+        }
+      } else {
+        if (!candidate.marketTier) {
+          candidate.marketTier = 'unsigned holdover';
+        }
+        if (candidate.marketScore == null) {
+          candidate.marketScore = 2;
+        }
+      }
+    } catch (error) {
+      console.warn('Unable to verify free agent activity', path, error);
+    }
+  }
 }
 
 async function fetchSeasonAverage(playerId, seasons = FREE_AGENT_SEASON_CANDIDATES) {
