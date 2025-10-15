@@ -219,6 +219,7 @@ const FREE_AGENT_MAX_ITEMS = 10;
 const FREE_AGENT_FETCH_LIMIT = 40;
 const FREE_AGENT_SEASON_CANDIDATES = determineSeasonCandidates();
 const FREE_AGENT_ENDPOINT_BASE = '/nba/v1/free_agents';
+const FREE_AGENT_FALLBACK_PATH = 'data/free_agents_fallback.json';
 
 function determineSeasonCandidates() {
   const now = new Date();
@@ -261,6 +262,22 @@ function normalizeFreeAgentPayload(payload) {
     return payload;
   }
   return [];
+}
+
+async function loadFreeAgentFallback() {
+  try {
+    const response = await fetch(FREE_AGENT_FALLBACK_PATH, { cache: 'no-store' });
+    if (!response.ok) {
+      throw new Error(`Fallback ${response.status} ${response.statusText}`);
+    }
+    const payload = await response.json();
+    const entries = normalizeFreeAgentPayload(payload);
+    console.info(`Loaded ${entries.length} candidates from fallback dataset`);
+    return entries;
+  } catch (error) {
+    console.warn('Free agent fallback unavailable', error);
+    return [];
+  }
 }
 
 function normalizeFreeAgentCandidate(entry) {
@@ -332,6 +349,8 @@ function formatMarketTier(tier) {
 async function fetchFreeAgentCandidates({ limit = FREE_AGENT_FETCH_LIMIT } = {}) {
   const collected = [];
   const seen = new Set();
+  let lastError = null;
+  let attempted = false;
 
   const addEntries = (entries) => {
     entries.forEach((entry) => {
@@ -350,6 +369,7 @@ async function fetchFreeAgentCandidates({ limit = FREE_AGENT_FETCH_LIMIT } = {})
     do {
       const path = buildPath({ cursor, season });
       try {
+        attempted = true;
         const payload = await bdl(path, { cache: 'no-store' });
         const entries = normalizeFreeAgentPayload(payload);
         if (!entries.length) {
@@ -360,6 +380,7 @@ async function fetchFreeAgentCandidates({ limit = FREE_AGENT_FETCH_LIMIT } = {})
         pages += 1;
       } catch (error) {
         console.warn('Free agent endpoint failed', path, error);
+        lastError = error;
         break;
       }
     } while (cursor && collected.length < limit && pages < 6);
@@ -376,6 +397,14 @@ async function fetchFreeAgentCandidates({ limit = FREE_AGENT_FETCH_LIMIT } = {})
         }`,
       { season }
     );
+  }
+
+  if (!collected.length && (lastError || attempted)) {
+    const fallbackEntries = await loadFreeAgentFallback();
+    if (fallbackEntries.length) {
+      console.info('Using cached free agent fallback dataset');
+      addEntries(fallbackEntries);
+    }
   }
 
   return collected.slice(0, limit);
