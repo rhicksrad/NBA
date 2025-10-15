@@ -1,0 +1,142 @@
+[
+  {
+    "player": {
+      "id": 472,
+      "first_name": "Russell",
+      "last_name": "Westbrook",
+      "position": "G"
+    },
+    "last_team": {
+      "full_name": "Los Angeles Clippers",
+      "abbreviation": "LAC"
+    },
+    "market_tier": "veteran catalyst",
+    "market_score": 88.5
+  },
+  {
+    "player": {
+      "id": 443,
+      "first_name": "Klay",
+      "last_name": "Thompson",
+      "position": "G"
+    },
+    "last_team": {
+      "full_name": "Golden State Warriors",
+      "abbreviation": "GSW"
+    },
+    "market_tier": "spacing sniper",
+    "market_score": 91.0
+  },
+  {
+    "player": {
+      "id": 125,
+      "first_name": "DeMar",
+      "last_name": "DeRozan",
+      "position": "G-F"
+    },
+    "last_team": {
+      "full_name": "Chicago Bulls",
+      "abbreviation": "CHI"
+    },
+    "market_tier": "late-clock closer",
+    "market_score": 93.5
+  },
+  {
+    "player": {
+      "id": 210,
+      "first_name": "Buddy",
+      "last_name": "Hield",
+      "position": "G"
+    },
+    "last_team": {
+      "full_name": "Philadelphia 76ers",
+      "abbreviation": "PHI"
+    },
+    "market_tier": "movement shooter",
+    "market_score": 86.0
+  },
+  {
+    "player": {
+      "id": 249,
+      "first_name": "Tyus",
+      "last_name": "Jones",
+      "position": "G"
+    },
+    "last_team": {
+      "full_name": "Washington Wizards",
+      "abbreviation": "WAS"
+    },
+    "market_tier": "steady lead guard",
+    "market_score": 84.0
+  },
+  {
+    "player": {
+      "id": 204,
+      "first_name": "Gordon",
+      "last_name": "Hayward",
+      "position": "F"
+    },
+    "last_team": {
+      "full_name": "Oklahoma City Thunder",
+      "abbreviation": "OKC"
+    },
+    "market_tier": "connector wing",
+    "market_score": 80.5
+  },
+  {
+    "player": {
+      "id": 62,
+      "first_name": "Miles",
+      "last_name": "Bridges",
+      "position": "F"
+    },
+    "last_team": {
+      "full_name": "Charlotte Hornets",
+      "abbreviation": "CHA"
+    },
+    "market_tier": "two-way forward",
+    "market_score": 85.5
+  },
+  {
+    "player": {
+      "id": 360,
+      "first_name": "Kelly",
+      "last_name": "Oubre Jr.",
+      "position": "F"
+    },
+    "last_team": {
+      "full_name": "Philadelphia 76ers",
+      "abbreviation": "PHI"
+    },
+    "market_tier": "switchable scorer",
+    "market_score": 78.0
+  },
+  {
+    "player": {
+      "id": 286,
+      "first_name": "Kyle",
+      "last_name": "Lowry",
+      "position": "G"
+    },
+    "last_team": {
+      "full_name": "Philadelphia 76ers",
+      "abbreviation": "PHI"
+    },
+    "market_tier": "veteran stabilizer",
+    "market_score": 77.5
+  },
+  {
+    "player": {
+      "id": 285,
+      "first_name": "Kevin",
+      "last_name": "Love",
+      "position": "F-C"
+    },
+    "last_team": {
+      "full_name": "Miami Heat",
+      "abbreviation": "MIA"
+    },
+    "market_tier": "spacing big",
+    "market_score": 75.0
+  }
+]
