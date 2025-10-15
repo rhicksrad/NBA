@@ -1,3 +1,4 @@
+import { bdl } from '../assets/js/bdl.js';
 import { registerCharts, helpers } from './hub-charts.js';
 import { enablePanZoom, enhanceUsaInsets } from './map-utils.js';
 import { createTeamLogo } from './team-logos.js';
@@ -212,6 +213,459 @@ function normalizeInteger(value) {
     return 0;
   }
   return Math.round(numeric);
+}
+
+const FREE_AGENT_MAX_ITEMS = 10;
+const FREE_AGENT_FETCH_LIMIT = 40;
+const FREE_AGENT_SEASON_CANDIDATES = determineSeasonCandidates();
+
+function determineSeasonCandidates() {
+  const now = new Date();
+  const year = now.getUTCFullYear();
+  const month = now.getUTCMonth();
+  const currentSeason = month >= 6 ? year : year - 1;
+  const previousSeason = currentSeason - 1;
+  return previousSeason >= 0 ? [currentSeason, previousSeason] : [currentSeason];
+}
+
+function formatSeasonText(season) {
+  if (!Number.isFinite(season)) {
+    return null;
+  }
+  return `Season ${season}`;
+}
+
+function normalizeFloat(value) {
+  const numeric = Number(value);
+  return Number.isFinite(numeric) ? numeric : null;
+}
+
+function normalizeFreeAgentPayload(payload) {
+  if (!payload) {
+    return [];
+  }
+  if (Array.isArray(payload.data)) {
+    return payload.data;
+  }
+  if (Array.isArray(payload.results)) {
+    return payload.results;
+  }
+  if (Array.isArray(payload.players)) {
+    return payload.players;
+  }
+  if (Array.isArray(payload.free_agents)) {
+    return payload.free_agents;
+  }
+  if (Array.isArray(payload)) {
+    return payload;
+  }
+  return [];
+}
+
+function normalizeFreeAgentCandidate(entry) {
+  if (!entry) {
+    return null;
+  }
+  const playerSource = entry.player || entry.athlete || entry.profile || entry;
+  const idCandidate =
+    playerSource.id ?? entry.player_id ?? entry.playerId ?? entry.personId ?? entry.id;
+  const id = Number(idCandidate);
+  if (!Number.isFinite(id)) {
+    return null;
+  }
+  const firstName =
+    playerSource.first_name ?? playerSource.firstName ?? entry.first_name ?? entry.firstName ?? '';
+  const lastName =
+    playerSource.last_name ?? playerSource.lastName ?? entry.last_name ?? entry.lastName ?? '';
+  const fallbackName = playerSource.name ?? entry.name ?? `${firstName} ${lastName}`.trim();
+  const fullName = `${firstName} ${lastName}`.trim() || (fallbackName || 'Player');
+  const position =
+    (playerSource.position ?? entry.position ?? entry.primary_position ?? '').toUpperCase();
+  const teamSource = entry.last_team || playerSource.team || entry.team || entry.previous_team || null;
+  const teamName =
+    typeof teamSource?.full_name === 'string'
+      ? teamSource.full_name
+      : typeof teamSource?.name === 'string'
+      ? teamSource.name
+      : null;
+  const teamAbbr =
+    teamSource?.abbreviation ?? teamSource?.tricode ?? teamSource?.shortName ?? teamSource?.id ?? null;
+  const metricsSource = entry.metrics || entry.stats || entry.player_stats || null;
+  const metricsSeasonCandidate =
+    entry.metrics?.season ?? entry.stats?.season ?? entry.season ?? entry.player_stats?.season;
+  const metricsSeason = Number.isFinite(Number(metricsSeasonCandidate))
+    ? Number(metricsSeasonCandidate)
+    : null;
+  const marketTier =
+    entry.market_tier || entry.marketTier || entry.tier || entry.market?.tier || entry.segment || null;
+  const marketScore = normalizeFloat(
+    entry.market_score ?? entry.marketScore ?? entry.score ?? entry.rank ?? entry.rating
+  );
+
+  return {
+    id,
+    firstName,
+    lastName,
+    fullName,
+    position,
+    teamName,
+    teamAbbr,
+    metrics: metricsSource ?? null,
+    metricsSeason,
+    marketTier,
+    marketScore,
+  };
+}
+
+function formatMarketTier(tier) {
+  if (typeof tier !== 'string') {
+    return null;
+  }
+  const trimmed = tier.trim();
+  if (!trimmed) {
+    return null;
+  }
+  return trimmed.charAt(0).toUpperCase() + trimmed.slice(1);
+}
+
+async function fetchFreeAgentCandidates({ limit = FREE_AGENT_FETCH_LIMIT } = {}) {
+  const collected = [];
+  const seen = new Set();
+
+  const addEntries = (entries) => {
+    entries.forEach((entry) => {
+      const candidate = normalizeFreeAgentCandidate(entry);
+      if (!candidate || seen.has(candidate.id)) {
+        return;
+      }
+      seen.add(candidate.id);
+      collected.push(candidate);
+    });
+  };
+
+  const queryEndpoint = async (buildPath, { season } = {}) => {
+    let cursor = null;
+    let pages = 0;
+    do {
+      const path = buildPath({ cursor, season });
+      try {
+        const payload = await bdl(path, { cache: 'no-store' });
+        const entries = normalizeFreeAgentPayload(payload);
+        if (!entries.length) {
+          break;
+        }
+        addEntries(entries);
+        cursor = payload?.meta?.next_cursor ?? null;
+        pages += 1;
+      } catch (error) {
+        console.warn('Free agent endpoint failed', path, error);
+        break;
+      }
+    } while (cursor && collected.length < limit && pages < 6);
+  };
+
+  for (const season of FREE_AGENT_SEASON_CANDIDATES) {
+    if (collected.length >= limit) {
+      break;
+    }
+    await queryEndpoint(
+      ({ cursor, season: seasonValue }) =>
+        `/v1/free_agents?season=${seasonValue}&per_page=100${cursor ? `&cursor=${cursor}` : ''}`,
+      { season }
+    );
+  }
+
+  if (collected.length < limit) {
+    await queryEndpoint(({ cursor }) => `/v1/free_agents?per_page=100${cursor ? `&cursor=${cursor}` : ''}`);
+  }
+
+  if (collected.length < limit) {
+    await queryEndpoint(({ cursor }) =>
+      `/v1/players?status=Free%20Agent&per_page=100${cursor ? `&cursor=${cursor}` : ''}`
+    );
+  }
+
+  return collected.slice(0, limit);
+}
+
+async function fetchSeasonAverage(playerId, seasons = FREE_AGENT_SEASON_CANDIDATES) {
+  for (const season of seasons) {
+    try {
+      const payload = await bdl(`/v1/season_averages?season=${season}&player_id=${playerId}`, {
+        cache: 'no-store',
+      });
+      const stats = Array.isArray(payload?.data) ? payload.data[0] : null;
+      if (stats) {
+        return { stats, season };
+      }
+    } catch (error) {
+      console.warn(`Season averages unavailable for player ${playerId} in ${season}`, error);
+    }
+  }
+  return null;
+}
+
+function buildFreeAgentMetrics(candidate, statEntry) {
+  const statsSource = statEntry?.stats ?? candidate.metrics ?? null;
+  if (!statsSource) {
+    return null;
+  }
+  const pts =
+    normalizeFloat(statsSource.pts ?? statsSource.points_per_game ?? statsSource.points ?? statsSource.ppg) ??
+    null;
+  const reb =
+    normalizeFloat(statsSource.reb ?? statsSource.rebounds_per_game ?? statsSource.rebounds ?? statsSource.rpg) ??
+    null;
+  const ast =
+    normalizeFloat(statsSource.ast ?? statsSource.assists_per_game ?? statsSource.assists ?? statsSource.apg) ??
+    null;
+  const stl =
+    normalizeFloat(statsSource.stl ?? statsSource.steals_per_game ?? statsSource.steals ?? statsSource.spg) ??
+    null;
+  const blk =
+    normalizeFloat(statsSource.blk ?? statsSource.blocks_per_game ?? statsSource.blocks ?? statsSource.bpg) ??
+    null;
+
+  if (pts === null && reb === null && ast === null && stl === null && blk === null) {
+    return null;
+  }
+
+  const stock = (stl ?? 0) + (blk ?? 0);
+  const score =
+    (pts ?? 0) * 1.4 +
+    (reb ?? 0) * 0.9 +
+    (ast ?? 0) * 1.1 +
+    stock * 0.6 +
+    (candidate.marketScore ?? 0) * 0.4;
+
+  return {
+    pts,
+    reb,
+    ast,
+    stl,
+    blk,
+    stock,
+    score,
+    season: statEntry?.season ?? candidate.metricsSeason ?? null,
+  };
+}
+
+function renderFreeAgentBoard(entries, { list, footnote, subtitle, seasonsUsed, updatedAt }) {
+  if (!list) {
+    return;
+  }
+  list.innerHTML = '';
+
+  if (!entries.length) {
+    const placeholder = document.createElement('li');
+    placeholder.className = 'free-agent-radar__placeholder';
+    placeholder.textContent =
+      'No free agent market data is available from Ball Don’t Lie right now. Check back soon.';
+    list.appendChild(placeholder);
+    if (footnote) {
+      footnote.textContent = '';
+    }
+    return;
+  }
+
+  entries.forEach((entry, index) => {
+    const { candidate, metrics } = entry;
+    const item = document.createElement('li');
+    item.className = 'free-agent-radar__item';
+
+    const rank = document.createElement('span');
+    rank.className = 'free-agent-radar__rank';
+    rank.textContent = `#${index + 1}`;
+    item.appendChild(rank);
+
+    const body = document.createElement('div');
+    body.className = 'free-agent-radar__body';
+
+    const identity = document.createElement('div');
+    identity.className = 'free-agent-radar__identity';
+    const name = document.createElement('p');
+    name.className = 'free-agent-radar__name';
+    name.textContent = candidate.fullName;
+    identity.appendChild(name);
+    if (candidate.position) {
+      const position = document.createElement('span');
+      position.className = 'free-agent-radar__position';
+      position.textContent = candidate.position;
+      identity.appendChild(position);
+    }
+    body.appendChild(identity);
+
+    const meta = document.createElement('p');
+    meta.className = 'free-agent-radar__meta';
+    const metaParts = [];
+    if (candidate.teamName) {
+      metaParts.push(`Last team: ${candidate.teamName}`);
+    }
+    if (metrics.season) {
+      const label = formatSeasonText(metrics.season);
+      if (label) {
+        metaParts.push(label);
+      }
+    }
+    const tierLabel = formatMarketTier(candidate.marketTier);
+    if (tierLabel) {
+      metaParts.push(`${tierLabel} tier`);
+    }
+    meta.textContent = metaParts.join(' · ') || 'Market intel syncing…';
+    body.appendChild(meta);
+
+    const metricsGrid = document.createElement('dl');
+    metricsGrid.className = 'free-agent-radar__metrics';
+    const appendMetric = (label, value) => {
+      const wrapper = document.createElement('div');
+      const term = document.createElement('dt');
+      term.textContent = label;
+      const detail = document.createElement('dd');
+      detail.textContent = helpers.formatNumber(value ?? 0, 1);
+      wrapper.append(term, detail);
+      metricsGrid.appendChild(wrapper);
+    };
+    appendMetric('PTS', metrics.pts ?? 0);
+    appendMetric('REB', metrics.reb ?? 0);
+    appendMetric('AST', metrics.ast ?? 0);
+    body.appendChild(metricsGrid);
+
+    item.appendChild(body);
+
+    const score = document.createElement('div');
+    score.className = 'free-agent-radar__score';
+    const scoreLabel = document.createElement('span');
+    scoreLabel.className = 'free-agent-radar__score-label';
+    scoreLabel.textContent = 'Market score';
+    const scoreValue = document.createElement('span');
+    scoreValue.className = 'free-agent-radar__score-value';
+    scoreValue.textContent = helpers.formatNumber(metrics.score ?? 0, 0);
+    score.append(scoreLabel, scoreValue);
+    item.appendChild(score);
+
+    list.appendChild(item);
+  });
+
+  if (subtitle) {
+    subtitle.textContent =
+      'Ranking blends Ball Don’t Lie season averages with market tiers so you can scan the open board at a glance.';
+  }
+
+  if (footnote) {
+    const seasonsArray = Array.from(seasonsUsed ?? []).filter((season) => Number.isFinite(season));
+    const seasonText = seasonsArray.length
+      ? `Season averages ${seasonsArray
+          .sort((a, b) => b - a)
+          .map((season) => season)
+          .join(', ')}`
+      : 'Season averages unavailable';
+    const formatter = new Intl.DateTimeFormat('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+    });
+    const timestamp = formatter.format(updatedAt ?? new Date());
+    footnote.textContent = `${seasonText} · Updated ${timestamp} via Ball Don’t Lie.`;
+  }
+}
+
+async function hydrateFreeAgentBoard() {
+  const list = document.querySelector('[data-free-agent-list]');
+  const board = document.querySelector('[data-free-agent-board]');
+  const footnote = document.querySelector('[data-free-agent-footnote]');
+  const subtitle = document.querySelector('[data-free-agent-subtitle]');
+
+  if (!list) {
+    return;
+  }
+
+  if (board) {
+    board.setAttribute('aria-busy', 'true');
+  }
+  if (footnote) {
+    footnote.textContent = '';
+  }
+
+  list.innerHTML = '';
+  const loading = document.createElement('li');
+  loading.className = 'free-agent-radar__placeholder';
+  loading.textContent = 'Free agent intelligence syncing…';
+  list.appendChild(loading);
+
+  try {
+    const candidates = await fetchFreeAgentCandidates({ limit: FREE_AGENT_FETCH_LIMIT });
+    if (!candidates.length) {
+      loading.textContent = 'Ball Don’t Lie returned an empty free agent deck.';
+      return;
+    }
+
+    const statsTargets = candidates.slice(0, FREE_AGENT_MAX_ITEMS * 2);
+    const statsById = new Map();
+    const seasonsUsed = new Set();
+
+    for (const candidate of statsTargets) {
+      const statsEntry = await fetchSeasonAverage(candidate.id);
+      if (statsEntry) {
+        statsById.set(candidate.id, statsEntry);
+        if (Number.isFinite(statsEntry.season)) {
+          seasonsUsed.add(statsEntry.season);
+        }
+      }
+    }
+
+    const enriched = candidates
+      .map((candidate) => {
+        const statEntry = statsById.get(candidate.id);
+        const metrics = buildFreeAgentMetrics(candidate, statEntry);
+        return metrics ? { candidate, metrics } : null;
+      })
+      .filter(Boolean);
+
+    if (!enriched.length) {
+      loading.textContent = 'Free agent stats are syncing — try refreshing once Ball Don’t Lie updates again.';
+      if (footnote) {
+        footnote.textContent = '';
+      }
+      return;
+    }
+
+    enriched.sort((a, b) => {
+      const scoreDelta = (b.metrics.score ?? 0) - (a.metrics.score ?? 0);
+      if (Math.abs(scoreDelta) > 0.0001) {
+        return scoreDelta;
+      }
+      const ptsDelta = (b.metrics.pts ?? 0) - (a.metrics.pts ?? 0);
+      if (Math.abs(ptsDelta) > 0.0001) {
+        return ptsDelta;
+      }
+      return (b.candidate.marketScore ?? 0) - (a.candidate.marketScore ?? 0);
+    });
+
+    const visible = enriched.slice(0, FREE_AGENT_MAX_ITEMS);
+
+    renderFreeAgentBoard(visible, {
+      list,
+      footnote,
+      subtitle,
+      seasonsUsed,
+      updatedAt: new Date(),
+    });
+  } catch (error) {
+    console.error('Unable to hydrate free agent board', error);
+    list.innerHTML = '';
+    const errorItem = document.createElement('li');
+    errorItem.className = 'free-agent-radar__placeholder';
+    errorItem.textContent =
+      'We couldn’t reach Ball Don’t Lie for free agent data. Please refresh to try again.';
+    list.appendChild(errorItem);
+    if (footnote) {
+      footnote.textContent = '';
+    }
+  } finally {
+    if (board) {
+      board.setAttribute('aria-busy', 'false');
+    }
+  }
 }
 
 function computeNextMilestone(total, step) {
@@ -1322,6 +1776,9 @@ async function resolveScheduleSource() {
 }
 
 async function bootstrap() {
+  hydrateFreeAgentBoard().catch((error) =>
+    console.error('Unable to render free agent board during bootstrap', error)
+  );
   renderPaceRadar();
   const [scheduleSource] = await Promise.all([resolveScheduleSource(), loadPacePressure()]);
 
