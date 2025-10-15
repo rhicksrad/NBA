@@ -1,4 +1,19 @@
-export const BDL_BASE = 'https://bdlproxy.hicksrch.workers.dev/bdl';
+export const BDL_BASE = 'https://bdlproxy.hicksrch.workers.dev';
+
+function buildProxyPath(path) {
+  const normalized = normalizePath(path);
+  if (normalized.startsWith('/bdl/')) {
+    return normalized;
+  }
+  if (normalized === '/bdl') {
+    return normalized;
+  }
+  return `/bdl${normalized}`;
+}
+
+function buildProxyUrl(path) {
+  return `${BDL_BASE}${buildProxyPath(path)}`;
+}
 
 function makeLimiter({ maxConcurrent = 1, minIntervalMs = 300 } = {}) {
   let active = 0;
@@ -70,7 +85,7 @@ function normalizePath(path) {
   return path.startsWith('/') ? path : `/${path}`;
 }
 
-async function fetchJsonWithRetry(url, init = {}) {
+function buildRequestInit(init = {}) {
   const headers = new Headers({ Accept: 'application/json' });
   if (init.headers instanceof Headers) {
     init.headers.forEach((value, key) => headers.set(key, value));
@@ -80,63 +95,73 @@ async function fetchJsonWithRetry(url, init = {}) {
     }
   }
 
-  const baseInit = {
+  return {
     ...init,
     headers,
     method: init.method ?? 'GET',
   };
+}
 
-  let unauthorizedLogged = false;
+export async function fetchBDL(path, init = {}, { retries = 3 } = {}) {
+  const url = buildProxyUrl(path);
+  const requestInit = buildRequestInit(init);
 
-  for (let attempt = 1; attempt <= 6; attempt += 1) {
-    const response = await fetch(url, baseInit);
-    if (response.status === 429) {
-      const retryAfter = parseRetryAfter(response.headers.get('Retry-After'));
-      const backoff = retryAfter != null ? retryAfter : Math.min(3000 * attempt, 15000);
-      const jitter = Math.floor(Math.random() * 400);
-      await new Promise((resolve) => setTimeout(resolve, backoff + jitter));
-      continue;
+  for (let attempt = 0; attempt <= retries; attempt += 1) {
+    const response = await fetch(url, requestInit);
+    if (response.status !== 429) {
+      return response;
     }
-    if (response.status === 401) {
-      if (!unauthorizedLogged) {
-        unauthorizedLogged = true;
-        console.error('Ball Don\'t Lie proxy authorization failed. Verify server-side key configuration.');
-      }
-      const text = await response.text().catch(() => '');
-      const path = (() => {
-        try {
-          return new URL(url).pathname;
-        } catch {
-          return url;
-        }
-      })();
-      throw new Error(`BDL 401 for ${path}${text ? `: ${text.slice(0, 120)}` : ''}`);
+    if (attempt === retries) {
+      break;
     }
-    if (!response.ok) {
-      const text = await response.text().catch(() => '');
-      const path = (() => {
-        try {
-          return new URL(url).pathname;
-        } catch {
-          return url;
-        }
-      })();
-      throw new Error(`BDL ${response.status} for ${path}${text ? `: ${text.slice(0, 120)}` : ''}`);
-    }
-    return response.json();
+    const retryAfter = parseRetryAfter(response.headers.get('Retry-After'));
+    const delay = retryAfter != null ? retryAfter : 500 * 2 ** attempt;
+    await new Promise((resolve) => setTimeout(resolve, delay));
   }
-  throw new Error('BDL proxy retried too many times after 429 responses.');
+
+  throw new Error(`BDL 429 after ${retries + 1} attempts for ${path}`);
+}
+
+async function fetchJsonWithRetry(path, init = {}, options = {}) {
+  const response = await fetchBDL(path, init, options);
+
+  if (response.status === 401) {
+    console.error('Ball Don\'t Lie proxy authorization failed. Verify server-side key configuration.');
+    const text = await response.text().catch(() => '');
+    const proxiedPath = (() => {
+      try {
+        return new URL(response.url).pathname;
+      } catch {
+        return buildProxyPath(path);
+      }
+    })();
+    throw new Error(`BDL 401 for ${proxiedPath}${text ? `: ${text.slice(0, 120)}` : ''}`);
+  }
+
+  if (!response.ok) {
+    const text = await response.text().catch(() => '');
+    const proxiedPath = (() => {
+      try {
+        return new URL(response.url).pathname;
+      } catch {
+        return buildProxyPath(path);
+      }
+    })();
+    throw new Error(`BDL ${response.status} for ${proxiedPath}${text ? `: ${text.slice(0, 120)}` : ''}`);
+  }
+
+  return response.json();
 }
 
 export async function bdl(path, init = {}) {
   const normalizedPath = normalizePath(path);
-  const url = `${BDL_BASE}${normalizedPath}`;
-  const memoKey = shouldMemoize(init) ? url : null;
+  const proxyUrl = buildProxyUrl(normalizedPath);
+  const memoKey = shouldMemoize(init) ? proxyUrl : null;
   if (memoKey && memo.has(memoKey)) {
     return memo.get(memoKey);
   }
 
-  const task = limit(() => fetchJsonWithRetry(url, init));
+  const task = limit(() => fetchJsonWithRetry(normalizedPath, init));
   if (!memoKey) {
     return task;
   }
