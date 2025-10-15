@@ -219,8 +219,6 @@ const FREE_AGENT_MAX_ITEMS = 10;
 const FREE_AGENT_FETCH_LIMIT = 40;
 const FREE_AGENT_SEASON_CANDIDATES = determineSeasonCandidates();
 const FREE_AGENT_ENDPOINT_BASE = '/nba/v1/free_agents';
-const FREE_AGENT_PLAYERS_ENDPOINT_BASE = '/nba/v1/players';
-const FREE_AGENT_STATUS_QUERY = encodeURIComponent('Free Agent');
 
 function determineSeasonCandidates() {
   const now = new Date();
@@ -377,20 +375,6 @@ async function fetchFreeAgentCandidates({ limit = FREE_AGENT_FETCH_LIMIT } = {})
           cursor ? `&cursor=${cursor}` : ''
         }`,
       { season }
-    );
-  }
-
-  if (collected.length < limit) {
-    await queryEndpoint(({ cursor }) =>
-      `${FREE_AGENT_ENDPOINT_BASE}?per_page=100${cursor ? `&cursor=${cursor}` : ''}`
-    );
-  }
-
-  if (collected.length < limit) {
-    await queryEndpoint(({ cursor }) =>
-      `${FREE_AGENT_PLAYERS_ENDPOINT_BASE}?status=${FREE_AGENT_STATUS_QUERY}&per_page=100${
-        cursor ? `&cursor=${cursor}` : ''
-      }`
     );
   }
 
