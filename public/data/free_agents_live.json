@@ -35,74 +35,6 @@
       "seasonLabel": "2024-25"
     },
     {
-      "id": 17895858,
-      "name": "Quentin Grimes",
-      "position": "G",
-      "teamLabel": "Philadelphia 76ers (PHI)",
-      "metrics": {
-        "points": 10.403225806451612,
-        "assists": 2.1774193548387095,
-        "rebounds": 3.774193548387097,
-        "steals": 0.6774193548387096,
-        "blocks": 0.25806451612903225,
-        "minutes": 22.451612903225808,
-        "games": 62
-      },
-      "score": 20.387,
-      "seasonLabel": "2024-25"
-    },
-    {
-      "id": 17896041,
-      "name": "Keon Johnson",
-      "position": "G",
-      "teamLabel": "Brooklyn Nets (BKN)",
-      "metrics": {
-        "points": 9.75,
-        "assists": 1.9166666666666667,
-        "rebounds": 3.5166666666666666,
-        "steals": 1.0166666666666666,
-        "blocks": 0.38333333333333336,
-        "minutes": 23.033333333333335,
-        "games": 60
-      },
-      "score": 19.73,
-      "seasonLabel": "2024-25"
-    },
-    {
-      "id": 17553979,
-      "name": "Jonathan Kuminga",
-      "position": "F",
-      "teamLabel": "Golden State Warriors (GSW)",
-      "metrics": {
-        "points": 8.78688524590164,
-        "assists": 1.1639344262295082,
-        "rebounds": 2.6065573770491803,
-        "steals": 0.47540983606557374,
-        "blocks": 0.29508196721311475,
-        "minutes": 13.60655737704918,
-        "games": 61
-      },
-      "score": 16.496,
-      "seasonLabel": "2024-25"
-    },
-    {
-      "id": 219,
-      "name": "Al Horford",
-      "position": "C-F",
-      "teamLabel": "Boston Celtics (BOS)",
-      "metrics": {
-        "points": 6.377049180327869,
-        "assists": 1.4262295081967213,
-        "rebounds": 4.426229508196721,
-        "steals": 0.47540983606557374,
-        "blocks": 0.6557377049180327,
-        "minutes": 21.24590163934426,
-        "games": 61
-      },
-      "score": 15.746,
-      "seasonLabel": "2024-25"
-    },
-    {
       "id": 17896022,
       "name": "Brandon Boston Jr.",
       "position": "G",
@@ -134,40 +66,6 @@
         "games": 60
       },
       "score": 14.487,
-      "seasonLabel": "2024-25"
-    },
-    {
-      "id": 17896094,
-      "name": "Dalano Banton",
-      "position": "G",
-      "teamLabel": "Portland Trail Blazers (POR)",
-      "metrics": {
-        "points": 6.67741935483871,
-        "assists": 1.7096774193548387,
-        "rebounds": 1.532258064516129,
-        "steals": 0.5161290322580645,
-        "blocks": 0.3709677419354839,
-        "minutes": 12.225806451612904,
-        "games": 62
-      },
-      "score": 14.158,
-      "seasonLabel": "2024-25"
-    },
-    {
-      "id": 368,
-      "name": "Cameron Payne",
-      "position": "G",
-      "teamLabel": "New York Knicks (NYK)",
-      "metrics": {
-        "points": 6.366666666666666,
-        "assists": 2.4,
-        "rebounds": 1.2666666666666666,
-        "steals": 0.5166666666666667,
-        "blocks": 0.2,
-        "minutes": 12.883333333333333,
-        "games": 60
-      },
-      "score": 14.028,
       "seasonLabel": "2024-25"
     },
     {
@@ -276,5 +174,5 @@
   "season": 2024,
   "seasonLabel": "2024-25",
   "rosterSnapshotFetchedAt": "2025-09-30T15:46:36.879Z",
-  "generated_at": "2025-10-15T23:01:54.829Z"
+  "generated_at": "2025-10-15T23:47:00.354Z"
 }
