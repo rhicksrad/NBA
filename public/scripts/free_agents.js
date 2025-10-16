@@ -6,6 +6,11 @@ const MAX_CANDIDATES = 120;
 const MIN_GAMES_PLAYED = 15;
 const MIN_MINUTES_PER_GAME = 12;
 const MAX_SEASON_PROBES = 4;
+const MAX_ACTIVE_ROSTER_PAGES = 16;
+const MANUAL_ROSTERED_OVERRIDES = new Set([
+  // BDL lagged on the 2025 team option pickup for Keon Johnson (Nets).
+  17896041,
+]);
 
 const PRECOMPUTED_BOARD_URL = new URL('../data/free_agents_live.json', import.meta.url);
 
@@ -59,13 +64,11 @@ async function fetchRosterSnapshot() {
     const { readFile } = await import('node:fs/promises');
     const raw = await readFile(ROSTER_SNAPSHOT_URL, 'utf-8');
     const snapshot = JSON.parse(raw);
-    const rosterIds = new Set();
-    for (const team of snapshot?.teams ?? []) {
-      for (const player of team?.roster ?? []) {
-        if (player?.id != null) {
-          rosterIds.add(player.id);
-        }
-      }
+    const rosterIds = extractRosterIds(snapshot);
+    const liveRosterIds = await loadLiveRosterIds();
+    mergeRosterIds(rosterIds, liveRosterIds);
+    for (const id of MANUAL_ROSTERED_OVERRIDES) {
+      rosterIds.add(id);
     }
     return { snapshot, rosterIds };
   }
@@ -75,6 +78,16 @@ async function fetchRosterSnapshot() {
     throw new Error(`Failed to load roster snapshot (${response.status})`);
   }
   const snapshot = await response.json();
+  const rosterIds = extractRosterIds(snapshot);
+  const liveRosterIds = await loadLiveRosterIds();
+  mergeRosterIds(rosterIds, liveRosterIds);
+  for (const id of MANUAL_ROSTERED_OVERRIDES) {
+    rosterIds.add(id);
+  }
+  return { snapshot, rosterIds };
+}
+
+function extractRosterIds(snapshot) {
   const rosterIds = new Set();
   for (const team of snapshot?.teams ?? []) {
     for (const player of team?.roster ?? []) {
@@ -83,7 +96,54 @@ async function fetchRosterSnapshot() {
       }
     }
   }
-  return { snapshot, rosterIds };
+  return rosterIds;
+}
+
+function mergeRosterIds(target, incoming) {
+  if (!incoming) return;
+  for (const id of incoming) {
+    target.add(id);
+  }
+}
+
+async function loadLiveRosterIds() {
+  try {
+    return await fetchLiveRosterIds();
+  } catch (error) {
+    console.warn('Unable to fetch live Ball Don\'t Lie roster snapshot', error);
+    return null;
+  }
+}
+
+async function fetchLiveRosterIds() {
+  const rosterIds = new Set();
+  let cursor;
+  const visited = new Set();
+
+  for (let page = 0; page < MAX_ACTIVE_ROSTER_PAGES; page += 1) {
+    const params = new URLSearchParams({ per_page: '100' });
+    if (cursor != null) {
+      params.set('cursor', String(cursor));
+    }
+
+    const payload = await bdl(`/v1/players/active?${params.toString()}`);
+    const players = Array.isArray(payload?.data) ? payload.data : [];
+    for (const player of players) {
+      const id = Number(player?.id);
+      if (Number.isFinite(id)) {
+        rosterIds.add(id);
+      }
+    }
+
+    const nextCursor = payload?.meta?.next_cursor;
+    if (nextCursor == null || visited.has(String(nextCursor))) {
+      break;
+    }
+    visited.add(String(nextCursor));
+    cursor = nextCursor;
+  }
+
+  return rosterIds;
 }
 
 async function loadPrecomputedBoard() {
