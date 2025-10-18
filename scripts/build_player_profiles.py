@@ -1084,6 +1084,10 @@ def _build_recent_goat_leaderboard(
             "score": float(score),
             "blurb": _format_recent_blurb(record),
         }
+        for field in ("points", "assists", "rebounds", "blocks"):
+            value = record.get(field)
+            if isinstance(value, (int, float)) and math.isfinite(value):
+                entry[field] = int(round(float(value)))
         if tier:
             entry["tier"] = tier
         if resume:

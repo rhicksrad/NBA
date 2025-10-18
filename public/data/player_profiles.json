@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2025-10-18T13:52:08+00:00",
+  "generatedAt": "2025-10-18T14:23:44+00:00",
   "metrics": [
     {
       "id": "offensive-creation",
@@ -95,7 +95,7 @@
         "teamAbbr": "MIL"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 570
+      "goatRecentRank": 507
     },
     {
       "id": "aaron-estrada-1642401",
@@ -132,8 +132,8 @@
         "teamId": "9",
         "teamAbbr": "DET"
       },
-      "goatRecentScore": 1.9,
-      "goatRecentRank": 473
+      "goatRecentScore": 2.0,
+      "goatRecentRank": 466
     },
     {
       "id": "aaron-gordon-203932",
@@ -171,8 +171,8 @@
         "teamId": "8",
         "teamAbbr": "DEN"
       },
-      "goatRecentScore": 70.8,
-      "goatRecentRank": 14
+      "goatRecentScore": 68.3,
+      "goatRecentRank": 18
     },
     {
       "id": "aaron-holiday-1628988",
@@ -212,8 +212,8 @@
         "teamId": "11",
         "teamAbbr": "HOU"
       },
-      "goatRecentScore": 44.8,
-      "goatRecentRank": 199
+      "goatRecentScore": 39.0,
+      "goatRecentRank": 220
     },
     {
       "id": "aaron-nesmith-1630174",
@@ -251,8 +251,8 @@
         "teamId": "12",
         "teamAbbr": "IND"
       },
-      "goatRecentScore": 48.7,
-      "goatRecentRank": 137
+      "goatRecentScore": 45.1,
+      "goatRecentRank": 146
     },
     {
       "id": "aaron-scott-1060112014",
@@ -286,7 +286,7 @@
         "teamAbbr": "BOS"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 585
+      "goatRecentRank": 498
     },
     {
       "id": "aaron-wiggins-1630598",
@@ -323,8 +323,8 @@
         "teamId": "21",
         "teamAbbr": "OKC"
       },
-      "goatRecentScore": 57.7,
-      "goatRecentRank": 67
+      "goatRecentScore": 51.3,
+      "goatRecentRank": 86
     },
     {
       "id": "adam-flagler-1641745",
@@ -361,8 +361,8 @@
         "teamId": "27",
         "teamAbbr": "SAS"
       },
-      "goatRecentScore": 18.7,
-      "goatRecentRank": 416
+      "goatRecentScore": 11.1,
+      "goatRecentRank": 424
     },
     {
       "id": "adama-bal-1060015883",
@@ -397,7 +397,7 @@
         "teamAbbr": "NYK"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 497
+      "goatRecentRank": 511
     },
     {
       "id": "adem-bona-1641737",
@@ -435,8 +435,8 @@
         "teamId": "23",
         "teamAbbr": "PHI"
       },
-      "goatRecentScore": 31.2,
-      "goatRecentRank": 370
+      "goatRecentScore": 32.3,
+      "goatRecentRank": 315
     },
     {
       "id": "adou-thiero-1057386376",
@@ -471,7 +471,7 @@
         "teamAbbr": "LAL"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 614
+      "goatRecentRank": 635
     },
     {
       "id": "airious-bailey-1057260888",
@@ -505,7 +505,7 @@
         "teamAbbr": "UTA"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 580
+      "goatRecentRank": 521
     },
     {
       "id": "aj-johnson-1642358",
@@ -543,8 +543,8 @@
         "teamId": "30",
         "teamAbbr": "WAS"
       },
-      "goatRecentScore": 24.5,
-      "goatRecentRank": 404
+      "goatRecentScore": 21.3,
+      "goatRecentRank": 402
     },
     {
       "id": "ajay-mitchell-1642349",
@@ -584,8 +584,8 @@
         "teamId": "21",
         "teamAbbr": "OKC"
       },
-      "goatRecentScore": 48.1,
-      "goatRecentRank": 143
+      "goatRecentScore": 35.2,
+      "goatRecentRank": 280
     },
     {
       "id": "akoldah-gak-196294555",
@@ -624,7 +624,7 @@
         "teamAbbr": "WAS"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 530
+      "goatRecentRank": 636
     },
     {
       "id": "al-horford-201143",
@@ -665,8 +665,8 @@
         "teamId": "10",
         "teamAbbr": "GSW"
       },
-      "goatRecentScore": 68.6,
-      "goatRecentRank": 23
+      "goatRecentScore": 63.4,
+      "goatRecentRank": 32
     },
     {
       "id": "alex-antetokounmpo-1060010671",
@@ -700,7 +700,7 @@
         "teamAbbr": "MIL"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 639
+      "goatRecentRank": 645
     },
     {
       "id": "alex-caruso-1627936",
@@ -741,8 +741,8 @@
         "teamId": "21",
         "teamAbbr": "OKC"
       },
-      "goatRecentScore": 56.6,
-      "goatRecentRank": 69
+      "goatRecentScore": 52.9,
+      "goatRecentRank": 72
     },
     {
       "id": "alex-len-203458",
@@ -783,8 +783,8 @@
         "teamId": "20",
         "teamAbbr": "NYK"
       },
-      "goatRecentScore": 42.2,
-      "goatRecentRank": 238
+      "goatRecentScore": 38.2,
+      "goatRecentRank": 233
     },
     {
       "id": "alex-morales-1631457",
@@ -821,8 +821,8 @@
         "teamId": "22",
         "teamAbbr": "ORL"
       },
-      "goatRecentScore": 0.5,
-      "goatRecentRank": 485
+      "goatRecentScore": 0.4,
+      "goatRecentRank": 484
     },
     {
       "id": "alex-toohey-1057396605",
@@ -857,7 +857,7 @@
         "teamAbbr": "GSW"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 645
+      "goatRecentRank": 624
     },
     {
       "id": "alexandre-sarr-1028028405",
@@ -891,7 +891,7 @@
         "teamAbbr": "WAS"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 512
+      "goatRecentRank": 503
     },
     {
       "id": "alijah-martin-1057389862",
@@ -925,7 +925,7 @@
         "teamAbbr": "TOR"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 551
+      "goatRecentRank": 526
     },
     {
       "id": "alize-johnson-1628993",
@@ -964,7 +964,7 @@
         "teamAbbr": "MIN"
       },
       "goatRecentScore": 2.8,
-      "goatRecentRank": 461
+      "goatRecentRank": 457
     },
     {
       "id": "alondes-williams-1631214",
@@ -1000,7 +1000,7 @@
         "teamId": "30",
         "teamAbbr": "WAS"
       },
-      "goatRecentScore": 7.5,
+      "goatRecentScore": 5.8,
       "goatRecentRank": 439
     },
     {
@@ -1037,8 +1037,8 @@
         "teamId": "11",
         "teamAbbr": "HOU"
       },
-      "goatRecentScore": 58.7,
-      "goatRecentRank": 60
+      "goatRecentScore": 59.4,
+      "goatRecentRank": 44
     },
     {
       "id": "amari-williams-1057396966",
@@ -1072,7 +1072,7 @@
         "teamAbbr": "BOS"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 641
+      "goatRecentRank": 654
     },
     {
       "id": "amen-thompson-1641708",
@@ -1108,8 +1108,8 @@
         "teamId": "11",
         "teamAbbr": "HOU"
       },
-      "goatRecentScore": 56.3,
-      "goatRecentRank": 72
+      "goatRecentScore": 52.9,
+      "goatRecentRank": 71
     },
     {
       "id": "amir-coffey-1629599",
@@ -1149,8 +1149,8 @@
         "teamId": "17",
         "teamAbbr": "MIL"
       },
-      "goatRecentScore": 38.2,
-      "goatRecentRank": 295
+      "goatRecentScore": 30.5,
+      "goatRecentRank": 334
     },
     {
       "id": "andre-drummond-203083",
@@ -1190,8 +1190,8 @@
         "teamId": "23",
         "teamAbbr": "PHI"
       },
-      "goatRecentScore": 50.4,
-      "goatRecentRank": 114
+      "goatRecentScore": 49.9,
+      "goatRecentRank": 92
     },
     {
       "id": "andre-jackson-jr-1641748",
@@ -1228,8 +1228,8 @@
         "teamId": "17",
         "teamAbbr": "MIL"
       },
-      "goatRecentScore": 36.0,
-      "goatRecentRank": 321
+      "goatRecentScore": 28.4,
+      "goatRecentRank": 356
     },
     {
       "id": "andrew-carr-1058451021",
@@ -1264,7 +1264,7 @@
         "teamAbbr": "POR"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 560
+      "goatRecentRank": 574
     },
     {
       "id": "andrew-nembhard-1629614",
@@ -1300,8 +1300,8 @@
         "teamId": "12",
         "teamAbbr": "IND"
       },
-      "goatRecentScore": 47.7,
-      "goatRecentRank": 149
+      "goatRecentScore": 42.9,
+      "goatRecentRank": 173
     },
     {
       "id": "andrew-wiggins-203952",
@@ -1341,8 +1341,8 @@
         "teamId": "16",
         "teamAbbr": "MIA"
       },
-      "goatRecentScore": 45.5,
-      "goatRecentRank": 185
+      "goatRecentScore": 42.1,
+      "goatRecentRank": 186
     },
     {
       "id": "anfernee-simons-1629014",
@@ -1380,8 +1380,8 @@
         "teamId": "2",
         "teamAbbr": "BOS"
       },
-      "goatRecentScore": 42.4,
-      "goatRecentRank": 233
+      "goatRecentScore": 42.5,
+      "goatRecentRank": 181
     },
     {
       "id": "anthony-black-1641710",
@@ -1417,8 +1417,8 @@
         "teamId": "22",
         "teamAbbr": "ORL"
       },
-      "goatRecentScore": 39.8,
-      "goatRecentRank": 276
+      "goatRecentScore": 33.7,
+      "goatRecentRank": 300
     },
     {
       "id": "anthony-davis-203076",
@@ -1458,8 +1458,8 @@
         "teamId": "7",
         "teamAbbr": "DAL"
       },
-      "goatRecentScore": 69.2,
-      "goatRecentRank": 19
+      "goatRecentScore": 69.7,
+      "goatRecentRank": 13
     },
     {
       "id": "anthony-edwards-1630162",
@@ -1497,8 +1497,8 @@
         "teamId": "18",
         "teamAbbr": "MIN"
       },
-      "goatRecentScore": 69.1,
-      "goatRecentRank": 20
+      "goatRecentScore": 68.4,
+      "goatRecentRank": 17
     },
     {
       "id": "anthony-gill-1630264",
@@ -1534,8 +1534,8 @@
         "teamId": "30",
         "teamAbbr": "WAS"
       },
-      "goatRecentScore": 28.9,
-      "goatRecentRank": 386
+      "goatRecentScore": 29.3,
+      "goatRecentRank": 347
     },
     {
       "id": "anton-watson-1641817",
@@ -1572,8 +1572,8 @@
         "teamId": "14",
         "teamAbbr": "LAL"
       },
-      "goatRecentScore": 2.7,
-      "goatRecentRank": 463
+      "goatRecentScore": 1.9,
+      "goatRecentRank": 470
     },
     {
       "id": "antonio-reeves-1641810",
@@ -1611,8 +1611,8 @@
         "teamId": "4",
         "teamAbbr": "CHA"
       },
-      "goatRecentScore": 23.3,
-      "goatRecentRank": 407
+      "goatRecentScore": 24.5,
+      "goatRecentRank": 393
     },
     {
       "id": "ariel-hukporti-1630574",
@@ -1652,8 +1652,8 @@
         "teamId": "20",
         "teamAbbr": "NYK"
       },
-      "goatRecentScore": 16.8,
-      "goatRecentRank": 418
+      "goatRecentScore": 12.0,
+      "goatRecentRank": 420
     },
     {
       "id": "armando-bacot-1630654",
@@ -1690,8 +1690,8 @@
         "teamId": "15",
         "teamAbbr": "MEM"
       },
-      "goatRecentScore": 2.1,
-      "goatRecentRank": 472
+      "goatRecentScore": 1.7,
+      "goatRecentRank": 473
     },
     {
       "id": "asa-newell-1057279093",
@@ -1725,7 +1725,7 @@
         "teamAbbr": "ATL"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 572
+      "goatRecentRank": 593
     },
     {
       "id": "augustas-marciulionis-1057847467",
@@ -1760,7 +1760,7 @@
         "teamAbbr": "LAL"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 602
+      "goatRecentRank": 576
     },
     {
       "id": "ausar-thompson-1641709",
@@ -1796,8 +1796,8 @@
         "teamId": "9",
         "teamAbbr": "DET"
       },
-      "goatRecentScore": 40.1,
-      "goatRecentRank": 272
+      "goatRecentScore": 39.3,
+      "goatRecentRank": 219
     },
     {
       "id": "austin-reaves-1630559",
@@ -1834,8 +1834,8 @@
         "teamId": "14",
         "teamAbbr": "LAL"
       },
-      "goatRecentScore": 54.8,
-      "goatRecentRank": 81
+      "goatRecentScore": 52.2,
+      "goatRecentRank": 77
     },
     {
       "id": "ayo-dosunmu-1630245",
@@ -1873,8 +1873,8 @@
         "teamId": "5",
         "teamAbbr": "CHI"
       },
-      "goatRecentScore": 41.8,
-      "goatRecentRank": 246
+      "goatRecentScore": 38.5,
+      "goatRecentRank": 230
     },
     {
       "id": "babacar-sane-1028256864",
@@ -1908,7 +1908,7 @@
         "teamAbbr": "UTA"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 660
+      "goatRecentRank": 656
     },
     {
       "id": "bam-adebayo-1628389",
@@ -1946,8 +1946,8 @@
         "teamId": "16",
         "teamAbbr": "MIA"
       },
-      "goatRecentScore": 57.6,
-      "goatRecentRank": 68
+      "goatRecentScore": 56.9,
+      "goatRecentRank": 55
     },
     {
       "id": "baylor-scheierman-1631248",
@@ -1985,8 +1985,8 @@
         "teamId": "2",
         "teamAbbr": "BOS"
       },
-      "goatRecentScore": 33.3,
-      "goatRecentRank": 351
+      "goatRecentScore": 21.4,
+      "goatRecentRank": 401
     },
     {
       "id": "ben-saraf-196295100",
@@ -2023,7 +2023,7 @@
         "teamAbbr": "BKN"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 588
+      "goatRecentRank": 536
     },
     {
       "id": "ben-sheppard-1641767",
@@ -2061,8 +2061,8 @@
         "teamId": "12",
         "teamAbbr": "IND"
       },
-      "goatRecentScore": 37.2,
-      "goatRecentRank": 304
+      "goatRecentScore": 28.8,
+      "goatRecentRank": 352
     },
     {
       "id": "bennedict-mathurin-1631097",
@@ -2098,8 +2098,8 @@
         "teamId": "12",
         "teamAbbr": "IND"
       },
-      "goatRecentScore": 47.4,
-      "goatRecentRank": 152
+      "goatRecentScore": 43.8,
+      "goatRecentRank": 161
     },
     {
       "id": "bez-mbeng-1059992972",
@@ -2133,7 +2133,7 @@
         "teamAbbr": "MIA"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 601
+      "goatRecentRank": 604
     },
     {
       "id": "bilal-coulibaly-1641731",
@@ -2169,8 +2169,8 @@
         "teamId": "30",
         "teamAbbr": "WAS"
       },
-      "goatRecentScore": 31.1,
-      "goatRecentRank": 371
+      "goatRecentScore": 32.8,
+      "goatRecentRank": 306
     },
     {
       "id": "bismack-biyombo-202687",
@@ -2211,8 +2211,8 @@
         "teamId": "27",
         "teamAbbr": "SAS"
       },
-      "goatRecentScore": 40.4,
-      "goatRecentRank": 265
+      "goatRecentScore": 35.4,
+      "goatRecentRank": 276
     },
     {
       "id": "blake-hinson-1642396",
@@ -2249,8 +2249,8 @@
         "teamId": "10",
         "teamAbbr": "GSW"
       },
-      "goatRecentScore": 0.6,
-      "goatRecentRank": 483
+      "goatRecentScore": 0.2,
+      "goatRecentRank": 488
     },
     {
       "id": "blake-wesley-1631104",
@@ -2287,8 +2287,8 @@
         "teamId": "25",
         "teamAbbr": "POR"
       },
-      "goatRecentScore": 34.8,
-      "goatRecentRank": 338
+      "goatRecentScore": 33.5,
+      "goatRecentRank": 302
     },
     {
       "id": "bobby-portis-1626171",
@@ -2328,8 +2328,8 @@
         "teamId": "17",
         "teamAbbr": "MIL"
       },
-      "goatRecentScore": 54.1,
-      "goatRecentRank": 87
+      "goatRecentScore": 50.1,
+      "goatRecentRank": 91
     },
     {
       "id": "bobi-klintman-1641752",
@@ -2368,7 +2368,7 @@
         "teamId": "9",
         "teamAbbr": "DET"
       },
-      "goatRecentScore": 2.7,
+      "goatRecentScore": 2.3,
       "goatRecentRank": 462
     },
     {
@@ -2410,7 +2410,7 @@
         "teamAbbr": "LAC"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 574
+      "goatRecentRank": 586
     },
     {
       "id": "boo-buie-iii-1642486",
@@ -2450,7 +2450,7 @@
         "teamAbbr": "NYK"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 567
+      "goatRecentRank": 671
     },
     {
       "id": "boogie-ellis-1642407",
@@ -2487,8 +2487,8 @@
         "teamId": "26",
         "teamAbbr": "SAC"
       },
-      "goatRecentScore": 1.5,
-      "goatRecentRank": 475
+      "goatRecentScore": 1.8,
+      "goatRecentRank": 472
     },
     {
       "id": "bradley-beal-203078",
@@ -2529,8 +2529,8 @@
         "teamId": "13",
         "teamAbbr": "LAC"
       },
-      "goatRecentScore": 46.3,
-      "goatRecentRank": 173
+      "goatRecentScore": 43.2,
+      "goatRecentRank": 170
     },
     {
       "id": "branden-carlson-1642382",
@@ -2567,8 +2567,8 @@
         "teamId": "21",
         "teamAbbr": "OKC"
       },
-      "goatRecentScore": 24.0,
-      "goatRecentRank": 406
+      "goatRecentScore": 18.5,
+      "goatRecentRank": 407
     },
     {
       "id": "brandin-podziemski-1641764",
@@ -2607,8 +2607,8 @@
         "teamId": "10",
         "teamAbbr": "GSW"
       },
-      "goatRecentScore": 55.9,
-      "goatRecentRank": 76
+      "goatRecentScore": 52.1,
+      "goatRecentRank": 80
     },
     {
       "id": "brandon-clarke-1629634",
@@ -2648,8 +2648,8 @@
         "teamId": "15",
         "teamAbbr": "MEM"
       },
-      "goatRecentScore": 49.2,
-      "goatRecentRank": 127
+      "goatRecentScore": 43.4,
+      "goatRecentRank": 164
     },
     {
       "id": "brandon-ingram-1627742",
@@ -2689,8 +2689,8 @@
         "teamId": "28",
         "teamAbbr": "TOR"
       },
-      "goatRecentScore": 49.0,
-      "goatRecentRank": 132
+      "goatRecentScore": 46.4,
+      "goatRecentRank": 122
     },
     {
       "id": "brandon-miller-1641706",
@@ -2729,8 +2729,8 @@
         "teamId": "4",
         "teamAbbr": "CHA"
       },
-      "goatRecentScore": 35.2,
-      "goatRecentRank": 334
+      "goatRecentScore": 36.2,
+      "goatRecentRank": 267
     },
     {
       "id": "brandon-williams-1630314",
@@ -2768,8 +2768,8 @@
         "teamId": "7",
         "teamAbbr": "DAL"
       },
-      "goatRecentScore": 38.8,
-      "goatRecentRank": 288
+      "goatRecentScore": 33.5,
+      "goatRecentRank": 301
     },
     {
       "id": "braxton-key-1630296",
@@ -2808,8 +2808,8 @@
         "teamId": "15",
         "teamAbbr": "MEM"
       },
-      "goatRecentScore": 16.1,
-      "goatRecentRank": 420
+      "goatRecentScore": 14.2,
+      "goatRecentRank": 416
     },
     {
       "id": "brice-sensabaugh-1641729",
@@ -2847,8 +2847,8 @@
         "teamId": "29",
         "teamAbbr": "UTA"
       },
-      "goatRecentScore": 31.2,
-      "goatRecentRank": 368
+      "goatRecentScore": 32.4,
+      "goatRecentRank": 312
     },
     {
       "id": "brice-williams-1057849497",
@@ -2882,7 +2882,7 @@
         "teamAbbr": "DET"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 599
+      "goatRecentRank": 554
     },
     {
       "id": "bronny-james-1642355",
@@ -2921,7 +2921,7 @@
         "teamId": "14",
         "teamAbbr": "LAL"
       },
-      "goatRecentScore": 15.2,
+      "goatRecentScore": 11.6,
       "goatRecentRank": 422
     },
     {
@@ -2961,8 +2961,8 @@
         "teamId": "13",
         "teamAbbr": "LAC"
       },
-      "goatRecentScore": 60.7,
-      "goatRecentRank": 49
+      "goatRecentScore": 57.6,
+      "goatRecentRank": 53
     },
     {
       "id": "brooks-barnhizer-1057392335",
@@ -2997,7 +2997,7 @@
         "teamAbbr": "OKC"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 667
+      "goatRecentRank": 641
     },
     {
       "id": "bruce-brown-1628971",
@@ -3037,8 +3037,8 @@
         "teamId": "8",
         "teamAbbr": "DEN"
       },
-      "goatRecentScore": 44.7,
-      "goatRecentRank": 200
+      "goatRecentScore": 40.1,
+      "goatRecentRank": 215
     },
     {
       "id": "bryce-mcgowens-1631121",
@@ -3075,8 +3075,8 @@
         "teamId": "19",
         "teamAbbr": "NOP"
       },
-      "goatRecentScore": 28.0,
-      "goatRecentRank": 389
+      "goatRecentScore": 25.9,
+      "goatRecentRank": 377
     },
     {
       "id": "buddy-hield-1627741",
@@ -3117,8 +3117,8 @@
         "teamId": "10",
         "teamAbbr": "GSW"
       },
-      "goatRecentScore": 50.1,
-      "goatRecentRank": 119
+      "goatRecentScore": 47.1,
+      "goatRecentRank": 116
     },
     {
       "id": "cade-cunningham-1630595",
@@ -3154,8 +3154,8 @@
         "teamId": "9",
         "teamAbbr": "DET"
       },
-      "goatRecentScore": 49.0,
-      "goatRecentRank": 131
+      "goatRecentScore": 51.2,
+      "goatRecentRank": 87
     },
     {
       "id": "caleb-daniels-1641915",
@@ -3192,8 +3192,8 @@
         "teamId": "16",
         "teamAbbr": "MIA"
       },
-      "goatRecentScore": 0.8,
-      "goatRecentRank": 481
+      "goatRecentScore": 0.9,
+      "goatRecentRank": 478
     },
     {
       "id": "caleb-houstan-1631216",
@@ -3231,8 +3231,8 @@
         "teamId": "1",
         "teamAbbr": "ATL"
       },
-      "goatRecentScore": 31.8,
-      "goatRecentRank": 363
+      "goatRecentScore": 25.6,
+      "goatRecentRank": 379
     },
     {
       "id": "caleb-love-1057847330",
@@ -3267,7 +3267,7 @@
         "teamAbbr": "POR"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 520
+      "goatRecentRank": 607
     },
     {
       "id": "caleb-martin-1628997",
@@ -3307,8 +3307,8 @@
         "teamId": "7",
         "teamAbbr": "DAL"
       },
-      "goatRecentScore": 41.7,
-      "goatRecentRank": 247
+      "goatRecentScore": 37.4,
+      "goatRecentRank": 248
     },
     {
       "id": "cam-christie-1642353",
@@ -3345,8 +3345,8 @@
         "teamId": "13",
         "teamAbbr": "LAC"
       },
-      "goatRecentScore": 7.8,
-      "goatRecentRank": 437
+      "goatRecentScore": 6.1,
+      "goatRecentRank": 438
     },
     {
       "id": "cam-spencer-1642285",
@@ -3385,7 +3385,7 @@
         "teamId": "15",
         "teamAbbr": "MEM"
       },
-      "goatRecentScore": 17.2,
+      "goatRecentScore": 14.2,
       "goatRecentRank": 417
     },
     {
@@ -3425,8 +3425,8 @@
         "teamId": "3",
         "teamAbbr": "BKN"
       },
-      "goatRecentScore": 42.2,
-      "goatRecentRank": 239
+      "goatRecentScore": 40.6,
+      "goatRecentRank": 210
     },
     {
       "id": "cam-whitmore-1641715",
@@ -3464,8 +3464,8 @@
         "teamId": "30",
         "teamAbbr": "WAS"
       },
-      "goatRecentScore": 42.8,
-      "goatRecentRank": 226
+      "goatRecentScore": 37.2,
+      "goatRecentRank": 253
     },
     {
       "id": "cameron-brown-1059990598",
@@ -3500,7 +3500,7 @@
         "teamAbbr": "OKC"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 613
+      "goatRecentRank": 491
     },
     {
       "id": "cameron-johnson-1629661",
@@ -3540,8 +3540,8 @@
         "teamId": "8",
         "teamAbbr": "DEN"
       },
-      "goatRecentScore": 41.6,
-      "goatRecentRank": 248
+      "goatRecentScore": 39.8,
+      "goatRecentRank": 216
     },
     {
       "id": "cameron-matthews-1057847482",
@@ -3575,7 +3575,7 @@
         "teamAbbr": "HOU"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 562
+      "goatRecentRank": 518
     },
     {
       "id": "cameron-payne-1626166",
@@ -3615,8 +3615,8 @@
         "teamId": "12",
         "teamAbbr": "IND"
       },
-      "goatRecentScore": 50.2,
-      "goatRecentRank": 117
+      "goatRecentScore": 44.8,
+      "goatRecentRank": 147
     },
     {
       "id": "caris-levert-1627747",
@@ -3656,8 +3656,8 @@
         "teamId": "9",
         "teamAbbr": "DET"
       },
-      "goatRecentScore": 55.5,
-      "goatRecentRank": 79
+      "goatRecentScore": 51.8,
+      "goatRecentRank": 84
     },
     {
       "id": "carlton-carrington-1028025235",
@@ -3691,7 +3691,7 @@
         "teamAbbr": "WAS"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 490
+      "goatRecentRank": 617
     },
     {
       "id": "carter-bryant-1057271360",
@@ -3726,7 +3726,7 @@
         "teamAbbr": "SAS"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 524
+      "goatRecentRank": 619
     },
     {
       "id": "cason-wallace-1641717",
@@ -3765,8 +3765,8 @@
         "teamId": "21",
         "teamAbbr": "OKC"
       },
-      "goatRecentScore": 56.5,
-      "goatRecentRank": 70
+      "goatRecentScore": 48.3,
+      "goatRecentRank": 106
     },
     {
       "id": "cedric-coward-1057266649",
@@ -3800,7 +3800,7 @@
         "teamAbbr": "MEM"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 531
+      "goatRecentRank": 564
     },
     {
       "id": "chance-mcmillian-1057970707",
@@ -3835,7 +3835,7 @@
         "teamAbbr": "GSW"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 542
+      "goatRecentRank": 629
     },
     {
       "id": "chaney-johnson-1057846840",
@@ -3869,7 +3869,7 @@
         "teamAbbr": "CLE"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 532
+      "goatRecentRank": 508
     },
     {
       "id": "charles-bassey-1629646",
@@ -3907,8 +3907,8 @@
         "teamId": "1",
         "teamAbbr": "ATL"
       },
-      "goatRecentScore": 40.9,
-      "goatRecentRank": 258
+      "goatRecentScore": 41.8,
+      "goatRecentRank": 191
     },
     {
       "id": "charles-bediako-1641777",
@@ -3946,7 +3946,7 @@
         "teamAbbr": "DET"
       },
       "goatRecentScore": 0.5,
-      "goatRecentRank": 484
+      "goatRecentRank": 483
     },
     {
       "id": "chase-hunter-1059058141",
@@ -3981,7 +3981,7 @@
         "teamAbbr": "NOP"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 510
+      "goatRecentRank": 528
     },
     {
       "id": "chaz-lanier-1057389625",
@@ -4015,7 +4015,7 @@
         "teamAbbr": "DET"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 658
+      "goatRecentRank": 637
     },
     {
       "id": "chet-holmgren-1631096",
@@ -4057,7 +4057,7 @@
         "teamId": "21",
         "teamAbbr": "OKC"
       },
-      "goatRecentScore": 75.8,
+      "goatRecentScore": 72.1,
       "goatRecentRank": 8
     },
     {
@@ -4096,8 +4096,8 @@
         "teamId": "2",
         "teamAbbr": "BOS"
       },
-      "goatRecentScore": 43.8,
-      "goatRecentRank": 210
+      "goatRecentScore": 41.9,
+      "goatRecentRank": 190
     },
     {
       "id": "chris-manon-1057847504",
@@ -4132,7 +4132,7 @@
         "teamAbbr": "LAL"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 600
+      "goatRecentRank": 556
     },
     {
       "id": "chris-paul-101108",
@@ -4171,8 +4171,8 @@
         "teamId": "13",
         "teamAbbr": "LAC"
       },
-      "goatRecentScore": 52.0,
-      "goatRecentRank": 102
+      "goatRecentScore": 49.8,
+      "goatRecentRank": 94
     },
     {
       "id": "chris-youngblood-1057849685",
@@ -4207,7 +4207,7 @@
         "teamAbbr": "OKC"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 543
+      "goatRecentRank": 590
     },
     {
       "id": "christian-braun-1631128",
@@ -4243,8 +4243,8 @@
         "teamId": "8",
         "teamAbbr": "DEN"
       },
-      "goatRecentScore": 50.8,
-      "goatRecentRank": 110
+      "goatRecentScore": 44.4,
+      "goatRecentRank": 151
     },
     {
       "id": "christian-koloko-1631132",
@@ -4281,8 +4281,8 @@
         "teamId": "14",
         "teamAbbr": "LAL"
       },
-      "goatRecentScore": 42.6,
-      "goatRecentRank": 229
+      "goatRecentScore": 36.2,
+      "goatRecentRank": 266
     },
     {
       "id": "christian-shumate-1057848715",
@@ -4317,7 +4317,7 @@
         "teamAbbr": "NOP"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 536
+      "goatRecentRank": 557
     },
     {
       "id": "chucky-hepburn-1057846535",
@@ -4351,7 +4351,7 @@
         "teamAbbr": "TOR"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 626
+      "goatRecentRank": 552
     },
     {
       "id": "cj-huntley-1057846700",
@@ -4423,8 +4423,8 @@
         "teamId": "30",
         "teamAbbr": "WAS"
       },
-      "goatRecentScore": 49.1,
-      "goatRecentRank": 130
+      "goatRecentScore": 47.4,
+      "goatRecentRank": 113
     },
     {
       "id": "clint-capela-203991",
@@ -4464,8 +4464,8 @@
         "teamId": "11",
         "teamAbbr": "HOU"
       },
-      "goatRecentScore": 49.8,
-      "goatRecentRank": 122
+      "goatRecentScore": 47.7,
+      "goatRecentRank": 111
     },
     {
       "id": "coby-white-1629632",
@@ -4505,8 +4505,8 @@
         "teamId": "5",
         "teamAbbr": "CHI"
       },
-      "goatRecentScore": 47.6,
-      "goatRecentRank": 151
+      "goatRecentScore": 45.5,
+      "goatRecentRank": 138
     },
     {
       "id": "cody-williams-1642262",
@@ -4544,8 +4544,8 @@
         "teamId": "29",
         "teamAbbr": "UTA"
       },
-      "goatRecentScore": 20.0,
-      "goatRecentRank": 411
+      "goatRecentScore": 18.8,
+      "goatRecentRank": 406
     },
     {
       "id": "colby-jones-1641732",
@@ -4584,8 +4584,8 @@
         "teamId": "9",
         "teamAbbr": "DET"
       },
-      "goatRecentScore": 31.7,
-      "goatRecentRank": 364
+      "goatRecentScore": 28.3,
+      "goatRecentRank": 360
     },
     {
       "id": "cole-anthony-1630175",
@@ -4623,8 +4623,8 @@
         "teamId": "17",
         "teamAbbr": "MIL"
       },
-      "goatRecentScore": 49.9,
-      "goatRecentRank": 121
+      "goatRecentScore": 46.7,
+      "goatRecentRank": 119
     },
     {
       "id": "coleman-hawkins-1059021996",
@@ -4658,7 +4658,7 @@
         "teamAbbr": "DEN"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 544
+      "goatRecentRank": 642
     },
     {
       "id": "colin-castleton-1630658",
@@ -4696,8 +4696,8 @@
         "teamId": "22",
         "teamAbbr": "ORL"
       },
-      "goatRecentScore": 35.8,
-      "goatRecentRank": 325
+      "goatRecentScore": 28.7,
+      "goatRecentRank": 353
     },
     {
       "id": "collin-gillespie-1631221",
@@ -4735,8 +4735,8 @@
         "teamId": "24",
         "teamAbbr": "PHX"
       },
-      "goatRecentScore": 37.6,
-      "goatRecentRank": 302
+      "goatRecentScore": 32.3,
+      "goatRecentRank": 316
     },
     {
       "id": "collin-murray-boyles-1057268940",
@@ -4770,7 +4770,7 @@
         "teamAbbr": "TOR"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 540
+      "goatRecentRank": 609
     },
     {
       "id": "collin-sexton-1629012",
@@ -4808,8 +4808,8 @@
         "teamId": "4",
         "teamAbbr": "CHA"
       },
-      "goatRecentScore": 44.6,
-      "goatRecentRank": 202
+      "goatRecentScore": 45.4,
+      "goatRecentRank": 139
     },
     {
       "id": "cooper-flagg-1057262088",
@@ -4843,7 +4843,7 @@
         "teamAbbr": "DAL"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 664
+      "goatRecentRank": 622
     },
     {
       "id": "corey-kispert-1630557",
@@ -4879,8 +4879,8 @@
         "teamId": "30",
         "teamAbbr": "WAS"
       },
-      "goatRecentScore": 35.5,
-      "goatRecentRank": 330
+      "goatRecentScore": 36.6,
+      "goatRecentRank": 263
     },
     {
       "id": "cormac-ryan-1642504",
@@ -4918,7 +4918,7 @@
         "teamAbbr": "MIL"
       },
       "goatRecentScore": 0.3,
-      "goatRecentRank": 488
+      "goatRecentRank": 486
     },
     {
       "id": "craig-porter-56677872",
@@ -4952,7 +4952,7 @@
         "teamAbbr": "CLE"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 541
+      "goatRecentRank": 575
     },
     {
       "id": "curtis-jones-1057846921",
@@ -4986,7 +4986,7 @@
         "teamAbbr": "DEN"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 649
+      "goatRecentRank": 490
     },
     {
       "id": "d-angelo-russell-1626156",
@@ -5024,8 +5024,8 @@
         "teamId": "7",
         "teamAbbr": "DAL"
       },
-      "goatRecentScore": 56.0,
-      "goatRecentRank": 74
+      "goatRecentScore": 54.1,
+      "goatRecentRank": 68
     },
     {
       "id": "daeqwon-plowden-1631342",
@@ -5061,8 +5061,8 @@
         "teamId": "26",
         "teamAbbr": "SAC"
       },
-      "goatRecentScore": 9.1,
-      "goatRecentRank": 433
+      "goatRecentScore": 7.4,
+      "goatRecentRank": 434
     },
     {
       "id": "dain-dainja-1057845569",
@@ -5096,7 +5096,7 @@
         "teamAbbr": "MIA"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 500
+      "goatRecentRank": 582
     },
     {
       "id": "dalen-terry-1631207",
@@ -5134,8 +5134,8 @@
         "teamId": "5",
         "teamAbbr": "CHI"
       },
-      "goatRecentScore": 38.2,
-      "goatRecentRank": 297
+      "goatRecentScore": 33.9,
+      "goatRecentRank": 299
     },
     {
       "id": "dalton-knecht-1642261",
@@ -5174,8 +5174,8 @@
         "teamId": "14",
         "teamAbbr": "LAL"
       },
-      "goatRecentScore": 36.5,
-      "goatRecentRank": 314
+      "goatRecentScore": 27.7,
+      "goatRecentRank": 368
     },
     {
       "id": "damian-lillard-203081",
@@ -5214,8 +5214,8 @@
         "teamId": "25",
         "teamAbbr": "POR"
       },
-      "goatRecentScore": 63.4,
-      "goatRecentRank": 38
+      "goatRecentScore": 62.7,
+      "goatRecentRank": 37
     },
     {
       "id": "daniel-batcho-1059276973",
@@ -5249,7 +5249,7 @@
         "teamAbbr": "SAC"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 569
+      "goatRecentRank": 662
     },
     {
       "id": "daniel-gafford-1629655",
@@ -5287,8 +5287,8 @@
         "teamId": "7",
         "teamAbbr": "DAL"
       },
-      "goatRecentScore": 50.1,
-      "goatRecentRank": 118
+      "goatRecentScore": 49.7,
+      "goatRecentRank": 96
     },
     {
       "id": "daniss-jenkins-1642450",
@@ -5327,8 +5327,8 @@
         "teamId": "9",
         "teamAbbr": "DET"
       },
-      "goatRecentScore": 6.4,
-      "goatRecentRank": 445
+      "goatRecentScore": 5.7,
+      "goatRecentRank": 440
     },
     {
       "id": "danny-wolf-1057280779",
@@ -5362,7 +5362,7 @@
         "teamAbbr": "BKN"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 603
+      "goatRecentRank": 631
     },
     {
       "id": "dante-exum-203957",
@@ -5402,8 +5402,8 @@
         "teamId": "7",
         "teamAbbr": "DAL"
       },
-      "goatRecentScore": 42.7,
-      "goatRecentRank": 227
+      "goatRecentScore": 35.9,
+      "goatRecentRank": 270
     },
     {
       "id": "dario-saric-203967",
@@ -5441,8 +5441,8 @@
         "teamId": "26",
         "teamAbbr": "SAC"
       },
-      "goatRecentScore": 42.3,
-      "goatRecentRank": 237
+      "goatRecentScore": 37.7,
+      "goatRecentRank": 244
     },
     {
       "id": "dariq-whitehead-1641727",
@@ -5479,7 +5479,7 @@
         "teamId": "21",
         "teamAbbr": "OKC"
       },
-      "goatRecentScore": 12.8,
+      "goatRecentScore": 11.3,
       "goatRecentRank": 423
     },
     {
@@ -5514,7 +5514,7 @@
         "teamAbbr": "CLE"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 505
+      "goatRecentRank": 493
     },
     {
       "id": "darius-garland-1629636",
@@ -5552,8 +5552,8 @@
         "teamId": "6",
         "teamAbbr": "CLE"
       },
-      "goatRecentScore": 67.4,
-      "goatRecentRank": 28
+      "goatRecentScore": 65.6,
+      "goatRecentRank": 27
     },
     {
       "id": "daron-holmes-ii-1641747",
@@ -5591,7 +5591,7 @@
         "teamAbbr": "DEN"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 628
+      "goatRecentRank": 660
     },
     {
       "id": "david-duke-jr-1630561",
@@ -5631,8 +5631,8 @@
         "teamId": "24",
         "teamAbbr": "PHX"
       },
-      "goatRecentScore": 19.1,
-      "goatRecentRank": 414
+      "goatRecentScore": 16.5,
+      "goatRecentRank": 415
     },
     {
       "id": "david-jones-1028245237",
@@ -5667,7 +5667,7 @@
         "teamAbbr": "SAS"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 648
+      "goatRecentRank": 512
     },
     {
       "id": "davion-mitchell-1630558",
@@ -5703,8 +5703,8 @@
         "teamId": "16",
         "teamAbbr": "MIA"
       },
-      "goatRecentScore": 41.3,
-      "goatRecentRank": 254
+      "goatRecentScore": 37.0,
+      "goatRecentRank": 258
     },
     {
       "id": "dawson-garcia-1057846106",
@@ -5738,7 +5738,7 @@
         "teamAbbr": "DET"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 668
+      "goatRecentRank": 597
     },
     {
       "id": "day-ron-sharpe-1630549",
@@ -5777,7 +5777,7 @@
         "teamAbbr": "BKN"
       },
       "goatRecentScore": 45.8,
-      "goatRecentRank": 180
+      "goatRecentRank": 133
     },
     {
       "id": "de-aaron-fox-1628368",
@@ -5816,8 +5816,8 @@
         "teamId": "27",
         "teamAbbr": "SAS"
       },
-      "goatRecentScore": 61.0,
-      "goatRecentRank": 47
+      "goatRecentScore": 60.6,
+      "goatRecentRank": 38
     },
     {
       "id": "de-andre-hunter-1629631",
@@ -5857,8 +5857,8 @@
         "teamId": "6",
         "teamAbbr": "CLE"
       },
-      "goatRecentScore": 44.4,
-      "goatRecentRank": 204
+      "goatRecentScore": 40.1,
+      "goatRecentRank": 214
     },
     {
       "id": "de-anthony-melton-1629001",
@@ -5897,8 +5897,8 @@
         "teamId": "10",
         "teamAbbr": "GSW"
       },
-      "goatRecentScore": 53.8,
-      "goatRecentRank": 89
+      "goatRecentScore": 46.5,
+      "goatRecentRank": 121
     },
     {
       "id": "dean-wade-1629731",
@@ -5936,8 +5936,8 @@
         "teamId": "6",
         "teamAbbr": "CLE"
       },
-      "goatRecentScore": 50.8,
-      "goatRecentRank": 109
+      "goatRecentScore": 43.1,
+      "goatRecentRank": 172
     },
     {
       "id": "deandre-ayton-1629028",
@@ -5978,8 +5978,8 @@
         "teamId": "14",
         "teamAbbr": "LAL"
       },
-      "goatRecentScore": 46.3,
-      "goatRecentRank": 169
+      "goatRecentScore": 45.4,
+      "goatRecentRank": 141
     },
     {
       "id": "deivon-smith-1059635242",
@@ -6013,7 +6013,7 @@
         "teamAbbr": "ATL"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 522
+      "goatRecentRank": 613
     },
     {
       "id": "dejounte-murray-1627749",
@@ -6052,8 +6052,8 @@
         "teamId": "19",
         "teamAbbr": "NOP"
       },
-      "goatRecentScore": 50.1,
-      "goatRecentRank": 120
+      "goatRecentScore": 49.8,
+      "goatRecentRank": 95
     },
     {
       "id": "demar-derozan-201942",
@@ -6091,8 +6091,8 @@
         "teamId": "26",
         "teamAbbr": "SAC"
       },
-      "goatRecentScore": 53.0,
-      "goatRecentRank": 95
+      "goatRecentScore": 52.6,
+      "goatRecentRank": 74
     },
     {
       "id": "deni-avdija-1630166",
@@ -6129,8 +6129,8 @@
         "teamId": "25",
         "teamAbbr": "POR"
       },
-      "goatRecentScore": 45.5,
-      "goatRecentRank": 184
+      "goatRecentScore": 46.5,
+      "goatRecentRank": 120
     },
     {
       "id": "dennis-schroder-203471",
@@ -6170,8 +6170,8 @@
         "teamId": "26",
         "teamAbbr": "SAC"
       },
-      "goatRecentScore": 46.3,
-      "goatRecentRank": 172
+      "goatRecentScore": 44.2,
+      "goatRecentRank": 155
     },
     {
       "id": "dereck-lively-ii-1641726",
@@ -6211,8 +6211,8 @@
         "teamId": "7",
         "teamAbbr": "DAL"
       },
-      "goatRecentScore": 54.3,
-      "goatRecentRank": 84
+      "goatRecentScore": 49.3,
+      "goatRecentRank": 99
     },
     {
       "id": "derik-queen-1057274415",
@@ -6247,7 +6247,7 @@
         "teamAbbr": "NOP"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 625
+      "goatRecentRank": 571
     },
     {
       "id": "derrick-jones-jr-1627884",
@@ -6287,8 +6287,8 @@
         "teamId": "13",
         "teamAbbr": "LAC"
       },
-      "goatRecentScore": 50.3,
-      "goatRecentRank": 115
+      "goatRecentScore": 45.7,
+      "goatRecentRank": 136
     },
     {
       "id": "derrick-white-1628401",
@@ -6326,8 +6326,8 @@
         "teamId": "2",
         "teamAbbr": "BOS"
       },
-      "goatRecentScore": 75.6,
-      "goatRecentRank": 9
+      "goatRecentScore": 71.8,
+      "goatRecentRank": 10
     },
     {
       "id": "desmond-bane-1630217",
@@ -6363,8 +6363,8 @@
         "teamId": "22",
         "teamAbbr": "ORL"
       },
-      "goatRecentScore": 55.7,
-      "goatRecentRank": 78
+      "goatRecentScore": 54.3,
+      "goatRecentRank": 67
     },
     {
       "id": "devin-booker-1626164",
@@ -6402,8 +6402,8 @@
         "teamId": "24",
         "teamAbbr": "PHX"
       },
-      "goatRecentScore": 61.2,
-      "goatRecentRank": 46
+      "goatRecentScore": 59.6,
+      "goatRecentRank": 43
     },
     {
       "id": "devin-carter-1642269",
@@ -6439,8 +6439,8 @@
         "teamId": "26",
         "teamAbbr": "SAC"
       },
-      "goatRecentScore": 26.7,
-      "goatRecentRank": 394
+      "goatRecentScore": 23.0,
+      "goatRecentRank": 397
     },
     {
       "id": "devin-vassell-1630170",
@@ -6477,8 +6477,8 @@
         "teamId": "27",
         "teamAbbr": "SAS"
       },
-      "goatRecentScore": 41.4,
-      "goatRecentRank": 252
+      "goatRecentScore": 42.4,
+      "goatRecentRank": 182
     },
     {
       "id": "dillon-brooks-1628415",
@@ -6516,8 +6516,8 @@
         "teamId": "24",
         "teamAbbr": "PHX"
       },
-      "goatRecentScore": 51.0,
-      "goatRecentRank": 106
+      "goatRecentScore": 46.0,
+      "goatRecentRank": 130
     },
     {
       "id": "dillon-jones-1641794",
@@ -6555,8 +6555,8 @@
         "teamId": "30",
         "teamAbbr": "WAS"
       },
-      "goatRecentScore": 44.9,
-      "goatRecentRank": 197
+      "goatRecentScore": 31.2,
+      "goatRecentRank": 329
     },
     {
       "id": "dj-rodman-1058094827",
@@ -6590,7 +6590,7 @@
         "teamAbbr": "CHA"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 671
+      "goatRecentRank": 499
     },
     {
       "id": "dj-steward-1630569",
@@ -6627,8 +6627,8 @@
         "teamId": "5",
         "teamAbbr": "CHI"
       },
-      "goatRecentScore": 2.5,
-      "goatRecentRank": 465
+      "goatRecentScore": 1.8,
+      "goatRecentRank": 471
     },
     {
       "id": "domantas-sabonis-1627734",
@@ -6666,8 +6666,8 @@
         "teamId": "26",
         "teamAbbr": "SAC"
       },
-      "goatRecentScore": 64.4,
-      "goatRecentRank": 36
+      "goatRecentScore": 64.6,
+      "goatRecentRank": 30
     },
     {
       "id": "dominick-barlow-1631230",
@@ -6705,8 +6705,8 @@
         "teamId": "23",
         "teamAbbr": "PHI"
       },
-      "goatRecentScore": 32.7,
-      "goatRecentRank": 355
+      "goatRecentScore": 32.5,
+      "goatRecentRank": 308
     },
     {
       "id": "donovan-clingan-1642270",
@@ -6745,8 +6745,8 @@
         "teamId": "25",
         "teamAbbr": "POR"
       },
-      "goatRecentScore": 43.3,
-      "goatRecentRank": 219
+      "goatRecentScore": 40.4,
+      "goatRecentRank": 211
     },
     {
       "id": "donovan-mitchell-1628378",
@@ -6784,7 +6784,7 @@
         "teamId": "6",
         "teamAbbr": "CLE"
       },
-      "goatRecentScore": 76.0,
+      "goatRecentScore": 75.0,
       "goatRecentRank": 7
     },
     {
@@ -6823,8 +6823,8 @@
         "teamId": "18",
         "teamAbbr": "MIN"
       },
-      "goatRecentScore": 53.3,
-      "goatRecentRank": 92
+      "goatRecentScore": 49.3,
+      "goatRecentRank": 98
     },
     {
       "id": "dorian-finney-smith-1627827",
@@ -6862,8 +6862,8 @@
         "teamId": "11",
         "teamAbbr": "HOU"
       },
-      "goatRecentScore": 40.9,
-      "goatRecentRank": 260
+      "goatRecentScore": 37.4,
+      "goatRecentRank": 250
     },
     {
       "id": "doug-mcdermott-203926",
@@ -6901,8 +6901,8 @@
         "teamId": "26",
         "teamAbbr": "SAC"
       },
-      "goatRecentScore": 33.1,
-      "goatRecentRank": 352
+      "goatRecentScore": 30.8,
+      "goatRecentRank": 333
     },
     {
       "id": "drake-powell-1057279425",
@@ -6936,7 +6936,7 @@
         "teamAbbr": "BKN"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 504
+      "goatRecentRank": 598
     },
     {
       "id": "draymond-green-203110",
@@ -6975,8 +6975,8 @@
         "teamId": "10",
         "teamAbbr": "GSW"
       },
-      "goatRecentScore": 61.7,
-      "goatRecentRank": 43
+      "goatRecentScore": 59.4,
+      "goatRecentRank": 45
     },
     {
       "id": "drew-eubanks-1629234",
@@ -7016,8 +7016,8 @@
         "teamId": "26",
         "teamAbbr": "SAC"
       },
-      "goatRecentScore": 43.5,
-      "goatRecentRank": 213
+      "goatRecentScore": 41.3,
+      "goatRecentRank": 201
     },
     {
       "id": "drew-peterson-1641809",
@@ -7055,8 +7055,8 @@
         "teamId": "4",
         "teamAbbr": "CHA"
       },
-      "goatRecentScore": 19.3,
-      "goatRecentRank": 413
+      "goatRecentScore": 13.9,
+      "goatRecentRank": 418
     },
     {
       "id": "dru-smith-1630696",
@@ -7095,8 +7095,8 @@
         "teamId": "16",
         "teamAbbr": "MIA"
       },
-      "goatRecentScore": 38.7,
-      "goatRecentRank": 291
+      "goatRecentScore": 29.9,
+      "goatRecentRank": 342
     },
     {
       "id": "duncan-robinson-1629130",
@@ -7134,8 +7134,8 @@
         "teamId": "9",
         "teamAbbr": "DET"
       },
-      "goatRecentScore": 42.4,
-      "goatRecentRank": 234
+      "goatRecentScore": 38.7,
+      "goatRecentRank": 227
     },
     {
       "id": "duop-reath-1641871",
@@ -7172,8 +7172,8 @@
         "teamId": "25",
         "teamAbbr": "POR"
       },
-      "goatRecentScore": 35.3,
-      "goatRecentRank": 333
+      "goatRecentScore": 34.6,
+      "goatRecentRank": 287
     },
     {
       "id": "dwight-powell-203939",
@@ -7215,8 +7215,8 @@
         "teamId": "7",
         "teamAbbr": "DAL"
       },
-      "goatRecentScore": 43.5,
-      "goatRecentRank": 214
+      "goatRecentScore": 38.9,
+      "goatRecentRank": 225
     },
     {
       "id": "dylan-cardwell-1057845274",
@@ -7250,7 +7250,7 @@
         "teamAbbr": "SAC"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 535
+      "goatRecentRank": 572
     },
     {
       "id": "dylan-harper-1057262518",
@@ -7285,7 +7285,7 @@
         "teamAbbr": "SAS"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 584
+      "goatRecentRank": 541
     },
     {
       "id": "dyson-daniels-1630700",
@@ -7321,8 +7321,8 @@
         "teamId": "1",
         "teamAbbr": "ATL"
       },
-      "goatRecentScore": 46.3,
-      "goatRecentRank": 170
+      "goatRecentScore": 42.7,
+      "goatRecentRank": 178
     },
     {
       "id": "e-j-liddell-1630604",
@@ -7361,8 +7361,8 @@
         "teamId": "3",
         "teamAbbr": "BKN"
       },
-      "goatRecentScore": 8.8,
-      "goatRecentRank": 435
+      "goatRecentScore": 7.7,
+      "goatRecentRank": 433
     },
     {
       "id": "egor-demin-196294531",
@@ -7399,7 +7399,7 @@
         "teamAbbr": "BKN"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 619
+      "goatRecentRank": 666
     },
     {
       "id": "eli-john-ndiaye-196294543",
@@ -7437,7 +7437,7 @@
         "teamAbbr": "ATL"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 630
+      "goatRecentRank": 650
     },
     {
       "id": "elijah-harkless-1641989",
@@ -7473,8 +7473,8 @@
         "teamId": "29",
         "teamAbbr": "UTA"
       },
-      "goatRecentScore": 9.3,
-      "goatRecentRank": 432
+      "goatRecentScore": 9.5,
+      "goatRecentRank": 428
     },
     {
       "id": "emanuel-miller-1641801",
@@ -7513,8 +7513,8 @@
         "teamId": "5",
         "teamAbbr": "CHI"
       },
-      "goatRecentScore": 3.5,
-      "goatRecentRank": 457
+      "goatRecentScore": 2.9,
+      "goatRecentRank": 456
     },
     {
       "id": "enrique-freeman-1642402",
@@ -7553,8 +7553,8 @@
         "teamId": "18",
         "teamAbbr": "MIN"
       },
-      "goatRecentScore": 12.2,
-      "goatRecentRank": 424
+      "goatRecentScore": 10.9,
+      "goatRecentRank": 425
     },
     {
       "id": "eric-dixon-1057845724",
@@ -7588,7 +7588,7 @@
         "teamAbbr": "CHA"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 494
+      "goatRecentRank": 663
     },
     {
       "id": "eric-gordon-201569",
@@ -7626,8 +7626,8 @@
         "teamId": "23",
         "teamAbbr": "PHI"
       },
-      "goatRecentScore": 37.9,
-      "goatRecentRank": 299
+      "goatRecentScore": 34.4,
+      "goatRecentRank": 291
     },
     {
       "id": "erik-reynolds-ii-1059875969",
@@ -7663,7 +7663,7 @@
         "teamAbbr": "OKC"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 561
+      "goatRecentRank": 549
     },
     {
       "id": "erik-stevenson-1641907",
@@ -7701,7 +7701,7 @@
         "teamAbbr": "WAS"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 624
+      "goatRecentRank": 669
     },
     {
       "id": "ethan-thompson-1630679",
@@ -7738,8 +7738,8 @@
         "teamId": "16",
         "teamAbbr": "MIA"
       },
-      "goatRecentScore": 0.9,
-      "goatRecentRank": 480
+      "goatRecentScore": 0.7,
+      "goatRecentRank": 481
     },
     {
       "id": "evan-mobley-1630596",
@@ -7775,7 +7775,7 @@
         "teamId": "6",
         "teamAbbr": "CLE"
       },
-      "goatRecentScore": 68.0,
+      "goatRecentScore": 65.8,
       "goatRecentRank": 26
     },
     {
@@ -7812,8 +7812,8 @@
         "teamId": "22",
         "teamAbbr": "ORL"
       },
-      "goatRecentScore": 58.7,
-      "goatRecentRank": 62
+      "goatRecentScore": 57.9,
+      "goatRecentRank": 51
     },
     {
       "id": "fred-vanvleet-1627832",
@@ -7851,8 +7851,8 @@
         "teamId": "11",
         "teamAbbr": "HOU"
       },
-      "goatRecentScore": 61.4,
-      "goatRecentRank": 44
+      "goatRecentScore": 59.7,
+      "goatRecentRank": 42
     },
     {
       "id": "gabe-madsen-1059253855",
@@ -7886,7 +7886,7 @@
         "teamAbbr": "MIA"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 521
+      "goatRecentRank": 561
     },
     {
       "id": "gabe-mcglothan-1642440",
@@ -7923,7 +7923,7 @@
         "teamAbbr": "IND"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 665
+      "goatRecentRank": 588
     },
     {
       "id": "gabe-vincent-1629216",
@@ -7964,8 +7964,8 @@
         "teamId": "14",
         "teamAbbr": "LAL"
       },
-      "goatRecentScore": 39.5,
-      "goatRecentRank": 282
+      "goatRecentScore": 31.9,
+      "goatRecentRank": 321
     },
     {
       "id": "garrett-temple-202066",
@@ -8003,8 +8003,8 @@
         "teamId": "28",
         "teamAbbr": "TOR"
       },
-      "goatRecentScore": 31.4,
-      "goatRecentRank": 366
+      "goatRecentScore": 26.1,
+      "goatRecentRank": 375
     },
     {
       "id": "garrison-brooks-1057845114",
@@ -8039,7 +8039,7 @@
         "teamAbbr": "NOP"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 550
+      "goatRecentRank": 504
     },
     {
       "id": "garrison-mathews-1629726",
@@ -8078,8 +8078,8 @@
         "teamId": "20",
         "teamAbbr": "NYK"
       },
-      "goatRecentScore": 33.4,
-      "goatRecentRank": 350
+      "goatRecentScore": 29.7,
+      "goatRecentRank": 345
     },
     {
       "id": "gary-harris-203914",
@@ -8119,8 +8119,8 @@
         "teamId": "17",
         "teamAbbr": "MIL"
       },
-      "goatRecentScore": 37.1,
-      "goatRecentRank": 307
+      "goatRecentScore": 29.7,
+      "goatRecentRank": 344
     },
     {
       "id": "gary-payton-ii-1627780",
@@ -8162,8 +8162,8 @@
         "teamId": "10",
         "teamAbbr": "GSW"
       },
-      "goatRecentScore": 45.3,
-      "goatRecentRank": 188
+      "goatRecentScore": 38.7,
+      "goatRecentRank": 226
     },
     {
       "id": "gary-trent-jr-1629018",
@@ -8204,8 +8204,8 @@
         "teamId": "17",
         "teamAbbr": "MIL"
       },
-      "goatRecentScore": 42.3,
-      "goatRecentRank": 236
+      "goatRecentScore": 39.4,
+      "goatRecentRank": 218
     },
     {
       "id": "georges-niang-1627777",
@@ -8245,8 +8245,8 @@
         "teamId": "29",
         "teamAbbr": "UTA"
       },
-      "goatRecentScore": 47.8,
-      "goatRecentRank": 147
+      "goatRecentScore": 41.1,
+      "goatRecentRank": 206
     },
     {
       "id": "gg-jackson-1641713",
@@ -8284,8 +8284,8 @@
         "teamId": "15",
         "teamAbbr": "MEM"
       },
-      "goatRecentScore": 35.8,
-      "goatRecentRank": 324
+      "goatRecentScore": 31.4,
+      "goatRecentRank": 325
     },
     {
       "id": "giannis-antetokounmpo-203507",
@@ -8323,7 +8323,7 @@
         "teamId": "17",
         "teamAbbr": "MIL"
       },
-      "goatRecentScore": 82.2,
+      "goatRecentScore": 83.5,
       "goatRecentRank": 4
     },
     {
@@ -8360,7 +8360,7 @@
         "teamAbbr": "ORL"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 513
+      "goatRecentRank": 610
     },
     {
       "id": "gradey-dick-1641711",
@@ -8396,8 +8396,8 @@
         "teamId": "28",
         "teamAbbr": "TOR"
       },
-      "goatRecentScore": 31.9,
-      "goatRecentRank": 361
+      "goatRecentScore": 30.4,
+      "goatRecentRank": 338
     },
     {
       "id": "grant-nelson-1059875475",
@@ -8431,7 +8431,7 @@
         "teamAbbr": "BKN"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 511
+      "goatRecentRank": 527
     },
     {
       "id": "grant-williams-1629684",
@@ -8469,8 +8469,8 @@
         "teamId": "4",
         "teamAbbr": "CHA"
       },
-      "goatRecentScore": 41.0,
-      "goatRecentRank": 256
+      "goatRecentScore": 35.0,
+      "goatRecentRank": 284
     },
     {
       "id": "grayson-allen-1628960",
@@ -8510,8 +8510,8 @@
         "teamId": "24",
         "teamAbbr": "PHX"
       },
-      "goatRecentScore": 51.0,
-      "goatRecentRank": 107
+      "goatRecentScore": 46.2,
+      "goatRecentRank": 128
     },
     {
       "id": "guerschon-yabusele-196294542",
@@ -8553,7 +8553,7 @@
         "teamAbbr": "NYK"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 509
+      "goatRecentRank": 623
     },
     {
       "id": "gui-santos-1630611",
@@ -8592,8 +8592,8 @@
         "teamId": "10",
         "teamAbbr": "GSW"
       },
-      "goatRecentScore": 46.9,
-      "goatRecentRank": 160
+      "goatRecentScore": 37.9,
+      "goatRecentRank": 242
     },
     {
       "id": "hansen-yang-1057275769",
@@ -8628,7 +8628,7 @@
         "teamAbbr": "POR"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 595
+      "goatRecentRank": 632
     },
     {
       "id": "harrison-barnes-203084",
@@ -8667,8 +8667,8 @@
         "teamId": "27",
         "teamAbbr": "SAS"
       },
-      "goatRecentScore": 45.6,
-      "goatRecentRank": 183
+      "goatRecentScore": 41.7,
+      "goatRecentRank": 196
     },
     {
       "id": "harrison-ingram-1631127",
@@ -8708,8 +8708,8 @@
         "teamId": "27",
         "teamAbbr": "SAS"
       },
-      "goatRecentScore": 4.1,
-      "goatRecentRank": 455
+      "goatRecentScore": 4.3,
+      "goatRecentRank": 450
     },
     {
       "id": "hason-ward-1028272676",
@@ -8743,7 +8743,7 @@
         "teamAbbr": "BOS"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 662
+      "goatRecentRank": 522
     },
     {
       "id": "haywood-highsmith-1629312",
@@ -8781,8 +8781,8 @@
         "teamId": "3",
         "teamAbbr": "BKN"
       },
-      "goatRecentScore": 40.5,
-      "goatRecentRank": 262
+      "goatRecentScore": 35.2,
+      "goatRecentRank": 281
     },
     {
       "id": "herbert-jones-1630529",
@@ -8821,8 +8821,8 @@
         "teamId": "19",
         "teamAbbr": "NOP"
       },
-      "goatRecentScore": 46.1,
-      "goatRecentRank": 175
+      "goatRecentScore": 42.8,
+      "goatRecentRank": 176
     },
     {
       "id": "hugo-gonzalez-196294536",
@@ -8859,7 +8859,7 @@
         "teamAbbr": "BOS"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 555
+      "goatRecentRank": 505
     },
     {
       "id": "hunter-dickinson-1057845705",
@@ -8894,7 +8894,7 @@
         "teamAbbr": "NOP"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 591
+      "goatRecentRank": 644
     },
     {
       "id": "hunter-sallis-1057848561",
@@ -8928,7 +8928,7 @@
         "teamAbbr": "PHI"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 598
+      "goatRecentRank": 578
     },
     {
       "id": "hunter-tyson-1641816",
@@ -8966,8 +8966,8 @@
         "teamId": "8",
         "teamAbbr": "DEN"
       },
-      "goatRecentScore": 35.2,
-      "goatRecentRank": 335
+      "goatRecentScore": 26.0,
+      "goatRecentRank": 376
     },
     {
       "id": "igor-milicic-jr-1057847674",
@@ -9002,7 +9002,7 @@
         "teamAbbr": "PHI"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 578
+      "goatRecentRank": 580
     },
     {
       "id": "immanuel-quickley-1630193",
@@ -9041,8 +9041,8 @@
         "teamId": "28",
         "teamAbbr": "TOR"
       },
-      "goatRecentScore": 50.4,
-      "goatRecentRank": 111
+      "goatRecentScore": 48.3,
+      "goatRecentRank": 107
     },
     {
       "id": "isaac-jones-1642403",
@@ -9081,7 +9081,7 @@
         "teamId": "26",
         "teamAbbr": "SAC"
       },
-      "goatRecentScore": 19.9,
+      "goatRecentScore": 17.2,
       "goatRecentRank": 412
     },
     {
@@ -9123,8 +9123,8 @@
         "teamId": "5",
         "teamAbbr": "CHI"
       },
-      "goatRecentScore": 48.7,
-      "goatRecentRank": 135
+      "goatRecentScore": 42.3,
+      "goatRecentRank": 183
     },
     {
       "id": "isaiah-collier-1642268",
@@ -9162,8 +9162,8 @@
         "teamId": "29",
         "teamAbbr": "UTA"
       },
-      "goatRecentScore": 30.7,
-      "goatRecentRank": 375
+      "goatRecentScore": 32.3,
+      "goatRecentRank": 314
     },
     {
       "id": "isaiah-crawford-1642384",
@@ -9202,8 +9202,8 @@
         "teamId": "11",
         "teamAbbr": "HOU"
       },
-      "goatRecentScore": 4.9,
-      "goatRecentRank": 451
+      "goatRecentScore": 4.5,
+      "goatRecentRank": 449
     },
     {
       "id": "isaiah-hartenstein-1628392",
@@ -9246,8 +9246,8 @@
         "teamId": "21",
         "teamAbbr": "OKC"
       },
-      "goatRecentScore": 64.1,
-      "goatRecentRank": 37
+      "goatRecentScore": 60.2,
+      "goatRecentRank": 40
     },
     {
       "id": "isaiah-jackson-1630543",
@@ -9286,8 +9286,8 @@
         "teamId": "12",
         "teamAbbr": "IND"
       },
-      "goatRecentScore": 46.7,
-      "goatRecentRank": 161
+      "goatRecentScore": 44.0,
+      "goatRecentRank": 159
     },
     {
       "id": "isaiah-joe-1630198",
@@ -9327,8 +9327,8 @@
         "teamId": "21",
         "teamAbbr": "OKC"
       },
-      "goatRecentScore": 61.9,
-      "goatRecentRank": 42
+      "goatRecentScore": 56.5,
+      "goatRecentRank": 58
     },
     {
       "id": "isaiah-livers-1630587",
@@ -9367,8 +9367,8 @@
         "teamId": "24",
         "teamAbbr": "PHX"
       },
-      "goatRecentScore": 21.1,
-      "goatRecentRank": 410
+      "goatRecentScore": 22.2,
+      "goatRecentRank": 399
     },
     {
       "id": "isaiah-stevens-1641815",
@@ -9405,8 +9405,8 @@
         "teamId": "26",
         "teamAbbr": "SAC"
       },
-      "goatRecentScore": 3.8,
-      "goatRecentRank": 456
+      "goatRecentScore": 2.4,
+      "goatRecentRank": 461
     },
     {
       "id": "isaiah-stewart-1630191",
@@ -9444,8 +9444,8 @@
         "teamId": "9",
         "teamAbbr": "DET"
       },
-      "goatRecentScore": 38.7,
-      "goatRecentRank": 290
+      "goatRecentScore": 38.2,
+      "goatRecentRank": 237
     },
     {
       "id": "isaih-moore-1057847758",
@@ -9479,7 +9479,7 @@
         "teamAbbr": "CHA"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 666
+      "goatRecentRank": 570
     },
     {
       "id": "ivica-zubac-1627826",
@@ -9518,8 +9518,8 @@
         "teamId": "13",
         "teamAbbr": "LAC"
       },
-      "goatRecentScore": 60.9,
-      "goatRecentRank": 48
+      "goatRecentScore": 58.6,
+      "goatRecentRank": 47
     },
     {
       "id": "ja-morant-1629630",
@@ -9557,7 +9557,7 @@
         "teamId": "15",
         "teamAbbr": "MEM"
       },
-      "goatRecentScore": 68.7,
+      "goatRecentScore": 67.3,
       "goatRecentRank": 22
     },
     {
@@ -9596,8 +9596,8 @@
         "teamId": "28",
         "teamAbbr": "TOR"
       },
-      "goatRecentScore": 30.3,
-      "goatRecentRank": 380
+      "goatRecentScore": 26.6,
+      "goatRecentRank": 373
     },
     {
       "id": "ja-vier-francis-1057969148",
@@ -9632,7 +9632,7 @@
         "teamAbbr": "GSW"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 607
+      "goatRecentRank": 525
     },
     {
       "id": "jabari-smith-jr-1631095",
@@ -9671,8 +9671,8 @@
         "teamId": "11",
         "teamAbbr": "HOU"
       },
-      "goatRecentScore": 45.1,
-      "goatRecentRank": 194
+      "goatRecentScore": 42.2,
+      "goatRecentRank": 185
     },
     {
       "id": "jabari-walker-1631133",
@@ -9710,8 +9710,8 @@
         "teamId": "23",
         "teamAbbr": "PHI"
       },
-      "goatRecentScore": 36.8,
-      "goatRecentRank": 313
+      "goatRecentScore": 36.9,
+      "goatRecentRank": 259
     },
     {
       "id": "jacksen-moni-1057970845",
@@ -9746,7 +9746,7 @@
         "teamAbbr": "GSW"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 503
+      "goatRecentRank": 616
     },
     {
       "id": "jackson-rowe-1642050",
@@ -9783,8 +9783,8 @@
         "teamId": "10",
         "teamAbbr": "GSW"
       },
-      "goatRecentScore": 6.4,
-      "goatRecentRank": 444
+      "goatRecentScore": 5.5,
+      "goatRecentRank": 442
     },
     {
       "id": "jacob-toppin-1631210",
@@ -9820,8 +9820,8 @@
         "teamId": "1",
         "teamAbbr": "ATL"
       },
-      "goatRecentScore": 8.2,
-      "goatRecentRank": 436
+      "goatRecentScore": 6.1,
+      "goatRecentRank": 437
     },
     {
       "id": "jaden-akins-1059276748",
@@ -9855,7 +9855,7 @@
         "teamAbbr": "DET"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 558
+      "goatRecentRank": 638
     },
     {
       "id": "jaden-hardy-1630702",
@@ -9891,8 +9891,8 @@
         "teamId": "7",
         "teamAbbr": "DAL"
       },
-      "goatRecentScore": 43.6,
-      "goatRecentRank": 212
+      "goatRecentScore": 38.6,
+      "goatRecentRank": 228
     },
     {
       "id": "jaden-ivey-1631093",
@@ -9931,8 +9931,8 @@
         "teamId": "9",
         "teamAbbr": "DET"
       },
-      "goatRecentScore": 40.3,
-      "goatRecentRank": 268
+      "goatRecentScore": 43.3,
+      "goatRecentRank": 167
     },
     {
       "id": "jaden-mcdaniels-1630183",
@@ -9968,8 +9968,8 @@
         "teamId": "18",
         "teamAbbr": "MIN"
       },
-      "goatRecentScore": 54.4,
-      "goatRecentRank": 83
+      "goatRecentScore": 50.2,
+      "goatRecentRank": 90
     },
     {
       "id": "jaden-springer-1630531",
@@ -10008,8 +10008,8 @@
         "teamId": "19",
         "teamAbbr": "NOP"
       },
-      "goatRecentScore": 41.2,
-      "goatRecentRank": 255
+      "goatRecentScore": 32.4,
+      "goatRecentRank": 310
     },
     {
       "id": "jae-sean-tate-1630256",
@@ -10047,8 +10047,8 @@
         "teamId": "11",
         "teamAbbr": "HOU"
       },
-      "goatRecentScore": 40.4,
-      "goatRecentRank": 266
+      "goatRecentScore": 34.3,
+      "goatRecentRank": 294
     },
     {
       "id": "jahmir-young-1642443",
@@ -10084,8 +10084,8 @@
         "teamId": "16",
         "teamAbbr": "MIA"
       },
-      "goatRecentScore": 2.9,
-      "goatRecentRank": 459
+      "goatRecentScore": 2.4,
+      "goatRecentRank": 460
     },
     {
       "id": "jahmyl-telfort-1057849029",
@@ -10120,7 +10120,7 @@
         "teamAbbr": "LAC"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 556
+      "goatRecentRank": 523
     },
     {
       "id": "jaime-jaquez-jr-1631170",
@@ -10159,8 +10159,8 @@
         "teamId": "16",
         "teamAbbr": "MIA"
       },
-      "goatRecentScore": 42.0,
-      "goatRecentRank": 242
+      "goatRecentScore": 36.4,
+      "goatRecentRank": 265
     },
     {
       "id": "jake-laravia-1631222",
@@ -10197,8 +10197,8 @@
         "teamId": "14",
         "teamAbbr": "LAL"
       },
-      "goatRecentScore": 40.2,
-      "goatRecentRank": 270
+      "goatRecentScore": 34.3,
+      "goatRecentRank": 295
     },
     {
       "id": "jakob-poeltl-1627751",
@@ -10236,8 +10236,8 @@
         "teamId": "28",
         "teamAbbr": "TOR"
       },
-      "goatRecentScore": 47.6,
-      "goatRecentRank": 150
+      "goatRecentScore": 48.2,
+      "goatRecentRank": 109
     },
     {
       "id": "jalen-brunson-1628973",
@@ -10276,8 +10276,8 @@
         "teamId": "20",
         "teamAbbr": "NYK"
       },
-      "goatRecentScore": 69.9,
-      "goatRecentRank": 16
+      "goatRecentScore": 69.2,
+      "goatRecentRank": 15
     },
     {
       "id": "jalen-duren-1631105",
@@ -10313,8 +10313,8 @@
         "teamId": "9",
         "teamAbbr": "DET"
       },
-      "goatRecentScore": 46.6,
-      "goatRecentRank": 163
+      "goatRecentScore": 48.3,
+      "goatRecentRank": 108
     },
     {
       "id": "jalen-green-1630224",
@@ -10350,8 +10350,8 @@
         "teamId": "24",
         "teamAbbr": "PHX"
       },
-      "goatRecentScore": 50.4,
-      "goatRecentRank": 112
+      "goatRecentScore": 49.1,
+      "goatRecentRank": 102
     },
     {
       "id": "jalen-johnson-1630552",
@@ -10387,8 +10387,8 @@
         "teamId": "1",
         "teamAbbr": "ATL"
       },
-      "goatRecentScore": 47.8,
-      "goatRecentRank": 148
+      "goatRecentScore": 45.2,
+      "goatRecentRank": 144
     },
     {
       "id": "jalen-pickett-1629618",
@@ -10426,8 +10426,8 @@
         "teamId": "8",
         "teamAbbr": "DEN"
       },
-      "goatRecentScore": 35.8,
-      "goatRecentRank": 327
+      "goatRecentScore": 25.8,
+      "goatRecentRank": 378
     },
     {
       "id": "jalen-slawson-1641771",
@@ -10466,8 +10466,8 @@
         "teamId": "12",
         "teamAbbr": "IND"
       },
-      "goatRecentScore": 4.3,
-      "goatRecentRank": 453
+      "goatRecentScore": 3.5,
+      "goatRecentRank": 455
     },
     {
       "id": "jalen-smith-1630188",
@@ -10505,8 +10505,8 @@
         "teamId": "5",
         "teamAbbr": "CHI"
       },
-      "goatRecentScore": 48.6,
-      "goatRecentRank": 138
+      "goatRecentScore": 45.9,
+      "goatRecentRank": 131
     },
     {
       "id": "jalen-suggs-1630591",
@@ -10542,8 +10542,8 @@
         "teamId": "22",
         "teamAbbr": "ORL"
       },
-      "goatRecentScore": 46.2,
-      "goatRecentRank": 174
+      "goatRecentScore": 42.5,
+      "goatRecentRank": 180
     },
     {
       "id": "jalen-williams-1631114",
@@ -10580,8 +10580,8 @@
         "teamId": "21",
         "teamAbbr": "OKC"
       },
-      "goatRecentScore": 69.3,
-      "goatRecentRank": 18
+      "goatRecentScore": 66.6,
+      "goatRecentRank": 25
     },
     {
       "id": "jalen-wilson-1630592",
@@ -10617,8 +10617,8 @@
         "teamId": "3",
         "teamAbbr": "BKN"
       },
-      "goatRecentScore": 30.1,
-      "goatRecentRank": 381
+      "goatRecentScore": 28.1,
+      "goatRecentRank": 364
     },
     {
       "id": "jamal-cain-1631288",
@@ -10654,8 +10654,8 @@
         "teamId": "22",
         "teamAbbr": "ORL"
       },
-      "goatRecentScore": 33.6,
-      "goatRecentRank": 349
+      "goatRecentScore": 30.2,
+      "goatRecentRank": 340
     },
     {
       "id": "jamal-murray-1627750",
@@ -10693,8 +10693,8 @@
         "teamId": "8",
         "teamAbbr": "DEN"
       },
-      "goatRecentScore": 72.3,
-      "goatRecentRank": 12
+      "goatRecentScore": 70.3,
+      "goatRecentRank": 11
     },
     {
       "id": "jamal-shead-1642347",
@@ -10732,8 +10732,8 @@
         "teamId": "28",
         "teamAbbr": "TOR"
       },
-      "goatRecentScore": 34.3,
-      "goatRecentRank": 345
+      "goatRecentScore": 31.1,
+      "goatRecentRank": 330
     },
     {
       "id": "jamarion-sharp-1642481",
@@ -10770,8 +10770,8 @@
         "teamId": "7",
         "teamAbbr": "DAL"
       },
-      "goatRecentScore": 2.2,
-      "goatRecentRank": 468
+      "goatRecentScore": 2.3,
+      "goatRecentRank": 464
     },
     {
       "id": "jameer-nelson-jr-1057847891",
@@ -10806,7 +10806,7 @@
         "teamAbbr": "SAC"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 552
+      "goatRecentRank": 596
     },
     {
       "id": "james-akinjo-1631231",
@@ -10843,8 +10843,8 @@
         "teamId": "8",
         "teamAbbr": "DEN"
       },
-      "goatRecentScore": 0.1,
-      "goatRecentRank": 489
+      "goatRecentScore": 0.2,
+      "goatRecentRank": 487
     },
     {
       "id": "james-harden-201935",
@@ -10883,8 +10883,8 @@
         "teamId": "13",
         "teamAbbr": "LAC"
       },
-      "goatRecentScore": 70.0,
-      "goatRecentRank": 15
+      "goatRecentScore": 68.2,
+      "goatRecentRank": 19
     },
     {
       "id": "james-wiseman-1630164",
@@ -10923,8 +10923,8 @@
         "teamId": "12",
         "teamAbbr": "IND"
       },
-      "goatRecentScore": 34.8,
-      "goatRecentRank": 340
+      "goatRecentScore": 36.7,
+      "goatRecentRank": 261
     },
     {
       "id": "jamir-watkins-1057391756",
@@ -10958,7 +10958,7 @@
         "teamAbbr": "WAS"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 546
+      "goatRecentRank": 563
     },
     {
       "id": "jamison-battle-1642419",
@@ -10997,8 +10997,8 @@
         "teamId": "28",
         "teamAbbr": "TOR"
       },
-      "goatRecentScore": 29.0,
-      "goatRecentRank": 384
+      "goatRecentScore": 24.7,
+      "goatRecentRank": 391
     },
     {
       "id": "jarace-walker-1641716",
@@ -11036,8 +11036,8 @@
         "teamId": "12",
         "teamAbbr": "IND"
       },
-      "goatRecentScore": 42.0,
-      "goatRecentRank": 245
+      "goatRecentScore": 34.4,
+      "goatRecentRank": 290
     },
     {
       "id": "jared-butler-1630215",
@@ -11076,8 +11076,8 @@
         "teamId": "24",
         "teamAbbr": "PHX"
       },
-      "goatRecentScore": 34.8,
-      "goatRecentRank": 341
+      "goatRecentScore": 38.6,
+      "goatRecentRank": 229
     },
     {
       "id": "jared-mccain-1642272",
@@ -11116,8 +11116,8 @@
         "teamId": "23",
         "teamAbbr": "PHI"
       },
-      "goatRecentScore": 31.1,
-      "goatRecentRank": 372
+      "goatRecentScore": 28.5,
+      "goatRecentRank": 355
     },
     {
       "id": "jaren-jackson-jr-1628991",
@@ -11156,8 +11156,8 @@
         "teamId": "15",
         "teamAbbr": "MEM"
       },
-      "goatRecentScore": 58.6,
-      "goatRecentRank": 63
+      "goatRecentScore": 58.4,
+      "goatRecentRank": 49
     },
     {
       "id": "jarred-vanderbilt-1629020",
@@ -11198,8 +11198,8 @@
         "teamId": "14",
         "teamAbbr": "LAL"
       },
-      "goatRecentScore": 43.3,
-      "goatRecentRank": 217
+      "goatRecentScore": 37.4,
+      "goatRecentRank": 249
     },
     {
       "id": "jarrett-allen-1628386",
@@ -11237,8 +11237,8 @@
         "teamId": "6",
         "teamAbbr": "CLE"
       },
-      "goatRecentScore": 69.9,
-      "goatRecentRank": 17
+      "goatRecentScore": 67.5,
+      "goatRecentRank": 20
     },
     {
       "id": "jase-richardson-1057279571",
@@ -11272,7 +11272,7 @@
         "teamAbbr": "ORL"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 659
+      "goatRecentRank": 664
     },
     {
       "id": "jason-preston-1630554",
@@ -11309,8 +11309,8 @@
         "teamId": "13",
         "teamAbbr": "LAC"
       },
-      "goatRecentScore": 11.7,
-      "goatRecentRank": 426
+      "goatRecentScore": 11.9,
+      "goatRecentRank": 421
     },
     {
       "id": "javante-mccoy-1631322",
@@ -11347,8 +11347,8 @@
         "teamId": "9",
         "teamAbbr": "DET"
       },
-      "goatRecentScore": 2.6,
-      "goatRecentRank": 464
+      "goatRecentScore": 2.7,
+      "goatRecentRank": 458
     },
     {
       "id": "javon-small-1057396260",
@@ -11382,7 +11382,7 @@
         "teamAbbr": "MEM"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 590
+      "goatRecentRank": 652
     },
     {
       "id": "javonte-cooke-1058091815",
@@ -11417,7 +11417,7 @@
         "teamAbbr": "POR"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 654
+      "goatRecentRank": 531
     },
     {
       "id": "javonte-green-1629750",
@@ -11457,8 +11457,8 @@
         "teamId": "9",
         "teamAbbr": "DET"
       },
-      "goatRecentScore": 35.5,
-      "goatRecentRank": 329
+      "goatRecentScore": 31.9,
+      "goatRecentRank": 322
     },
     {
       "id": "javonte-smart-1630606",
@@ -11497,8 +11497,8 @@
         "teamId": "22",
         "teamAbbr": "ORL"
       },
-      "goatRecentScore": 2.9,
-      "goatRecentRank": 460
+      "goatRecentScore": 2.6,
+      "goatRecentRank": 459
     },
     {
       "id": "jaxson-hayes-1629637",
@@ -11537,8 +11537,8 @@
         "teamId": "14",
         "teamAbbr": "LAL"
       },
-      "goatRecentScore": 43.4,
-      "goatRecentRank": 215
+      "goatRecentScore": 37.1,
+      "goatRecentRank": 255
     },
     {
       "id": "jay-huff-1630643",
@@ -11576,8 +11576,8 @@
         "teamId": "12",
         "teamAbbr": "IND"
       },
-      "goatRecentScore": 44.7,
-      "goatRecentRank": 201
+      "goatRecentScore": 38.4,
+      "goatRecentRank": 231
     },
     {
       "id": "jaylen-brown-1627759",
@@ -11615,8 +11615,8 @@
         "teamId": "2",
         "teamAbbr": "BOS"
       },
-      "goatRecentScore": 75.0,
-      "goatRecentRank": 10
+      "goatRecentScore": 72.0,
+      "goatRecentRank": 9
     },
     {
       "id": "jaylen-clark-1641740",
@@ -11654,8 +11654,8 @@
         "teamId": "18",
         "teamAbbr": "MIN"
       },
-      "goatRecentScore": 38.2,
-      "goatRecentRank": 294
+      "goatRecentScore": 27.8,
+      "goatRecentRank": 367
     },
     {
       "id": "jaylen-wells-1642377",
@@ -11691,8 +11691,8 @@
         "teamId": "15",
         "teamAbbr": "MEM"
       },
-      "goatRecentScore": 43.6,
-      "goatRecentRank": 211
+      "goatRecentScore": 36.0,
+      "goatRecentRank": 268
     },
     {
       "id": "jaylin-williams-1642444",
@@ -11730,7 +11730,7 @@
         "teamAbbr": "OKC"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 581
+      "goatRecentRank": 519
     },
     {
       "id": "jaylon-tyson-1642281",
@@ -11768,8 +11768,8 @@
         "teamId": "6",
         "teamAbbr": "CLE"
       },
-      "goatRecentScore": 37.7,
-      "goatRecentRank": 301
+      "goatRecentScore": 26.9,
+      "goatRecentRank": 370
     },
     {
       "id": "jayson-tatum-1628369",
@@ -11807,7 +11807,7 @@
         "teamId": "2",
         "teamAbbr": "BOS"
       },
-      "goatRecentScore": 87.7,
+      "goatRecentScore": 87.0,
       "goatRecentRank": 3
     },
     {
@@ -11844,8 +11844,8 @@
         "teamId": "11",
         "teamAbbr": "HOU"
       },
-      "goatRecentScore": 25.1,
-      "goatRecentRank": 402
+      "goatRecentScore": 17.7,
+      "goatRecentRank": 409
     },
     {
       "id": "jeenathan-williams-47738533",
@@ -11880,7 +11880,7 @@
         "teamAbbr": "LAL"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 635
+      "goatRecentRank": 573
     },
     {
       "id": "jeff-green-201145",
@@ -11920,8 +11920,8 @@
         "teamId": "11",
         "teamAbbr": "HOU"
       },
-      "goatRecentScore": 40.2,
-      "goatRecentRank": 269
+      "goatRecentScore": 32.3,
+      "goatRecentRank": 317
     },
     {
       "id": "jerami-grant-203924",
@@ -11959,8 +11959,8 @@
         "teamId": "25",
         "teamAbbr": "POR"
       },
-      "goatRecentScore": 41.5,
-      "goatRecentRank": 251
+      "goatRecentScore": 40.2,
+      "goatRecentRank": 212
     },
     {
       "id": "jeremiah-fears-1057267077",
@@ -11995,7 +11995,7 @@
         "teamAbbr": "NOP"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 553
+      "goatRecentRank": 591
     },
     {
       "id": "jeremiah-tilmon-1630777",
@@ -12033,7 +12033,7 @@
         "teamAbbr": "MIL"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 647
+      "goatRecentRank": 670
     },
     {
       "id": "jeremy-sochan-1631110",
@@ -12072,8 +12072,8 @@
         "teamId": "27",
         "teamAbbr": "SAS"
       },
-      "goatRecentScore": 40.1,
-      "goatRecentRank": 273
+      "goatRecentScore": 41.3,
+      "goatRecentRank": 202
     },
     {
       "id": "jericho-sims-1630579",
@@ -12109,8 +12109,8 @@
         "teamId": "17",
         "teamAbbr": "MIL"
       },
-      "goatRecentScore": 38.9,
-      "goatRecentRank": 287
+      "goatRecentScore": 30.0,
+      "goatRecentRank": 341
     },
     {
       "id": "jett-howard-1641724",
@@ -12146,8 +12146,8 @@
         "teamId": "22",
         "teamAbbr": "ORL"
       },
-      "goatRecentScore": 32.4,
-      "goatRecentRank": 358
+      "goatRecentScore": 24.9,
+      "goatRecentRank": 388
     },
     {
       "id": "jevon-carter-1628975",
@@ -12187,8 +12187,8 @@
         "teamId": "5",
         "teamAbbr": "CHI"
       },
-      "goatRecentScore": 42.3,
-      "goatRecentRank": 235
+      "goatRecentScore": 36.9,
+      "goatRecentRank": 260
     },
     {
       "id": "jimmy-butler-202710",
@@ -12229,8 +12229,8 @@
         "teamId": "10",
         "teamAbbr": "GSW"
       },
-      "goatRecentScore": 62.3,
-      "goatRecentRank": 40
+      "goatRecentScore": 60.5,
+      "goatRecentRank": 39
     },
     {
       "id": "joan-beringer-1057271099",
@@ -12264,7 +12264,7 @@
         "teamAbbr": "MIN"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 636
+      "goatRecentRank": 532
     },
     {
       "id": "jock-landale-1629111",
@@ -12302,8 +12302,8 @@
         "teamId": "15",
         "teamAbbr": "MEM"
       },
-      "goatRecentScore": 48.6,
-      "goatRecentRank": 139
+      "goatRecentScore": 44.7,
+      "goatRecentRank": 148
     },
     {
       "id": "joe-ingles-204060",
@@ -12343,8 +12343,8 @@
         "teamId": "18",
         "teamAbbr": "MIN"
       },
-      "goatRecentScore": 45.2,
-      "goatRecentRank": 189
+      "goatRecentScore": 37.5,
+      "goatRecentRank": 247
     },
     {
       "id": "joel-embiid-203954",
@@ -12386,8 +12386,8 @@
         "teamId": "23",
         "teamAbbr": "PHI"
       },
-      "goatRecentScore": 78.0,
-      "goatRecentRank": 5
+      "goatRecentScore": 77.1,
+      "goatRecentRank": 6
     },
     {
       "id": "john-collins-1628381",
@@ -12428,8 +12428,8 @@
         "teamId": "13",
         "teamAbbr": "LAC"
       },
-      "goatRecentScore": 45.1,
-      "goatRecentRank": 193
+      "goatRecentScore": 43.6,
+      "goatRecentRank": 163
     },
     {
       "id": "john-konchar-1629723",
@@ -12469,8 +12469,8 @@
         "teamId": "15",
         "teamAbbr": "MEM"
       },
-      "goatRecentScore": 40.4,
-      "goatRecentRank": 267
+      "goatRecentScore": 35.2,
+      "goatRecentRank": 282
     },
     {
       "id": "john-poulakidas-1057848244",
@@ -12505,7 +12505,7 @@
         "teamAbbr": "LAC"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 669
+      "goatRecentRank": 640
     },
     {
       "id": "john-tonje-1057396603",
@@ -12539,7 +12539,7 @@
         "teamAbbr": "UTA"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 534
+      "goatRecentRank": 500
     },
     {
       "id": "johnell-davis-1058697789",
@@ -12573,7 +12573,7 @@
         "teamAbbr": "ORL"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 620
+      "goatRecentRank": 639
     },
     {
       "id": "johni-broome-1057382509",
@@ -12607,7 +12607,7 @@
         "teamAbbr": "PHI"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 593
+      "goatRecentRank": 577
     },
     {
       "id": "johnny-furphy-1642277",
@@ -12643,8 +12643,8 @@
         "teamId": "12",
         "teamAbbr": "IND"
       },
-      "goatRecentScore": 24.2,
-      "goatRecentRank": 405
+      "goatRecentScore": 18.0,
+      "goatRecentRank": 408
     },
     {
       "id": "johnny-juzang-1630548",
@@ -12682,8 +12682,8 @@
         "teamId": "18",
         "teamAbbr": "MIN"
       },
-      "goatRecentScore": 28.7,
-      "goatRecentRank": 388
+      "goatRecentScore": 28.2,
+      "goatRecentRank": 362
     },
     {
       "id": "jonas-aidoo-1059872205",
@@ -12717,7 +12717,7 @@
         "teamAbbr": "CHA"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 565
+      "goatRecentRank": 533
     },
     {
       "id": "jonas-valanciunas-202685",
@@ -12757,8 +12757,8 @@
         "teamId": "8",
         "teamAbbr": "DEN"
       },
-      "goatRecentScore": 52.4,
-      "goatRecentRank": 100
+      "goatRecentScore": 52.2,
+      "goatRecentRank": 78
     },
     {
       "id": "jonathan-isaac-1628371",
@@ -12798,8 +12798,8 @@
         "teamId": "22",
         "teamAbbr": "ORL"
       },
-      "goatRecentScore": 48.5,
-      "goatRecentRank": 140
+      "goatRecentScore": 44.1,
+      "goatRecentRank": 157
     },
     {
       "id": "jonathan-kuminga-1630228",
@@ -12836,8 +12836,8 @@
         "teamId": "10",
         "teamAbbr": "GSW"
       },
-      "goatRecentScore": 50.2,
-      "goatRecentRank": 116
+      "goatRecentScore": 45.8,
+      "goatRecentRank": 134
     },
     {
       "id": "jonathan-mogbo-1642367",
@@ -12876,8 +12876,8 @@
         "teamId": "28",
         "teamAbbr": "TOR"
       },
-      "goatRecentScore": 32.5,
-      "goatRecentRank": 357
+      "goatRecentScore": 31.2,
+      "goatRecentRank": 328
     },
     {
       "id": "jonathan-pierre-1057848187",
@@ -12911,7 +12911,7 @@
         "teamAbbr": "WAS"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 508
+      "goatRecentRank": 492
     },
     {
       "id": "jordan-clarkson-203903",
@@ -12952,8 +12952,8 @@
         "teamId": "20",
         "teamAbbr": "NYK"
       },
-      "goatRecentScore": 43.1,
-      "goatRecentRank": 222
+      "goatRecentScore": 41.7,
+      "goatRecentRank": 194
     },
     {
       "id": "jordan-goodwin-1630692",
@@ -12991,8 +12991,8 @@
         "teamId": "24",
         "teamAbbr": "PHX"
       },
-      "goatRecentScore": 41.6,
-      "goatRecentRank": 250
+      "goatRecentScore": 38.0,
+      "goatRecentRank": 239
     },
     {
       "id": "jordan-hawkins-1641722",
@@ -13031,7 +13031,7 @@
         "teamId": "19",
         "teamAbbr": "NOP"
       },
-      "goatRecentScore": 34.8,
+      "goatRecentScore": 30.4,
       "goatRecentRank": 339
     },
     {
@@ -13071,8 +13071,8 @@
         "teamId": "27",
         "teamAbbr": "SAS"
       },
-      "goatRecentScore": 46.3,
-      "goatRecentRank": 171
+      "goatRecentScore": 41.5,
+      "goatRecentRank": 200
     },
     {
       "id": "jordan-miller-1641757",
@@ -13109,8 +13109,8 @@
         "teamId": "13",
         "teamAbbr": "LAC"
       },
-      "goatRecentScore": 35.1,
-      "goatRecentRank": 337
+      "goatRecentScore": 26.8,
+      "goatRecentRank": 372
     },
     {
       "id": "jordan-poole-1629673",
@@ -13149,8 +13149,8 @@
         "teamId": "19",
         "teamAbbr": "NOP"
       },
-      "goatRecentScore": 47.4,
-      "goatRecentRank": 153
+      "goatRecentScore": 49.7,
+      "goatRecentRank": 97
     },
     {
       "id": "jordan-tucker-1630733",
@@ -13187,8 +13187,8 @@
         "teamId": "23",
         "teamAbbr": "PHI"
       },
-      "goatRecentScore": 1.0,
-      "goatRecentRank": 478
+      "goatRecentScore": 0.9,
+      "goatRecentRank": 479
     },
     {
       "id": "jordan-walsh-1641775",
@@ -13224,8 +13224,8 @@
         "teamId": "2",
         "teamAbbr": "BOS"
       },
-      "goatRecentScore": 43.0,
-      "goatRecentRank": 223
+      "goatRecentScore": 29.9,
+      "goatRecentRank": 343
     },
     {
       "id": "jose-alvarado-1630631",
@@ -13264,8 +13264,8 @@
         "teamId": "19",
         "teamAbbr": "NOP"
       },
-      "goatRecentScore": 45.8,
-      "goatRecentRank": 178
+      "goatRecentScore": 42.3,
+      "goatRecentRank": 184
     },
     {
       "id": "josh-giddey-1630581",
@@ -13301,8 +13301,8 @@
         "teamId": "5",
         "teamAbbr": "CHI"
       },
-      "goatRecentScore": 58.1,
-      "goatRecentRank": 66
+      "goatRecentScore": 56.5,
+      "goatRecentRank": 59
     },
     {
       "id": "josh-green-1630182",
@@ -13338,8 +13338,8 @@
         "teamId": "4",
         "teamAbbr": "CHA"
       },
-      "goatRecentScore": 36.8,
-      "goatRecentRank": 311
+      "goatRecentScore": 33.4,
+      "goatRecentRank": 304
     },
     {
       "id": "josh-hart-1628404",
@@ -13378,8 +13378,8 @@
         "teamId": "20",
         "teamAbbr": "NYK"
       },
-      "goatRecentScore": 58.9,
-      "goatRecentRank": 58
+      "goatRecentScore": 56.3,
+      "goatRecentRank": 60
     },
     {
       "id": "josh-minott-1631169",
@@ -13415,8 +13415,8 @@
         "teamId": "2",
         "teamAbbr": "BOS"
       },
-      "goatRecentScore": 46.4,
-      "goatRecentRank": 167
+      "goatRecentScore": 37.7,
+      "goatRecentRank": 243
     },
     {
       "id": "josh-oduro-1642490",
@@ -13455,7 +13455,7 @@
         "teamAbbr": "NOP"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 609
+      "goatRecentRank": 633
     },
     {
       "id": "josh-okogie-1629006",
@@ -13495,7 +13495,7 @@
         "teamId": "11",
         "teamAbbr": "HOU"
       },
-      "goatRecentScore": 43.0,
+      "goatRecentScore": 38.9,
       "goatRecentRank": 224
     },
     {
@@ -13535,8 +13535,8 @@
         "teamId": "25",
         "teamAbbr": "POR"
       },
-      "goatRecentScore": 74.3,
-      "goatRecentRank": 11
+      "goatRecentScore": 69.8,
+      "goatRecentRank": 12
     },
     {
       "id": "juan-nunez-1028037710",
@@ -13571,7 +13571,7 @@
         "teamAbbr": "SAS"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 634
+      "goatRecentRank": 501
     },
     {
       "id": "judah-mintz-1641758",
@@ -13608,8 +13608,8 @@
         "teamId": "23",
         "teamAbbr": "PHI"
       },
-      "goatRecentScore": 0.9,
-      "goatRecentRank": 479
+      "goatRecentScore": 0.7,
+      "goatRecentRank": 480
     },
     {
       "id": "jules-bernard-1631262",
@@ -13646,8 +13646,8 @@
         "teamId": "18",
         "teamAbbr": "MIN"
       },
-      "goatRecentScore": 9.4,
-      "goatRecentRank": 431
+      "goatRecentScore": 10.6,
+      "goatRecentRank": 426
     },
     {
       "id": "julian-champagnie-1630577",
@@ -13686,8 +13686,8 @@
         "teamId": "27",
         "teamAbbr": "SAS"
       },
-      "goatRecentScore": 37.2,
-      "goatRecentRank": 306
+      "goatRecentScore": 35.6,
+      "goatRecentRank": 272
     },
     {
       "id": "julian-phillips-1641763",
@@ -13725,8 +13725,8 @@
         "teamId": "5",
         "teamAbbr": "CHI"
       },
-      "goatRecentScore": 32.9,
-      "goatRecentRank": 353
+      "goatRecentScore": 26.8,
+      "goatRecentRank": 371
     },
     {
       "id": "julian-reese-1060111739",
@@ -13760,7 +13760,7 @@
         "teamAbbr": "TOR"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 529
+      "goatRecentRank": 630
     },
     {
       "id": "julian-strawther-1631124",
@@ -13798,8 +13798,8 @@
         "teamId": "8",
         "teamAbbr": "DEN"
       },
-      "goatRecentScore": 39.2,
-      "goatRecentRank": 285
+      "goatRecentScore": 30.4,
+      "goatRecentRank": 336
     },
     {
       "id": "julius-randle-203944",
@@ -13839,8 +13839,8 @@
         "teamId": "18",
         "teamAbbr": "MIN"
       },
-      "goatRecentScore": 65.3,
-      "goatRecentRank": 32
+      "goatRecentScore": 63.2,
+      "goatRecentRank": 33
     },
     {
       "id": "justin-champagnie-1630551",
@@ -13878,8 +13878,8 @@
         "teamId": "30",
         "teamAbbr": "WAS"
       },
-      "goatRecentScore": 34.2,
-      "goatRecentRank": 347
+      "goatRecentScore": 33.4,
+      "goatRecentRank": 303
     },
     {
       "id": "justin-edwards-1642348",
@@ -13917,8 +13917,8 @@
         "teamId": "23",
         "teamAbbr": "PHI"
       },
-      "goatRecentScore": 26.5,
-      "goatRecentRank": 395
+      "goatRecentScore": 25.0,
+      "goatRecentRank": 387
     },
     {
       "id": "jusuf-nurkic-203994",
@@ -13958,8 +13958,8 @@
         "teamId": "29",
         "teamAbbr": "UTA"
       },
-      "goatRecentScore": 53.5,
-      "goatRecentRank": 90
+      "goatRecentScore": 52.3,
+      "goatRecentRank": 76
     },
     {
       "id": "k-j-simpson-1028038474",
@@ -13993,7 +13993,7 @@
         "teamAbbr": "CHA"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 566
+      "goatRecentRank": 510
     },
     {
       "id": "kadary-richmond-1059542426",
@@ -14027,7 +14027,7 @@
         "teamAbbr": "WAS"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 538
+      "goatRecentRank": 665
     },
     {
       "id": "kam-jones-1057389374",
@@ -14061,7 +14061,7 @@
         "teamAbbr": "IND"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 548
+      "goatRecentRank": 513
     },
     {
       "id": "karl-anthony-towns-1626157",
@@ -14100,8 +14100,8 @@
         "teamId": "20",
         "teamAbbr": "NYK"
       },
-      "goatRecentScore": 68.5,
-      "goatRecentRank": 25
+      "goatRecentScore": 66.8,
+      "goatRecentRank": 23
     },
     {
       "id": "karlo-matkovic-1631255",
@@ -14140,8 +14140,8 @@
         "teamId": "19",
         "teamAbbr": "NOP"
       },
-      "goatRecentScore": 32.7,
-      "goatRecentRank": 356
+      "goatRecentScore": 31.3,
+      "goatRecentRank": 326
     },
     {
       "id": "kasparas-jakucionis-1057272939",
@@ -14175,7 +14175,7 @@
         "teamAbbr": "MIA"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 596
+      "goatRecentRank": 643
     },
     {
       "id": "kawhi-leonard-202695",
@@ -14216,8 +14216,8 @@
         "teamId": "13",
         "teamAbbr": "LAC"
       },
-      "goatRecentScore": 71.6,
-      "goatRecentRank": 13
+      "goatRecentScore": 69.6,
+      "goatRecentRank": 14
     },
     {
       "id": "keaton-wallace-1630811",
@@ -14256,8 +14256,8 @@
         "teamId": "1",
         "teamAbbr": "ATL"
       },
-      "goatRecentScore": 30.5,
-      "goatRecentRank": 378
+      "goatRecentScore": 25.3,
+      "goatRecentRank": 383
     },
     {
       "id": "keegan-murray-1631099",
@@ -14293,8 +14293,8 @@
         "teamId": "26",
         "teamAbbr": "SAC"
       },
-      "goatRecentScore": 49.3,
-      "goatRecentRank": 125
+      "goatRecentScore": 46.3,
+      "goatRecentRank": 124
     },
     {
       "id": "kel-el-ware-1642276",
@@ -14330,8 +14330,8 @@
         "teamId": "16",
         "teamAbbr": "MIA"
       },
-      "goatRecentScore": 39.5,
-      "goatRecentRank": 281
+      "goatRecentScore": 35.5,
+      "goatRecentRank": 274
     },
     {
       "id": "keldon-johnson-1629640",
@@ -14370,8 +14370,8 @@
         "teamId": "27",
         "teamAbbr": "SAS"
       },
-      "goatRecentScore": 42.6,
-      "goatRecentRank": 231
+      "goatRecentScore": 44.2,
+      "goatRecentRank": 154
     },
     {
       "id": "kelly-olynyk-203482",
@@ -14413,7 +14413,7 @@
         "teamAbbr": "SAS"
       },
       "goatRecentScore": 44.2,
-      "goatRecentRank": 205
+      "goatRecentRank": 156
     },
     {
       "id": "kelly-oubre-jr-1626162",
@@ -14452,8 +14452,8 @@
         "teamId": "23",
         "teamAbbr": "PHI"
       },
-      "goatRecentScore": 43.4,
-      "goatRecentRank": 216
+      "goatRecentScore": 41.7,
+      "goatRecentRank": 192
     },
     {
       "id": "kennedy-chandler-1631113",
@@ -14492,8 +14492,8 @@
         "teamId": "23",
         "teamAbbr": "PHI"
       },
-      "goatRecentScore": 21.4,
-      "goatRecentRank": 408
+      "goatRecentScore": 17.1,
+      "goatRecentRank": 413
     },
     {
       "id": "kenrich-williams-1629026",
@@ -14534,8 +14534,8 @@
         "teamId": "21",
         "teamAbbr": "OKC"
       },
-      "goatRecentScore": 56.0,
-      "goatRecentRank": 73
+      "goatRecentScore": 48.4,
+      "goatRecentRank": 105
     },
     {
       "id": "kentavious-caldwell-pope-203484",
@@ -14573,8 +14573,8 @@
         "teamId": "15",
         "teamAbbr": "MEM"
       },
-      "goatRecentScore": 59.1,
-      "goatRecentRank": 57
+      "goatRecentScore": 54.7,
+      "goatRecentRank": 66
     },
     {
       "id": "keon-ellis-1631165",
@@ -14612,8 +14612,8 @@
         "teamId": "26",
         "teamAbbr": "SAC"
       },
-      "goatRecentScore": 42.6,
-      "goatRecentRank": 228
+      "goatRecentScore": 38.0,
+      "goatRecentRank": 241
     },
     {
       "id": "keshad-johnson-1642352",
@@ -14649,8 +14649,8 @@
         "teamId": "16",
         "teamAbbr": "MIA"
       },
-      "goatRecentScore": 11.0,
-      "goatRecentRank": 428
+      "goatRecentScore": 8.7,
+      "goatRecentRank": 429
     },
     {
       "id": "keshon-gilbert-1057846172",
@@ -14684,7 +14684,7 @@
         "teamAbbr": "WAS"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 640
+      "goatRecentRank": 539
     },
     {
       "id": "kessler-edwards-1630556",
@@ -14722,8 +14722,8 @@
         "teamId": "8",
         "teamAbbr": "DEN"
       },
-      "goatRecentScore": 34.3,
-      "goatRecentRank": 343
+      "goatRecentScore": 28.3,
+      "goatRecentRank": 359
     },
     {
       "id": "kevin-durant-201142",
@@ -14762,8 +14762,8 @@
         "teamId": "11",
         "teamAbbr": "HOU"
       },
-      "goatRecentScore": 64.7,
-      "goatRecentRank": 33
+      "goatRecentScore": 63.0,
+      "goatRecentRank": 35
     },
     {
       "id": "kevin-huerter-1628989",
@@ -14801,8 +14801,8 @@
         "teamId": "5",
         "teamAbbr": "CHI"
       },
-      "goatRecentScore": 51.3,
-      "goatRecentRank": 104
+      "goatRecentScore": 47.1,
+      "goatRecentRank": 117
     },
     {
       "id": "kevin-love-201567",
@@ -14842,8 +14842,8 @@
         "teamId": "29",
         "teamAbbr": "UTA"
       },
-      "goatRecentScore": 49.2,
-      "goatRecentRank": 126
+      "goatRecentScore": 44.5,
+      "goatRecentRank": 150
     },
     {
       "id": "kevin-mccullar-jr-1641755",
@@ -14884,8 +14884,8 @@
         "teamId": "20",
         "teamAbbr": "NYK"
       },
-      "goatRecentScore": 2.2,
-      "goatRecentRank": 471
+      "goatRecentScore": 1.3,
+      "goatRecentRank": 475
     },
     {
       "id": "kevin-porter-jr-1629645",
@@ -14926,8 +14926,8 @@
         "teamId": "17",
         "teamAbbr": "MIL"
       },
-      "goatRecentScore": 45.2,
-      "goatRecentRank": 190
+      "goatRecentScore": 42.8,
+      "goatRecentRank": 177
     },
     {
       "id": "kevon-harris-1630284",
@@ -14966,8 +14966,8 @@
         "teamId": "11",
         "teamAbbr": "HOU"
       },
-      "goatRecentScore": 28.0,
-      "goatRecentRank": 390
+      "goatRecentScore": 24.4,
+      "goatRecentRank": 394
     },
     {
       "id": "kevon-looney-1626172",
@@ -15006,8 +15006,8 @@
         "teamId": "19",
         "teamAbbr": "NOP"
       },
-      "goatRecentScore": 54.0,
-      "goatRecentRank": 88
+      "goatRecentScore": 50.5,
+      "goatRecentRank": 89
     },
     {
       "id": "keyonte-george-1641718",
@@ -15043,8 +15043,8 @@
         "teamId": "29",
         "teamAbbr": "UTA"
       },
-      "goatRecentScore": 37.4,
-      "goatRecentRank": 303
+      "goatRecentScore": 38.2,
+      "goatRecentRank": 234
     },
     {
       "id": "khaman-maluach-1057268513",
@@ -15078,7 +15078,7 @@
         "teamAbbr": "PHX"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 637
+      "goatRecentRank": 668
     },
     {
       "id": "khris-middleton-203114",
@@ -15118,8 +15118,8 @@
         "teamId": "30",
         "teamAbbr": "WAS"
       },
-      "goatRecentScore": 55.8,
-      "goatRecentRank": 77
+      "goatRecentScore": 52.1,
+      "goatRecentRank": 81
     },
     {
       "id": "klay-thompson-202691",
@@ -15159,8 +15159,8 @@
         "teamId": "7",
         "teamAbbr": "DAL"
       },
-      "goatRecentScore": 48.7,
-      "goatRecentRank": 136
+      "goatRecentScore": 46.0,
+      "goatRecentRank": 129
     },
     {
       "id": "kobe-brown-1641738",
@@ -15197,8 +15197,8 @@
         "teamId": "13",
         "teamAbbr": "LAC"
       },
-      "goatRecentScore": 36.2,
-      "goatRecentRank": 318
+      "goatRecentScore": 27.1,
+      "goatRecentRank": 369
     },
     {
       "id": "kobe-bufkin-1641723",
@@ -15237,8 +15237,8 @@
         "teamId": "3",
         "teamAbbr": "BKN"
       },
-      "goatRecentScore": 30.8,
-      "goatRecentRank": 374
+      "goatRecentScore": 25.5,
+      "goatRecentRank": 382
     },
     {
       "id": "kobe-johnson-1057846878",
@@ -15272,7 +15272,7 @@
         "teamAbbr": "ATL"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 496
+      "goatRecentRank": 544
     },
     {
       "id": "kobe-sanders-1057396055",
@@ -15307,7 +15307,7 @@
         "teamAbbr": "LAC"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 589
+      "goatRecentRank": 546
     },
     {
       "id": "koby-brea-1057387526",
@@ -15341,7 +15341,7 @@
         "teamAbbr": "PHX"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 568
+      "goatRecentRank": 603
     },
     {
       "id": "kon-knueppel-1057263194",
@@ -15375,7 +15375,7 @@
         "teamAbbr": "CHA"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 608
+      "goatRecentRank": 583
     },
     {
       "id": "kris-dunn-1627739",
@@ -15414,8 +15414,8 @@
         "teamId": "13",
         "teamAbbr": "LAC"
       },
-      "goatRecentScore": 46.4,
-      "goatRecentRank": 166
+      "goatRecentScore": 43.3,
+      "goatRecentRank": 168
     },
     {
       "id": "kris-murray-1631200",
@@ -15454,8 +15454,8 @@
         "teamId": "25",
         "teamAbbr": "POR"
       },
-      "goatRecentScore": 31.1,
-      "goatRecentRank": 373
+      "goatRecentScore": 29.1,
+      "goatRecentRank": 349
     },
     {
       "id": "kristaps-porzingis-204001",
@@ -15495,7 +15495,7 @@
         "teamId": "1",
         "teamAbbr": "ATL"
       },
-      "goatRecentScore": 68.6,
+      "goatRecentScore": 66.6,
       "goatRecentRank": 24
     },
     {
@@ -15536,8 +15536,8 @@
         "teamId": "29",
         "teamAbbr": "UTA"
       },
-      "goatRecentScore": 53.1,
-      "goatRecentRank": 94
+      "goatRecentScore": 48.6,
+      "goatRecentRank": 103
     },
     {
       "id": "kyle-filipowski-1642271",
@@ -15575,8 +15575,8 @@
         "teamId": "29",
         "teamAbbr": "UTA"
       },
-      "goatRecentScore": 32.0,
-      "goatRecentRank": 360
+      "goatRecentScore": 34.5,
+      "goatRecentRank": 288
     },
     {
       "id": "kyle-kuzma-1628398",
@@ -15614,8 +15614,8 @@
         "teamId": "17",
         "teamAbbr": "MIL"
       },
-      "goatRecentScore": 44.6,
-      "goatRecentRank": 203
+      "goatRecentScore": 46.3,
+      "goatRecentRank": 125
     },
     {
       "id": "kyle-lowry-200768",
@@ -15652,8 +15652,8 @@
         "teamId": "23",
         "teamAbbr": "PHI"
       },
-      "goatRecentScore": 42.0,
-      "goatRecentRank": 241
+      "goatRecentScore": 37.2,
+      "goatRecentRank": 252
     },
     {
       "id": "kyrie-irving-202681",
@@ -15691,8 +15691,8 @@
         "teamId": "7",
         "teamAbbr": "DAL"
       },
-      "goatRecentScore": 66.4,
-      "goatRecentRank": 30
+      "goatRecentScore": 64.9,
+      "goatRecentRank": 29
     },
     {
       "id": "kyshawn-george-1642273",
@@ -15728,8 +15728,8 @@
         "teamId": "30",
         "teamAbbr": "WAS"
       },
-      "goatRecentScore": 28.9,
-      "goatRecentRank": 385
+      "goatRecentScore": 29.2,
+      "goatRecentRank": 348
     },
     {
       "id": "lachlan-olbrich-1057395493",
@@ -15763,7 +15763,7 @@
         "teamAbbr": "CHI"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 492
+      "goatRecentRank": 621
     },
     {
       "id": "lamelo-ball-1630163",
@@ -15799,8 +15799,8 @@
         "teamId": "4",
         "teamAbbr": "CHA"
       },
-      "goatRecentScore": 47.0,
-      "goatRecentRank": 157
+      "goatRecentScore": 49.1,
+      "goatRecentRank": 100
     },
     {
       "id": "lamont-butler-1057845228",
@@ -15834,7 +15834,7 @@
         "teamAbbr": "ATL"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 516
+      "goatRecentRank": 592
     },
     {
       "id": "landry-shamet-1629013",
@@ -15873,8 +15873,8 @@
         "teamId": "20",
         "teamAbbr": "NYK"
       },
-      "goatRecentScore": 35.1,
-      "goatRecentRank": 336
+      "goatRecentScore": 30.5,
+      "goatRecentRank": 335
     },
     {
       "id": "larry-nance-jr-1626204",
@@ -15915,8 +15915,8 @@
         "teamId": "6",
         "teamAbbr": "CLE"
       },
-      "goatRecentScore": 45.9,
-      "goatRecentRank": 177
+      "goatRecentScore": 41.6,
+      "goatRecentRank": 197
     },
     {
       "id": "lauri-markkanen-1628374",
@@ -15954,8 +15954,8 @@
         "teamId": "29",
         "teamAbbr": "UTA"
       },
-      "goatRecentScore": 46.0,
-      "goatRecentRank": 176
+      "goatRecentScore": 46.2,
+      "goatRecentRank": 126
     },
     {
       "id": "lawson-lovering-1057847334",
@@ -15989,7 +15989,7 @@
         "teamAbbr": "MEM"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 491
+      "goatRecentRank": 594
     },
     {
       "id": "lebron-james-2544",
@@ -16030,8 +16030,8 @@
         "teamId": "14",
         "teamAbbr": "LAL"
       },
-      "goatRecentScore": 65.5,
-      "goatRecentRank": 31
+      "goatRecentScore": 65.4,
+      "goatRecentRank": 28
     },
     {
       "id": "leonard-miller-1631159",
@@ -16067,7 +16067,7 @@
         "teamId": "18",
         "teamAbbr": "MIN"
       },
-      "goatRecentScore": 16.2,
+      "goatRecentScore": 13.1,
       "goatRecentRank": 419
     },
     {
@@ -16107,8 +16107,8 @@
         "teamId": "22",
         "teamAbbr": "ORL"
       },
-      "goatRecentScore": 37.0,
-      "goatRecentRank": 309
+      "goatRecentScore": 28.4,
+      "goatRecentRank": 358
     },
     {
       "id": "liam-mcneeley-1057278805",
@@ -16142,7 +16142,7 @@
         "teamAbbr": "CHA"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 545
+      "goatRecentRank": 605
     },
     {
       "id": "lindy-waters-iii-1630322",
@@ -16180,8 +16180,8 @@
         "teamId": "27",
         "teamAbbr": "SAS"
       },
-      "goatRecentScore": 42.6,
-      "goatRecentRank": 230
+      "goatRecentScore": 35.4,
+      "goatRecentRank": 278
     },
     {
       "id": "lj-cryer-1057968644",
@@ -16216,7 +16216,7 @@
         "teamAbbr": "GSW"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 646
+      "goatRecentRank": 589
     },
     {
       "id": "lonzo-ball-1628366",
@@ -16254,8 +16254,8 @@
         "teamId": "6",
         "teamAbbr": "CLE"
       },
-      "goatRecentScore": 45.8,
-      "goatRecentRank": 179
+      "goatRecentScore": 41.7,
+      "goatRecentRank": 193
     },
     {
       "id": "luguentz-dort-1629652",
@@ -16294,8 +16294,8 @@
         "teamId": "21",
         "teamAbbr": "OKC"
       },
-      "goatRecentScore": 60.6,
-      "goatRecentRank": 50
+      "goatRecentScore": 55.8,
+      "goatRecentRank": 62
     },
     {
       "id": "luka-doncic-1629029",
@@ -16338,8 +16338,8 @@
         "teamId": "14",
         "teamAbbr": "LAL"
       },
-      "goatRecentScore": 77.0,
-      "goatRecentRank": 6
+      "goatRecentScore": 78.6,
+      "goatRecentRank": 5
     },
     {
       "id": "luka-garza-1630568",
@@ -16375,8 +16375,8 @@
         "teamId": "2",
         "teamAbbr": "BOS"
       },
-      "goatRecentScore": 51.0,
-      "goatRecentRank": 108
+      "goatRecentScore": 43.8,
+      "goatRecentRank": 162
     },
     {
       "id": "luke-kennard-1628379",
@@ -16416,8 +16416,8 @@
         "teamId": "1",
         "teamAbbr": "ATL"
       },
-      "goatRecentScore": 43.0,
-      "goatRecentRank": 225
+      "goatRecentScore": 38.1,
+      "goatRecentRank": 238
     },
     {
       "id": "luke-kornet-1628436",
@@ -16456,8 +16456,8 @@
         "teamId": "27",
         "teamAbbr": "SAS"
       },
-      "goatRecentScore": 60.1,
-      "goatRecentRank": 52
+      "goatRecentScore": 53.2,
+      "goatRecentRank": 70
     },
     {
       "id": "luke-travers-1631247",
@@ -16496,8 +16496,8 @@
         "teamId": "6",
         "teamAbbr": "CLE"
       },
-      "goatRecentScore": 7.4,
-      "goatRecentRank": 440
+      "goatRecentScore": 5.1,
+      "goatRecentRank": 446
     },
     {
       "id": "malachi-smith-1059753274",
@@ -16531,7 +16531,7 @@
         "teamAbbr": "BKN"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 670
+      "goatRecentRank": 653
     },
     {
       "id": "malaki-branham-1631103",
@@ -16567,8 +16567,8 @@
         "teamId": "30",
         "teamAbbr": "WAS"
       },
-      "goatRecentScore": 34.3,
-      "goatRecentRank": 344
+      "goatRecentScore": 34.9,
+      "goatRecentRank": 285
     },
     {
       "id": "malcolm-hill-1630792",
@@ -16607,8 +16607,8 @@
         "teamId": "23",
         "teamAbbr": "PHI"
       },
-      "goatRecentScore": 4.2,
-      "goatRecentRank": 454
+      "goatRecentScore": 4.0,
+      "goatRecentRank": 453
     },
     {
       "id": "malevy-leons-1642502",
@@ -16646,8 +16646,8 @@
         "teamId": "21",
         "teamAbbr": "OKC"
       },
-      "goatRecentScore": 3.0,
-      "goatRecentRank": 458
+      "goatRecentScore": 2.0,
+      "goatRecentRank": 467
     },
     {
       "id": "malik-monk-1628370",
@@ -16685,8 +16685,8 @@
         "teamId": "26",
         "teamAbbr": "SAC"
       },
-      "goatRecentScore": 55.1,
-      "goatRecentRank": 80
+      "goatRecentScore": 51.8,
+      "goatRecentRank": 83
     },
     {
       "id": "marcus-domask-1028244064",
@@ -16720,7 +16720,7 @@
         "teamAbbr": "CHI"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 605
+      "goatRecentRank": 524
     },
     {
       "id": "marcus-sasser-1631204",
@@ -16758,8 +16758,8 @@
         "teamId": "9",
         "teamAbbr": "DET"
       },
-      "goatRecentScore": 36.0,
-      "goatRecentRank": 320
+      "goatRecentScore": 35.0,
+      "goatRecentRank": 283
     },
     {
       "id": "marcus-smart-203935",
@@ -16800,8 +16800,8 @@
         "teamId": "14",
         "teamAbbr": "LAL"
       },
-      "goatRecentScore": 52.1,
-      "goatRecentRank": 101
+      "goatRecentScore": 47.6,
+      "goatRecentRank": 112
     },
     {
       "id": "marjon-beauchamp-1630699",
@@ -16837,8 +16837,8 @@
         "teamId": "23",
         "teamAbbr": "PHI"
       },
-      "goatRecentScore": 38.7,
-      "goatRecentRank": 289
+      "goatRecentScore": 30.9,
+      "goatRecentRank": 331
     },
     {
       "id": "mark-armstrong-1028263126",
@@ -16872,7 +16872,7 @@
         "teamAbbr": "BKN"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 643
+      "goatRecentRank": 538
     },
     {
       "id": "mark-sears-1057848654",
@@ -16906,7 +16906,7 @@
         "teamAbbr": "MIL"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 493
+      "goatRecentRank": 659
     },
     {
       "id": "mark-williams-1631109",
@@ -16942,8 +16942,8 @@
         "teamId": "24",
         "teamAbbr": "PHX"
       },
-      "goatRecentScore": 41.4,
-      "goatRecentRank": 253
+      "goatRecentScore": 42.7,
+      "goatRecentRank": 179
     },
     {
       "id": "marvin-bagley-iii-1628963",
@@ -16984,8 +16984,8 @@
         "teamId": "30",
         "teamAbbr": "WAS"
       },
-      "goatRecentScore": 35.3,
-      "goatRecentRank": 332
+      "goatRecentScore": 38.9,
+      "goatRecentRank": 223
     },
     {
       "id": "mason-plumlee-203486",
@@ -17025,8 +17025,8 @@
         "teamId": "4",
         "teamAbbr": "CHA"
       },
-      "goatRecentScore": 45.5,
-      "goatRecentRank": 186
+      "goatRecentScore": 44.1,
+      "goatRecentRank": 158
     },
     {
       "id": "matas-buzelis-1641824",
@@ -17064,8 +17064,8 @@
         "teamId": "5",
         "teamAbbr": "CHI"
       },
-      "goatRecentScore": 37.2,
-      "goatRecentRank": 305
+      "goatRecentScore": 31.7,
+      "goatRecentRank": 323
     },
     {
       "id": "matisse-thybulle-1629680",
@@ -17108,8 +17108,8 @@
         "teamId": "25",
         "teamAbbr": "POR"
       },
-      "goatRecentScore": 36.1,
-      "goatRecentRank": 319
+      "goatRecentScore": 32.1,
+      "goatRecentRank": 318
     },
     {
       "id": "matt-cross-1060124286",
@@ -17143,7 +17143,7 @@
         "teamAbbr": "DAL"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 537
+      "goatRecentRank": 497
     },
     {
       "id": "matt-ryan-1630346",
@@ -17180,8 +17180,8 @@
         "teamId": "20",
         "teamAbbr": "NYK"
       },
-      "goatRecentScore": 31.8,
-      "goatRecentRank": 362
+      "goatRecentScore": 23.3,
+      "goatRecentRank": 396
     },
     {
       "id": "matthew-cleveland-1057845405",
@@ -17215,7 +17215,7 @@
         "teamAbbr": "DAL"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 617
+      "goatRecentRank": 602
     },
     {
       "id": "matthew-murrell-1057847840",
@@ -17249,7 +17249,7 @@
         "teamAbbr": "UTA"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 582
+      "goatRecentRank": 606
     },
     {
       "id": "max-abmas-1630546",
@@ -17286,7 +17286,7 @@
         "teamAbbr": "UTA"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 616
+      "goatRecentRank": 620
     },
     {
       "id": "max-christie-1631108",
@@ -17322,8 +17322,8 @@
         "teamId": "7",
         "teamAbbr": "DAL"
       },
-      "goatRecentScore": 37.9,
-      "goatRecentRank": 298
+      "goatRecentScore": 32.4,
+      "goatRecentRank": 311
     },
     {
       "id": "max-fiedler-1642499",
@@ -17360,7 +17360,7 @@
         "teamId": "23",
         "teamAbbr": "PHI"
       },
-      "goatRecentScore": 0.7,
+      "goatRecentScore": 0.6,
       "goatRecentRank": 482
     },
     {
@@ -17395,7 +17395,7 @@
         "teamAbbr": "BOS"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 623
+      "goatRecentRank": 648
     },
     {
       "id": "max-strus-1629622",
@@ -17433,8 +17433,8 @@
         "teamId": "6",
         "teamAbbr": "CLE"
       },
-      "goatRecentScore": 50.4,
-      "goatRecentRank": 113
+      "goatRecentScore": 45.3,
+      "goatRecentRank": 143
     },
     {
       "id": "maxi-kleber-1628467",
@@ -17473,8 +17473,8 @@
         "teamId": "14",
         "teamAbbr": "LAL"
       },
-      "goatRecentScore": 35.4,
-      "goatRecentRank": 331
+      "goatRecentScore": 27.9,
+      "goatRecentRank": 366
     },
     {
       "id": "maxime-raynaud-1057390745",
@@ -17508,7 +17508,7 @@
         "teamAbbr": "SAC"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 638
+      "goatRecentRank": 514
     },
     {
       "id": "melvin-ajinca-1028044409",
@@ -17542,7 +17542,7 @@
         "teamAbbr": "DAL"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 597
+      "goatRecentRank": 584
     },
     {
       "id": "micah-peavy-1057390538",
@@ -17577,7 +17577,7 @@
         "teamAbbr": "NOP"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 579
+      "goatRecentRank": 615
     },
     {
       "id": "micah-potter-1630695",
@@ -17616,8 +17616,8 @@
         "teamId": "27",
         "teamAbbr": "SAS"
       },
-      "goatRecentScore": 25.5,
-      "goatRecentRank": 398
+      "goatRecentScore": 23.8,
+      "goatRecentRank": 395
     },
     {
       "id": "michael-porter-jr-1629008",
@@ -17656,8 +17656,8 @@
         "teamId": "3",
         "teamAbbr": "BKN"
       },
-      "goatRecentScore": 66.9,
-      "goatRecentRank": 29
+      "goatRecentScore": 63.8,
+      "goatRecentRank": 31
     },
     {
       "id": "mikal-bridges-1628969",
@@ -17696,8 +17696,8 @@
         "teamId": "20",
         "teamAbbr": "NYK"
       },
-      "goatRecentScore": 49.6,
-      "goatRecentRank": 124
+      "goatRecentScore": 47.4,
+      "goatRecentRank": 114
     },
     {
       "id": "mike-conley-201144",
@@ -17735,8 +17735,8 @@
         "teamId": "18",
         "teamAbbr": "MIN"
       },
-      "goatRecentScore": 58.4,
-      "goatRecentRank": 64
+      "goatRecentScore": 54.8,
+      "goatRecentRank": 65
     },
     {
       "id": "miles-bridges-1628970",
@@ -17774,8 +17774,8 @@
         "teamId": "4",
         "teamAbbr": "CHA"
       },
-      "goatRecentScore": 39.4,
-      "goatRecentRank": 283
+      "goatRecentScore": 42.0,
+      "goatRecentRank": 188
     },
     {
       "id": "miles-kelly-1057847026",
@@ -17809,7 +17809,7 @@
         "teamAbbr": "DAL"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 633
+      "goatRecentRank": 614
     },
     {
       "id": "miles-mcbride-1630540",
@@ -17848,8 +17848,8 @@
         "teamId": "20",
         "teamAbbr": "NYK"
       },
-      "goatRecentScore": 46.4,
-      "goatRecentRank": 165
+      "goatRecentScore": 40.2,
+      "goatRecentRank": 213
     },
     {
       "id": "miller-kopp-1642046",
@@ -17887,7 +17887,7 @@
         "teamAbbr": "CLE"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 499
+      "goatRecentRank": 502
     },
     {
       "id": "mitchell-mascari-1059279604",
@@ -17921,7 +17921,7 @@
         "teamAbbr": "SAC"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 655
+      "goatRecentRank": 657
     },
     {
       "id": "mitchell-robinson-1629011",
@@ -17964,8 +17964,8 @@
         "teamId": "20",
         "teamAbbr": "NYK"
       },
-      "goatRecentScore": 52.4,
-      "goatRecentRank": 99
+      "goatRecentScore": 47.3,
+      "goatRecentRank": 115
     },
     {
       "id": "mohamed-diawara-1057393207",
@@ -18000,7 +18000,7 @@
         "teamAbbr": "NYK"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 515
+      "goatRecentRank": 555
     },
     {
       "id": "moritz-wagner-1629021",
@@ -18042,8 +18042,8 @@
         "teamId": "22",
         "teamAbbr": "ORL"
       },
-      "goatRecentScore": 49.7,
-      "goatRecentRank": 123
+      "goatRecentScore": 45.6,
+      "goatRecentRank": 137
     },
     {
       "id": "moses-brown-1629650",
@@ -18083,8 +18083,8 @@
         "teamId": "8",
         "teamAbbr": "DEN"
       },
-      "goatRecentScore": 39.7,
-      "goatRecentRank": 278
+      "goatRecentScore": 39.0,
+      "goatRecentRank": 221
     },
     {
       "id": "moses-moody-1630541",
@@ -18123,8 +18123,8 @@
         "teamId": "10",
         "teamAbbr": "GSW"
       },
-      "goatRecentScore": 48.9,
-      "goatRecentRank": 133
+      "goatRecentScore": 43.2,
+      "goatRecentRank": 169
     },
     {
       "id": "moses-wood-1642473",
@@ -18162,7 +18162,7 @@
         "teamAbbr": "PHX"
       },
       "goatRecentScore": 0.4,
-      "goatRecentRank": 487
+      "goatRecentRank": 485
     },
     {
       "id": "mouhamed-gueye-1631243",
@@ -18201,8 +18201,8 @@
         "teamId": "1",
         "teamAbbr": "ATL"
       },
-      "goatRecentScore": 39.2,
-      "goatRecentRank": 284
+      "goatRecentScore": 35.8,
+      "goatRecentRank": 271
     },
     {
       "id": "moussa-cisse-1057845382",
@@ -18236,7 +18236,7 @@
         "teamAbbr": "DAL"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 594
+      "goatRecentRank": 535
     },
     {
       "id": "moussa-diabate-1631217",
@@ -18274,8 +18274,8 @@
         "teamId": "4",
         "teamAbbr": "CHA"
       },
-      "goatRecentScore": 35.9,
-      "goatRecentRank": 322
+      "goatRecentScore": 35.3,
+      "goatRecentRank": 279
     },
     {
       "id": "myles-turner-1626167",
@@ -18313,8 +18313,8 @@
         "teamId": "17",
         "teamAbbr": "MIL"
       },
-      "goatRecentScore": 60.0,
-      "goatRecentRank": 53
+      "goatRecentScore": 58.2,
+      "goatRecentRank": 50
     },
     {
       "id": "myron-gardner-1057846109",
@@ -18348,7 +18348,7 @@
         "teamAbbr": "MIA"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 586
+      "goatRecentRank": 550
     },
     {
       "id": "n-faly-dante-1642368",
@@ -18387,8 +18387,8 @@
         "teamId": "1",
         "teamAbbr": "ATL"
       },
-      "goatRecentScore": 5.3,
-      "goatRecentRank": 449
+      "goatRecentScore": 5.2,
+      "goatRecentRank": 445
     },
     {
       "id": "nae-qwan-tomlin-1641772",
@@ -18426,8 +18426,8 @@
         "teamId": "6",
         "teamAbbr": "CLE"
       },
-      "goatRecentScore": 5.2,
-      "goatRecentRank": 450
+      "goatRecentScore": 3.9,
+      "goatRecentRank": 454
     },
     {
       "id": "nah-shon-hyland-17896031",
@@ -18461,7 +18461,7 @@
         "teamAbbr": "MIN"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 629
+      "goatRecentRank": 494
     },
     {
       "id": "naji-marshall-1630230",
@@ -18500,8 +18500,8 @@
         "teamId": "7",
         "teamAbbr": "DAL"
       },
-      "goatRecentScore": 44.9,
-      "goatRecentRank": 198
+      "goatRecentScore": 40.9,
+      "goatRecentRank": 208
     },
     {
       "id": "nate-hinton-1630207",
@@ -18542,8 +18542,8 @@
         "teamId": "15",
         "teamAbbr": "MEM"
       },
-      "goatRecentScore": 9.0,
-      "goatRecentRank": 434
+      "goatRecentScore": 7.9,
+      "goatRecentRank": 432
     },
     {
       "id": "nathan-mariano-1060110806",
@@ -18577,7 +18577,7 @@
         "teamAbbr": "PHX"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 571
+      "goatRecentRank": 537
     },
     {
       "id": "naz-reid-1629675",
@@ -18615,8 +18615,8 @@
         "teamId": "18",
         "teamAbbr": "MIN"
       },
-      "goatRecentScore": 58.4,
-      "goatRecentRank": 65
+      "goatRecentScore": 55.1,
+      "goatRecentRank": 63
     },
     {
       "id": "neemias-queta-1629674",
@@ -18654,8 +18654,8 @@
         "teamId": "2",
         "teamAbbr": "BOS"
       },
-      "goatRecentScore": 58.7,
-      "goatRecentRank": 61
+      "goatRecentScore": 49.9,
+      "goatRecentRank": 93
     },
     {
       "id": "new-prospect-999999",
@@ -18687,7 +18687,7 @@
         "teamAbbr": "BOS"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 564
+      "goatRecentRank": 655
     },
     {
       "id": "nick-muszynski-1028271224",
@@ -18722,7 +18722,7 @@
         "teamAbbr": "POR"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 576
+      "goatRecentRank": 520
     },
     {
       "id": "nick-richards-1630208",
@@ -18758,8 +18758,8 @@
         "teamId": "24",
         "teamAbbr": "PHX"
       },
-      "goatRecentScore": 39.7,
-      "goatRecentRank": 277
+      "goatRecentScore": 42.0,
+      "goatRecentRank": 189
     },
     {
       "id": "nick-smith-jr-1641733",
@@ -18797,8 +18797,8 @@
         "teamId": "14",
         "teamAbbr": "LAL"
       },
-      "goatRecentScore": 27.2,
-      "goatRecentRank": 393
+      "goatRecentScore": 28.3,
+      "goatRecentRank": 361
     },
     {
       "id": "nickeil-alexander-walker-1629638",
@@ -18838,8 +18838,8 @@
         "teamId": "1",
         "teamAbbr": "ATL"
       },
-      "goatRecentScore": 51.3,
-      "goatRecentRank": 103
+      "goatRecentScore": 46.4,
+      "goatRecentRank": 123
     },
     {
       "id": "nicolas-batum-201587",
@@ -18880,8 +18880,8 @@
         "teamId": "13",
         "teamAbbr": "LAC"
       },
-      "goatRecentScore": 48.1,
-      "goatRecentRank": 142
+      "goatRecentScore": 42.9,
+      "goatRecentRank": 174
     },
     {
       "id": "nicolas-claxton-666508",
@@ -18917,7 +18917,7 @@
         "teamAbbr": "BKN"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 618
+      "goatRecentRank": 515
     },
     {
       "id": "nigel-hayes-1628502",
@@ -18957,7 +18957,7 @@
         "teamAbbr": "PHX"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 518
+      "goatRecentRank": 566
     },
     {
       "id": "nikola-durisic-1028035632",
@@ -18991,7 +18991,7 @@
         "teamAbbr": "ATL"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 592
+      "goatRecentRank": 567
     },
     {
       "id": "nikola-jokic-203999",
@@ -19029,7 +19029,7 @@
         "teamId": "8",
         "teamAbbr": "DEN"
       },
-      "goatRecentScore": 95.9,
+      "goatRecentScore": 98.8,
       "goatRecentRank": 1
     },
     {
@@ -19066,8 +19066,8 @@
         "teamId": "16",
         "teamAbbr": "MIA"
       },
-      "goatRecentScore": 41.6,
-      "goatRecentRank": 249
+      "goatRecentScore": 37.6,
+      "goatRecentRank": 245
     },
     {
       "id": "nikola-topic-1642260",
@@ -19108,7 +19108,7 @@
         "teamAbbr": "OKC"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 642
+      "goatRecentRank": 516
     },
     {
       "id": "nikola-vucevic-202696",
@@ -19146,8 +19146,8 @@
         "teamId": "5",
         "teamAbbr": "CHI"
       },
-      "goatRecentScore": 53.3,
-      "goatRecentRank": 91
+      "goatRecentScore": 52.7,
+      "goatRecentRank": 73
     },
     {
       "id": "nique-clifford-1057276634",
@@ -19181,7 +19181,7 @@
         "teamAbbr": "SAC"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 519
+      "goatRecentRank": 626
     },
     {
       "id": "noa-essengue-196295093",
@@ -19218,7 +19218,7 @@
         "teamAbbr": "CHI"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 653
+      "goatRecentRank": 553
     },
     {
       "id": "noah-clowney-1641730",
@@ -19254,8 +19254,8 @@
         "teamId": "3",
         "teamAbbr": "BKN"
       },
-      "goatRecentScore": 29.7,
-      "goatRecentRank": 383
+      "goatRecentScore": 28.2,
+      "goatRecentRank": 363
     },
     {
       "id": "noah-penda-1057385481",
@@ -19289,7 +19289,7 @@
         "teamAbbr": "ORL"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 557
+      "goatRecentRank": 543
     },
     {
       "id": "nolan-traore-1057275262",
@@ -19323,7 +19323,7 @@
         "teamAbbr": "BKN"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 606
+      "goatRecentRank": 495
     },
     {
       "id": "norchad-omier-1057848025",
@@ -19357,7 +19357,7 @@
         "teamAbbr": "CLE"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 656
+      "goatRecentRank": 595
     },
     {
       "id": "norman-powell-1626181",
@@ -19395,8 +19395,8 @@
         "teamId": "16",
         "teamAbbr": "MIA"
       },
-      "goatRecentScore": 52.7,
-      "goatRecentRank": 98
+      "goatRecentScore": 48.5,
+      "goatRecentRank": 104
     },
     {
       "id": "obi-toppin-1630167",
@@ -19434,8 +19434,8 @@
         "teamId": "12",
         "teamAbbr": "IND"
       },
-      "goatRecentScore": 49.1,
-      "goatRecentRank": 129
+      "goatRecentScore": 44.4,
+      "goatRecentRank": 152
     },
     {
       "id": "ochai-agbaji-1630534",
@@ -19474,8 +19474,8 @@
         "teamId": "28",
         "teamAbbr": "TOR"
       },
-      "goatRecentScore": 36.4,
-      "goatRecentRank": 316
+      "goatRecentScore": 34.1,
+      "goatRecentRank": 297
     },
     {
       "id": "og-anunoby-1628384",
@@ -19514,8 +19514,8 @@
         "teamId": "20",
         "teamAbbr": "NYK"
       },
-      "goatRecentScore": 60.2,
-      "goatRecentRank": 51
+      "goatRecentScore": 57.6,
+      "goatRecentRank": 54
     },
     {
       "id": "olivier-maxence-prosper-1641765",
@@ -19551,8 +19551,8 @@
         "teamId": "15",
         "teamAbbr": "MEM"
       },
-      "goatRecentScore": 35.8,
-      "goatRecentRank": 326
+      "goatRecentScore": 28.9,
+      "goatRecentRank": 351
     },
     {
       "id": "onyeka-okongwu-1630168",
@@ -19588,8 +19588,8 @@
         "teamId": "1",
         "teamAbbr": "ATL"
       },
-      "goatRecentScore": 48.0,
-      "goatRecentRank": 144
+      "goatRecentScore": 46.2,
+      "goatRecentRank": 127
     },
     {
       "id": "orlando-robinson-1631115",
@@ -19626,8 +19626,8 @@
         "teamId": "22",
         "teamAbbr": "ORL"
       },
-      "goatRecentScore": 40.6,
-      "goatRecentRank": 261
+      "goatRecentScore": 34.1,
+      "goatRecentRank": 296
     },
     {
       "id": "oscar-tshiebwe-1631131",
@@ -19665,8 +19665,8 @@
         "teamId": "29",
         "teamAbbr": "UTA"
       },
-      "goatRecentScore": 15.9,
-      "goatRecentRank": 421
+      "goatRecentScore": 17.5,
+      "goatRecentRank": 411
     },
     {
       "id": "oso-ighodaro-1642345",
@@ -19704,8 +19704,8 @@
         "teamId": "24",
         "teamAbbr": "PHX"
       },
-      "goatRecentScore": 30.5,
-      "goatRecentRank": 377
+      "goatRecentScore": 25.1,
+      "goatRecentRank": 384
     },
     {
       "id": "ousmane-dieng-1631172",
@@ -19744,8 +19744,8 @@
         "teamId": "21",
         "teamAbbr": "OKC"
       },
-      "goatRecentScore": 42.0,
-      "goatRecentRank": 243
+      "goatRecentScore": 32.5,
+      "goatRecentRank": 307
     },
     {
       "id": "p-j-washington-1629023",
@@ -19781,8 +19781,8 @@
         "teamId": "7",
         "teamAbbr": "DAL"
       },
-      "goatRecentScore": 45.4,
-      "goatRecentRank": 187
+      "goatRecentScore": 44.4,
+      "goatRecentRank": 153
     },
     {
       "id": "pacome-dadiet-1642359",
@@ -19822,8 +19822,8 @@
         "teamId": "20",
         "teamAbbr": "NYK"
       },
-      "goatRecentScore": 9.5,
-      "goatRecentRank": 430
+      "goatRecentScore": 6.3,
+      "goatRecentRank": 436
     },
     {
       "id": "paolo-banchero-1631094",
@@ -19859,8 +19859,8 @@
         "teamId": "22",
         "teamAbbr": "ORL"
       },
-      "goatRecentScore": 52.8,
-      "goatRecentRank": 97
+      "goatRecentScore": 51.5,
+      "goatRecentRank": 85
     },
     {
       "id": "pascal-siakam-1627783",
@@ -19898,8 +19898,8 @@
         "teamId": "12",
         "teamAbbr": "IND"
       },
-      "goatRecentScore": 63.1,
-      "goatRecentRank": 39
+      "goatRecentScore": 63.0,
+      "goatRecentRank": 34
     },
     {
       "id": "pat-connaughton-1626192",
@@ -19939,8 +19939,8 @@
         "teamId": "4",
         "teamAbbr": "CHA"
       },
-      "goatRecentScore": 40.9,
-      "goatRecentRank": 259
+      "goatRecentScore": 34.0,
+      "goatRecentRank": 298
     },
     {
       "id": "pat-spencer-1630311",
@@ -19977,8 +19977,8 @@
         "teamId": "10",
         "teamAbbr": "GSW"
       },
-      "goatRecentScore": 30.3,
-      "goatRecentRank": 379
+      "goatRecentScore": 25.0,
+      "goatRecentRank": 386
     },
     {
       "id": "patrick-baldwin-jr-1631116",
@@ -20019,8 +20019,8 @@
         "teamId": "13",
         "teamAbbr": "LAC"
       },
-      "goatRecentScore": 32.8,
-      "goatRecentRank": 354
+      "goatRecentScore": 32.1,
+      "goatRecentRank": 319
     },
     {
       "id": "patrick-williams-1630172",
@@ -20056,7 +20056,7 @@
         "teamId": "5",
         "teamAbbr": "CHI"
       },
-      "goatRecentScore": 40.5,
+      "goatRecentScore": 36.5,
       "goatRecentRank": 264
     },
     {
@@ -20095,8 +20095,8 @@
         "teamId": "23",
         "teamAbbr": "PHI"
       },
-      "goatRecentScore": 61.4,
-      "goatRecentRank": 45
+      "goatRecentScore": 60.0,
+      "goatRecentRank": 41
     },
     {
       "id": "paul-reed-1630194",
@@ -20132,8 +20132,8 @@
         "teamId": "9",
         "teamAbbr": "DET"
       },
-      "goatRecentScore": 53.2,
-      "goatRecentRank": 93
+      "goatRecentScore": 49.1,
+      "goatRecentRank": 101
     },
     {
       "id": "payton-pritchard-1630202",
@@ -20171,8 +20171,8 @@
         "teamId": "2",
         "teamAbbr": "BOS"
       },
-      "goatRecentScore": 64.7,
-      "goatRecentRank": 35
+      "goatRecentScore": 58.4,
+      "goatRecentRank": 48
     },
     {
       "id": "payton-sandfort-1059635020",
@@ -20207,7 +20207,7 @@
         "teamAbbr": "OKC"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 527
+      "goatRecentRank": 517
     },
     {
       "id": "pedro-bradshaw-1059749510",
@@ -20241,7 +20241,7 @@
         "teamAbbr": "UTA"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 651
+      "goatRecentRank": 509
     },
     {
       "id": "pelle-larsson-1641796",
@@ -20277,8 +20277,8 @@
         "teamId": "16",
         "teamAbbr": "MIA"
       },
-      "goatRecentScore": 30.6,
-      "goatRecentRank": 376
+      "goatRecentScore": 24.7,
+      "goatRecentRank": 389
     },
     {
       "id": "pete-nance-1631250",
@@ -20316,8 +20316,8 @@
         "teamId": "17",
         "teamAbbr": "MIL"
       },
-      "goatRecentScore": 7.2,
-      "goatRecentRank": 442
+      "goatRecentScore": 5.4,
+      "goatRecentRank": 443
     },
     {
       "id": "peyton-watson-1631212",
@@ -20355,8 +20355,8 @@
         "teamId": "8",
         "teamAbbr": "DEN"
       },
-      "goatRecentScore": 45.0,
-      "goatRecentRank": 196
+      "goatRecentScore": 37.3,
+      "goatRecentRank": 251
     },
     {
       "id": "phillip-wheeler-1630762",
@@ -20392,8 +20392,8 @@
         "teamId": "22",
         "teamAbbr": "ORL"
       },
-      "goatRecentScore": 1.9,
-      "goatRecentRank": 474
+      "goatRecentScore": 2.3,
+      "goatRecentRank": 463
     },
     {
       "id": "pj-hall-1641790",
@@ -20429,8 +20429,8 @@
         "teamId": "15",
         "teamAbbr": "MEM"
       },
-      "goatRecentScore": 5.7,
-      "goatRecentRank": 446
+      "goatRecentScore": 5.0,
+      "goatRecentRank": 447
     },
     {
       "id": "precious-achiuwa-1630173",
@@ -20468,8 +20468,8 @@
         "teamId": "16",
         "teamAbbr": "MIA"
       },
-      "goatRecentScore": 46.4,
-      "goatRecentRank": 164
+      "goatRecentScore": 41.1,
+      "goatRecentRank": 205
     },
     {
       "id": "quentin-grimes-1629656",
@@ -20505,8 +20505,8 @@
         "teamId": "23",
         "teamAbbr": "PHI"
       },
-      "goatRecentScore": 42.5,
-      "goatRecentRank": 232
+      "goatRecentScore": 38.2,
+      "goatRecentRank": 235
     },
     {
       "id": "quenton-jackson-1631245",
@@ -20545,8 +20545,8 @@
         "teamId": "12",
         "teamAbbr": "IND"
       },
-      "goatRecentScore": 37.1,
-      "goatRecentRank": 308
+      "goatRecentScore": 31.2,
+      "goatRecentRank": 327
     },
     {
       "id": "quinten-post-1642366",
@@ -20585,8 +20585,8 @@
         "teamId": "10",
         "teamAbbr": "GSW"
       },
-      "goatRecentScore": 43.2,
-      "goatRecentRank": 220
+      "goatRecentScore": 34.5,
+      "goatRecentRank": 289
     },
     {
       "id": "r-j-davis-1057845629",
@@ -20621,7 +20621,7 @@
         "teamAbbr": "LAL"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 533
+      "goatRecentRank": 506
     },
     {
       "id": "rasheer-fleming-1057383369",
@@ -20655,7 +20655,7 @@
         "teamAbbr": "PHX"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 526
+      "goatRecentRank": 540
     },
     {
       "id": "rayan-rupert-1641712",
@@ -20692,7 +20692,7 @@
         "teamId": "25",
         "teamAbbr": "POR"
       },
-      "goatRecentScore": 27.6,
+      "goatRecentScore": 24.5,
       "goatRecentRank": 392
     },
     {
@@ -20729,8 +20729,8 @@
         "teamId": "12",
         "teamAbbr": "IND"
       },
-      "goatRecentScore": 7.6,
-      "goatRecentRank": 438
+      "goatRecentScore": 7.0,
+      "goatRecentRank": 435
     },
     {
       "id": "reece-beekman-1641736",
@@ -20768,8 +20768,8 @@
         "teamId": "22",
         "teamAbbr": "ORL"
       },
-      "goatRecentScore": 25.1,
-      "goatRecentRank": 400
+      "goatRecentScore": 19.6,
+      "goatRecentRank": 404
     },
     {
       "id": "reed-sheppard-1642263",
@@ -20807,8 +20807,8 @@
         "teamId": "11",
         "teamAbbr": "HOU"
       },
-      "goatRecentScore": 38.2,
-      "goatRecentRank": 296
+      "goatRecentScore": 28.9,
+      "goatRecentRank": 350
     },
     {
       "id": "ricky-council-iv-1641741",
@@ -20847,8 +20847,8 @@
         "teamId": "11",
         "teamAbbr": "HOU"
       },
-      "goatRecentScore": 31.7,
-      "goatRecentRank": 365
+      "goatRecentScore": 30.8,
+      "goatRecentRank": 332
     },
     {
       "id": "riley-minix-1642434",
@@ -20888,8 +20888,8 @@
         "teamId": "27",
         "teamAbbr": "SAS"
       },
-      "goatRecentScore": 2.2,
-      "goatRecentRank": 467
+      "goatRecentScore": 2.0,
+      "goatRecentRank": 468
     },
     {
       "id": "rj-barrett-1629628",
@@ -20926,8 +20926,8 @@
         "teamId": "28",
         "teamAbbr": "TOR"
       },
-      "goatRecentScore": 48.0,
-      "goatRecentRank": 145
+      "goatRecentScore": 45.9,
+      "goatRecentRank": 132
     },
     {
       "id": "rj-luis-jr-1057847347",
@@ -20962,7 +20962,7 @@
         "teamAbbr": "BOS"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 575
+      "goatRecentRank": 581
     },
     {
       "id": "rob-dillingham-1642265",
@@ -21000,8 +21000,8 @@
         "teamId": "18",
         "teamAbbr": "MIN"
       },
-      "goatRecentScore": 39.5,
-      "goatRecentRank": 280
+      "goatRecentScore": 31.4,
+      "goatRecentRank": 324
     },
     {
       "id": "robert-williams-iii-1629057",
@@ -21039,8 +21039,8 @@
         "teamId": "25",
         "teamAbbr": "POR"
       },
-      "goatRecentScore": 48.3,
-      "goatRecentRank": 141
+      "goatRecentScore": 43.4,
+      "goatRecentRank": 166
     },
     {
       "id": "rocco-zikarsky-1057397172",
@@ -21074,7 +21074,7 @@
         "teamAbbr": "MIN"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 559
+      "goatRecentRank": 608
     },
     {
       "id": "ron-harper-jr-1631199",
@@ -21111,8 +21111,8 @@
         "teamId": "2",
         "teamAbbr": "BOS"
       },
-      "goatRecentScore": 5.5,
-      "goatRecentRank": 448
+      "goatRecentScore": 4.2,
+      "goatRecentRank": 451
     },
     {
       "id": "ronald-holland-ii-1641842",
@@ -21151,8 +21151,8 @@
         "teamId": "9",
         "teamAbbr": "DET"
       },
-      "goatRecentScore": 36.8,
-      "goatRecentRank": 312
+      "goatRecentScore": 29.5,
+      "goatRecentRank": 346
     },
     {
       "id": "royce-o-neale-1626220",
@@ -21192,8 +21192,8 @@
         "teamId": "24",
         "teamAbbr": "PHX"
       },
-      "goatRecentScore": 43.9,
-      "goatRecentRank": 208
+      "goatRecentScore": 41.0,
+      "goatRecentRank": 207
     },
     {
       "id": "rudy-gobert-203497",
@@ -21231,8 +21231,8 @@
         "teamId": "18",
         "teamAbbr": "MIN"
       },
-      "goatRecentScore": 64.7,
-      "goatRecentRank": 34
+      "goatRecentScore": 63.0,
+      "goatRecentRank": 36
     },
     {
       "id": "rui-hachimura-1629060",
@@ -21271,8 +21271,8 @@
         "teamId": "14",
         "teamAbbr": "LAL"
       },
-      "goatRecentScore": 48.0,
-      "goatRecentRank": 146
+      "goatRecentScore": 42.9,
+      "goatRecentRank": 175
     },
     {
       "id": "russell-westbrook-201566",
@@ -21312,8 +21312,8 @@
         "teamId": "26",
         "teamAbbr": "SAC"
       },
-      "goatRecentScore": 54.6,
-      "goatRecentRank": 82
+      "goatRecentScore": 52.2,
+      "goatRecentRank": 79
     },
     {
       "id": "ryan-dunn-1642346",
@@ -21349,8 +21349,8 @@
         "teamId": "24",
         "teamAbbr": "PHX"
       },
-      "goatRecentScore": 33.6,
-      "goatRecentRank": 348
+      "goatRecentScore": 28.4,
+      "goatRecentRank": 357
     },
     {
       "id": "ryan-kalkbrenner-1057384362",
@@ -21384,7 +21384,7 @@
         "teamAbbr": "CHA"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 612
+      "goatRecentRank": 646
     },
     {
       "id": "ryan-nembhard-1057847894",
@@ -21418,7 +21418,7 @@
         "teamAbbr": "DAL"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 587
+      "goatRecentRank": 628
     },
     {
       "id": "ryan-rollins-1631157",
@@ -21456,8 +21456,8 @@
         "teamId": "17",
         "teamAbbr": "MIL"
       },
-      "goatRecentScore": 40.5,
-      "goatRecentRank": 263
+      "goatRecentScore": 37.0,
+      "goatRecentRank": 257
     },
     {
       "id": "saddiq-bey-1630180",
@@ -21497,8 +21497,8 @@
         "teamId": "19",
         "teamAbbr": "NOP"
       },
-      "goatRecentScore": 36.9,
-      "goatRecentRank": 310
+      "goatRecentScore": 35.4,
+      "goatRecentRank": 277
     },
     {
       "id": "saint-thomas-1057849072",
@@ -21532,7 +21532,7 @@
         "teamAbbr": "PHI"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 644
+      "goatRecentRank": 634
     },
     {
       "id": "sam-hauser-1630573",
@@ -21570,8 +21570,8 @@
         "teamId": "2",
         "teamAbbr": "BOS"
       },
-      "goatRecentScore": 62.2,
-      "goatRecentRank": 41
+      "goatRecentScore": 55.0,
+      "goatRecentRank": 64
     },
     {
       "id": "sam-merrill-1630241",
@@ -21609,8 +21609,8 @@
         "teamId": "6",
         "teamAbbr": "CLE"
       },
-      "goatRecentScore": 49.1,
-      "goatRecentRank": 128
+      "goatRecentScore": 41.2,
+      "goatRecentRank": 203
     },
     {
       "id": "sandro-mamukelashvili-1630572",
@@ -21646,8 +21646,8 @@
         "teamId": "28",
         "teamAbbr": "TOR"
       },
-      "goatRecentScore": 40.9,
-      "goatRecentRank": 257
+      "goatRecentScore": 39.6,
+      "goatRecentRank": 217
     },
     {
       "id": "santi-aldama-1630583",
@@ -21685,8 +21685,8 @@
         "teamId": "15",
         "teamAbbr": "MEM"
       },
-      "goatRecentScore": 46.9,
-      "goatRecentRank": 159
+      "goatRecentScore": 43.4,
+      "goatRecentRank": 165
     },
     {
       "id": "scoot-henderson-1630703",
@@ -21725,8 +21725,8 @@
         "teamId": "25",
         "teamAbbr": "POR"
       },
-      "goatRecentScore": 39.5,
-      "goatRecentRank": 279
+      "goatRecentScore": 38.2,
+      "goatRecentRank": 236
     },
     {
       "id": "scottie-barnes-1630567",
@@ -21762,8 +21762,8 @@
         "teamId": "28",
         "teamAbbr": "TOR"
       },
-      "goatRecentScore": 51.1,
-      "goatRecentRank": 105
+      "goatRecentScore": 51.2,
+      "goatRecentRank": 88
     },
     {
       "id": "scotty-pippen-jr-1630590",
@@ -21802,7 +21802,7 @@
         "teamId": "15",
         "teamAbbr": "MEM"
       },
-      "goatRecentScore": 43.8,
+      "goatRecentScore": 40.8,
       "goatRecentRank": 209
     },
     {
@@ -21838,7 +21838,7 @@
         "teamAbbr": "UTA"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 502
+      "goatRecentRank": 612
     },
     {
       "id": "sean-mcdermott-1630253",
@@ -21878,7 +21878,7 @@
         "teamAbbr": "PHX"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 650
+      "goatRecentRank": 558
     },
     {
       "id": "sean-pedulla-1058921044",
@@ -21913,7 +21913,7 @@
         "teamAbbr": "POR"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 583
+      "goatRecentRank": 667
     },
     {
       "id": "seth-curry-203552",
@@ -21954,8 +21954,8 @@
         "teamId": "10",
         "teamAbbr": "GSW"
       },
-      "goatRecentScore": 36.2,
-      "goatRecentRank": 317
+      "goatRecentScore": 32.0,
+      "goatRecentRank": 320
     },
     {
       "id": "shaedon-sharpe-1631101",
@@ -21994,8 +21994,8 @@
         "teamId": "25",
         "teamAbbr": "POR"
       },
-      "goatRecentScore": 40.0,
-      "goatRecentRank": 274
+      "goatRecentScore": 39.0,
+      "goatRecentRank": 222
     },
     {
       "id": "shai-gilgeous-alexander-1628983",
@@ -22034,7 +22034,7 @@
         "teamId": "21",
         "teamAbbr": "OKC"
       },
-      "goatRecentScore": 91.2,
+      "goatRecentScore": 92.7,
       "goatRecentRank": 2
     },
     {
@@ -22075,7 +22075,7 @@
         "teamAbbr": "WAS"
       },
       "goatRecentScore": 2.2,
-      "goatRecentRank": 470
+      "goatRecentRank": 465
     },
     {
       "id": "sidy-cissoko-1631321",
@@ -22112,8 +22112,8 @@
         "teamId": "25",
         "teamAbbr": "POR"
       },
-      "goatRecentScore": 21.1,
-      "goatRecentRank": 409
+      "goatRecentScore": 17.6,
+      "goatRecentRank": 410
     },
     {
       "id": "simone-fontecchio-1631323",
@@ -22149,8 +22149,8 @@
         "teamId": "16",
         "teamAbbr": "MIA"
       },
-      "goatRecentScore": 38.7,
-      "goatRecentRank": 292
+      "goatRecentScore": 34.3,
+      "goatRecentRank": 293
     },
     {
       "id": "sion-james-1057384156",
@@ -22184,7 +22184,7 @@
         "teamAbbr": "CHA"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 528
+      "goatRecentRank": 562
     },
     {
       "id": "spencer-jones-1642461",
@@ -22220,8 +22220,8 @@
         "teamId": "8",
         "teamAbbr": "DEN"
       },
-      "goatRecentScore": 7.2,
-      "goatRecentRank": 441
+      "goatRecentScore": 4.9,
+      "goatRecentRank": 448
     },
     {
       "id": "stanley-umude-1630649",
@@ -22258,8 +22258,8 @@
         "teamId": "27",
         "teamAbbr": "SAS"
       },
-      "goatRecentScore": 25.5,
-      "goatRecentRank": 399
+      "goatRecentScore": 22.7,
+      "goatRecentRank": 398
     },
     {
       "id": "stephen-curry-201939",
@@ -22298,8 +22298,8 @@
         "teamId": "10",
         "teamAbbr": "GSW"
       },
-      "goatRecentScore": 69.0,
-      "goatRecentRank": 21
+      "goatRecentScore": 68.9,
+      "goatRecentRank": 16
     },
     {
       "id": "stephen-thompson-78333",
@@ -22339,7 +22339,7 @@
         "teamAbbr": "MIL"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 517
+      "goatRecentRank": 618
     },
     {
       "id": "stephon-castle-1642264",
@@ -22376,8 +22376,8 @@
         "teamId": "27",
         "teamAbbr": "SAS"
       },
-      "goatRecentScore": 38.9,
-      "goatRecentRank": 286
+      "goatRecentScore": 36.0,
+      "goatRecentRank": 269
     },
     {
       "id": "steve-settle-iii-1059753117",
@@ -22412,7 +22412,7 @@
         "teamAbbr": "MIA"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 549
+      "goatRecentRank": 568
     },
     {
       "id": "steven-adams-203500",
@@ -22452,8 +22452,8 @@
         "teamId": "11",
         "teamAbbr": "HOU"
       },
-      "goatRecentScore": 59.4,
-      "goatRecentRank": 54
+      "goatRecentScore": 54.1,
+      "goatRecentRank": 69
     },
     {
       "id": "steven-crowl-1057845539",
@@ -22487,7 +22487,7 @@
         "teamAbbr": "UTA"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 495
+      "goatRecentRank": 585
     },
     {
       "id": "svi-mykhailiuk-1629004",
@@ -22525,8 +22525,8 @@
         "teamId": "29",
         "teamAbbr": "UTA"
       },
-      "goatRecentScore": 38.5,
-      "goatRecentRank": 293
+      "goatRecentScore": 33.1,
+      "goatRecentRank": 305
     },
     {
       "id": "t-j-mcconnell-204456",
@@ -22564,8 +22564,8 @@
         "teamId": "12",
         "teamAbbr": "IND"
       },
-      "goatRecentScore": 54.2,
-      "goatRecentRank": 86
+      "goatRecentScore": 51.8,
+      "goatRecentRank": 82
     },
     {
       "id": "taelon-peter-1057395638",
@@ -22599,7 +22599,7 @@
         "teamAbbr": "IND"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 523
+      "goatRecentRank": 651
     },
     {
       "id": "taevion-kinsey-1641795",
@@ -22637,7 +22637,7 @@
         "teamAbbr": "GSW"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 525
+      "goatRecentRank": 658
     },
     {
       "id": "tamar-bates-1057844839",
@@ -22671,7 +22671,7 @@
         "teamAbbr": "DEN"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 615
+      "goatRecentRank": 569
     },
     {
       "id": "tari-eason-1631106",
@@ -22709,8 +22709,8 @@
         "teamId": "11",
         "teamAbbr": "HOU"
       },
-      "goatRecentScore": 47.0,
-      "goatRecentRank": 156
+      "goatRecentScore": 45.1,
+      "goatRecentRank": 145
     },
     {
       "id": "taurean-prince-1627752",
@@ -22748,8 +22748,8 @@
         "teamId": "17",
         "teamAbbr": "MIL"
       },
-      "goatRecentScore": 42.1,
-      "goatRecentRank": 240
+      "goatRecentScore": 36.6,
+      "goatRecentRank": 262
     },
     {
       "id": "taylor-funk-1641917",
@@ -22786,7 +22786,7 @@
         "teamId": "30",
         "teamAbbr": "WAS"
       },
-      "goatRecentScore": 1.2,
+      "goatRecentScore": 1.0,
       "goatRecentRank": 477
     },
     {
@@ -22823,8 +22823,8 @@
         "teamId": "29",
         "teamAbbr": "UTA"
       },
-      "goatRecentScore": 29.7,
-      "goatRecentRank": 382
+      "goatRecentScore": 26.5,
+      "goatRecentRank": 374
     },
     {
       "id": "terance-mann-1629611",
@@ -22863,8 +22863,8 @@
         "teamId": "3",
         "teamAbbr": "BKN"
       },
-      "goatRecentScore": 43.2,
-      "goatRecentRank": 221
+      "goatRecentScore": 37.6,
+      "goatRecentRank": 246
     },
     {
       "id": "terence-davis-1629056",
@@ -22904,8 +22904,8 @@
         "teamId": "26",
         "teamAbbr": "SAC"
       },
-      "goatRecentScore": 45.8,
-      "goatRecentRank": 181
+      "goatRecentScore": 38.2,
+      "goatRecentRank": 232
     },
     {
       "id": "terrence-hargrove-jr-1059021935",
@@ -22940,7 +22940,7 @@
         "teamAbbr": "DEN"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 498
+      "goatRecentRank": 647
     },
     {
       "id": "terrence-shannon-jr-1630545",
@@ -22979,8 +22979,8 @@
         "teamId": "18",
         "teamAbbr": "MIN"
       },
-      "goatRecentScore": 28.9,
-      "goatRecentRank": 387
+      "goatRecentScore": 21.8,
+      "goatRecentRank": 400
     },
     {
       "id": "terry-rozier-1626179",
@@ -23020,8 +23020,8 @@
         "teamId": "16",
         "teamAbbr": "MIA"
       },
-      "goatRecentScore": 43.3,
-      "goatRecentRank": 218
+      "goatRecentScore": 43.9,
+      "goatRecentRank": 160
     },
     {
       "id": "tevian-jones-1641856",
@@ -23060,7 +23060,7 @@
         "teamAbbr": "LAL"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 610
+      "goatRecentRank": 579
     },
     {
       "id": "thanasis-antetokounmpo-203648",
@@ -23100,8 +23100,8 @@
         "teamId": "17",
         "teamAbbr": "MIL"
       },
-      "goatRecentScore": 25.1,
-      "goatRecentRank": 401
+      "goatRecentScore": 18.9,
+      "goatRecentRank": 405
     },
     {
       "id": "thomas-bryant-1628418",
@@ -23141,8 +23141,8 @@
         "teamId": "6",
         "teamAbbr": "CLE"
       },
-      "goatRecentScore": 47.4,
-      "goatRecentRank": 154
+      "goatRecentScore": 41.2,
+      "goatRecentRank": 204
     },
     {
       "id": "thomas-sorber-1057274983",
@@ -23177,7 +23177,7 @@
         "teamAbbr": "OKC"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 621
+      "goatRecentRank": 530
     },
     {
       "id": "tidjane-salaun-1642275",
@@ -23216,8 +23216,8 @@
         "teamId": "4",
         "teamAbbr": "CHA"
       },
-      "goatRecentScore": 24.9,
-      "goatRecentRank": 403
+      "goatRecentScore": 25.0,
+      "goatRecentRank": 385
     },
     {
       "id": "tim-hardaway-jr-203501",
@@ -23256,8 +23256,8 @@
         "teamId": "8",
         "teamAbbr": "DEN"
       },
-      "goatRecentScore": 46.4,
-      "goatRecentRank": 168
+      "goatRecentScore": 41.6,
+      "goatRecentRank": 199
     },
     {
       "id": "tobias-harris-202699",
@@ -23295,8 +23295,8 @@
         "teamId": "9",
         "teamAbbr": "DET"
       },
-      "goatRecentScore": 59.1,
-      "goatRecentRank": 56
+      "goatRecentScore": 56.3,
+      "goatRecentRank": 61
     },
     {
       "id": "tolu-smith-1642449",
@@ -23335,8 +23335,8 @@
         "teamId": "9",
         "teamAbbr": "DET"
       },
-      "goatRecentScore": 2.3,
-      "goatRecentRank": 466
+      "goatRecentScore": 1.9,
+      "goatRecentRank": 469
     },
     {
       "id": "tony-bradley-1628396",
@@ -23378,8 +23378,8 @@
         "teamId": "12",
         "teamAbbr": "IND"
       },
-      "goatRecentScore": 18.7,
-      "goatRecentRank": 415
+      "goatRecentScore": 16.9,
+      "goatRecentRank": 414
     },
     {
       "id": "tosan-evbuomwan-1641787",
@@ -23416,8 +23416,8 @@
         "teamId": "20",
         "teamAbbr": "NYK"
       },
-      "goatRecentScore": 25.6,
-      "goatRecentRank": 397
+      "goatRecentScore": 25.5,
+      "goatRecentRank": 381
     },
     {
       "id": "toumani-camara-1641739",
@@ -23454,8 +23454,8 @@
         "teamId": "25",
         "teamAbbr": "POR"
       },
-      "goatRecentScore": 35.8,
-      "goatRecentRank": 323
+      "goatRecentScore": 34.4,
+      "goatRecentRank": 292
     },
     {
       "id": "trae-young-1629027",
@@ -23493,8 +23493,8 @@
         "teamId": "1",
         "teamAbbr": "ATL"
       },
-      "goatRecentScore": 56.4,
-      "goatRecentRank": 71
+      "goatRecentScore": 56.8,
+      "goatRecentRank": 56
     },
     {
       "id": "trayce-jackson-davis-1631218",
@@ -23531,8 +23531,8 @@
         "teamId": "10",
         "teamAbbr": "GSW"
       },
-      "goatRecentScore": 46.6,
-      "goatRecentRank": 162
+      "goatRecentScore": 41.7,
+      "goatRecentRank": 195
     },
     {
       "id": "tre-johnson-1057262985",
@@ -23566,7 +23566,7 @@
         "teamAbbr": "WAS"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 657
+      "goatRecentRank": 649
     },
     {
       "id": "tre-jones-1630200",
@@ -23604,8 +23604,8 @@
         "teamId": "5",
         "teamAbbr": "CHI"
       },
-      "goatRecentScore": 42.0,
-      "goatRecentRank": 244
+      "goatRecentScore": 43.1,
+      "goatRecentRank": 171
     },
     {
       "id": "tre-mann-1630544",
@@ -23644,8 +23644,8 @@
         "teamId": "4",
         "teamAbbr": "CHA"
       },
-      "goatRecentScore": 40.1,
-      "goatRecentRank": 271
+      "goatRecentScore": 35.4,
+      "goatRecentRank": 275
     },
     {
       "id": "trendon-watford-1630570",
@@ -23683,8 +23683,8 @@
         "teamId": "23",
         "teamAbbr": "PHI"
       },
-      "goatRecentScore": 39.8,
-      "goatRecentRank": 275
+      "goatRecentScore": 38.0,
+      "goatRecentRank": 240
     },
     {
       "id": "trentyn-flowers-1642280",
@@ -23720,7 +23720,7 @@
         "teamId": "5",
         "teamAbbr": "CHI"
       },
-      "goatRecentScore": 1.5,
+      "goatRecentScore": 1.0,
       "goatRecentRank": 476
     },
     {
@@ -23758,8 +23758,8 @@
         "teamId": "19",
         "teamAbbr": "NOP"
       },
-      "goatRecentScore": 10.5,
-      "goatRecentRank": 429
+      "goatRecentScore": 8.2,
+      "goatRecentRank": 431
     },
     {
       "id": "trey-jemison-64269023",
@@ -23794,7 +23794,7 @@
         "teamAbbr": "NYK"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 652
+      "goatRecentRank": 601
     },
     {
       "id": "trey-murphy-iii-1630530",
@@ -23832,8 +23832,8 @@
         "teamId": "19",
         "teamAbbr": "NOP"
       },
-      "goatRecentScore": 44.0,
-      "goatRecentRank": 206
+      "goatRecentScore": 41.6,
+      "goatRecentRank": 198
     },
     {
       "id": "trhae-mitchell-1630342",
@@ -23872,7 +23872,7 @@
         "teamAbbr": "NOP"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 604
+      "goatRecentRank": 542
     },
     {
       "id": "tristan-da-silva-1641783",
@@ -23911,8 +23911,8 @@
         "teamId": "22",
         "teamAbbr": "ORL"
       },
-      "goatRecentScore": 31.3,
-      "goatRecentRank": 367
+      "goatRecentScore": 24.7,
+      "goatRecentRank": 390
     },
     {
       "id": "tristan-enaruna-1642400",
@@ -23949,7 +23949,7 @@
         "teamAbbr": "CLE"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 631
+      "goatRecentRank": 587
     },
     {
       "id": "tristan-vukcevic-1641774",
@@ -23985,8 +23985,8 @@
         "teamId": "30",
         "teamAbbr": "WAS"
       },
-      "goatRecentScore": 35.6,
-      "goatRecentRank": 328
+      "goatRecentScore": 37.0,
+      "goatRecentRank": 256
     },
     {
       "id": "tristen-newton-1641803",
@@ -24025,8 +24025,8 @@
         "teamId": "18",
         "teamAbbr": "MIN"
       },
-      "goatRecentScore": 5.6,
-      "goatRecentRank": 447
+      "goatRecentScore": 5.7,
+      "goatRecentRank": 441
     },
     {
       "id": "ty-jerome-1629660",
@@ -24066,8 +24066,8 @@
         "teamId": "15",
         "teamAbbr": "MEM"
       },
-      "goatRecentScore": 52.9,
-      "goatRecentRank": 96
+      "goatRecentScore": 46.8,
+      "goatRecentRank": 118
     },
     {
       "id": "tyler-burton-1057845216",
@@ -24101,7 +24101,7 @@
         "teamAbbr": "MEM"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 573
+      "goatRecentRank": 625
     },
     {
       "id": "tyler-herro-1629639",
@@ -24139,8 +24139,8 @@
         "teamId": "16",
         "teamAbbr": "MIA"
       },
-      "goatRecentScore": 54.3,
-      "goatRecentRank": 85
+      "goatRecentScore": 52.4,
+      "goatRecentRank": 75
     },
     {
       "id": "tyler-kolek-1642278",
@@ -24177,8 +24177,8 @@
         "teamId": "20",
         "teamAbbr": "NYK"
       },
-      "goatRecentScore": 26.4,
-      "goatRecentRank": 396
+      "goatRecentScore": 20.7,
+      "goatRecentRank": 403
     },
     {
       "id": "tyler-smith-1641890",
@@ -24214,7 +24214,7 @@
         "teamId": "17",
         "teamAbbr": "MIL"
       },
-      "goatRecentScore": 11.2,
+      "goatRecentScore": 9.6,
       "goatRecentRank": 427
     },
     {
@@ -24251,8 +24251,8 @@
         "teamId": "12",
         "teamAbbr": "IND"
       },
-      "goatRecentScore": 67.9,
-      "goatRecentRank": 27
+      "goatRecentScore": 67.4,
+      "goatRecentRank": 21
     },
     {
       "id": "tyrese-hunter-1060125450",
@@ -24286,7 +24286,7 @@
         "teamAbbr": "HOU"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 506
+      "goatRecentRank": 560
     },
     {
       "id": "tyrese-martin-1631213",
@@ -24322,8 +24322,8 @@
         "teamId": "3",
         "teamAbbr": "BKN"
       },
-      "goatRecentScore": 31.2,
-      "goatRecentRank": 369
+      "goatRecentScore": 28.1,
+      "goatRecentRank": 365
     },
     {
       "id": "tyrese-maxey-1630178",
@@ -24359,8 +24359,8 @@
         "teamId": "23",
         "teamAbbr": "PHI"
       },
-      "goatRecentScore": 58.8,
-      "goatRecentRank": 59
+      "goatRecentScore": 56.5,
+      "goatRecentRank": 57
     },
     {
       "id": "tyrese-proctor-1057395754",
@@ -24394,7 +24394,7 @@
         "teamAbbr": "CLE"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 514
+      "goatRecentRank": 611
     },
     {
       "id": "tyrese-samuel-1057848571",
@@ -24428,7 +24428,7 @@
         "teamAbbr": "PHX"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 663
+      "goatRecentRank": 496
     },
     {
       "id": "tyson-etienne-1630623",
@@ -24465,8 +24465,8 @@
         "teamId": "3",
         "teamAbbr": "BKN"
       },
-      "goatRecentScore": 6.5,
-      "goatRecentRank": 443
+      "goatRecentScore": 5.3,
+      "goatRecentRank": 444
     },
     {
       "id": "tyty-washington-jr-1631102",
@@ -24507,8 +24507,8 @@
         "teamId": "13",
         "teamAbbr": "LAC"
       },
-      "goatRecentScore": 27.9,
-      "goatRecentRank": 391
+      "goatRecentScore": 25.5,
+      "goatRecentRank": 380
     },
     {
       "id": "tyus-jones-1626145",
@@ -24546,8 +24546,8 @@
         "teamId": "22",
         "teamAbbr": "ORL"
       },
-      "goatRecentScore": 45.7,
-      "goatRecentRank": 182
+      "goatRecentScore": 44.5,
+      "goatRecentRank": 149
     },
     {
       "id": "vernon-carey-jr-1630176",
@@ -24587,7 +24587,7 @@
         "teamId": "11",
         "teamAbbr": "HOU"
       },
-      "goatRecentScore": 4.4,
+      "goatRecentScore": 4.0,
       "goatRecentRank": 452
     },
     {
@@ -24625,8 +24625,8 @@
         "teamId": "27",
         "teamAbbr": "SAS"
       },
-      "goatRecentScore": 55.9,
-      "goatRecentRank": 75
+      "goatRecentScore": 59.2,
+      "goatRecentRank": 46
     },
     {
       "id": "viktor-lakhin-1059510388",
@@ -24661,7 +24661,7 @@
         "teamAbbr": "OKC"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 507
+      "goatRecentRank": 548
     },
     {
       "id": "vince-williams-jr-1631246",
@@ -24700,8 +24700,8 @@
         "teamId": "15",
         "teamAbbr": "MEM"
       },
-      "goatRecentScore": 34.6,
-      "goatRecentRank": 342
+      "goatRecentScore": 32.4,
+      "goatRecentRank": 309
     },
     {
       "id": "vit-krejci-1630249",
@@ -24737,8 +24737,8 @@
         "teamId": "1",
         "teamAbbr": "ATL"
       },
-      "goatRecentScore": 34.2,
-      "goatRecentRank": 346
+      "goatRecentScore": 28.6,
+      "goatRecentRank": 354
     },
     {
       "id": "vj-edgecombe-1057261935",
@@ -24772,7 +24772,7 @@
         "teamAbbr": "PHI"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 501
+      "goatRecentRank": 565
     },
     {
       "id": "vladislav-goldin-1057846206",
@@ -24806,7 +24806,7 @@
         "teamAbbr": "MIA"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 611
+      "goatRecentRank": 627
     },
     {
       "id": "walker-kessler-1631117",
@@ -24842,8 +24842,8 @@
         "teamId": "29",
         "teamAbbr": "UTA"
       },
-      "goatRecentScore": 47.1,
-      "goatRecentRank": 155
+      "goatRecentScore": 47.8,
+      "goatRecentRank": 110
     },
     {
       "id": "walter-clayton-jr-1057271583",
@@ -24878,7 +24878,7 @@
         "teamAbbr": "UTA"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 554
+      "goatRecentRank": 599
     },
     {
       "id": "warren-washington-1642514",
@@ -24915,8 +24915,8 @@
         "teamId": "16",
         "teamAbbr": "MIA"
       },
-      "goatRecentScore": 0.4,
-      "goatRecentRank": 486
+      "goatRecentScore": 0.2,
+      "goatRecentRank": 489
     },
     {
       "id": "wendell-carter-jr-1628976",
@@ -24955,8 +24955,8 @@
         "teamId": "22",
         "teamAbbr": "ORL"
       },
-      "goatRecentScore": 45.2,
-      "goatRecentRank": 192
+      "goatRecentScore": 42.1,
+      "goatRecentRank": 187
     },
     {
       "id": "will-richard-1057395872",
@@ -24991,7 +24991,7 @@
         "teamAbbr": "GSW"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 622
+      "goatRecentRank": 600
     },
     {
       "id": "will-richardson-1642019",
@@ -25029,7 +25029,7 @@
         "teamAbbr": "DEN"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 539
+      "goatRecentRank": 661
     },
     {
       "id": "will-riley-1057279594",
@@ -25063,7 +25063,7 @@
         "teamAbbr": "WAS"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 627
+      "goatRecentRank": 559
     },
     {
       "id": "xavier-tillman-1630214",
@@ -25101,8 +25101,8 @@
         "teamId": "2",
         "teamAbbr": "BOS"
       },
-      "goatRecentScore": 45.0,
-      "goatRecentRank": 195
+      "goatRecentScore": 37.1,
+      "goatRecentRank": 254
     },
     {
       "id": "yanic-konan-niederhauser-1057279105",
@@ -25138,7 +25138,7 @@
         "teamAbbr": "LAC"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 577
+      "goatRecentRank": 551
     },
     {
       "id": "yuki-kawamura-1642530",
@@ -25177,8 +25177,8 @@
         "teamId": "5",
         "teamAbbr": "CHI"
       },
-      "goatRecentScore": 11.9,
-      "goatRecentRank": 425
+      "goatRecentScore": 8.6,
+      "goatRecentRank": 430
     },
     {
       "id": "yves-missi-1642274",
@@ -25215,8 +25215,8 @@
         "teamId": "19",
         "teamAbbr": "NOP"
       },
-      "goatRecentScore": 32.3,
-      "goatRecentRank": 359
+      "goatRecentScore": 32.4,
+      "goatRecentRank": 313
     },
     {
       "id": "zaccharie-risacher-1642258",
@@ -25254,8 +25254,8 @@
         "teamId": "1",
         "teamAbbr": "ATL"
       },
-      "goatRecentScore": 36.5,
-      "goatRecentRank": 315
+      "goatRecentScore": 30.4,
+      "goatRecentRank": 337
     },
     {
       "id": "zach-collins-1628380",
@@ -25295,8 +25295,8 @@
         "teamId": "5",
         "teamAbbr": "CHI"
       },
-      "goatRecentScore": 45.2,
-      "goatRecentRank": 191
+      "goatRecentScore": 45.8,
+      "goatRecentRank": 135
     },
     {
       "id": "zach-edey-1641744",
@@ -25332,8 +25332,8 @@
         "teamId": "15",
         "teamAbbr": "MEM"
       },
-      "goatRecentScore": 48.9,
-      "goatRecentRank": 134
+      "goatRecentScore": 45.4,
+      "goatRecentRank": 140
     },
     {
       "id": "zach-lavine-203897",
@@ -25371,8 +25371,8 @@
         "teamId": "26",
         "teamAbbr": "SAC"
       },
-      "goatRecentScore": 47.0,
-      "goatRecentRank": 158
+      "goatRecentScore": 45.3,
+      "goatRecentRank": 142
     },
     {
       "id": "zack-austin-1057844738",
@@ -25407,7 +25407,7 @@
         "teamAbbr": "OKC"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 563
+      "goatRecentRank": 529
     },
     {
       "id": "zeke-mayo-1060126250",
@@ -25441,7 +25441,7 @@
         "teamAbbr": "CLE"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 632
+      "goatRecentRank": 545
     },
     {
       "id": "zeke-nnaji-1630192",
@@ -25479,8 +25479,8 @@
         "teamId": "8",
         "teamAbbr": "DEN"
       },
-      "goatRecentScore": 44.0,
-      "goatRecentRank": 207
+      "goatRecentScore": 35.5,
+      "goatRecentRank": 273
     },
     {
       "id": "zeng-fanbo-1057845931",
@@ -25514,7 +25514,7 @@
         "teamAbbr": "BKN"
       },
       "goatRecentScore": 0.0,
-      "goatRecentRank": 661
+      "goatRecentRank": 534
     },
     {
       "id": "ziaire-williams-1630533",
@@ -25552,8 +25552,8 @@
         "teamId": "3",
         "teamAbbr": "BKN"
       },
-      "goatRecentScore": 37.7,
-      "goatRecentRank": 300
+      "goatRecentScore": 34.9,
+      "goatRecentRank": 286
     },
     {
       "id": "zion-williamson-1629627",
@@ -25590,8 +25590,8 @@
         "teamId": "19",
         "teamAbbr": "NOP"
       },
-      "goatRecentScore": 59.2,
-      "goatRecentRank": 55
+      "goatRecentScore": 57.8,
+      "goatRecentRank": 52
     },
     {
       "id": "zyon-pullin-1642389",
@@ -25628,8 +25628,8 @@
         "teamId": "18",
         "teamAbbr": "MIN"
       },
-      "goatRecentScore": 2.2,
-      "goatRecentRank": 469
+      "goatRecentScore": 1.6,
+      "goatRecentRank": 474
     }
   ]
 }

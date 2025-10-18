@@ -13,10 +13,9 @@ RECENT_SEASON_YEARS = {
 }
 RECENT_SEASON_MAX_GAMES = 82 * RECENT_SEASON_SPAN
 RECENT_COMPONENT_WEIGHTS = {
-    "production": 40.0,
-    "impact": 25.0,
-    "efficiency": 20.0,
-    "availability": 15.0,
+    "production": 50.0,
+    "impact": 30.0,
+    "availability": 20.0,
 }
 RECENT_MIN_GAMES = 25
 RECENT_MIN_MINUTES = 600.0
@@ -176,7 +175,6 @@ def compute_recent_goat_scores(
         per36_stocks = ((bucket["steals"] + bucket["blocks"]) / minutes) * 36.0 if minutes else 0.0
 
         availability = min(bucket["games"] / RECENT_SEASON_MAX_GAMES, 1.0)
-        win_pct = (bucket["wins"] / bucket["games"]) if bucket["games"] else 0.0
         plus_minus = (bucket["plus_minus"] / bucket["games"]) if bucket["games"] else 0.0
 
         game_availability = availability
@@ -198,12 +196,10 @@ def compute_recent_goat_scores(
             0.0,
         ) * sample_scale
         impact_component = max(plus_minus, 0.0) * sample_scale
-        efficiency_component = max(win_pct, 0.0) * sample_scale
 
         components = {
             "production": production_component,
             "impact": impact_component,
-            "efficiency": efficiency_component,
             "availability": availability_component,
         }
         bucket["components"] = components
@@ -238,6 +234,10 @@ def compute_recent_goat_scores(
             "rank": rankings.get(person_id),
             "games": bucket["games"],
             "wins": bucket["wins"],
+            "points": int(round(bucket["points"])),
+            "assists": int(round(bucket["assists"])),
+            "rebounds": int(round(bucket["rebounds"])),
+            "blocks": int(round(bucket["blocks"])),
             "seasons": sorted(bucket["seasons"]),
             "teamName": bucket.get("team_name"),
             "teamCity": bucket.get("team_city"),
