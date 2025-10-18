@@ -485,7 +485,29 @@ function renderRecentLeaderboard(records, listElement, placeholderElement) {
     const note = document.createElement('span');
     note.textContent = player?.blurb || '';
 
+    const totalsSpecs = [
+      ['points', 'pts'],
+      ['assists', 'ast'],
+      ['rebounds', 'reb'],
+      ['blocks', 'blk'],
+    ];
+    const totalsParts = totalsSpecs
+      .map(([key, label]) => {
+        const value = Number.isFinite(player?.[key]) ? player[key] : null;
+        if (value === null) {
+          return null;
+        }
+        return `${helpers.formatNumber(value, 0)} ${label}`;
+      })
+      .filter(Boolean);
+
     body.append(title, note);
+    if (totalsParts.length) {
+      const totals = document.createElement('span');
+      totals.className = 'players-rankings__totals';
+      totals.textContent = totalsParts.join(' · ');
+      body.appendChild(totals);
+    }
     item.append(rank, body);
     listElement.appendChild(item);
   });

@@ -5988,6 +5988,12 @@ section h2 { margin-top: 0; font-size: clamp(1.35rem, 3vw, 1.8rem); letter-spaci
 .players-rankings__body { display: grid; gap: 0.3rem; }
 .players-rankings__body strong { font-size: 1.05rem; color: var(--navy); }
 .players-rankings__body span { color: var(--text-subtle); font-size: 0.95rem; line-height: 1.55; }
+.players-rankings__totals {
+  display: inline-block;
+  color: color-mix(in srgb, var(--navy) 75%, var(--text-subtle) 25%);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
 .players-lab__section { display: grid; gap: 1.5rem; }
 .players-lab__section-header { display: grid; gap: 0.6rem; max-width: 660px; }
 .players-lab__section-header h2 { margin: 0; font-size: clamp(1.6rem, 3vw, 1.9rem); }
