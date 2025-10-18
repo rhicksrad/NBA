@@ -6,6 +6,7 @@ from pathlib import Path
 from scripts.goat_metrics import (
     RECENT_SEASON_SPAN,
     RECENT_SEASON_START,
+    compute_recent_goat_scores,
     format_season_window,
 )
 
@@ -56,3 +57,46 @@ def test_goat_recent_matches_profiles() -> None:
         profile = profile_by_id[person_id]
         assert profile.get("goatRecentScore") == entry.get("score")
         assert profile.get("goatRecentRank") == entry.get("rank")
+
+
+def test_recent_scores_penalize_small_samples() -> None:
+    rows: list[dict[str, str]] = []
+    # Player with an extended sample of strong production.
+    for _ in range(50):
+        rows.append(
+            {
+                "personId": "big-sample",
+                "gameDate": "2023-01-15",
+                "numMinutes": "30",
+                "points": "20",
+                "assists": "5",
+                "reboundsTotal": "8",
+                "steals": "1",
+                "blocks": "1",
+                "win": "1",
+                "plusMinusPoints": "8",
+            }
+        )
+    # Player with a tiny sample but extreme per-minute numbers.
+    for _ in range(2):
+        rows.append(
+            {
+                "personId": "small-sample",
+                "gameDate": "2024-10-20",
+                "numMinutes": "20",
+                "points": "25",
+                "assists": "8",
+                "reboundsTotal": "5",
+                "steals": "2",
+                "blocks": "2",
+                "win": "1",
+                "plusMinusPoints": "15",
+            }
+        )
+
+    scores = compute_recent_goat_scores(rows, {"big-sample", "small-sample"})
+    assert scores["big-sample"]["score"] > scores["small-sample"]["score"]
+    assert scores["big-sample"]["rank"] == 1
+    assert scores["small-sample"]["rank"] == 2
+    # Ensure the small sample receives a meaningful penalty despite high production.
+    assert scores["small-sample"]["score"] < 30

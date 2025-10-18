@@ -18,6 +18,8 @@ RECENT_COMPONENT_WEIGHTS = {
     "efficiency": 20.0,
     "availability": 15.0,
 }
+RECENT_MIN_GAMES = 25
+RECENT_MIN_MINUTES = 600.0
 
 
 def _parse_float(value: Any) -> float | None:
@@ -181,15 +183,22 @@ def compute_recent_goat_scores(
         minute_availability = min((minutes / (RECENT_SEASON_MAX_GAMES * 36.0)), 1.0)
         availability_component = (game_availability + minute_availability) / 2.0
 
+        sample_scale_candidates = [1.0]
+        if RECENT_MIN_GAMES > 0:
+            sample_scale_candidates.append(bucket["games"] / RECENT_MIN_GAMES)
+        if RECENT_MIN_MINUTES > 0:
+            sample_scale_candidates.append(minutes / RECENT_MIN_MINUTES)
+        sample_scale = max(0.0, min(sample_scale_candidates))
+
         production_component = max(
             per36_points
             + 1.5 * per36_assists
             + 1.1 * per36_rebounds
             + 3.0 * per36_stocks,
             0.0,
-        )
-        impact_component = max(plus_minus, 0.0)
-        efficiency_component = max(win_pct, 0.0)
+        ) * sample_scale
+        impact_component = max(plus_minus, 0.0) * sample_scale
+        efficiency_component = max(win_pct, 0.0) * sample_scale
 
         components = {
             "production": production_component,
