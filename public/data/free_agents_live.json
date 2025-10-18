@@ -18,20 +18,20 @@
       "seasonLabel": "2024-25"
     },
     {
-      "id": 472,
-      "name": "Russell Westbrook",
+      "id": 130,
+      "name": "Spencer Dinwiddie",
       "position": "G",
-      "teamLabel": "Denver Nuggets (DEN)",
+      "teamLabel": "Dallas Mavericks (DAL)",
       "metrics": {
-        "points": 11.229508196721312,
-        "assists": 5.459016393442623,
-        "rebounds": 4.377049180327869,
-        "steals": 1.2459016393442623,
-        "blocks": 0.4098360655737705,
-        "minutes": 24.278688524590162,
-        "games": 61
+        "points": 9.806451612903226,
+        "assists": 3.596774193548387,
+        "rebounds": 2.2580645161290325,
+        "steals": 0.7741935483870968,
+        "blocks": 0.1935483870967742,
+        "minutes": 24.241935483870968,
+        "games": 62
       },
-      "score": 25.447,
+      "score": 20.199,
       "seasonLabel": "2024-25"
     },
     {
@@ -69,6 +69,23 @@
       "seasonLabel": "2024-25"
     },
     {
+      "id": 17896094,
+      "name": "Dalano Banton",
+      "position": "G",
+      "teamLabel": "Portland Trail Blazers (POR)",
+      "metrics": {
+        "points": 6.67741935483871,
+        "assists": 1.7096774193548387,
+        "rebounds": 1.532258064516129,
+        "steals": 0.5161290322580645,
+        "blocks": 0.3709677419354839,
+        "minutes": 12.225806451612904,
+        "games": 62
+      },
+      "score": 14.158,
+      "seasonLabel": "2024-25"
+    },
+    {
       "id": 666748,
       "name": "Cody Martin",
       "position": "F",
@@ -103,20 +120,20 @@
       "seasonLabel": "2024-25"
     },
     {
-      "id": 56913527,
-      "name": "Ricky Council IV",
-      "position": "G",
-      "teamLabel": "Philadelphia 76ers (PHI)",
+      "id": 17896021,
+      "name": "Jeremiah Robinson-Earl",
+      "position": "F",
+      "teamLabel": "New Orleans Pelicans (NOP)",
       "metrics": {
-        "points": 5.183333333333334,
-        "assists": 0.9666666666666667,
-        "rebounds": 1.8666666666666667,
-        "steals": 0.4,
-        "blocks": 0.13333333333333333,
-        "minutes": 12.15,
-        "games": 60
+        "points": 4.409836065573771,
+        "assists": 0.8688524590163934,
+        "rebounds": 3.4918032786885247,
+        "steals": 0.45901639344262296,
+        "blocks": 0.11475409836065574,
+        "minutes": 13.557377049180328,
+        "games": 61
       },
-      "score": 11.569,
+      "score": 11.746,
       "seasonLabel": "2024-25"
     },
     {
@@ -173,6 +190,6 @@
   ],
   "season": 2024,
   "seasonLabel": "2024-25",
-  "rosterSnapshotFetchedAt": "2025-09-30T15:46:36.879Z",
-  "generated_at": "2025-10-16T00:23:48.394Z"
+  "rosterSnapshotFetchedAt": "2025-10-18T03:27:38.772Z",
+  "generated_at": "2025-10-18T03:33:13.757Z"
 }
