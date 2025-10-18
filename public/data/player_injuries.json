@@ -1,5 +1,5 @@
 {
-  "fetched_at": "2025-10-09T13:54:58.861Z",
+  "fetched_at": "2025-10-18T03:33:23.771Z",
   "source": "Ball Don't Lie",
   "items": [
     {
@@ -10,8 +10,8 @@
       "team_tricode": "BOS",
       "team_name": "Boston Celtics",
       "return_date": "Apr 1",
-      "description": "Sep 23: Tatum (Achilles) said Tuesday that he's not ruling out a return in 2025-26, Zack Cox of the Boston Herald reports.",
-      "report_label": "Sep 23"
+      "description": "Oct 9: The Celtics have not ruled Tatum (Achilles) out for the 2025-26 season, ESPN's Shams Charania reported on the Pat McAfee Show on Thursday.",
+      "report_label": "Oct 9"
     },
     {
       "player": "Darius Garland",
@@ -21,8 +21,8 @@
       "team_tricode": "CLE",
       "team_name": "Cleveland Cavaliers",
       "return_date": "Nov 1",
-      "description": "Oct 7: Garland (toe) went through a light individual workout after Tuesday's shootaround, Chris Fedor of The Cleveland Plain Dealer reports.",
-      "report_label": "Oct 7"
+      "description": "Oct 15: Garland (toe) participated in a scrimmage with contact Tuesday, Chris Fedor of Cleveland.com reports.",
+      "report_label": "Oct 15"
     },
     {
       "player": "Max Strus",
@@ -45,6 +45,17 @@
       "return_date": "Jan 1",
       "description": "Sep 29: At Media Day on Monday, Mavericks head coach Jason Kidd refuted the report that Irving (knee) is ahead of schedule in his recovery, Christian Clark reports.",
       "report_label": "Sep 29"
+    },
+    {
+      "player": "Jaden Ivey",
+      "status": "Out",
+      "status_level": "caution",
+      "player_id": 38017682,
+      "team_tricode": "DET",
+      "team_name": "Detroit Pistons",
+      "return_date": "Nov 24",
+      "description": "Oct 16: The Pistons announced Thursday that Ivey underwent an arthroscopic procedure to relieve right knee discomfort and will be re-evaluated in four weeks.",
+      "report_label": "Oct 16"
     },
     {
       "player": "De'Anthony Melton",
@@ -75,9 +86,20 @@
       "player_id": 1057389374,
       "team_tricode": "IND",
       "team_name": "Indiana Pacers",
-      "return_date": "Oct 29",
-      "description": "Oct 6: Jones (back) is likely going to be sidelined for a few weeks, Tony East of WTHR Channel 13 Indianapolis reports.",
-      "report_label": "Oct 6"
+      "return_date": "Nov 11",
+      "description": "Oct 16: Jones (back) will be sidelined through Nov. 9, Tony East of WTHR Channel 13 Indianapolis reports.",
+      "report_label": "Oct 16"
+    },
+    {
+      "player": "T.J. McConnell",
+      "status": "Out",
+      "status_level": "caution",
+      "player_id": 304,
+      "team_tricode": "IND",
+      "team_name": "Indiana Pacers",
+      "return_date": "Nov 11",
+      "description": "Oct 9: McConnell (hamstring) is expected to miss at least one month of action, Tony East of WTHR Channel 13 Indianapolis reports.",
+      "report_label": "Oct 9"
     },
     {
       "player": "Tyrese Haliburton",
@@ -89,28 +111,6 @@
       "return_date": "Oct 1",
       "description": "Jul 7: Haliburton will miss the entire 2025-26 season while recovering from surgery on his right Achilles tendon, Shams Charania of ESPN reports.",
       "report_label": "Jul 7"
-    },
-    {
-      "player": "Brandon Clarke",
-      "status": "Out",
-      "status_level": "caution",
-      "player_id": 666505,
-      "team_tricode": "MEM",
-      "team_name": "Memphis Grizzlies",
-      "return_date": "Nov 7",
-      "description": "Sep 28: Clarke will undergo a procedure to address knee synovitis and will be re-evaluated in six weeks, Shams Charania of ESPNreports.",
-      "report_label": "Sep 28"
-    },
-    {
-      "player": "Zach Edey",
-      "status": "Out",
-      "status_level": "caution",
-      "player_id": 1028025754,
-      "team_tricode": "MEM",
-      "team_name": "Memphis Grizzlies",
-      "return_date": "Nov 7",
-      "description": "Sep 26: Edey has been cleared to begin ramping up basketball activities and is expected to return to play in six to nine weeks.",
-      "report_label": "Sep 26"
     }
   ],
   "note": "Source: Ball Don't Lie player injuries feed. Displaying the 10 most relevant recent reports."
