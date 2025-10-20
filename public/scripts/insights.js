@@ -680,6 +680,49 @@ function buildHomeClutchChart(dataRef) {
   };
 }
 
+function restyleNeoList() {
+  const seenLists = new Set();
+  const roots = document.querySelectorAll('[data-neo3d-root], .neo3d-controls, .neo-list');
+
+  roots.forEach((node) => {
+    let rootContainer = null;
+    if (node instanceof Element) {
+      rootContainer = node.closest('[data-neo3d-root], .neo3d') ?? node.parentElement;
+    }
+
+    if (!(rootContainer instanceof Element)) {
+      return;
+    }
+
+    if (!rootContainer.classList.contains('neo3d')) {
+      rootContainer.classList.add('neo3d');
+    }
+
+    const controls = rootContainer.querySelector('.neo3d-controls');
+    const list = rootContainer.querySelector('.neo-list');
+
+    if (!(list instanceof Element) || seenLists.has(list)) {
+      return;
+    }
+
+    if (controls instanceof Element && controls.nextElementSibling !== list) {
+      controls.insertAdjacentElement('afterend', list);
+    }
+
+    if (!list.classList.contains('neo-list--compact')) {
+      list.classList.add('neo-list--compact');
+    }
+
+    list.querySelectorAll(':scope > li').forEach((item) => {
+      if (item instanceof Element && !item.classList.contains('neo-list__item')) {
+        item.classList.add('neo-list__item');
+      }
+    });
+
+    seenLists.add(list);
+  });
+}
+
 async function bootstrap() {
   let data;
   try {
@@ -717,10 +760,17 @@ async function bootstrap() {
     { element: '#home-road-splits', source: DATA_URL, createConfig: () => buildHomeRoadChart(data) },
     { element: '#home-clutch', source: DATA_URL, createConfig: () => buildHomeClutchChart(data) },
   ]);
+
+  restyleNeoList();
+}
+
+function init() {
+  restyleNeoList();
+  bootstrap();
 }
 
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', bootstrap, { once: true });
+  document.addEventListener('DOMContentLoaded', init, { once: true });
 } else {
-  bootstrap();
+  init();
 }

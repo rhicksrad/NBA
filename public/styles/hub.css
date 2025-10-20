@@ -6875,6 +6875,101 @@ section h2 { margin-top: 0; font-size: clamp(1.35rem, 3vw, 1.8rem); letter-spaci
   color: color-mix(in srgb, var(--royal) 70%, var(--text-subtle) 30%);
 }
 
+.neo3d {
+  display: grid;
+  gap: clamp(0.6rem, 1.6vw, 0.9rem);
+}
+
+.neo3d-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.6rem 0.85rem;
+  border-radius: var(--radius-md);
+  border: 1px solid color-mix(in srgb, var(--royal) 14%, transparent);
+  background:
+    linear-gradient(135deg, rgba(17, 86, 214, 0.1), rgba(244, 181, 63, 0.05)),
+    color-mix(in srgb, rgba(255, 255, 255, 0.96) 70%, rgba(242, 246, 255, 0.92) 30%);
+  box-shadow: 0 10px 18px rgba(17, 86, 214, 0.08);
+}
+
+.neo3d-controls > * {
+  margin: 0;
+}
+
+.neo3d-controls__group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.neo-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 0.45rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.neo-list--compact {
+  max-height: min(22rem, 40vh);
+  overflow-y: auto;
+  padding-right: 0.25rem;
+  scrollbar-width: thin;
+}
+
+.neo-list--compact::-webkit-scrollbar {
+  width: 6px;
+}
+
+.neo-list--compact::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--royal) 30%, transparent);
+  border-radius: 999px;
+}
+
+.neo-list__item {
+  display: grid;
+  gap: 0.35rem;
+  padding: 0.6rem 0.75rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid color-mix(in srgb, var(--royal) 12%, transparent);
+  background: color-mix(in srgb, rgba(255, 255, 255, 0.96) 72%, rgba(242, 246, 255, 0.9) 28%);
+  box-shadow: 0 8px 16px rgba(17, 86, 214, 0.08);
+  line-height: 1.35;
+}
+
+.neo-list__item > * {
+  margin: 0;
+}
+
+.neo-list__item h4,
+.neo-list__item strong {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: color-mix(in srgb, var(--royal) 74%, rgba(17, 86, 214, 0.5) 26%);
+}
+
+.neo-list__item p,
+.neo-list__item span,
+.neo-list__item small {
+  font-size: 0.82rem;
+  color: var(--text-subtle);
+}
+
+@media (max-width: 720px) {
+  .neo3d-controls {
+    gap: 0.6rem;
+  }
+
+  .neo-list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 @media (max-width: 640px) {
   .scoreboard-card {
     padding: 0.85rem 0.9rem 1rem;
