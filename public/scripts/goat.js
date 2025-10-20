@@ -1,5 +1,5 @@
 import { registerCharts, helpers } from './hub-charts.js';
-import { rankByGoatScore, toNum } from '@/lib/rank';
+import { toNum } from '@/lib/rank';
 import { groupByTier, orderedTierNames } from '@/lib/tiers';
 
 const palette = {
@@ -289,9 +289,7 @@ const TIER_LABEL_OVERRIDES = new Map([
   ['Hall of Fame', 'All-NBA'],
 ]);
 
-const TIER_GROUP_ALIASES = new Map([
-  ['Legendary Core', 'Pantheon'],
-]);
+const TIER_GROUP_ALIASES = new Map();
 
 const gaugeLabelPlugin = {
   id: 'gaugeLabel',
@@ -401,6 +399,61 @@ function ensureSequentialRanks(records, rankKey = 'rank') {
   });
 }
 
+function normalizeGoatLeaderboardPlayers(players) {
+  if (!Array.isArray(players) || !players.length) {
+    return [];
+  }
+
+  const normalized = players
+    .map((player, index) => {
+      if (!player || typeof player !== 'object') {
+        return null;
+      }
+
+      const score = toNum(player.goatScore);
+      const providedRank = Number(player.rank);
+      const hasProvidedRank = Number.isFinite(providedRank);
+
+      return {
+        ...player,
+        goatScore: score,
+        rank: hasProvidedRank ? providedRank : null,
+        __providedRank: hasProvidedRank ? providedRank : null,
+        __order: index,
+      };
+    })
+    .filter(Boolean);
+
+  normalized.sort((a, b) => {
+    const rankA = a.__providedRank ?? Number.POSITIVE_INFINITY;
+    const rankB = b.__providedRank ?? Number.POSITIVE_INFINITY;
+    if (rankA !== rankB) {
+      return rankA - rankB;
+    }
+
+    if (Number.isFinite(a.goatScore) && Number.isFinite(b.goatScore) && a.goatScore !== b.goatScore) {
+      return b.goatScore - a.goatScore;
+    }
+
+    return a.__order - b.__order;
+  });
+
+  normalized.forEach((player, index) => {
+    if (!Number.isFinite(player.rank)) {
+      player.rank = index + 1;
+    }
+  });
+
+  ensureSequentialRanks(normalized, 'rank');
+
+  normalized.forEach((player) => {
+    delete player.__providedRank;
+    delete player.__order;
+  });
+
+  return normalized;
+}
+
 function normalizeTierName(tier) {
   if (typeof tier !== 'string') {
     return 'Uncategorized';
@@ -430,7 +483,19 @@ function groupPlayersByTier(players) {
   const tierOrder = orderedTierNames(normalizedPlayers);
 
   return tierOrder.map((tier) => {
-    const tierPlayers = tierMap.get(tier) ?? [];
+    const tierPlayers = [...(tierMap.get(tier) ?? [])].sort((a, b) => {
+      const rankA = Number.isFinite(a?.rank) ? a.rank : Number.POSITIVE_INFINITY;
+      const rankB = Number.isFinite(b?.rank) ? b.rank : Number.POSITIVE_INFINITY;
+      if (rankA !== rankB) {
+        return rankA - rankB;
+      }
+      const scoreA = Number.isFinite(a?.goatScore) ? a.goatScore : Number.NEGATIVE_INFINITY;
+      const scoreB = Number.isFinite(b?.goatScore) ? b.goatScore : Number.NEGATIVE_INFINITY;
+      if (scoreA !== scoreB) {
+        return scoreB - scoreA;
+      }
+      return 0;
+    });
     const bestRank = Number.isFinite(tierPlayers[0]?.rank) ? tierPlayers[0].rank : Infinity;
     return { tier, players: tierPlayers, bestRank };
   });
@@ -1432,10 +1497,7 @@ async function init() {
     const { payload: data, source: goatDataSource } = await loadGoatData();
     const weights = Array.isArray(data?.weights) ? data.weights : [];
     const rawPlayers = Array.isArray(data?.players) ? data.players : [];
-    const rankedPlayers = rankByGoatScore(rawPlayers).map((player) => ({
-      ...player,
-      goatScore: toNum(player.goatScore),
-    }));
+    const rankedPlayers = normalizeGoatLeaderboardPlayers(rawPlayers);
 
     indexGoatPlayers(rankedPlayers);
 
