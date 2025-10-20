@@ -447,6 +447,7 @@ function normalizeGoatLeaderboardPlayers(players) {
   ensureSequentialRanks(normalized, 'rank');
 
   normalized.forEach((player) => {
+    player.originalRank = Number.isFinite(player.__providedRank) ? player.__providedRank : null;
     delete player.__providedRank;
     delete player.__order;
   });
@@ -688,6 +689,8 @@ function buildLeaderboard(
   const grouped = groupPlayers(normalizedPlayers);
   let initialPlayerName = null;
 
+  let runningRank = 0;
+
   grouped.forEach((group) => {
     const details = document.createElement('details');
     details.className = 'goat-tier';
@@ -735,25 +738,37 @@ function buildLeaderboard(
 
       const rank = document.createElement('span');
       rank.className = 'goat-tier__player-rank';
-      const localRank = index + 1;
-      const globalRank = Number.isFinite(player.rank) ? player.rank : null;
-      const displayRank =
-        globalRank !== null && Number.isFinite(globalRank)
-          ? globalRank
-          : Number.isFinite(localRank)
-          ? localRank
-          : null;
 
-      rank.textContent = displayRank !== null ? displayRank : '—';
-      rank.dataset.localRank = String(localRank);
-      if (globalRank !== null) {
-        rank.dataset.globalRank = String(globalRank);
-        rank.title = `Global #${globalRank}`;
-        button.dataset.globalRank = String(globalRank);
+      const tierRank = index + 1;
+      const hasTierRank = Number.isFinite(tierRank);
+      const sourceRank = Number.isFinite(player.originalRank) ? player.originalRank : null;
+
+      runningRank += 1;
+      const displayRank = runningRank;
+
+      rank.textContent = hasTierRank ? String(displayRank) : '—';
+      rank.dataset.localRank = String(tierRank);
+
+      if (hasTierRank) {
+        rank.dataset.globalRank = String(displayRank);
+        button.dataset.globalRank = String(displayRank);
+
+        if (sourceRank !== null) {
+          rank.dataset.sourceRank = String(sourceRank);
+          button.dataset.sourceRank = String(sourceRank);
+          const rankNote = sourceRank === displayRank ? '' : ` (was ${sourceRank})`;
+          rank.title = `GOAT #${displayRank}${rankNote} · Tier #${tierRank}`;
+        } else {
+          delete rank.dataset.sourceRank;
+          delete button.dataset.sourceRank;
+          rank.title = `GOAT #${displayRank} · Tier #${tierRank}`;
+        }
       } else {
-        rank.title = 'Global rank unavailable';
         delete rank.dataset.globalRank;
+        delete rank.dataset.sourceRank;
         delete button.dataset.globalRank;
+        delete button.dataset.sourceRank;
+        rank.title = 'Rank unavailable';
       }
 
       const nameBlock = document.createElement('div');
