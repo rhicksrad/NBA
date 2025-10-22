@@ -167,6 +167,7 @@ function determineInitialRange() {
 let activeRange = determineInitialRange();
 let scoreboardView = 'all';
 let latestGames = [];
+let latestStats = [];
 let lastUpdated = null;
 let refreshTimer = null;
 let loading = false;
@@ -486,6 +487,128 @@ async function fetchGamesForRange(startDate, endDate) {
   return Array.from(seen.values());
 }
 
+function createStatKey(row) {
+  const statId = Number(row?.id);
+  if (Number.isFinite(statId) && statId > 0) {
+    return `id-${statId}`;
+  }
+  const gameId = Number(row?.game?.id);
+  const playerId = Number(row?.player?.id);
+  if (Number.isFinite(gameId) && Number.isFinite(playerId)) {
+    return `gp-${gameId}-${playerId}`;
+  }
+  const teamId = Number(row?.team?.id);
+  const minutes = typeof row?.min === 'string' ? row.min : '';
+  return `fallback-${gameId ?? 'game'}-${teamId ?? 'team'}-${playerId ?? 'player'}-${minutes}-${row?.pts ?? '0'}`;
+}
+
+function normalizeStatRow(raw, gameLookup) {
+  if (!raw) {
+    return null;
+  }
+  const statId = Number(raw?.id);
+  const gameId = Number(raw?.game?.id);
+  const teamId = Number(raw?.team?.id);
+  const playerId = Number(raw?.player?.id);
+  const first = typeof raw?.player?.first_name === 'string' ? raw.player.first_name.trim() : '';
+  const last = typeof raw?.player?.last_name === 'string' ? raw.player.last_name.trim() : '';
+  let name = `${first} ${last}`.trim();
+  if (!name) {
+    name = typeof raw?.player?.display_name === 'string' ? raw.player.display_name.trim() : '';
+  }
+  if (!name) {
+    name = 'Player';
+  }
+  const teamName =
+    typeof raw?.team?.full_name === 'string'
+      ? raw.team.full_name
+      : typeof raw?.team?.name === 'string'
+      ? raw.team.name
+      : 'Team';
+  let teamAbbreviation = typeof raw?.team?.abbreviation === 'string' ? raw.team.abbreviation.trim() : '';
+  if (!teamAbbreviation && teamName) {
+    teamAbbreviation = teamName.slice(0, 3).toUpperCase();
+  } else {
+    teamAbbreviation = teamAbbreviation.toUpperCase();
+  }
+  const seconds = parseMinutesToSeconds(raw?.min);
+  const game = Number.isFinite(gameId) ? gameLookup.get(gameId) : null;
+  return {
+    id: Number.isFinite(statId) ? statId : null,
+    gameId: Number.isFinite(gameId) ? gameId : null,
+    stage: game?.stage ?? null,
+    playerId: Number.isFinite(playerId) ? playerId : null,
+    playerName: name,
+    teamId: Number.isFinite(teamId) ? teamId : null,
+    teamName,
+    teamAbbreviation,
+    minutes: seconds / 60,
+    seconds,
+    pts: Number(raw?.pts ?? 0),
+    ast: Number(raw?.ast ?? 0),
+    reb: Number(raw?.reb ?? 0),
+    oreb: Number(raw?.oreb ?? 0),
+    dreb: Number(raw?.dreb ?? 0),
+    stl: Number(raw?.stl ?? 0),
+    blk: Number(raw?.blk ?? 0),
+    turnover: Number(raw?.turnover ?? 0),
+    pf: Number(raw?.pf ?? 0),
+    fgm: Number(raw?.fgm ?? 0),
+    fga: Number(raw?.fga ?? 0),
+    fg3m: Number(raw?.fg3m ?? 0),
+    fg3a: Number(raw?.fg3a ?? 0),
+    ftm: Number(raw?.ftm ?? 0),
+    fta: Number(raw?.fta ?? 0),
+  };
+}
+
+async function fetchStatsForGames(games) {
+  const gameLookup = new Map();
+  const gameIds = [];
+  games.forEach((game) => {
+    const numericId = Number(game?.id);
+    if (!Number.isFinite(numericId) || numericId <= 0) {
+      return;
+    }
+    gameLookup.set(numericId, game);
+    gameIds.push(numericId);
+  });
+  if (!gameIds.length) {
+    return [];
+  }
+
+  const uniqueIds = Array.from(new Set(gameIds));
+  const results = new Map();
+  const chunkSize = 10;
+  for (let index = 0; index < uniqueIds.length; index += chunkSize) {
+    const chunk = uniqueIds.slice(index, index + chunkSize);
+    let cursor;
+    do {
+      const params = {
+        game_ids: chunk,
+        per_page: PAGE_SIZE,
+        cursor,
+      };
+      // eslint-disable-next-line no-await-in-loop
+      const payload = await request('stats', params);
+      const rows = Array.isArray(payload?.data) ? payload.data : [];
+      rows.forEach((row) => {
+        const key = createStatKey(row);
+        if (results.has(key)) {
+          return;
+        }
+        const normalized = normalizeStatRow(row, gameLookup);
+        if (normalized) {
+          results.set(key, normalized);
+        }
+      });
+      cursor = payload?.meta?.next_cursor ?? null;
+    } while (cursor);
+  }
+
+  return Array.from(results.values());
+}
+
 function parseDateTime(value) {
   if (!value || typeof value !== 'string') {
     return null;
@@ -615,6 +738,22 @@ function parseElapsedClockValue(value) {
     precision,
     fractional,
   };
+}
+
+function parseMinutesToSeconds(value) {
+  if (typeof value !== 'string') {
+    return 0;
+  }
+  const match = value.trim().match(/^(\d+):(\d{2})$/);
+  if (!match) {
+    return 0;
+  }
+  const minutes = Number(match[1]);
+  const seconds = Number(match[2]);
+  if (!Number.isFinite(minutes) || !Number.isFinite(seconds)) {
+    return 0;
+  }
+  return minutes * 60 + seconds;
 }
 
 function getPeriodDurationSeconds(period) {
@@ -1150,6 +1289,22 @@ function fallbackChart(message) {
   };
 }
 
+function filterRelevantStats(stats) {
+  if (!Array.isArray(stats)) {
+    return [];
+  }
+  return stats.filter((stat) => stat && stat.stage !== 'upcoming');
+}
+
+function computePercentage(makes, attempts) {
+  const made = Number(makes ?? 0);
+  const taken = Number(attempts ?? 0);
+  if (!Number.isFinite(made) || !Number.isFinite(taken) || taken <= 0) {
+    return null;
+  }
+  return (made / taken) * 100;
+}
+
 function buildStatusChart(games) {
   const counts = { upcoming: 0, live: 0, final: 0 };
   games.forEach((game) => {
@@ -1435,6 +1590,586 @@ function buildBalanceChart(games) {
   };
 }
 
+function collectPlayerTotals(stats) {
+  const totals = new Map();
+  filterRelevantStats(stats).forEach((stat) => {
+    if (!stat?.playerName) {
+      return;
+    }
+    const teamKey = Number.isFinite(stat.teamId) ? stat.teamId : stat.teamName;
+    const playerKey = Number.isFinite(stat.playerId) ? stat.playerId : stat.playerName;
+    const key = `${playerKey}-${teamKey ?? 'team'}`;
+    if (!totals.has(key)) {
+      totals.set(key, {
+        key,
+        playerId: stat.playerId,
+        name: stat.playerName,
+        teamId: stat.teamId,
+        teamName: stat.teamName,
+        teamAbbreviation: stat.teamAbbreviation || stat.teamName || 'Team',
+        pts: 0,
+        ast: 0,
+        reb: 0,
+        oreb: 0,
+        stl: 0,
+        blk: 0,
+        fgm: 0,
+        fga: 0,
+        fg3m: 0,
+        fg3a: 0,
+        ftm: 0,
+        fta: 0,
+        turnover: 0,
+        seconds: 0,
+        games: new Set(),
+      });
+    }
+    const entry = totals.get(key);
+    entry.pts += Number(stat.pts ?? 0);
+    entry.ast += Number(stat.ast ?? 0);
+    entry.reb += Number(stat.reb ?? 0);
+    entry.oreb += Number(stat.oreb ?? 0);
+    entry.stl += Number(stat.stl ?? 0);
+    entry.blk += Number(stat.blk ?? 0);
+    entry.fgm += Number(stat.fgm ?? 0);
+    entry.fga += Number(stat.fga ?? 0);
+    entry.fg3m += Number(stat.fg3m ?? 0);
+    entry.fg3a += Number(stat.fg3a ?? 0);
+    entry.ftm += Number(stat.ftm ?? 0);
+    entry.fta += Number(stat.fta ?? 0);
+    entry.turnover += Number(stat.turnover ?? 0);
+    entry.seconds += Number(stat.seconds ?? 0);
+    if (Number.isFinite(stat.gameId)) {
+      entry.games.add(stat.gameId);
+    }
+  });
+  return totals;
+}
+
+function collectTeamTotals(stats) {
+  const totals = new Map();
+  filterRelevantStats(stats).forEach((stat) => {
+    if (!stat?.teamName) {
+      return;
+    }
+    const key = Number.isFinite(stat.teamId) ? stat.teamId : stat.teamName;
+    if (!totals.has(key)) {
+      totals.set(key, {
+        teamId: stat.teamId,
+        teamName: stat.teamName,
+        teamAbbreviation: stat.teamAbbreviation || stat.teamName || 'Team',
+        pts: 0,
+        fgm: 0,
+        fga: 0,
+        fg3m: 0,
+        fg3a: 0,
+        ftm: 0,
+        fta: 0,
+        oreb: 0,
+        reb: 0,
+        stl: 0,
+        blk: 0,
+        turnover: 0,
+        games: new Set(),
+      });
+    }
+    const entry = totals.get(key);
+    entry.pts += Number(stat.pts ?? 0);
+    entry.fgm += Number(stat.fgm ?? 0);
+    entry.fga += Number(stat.fga ?? 0);
+    entry.fg3m += Number(stat.fg3m ?? 0);
+    entry.fg3a += Number(stat.fg3a ?? 0);
+    entry.ftm += Number(stat.ftm ?? 0);
+    entry.fta += Number(stat.fta ?? 0);
+    entry.oreb += Number(stat.oreb ?? 0);
+    entry.reb += Number(stat.reb ?? 0);
+    entry.stl += Number(stat.stl ?? 0);
+    entry.blk += Number(stat.blk ?? 0);
+    entry.turnover += Number(stat.turnover ?? 0);
+    if (Number.isFinite(stat.gameId)) {
+      entry.games.add(stat.gameId);
+    }
+  });
+  return totals;
+}
+
+function buildPlayerPointLeadersChart(stats) {
+  const totals = collectPlayerTotals(stats);
+  const ranked = Array.from(totals.values())
+    .map((entry) => ({ ...entry, gameCount: entry.games.size }))
+    .filter((entry) => entry.pts > 0)
+    .sort((a, b) => {
+      const delta = b.pts - a.pts;
+      if (delta !== 0) {
+        return delta;
+      }
+      const gameDelta = b.gameCount - a.gameCount;
+      if (gameDelta !== 0) {
+        return gameDelta;
+      }
+      return a.name.localeCompare(b.name);
+    })
+    .slice(0, 8);
+  if (!ranked.length) {
+    return fallbackChart('Player points building');
+  }
+  const colors = ['#1156d6', '#ef3d5b', '#1f7bff', '#f4b53f', '#6c4fe0', '#11b5c6', '#0b2545', '#2bb7da'];
+  return {
+    type: 'bar',
+    data: {
+      labels: ranked.map((entry) => `${entry.name} (${entry.teamAbbreviation})`),
+      datasets: [
+        {
+          label: 'Points',
+          data: ranked.map((entry) => entry.pts),
+          backgroundColor: ranked.map((_, index) => colors[index % colors.length]),
+        },
+      ],
+    },
+    options: {
+      indexAxis: 'y',
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label(context) {
+              const entry = ranked[context.dataIndex];
+              const games = entry.gameCount === 1 ? 'game' : 'games';
+              return `${context.formattedValue} points across ${entry.gameCount} ${games}`;
+            },
+          },
+        },
+      },
+      scales: {
+        x: {
+          beginAtZero: true,
+          grid: { color: 'rgba(17, 86, 214, 0.12)' },
+        },
+        y: {
+          grid: { display: false },
+        },
+      },
+    },
+  };
+}
+
+function buildAssistLeadersChart(stats) {
+  const totals = collectPlayerTotals(stats);
+  const ranked = Array.from(totals.values())
+    .map((entry) => ({ ...entry, gameCount: entry.games.size }))
+    .filter((entry) => entry.ast > 0)
+    .sort((a, b) => {
+      const delta = b.ast - a.ast;
+      if (delta !== 0) {
+        return delta;
+      }
+      const pointDelta = b.pts - a.pts;
+      if (pointDelta !== 0) {
+        return pointDelta;
+      }
+      return a.name.localeCompare(b.name);
+    })
+    .slice(0, 8);
+  if (!ranked.length) {
+    return fallbackChart('Assist data building');
+  }
+  const colors = ['#11b5c6', '#6c4fe0', '#1156d6', '#ef3d5b', '#1f7bff', '#f4b53f', '#0b2545', '#2bb7da'];
+  return {
+    type: 'bar',
+    data: {
+      labels: ranked.map((entry) => `${entry.name} (${entry.teamAbbreviation})`),
+      datasets: [
+        {
+          label: 'Assists',
+          data: ranked.map((entry) => entry.ast),
+          backgroundColor: ranked.map((_, index) => colors[index % colors.length]),
+        },
+      ],
+    },
+    options: {
+      indexAxis: 'y',
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label(context) {
+              const entry = ranked[context.dataIndex];
+              const games = entry.gameCount === 1 ? 'game' : 'games';
+              return `${context.formattedValue} assists across ${entry.gameCount} ${games}`;
+            },
+          },
+        },
+      },
+      scales: {
+        x: {
+          beginAtZero: true,
+          grid: { color: 'rgba(17, 86, 214, 0.12)' },
+        },
+        y: {
+          grid: { display: false },
+        },
+      },
+    },
+  };
+}
+
+function buildReboundBattleChart(stats) {
+  const totals = collectTeamTotals(stats);
+  const ranked = Array.from(totals.values())
+    .map((entry) => ({
+      ...entry,
+      defensive: Math.max(entry.reb - entry.oreb, 0),
+      total: entry.reb,
+    }))
+    .filter((entry) => entry.total > 0)
+    .sort((a, b) => b.total - a.total)
+    .slice(0, 8);
+  if (!ranked.length) {
+    return fallbackChart('Rebound data building');
+  }
+  return {
+    type: 'bar',
+    data: {
+      labels: ranked.map((entry) => entry.teamAbbreviation),
+      datasets: [
+        {
+          label: 'Offensive',
+          data: ranked.map((entry) => entry.oreb),
+          backgroundColor: 'rgba(239, 61, 91, 0.82)',
+          stack: 'rebounds',
+        },
+        {
+          label: 'Defensive',
+          data: ranked.map((entry) => entry.defensive),
+          backgroundColor: 'rgba(17, 86, 214, 0.82)',
+          stack: 'rebounds',
+        },
+      ],
+    },
+    options: {
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'bottom' },
+        tooltip: {
+          callbacks: {
+            footer(items) {
+              if (!items?.length) {
+                return '';
+              }
+              const entry = ranked[items[0].dataIndex];
+              return `Total ${helpers.formatNumber(entry.total, 0)} rebounds`;
+            },
+          },
+        },
+      },
+      scales: {
+        x: {
+          stacked: true,
+          grid: { display: false },
+        },
+        y: {
+          stacked: true,
+          beginAtZero: true,
+          ticks: { precision: 0 },
+          title: { display: true, text: 'Rebounds' },
+          grid: { color: 'rgba(17, 86, 214, 0.12)' },
+        },
+      },
+    },
+  };
+}
+
+function buildShootingEfficiencyChart(stats) {
+  const totals = collectTeamTotals(stats);
+  const ranked = Array.from(totals.values())
+    .map((entry) => ({
+      ...entry,
+      fgPct: computePercentage(entry.fgm, entry.fga),
+      fg3Pct: computePercentage(entry.fg3m, entry.fg3a),
+      ftPct: computePercentage(entry.ftm, entry.fta),
+    }))
+    .filter((entry) => entry.fga > 0 || entry.fg3a > 0 || entry.fta > 0)
+    .sort((a, b) => b.fga - a.fga)
+    .slice(0, 6);
+  if (!ranked.length) {
+    return fallbackChart('Shooting data building');
+  }
+  return {
+    type: 'bar',
+    data: {
+      labels: ranked.map((entry) => entry.teamAbbreviation),
+      datasets: [
+        {
+          label: 'FG%',
+          data: ranked.map((entry) => entry.fgPct ?? 0),
+          backgroundColor: 'rgba(17, 86, 214, 0.82)',
+        },
+        {
+          label: '3P%',
+          data: ranked.map((entry) => entry.fg3Pct ?? 0),
+          backgroundColor: 'rgba(239, 61, 91, 0.78)',
+        },
+        {
+          label: 'FT%',
+          data: ranked.map((entry) => entry.ftPct ?? 0),
+          backgroundColor: 'rgba(244, 181, 63, 0.78)',
+        },
+      ],
+    },
+    options: {
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'bottom' },
+        tooltip: {
+          callbacks: {
+            label(context) {
+              const entry = ranked[context.dataIndex];
+              const value = context.parsed.y ?? context.parsed;
+              if (context.dataset.label === 'FG%') {
+                return `FG: ${helpers.formatNumber(value ?? 0, 1)}% (${helpers.formatNumber(entry.fgm, 0)}-${helpers.formatNumber(entry.fga, 0)})`;
+              }
+              if (context.dataset.label === '3P%') {
+                return `3P: ${helpers.formatNumber(value ?? 0, 1)}% (${helpers.formatNumber(entry.fg3m, 0)}-${helpers.formatNumber(entry.fg3a, 0)})`;
+              }
+              return `FT: ${helpers.formatNumber(value ?? 0, 1)}% (${helpers.formatNumber(entry.ftm, 0)}-${helpers.formatNumber(entry.fta, 0)})`;
+            },
+          },
+        },
+      },
+      scales: {
+        x: {
+          grid: { display: false },
+        },
+        y: {
+          beginAtZero: true,
+          suggestedMax: 100,
+          ticks: {
+            callback(value) {
+              return `${value}%`;
+            },
+          },
+          title: { display: true, text: 'Percentage' },
+          grid: { color: 'rgba(17, 86, 214, 0.12)' },
+        },
+      },
+    },
+  };
+}
+
+function buildFreeThrowVolumeChart(stats) {
+  const totals = collectPlayerTotals(stats);
+  const ranked = Array.from(totals.values())
+    .map((entry) => ({ ...entry, gameCount: entry.games.size }))
+    .filter((entry) => entry.fta > 0)
+    .sort((a, b) => {
+      const attemptDelta = b.fta - a.fta;
+      if (attemptDelta !== 0) {
+        return attemptDelta;
+      }
+      const makeDelta = b.ftm - a.ftm;
+      if (makeDelta !== 0) {
+        return makeDelta;
+      }
+      return a.name.localeCompare(b.name);
+    })
+    .slice(0, 8);
+  if (!ranked.length) {
+    return fallbackChart('Free throw data building');
+  }
+  return {
+    type: 'bar',
+    data: {
+      labels: ranked.map((entry) => `${entry.name} (${entry.teamAbbreviation})`),
+      datasets: [
+        {
+          label: 'Attempts',
+          data: ranked.map((entry) => entry.fta),
+          backgroundColor: 'rgba(239, 61, 91, 0.82)',
+        },
+        {
+          label: 'Makes',
+          data: ranked.map((entry) => entry.ftm),
+          backgroundColor: 'rgba(17, 86, 214, 0.82)',
+        },
+      ],
+    },
+    options: {
+      indexAxis: 'y',
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'bottom' },
+        tooltip: {
+          callbacks: {
+            label(context) {
+              const entry = ranked[context.dataIndex];
+              if (context.dataset.label === 'Attempts') {
+                return `${helpers.formatNumber(entry.fta, 0)} attempts`;
+              }
+              return `${helpers.formatNumber(entry.ftm, 0)} makes`;
+            },
+            footer(items) {
+              if (!items?.length) {
+                return '';
+              }
+              const entry = ranked[items[0].dataIndex];
+              const pct = computePercentage(entry.ftm, entry.fta);
+              if (pct === null) {
+                return '';
+              }
+              return `FT% ${helpers.formatNumber(pct, 1)}%`;
+            },
+          },
+        },
+      },
+      scales: {
+        x: {
+          beginAtZero: true,
+          grid: { color: 'rgba(17, 86, 214, 0.12)' },
+        },
+        y: {
+          grid: { display: false },
+        },
+      },
+    },
+  };
+}
+
+function buildDefenseImpactChart(stats) {
+  const totals = collectTeamTotals(stats);
+  const ranked = Array.from(totals.values())
+    .map((entry) => ({
+      ...entry,
+      total: entry.stl + entry.blk,
+    }))
+    .filter((entry) => entry.total > 0)
+    .sort((a, b) => b.total - a.total)
+    .slice(0, 8);
+  if (!ranked.length) {
+    return fallbackChart('Defensive play data building');
+  }
+  return {
+    type: 'bar',
+    data: {
+      labels: ranked.map((entry) => entry.teamAbbreviation),
+      datasets: [
+        {
+          label: 'Steals',
+          data: ranked.map((entry) => entry.stl),
+          backgroundColor: 'rgba(17, 181, 198, 0.85)',
+        },
+        {
+          label: 'Blocks',
+          data: ranked.map((entry) => entry.blk),
+          backgroundColor: 'rgba(108, 79, 224, 0.82)',
+        },
+      ],
+    },
+    options: {
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'bottom' },
+        tooltip: {
+          callbacks: {
+            footer(items) {
+              if (!items?.length) {
+                return '';
+              }
+              const entry = ranked[items[0].dataIndex];
+              return `Total disruptions ${helpers.formatNumber(entry.total, 0)}`;
+            },
+          },
+        },
+      },
+      scales: {
+        x: {
+          grid: { display: false },
+        },
+        y: {
+          beginAtZero: true,
+          ticks: { precision: 0 },
+          title: { display: true, text: 'Plays' },
+          grid: { color: 'rgba(17, 86, 214, 0.12)' },
+        },
+      },
+    },
+  };
+}
+
+function buildUsageEfficiencyChart(stats) {
+  const totals = collectPlayerTotals(stats);
+  const aggregated = Array.from(totals.values())
+    .map((entry) => ({
+      ...entry,
+      gameCount: entry.games.size,
+      usage: entry.fga + 0.44 * entry.fta + entry.turnover,
+    }))
+    .filter((entry) => entry.usage > 0 && entry.pts > 0)
+    .sort((a, b) => b.usage - a.usage)
+    .slice(0, 15);
+  if (!aggregated.length) {
+    return fallbackChart('Usage data building');
+  }
+  const points = aggregated.map((entry) => {
+    const averageMinutes = entry.gameCount ? entry.seconds / 60 / entry.gameCount : entry.seconds / 60;
+    const radius = Math.max(6, Math.min(18, averageMinutes * 0.8));
+    const fgPct = computePercentage(entry.fgm, entry.fga);
+    return {
+      x: entry.usage,
+      y: entry.pts,
+      r: radius,
+      name: entry.name,
+      team: entry.teamAbbreviation,
+      fgPct,
+      games: entry.gameCount,
+    };
+  });
+  return {
+    type: 'bubble',
+    data: {
+      datasets: [
+        {
+          label: 'Usage to points',
+          data: points,
+          parsing: false,
+          backgroundColor: 'rgba(17, 86, 214, 0.45)',
+          borderColor: 'rgba(17, 86, 214, 0.9)',
+        },
+      ],
+    },
+    options: {
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label(context) {
+              const raw = context.raw || {};
+              const prefix = raw.name ? `${raw.name} (${raw.team})` : 'Player';
+              const games = raw.games === 1 ? 'game' : 'games';
+              const fgPct = Number.isFinite(raw.fgPct) ? `${helpers.formatNumber(raw.fgPct, 1)}% FG` : 'FG% N/A';
+              return [`${prefix}`, `Usage involvement ${helpers.formatNumber(raw.x, 1)}`, `Points ${helpers.formatNumber(raw.y, 1)}`, `${fgPct}`, `${raw.games} ${games}`];
+            },
+          },
+        },
+      },
+      scales: {
+        x: {
+          beginAtZero: true,
+          title: { display: true, text: 'Usage involvement (FGA + 0.44 FTA + TOV)' },
+          grid: { color: 'rgba(17, 86, 214, 0.12)' },
+        },
+        y: {
+          beginAtZero: true,
+          title: { display: true, text: 'Points' },
+          grid: { color: 'rgba(17, 86, 214, 0.12)' },
+        },
+      },
+    },
+  };
+}
+
 function rebuildCharts() {
   destroyCharts();
   registerCharts([
@@ -1468,6 +2203,48 @@ function rebuildCharts() {
         return buildBalanceChart(latestGames);
       },
     },
+    {
+      element: '#player-point-leaders',
+      async createConfig() {
+        return buildPlayerPointLeadersChart(latestStats);
+      },
+    },
+    {
+      element: '#assist-leaders',
+      async createConfig() {
+        return buildAssistLeadersChart(latestStats);
+      },
+    },
+    {
+      element: '#rebound-battle',
+      async createConfig() {
+        return buildReboundBattleChart(latestStats);
+      },
+    },
+    {
+      element: '#shooting-efficiency',
+      async createConfig() {
+        return buildShootingEfficiencyChart(latestStats);
+      },
+    },
+    {
+      element: '#free-throw-volume',
+      async createConfig() {
+        return buildFreeThrowVolumeChart(latestStats);
+      },
+    },
+    {
+      element: '#defense-plays',
+      async createConfig() {
+        return buildDefenseImpactChart(latestStats);
+      },
+    },
+    {
+      element: '#usage-efficiency',
+      async createConfig() {
+        return buildUsageEfficiencyChart(latestStats);
+      },
+    },
   ]);
 }
 
@@ -1492,6 +2269,7 @@ async function loadGames(options = {}) {
   loading = true;
   const { silent = false } = options;
   const previousGames = latestGames;
+  const previousStats = latestStats;
   if (refreshButton) {
     refreshButton.disabled = true;
   }
@@ -1507,6 +2285,12 @@ async function loadGames(options = {}) {
     renderScoreboard(games);
     setRefreshTimestamp(lastUpdated);
     setFetchMessage(`Updated ${formatTimeLabel(lastUpdated)}`, 'success');
+    try {
+      latestStats = await fetchStatsForGames(games);
+    } catch (statsError) {
+      console.warn('Unable to load slate stats', statsError);
+      latestStats = [];
+    }
     rebuildCharts();
   } catch (error) {
     console.error('Unable to load live games data', error);
@@ -1518,12 +2302,14 @@ async function loadGames(options = {}) {
     setFetchMessage(message, 'error');
     if (previousGames && previousGames.length) {
       latestGames = previousGames;
+      latestStats = previousStats;
       updateMetrics(previousGames);
       renderScoreboard(previousGames);
     } else {
       renderScoreboardState('Unable to load games right now.');
       updateMetrics([]);
     }
+    rebuildCharts();
   } finally {
     loading = false;
     if (refreshButton) {

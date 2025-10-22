@@ -237,6 +237,111 @@
               Scatter plot pairs each game’s current score, revealing which matchups stay balanced and which tilt toward one side.
             </p>
           </article>
+
+          <article class="lab-module" data-chart-wrapper>
+            <header class="lab-module__header">
+              <h2>Slate scorers</h2>
+              <div class="lab-module__meta">
+                <span class="lab-chip">Top player points</span>
+              </div>
+            </header>
+            <div class="viz-canvas">
+              <canvas id="player-point-leaders" data-chart-ratio="0.72" aria-describedby="player-point-caption"></canvas>
+            </div>
+            <p id="player-point-caption" class="lab-module__caption">
+              Horizontal bars highlight which players piled up the most points across the games in view.
+            </p>
+          </article>
+
+          <article class="lab-module" data-chart-wrapper>
+            <header class="lab-module__header">
+              <h2>Assist engines</h2>
+              <div class="lab-module__meta">
+                <span class="lab-chip">Playmakers on the slate</span>
+              </div>
+            </header>
+            <div class="viz-canvas">
+              <canvas id="assist-leaders" data-chart-ratio="0.72" aria-describedby="assist-caption"></canvas>
+            </div>
+            <p id="assist-caption" class="lab-module__caption">
+              Tracks which distributors created the most buckets, summing assists across the selected matchups.
+            </p>
+          </article>
+
+          <article class="lab-module" data-chart-wrapper>
+            <header class="lab-module__header">
+              <h2>Glass battle</h2>
+              <div class="lab-module__meta">
+                <span class="lab-chip">Offensive vs. defensive boards</span>
+              </div>
+            </header>
+            <div class="viz-canvas">
+              <canvas id="rebound-battle" data-chart-ratio="0.68" aria-describedby="rebound-caption"></canvas>
+            </div>
+            <p id="rebound-caption" class="lab-module__caption">
+              Stacked bars show how each team split its rebound haul between second-chance and cleanup boards.
+            </p>
+          </article>
+
+          <article class="lab-module lab-module--wide" data-chart-wrapper>
+            <header class="lab-module__header">
+              <h2>Shooting efficiency lanes</h2>
+              <div class="lab-module__meta">
+                <span class="lab-chip">Team FG% • 3P% • FT%</span>
+              </div>
+            </header>
+            <div class="viz-canvas">
+              <canvas id="shooting-efficiency" data-chart-ratio="0.54" aria-describedby="shooting-caption"></canvas>
+            </div>
+            <p id="shooting-caption" class="lab-module__caption">
+              Compares each team&rsquo;s accuracy profile, plotting field goal, three-point, and free throw percentages side by side.
+            </p>
+          </article>
+
+          <article class="lab-module" data-chart-wrapper>
+            <header class="lab-module__header">
+              <h2>Stripe pressure</h2>
+              <div class="lab-module__meta">
+                <span class="lab-chip">Free throw volume leaders</span>
+              </div>
+            </header>
+            <div class="viz-canvas">
+              <canvas id="free-throw-volume" data-chart-ratio="0.72" aria-describedby="free-throw-caption"></canvas>
+            </div>
+            <p id="free-throw-caption" class="lab-module__caption">
+              Highlights which players generated the most trips to the line and how many freebies they converted.
+            </p>
+          </article>
+
+          <article class="lab-module" data-chart-wrapper>
+            <header class="lab-module__header">
+              <h2>Disruption index</h2>
+              <div class="lab-module__meta">
+                <span class="lab-chip">Steals and blocks by team</span>
+              </div>
+            </header>
+            <div class="viz-canvas">
+              <canvas id="defense-plays" data-chart-ratio="0.68" aria-describedby="defense-caption"></canvas>
+            </div>
+            <p id="defense-caption" class="lab-module__caption">
+              Measures how active each defense was by totaling steals and blocks recorded on the slate.
+            </p>
+          </article>
+
+          <article class="lab-module lab-module--wide" data-chart-wrapper>
+            <header class="lab-module__header">
+              <h2>Usage vs. payoff</h2>
+              <div class="lab-module__meta">
+                <span class="lab-chip">Player involvement vs. points</span>
+              </div>
+            </header>
+            <div class="viz-canvas">
+              <canvas id="usage-efficiency" data-chart-ratio="0.56" aria-describedby="usage-caption"></canvas>
+            </div>
+            <p id="usage-caption" class="lab-module__caption">
+              Bubble chart maps high-usage players by combining shot attempts, free throws, and turnovers against their point production.
+            </p>
+          </article>
         </section>
       </main>
 
