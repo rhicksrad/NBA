@@ -1265,15 +1265,18 @@ function setFetchMessage(message = '', type = 'idle') {
   }
 }
 
-function fallbackChart(message) {
-  return {
-    type: 'doughnut',
+function fallbackChart(message, options = {}) {
+  const { type = 'doughnut', indexAxis, scales } = options ?? {};
+  const datasetColor = type === 'bar' ? 'rgba(17, 86, 214, 0.25)' : 'rgba(17, 86, 214, 0.12)';
+  const dataValues = type === 'bar' ? [0] : [1];
+  const config = {
+    type,
     data: {
       labels: [''],
       datasets: [
         {
-          data: [1],
-          backgroundColor: ['rgba(17, 86, 214, 0.12)'],
+          data: dataValues,
+          backgroundColor: [datasetColor],
           borderWidth: 0,
         },
       ],
@@ -1287,6 +1290,17 @@ function fallbackChart(message) {
       },
     },
   };
+  if (type === 'bar') {
+    config.options.indexAxis = indexAxis ?? 'x';
+    config.options.scales =
+      scales ?? {
+        x: { beginAtZero: true, display: false },
+        y: { display: false },
+      };
+  } else if (scales) {
+    config.options.scales = scales;
+  }
+  return config;
 }
 
 function filterRelevantStats(stats) {
@@ -1303,92 +1317,6 @@ function computePercentage(makes, attempts) {
     return null;
   }
   return (made / taken) * 100;
-}
-
-function buildStatusChart(games) {
-  const counts = { upcoming: 0, live: 0, final: 0 };
-  games.forEach((game) => {
-    if (counts[game.stage] !== undefined) {
-      counts[game.stage] += 1;
-    }
-  });
-  const total = counts.upcoming + counts.live + counts.final;
-  if (!total) {
-    return fallbackChart('No games scheduled');
-  }
-  return {
-    type: 'doughnut',
-    data: {
-      labels: ['Upcoming', 'Live', 'Final'],
-      datasets: [
-        {
-          data: [counts.upcoming, counts.live, counts.final],
-          backgroundColor: ['rgba(17, 86, 214, 0.78)', 'rgba(239, 61, 91, 0.82)', 'rgba(11, 37, 69, 0.85)'],
-          borderWidth: 0,
-        },
-      ],
-    },
-    options: {
-      maintainAspectRatio: false,
-      plugins: {
-        legend: { position: 'bottom' },
-      },
-    },
-  };
-}
-
-function buildTipoffChart(games) {
-  const buckets = new Map();
-  games.forEach((game) => {
-    if (!(game.tipoff instanceof Date) || Number.isNaN(game.tipoff.getTime())) {
-      return;
-    }
-    const hour = game.tipoff.getHours();
-    const label = game.tipoff.toLocaleTimeString(undefined, { hour: 'numeric' });
-    const key = `${hour}-${label}`;
-    const entry = buckets.get(key) ?? { hour, label, count: 0 };
-    entry.count += 1;
-    buckets.set(key, entry);
-  });
-  const slots = Array.from(buckets.values()).sort((a, b) => a.hour - b.hour);
-  if (!slots.length) {
-    return fallbackChart('Tipoff data pending');
-  }
-  return {
-    type: 'line',
-    data: {
-      labels: slots.map((slot) => slot.label),
-      datasets: [
-        {
-          label: 'Games',
-          data: slots.map((slot) => slot.count),
-          borderColor: '#1156d6',
-          backgroundColor: 'rgba(17, 86, 214, 0.22)',
-          tension: 0.35,
-          fill: true,
-          pointBackgroundColor: '#ffffff',
-          pointBorderColor: '#1156d6',
-          pointHoverRadius: 6,
-        },
-      ],
-    },
-    options: {
-      maintainAspectRatio: false,
-      plugins: { legend: { display: false } },
-      interaction: { mode: 'nearest', intersect: false },
-      scales: {
-        y: {
-          beginAtZero: true,
-          ticks: { precision: 0 },
-          title: { display: true, text: 'Games' },
-          grid: { color: 'rgba(17, 86, 214, 0.12)' },
-        },
-        x: {
-          grid: { display: false },
-        },
-      },
-    },
-  };
 }
 
 function buildMarginChart(games) {
@@ -1516,38 +1444,83 @@ function buildScoringChart(games) {
 function buildBalanceChart(games) {
   const relevant = games.filter((game) => game.home.score > 0 || game.visitor.score > 0);
   if (!relevant.length) {
-    return fallbackChart('Score data pending');
+    return fallbackChart('Score data pending', {
+      type: 'bar',
+      indexAxis: 'y',
+      scales: {
+        x: { beginAtZero: true, display: false },
+        y: { display: false },
+      },
+    });
   }
-  const stageColors = {
-    live: 'rgba(239, 61, 91, 0.85)',
-    final: 'rgba(17, 86, 214, 0.85)',
-    upcoming: 'rgba(154, 165, 196, 0.7)',
+  const entries = relevant
+    .map((game) => {
+      const visitorAbbr = game.visitor.abbreviation || game.visitor.name;
+      const homeAbbr = game.home.abbreviation || game.home.name;
+      const margin = Number.isFinite(game.margin)
+        ? game.margin
+        : (Number(game.home.score) || 0) - (Number(game.visitor.score) || 0);
+      const total = Number(game.home.score || 0) + Number(game.visitor.score || 0);
+      return {
+        x: margin,
+        stage: game.stage,
+        label: `${visitorAbbr} @ ${homeAbbr}`,
+        visitorAbbr,
+        homeAbbr,
+        visitorScore: Number(game.visitor.score || 0),
+        homeScore: Number(game.home.score || 0),
+        total,
+      };
+    })
+    .sort((a, b) => {
+      const diff = Math.abs(a.x) - Math.abs(b.x);
+      if (diff !== 0) {
+        return diff;
+      }
+      return b.total - a.total;
+    })
+    .slice(0, 14);
+
+  const stagePalette = {
+    final: {
+      home: 'rgba(17, 86, 214, 0.85)',
+      visitor: 'rgba(239, 61, 91, 0.85)',
+      neutral: 'rgba(154, 165, 196, 0.8)',
+    },
+    live: {
+      home: 'rgba(17, 86, 214, 0.65)',
+      visitor: 'rgba(239, 61, 91, 0.72)',
+      neutral: 'rgba(154, 165, 196, 0.6)',
+    },
   };
-  const points = relevant.map((game) => ({
-    x: Math.max(game.visitor.score, 0),
-    y: Math.max(game.home.score, 0),
-    label: `${game.visitor.abbreviation || game.visitor.name} @ ${game.home.abbreviation || game.home.name}`,
-    stage: game.stage,
-    margin: game.margin,
-    total: game.totalPoints,
-  }));
-  const colors = points.map((point) => stageColors[point.stage] ?? 'rgba(17, 86, 214, 0.6)');
+
+  const colors = entries.map((entry) => {
+    const palette = stagePalette[entry.stage] ?? stagePalette.live;
+    if (Math.abs(entry.x) < 0.5) {
+      return palette.neutral;
+    }
+    return entry.x > 0 ? palette.home : palette.visitor;
+  });
+
+  const maxMagnitude = Math.max(...entries.map((entry) => Math.abs(entry.x)), 1);
+  const marginPadding = Math.max(2, Math.ceil(maxMagnitude * 0.1));
+
   return {
-    type: 'scatter',
+    type: 'bar',
     data: {
       datasets: [
         {
-          label: 'Score pairs',
-          data: points,
+          label: 'Margin (home - visitor)',
+          data: entries,
           parsing: false,
-          pointBackgroundColor: colors,
-          pointBorderColor: colors,
-          pointRadius: 6,
-          pointHoverRadius: 7,
+          backgroundColor: colors,
+          borderRadius: 8,
+          barThickness: 18,
         },
       ],
     },
     options: {
+      indexAxis: 'y',
       maintainAspectRatio: false,
       plugins: {
         legend: { display: false },
@@ -1555,21 +1528,23 @@ function buildBalanceChart(games) {
           callbacks: {
             label(context) {
               const raw = context.raw || {};
-              const details = [];
+              const pieces = [];
               if (raw.label) {
-                details.push(raw.label);
+                pieces.push(raw.label);
               }
               if (raw.stage) {
-                details.push(raw.stage.charAt(0).toUpperCase() + raw.stage.slice(1));
+                pieces.push(raw.stage.charAt(0).toUpperCase() + raw.stage.slice(1));
               }
-              const margin = formatSignedMargin(raw.margin);
+              const margin = formatSignedMargin(raw.x);
               if (margin) {
-                details.push(`Margin ${margin}`);
+                pieces.push(`Margin ${margin}`);
               }
+              pieces.push(`${raw.visitorAbbr ?? 'Visitor'} ${helpers.formatNumber(raw.visitorScore ?? 0, 0)}`);
+              pieces.push(`${raw.homeAbbr ?? 'Home'} ${helpers.formatNumber(raw.homeScore ?? 0, 0)}`);
               if (Number.isFinite(raw.total) && raw.total > 0) {
-                details.push(`Total ${helpers.formatNumber(raw.total, 0)}`);
+                pieces.push(`Total ${helpers.formatNumber(raw.total, 0)}`);
               }
-              return details;
+              return pieces;
             },
           },
         },
@@ -1577,13 +1552,23 @@ function buildBalanceChart(games) {
       scales: {
         x: {
           beginAtZero: true,
-          title: { display: true, text: 'Visitor points' },
-          grid: { color: 'rgba(17, 86, 214, 0.08)' },
+          min: -1 * (maxMagnitude + marginPadding),
+          max: maxMagnitude + marginPadding,
+          grid: { color: 'rgba(17, 86, 214, 0.12)' },
+          title: { display: true, text: 'Point margin (home - visitor)' },
+          ticks: {
+            callback(value) {
+              return formatSignedMargin(value);
+            },
+          },
         },
         y: {
-          beginAtZero: true,
-          title: { display: true, text: 'Home points' },
-          grid: { color: 'rgba(17, 86, 214, 0.12)' },
+          ticks: {
+            callback(_, index) {
+              return entries[index]?.label ?? '';
+            },
+          },
+          grid: { display: false },
         },
       },
     },
@@ -1808,6 +1793,101 @@ function buildAssistLeadersChart(stats) {
           grid: { color: 'rgba(17, 86, 214, 0.12)' },
         },
         y: {
+          grid: { display: false },
+        },
+      },
+    },
+  };
+}
+
+function buildStocksLeadersChart(stats) {
+  const totals = collectPlayerTotals(stats);
+  const ranked = Array.from(totals.values())
+    .map((entry) => ({
+      ...entry,
+      gameCount: entry.games.size,
+      stocks: Number(entry.stl ?? 0) + Number(entry.blk ?? 0),
+    }))
+    .filter((entry) => entry.stocks > 0)
+    .sort((a, b) => {
+      const stockDelta = b.stocks - a.stocks;
+      if (stockDelta !== 0) {
+        return stockDelta;
+      }
+      const stealDelta = b.stl - a.stl;
+      if (stealDelta !== 0) {
+        return stealDelta;
+      }
+      const blockDelta = b.blk - a.blk;
+      if (blockDelta !== 0) {
+        return blockDelta;
+      }
+      return a.name.localeCompare(b.name);
+    })
+    .slice(0, 8);
+  if (!ranked.length) {
+    return fallbackChart('Stocks data building', {
+      type: 'bar',
+      indexAxis: 'y',
+      scales: {
+        x: { beginAtZero: true, display: false },
+        y: { display: false },
+      },
+    });
+  }
+  const labels = ranked.map((entry) => `${entry.name} (${entry.teamAbbreviation})`);
+  return {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: 'Steals',
+          data: ranked.map((entry) => entry.stl),
+          backgroundColor: 'rgba(17, 86, 214, 0.82)',
+          stack: 'stocks',
+        },
+        {
+          label: 'Blocks',
+          data: ranked.map((entry) => entry.blk),
+          backgroundColor: 'rgba(17, 181, 198, 0.72)',
+          stack: 'stocks',
+        },
+      ],
+    },
+    options: {
+      indexAxis: 'y',
+      maintainAspectRatio: false,
+      responsive: true,
+      plugins: {
+        legend: { position: 'bottom' },
+        tooltip: {
+          callbacks: {
+            label(context) {
+              const value = helpers.formatNumber(context.parsed.x ?? context.parsed, 0);
+              return `${context.dataset.label}: ${value}`;
+            },
+            afterBody(items) {
+              const entry = ranked[items[0]?.dataIndex ?? 0];
+              if (!entry) {
+                return '';
+              }
+              const games = entry.gameCount === 1 ? 'game' : 'games';
+              return `Total stocks ${helpers.formatNumber(entry.stocks, 0)} across ${entry.gameCount} ${games}`;
+            },
+          },
+        },
+      },
+      scales: {
+        x: {
+          beginAtZero: true,
+          stacked: true,
+          ticks: { precision: 0 },
+          title: { display: true, text: 'Stocks (steals + blocks)' },
+          grid: { color: 'rgba(17, 86, 214, 0.12)' },
+        },
+        y: {
+          stacked: true,
           grid: { display: false },
         },
       },
@@ -2174,15 +2254,21 @@ function rebuildCharts() {
   destroyCharts();
   registerCharts([
     {
-      element: '#status-breakdown',
+      element: '#player-point-leaders',
       async createConfig() {
-        return buildStatusChart(latestGames);
+        return buildPlayerPointLeadersChart(latestStats);
       },
     },
     {
-      element: '#tipoff-curve',
+      element: '#assist-leaders',
       async createConfig() {
-        return buildTipoffChart(latestGames);
+        return buildAssistLeadersChart(latestStats);
+      },
+    },
+    {
+      element: '#stocks-leaders',
+      async createConfig() {
+        return buildStocksLeadersChart(latestStats);
       },
     },
     {
@@ -2201,18 +2287,6 @@ function rebuildCharts() {
       element: '#score-balance',
       async createConfig() {
         return buildBalanceChart(latestGames);
-      },
-    },
-    {
-      element: '#player-point-leaders',
-      async createConfig() {
-        return buildPlayerPointLeadersChart(latestStats);
-      },
-    },
-    {
-      element: '#assist-leaders',
-      async createConfig() {
-        return buildAssistLeadersChart(latestStats);
       },
     },
     {

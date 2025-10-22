@@ -164,31 +164,46 @@
 
           <article class="lab-module" data-chart-wrapper>
             <header class="lab-module__header">
-              <h2>Status mix</h2>
+              <h2>Slate scorers</h2>
               <div class="lab-module__meta">
-                <span class="lab-chip">Upcoming vs. live vs. finals</span>
+                <span class="lab-chip">Top player points</span>
               </div>
             </header>
             <div class="viz-canvas">
-              <canvas id="status-breakdown" data-chart-ratio="0.76" aria-describedby="status-caption"></canvas>
+              <canvas id="player-point-leaders" data-chart-ratio="0.72" aria-describedby="player-point-caption"></canvas>
             </div>
-            <p id="status-caption" class="lab-module__caption">
-              Doughnut slices show how the slate splits between unplayed, in-progress, and completed games.
+            <p id="player-point-caption" class="lab-module__caption">
+              Horizontal bars highlight which players piled up the most points across the games in view.
             </p>
           </article>
 
           <article class="lab-module" data-chart-wrapper>
             <header class="lab-module__header">
-              <h2>Tipoff cadence</h2>
+              <h2>Assist engines</h2>
               <div class="lab-module__meta">
-                <span class="lab-chip">Games by local hour</span>
+                <span class="lab-chip">Playmakers on the slate</span>
               </div>
             </header>
             <div class="viz-canvas">
-              <canvas id="tipoff-curve" data-chart-ratio="0.62" aria-describedby="tipoff-caption"></canvas>
+              <canvas id="assist-leaders" data-chart-ratio="0.72" aria-describedby="assist-caption"></canvas>
             </div>
-            <p id="tipoff-caption" class="lab-module__caption">
-              Line chart counts how many contests start in each local hour, highlighting the rhythm of the schedule.
+            <p id="assist-caption" class="lab-module__caption">
+              Tracks which distributors created the most buckets, summing assists across the selected matchups.
+            </p>
+          </article>
+
+          <article class="lab-module" data-chart-wrapper>
+            <header class="lab-module__header">
+              <h2>Stocks hawks</h2>
+              <div class="lab-module__meta">
+                <span class="lab-chip">Steals + blocks leaders</span>
+              </div>
+            </header>
+            <div class="viz-canvas">
+              <canvas id="stocks-leaders" data-chart-ratio="0.72" aria-describedby="stocks-caption"></canvas>
+            </div>
+            <p id="stocks-caption" class="lab-module__caption">
+              Stacked bars tally the players racking up steals and swats, showing total "stocks" on the slate.
             </p>
           </article>
 
@@ -227,44 +242,14 @@
             <header class="lab-module__header">
               <h2>Score balance</h2>
               <div class="lab-module__meta">
-                <span class="lab-chip">Visitor points vs. home points</span>
+                <span class="lab-chip">Home edge vs. road edge</span>
               </div>
             </header>
             <div class="viz-canvas">
               <canvas id="score-balance" data-chart-ratio="0.78" aria-describedby="balance-caption"></canvas>
             </div>
             <p id="balance-caption" class="lab-module__caption">
-              Scatter plot pairs each game’s current score, revealing which matchups stay balanced and which tilt toward one side.
-            </p>
-          </article>
-
-          <article class="lab-module" data-chart-wrapper>
-            <header class="lab-module__header">
-              <h2>Slate scorers</h2>
-              <div class="lab-module__meta">
-                <span class="lab-chip">Top player points</span>
-              </div>
-            </header>
-            <div class="viz-canvas">
-              <canvas id="player-point-leaders" data-chart-ratio="0.72" aria-describedby="player-point-caption"></canvas>
-            </div>
-            <p id="player-point-caption" class="lab-module__caption">
-              Horizontal bars highlight which players piled up the most points across the games in view.
-            </p>
-          </article>
-
-          <article class="lab-module" data-chart-wrapper>
-            <header class="lab-module__header">
-              <h2>Assist engines</h2>
-              <div class="lab-module__meta">
-                <span class="lab-chip">Playmakers on the slate</span>
-              </div>
-            </header>
-            <div class="viz-canvas">
-              <canvas id="assist-leaders" data-chart-ratio="0.72" aria-describedby="assist-caption"></canvas>
-            </div>
-            <p id="assist-caption" class="lab-module__caption">
-              Tracks which distributors created the most buckets, summing assists across the selected matchups.
+              Horizontal bars plot the point margin (home minus visitor) for every scored game so you can spot tight contests and runaway leads.
             </p>
           </article>
 
