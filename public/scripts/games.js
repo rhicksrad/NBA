@@ -953,11 +953,14 @@ function createScoreboardCard(game) {
     actions.className = 'scoreboard-card__actions';
     const link = document.createElement('a');
     link.className = 'scoreboard-card__link';
-    link.href = `game-preview.html?gameId=${numericId}`;
+    const isLiveOrFinal = game.stage === 'live' || game.stage === 'final';
+    const targetPage = isLiveOrFinal ? 'game-tracker.html' : 'game-preview.html';
+    link.href = `${targetPage}?gameId=${numericId}`;
     const visitorLabel = game.visitor?.name || game.visitor?.abbreviation || 'Road team';
     const homeLabel = game.home?.name || game.home?.abbreviation || 'Home team';
-    link.textContent = 'Matchup preview';
-    link.setAttribute('aria-label', `Open matchup preview for ${visitorLabel} at ${homeLabel}`);
+    link.textContent = isLiveOrFinal ? 'Open live tracker' : 'Matchup preview';
+    const ariaLabelAction = isLiveOrFinal ? 'live tracker' : 'matchup preview';
+    link.setAttribute('aria-label', `Open ${ariaLabelAction} for ${visitorLabel} at ${homeLabel}`);
     actions.appendChild(link);
     card.appendChild(actions);
   }

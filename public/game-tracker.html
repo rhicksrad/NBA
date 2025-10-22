@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <base href="/NBA/" />
+    <title>Game tracker | NBA Intelligence Hub</title>
+    <meta
+      name="description"
+      content="Live NBA game tracker built on the Ball Don't Lie API with a five minute data delay."
+    />
+    <link rel="icon" type="image/png" href="nba-logo-vector-01.png" />
+    <link rel="stylesheet" href="styles/hub.css" />
+    <link rel="stylesheet" href="styles/game-tracker.css" />
+  </head>
+  <body>
+    <div class="site-frame tracker-frame">
+      <header class="tracker-hero" aria-live="polite">
+        <div class="tracker-hero__meta">
+          <a class="tracker-hero__back" href="games.html">← Back to games lab</a>
+          <div class="tracker-hero__chips">
+            <span class="lab-chip" data-season-label>Season loading…</span>
+            <span class="lab-chip lab-chip--accent" data-status-label>Syncing…</span>
+          </div>
+        </div>
+        <h1 class="tracker-hero__title" data-matchup>Loading matchup…</h1>
+        <p class="tracker-hero__subtitle" data-tipoff></p>
+        <p class="tracker-hero__subtitle" data-stage-label></p>
+        <p class="tracker-hero__subtitle tracker-hero__subtitle--delay">
+          Feed refreshes every five minutes. Last sync <span data-updated>—</span>.
+        </p>
+      </header>
+
+      <main class="tracker-main" data-tracker-state>
+        <section class="tracker-scoreboard" aria-label="Scoreboard">
+          <div class="tracker-scoreboard__teams">
+            <article class="tracker-score" data-team="visitor">
+              <header class="tracker-score__header">
+                <span class="tracker-score__role">Road</span>
+                <h2 class="tracker-score__name" data-team-name="visitor">Visitor</h2>
+              </header>
+              <div class="tracker-score__value" data-team-score="visitor">0</div>
+              <p class="tracker-score__record" data-team-record="visitor"></p>
+            </article>
+
+            <article class="tracker-score" data-team="home">
+              <header class="tracker-score__header">
+                <span class="tracker-score__role">Home</span>
+                <h2 class="tracker-score__name" data-team-name="home">Home</h2>
+              </header>
+              <div class="tracker-score__value" data-team-score="home">0</div>
+              <p class="tracker-score__record" data-team-record="home"></p>
+            </article>
+          </div>
+
+          <div class="tracker-scoreboard__meta">
+            <p class="tracker-scoreboard__status" data-game-status>Syncing live scoreboard…</p>
+            <button type="button" class="tracker-scoreboard__refresh" data-manual-refresh>
+              Refresh now
+            </button>
+          </div>
+        </section>
+
+        <section class="tracker-team-totals" aria-label="Team totals">
+          <article class="tracker-team-card" data-team-card="visitor">
+            <header class="tracker-team-card__header">
+              <h2 class="tracker-team-card__title" data-team-label="visitor">Visitor totals</h2>
+              <span class="tracker-team-card__pace" data-team-pace="visitor"></span>
+            </header>
+            <dl class="tracker-team-card__grid" data-team-totals="visitor">
+              <div class="tracker-team-card__state" data-team-state="visitor">Loading team stats…</div>
+            </dl>
+          </article>
+
+          <article class="tracker-team-card" data-team-card="home">
+            <header class="tracker-team-card__header">
+              <h2 class="tracker-team-card__title" data-team-label="home">Home totals</h2>
+              <span class="tracker-team-card__pace" data-team-pace="home"></span>
+            </header>
+            <dl class="tracker-team-card__grid" data-team-totals="home">
+              <div class="tracker-team-card__state" data-team-state="home">Loading team stats…</div>
+            </dl>
+          </article>
+        </section>
+
+        <section class="tracker-leaders" aria-label="Team leaders">
+          <article class="tracker-leaders__card" data-team-leaders="visitor">
+            <h2 class="tracker-leaders__title" data-leaders-label="visitor">Visitor leaders</h2>
+            <div class="tracker-leaders__body" data-leaders-body="visitor">
+              <p class="tracker-leaders__state" data-leaders-state="visitor">Waiting on stats…</p>
+            </div>
+          </article>
+
+          <article class="tracker-leaders__card" data-team-leaders="home">
+            <h2 class="tracker-leaders__title" data-leaders-label="home">Home leaders</h2>
+            <div class="tracker-leaders__body" data-leaders-body="home">
+              <p class="tracker-leaders__state" data-leaders-state="home">Waiting on stats…</p>
+            </div>
+          </article>
+        </section>
+
+        <section class="tracker-footnotes">
+          <p class="tracker-footnotes__status" data-tracker-message>Syncing Ball Don't Lie data…</p>
+          <p class="tracker-footnotes__meta">
+            Ball Don't Lie live game data arrives on a ~5 minute delay. Scoreboard values may trail the broadcast feed.
+            <br />
+            Data source: Ball Don't Lie API via NBA Intelligence Hub proxy.
+          </p>
+          <p class="tracker-footnotes__cta" hidden data-preview-cta>
+            The game hasn’t tipped yet. Explore the <a data-preview-link href="#">matchup preview</a> while you wait.
+          </p>
+        </section>
+      </main>
+    </div>
+
+    <script type="module" src="scripts/game-tracker.js"></script>
+  </body>
+</html>
