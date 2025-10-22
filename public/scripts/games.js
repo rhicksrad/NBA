@@ -812,9 +812,71 @@ function formatGameClock(game) {
   return clock;
 }
 
+function isHalftimeStatus(status) {
+  if (typeof status !== 'string') {
+    return false;
+  }
+  return /\bhalf(?:-|\s)?time\b/i.test(status);
+}
+
+function getOvertimeLabelFromPeriod(period) {
+  const numeric = Number(period);
+  if (!Number.isFinite(numeric) || numeric <= 4) {
+    return null;
+  }
+  const overtimeIndex = numeric - 4;
+  return overtimeIndex === 1 ? 'OT' : `${overtimeIndex}OT`;
+}
+
+function getOvertimeLabelFromStatus(status) {
+  if (typeof status !== 'string') {
+    return null;
+  }
+  const trimmed = status.trim();
+  if (!trimmed) {
+    return null;
+  }
+  if (/double\s+overtime/i.test(trimmed)) {
+    return '2OT';
+  }
+  if (/triple\s+overtime/i.test(trimmed)) {
+    return '3OT';
+  }
+  const ordinalMatch = trimmed.match(/\b(\d+)(?:st|nd|rd|th)?\s*(?:OT|overtime)\b/i);
+  if (ordinalMatch) {
+    const count = Number(ordinalMatch[1]);
+    if (Number.isFinite(count)) {
+      return count <= 1 ? 'OT' : `${count}OT`;
+    }
+  }
+  const inlineMatch = trimmed.match(/\bOT(?:\s*|-) ?(\d+)\b/i);
+  if (inlineMatch) {
+    const count = Number(inlineMatch[1]);
+    if (Number.isFinite(count)) {
+      return count <= 1 ? 'OT' : `${count}OT`;
+    }
+  }
+  if (/\bovertime\b/i.test(trimmed) || /\bOT\b/i.test(trimmed)) {
+    return 'OT';
+  }
+  return null;
+}
+
+function deriveOvertimeLabel(status, period) {
+  return getOvertimeLabelFromStatus(status) || getOvertimeLabelFromPeriod(period);
+}
+
 function formatPeriodLabel(game) {
   if (game.stage === 'final') {
     return 'Final';
+  }
+  const status = normalizeStatusText(game?.status);
+  if (isHalftimeStatus(status)) {
+    return 'Halftime';
+  }
+  const overtimeLabel = deriveOvertimeLabel(status, game?.period);
+  if (overtimeLabel) {
+    return overtimeLabel;
   }
   const period = Number.isFinite(game?.period) ? Number(game.period) : 0;
   if (period <= 0) {
@@ -824,8 +886,7 @@ function formatPeriodLabel(game) {
   if (period === 2) return '2nd Qtr';
   if (period === 3) return '3rd Qtr';
   if (period === 4) return '4th Qtr';
-  const overtimeIndex = period - 4;
-  return overtimeIndex === 1 ? 'OT' : `${overtimeIndex}OT`;
+  return getOvertimeLabelFromPeriod(period) ?? '';
 }
 
 function formatGameStatus(game) {
@@ -833,6 +894,8 @@ function formatGameStatus(game) {
   const normalized = status.toLowerCase();
   const clock = formatGameClock(game);
   const periodLabel = formatPeriodLabel(game);
+  const halftime = isHalftimeStatus(status);
+  const overtimeLabel = deriveOvertimeLabel(status, game?.period);
 
   if (game.stage === 'final' || normalized.includes('final')) {
     return 'Final';
@@ -842,7 +905,14 @@ function formatGameStatus(game) {
     return 'Scheduled';
   }
 
+  if (halftime) {
+    return 'Halftime';
+  }
+
   if (normalized.includes('progress')) {
+    if (overtimeLabel) {
+      return clock ? `${overtimeLabel} • ${clock}` : overtimeLabel;
+    }
     if (periodLabel && clock) {
       return `${status} • ${periodLabel} ${clock}`;
     }
@@ -860,7 +930,7 @@ function formatGameStatus(game) {
   }
 
   if (game.stage === 'live') {
-    const label = periodLabel || status || 'In Progress';
+    const label = overtimeLabel || periodLabel || status || 'In Progress';
     return clock ? `${label} • ${clock}` : label;
   }
 
@@ -910,7 +980,16 @@ function formatPeriodDetail(game) {
     return 'Finished in regulation';
   }
   const periodLabel = formatPeriodLabel(game);
-  return periodLabel ? `Period: ${periodLabel}` : null;
+  if (!periodLabel) {
+    return null;
+  }
+  if (periodLabel === 'Halftime') {
+    return 'Halftime';
+  }
+  if (/OT$/i.test(periodLabel)) {
+    return periodLabel === 'OT' ? 'In overtime' : `In ${periodLabel}`;
+  }
+  return `Period: ${periodLabel}`;
 }
 
 function formatSignedMargin(value) {
