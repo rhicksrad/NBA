@@ -99,6 +99,177 @@
           </article>
         </section>
 
+        <section class="tracker-visuals" aria-label="Game intelligence board">
+          <header class="tracker-visuals__intro">
+            <h2 class="tracker-visuals__heading">Game intelligence board</h2>
+            <p class="tracker-visuals__lead">
+              Twelve curated charts track how each matchup is unfolding, spotlighting trends from the latest slate of
+              finals alongside tonight’s live pulse.
+            </p>
+          </header>
+
+          <div class="tracker-visuals__grid">
+            <article class="tracker-visuals__card" data-chart-wrapper>
+              <header class="tracker-visuals__header">
+                <h3 class="tracker-visuals__title">Team scoring pulse</h3>
+                <span class="lab-chip">Last eight finals</span>
+              </header>
+              <div class="viz-canvas">
+                <canvas id="points-trend" data-chart-ratio="0.62" aria-describedby="points-trend-caption"></canvas>
+              </div>
+              <p id="points-trend-caption" class="tracker-visuals__caption">
+                Line chart compares both clubs’ scoring outputs across their most recent completed games.
+              </p>
+            </article>
+
+            <article class="tracker-visuals__card" data-chart-wrapper>
+              <header class="tracker-visuals__header">
+                <h3 class="tracker-visuals__title">Offensive rating tempo</h3>
+                <span class="lab-chip">Points per 100 possessions</span>
+              </header>
+              <div class="viz-canvas">
+                <canvas id="off-rating-trend" data-chart-ratio="0.62" aria-describedby="off-rating-caption"></canvas>
+              </div>
+              <p id="off-rating-caption" class="tracker-visuals__caption">
+                Offense efficiency trendline shows how each side has scored per 100 trips over the recent eight-game
+                sample.
+              </p>
+            </article>
+
+            <article class="tracker-visuals__card" data-chart-wrapper>
+              <header class="tracker-visuals__header">
+                <h3 class="tracker-visuals__title">Possession cadence</h3>
+                <span class="lab-chip">Estimated pace</span>
+              </header>
+              <div class="viz-canvas">
+                <canvas id="pace-trend" data-chart-ratio="0.62" aria-describedby="pace-caption"></canvas>
+              </div>
+              <p id="pace-caption" class="tracker-visuals__caption">
+                Tracks how quickly each team has been playing, using estimated possessions per game across the same run
+                of finals.
+              </p>
+            </article>
+
+            <article class="tracker-visuals__card" data-chart-wrapper>
+              <header class="tracker-visuals__header">
+                <h3 class="tracker-visuals__title">Period scoring breakdown</h3>
+                <span class="lab-chip">Quarter and OT points</span>
+              </header>
+              <div class="viz-canvas">
+                <canvas id="period-scoring" data-chart-ratio="0.58" aria-describedby="period-caption"></canvas>
+              </div>
+              <p id="period-caption" class="tracker-visuals__caption">
+                Stacked bars surface when each club generated its offense tonight, highlighting quarter and overtime
+                swings.
+              </p>
+            </article>
+
+            <article class="tracker-visuals__card" data-chart-wrapper>
+              <header class="tracker-visuals__header">
+                <h3 class="tracker-visuals__title">Shot value mix</h3>
+                <span class="lab-chip">2s vs 3s vs freebies</span>
+              </header>
+              <div class="viz-canvas">
+                <canvas id="scoring-sources" data-chart-ratio="0.58" aria-describedby="scoring-sources-caption"></canvas>
+              </div>
+              <p id="scoring-sources-caption" class="tracker-visuals__caption">
+                Shows how many points came from two-pointers, threes, and the stripe for each roster.
+              </p>
+            </article>
+
+            <article class="tracker-visuals__card" data-chart-wrapper>
+              <header class="tracker-visuals__header">
+                <h3 class="tracker-visuals__title">Shooting touch</h3>
+                <span class="lab-chip">FG • 3P • FT%</span>
+              </header>
+              <div class="viz-canvas">
+                <canvas id="shooting-accuracy" data-chart-ratio="0.58" aria-describedby="shooting-caption"></canvas>
+              </div>
+              <p id="shooting-caption" class="tracker-visuals__caption">
+                Compares efficiency from the field, beyond the arc, and at the line in the current matchup.
+              </p>
+            </article>
+
+            <article class="tracker-visuals__card" data-chart-wrapper>
+              <header class="tracker-visuals__header">
+                <h3 class="tracker-visuals__title">Glass control</h3>
+                <span class="lab-chip">Off vs. defensive boards</span>
+              </header>
+              <div class="viz-canvas">
+                <canvas id="rebound-control" data-chart-ratio="0.58" aria-describedby="rebound-caption"></canvas>
+              </div>
+              <p id="rebound-caption" class="tracker-visuals__caption">
+                Highlights how each team split its rebounding haul between extra chances and clean finishes.
+              </p>
+            </article>
+
+            <article class="tracker-visuals__card" data-chart-wrapper>
+              <header class="tracker-visuals__header">
+                <h3 class="tracker-visuals__title">Playmaking balance</h3>
+                <span class="lab-chip">Assists vs turnovers</span>
+              </header>
+              <div class="viz-canvas">
+                <canvas id="playmaking-balance" data-chart-ratio="0.58" aria-describedby="playmaking-caption"></canvas>
+              </div>
+              <p id="playmaking-caption" class="tracker-visuals__caption">
+                Bar chart tracks creation versus giveaways to spotlight which side is dictating possessions.
+              </p>
+            </article>
+
+            <article class="tracker-visuals__card" data-chart-wrapper>
+              <header class="tracker-visuals__header">
+                <h3 class="tracker-visuals__title">Possession profile</h3>
+                <span class="lab-chip">Shot • stripe • miscues</span>
+              </header>
+              <div class="viz-canvas">
+                <canvas id="possession-profile" data-chart-ratio="0.58" aria-describedby="possession-caption"></canvas>
+              </div>
+              <p id="possession-caption" class="tracker-visuals__caption">
+                Radar readout compares how possessions ended — shots, free throws, or turnovers — for each club.
+              </p>
+            </article>
+
+            <article class="tracker-visuals__card" data-chart-wrapper>
+              <header class="tracker-visuals__header">
+                <h3 class="tracker-visuals__title">Foul discipline</h3>
+                <span class="lab-chip">Personal fouls split</span>
+              </header>
+              <div class="viz-canvas viz-canvas--compact">
+                <canvas id="foul-discipline" data-chart-ratio="0.72" aria-describedby="foul-caption"></canvas>
+              </div>
+              <p id="foul-caption" class="tracker-visuals__caption">
+                Doughnut slice shows which roster has been whistled more often tonight.
+              </p>
+            </article>
+
+            <article class="tracker-visuals__card" data-chart-wrapper>
+              <header class="tracker-visuals__header">
+                <h3 class="tracker-visuals__title">Scoring hierarchy</h3>
+                <span class="lab-chip">Top six point-getters</span>
+              </header>
+              <div class="viz-canvas viz-canvas--compact">
+                <canvas id="scoring-leaders" data-chart-ratio="0.72" aria-describedby="leaders-caption"></canvas>
+              </div>
+              <p id="leaders-caption" class="tracker-visuals__caption">
+                Horizontal bars spotlight the six biggest scoring lines from the box score.
+              </p>
+            </article>
+
+            <article class="tracker-visuals__card" data-chart-wrapper>
+              <header class="tracker-visuals__header">
+                <h3 class="tracker-visuals__title">Rotation workload</h3>
+                <span class="lab-chip">Minutes by key players</span>
+              </header>
+              <div class="viz-canvas viz-canvas--compact">
+                <canvas id="rotation-minutes" data-chart-ratio="0.72" aria-describedby="rotation-caption"></canvas>
+              </div>
+              <p id="rotation-caption" class="tracker-visuals__caption">
+                Compares total floor time logged by the primary six-man rotation for each side.
+              </p>
+            </article>
+          </div>
+        </section>
+
         <section class="tracker-footnotes">
           <p class="tracker-footnotes__status" data-tracker-message>Syncing Ball Don't Lie data…</p>
           <p class="tracker-footnotes__meta">
@@ -113,6 +284,7 @@
       </main>
     </div>
 
+    <script src="vendor/chart.umd.js" defer></script>
     <script type="module" src="scripts/game-tracker.js"></script>
   </body>
 </html>
