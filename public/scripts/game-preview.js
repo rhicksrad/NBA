@@ -236,6 +236,17 @@ function normalizeTeam(team) {
   };
 }
 
+function computeStage(status, period) {
+  const normalized = (status ?? '').toString().toLowerCase();
+  if (normalized.includes('final')) {
+    return 'final';
+  }
+  if (Number(period) > 0) {
+    return 'live';
+  }
+  return 'upcoming';
+}
+
 function normalizeGame(raw) {
   if (!raw) {
     return null;
@@ -249,6 +260,7 @@ function normalizeGame(raw) {
     time: typeof raw.time === 'string' ? raw.time.trim() : '',
     date: typeof raw.date === 'string' ? raw.date : null,
     tipoff,
+    stage: computeStage(raw.status, raw.period),
     postseason: Boolean(raw.postseason),
     seasonType: typeof raw.season_type === 'string' ? raw.season_type : '',
     home: normalizeTeam(raw.home_team),
@@ -618,6 +630,15 @@ async function initialize() {
     const game = await loadGame(gameId);
     if (!game) {
       setPreviewMessage('Unable to locate that matchup in the Ball Don\'t Lie dataset.', 'error');
+      return;
+    }
+    if (game.stage === 'live' || game.stage === 'final') {
+      setPreviewMessage('This matchup is now live. Redirecting to the game tracker…');
+      const base = document.baseURI || window.location.href;
+      const targetUrl = new URL('game-tracker.html', base);
+      const redirectId = Number.isFinite(game.id) && game.id ? game.id : gameId;
+      targetUrl.searchParams.set('gameId', String(redirectId));
+      window.location.replace(targetUrl.toString());
       return;
     }
     const tipoff = game.tipoff;
