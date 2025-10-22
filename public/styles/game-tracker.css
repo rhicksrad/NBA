@@ -333,6 +333,77 @@
   text-decoration: underline;
 }
 
+.tracker-visuals {
+  display: grid;
+  gap: 2.75rem;
+}
+
+.tracker-visuals__intro {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.tracker-visuals__heading {
+  margin: 0;
+  font-size: clamp(1.8rem, 3.2vw, 2.35rem);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: color-mix(in srgb, var(--navy) 94%, var(--text-subtle) 6%);
+}
+
+.tracker-visuals__lead {
+  margin: 0;
+  max-width: 60ch;
+  font-size: 1.02rem;
+  line-height: 1.55;
+  color: color-mix(in srgb, var(--text-subtle) 84%, var(--navy) 16%);
+}
+
+.tracker-visuals__grid {
+  display: grid;
+  gap: 1.85rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.tracker-visuals__card {
+  display: grid;
+  gap: 1.1rem;
+  padding: 1.55rem 1.75rem 1.8rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
+  background:
+    linear-gradient(160deg, rgba(17, 86, 214, 0.08), rgba(244, 181, 63, 0.06)),
+    rgba(255, 255, 255, 0.96);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.58);
+}
+
+.tracker-visuals__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.tracker-visuals__title {
+  margin: 0;
+  font-size: 1.22rem;
+  font-weight: 700;
+  color: color-mix(in srgb, var(--navy) 90%, var(--text-subtle) 10%);
+}
+
+.tracker-visuals__caption {
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: color-mix(in srgb, var(--text-subtle) 86%, var(--navy) 14%);
+}
+
+.tracker-visuals__card .lab-chip {
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+}
+
 @media (max-width: 640px) {
   .tracker-frame {
     padding: 2rem 1.1rem 3rem;

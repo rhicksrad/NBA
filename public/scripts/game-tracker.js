@@ -1,7 +1,36 @@
 import { bdl } from '../assets/js/bdl.js';
-import { helpers } from './hub-charts.js';
+import { registerCharts, destroyCharts, helpers } from './hub-charts.js';
 
 const REFRESH_INTERVAL_MS = 5 * 60 * 1000;
+const TREND_GAME_COUNT = 8;
+
+const palette = {
+  royal: '#1156d6',
+  sky: '#1f7bff',
+  gold: '#f4b53f',
+  coral: '#ef3d5b',
+  teal: '#11b5c6',
+  violet: '#6c4fe0',
+  lime: '#8fd43d',
+  navy: '#0b2545',
+};
+
+const roleColors = {
+  visitor: {
+    fill: 'rgba(17, 86, 214, 0.18)',
+    line: palette.sky,
+    solid: palette.sky,
+  },
+  home: {
+    fill: 'rgba(244, 181, 63, 0.22)',
+    line: palette.gold,
+    solid: palette.gold,
+  },
+};
+
+let latestVisualization = null;
+let trendCacheKey = null;
+let cachedTrend = null;
 
 const params = new URLSearchParams(window.location.search);
 const rawGameId = params.get('gameId') || params.get('id');
@@ -99,6 +128,67 @@ function parseDateOnly(value) {
   return parsed;
 }
 
+function toIsoDate(date) {
+  if (!(date instanceof Date) || Number.isNaN(date.getTime())) {
+    return null;
+  }
+  return date.toISOString().slice(0, 10);
+}
+
+function formatShortDate(date) {
+  if (!(date instanceof Date) || Number.isNaN(date.getTime())) {
+    return '';
+  }
+  try {
+    return new Intl.DateTimeFormat(undefined, {
+      month: 'short',
+      day: 'numeric',
+    }).format(date);
+  } catch (error) {
+    return date.toISOString().slice(5, 10);
+  }
+}
+
+function extractPeriodPoints(raw, prefix, fallback) {
+  const quarters = [1, 2, 3, 4];
+  const overtime = [1, 2, 3];
+  const labels = [];
+  const values = [];
+
+  quarters.forEach((index) => {
+    const key = `${prefix}_q${index}`;
+    const label = `${index}Q`;
+    const value = Number(raw?.[key]);
+    if (Number.isFinite(value)) {
+      labels.push(label);
+      values.push(value);
+    } else {
+      labels.push(label);
+      values.push(null);
+    }
+  });
+
+  overtime.forEach((index) => {
+    const key = `${prefix}_ot${index}`;
+    if (raw?.[key] == null) {
+      return;
+    }
+    const value = Number(raw[key]);
+    labels.push(`OT${index}`);
+    values.push(Number.isFinite(value) ? value : null);
+  });
+
+  const meaningful = values.some((value) => Number.isFinite(value) && value > 0);
+  if (!meaningful) {
+    return {
+      labels: ['Game total'],
+      values: [Number.isFinite(fallback) ? Number(fallback) : 0],
+    };
+  }
+
+  return { labels, values };
+}
+
 function formatSeasonLabel(season) {
   if (!Number.isFinite(season)) {
     return 'Season TBD';
@@ -175,7 +265,26 @@ function normalizeGame(raw) {
   const period = Number.isFinite(raw.period) ? raw.period : 0;
   const time = typeof raw.time === 'string' ? raw.time.trim() : '';
   const tipoff = parseDateTime(raw.datetime) || parseDateOnly(raw.date);
+  const dateIso = typeof raw?.date === 'string' ? raw.date : toIsoDate(tipoff);
   const stage = computeStage(status, period);
+  const homeBreakdown = extractPeriodPoints(raw, 'home', raw?.home_team_score);
+  const visitorBreakdown = extractPeriodPoints(raw, 'visitor', raw?.visitor_team_score);
+  const combinedLabels = new Set([...homeBreakdown.labels, ...visitorBreakdown.labels]);
+  const canonicalOrder = ['1Q', '2Q', '3Q', '4Q', 'OT1', 'OT2', 'OT3'];
+  let labels = canonicalOrder.filter((label) => combinedLabels.has(label));
+  if (!labels.length) {
+    labels = homeBreakdown.labels.length ? homeBreakdown.labels : visitorBreakdown.labels;
+  }
+  const homePeriodPoints = labels.map((label) => {
+    const index = homeBreakdown.labels.indexOf(label);
+    const value = index >= 0 ? homeBreakdown.values[index] : null;
+    return Number.isFinite(value) ? value : 0;
+  });
+  const visitorPeriodPoints = labels.map((label) => {
+    const index = visitorBreakdown.labels.indexOf(label);
+    const value = index >= 0 ? visitorBreakdown.values[index] : null;
+    return Number.isFinite(value) ? value : 0;
+  });
   return {
     id: Number.isFinite(raw.id) ? raw.id : null,
     season: Number.isFinite(raw.season) ? raw.season : null,
@@ -185,9 +294,15 @@ function normalizeGame(raw) {
     period,
     time,
     tipoff,
+    dateIso,
     postseason: Boolean(raw.postseason),
     home: normalizeTeam(raw.home_team, raw.home_team_score),
     visitor: normalizeTeam(raw.visitor_team, raw.visitor_team_score),
+    scoringBreakdown: {
+      labels,
+      home: homePeriodPoints,
+      visitor: visitorPeriodPoints,
+    },
   };
 }
 
@@ -401,6 +516,7 @@ function normalizePlayerStat(row) {
   const name = `${first} ${last}`.trim() || 'Player';
   return {
     id: Number.isFinite(row?.player?.id) ? row.player.id : null,
+    teamId: Number.isFinite(row?.team?.id) ? row.team.id : null,
     name,
     pts: Number(row?.pts ?? 0),
     ast: Number(row?.ast ?? 0),
@@ -466,6 +582,208 @@ function aggregateTeamStats(rows) {
     bucket.players.push(normalizePlayerStat(row));
   });
   return totals;
+}
+
+function aggregateStatsByGame(rows) {
+  const games = new Map();
+  rows.forEach((row) => {
+    const gameId = Number(row?.game?.id);
+    const teamId = Number(row?.team?.id);
+    if (!Number.isFinite(gameId) || !Number.isFinite(teamId)) {
+      return;
+    }
+    if (!games.has(gameId)) {
+      games.set(gameId, new Map());
+    }
+    const teams = games.get(gameId);
+    if (!teams.has(teamId)) {
+      teams.set(teamId, {
+        gameId,
+        teamId,
+        pts: 0,
+        fgm: 0,
+        fga: 0,
+        fg3m: 0,
+        fg3a: 0,
+        ftm: 0,
+        fta: 0,
+        oreb: 0,
+        reb: 0,
+        ast: 0,
+        stl: 0,
+        blk: 0,
+        turnover: 0,
+        pf: 0,
+      });
+    }
+    const bucket = teams.get(teamId);
+    bucket.pts += Number(row?.pts ?? 0);
+    bucket.fgm += Number(row?.fgm ?? 0);
+    bucket.fga += Number(row?.fga ?? 0);
+    bucket.fg3m += Number(row?.fg3m ?? 0);
+    bucket.fg3a += Number(row?.fg3a ?? 0);
+    bucket.ftm += Number(row?.ftm ?? 0);
+    bucket.fta += Number(row?.fta ?? 0);
+    bucket.oreb += Number(row?.oreb ?? 0);
+    bucket.reb += Number(row?.reb ?? 0);
+    bucket.ast += Number(row?.ast ?? 0);
+    bucket.stl += Number(row?.stl ?? 0);
+    bucket.blk += Number(row?.blk ?? 0);
+    bucket.turnover += Number(row?.turnover ?? 0);
+    bucket.pf += Number(row?.pf ?? 0);
+  });
+  return games;
+}
+
+async function fetchStatsForGames(gameIds) {
+  if (!gameIds || !gameIds.size) {
+    return new Map();
+  }
+  const baseParams = new URLSearchParams();
+  baseParams.set('per_page', '500');
+  Array.from(gameIds)
+    .filter((id) => Number.isFinite(id))
+    .forEach((id) => {
+      baseParams.append('game_ids[]', String(id));
+    });
+  const allRows = [];
+  let cursor = null;
+  do {
+    const params = new URLSearchParams(baseParams);
+    if (cursor) {
+      params.set('cursor', cursor);
+    }
+    const payload = await bdl(`/v1/stats?${params.toString()}`);
+    if (Array.isArray(payload?.data)) {
+      allRows.push(...payload.data);
+    }
+    cursor = payload?.meta?.next_cursor ?? null;
+  } while (cursor);
+  return aggregateStatsByGame(allRows);
+}
+
+async function loadTeamRecentGames(teamId, { season, postseason, beforeDateIso }) {
+  const params = new URLSearchParams({
+    'team_ids[]': String(teamId),
+    per_page: '60',
+  });
+  if (Number.isFinite(season)) {
+    params.append('seasons[]', String(season));
+  }
+  if (typeof postseason === 'boolean') {
+    params.append('postseason', postseason ? 'true' : 'false');
+  }
+  const payload = await bdl(`/v1/games?${params.toString()}`);
+  const rows = Array.isArray(payload?.data) ? payload.data : [];
+  const filtered = rows
+    .filter((row) => typeof row?.status === 'string' && row.status.toLowerCase().includes('final'))
+    .filter((row) => {
+      if (!beforeDateIso || typeof row?.date !== 'string') {
+        return true;
+      }
+      return row.date <= beforeDateIso;
+    });
+  filtered.sort((a, b) => {
+    const dateA = parseDateOnly(a?.date) || parseDateTime(a?.datetime) || new Date(0);
+    const dateB = parseDateOnly(b?.date) || parseDateTime(b?.datetime) || new Date(0);
+    return dateB.getTime() - dateA.getTime();
+  });
+  const limited = filtered.slice(0, TREND_GAME_COUNT);
+  limited.sort((a, b) => {
+    const dateA = parseDateOnly(a?.date) || parseDateTime(a?.datetime) || new Date(0);
+    const dateB = parseDateOnly(b?.date) || parseDateTime(b?.datetime) || new Date(0);
+    return dateA.getTime() - dateB.getTime();
+  });
+  return limited;
+}
+
+async function loadTrendData(game) {
+  if (!game?.visitor?.id || !game?.home?.id) {
+    return { visitor: [], home: [] };
+  }
+  const season = Number.isFinite(game.season) ? game.season : null;
+  const beforeDateIso = game.dateIso || toIsoDate(game.tipoff) || null;
+  const cacheKey = [game.visitor.id, game.home.id, season ?? 'na', game.postseason ? 'P' : 'R', beforeDateIso ?? ''];
+  const key = cacheKey.join(':');
+  if (trendCacheKey === key && cachedTrend) {
+    return cachedTrend;
+  }
+
+  const [visitorGamesRaw, homeGamesRaw] = await Promise.all([
+    loadTeamRecentGames(game.visitor.id, { season, postseason: game.postseason, beforeDateIso }),
+    loadTeamRecentGames(game.home.id, { season, postseason: game.postseason, beforeDateIso }),
+  ]);
+
+  const uniqueIds = new Set();
+  visitorGamesRaw.forEach((row) => {
+    if (Number.isFinite(row?.id)) {
+      uniqueIds.add(Number(row.id));
+    }
+  });
+  homeGamesRaw.forEach((row) => {
+    if (Number.isFinite(row?.id)) {
+      uniqueIds.add(Number(row.id));
+    }
+  });
+
+  if (game.stage === 'final' && Number.isFinite(game.id)) {
+    uniqueIds.add(Number(game.id));
+  }
+
+  const statsByGame = await fetchStatsForGames(uniqueIds);
+
+  const mapGames = (rawGames, teamId, role) =>
+    rawGames.map((row) => {
+      const gameId = Number(row?.id);
+      const isHome = Number(row?.home_team?.id) === teamId;
+      const opponent = isHome ? row?.visitor_team : row?.home_team;
+      const opponentId = Number(opponent?.id) || null;
+      const scoreboardPoints = isHome ? Number(row?.home_team_score ?? 0) : Number(row?.visitor_team_score ?? 0);
+      const opponentPoints = isHome ? Number(row?.visitor_team_score ?? 0) : Number(row?.home_team_score ?? 0);
+      const date = parseDateTime(row?.datetime) || parseDateOnly(row?.date);
+      const totalsByTeam = statsByGame.get(gameId) || new Map();
+      const teamTotals = totalsByTeam.get(teamId) || null;
+      const opponentTotals = opponentId ? totalsByTeam.get(opponentId) || null : null;
+      const possessions = computePossessions(teamTotals);
+      const opponentPossessions = computePossessions(opponentTotals);
+      let pace = null;
+      if (Number.isFinite(possessions) && Number.isFinite(opponentPossessions)) {
+        pace = (possessions + opponentPossessions) / 2;
+      } else if (Number.isFinite(possessions)) {
+        pace = possessions;
+      }
+      const offRating = Number.isFinite(possessions) && possessions > 0 ? (teamTotals.pts / possessions) * 100 : null;
+      return {
+        id: gameId,
+        role,
+        date,
+        label: formatShortDate(date),
+        opponent:
+          typeof opponent?.full_name === 'string' && opponent.full_name
+            ? opponent.full_name
+            : typeof opponent?.name === 'string'
+            ? opponent.name
+            : 'Opponent',
+        opponentAbbr:
+          typeof opponent?.abbreviation === 'string' && opponent.abbreviation
+            ? opponent.abbreviation.toUpperCase()
+            : '',
+        location: isHome ? 'vs' : '@',
+        points: Number.isFinite(teamTotals?.pts) && teamTotals.pts > 0 ? teamTotals.pts : scoreboardPoints,
+        opponentPoints,
+        offRating: Number.isFinite(offRating) ? offRating : null,
+        pace: Number.isFinite(pace) ? pace : null,
+        possessions: Number.isFinite(possessions) ? possessions : null,
+        result: scoreboardPoints > opponentPoints ? 'W' : scoreboardPoints < opponentPoints ? 'L' : 'T',
+      };
+    });
+
+  cachedTrend = {
+    visitor: mapGames(visitorGamesRaw, game.visitor.id, 'visitor'),
+    home: mapGames(homeGamesRaw, game.home.id, 'home'),
+  };
+  trendCacheKey = key;
+  return cachedTrend;
 }
 
 function renderSeasonChip(game) {
@@ -680,6 +998,836 @@ function renderTeamLeaders(role, totals) {
   });
 }
 
+async function buildVisualizationData(game, aggregated) {
+  if (!game) {
+    return null;
+  }
+  const visitorTotals = aggregated?.get?.(game.visitor.id) || null;
+  const homeTotals = aggregated?.get?.(game.home.id) || null;
+  const trend = await loadTrendData(game);
+  const scoringBreakdown = game.scoringBreakdown || { labels: [], visitor: [], home: [] };
+  return {
+    game,
+    trend,
+    scoringBreakdown,
+    totals: {
+      visitor: visitorTotals,
+      home: homeTotals,
+    },
+    players: {
+      visitor: Array.isArray(visitorTotals?.players) ? visitorTotals.players : [],
+      home: Array.isArray(homeTotals?.players) ? homeTotals.players : [],
+    },
+    possessions: {
+      visitor: computePossessions(visitorTotals),
+      home: computePossessions(homeTotals),
+    },
+    scores: {
+      visitor: Number.isFinite(game?.visitor?.score) ? Number(game.visitor.score) : null,
+      home: Number.isFinite(game?.home?.score) ? Number(game.home.score) : null,
+    },
+  };
+}
+
+function teamName(visualization, role) {
+  const fallback = role === 'visitor' ? 'Visitor' : 'Home';
+  return visualization?.game?.[role]?.name || fallback;
+}
+
+function teamAbbreviation(visualization, role) {
+  const abbr = visualization?.game?.[role]?.abbreviation;
+  if (typeof abbr === 'string' && abbr) {
+    return abbr.toUpperCase();
+  }
+  return teamName(visualization, role);
+}
+
+function alignTrendSeries(games, length, metricKey) {
+  const series = [];
+  const offset = Math.max(length - games.length, 0);
+  for (let index = 0; index < length; index += 1) {
+    if (index < offset) {
+      series.push(null);
+      continue;
+    }
+    const game = games[index - offset];
+    const rawValue = Number(game?.[metricKey]);
+    const value = Number.isFinite(rawValue) ? rawValue : null;
+    if (value === null) {
+      series.push(null);
+    } else {
+      const opponentLabel = `${game?.location ?? ''} ${game?.opponentAbbr || game?.opponent || ''}`.trim();
+      series.push({
+        x: index + 1,
+        y: value,
+        meta: {
+          label: game?.label || `Game ${index + 1}`,
+          opponent: opponentLabel,
+          result: game?.result || '',
+        },
+      });
+    }
+  }
+  return series;
+}
+
+function buildTrendLineConfig(visualization, metricKey, { decimals = 1, suffix = '' } = {}) {
+  const visitorGames = Array.isArray(visualization?.trend?.visitor) ? visualization.trend.visitor : [];
+  const homeGames = Array.isArray(visualization?.trend?.home) ? visualization.trend.home : [];
+  const maxLength = Math.max(visitorGames.length, homeGames.length);
+  const labels = maxLength
+    ? Array.from({ length: maxLength }, (_, index) => `Game ${index + 1}`)
+    : ['No data'];
+  const visitorData = maxLength ? alignTrendSeries(visitorGames, maxLength, metricKey) : [null];
+  const homeData = maxLength ? alignTrendSeries(homeGames, maxLength, metricKey) : [null];
+
+  return {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: teamName(visualization, 'visitor'),
+          data: visitorData,
+          borderColor: roleColors.visitor.line,
+          backgroundColor: roleColors.visitor.fill,
+          spanGaps: true,
+          tension: 0.35,
+          pointRadius: maxLength ? 3.5 : 0,
+          pointHoverRadius: maxLength ? 5.5 : 0,
+        },
+        {
+          label: teamName(visualization, 'home'),
+          data: homeData,
+          borderColor: roleColors.home.line,
+          backgroundColor: roleColors.home.fill,
+          spanGaps: true,
+          tension: 0.35,
+          pointRadius: maxLength ? 3.5 : 0,
+          pointHoverRadius: maxLength ? 5.5 : 0,
+        },
+      ],
+    },
+    options: {
+      interaction: { mode: 'nearest', intersect: false },
+      scales: {
+        x: {
+          ticks: {
+            callback(value, index) {
+              return labels[index] || value;
+            },
+          },
+        },
+        y: {
+          beginAtZero: true,
+          ticks: {
+            callback(value) {
+              return `${helpers.formatNumber(value, decimals)}${suffix}`;
+            },
+          },
+        },
+      },
+      plugins: {
+        tooltip: {
+          callbacks: {
+            title(context) {
+              const raw = context?.[0]?.raw?.meta;
+              if (raw?.label) {
+                return raw.label;
+              }
+              return context?.[0]?.label || '';
+            },
+            label(context) {
+              const datasetLabel = context?.dataset?.label || '';
+              const value = context.parsed?.y;
+              const lines = [];
+              if (Number.isFinite(value)) {
+                lines.push(`${datasetLabel}: ${helpers.formatNumber(value, decimals)}${suffix}`);
+              } else {
+                lines.push(`${datasetLabel}: N/A`);
+              }
+              const meta = context.raw?.meta;
+              if (meta) {
+                const opponentLine = `${meta.result ?? ''} ${meta.opponent ?? ''}`.trim();
+                if (opponentLine) {
+                  lines.push(opponentLine);
+                }
+              }
+              return lines;
+            },
+          },
+        },
+      },
+    },
+  };
+}
+
+function buildPeriodScoringConfig(visualization) {
+  const breakdown = visualization?.scoringBreakdown || { labels: [], visitor: [], home: [] };
+  let labels = Array.isArray(breakdown.labels) ? [...breakdown.labels] : [];
+  let visitorValues = Array.isArray(breakdown.visitor) ? [...breakdown.visitor] : [];
+  let homeValues = Array.isArray(breakdown.home) ? [...breakdown.home] : [];
+
+  if (!labels.length) {
+    labels = ['Game total'];
+    const visitorScore = Number.isFinite(visualization?.scores?.visitor) ? visualization.scores.visitor : 0;
+    const homeScore = Number.isFinite(visualization?.scores?.home) ? visualization.scores.home : 0;
+    visitorValues = [visitorScore];
+    homeValues = [homeScore];
+  }
+
+  const visitorData = labels.map((_, index) => {
+    const value = Number(visitorValues?.[index]);
+    return Number.isFinite(value) ? value : 0;
+  });
+  const homeData = labels.map((_, index) => {
+    const value = Number(homeValues?.[index]);
+    return Number.isFinite(value) ? value : 0;
+  });
+
+  return {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: teamName(visualization, 'visitor'),
+          data: visitorData,
+          backgroundColor: roleColors.visitor.fill,
+          borderColor: roleColors.visitor.solid,
+          borderWidth: 1.5,
+        },
+        {
+          label: teamName(visualization, 'home'),
+          data: homeData,
+          backgroundColor: roleColors.home.fill,
+          borderColor: roleColors.home.solid,
+          borderWidth: 1.5,
+        },
+      ],
+    },
+    options: {
+      scales: {
+        x: { stacked: false },
+        y: {
+          beginAtZero: true,
+          ticks: {
+            callback(value) {
+              return `${helpers.formatNumber(value, 0)} pts`;
+            },
+          },
+        },
+      },
+      plugins: {
+        tooltip: {
+          callbacks: {
+            label(context) {
+              const value = context.parsed?.y ?? 0;
+              return `${context.dataset.label}: ${helpers.formatNumber(value, 0)} points`;
+            },
+          },
+        },
+      },
+    },
+  };
+}
+
+function computeShotPointMix(totals) {
+  if (!totals) {
+    return { two: 0, three: 0, ft: 0 };
+  }
+  const fg3m = Number(totals?.fg3m ?? 0);
+  const fgm = Number(totals?.fgm ?? 0);
+  const ftm = Number(totals?.ftm ?? 0);
+  const twoMakes = Math.max(fgm - fg3m, 0);
+  return {
+    two: twoMakes * 2,
+    three: fg3m * 3,
+    ft: ftm,
+  };
+}
+
+function buildShotValueConfig(visualization) {
+  const visitorMix = computeShotPointMix(visualization?.totals?.visitor);
+  const homeMix = computeShotPointMix(visualization?.totals?.home);
+  return {
+    type: 'bar',
+    data: {
+      labels: [teamName(visualization, 'visitor'), teamName(visualization, 'home')],
+      datasets: [
+        {
+          label: 'Two-point',
+          data: [visitorMix.two, homeMix.two],
+          backgroundColor: palette.royal,
+          stack: 'points',
+        },
+        {
+          label: 'Three-point',
+          data: [visitorMix.three, homeMix.three],
+          backgroundColor: palette.coral,
+          stack: 'points',
+        },
+        {
+          label: 'Free throw',
+          data: [visitorMix.ft, homeMix.ft],
+          backgroundColor: palette.teal,
+          stack: 'points',
+        },
+      ],
+    },
+    options: {
+      scales: {
+        x: { stacked: true },
+        y: {
+          stacked: true,
+          beginAtZero: true,
+          ticks: {
+            callback(value) {
+              return `${helpers.formatNumber(value, 0)} pts`;
+            },
+          },
+        },
+      },
+      plugins: {
+        tooltip: {
+          callbacks: {
+            label(context) {
+              const value = context.parsed?.y ?? 0;
+              return `${context.dataset.label}: ${helpers.formatNumber(value, 0)} points`;
+            },
+          },
+        },
+      },
+    },
+  };
+}
+
+function buildShootingAccuracyConfig(visualization) {
+  const visitorTotals = visualization?.totals?.visitor;
+  const homeTotals = visualization?.totals?.home;
+  const labels = ['FG%', '3P%', 'FT%'];
+  const visitorData = [
+    percentage(visitorTotals?.fgm, visitorTotals?.fga) ?? 0,
+    percentage(visitorTotals?.fg3m, visitorTotals?.fg3a) ?? 0,
+    percentage(visitorTotals?.ftm, visitorTotals?.fta) ?? 0,
+  ];
+  const homeData = [
+    percentage(homeTotals?.fgm, homeTotals?.fga) ?? 0,
+    percentage(homeTotals?.fg3m, homeTotals?.fg3a) ?? 0,
+    percentage(homeTotals?.ftm, homeTotals?.fta) ?? 0,
+  ];
+  return {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: teamAbbreviation(visualization, 'visitor'),
+          data: visitorData,
+          backgroundColor: roleColors.visitor.fill,
+          borderColor: roleColors.visitor.solid,
+          borderWidth: 1.5,
+        },
+        {
+          label: teamAbbreviation(visualization, 'home'),
+          data: homeData,
+          backgroundColor: roleColors.home.fill,
+          borderColor: roleColors.home.solid,
+          borderWidth: 1.5,
+        },
+      ],
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true,
+          max: 100,
+          ticks: {
+            callback(value) {
+              return `${helpers.formatNumber(value, 0)}%`;
+            },
+          },
+        },
+      },
+      plugins: {
+        tooltip: {
+          callbacks: {
+            label(context) {
+              const value = context.parsed?.y ?? 0;
+              return `${context.dataset.label}: ${helpers.formatNumber(value, 1)}%`;
+            },
+          },
+        },
+      },
+    },
+  };
+}
+
+function buildReboundControlConfig(visualization) {
+  const visitorTotals = visualization?.totals?.visitor;
+  const homeTotals = visualization?.totals?.home;
+  const visitorOreb = Number(visitorTotals?.oreb ?? 0);
+  const visitorDreb = Math.max(Number(visitorTotals?.reb ?? 0) - visitorOreb, 0);
+  const homeOreb = Number(homeTotals?.oreb ?? 0);
+  const homeDreb = Math.max(Number(homeTotals?.reb ?? 0) - homeOreb, 0);
+  return {
+    type: 'bar',
+    data: {
+      labels: [teamAbbreviation(visualization, 'visitor'), teamAbbreviation(visualization, 'home')],
+      datasets: [
+        {
+          label: 'Offensive',
+          data: [visitorOreb, homeOreb],
+          backgroundColor: palette.coral,
+          stack: 'rebounds',
+        },
+        {
+          label: 'Defensive',
+          data: [visitorDreb, homeDreb],
+          backgroundColor: palette.sky,
+          stack: 'rebounds',
+        },
+      ],
+    },
+    options: {
+      scales: {
+        x: { stacked: true },
+        y: {
+          stacked: true,
+          beginAtZero: true,
+          ticks: {
+            callback(value) {
+              return helpers.formatNumber(value, 0);
+            },
+          },
+        },
+      },
+      plugins: {
+        tooltip: {
+          callbacks: {
+            label(context) {
+              const value = context.parsed?.y ?? 0;
+              return `${context.dataset.label}: ${helpers.formatNumber(value, 0)} boards`;
+            },
+          },
+        },
+      },
+    },
+  };
+}
+
+function buildPlaymakingBalanceConfig(visualization) {
+  const visitorTotals = visualization?.totals?.visitor;
+  const homeTotals = visualization?.totals?.home;
+  const visitorAst = Number(visitorTotals?.ast ?? 0);
+  const visitorTo = Number(visitorTotals?.turnover ?? 0);
+  const homeAst = Number(homeTotals?.ast ?? 0);
+  const homeTo = Number(homeTotals?.turnover ?? 0);
+  return {
+    type: 'bar',
+    data: {
+      labels: ['Assists', 'Turnovers'],
+      datasets: [
+        {
+          label: teamAbbreviation(visualization, 'visitor'),
+          data: [visitorAst, visitorTo],
+          backgroundColor: roleColors.visitor.fill,
+          borderColor: roleColors.visitor.solid,
+          borderWidth: 1.5,
+        },
+        {
+          label: teamAbbreviation(visualization, 'home'),
+          data: [homeAst, homeTo],
+          backgroundColor: roleColors.home.fill,
+          borderColor: roleColors.home.solid,
+          borderWidth: 1.5,
+        },
+      ],
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: {
+            callback(value) {
+              return helpers.formatNumber(value, 0);
+            },
+          },
+        },
+      },
+      plugins: {
+        tooltip: {
+          callbacks: {
+            label(context) {
+              const value = context.parsed?.y ?? 0;
+              const label = context.label.toLowerCase();
+              return `${context.dataset.label}: ${helpers.formatNumber(value, 0)} ${label}`;
+            },
+          },
+        },
+      },
+    },
+  };
+}
+
+function computePossessionShares(totals) {
+  const possessions = computePossessions(totals);
+  if (!Number.isFinite(possessions) || possessions <= 0) {
+    return { shots: 0, ft: 0, turnovers: 0 };
+  }
+  const fga = Number(totals?.fga ?? 0);
+  const oreb = Number(totals?.oreb ?? 0);
+  const fta = Number(totals?.fta ?? 0);
+  const turnovers = Number(totals?.turnover ?? 0);
+  const shotTrips = Math.max(fga - oreb, 0);
+  const ftTrips = 0.44 * fta;
+  return {
+    shots: (shotTrips / possessions) * 100,
+    ft: (ftTrips / possessions) * 100,
+    turnovers: (turnovers / possessions) * 100,
+  };
+}
+
+function buildPossessionProfileConfig(visualization) {
+  const visitorShares = computePossessionShares(visualization?.totals?.visitor);
+  const homeShares = computePossessionShares(visualization?.totals?.home);
+  return {
+    type: 'radar',
+    data: {
+      labels: ['Shot attempts', 'Free throw trips', 'Turnovers'],
+      datasets: [
+        {
+          label: teamAbbreviation(visualization, 'visitor'),
+          data: [visitorShares.shots, visitorShares.ft, visitorShares.turnovers],
+          backgroundColor: 'rgba(31, 123, 255, 0.18)',
+          borderColor: roleColors.visitor.solid,
+          pointBackgroundColor: roleColors.visitor.solid,
+          pointRadius: 3,
+        },
+        {
+          label: teamAbbreviation(visualization, 'home'),
+          data: [homeShares.shots, homeShares.ft, homeShares.turnovers],
+          backgroundColor: 'rgba(244, 181, 63, 0.22)',
+          borderColor: roleColors.home.solid,
+          pointBackgroundColor: roleColors.home.solid,
+          pointRadius: 3,
+        },
+      ],
+    },
+    options: {
+      scales: {
+        r: {
+          beginAtZero: true,
+          suggestedMax: 60,
+          ticks: {
+            backdropColor: 'transparent',
+            callback(value) {
+              return `${helpers.formatNumber(value, 0)}%`;
+            },
+          },
+          pointLabels: {
+            font: { weight: 600 },
+          },
+        },
+      },
+      plugins: {
+        tooltip: {
+          callbacks: {
+            label(context) {
+              const value = context.parsed?.r ?? 0;
+              return `${context.dataset.label}: ${helpers.formatNumber(value, 1)}%`;
+            },
+          },
+        },
+      },
+    },
+  };
+}
+
+function buildFoulDisciplineConfig(visualization) {
+  const visitorPf = Number(visualization?.totals?.visitor?.pf ?? 0);
+  const homePf = Number(visualization?.totals?.home?.pf ?? 0);
+  return {
+    type: 'doughnut',
+    data: {
+      labels: [teamAbbreviation(visualization, 'visitor'), teamAbbreviation(visualization, 'home')],
+      datasets: [
+        {
+          data: [visitorPf, homePf],
+          backgroundColor: [roleColors.visitor.fill, roleColors.home.fill],
+          borderColor: [roleColors.visitor.solid, roleColors.home.solid],
+          borderWidth: 1.5,
+        },
+      ],
+    },
+    options: {
+      cutout: '58%',
+      plugins: {
+        legend: { position: 'bottom' },
+        tooltip: {
+          callbacks: {
+            label(context) {
+              const value = context.parsed ?? 0;
+              return `${context.label}: ${helpers.formatNumber(value, 0)} fouls`;
+            },
+          },
+        },
+      },
+    },
+  };
+}
+
+function collectTopScorers(visualization, limit = 6) {
+  const combined = [];
+  ['visitor', 'home'].forEach((role) => {
+    const players = Array.isArray(visualization?.players?.[role]) ? visualization.players[role] : [];
+    const teamAbbr = teamAbbreviation(visualization, role);
+    players.forEach((player) => {
+      const points = Number(player?.pts ?? 0);
+      if (!Number.isFinite(points)) {
+        return;
+      }
+      combined.push({
+        name: player.name,
+        points,
+        role,
+        teamAbbr,
+        minutes: parseMinutesToSeconds(player?.min ?? '0:00'),
+      });
+    });
+  });
+  combined.sort((a, b) => {
+    if (b.points !== a.points) {
+      return b.points - a.points;
+    }
+    if (b.minutes !== a.minutes) {
+      return b.minutes - a.minutes;
+    }
+    return a.name.localeCompare(b.name);
+  });
+  return combined.slice(0, limit);
+}
+
+function buildScoringHierarchyConfig(visualization) {
+  const leaders = collectTopScorers(visualization);
+  if (!leaders.length) {
+    return {
+      type: 'bar',
+      data: {
+        labels: ['No box score yet'],
+        datasets: [
+          {
+            data: [0],
+            backgroundColor: 'rgba(11, 37, 69, 0.16)',
+            borderColor: 'rgba(11, 37, 69, 0.38)',
+            borderWidth: 1,
+          },
+        ],
+      },
+      options: {
+        indexAxis: 'y',
+        scales: {
+          x: { beginAtZero: true },
+        },
+        plugins: { legend: { display: false } },
+      },
+    };
+  }
+  const labels = leaders.map((player) => `${player.name} (${player.teamAbbr})`);
+  const data = leaders.map((player) => player.points);
+  const backgroundColor = leaders.map((player) => roleColors[player.role]?.fill || palette.sky);
+  const borderColor = leaders.map((player) => roleColors[player.role]?.solid || palette.sky);
+  return {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: 'Points',
+          data,
+          backgroundColor,
+          borderColor,
+          borderWidth: 1.4,
+        },
+      ],
+    },
+    options: {
+      indexAxis: 'y',
+      scales: {
+        x: {
+          beginAtZero: true,
+          ticks: {
+            callback(value) {
+              return helpers.formatNumber(value, 0);
+            },
+          },
+        },
+      },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label(context) {
+              const value = context.parsed?.x ?? 0;
+              return `${context.label}: ${helpers.formatNumber(value, 0)} points`;
+            },
+          },
+        },
+      },
+    },
+  };
+}
+
+function computeRotationMinutes(players) {
+  const sorted = [...players].sort(
+    (a, b) => parseMinutesToSeconds(b?.min ?? '0:00') - parseMinutesToSeconds(a?.min ?? '0:00')
+  );
+  const top = sorted.slice(0, 6);
+  const totalSeconds = top.reduce((sum, player) => sum + parseMinutesToSeconds(player?.min ?? '0:00'), 0);
+  return {
+    totalMinutes: totalSeconds / 60,
+    breakdown: top.map((player) => ({
+      name: player.name,
+      minutes: parseMinutesToSeconds(player?.min ?? '0:00') / 60,
+    })),
+  };
+}
+
+function buildRotationWorkloadConfig(visualization) {
+  const visitorRotation = computeRotationMinutes(Array.isArray(visualization?.players?.visitor) ? visualization.players.visitor : []);
+  const homeRotation = computeRotationMinutes(Array.isArray(visualization?.players?.home) ? visualization.players.home : []);
+  const labels = [teamAbbreviation(visualization, 'visitor'), teamAbbreviation(visualization, 'home')];
+  const totals = [visitorRotation.totalMinutes, homeRotation.totalMinutes];
+  return {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: 'Minutes (top six)',
+          data: totals,
+          backgroundColor: [roleColors.visitor.fill, roleColors.home.fill],
+          borderColor: [roleColors.visitor.solid, roleColors.home.solid],
+          borderWidth: 1.5,
+        },
+      ],
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: {
+            callback(value) {
+              return `${helpers.formatNumber(value, 0)} min`;
+            },
+          },
+        },
+      },
+      plugins: {
+        tooltip: {
+          callbacks: {
+            label(context) {
+              const value = context.parsed?.y ?? 0;
+              return `${context.dataset.label}: ${helpers.formatNumber(value, 1)} minutes`;
+            },
+            afterLabel(context) {
+              const rotation = context.dataIndex === 0 ? visitorRotation : homeRotation;
+              if (!rotation.breakdown.length) {
+                return '';
+              }
+              return rotation.breakdown
+                .map((player) => `• ${player.name}: ${helpers.formatNumber(player.minutes, 1)} min`)
+                .join('\n');
+            },
+          },
+        },
+      },
+    },
+  };
+}
+
+function renderVisualizations(visualization) {
+  if (!visualization) {
+    destroyCharts();
+    return;
+  }
+  destroyCharts();
+  registerCharts([
+    {
+      element: '#points-trend',
+      async createConfig() {
+        return buildTrendLineConfig(visualization, 'points', { decimals: 0, suffix: ' pts' });
+      },
+    },
+    {
+      element: '#off-rating-trend',
+      async createConfig() {
+        return buildTrendLineConfig(visualization, 'offRating', { decimals: 1 });
+      },
+    },
+    {
+      element: '#pace-trend',
+      async createConfig() {
+        return buildTrendLineConfig(visualization, 'pace', { decimals: 1, suffix: ' poss' });
+      },
+    },
+    {
+      element: '#period-scoring',
+      async createConfig() {
+        return buildPeriodScoringConfig(visualization);
+      },
+    },
+    {
+      element: '#scoring-sources',
+      async createConfig() {
+        return buildShotValueConfig(visualization);
+      },
+    },
+    {
+      element: '#shooting-accuracy',
+      async createConfig() {
+        return buildShootingAccuracyConfig(visualization);
+      },
+    },
+    {
+      element: '#rebound-control',
+      async createConfig() {
+        return buildReboundControlConfig(visualization);
+      },
+    },
+    {
+      element: '#playmaking-balance',
+      async createConfig() {
+        return buildPlaymakingBalanceConfig(visualization);
+      },
+    },
+    {
+      element: '#possession-profile',
+      async createConfig() {
+        return buildPossessionProfileConfig(visualization);
+      },
+    },
+    {
+      element: '#foul-discipline',
+      async createConfig() {
+        return buildFoulDisciplineConfig(visualization);
+      },
+    },
+    {
+      element: '#scoring-leaders',
+      async createConfig() {
+        return buildScoringHierarchyConfig(visualization);
+      },
+    },
+    {
+      element: '#rotation-minutes',
+      async createConfig() {
+        return buildRotationWorkloadConfig(visualization);
+      },
+    },
+  ]);
+}
+
 function scheduleNextRefresh(stage) {
   if (refreshTimer) {
     window.clearTimeout(refreshTimer);
@@ -775,12 +1923,17 @@ async function refreshData({ background = false } = {}) {
     }
 
     const aggregated = aggregateTeamStats(statsRows);
+    const visualizationData = await buildVisualizationData(game, aggregated);
+    latestVisualization = visualizationData;
+
     ['visitor', 'home'].forEach((role) => {
       const team = game[role];
       const totals = aggregated.get(team.id);
       renderTeamTotals(role, totals);
       renderTeamLeaders(role, totals);
     });
+
+    renderVisualizations(visualizationData);
 
     togglePreviewCta(game.stage);
 
