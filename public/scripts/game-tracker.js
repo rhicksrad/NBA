@@ -697,10 +697,110 @@ async function loadTeamRecentGames(teamId, { season, postseason, beforeDateIso }
   return limited;
 }
 
-async function loadTrendData(game) {
+async function loadTrendData(game, aggregated) {
   if (!game?.visitor?.id || !game?.home?.id) {
     return { visitor: [], home: [] };
   }
+
+  const stage = game.stage;
+  const singleGameMode = stage === 'live' || stage === 'final';
+
+  if (singleGameMode) {
+    trendCacheKey = null;
+    cachedTrend = null;
+
+    const totalsMap = aggregated instanceof Map ? aggregated : null;
+    const gameId = Number.isFinite(game?.id) ? Number(game.id) : null;
+    const tipoffDate =
+      game.tipoff instanceof Date && !Number.isNaN(game.tipoff.getTime())
+        ? game.tipoff
+        : parseDateOnly(game.dateIso);
+    const hasTipoffDate = tipoffDate instanceof Date && !Number.isNaN(tipoffDate.getTime());
+
+    const buildSingleGameEntry = (role) => {
+      const team = game[role];
+      if (!team?.id) {
+        return null;
+      }
+      const opponentRole = role === 'home' ? 'visitor' : 'home';
+      const opponent = game[opponentRole] || {};
+      const totals = totalsMap ? totalsMap.get(team.id) || null : null;
+      const opponentTotals = totalsMap && opponent?.id ? totalsMap.get(opponent.id) || null : null;
+
+      const possessionsValue = computePossessions(totals);
+      const opponentPossessionsValue = computePossessions(opponentTotals);
+      let paceValue = null;
+      if (Number.isFinite(possessionsValue) && Number.isFinite(opponentPossessionsValue)) {
+        paceValue = (possessionsValue + opponentPossessionsValue) / 2;
+      } else if (Number.isFinite(possessionsValue)) {
+        paceValue = possessionsValue;
+      }
+
+      const totalsPoints = Number.isFinite(totals?.pts) ? totals.pts : null;
+      const totalsOpponentPoints = Number.isFinite(opponentTotals?.pts) ? opponentTotals.pts : null;
+
+      const scoreboardPointsRaw = Number(team?.score);
+      const scoreboardPoints = Number.isFinite(scoreboardPointsRaw) ? scoreboardPointsRaw : null;
+      const scoreboardOpponentPointsRaw = Number(opponent?.score);
+      const scoreboardOpponentPoints = Number.isFinite(scoreboardOpponentPointsRaw)
+        ? scoreboardOpponentPointsRaw
+        : null;
+
+      const displayedPoints = totalsPoints ?? scoreboardPoints;
+      const displayedOpponentPoints = totalsOpponentPoints ?? scoreboardOpponentPoints;
+
+      const pointsValue = Number.isFinite(displayedPoints) ? displayedPoints : null;
+      const opponentPointsValue = Number.isFinite(displayedOpponentPoints) ? displayedOpponentPoints : null;
+
+      const resultPoints = scoreboardPoints ?? totalsPoints;
+      const resultOpponentPoints = scoreboardOpponentPoints ?? totalsOpponentPoints;
+      let result = '';
+      if (Number.isFinite(resultPoints) && Number.isFinite(resultOpponentPoints)) {
+        if (resultPoints > resultOpponentPoints) {
+          result = 'W';
+        } else if (resultPoints < resultOpponentPoints) {
+          result = 'L';
+        } else {
+          result = 'T';
+        }
+      }
+
+      const offRatingValue =
+        Number.isFinite(totalsPoints) && Number.isFinite(possessionsValue) && possessionsValue > 0
+          ? (totalsPoints / possessionsValue) * 100
+          : null;
+
+      const label = hasTipoffDate ? formatShortDate(tipoffDate) : 'This game';
+
+      return {
+        id: gameId,
+        role,
+        date: hasTipoffDate ? tipoffDate : null,
+        label,
+        opponent: opponent?.name || 'Opponent',
+        opponentAbbr:
+          typeof opponent?.abbreviation === 'string' && opponent.abbreviation
+            ? opponent.abbreviation.toUpperCase()
+            : '',
+        location: role === 'home' ? 'vs' : '@',
+        points: pointsValue,
+        opponentPoints: opponentPointsValue,
+        offRating: Number.isFinite(offRatingValue) ? offRatingValue : null,
+        pace: Number.isFinite(paceValue) ? paceValue : null,
+        possessions: Number.isFinite(possessionsValue) ? possessionsValue : null,
+        result,
+      };
+    };
+
+    const visitorEntry = buildSingleGameEntry('visitor');
+    const homeEntry = buildSingleGameEntry('home');
+
+    return {
+      visitor: visitorEntry ? [visitorEntry] : [],
+      home: homeEntry ? [homeEntry] : [],
+    };
+  }
+
   const season = Number.isFinite(game.season) ? game.season : null;
   const beforeDateIso = game.dateIso || toIsoDate(game.tipoff) || null;
   const cacheKey = [game.visitor.id, game.home.id, season ?? 'na', game.postseason ? 'P' : 'R', beforeDateIso ?? ''];
@@ -1004,7 +1104,7 @@ async function buildVisualizationData(game, aggregated) {
   }
   const visitorTotals = aggregated?.get?.(game.visitor.id) || null;
   const homeTotals = aggregated?.get?.(game.home.id) || null;
-  const trend = await loadTrendData(game);
+  const trend = await loadTrendData(game, aggregated);
   const scoringBreakdown = game.scoringBreakdown || { labels: [], visitor: [], home: [] };
   return {
     game,
