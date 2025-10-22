@@ -231,14 +231,15 @@
 
             <article class="tracker-visuals__card" data-chart-wrapper>
               <header class="tracker-visuals__header">
-                <h3 class="tracker-visuals__title">Foul discipline</h3>
-                <span class="lab-chip">Personal fouls split</span>
+                <h3 class="tracker-visuals__title">Win probability pulse</h3>
+                <span class="lab-chip">Custom live model</span>
               </header>
-              <div class="viz-canvas viz-canvas--compact">
-                <canvas id="foul-discipline" data-chart-ratio="0.72" aria-describedby="foul-caption"></canvas>
+              <div class="viz-canvas">
+                <canvas id="win-probability" data-chart-ratio="0.6" aria-describedby="win-probability-caption"></canvas>
               </div>
-              <p id="foul-caption" class="tracker-visuals__caption">
-                Doughnut slice shows which roster has been whistled more often tonight.
+              <p id="win-probability-caption" class="tracker-visuals__caption">
+                Blends score margin and clock pressure to estimate the home side&apos;s win odds from tip to
+                final horn.
               </p>
             </article>
 

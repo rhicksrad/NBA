@@ -1644,31 +1644,452 @@ function buildPossessionProfileConfig(visualization) {
   };
 }
 
-function buildFoulDisciplineConfig(visualization) {
-  const visitorPf = Number(visualization?.totals?.visitor?.pf ?? 0);
-  const homePf = Number(visualization?.totals?.home?.pf ?? 0);
+function periodDurationFromLabel(label) {
+  if (typeof label !== 'string') {
+    return 0;
+  }
+  if (/^OT\d+/i.test(label) || /^OT$/i.test(label)) {
+    return 5 * 60;
+  }
+  if (/^\dQ$/i.test(label)) {
+    return 12 * 60;
+  }
+  return 0;
+}
+
+function describePeriodEndpoint(label) {
+  if (typeof label !== 'string') {
+    return 'Period';
+  }
+  if (label === '1Q') return 'End 1Q';
+  if (label === '2Q') return 'Halftime';
+  if (label === '3Q') return 'End 3Q';
+  if (label === '4Q') return 'End 4Q';
+  if (/^OT(\d+)/i.test(label)) {
+    const match = label.match(/^OT(\d+)/i);
+    if (match) {
+      return `End OT${match[1]}`;
+    }
+  }
+  if (/^OT$/i.test(label)) {
+    return 'End OT';
+  }
+  return label;
+}
+
+function formatRemainingClock(seconds) {
+  if (!Number.isFinite(seconds)) {
+    return '';
+  }
+  const clamped = Math.max(0, seconds);
+  const wholeSeconds = Math.round(clamped);
+  const mins = Math.floor(wholeSeconds / 60);
+  const secs = wholeSeconds % 60;
+  return `${mins}:${String(secs).padStart(2, '0')}`;
+}
+
+function computeLiveElapsedSeconds(game) {
+  if (!game || !Number.isFinite(game?.period) || game.period <= 0) {
+    return null;
+  }
+  let elapsed = 0;
+  for (let index = 1; index < game.period; index += 1) {
+    const duration = getPeriodDurationSeconds(index) || 0;
+    elapsed += duration;
+  }
+  const parsed = parseElapsedClockValue(game.time);
+  const periodDuration = getPeriodDurationSeconds(game.period) || 0;
+  if (parsed && periodDuration) {
+    const fractional = parsed.fractional ? parsed.fractional / (parsed.precision || 1) : 0;
+    const elapsedInPeriod = parsed.minutes * 60 + parsed.seconds + fractional;
+    const bounded = Math.min(Math.max(elapsedInPeriod, 0), periodDuration);
+    elapsed += bounded;
+  }
+  return elapsed;
+}
+
+function computeTotalGameSeconds(game, labels, scoreboardElapsed = 0) {
+  const baseRegulation = 4 * 12 * 60;
+  const overtimeCount = Array.isArray(labels)
+    ? labels.filter((label) => /^OT\d+/i.test(label)).length
+    : 0;
+  const regulationTotal = baseRegulation + overtimeCount * 5 * 60;
+  if (game?.stage === 'final') {
+    return Math.max(regulationTotal, scoreboardElapsed, baseRegulation);
+  }
+  const period = Number(game?.period);
+  if (Number.isFinite(period) && period > 0) {
+    let total = 0;
+    for (let index = 1; index <= period; index += 1) {
+      total += getPeriodDurationSeconds(index) || 0;
+    }
+    return Math.max(total, regulationTotal, scoreboardElapsed, baseRegulation);
+  }
+  return Math.max(regulationTotal, baseRegulation, scoreboardElapsed);
+}
+
+function describeScoreboardPoint(game) {
+  if (!game) {
+    return 'Scoreboard';
+  }
+  if (game.stage === 'final') {
+    return 'Final';
+  }
+  if (game.stage === 'live') {
+    const periodLabel = formatPeriodLabel(game);
+    const clock = formatGameClock(game);
+    if (periodLabel && clock) {
+      return `Live • ${periodLabel} ${clock}`;
+    }
+    if (periodLabel) {
+      return `Live • ${periodLabel}`;
+    }
+    return 'Live update';
+  }
+  return formatGameStatus(game) || 'Scoreboard';
+}
+
+function formatLeadLabel(visualization, lead) {
+  if (!Number.isFinite(lead) || lead === 0) {
+    return 'Tied score';
+  }
+  const leaderRole = lead > 0 ? 'home' : 'visitor';
+  const prefix = teamAbbreviation(visualization, leaderRole);
+  return `${prefix} +${helpers.formatNumber(Math.abs(lead), 0)}`;
+}
+
+function estimateHomeWinProbability(lead, timeRemaining, totalSeconds) {
+  if (!Number.isFinite(lead) || !Number.isFinite(timeRemaining) || !Number.isFinite(totalSeconds)) {
+    return 0.5;
+  }
+  if (totalSeconds <= 0) {
+    if (lead > 0) return 1;
+    if (lead < 0) return 0;
+    return 0.5;
+  }
+  if (timeRemaining <= 0) {
+    if (lead > 0) return 1;
+    if (lead < 0) return 0;
+    return 0.5;
+  }
+  const remainingFraction = Math.max(0, Math.min(1, timeRemaining / totalSeconds));
+  const scale = 8 * remainingFraction + 1.6;
+  const logisticInput = lead / scale;
+  const probability = 1 / (1 + Math.exp(-logisticInput));
+  return Math.max(0, Math.min(1, probability));
+}
+
+function buildWinProbabilitySeries(visualization) {
+  const game = visualization?.game;
+  if (!game) {
+    return { points: [], totalSeconds: 0 };
+  }
+
+  const breakdown = game.scoringBreakdown || { labels: [], visitor: [], home: [] };
+  const labels = Array.isArray(breakdown.labels) ? breakdown.labels : [];
+  const homeSegments = Array.isArray(breakdown.home) ? breakdown.home : [];
+  const visitorSegments = Array.isArray(breakdown.visitor) ? breakdown.visitor : [];
+
+  const points = [
+    {
+      rawLabel: 'tip',
+      label: 'Tipoff',
+      elapsedSeconds: 0,
+      homeScore: 0,
+      visitorScore: 0,
+      stage: 'upcoming',
+    },
+  ];
+
+  let elapsedSeconds = 0;
+  let cumulativeHome = 0;
+  let cumulativeVisitor = 0;
+
+  labels.forEach((rawLabel, index) => {
+    const duration = periodDurationFromLabel(rawLabel);
+    if (duration <= 0) {
+      return;
+    }
+    const homeDelta = Number(homeSegments[index]) || 0;
+    const visitorDelta = Number(visitorSegments[index]) || 0;
+    cumulativeHome += homeDelta;
+    cumulativeVisitor += visitorDelta;
+    elapsedSeconds += duration;
+    points.push({
+      rawLabel,
+      label: describePeriodEndpoint(rawLabel),
+      elapsedSeconds,
+      homeScore: cumulativeHome,
+      visitorScore: cumulativeVisitor,
+      stage: 'period-end',
+    });
+  });
+
+  const scoreboardHome = Number(visualization?.scores?.home);
+  const scoreboardVisitor = Number(visualization?.scores?.visitor);
+  if (Number.isFinite(scoreboardHome) && Number.isFinite(scoreboardVisitor)) {
+    const liveElapsed = computeLiveElapsedSeconds(game);
+    const scoreboardElapsed = Number.isFinite(liveElapsed) ? liveElapsed : elapsedSeconds;
+    const totalSeconds = computeTotalGameSeconds(game, labels, scoreboardElapsed);
+    const clampedElapsed = Math.min(Math.max(scoreboardElapsed, 0), totalSeconds);
+    const scoreboardPoint = {
+      rawLabel: game.stage,
+      label: describeScoreboardPoint(game),
+      elapsedSeconds: clampedElapsed,
+      homeScore: scoreboardHome,
+      visitorScore: scoreboardVisitor,
+      stage: game.stage,
+      isLive: game.stage === 'live',
+      isFinal: game.stage === 'final',
+    };
+    const last = points[points.length - 1];
+    const duplicate =
+      last &&
+      Math.abs(last.homeScore - scoreboardHome) < 0.01 &&
+      Math.abs(last.visitorScore - scoreboardVisitor) < 0.01 &&
+      Math.abs(last.elapsedSeconds - clampedElapsed) < 1;
+    if (duplicate) {
+      points[points.length - 1] = { ...last, ...scoreboardPoint };
+    } else {
+      points.push(scoreboardPoint);
+    }
+    return {
+      points,
+      totalSeconds: Math.max(totalSeconds, elapsedSeconds),
+    };
+  }
+
+  const fallbackTotal = computeTotalGameSeconds(game, labels, elapsedSeconds);
   return {
-    type: 'doughnut',
+    points,
+    totalSeconds: Math.max(fallbackTotal, elapsedSeconds),
+  };
+}
+
+function buildWinProbabilityConfig(visualization) {
+  const { points, totalSeconds } = buildWinProbabilitySeries(visualization);
+  if (!points.length) {
+    return null;
+  }
+
+  const enriched = points
+    .map((point) => {
+      const clampedElapsed = Math.min(Math.max(point.elapsedSeconds, 0), totalSeconds || 0);
+      const timeRemaining = Math.max((totalSeconds || 0) - clampedElapsed, 0);
+      const lead = Number(point.homeScore) - Number(point.visitorScore);
+      let probability = estimateHomeWinProbability(lead, timeRemaining, totalSeconds || 0);
+      if (point.isFinal) {
+        if (lead > 0) probability = 1;
+        else if (lead < 0) probability = 0;
+        else probability = 0.5;
+      }
+      const probabilityPercent = Math.max(0, Math.min(100, probability * 100));
+      return {
+        ...point,
+        elapsedSeconds: clampedElapsed,
+        timeRemaining,
+        homeWinProbability: probabilityPercent,
+        lead,
+        leadLabel: formatLeadLabel(visualization, lead),
+        timeRemainingLabel: timeRemaining > 0 ? formatRemainingClock(timeRemaining) : '',
+      };
+    })
+    .sort((a, b) => a.elapsedSeconds - b.elapsedSeconds);
+
+  if (enriched.length < 2) {
+    const placeholderLabel = enriched[0]?.label || 'Awaiting tip';
+    return {
+      type: 'line',
+      data: {
+        labels: [placeholderLabel],
+        datasets: [
+          {
+            label: `${teamName(visualization, 'home')} win %`,
+            data: [{ y: 50, meta: enriched[0] }],
+            borderColor: roleColors.home.line,
+            fill: false,
+          },
+          {
+            label: `${teamName(visualization, 'visitor')} win %`,
+            data: [{ y: 50, meta: enriched[0] }],
+            borderColor: roleColors.visitor.line,
+            borderDash: [4, 4],
+            fill: false,
+          },
+        ],
+      },
+      options: {
+        plugins: {
+          legend: { position: 'bottom' },
+          tooltip: {
+            callbacks: {
+              label() {
+                return 'Win probability will activate once the game begins.';
+              },
+            },
+          },
+        },
+        scales: {
+          x: { display: false },
+          y: {
+            min: 0,
+            max: 100,
+            ticks: {
+              callback(value) {
+                return `${helpers.formatNumber(value, 0)}%`;
+              },
+            },
+          },
+        },
+      },
+    };
+  }
+
+  const visitorAbbr = teamAbbreviation(visualization, 'visitor');
+  const homeAbbr = teamAbbreviation(visualization, 'home');
+  const labels = enriched.map((point) => point.label);
+  const homeData = enriched.map((point) => ({ y: point.homeWinProbability, meta: point }));
+  const visitorData = enriched.map((point) => ({ y: 100 - point.homeWinProbability, meta: point }));
+
+  const backgroundGradient = (context) => {
+    const { chart } = context;
+    const { ctx, chartArea } = chart;
+    if (!chartArea) {
+      return 'rgba(244, 181, 63, 0.2)';
+    }
+    const gradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
+    gradient.addColorStop(0, 'rgba(17, 86, 214, 0.18)');
+    gradient.addColorStop(0.48, 'rgba(17, 86, 214, 0.06)');
+    gradient.addColorStop(0.52, 'rgba(244, 181, 63, 0.08)');
+    gradient.addColorStop(1, 'rgba(244, 181, 63, 0.3)');
+    return gradient;
+  };
+
+  return {
+    type: 'line',
     data: {
-      labels: [teamAbbreviation(visualization, 'visitor'), teamAbbreviation(visualization, 'home')],
+      labels,
       datasets: [
         {
-          data: [visitorPf, homePf],
-          backgroundColor: [roleColors.visitor.fill, roleColors.home.fill],
-          borderColor: [roleColors.visitor.solid, roleColors.home.solid],
-          borderWidth: 1.5,
+          label: `${teamName(visualization, 'home')} win %`,
+          data: homeData,
+          borderColor: roleColors.home.line,
+          backgroundColor: backgroundGradient,
+          fill: true,
+          tension: 0.32,
+          pointRadius(context) {
+            const meta = context.raw?.meta;
+            if (meta?.isFinal) {
+              return 6;
+            }
+            if (meta?.isLive) {
+              return 5;
+            }
+            return 3.5;
+          },
+          pointHoverRadius(context) {
+            const meta = context.raw?.meta;
+            if (meta?.isFinal) {
+              return 7.5;
+            }
+            if (meta?.isLive) {
+              return 6.5;
+            }
+            return 5;
+          },
+          pointBackgroundColor(context) {
+            const meta = context.raw?.meta;
+            if (meta?.isLive) {
+              return '#ffffff';
+            }
+            if (meta?.isFinal) {
+              return roleColors.home.solid;
+            }
+            return 'rgba(244, 181, 63, 0.95)';
+          },
+          pointBorderColor(context) {
+            const meta = context.raw?.meta;
+            if (meta?.isLive) {
+              return roleColors.home.solid;
+            }
+            return '#ffffff';
+          },
+          borderWidth: 2,
+        },
+        {
+          label: `${teamName(visualization, 'visitor')} win %`,
+          data: visitorData,
+          borderColor: roleColors.visitor.line,
+          borderDash: [6, 4],
+          fill: false,
+          tension: 0.32,
+          pointRadius: 0,
+          pointHoverRadius: 0,
         },
       ],
     },
     options: {
-      cutout: '58%',
+      interaction: { mode: 'index', intersect: false },
+      scales: {
+        x: {
+          grid: { display: false },
+          ticks: {
+            maxRotation: 0,
+            callback(value, index) {
+              return labels[index] || value;
+            },
+          },
+        },
+        y: {
+          min: 0,
+          max: 100,
+          grid: {
+            color(context) {
+              if (context.tick.value === 50) {
+                return 'rgba(11, 37, 69, 0.35)';
+              }
+              return 'rgba(11, 37, 69, 0.12)';
+            },
+            lineWidth(context) {
+              return context.tick.value === 50 ? 1.4 : 0.8;
+            },
+          },
+          ticks: {
+            callback(value) {
+              return `${helpers.formatNumber(value, 0)}%`;
+            },
+          },
+        },
+      },
       plugins: {
         legend: { position: 'bottom' },
         tooltip: {
+          displayColors: false,
           callbacks: {
+            title(context) {
+              return context?.[0]?.raw?.meta?.label || context?.[0]?.label || '';
+            },
             label(context) {
-              const value = context.parsed ?? 0;
-              return `${context.label}: ${helpers.formatNumber(value, 0)} fouls`;
+              const datasetLabel = context.dataset?.label || '';
+              const value = context.parsed?.y ?? 0;
+              return `${datasetLabel}: ${helpers.formatNumber(value, 1)}%`;
+            },
+            afterBody(contexts) {
+              const meta = contexts?.[0]?.raw?.meta;
+              if (!meta) {
+                return [];
+              }
+              const lines = [];
+              const visitorScore = helpers.formatNumber(meta.visitorScore ?? 0, 0);
+              const homeScore = helpers.formatNumber(meta.homeScore ?? 0, 0);
+              lines.push(`${visitorAbbr} ${visitorScore} — ${homeAbbr} ${homeScore}`);
+              if (meta.timeRemainingLabel) {
+                lines.push(`${meta.timeRemainingLabel} remaining`);
+              }
+              if (meta.leadLabel) {
+                lines.push(`Lead: ${meta.leadLabel}`);
+              }
+              return lines;
             },
           },
         },
@@ -1908,9 +2329,9 @@ function renderVisualizations(visualization) {
       },
     },
     {
-      element: '#foul-discipline',
+      element: '#win-probability',
       async createConfig() {
-        return buildFoulDisciplineConfig(visualization);
+        return buildWinProbabilityConfig(visualization);
       },
     },
     {
