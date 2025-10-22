@@ -117,6 +117,12 @@ bdl("/v1/players?search=lillard") returns Damian Lillard.
 
 Team and roster pages populate without console errors.
 
+Screenshot requirement
+
+Capture and attach a screenshot from the local development server that demonstrates the updated feature or fix working end-to-end.
+
+Reviewers must inspect the screenshot for both content and accuracy before approving changes.
+
 CI/CD notes
 
 Keep existing site build/validate steps.
