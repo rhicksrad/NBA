@@ -586,6 +586,93 @@ function normalizeStatusText(value) {
   return typeof value === 'string' ? value.trim() : '';
 }
 
+function sanitizeClockValue(value) {
+  return typeof value === 'string' ? value.replace(/\s+/g, '') : '';
+}
+
+function parseElapsedClockValue(value) {
+  const sanitized = sanitizeClockValue(value);
+  if (!sanitized) {
+    return null;
+  }
+  const match = sanitized.match(/^(\d{1,2}):(\d{1,2})(?:\.(\d{1,3}))?$/);
+  if (!match) {
+    return null;
+  }
+  const minutes = Number(match[1]);
+  const seconds = Number(match[2]);
+  if (!Number.isFinite(minutes) || !Number.isFinite(seconds)) {
+    return null;
+  }
+  const decimals = match[3] ? Math.min(match[3].length, 3) : 0;
+  const precision = decimals ? 10 ** decimals : 1;
+  const fractional = match[3] ? Number(match[3].slice(0, decimals)) : 0;
+  return {
+    sanitized,
+    minutes,
+    seconds,
+    decimals,
+    precision,
+    fractional,
+  };
+}
+
+function getPeriodDurationSeconds(period) {
+  const normalized = Number(period);
+  if (!Number.isFinite(normalized) || normalized <= 0) {
+    return null;
+  }
+  return normalized > 4 ? 5 * 60 : 12 * 60;
+}
+
+function formatGameClock(game) {
+  const sanitized = sanitizeClockValue(game?.time);
+  if (!game || game.stage !== 'live') {
+    return sanitized;
+  }
+  const parsed = parseElapsedClockValue(game.time);
+  const periodDuration = getPeriodDurationSeconds(game.period);
+  if (!parsed || !periodDuration) {
+    return sanitized;
+  }
+  const elapsedUnits =
+    parsed.minutes * 60 * parsed.precision +
+    parsed.seconds * parsed.precision +
+    parsed.fractional;
+  const periodUnits = periodDuration * parsed.precision;
+  if (!Number.isFinite(elapsedUnits) || elapsedUnits < 0) {
+    return sanitized;
+  }
+  let remainingUnits = periodUnits - elapsedUnits;
+  if (remainingUnits < 0) {
+    remainingUnits = 0;
+  }
+  let minutes = Math.floor(remainingUnits / (60 * parsed.precision));
+  let remainder = remainingUnits - minutes * 60 * parsed.precision;
+  let seconds = Math.floor(remainder / parsed.precision);
+  let fractionalUnits = remainder - seconds * parsed.precision;
+
+  if (seconds >= 60) {
+    minutes += Math.floor(seconds / 60);
+    seconds %= 60;
+  }
+
+  if (minutes < 0) {
+    minutes = 0;
+  }
+
+  let clock = `${minutes}:${String(seconds).padStart(2, '0')}`;
+  if (parsed.decimals > 0) {
+    const fractionText = String(fractionalUnits)
+      .padStart(parsed.decimals, '0')
+      .replace(/0+$/, '');
+    if (fractionText) {
+      clock += `.${fractionText}`;
+    }
+  }
+  return clock;
+}
+
 function formatPeriodLabel(game) {
   if (game.stage === 'final') {
     return 'Final';
@@ -605,7 +692,7 @@ function formatPeriodLabel(game) {
 function formatGameStatus(game) {
   const status = normalizeStatusText(game.status);
   const normalized = status.toLowerCase();
-  const clock = game.time ? game.time.replace(/\s+/g, '') : '';
+  const clock = formatGameClock(game);
   const periodLabel = formatPeriodLabel(game);
 
   if (game.stage === 'final' || normalized.includes('final')) {
@@ -715,7 +802,13 @@ function renderScoreboardState(message) {
 }
 
 function normalizeScoreboardView(value) {
-  return value === 'upcoming' ? 'upcoming' : 'all';
+  if (value === 'live') {
+    return 'live';
+  }
+  if (value === 'upcoming') {
+    return 'upcoming';
+  }
+  return 'all';
 }
 
 function updateScoreboardViewButtons() {
@@ -735,6 +828,9 @@ function filterGamesForView(games) {
   }
   if (scoreboardView === 'upcoming') {
     return games.filter((game) => game.stage === 'upcoming');
+  }
+  if (scoreboardView === 'live') {
+    return games.filter((game) => game.stage === 'live');
   }
   return games;
 }
