@@ -1481,6 +1481,8 @@ function buildBalanceChart(games) {
     })
     .slice(0, 14);
 
+  const datasetEntries = entries.map((entry, index) => ({ ...entry, y: index }));
+
   const stagePalette = {
     final: {
       home: 'rgba(17, 86, 214, 0.85)',
@@ -1494,7 +1496,7 @@ function buildBalanceChart(games) {
     },
   };
 
-  const colors = entries.map((entry) => {
+  const colors = datasetEntries.map((entry) => {
     const palette = stagePalette[entry.stage] ?? stagePalette.live;
     if (Math.abs(entry.x) < 0.5) {
       return palette.neutral;
@@ -1502,8 +1504,10 @@ function buildBalanceChart(games) {
     return entry.x > 0 ? palette.home : palette.visitor;
   });
 
-  const maxMagnitude = Math.max(...entries.map((entry) => Math.abs(entry.x)), 1);
+  const maxMagnitude = Math.max(...datasetEntries.map((entry) => Math.abs(entry.x)), 1);
   const marginPadding = Math.max(2, Math.ceil(maxMagnitude * 0.1));
+
+  const yDomainMax = datasetEntries.length > 0 ? datasetEntries.length - 1 : 0;
 
   return {
     type: 'bar',
@@ -1511,7 +1515,7 @@ function buildBalanceChart(games) {
       datasets: [
         {
           label: 'Margin (home - visitor)',
-          data: entries,
+          data: datasetEntries,
           parsing: false,
           backgroundColor: colors,
           borderRadius: 8,
@@ -1563,9 +1567,18 @@ function buildBalanceChart(games) {
           },
         },
         y: {
+          type: 'linear',
+          min: -0.5,
+          max: yDomainMax + 0.5,
+          offset: true,
           ticks: {
-            callback(_, index) {
-              return entries[index]?.label ?? '';
+            stepSize: 1,
+            callback(value) {
+              const index = Number(value);
+              if (Number.isInteger(index)) {
+                return datasetEntries[index]?.label ?? '';
+              }
+              return '';
             },
           },
           grid: { display: false },
