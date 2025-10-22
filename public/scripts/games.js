@@ -1194,25 +1194,16 @@ function renderScoreboard(games) {
     renderScoreboardState('No NBA games for this date.');
     return;
   }
-  let filtered = filterGamesForView(games);
-  let note = null;
+  const filtered = filterGamesForView(games);
   if (!filtered.length) {
-    if (scoreboardView === 'upcoming') {
-      filtered = games;
-      note = 'No upcoming games. Showing all matchups for this date.';
-    } else {
-      filtered = games;
+    let message = 'No NBA games for this date.';
+    if (scoreboardView === 'live') {
+      message = 'No games are live for this date. Check the upcoming slate or completed finals instead.';
+    } else if (scoreboardView === 'upcoming') {
+      message = 'No upcoming games remain for this date. All matchups have either started or finished.';
     }
-  }
-  if (!filtered.length) {
-    renderScoreboardState('No NBA games for this date.');
+    renderScoreboardState(message);
     return;
-  }
-  if (note) {
-    const noteElement = document.createElement('p');
-    noteElement.className = 'scoreboard-state';
-    noteElement.textContent = note;
-    scoreboardContainer.appendChild(noteElement);
   }
   const sorted = [...filtered].sort((a, b) => {
     const stageDelta = (stageRank[a.stage] ?? 3) - (stageRank[b.stage] ?? 3);
