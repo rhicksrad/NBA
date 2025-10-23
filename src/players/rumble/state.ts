@@ -1,4 +1,5 @@
 import type { MatchupState } from "./types";
+import { isEraStyle, type EraStyle } from "./era";
 
 function toBase64(value: string): string {
   if (typeof window !== "undefined" && typeof window.btoa === "function") {
@@ -27,7 +28,7 @@ export function encodeMatchup(state: MatchupState): string {
   const payload = {
     a: sanitizeIds(state.a),
     b: sanitizeIds(state.b),
-    eraNorm: Boolean(state.eraNorm),
+    style: isEraStyle(state.style) ? state.style : "current",
   };
   return toBase64(JSON.stringify(payload));
 }
@@ -38,10 +39,11 @@ export function decodeMatchup(value: string | null | undefined): MatchupState | 
   }
   try {
     const raw = JSON.parse(fromBase64(value));
+    const style = resolveStyle(raw?.style, raw?.eraNorm);
     return {
       a: sanitizeIds(raw?.a),
       b: sanitizeIds(raw?.b),
-      eraNorm: Boolean(raw?.eraNorm),
+      style,
     };
   } catch (error) {
     console.warn("Unable to decode rumble hash", error);
@@ -69,4 +71,14 @@ export function writeHash(state: MatchupState): void {
     "Roster Rumble",
     `${window.location.pathname}${window.location.search}${next}`
   );
+}
+
+function resolveStyle(style: unknown, legacyEraNorm: unknown): EraStyle {
+  if (isEraStyle(style)) {
+    return style;
+  }
+  if (typeof legacyEraNorm === "boolean" && legacyEraNorm) {
+    return "nineties";
+  }
+  return "current";
 }

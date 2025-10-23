@@ -5,6 +5,7 @@ import type {
   Player,
   TeamChemistry,
 } from "./types";
+import { ERA_PRESETS, type EraPreset, type EraStyle } from "./era";
 import { inferArchetypes } from "./archetypes";
 
 function hasArchetype(player: Player, target: Archetype): boolean {
@@ -29,13 +30,14 @@ function describeEdge(a: Player, b: Player, delta: number, reasons: string[]): C
   };
 }
 
-export function buildChemistry(players: Player[]): TeamChemistry {
+export function buildChemistry(players: Player[], eraStyle: EraStyle = "current"): TeamChemistry {
   const entries = players.filter(Boolean);
   entries.forEach(ensureArchetypes);
 
   const edges: ChemistryEdge[] = [];
   let scoreDelta = 0;
   const reasonAccumulator = new Map<string, number>();
+  const preset = ERA_PRESETS[eraStyle];
 
   for (let i = 0; i < entries.length; i += 1) {
     for (let j = i + 1; j < entries.length; j += 1) {
@@ -57,12 +59,12 @@ export function buildChemistry(players: Player[]): TeamChemistry {
         (hasArchetype(b, "Creator") || hasArchetype(b, "Secondary")) &&
         (hasArchetype(a, "Off-ball Shooter") || hasArchetype(a, "Stretch Big"));
       if (creatorShooter || shooterCreator) {
-        delta += 3;
+        delta += 3 * preset.threeFactor;
         reasons.push("creator → shooter");
       }
 
       if (a.threePA_rate > 0.5 && b.threePA_rate > 0.5) {
-        delta += 2;
+        delta += 2 * preset.spacingBonus;
         reasons.push("spacing stack");
       }
 
@@ -113,7 +115,7 @@ interface SlotComparison {
   reasons: string[];
 }
 
-function compareSlot(attacker: Player, defender: Player): SlotComparison {
+function compareSlot(attacker: Player, defender: Player, preset: EraPreset): SlotComparison {
   ensureArchetypes(attacker);
   ensureArchetypes(defender);
 
@@ -121,29 +123,30 @@ function compareSlot(attacker: Player, defender: Player): SlotComparison {
   const reasons: string[] = [];
 
   if (hasArchetype(attacker, "POA Stopper") && hasArchetype(defender, "Creator")) {
-    advantage += 3;
+    advantage += 3 + preset.handcheck;
     reasons.push("POA vs Creator");
   }
 
   if (hasArchetype(attacker, "Rim Protector") && hasArchetype(defender, "Rim Runner")) {
-    advantage += 2;
+    advantage += 2 + preset.postBoost * 0.3;
     reasons.push("Rim protection");
   }
 
   if (hasArchetype(attacker, "Off-ball Shooter") && !hasArchetype(defender, "Switch Big")) {
-    advantage += 2;
+    advantage += 2 * preset.threeFactor;
     reasons.push("Spacing advantage");
   }
 
   return { advantage, reasons };
 }
 
-export function evaluateMatchup(teamA: Player[], teamB: Player[]): MatchupAdjustment {
+export function evaluateMatchup(teamA: Player[], teamB: Player[], eraStyle: EraStyle = "current"): MatchupAdjustment {
   const limit = Math.min(teamA.length, teamB.length);
   let advantageA = 0;
   let advantageB = 0;
   const reasonsA: string[] = [];
   const reasonsB: string[] = [];
+  const preset = ERA_PRESETS[eraStyle];
 
   for (let i = 0; i < limit; i += 1) {
     const playerA = teamA[i];
@@ -152,12 +155,12 @@ export function evaluateMatchup(teamA: Player[], teamB: Player[]): MatchupAdjust
       // ignore empty slots
       continue;
     }
-    const forward = compareSlot(playerA, playerB);
+    const forward = compareSlot(playerA, playerB, preset);
     if (forward.advantage !== 0) {
       advantageA += forward.advantage;
       reasonsA.push(`${playerA.name}: ${forward.reasons.join(", ")}`);
     }
-    const reverse = compareSlot(playerB, playerA);
+    const reverse = compareSlot(playerB, playerA, preset);
     if (reverse.advantage !== 0) {
       advantageB += reverse.advantage;
       reasonsB.push(`${playerB.name}: ${reverse.reasons.join(", ")}`);
