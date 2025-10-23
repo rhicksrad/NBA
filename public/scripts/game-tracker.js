@@ -494,16 +494,27 @@ function parseMinutesToSeconds(value) {
   if (typeof value !== 'string') {
     return 0;
   }
-  const match = value.trim().match(/^(\d+):(\d{2})$/);
-  if (!match) {
+
+  const trimmed = value.trim();
+  if (!trimmed) {
     return 0;
   }
-  const minutes = Number(match[1]);
-  const seconds = Number(match[2]);
-  if (!Number.isFinite(minutes) || !Number.isFinite(seconds)) {
+
+  const clockMatch = trimmed.match(/^(\d+):(\d{1,2})$/);
+  if (clockMatch) {
+    const minutes = Number(clockMatch[1]);
+    const seconds = Number(clockMatch[2]);
+    if (!Number.isFinite(minutes) || !Number.isFinite(seconds)) {
+      return 0;
+    }
+    return minutes * 60 + seconds;
+  }
+
+  const numericMinutes = Number.parseFloat(trimmed);
+  if (!Number.isFinite(numericMinutes) || numericMinutes < 0) {
     return 0;
   }
-  return minutes * 60 + seconds;
+  return Math.round(numericMinutes * 60);
 }
 
 function normalizePlayerStat(row) {
@@ -1745,65 +1756,108 @@ function buildScoringHierarchyConfig(visualization) {
 }
 
 function computeRotationMinutes(players) {
-  const sorted = [...players].sort(
-    (a, b) => parseMinutesToSeconds(b?.min ?? '0:00') - parseMinutesToSeconds(a?.min ?? '0:00')
-  );
-  const top = sorted.slice(0, 6);
-  const totalSeconds = top.reduce((sum, player) => sum + parseMinutesToSeconds(player?.min ?? '0:00'), 0);
-  return {
-    totalMinutes: totalSeconds / 60,
-    breakdown: top.map((player) => ({
-      name: player.name,
-      minutes: parseMinutesToSeconds(player?.min ?? '0:00') / 60,
-    })),
-  };
+  return players
+    .map((player) => {
+      const name = typeof player?.name === 'string' ? player.name.trim() : '';
+      return {
+        name: name || 'Player',
+        minutes: parseMinutesToSeconds(player?.min ?? '0:00') / 60,
+      };
+    })
+    .filter((player) => Number.isFinite(player.minutes) && player.minutes > 0)
+    .sort((a, b) => {
+      if (b.minutes !== a.minutes) {
+        return b.minutes - a.minutes;
+      }
+      return a.name.localeCompare(b.name);
+    });
 }
 
 function buildRotationWorkloadConfig(visualization) {
-  const visitorRotation = computeRotationMinutes(Array.isArray(visualization?.players?.visitor) ? visualization.players.visitor : []);
-  const homeRotation = computeRotationMinutes(Array.isArray(visualization?.players?.home) ? visualization.players.home : []);
-  const labels = [teamAbbreviation(visualization, 'visitor'), teamAbbreviation(visualization, 'home')];
-  const totals = [visitorRotation.totalMinutes, homeRotation.totalMinutes];
+  const visitorAbbr = teamAbbreviation(visualization, 'visitor');
+  const homeAbbr = teamAbbreviation(visualization, 'home');
+  const visitorPlayers = computeRotationMinutes(
+    Array.isArray(visualization?.players?.visitor) ? visualization.players.visitor : []
+  ).map((player) => ({ ...player, role: 'visitor', teamAbbr: visitorAbbr }));
+  const homePlayers = computeRotationMinutes(
+    Array.isArray(visualization?.players?.home) ? visualization.players.home : []
+  ).map((player) => ({ ...player, role: 'home', teamAbbr: homeAbbr }));
+
+  const combined = [...visitorPlayers, ...homePlayers]
+    .sort((a, b) => {
+      if (b.minutes !== a.minutes) {
+        return b.minutes - a.minutes;
+      }
+      return a.name.localeCompare(b.name);
+    })
+    .slice(0, 12);
+
+  if (!combined.length) {
+    return {
+      type: 'bar',
+      data: {
+        labels: ['No rotation data yet'],
+        datasets: [
+          {
+            data: [0],
+            backgroundColor: 'rgba(11, 37, 69, 0.16)',
+            borderColor: 'rgba(11, 37, 69, 0.38)',
+            borderWidth: 1,
+          },
+        ],
+      },
+      options: {
+        indexAxis: 'y',
+        scales: {
+          x: { beginAtZero: true },
+        },
+        plugins: { legend: { display: false } },
+      },
+    };
+  }
+
+  const labels = combined.map((player) => `${player.name} (${player.teamAbbr})`);
+  const data = combined.map((player) => player.minutes);
+  const backgroundColor = combined.map(
+    (player) => roleColors[player.role]?.fill || roleColors.visitor.fill
+  );
+  const borderColor = combined.map(
+    (player) => roleColors[player.role]?.solid || roleColors.visitor.solid
+  );
+
   return {
     type: 'bar',
     data: {
       labels,
       datasets: [
         {
-          label: 'Minutes (top six)',
-          data: totals,
-          backgroundColor: [roleColors.visitor.fill, roleColors.home.fill],
-          borderColor: [roleColors.visitor.solid, roleColors.home.solid],
-          borderWidth: 1.5,
+          label: 'Minutes played',
+          data,
+          backgroundColor,
+          borderColor,
+          borderWidth: 1.4,
         },
       ],
     },
     options: {
+      indexAxis: 'y',
       scales: {
-        y: {
+        x: {
           beginAtZero: true,
           ticks: {
             callback(value) {
-              return `${helpers.formatNumber(value, 0)} min`;
+              return `${helpers.formatNumber(value, 1)} min`;
             },
           },
         },
       },
       plugins: {
+        legend: { display: false },
         tooltip: {
           callbacks: {
             label(context) {
-              const value = context.parsed?.y ?? 0;
-              return `${context.dataset.label}: ${helpers.formatNumber(value, 1)} minutes`;
-            },
-            afterLabel(context) {
-              const rotation = context.dataIndex === 0 ? visitorRotation : homeRotation;
-              if (!rotation.breakdown.length) {
-                return '';
-              }
-              return rotation.breakdown
-                .map((player) => `• ${player.name}: ${helpers.formatNumber(player.minutes, 1)} min`)
-                .join('\n');
+              const value = context.parsed?.x ?? 0;
+              return `${context.label}: ${helpers.formatNumber(value, 1)} minutes`;
             },
           },
         },
