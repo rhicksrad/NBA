@@ -3413,3 +3413,35 @@ function initPlayerAtlas() {
 }
 
 initPlayerAtlas();
+
+const rumbleTrigger = document.querySelector('[data-rumble-launch]');
+const rumbleMeta = document.querySelector('meta[name="rumble-module"]');
+
+if (rumbleTrigger && rumbleMeta) {
+  const rumbleModuleUrl = new URL(rumbleMeta.getAttribute('content'), document.baseURI).toString();
+  let rumbleMountPromise = null;
+
+  const ensureRumbleMounted = async () => {
+    if (!rumbleMountPromise) {
+      rumbleMountPromise = import(rumbleModuleUrl).then((module) => {
+        if (typeof module.mountRosterRumble !== 'function') {
+          throw new Error('Roster Rumble module missing mountRosterRumble export');
+        }
+        return module.mountRosterRumble({ trigger: rumbleTrigger, root: document.body });
+      });
+    }
+    return rumbleMountPromise;
+  };
+
+  rumbleTrigger.addEventListener('click', async (event) => {
+    event.preventDefault();
+    const experience = await ensureRumbleMounted();
+    experience.open();
+  });
+
+  if (window.location.hash.startsWith('#rumble=')) {
+    ensureRumbleMounted().then((experience) => {
+      experience.open();
+    });
+  }
+}
