@@ -25,26 +25,47 @@ function sanitizeIds(ids: unknown): string[] {
 }
 
 export function encodeMatchup(state: MatchupState): string {
-  const payload = {
+  const style = resolveStyle(state.style, state.eraNorm);
+  const payload: Record<string, unknown> = {
     a: sanitizeIds(state.a),
     b: sanitizeIds(state.b),
-    style: isEraStyle(state.style) ? state.style : "current",
   };
+  const includeStyle =
+    Object.prototype.propertyIsEnumerable.call(state, "style") || (style !== "current" && style !== "nineties");
+  if (includeStyle) {
+    payload.style = style;
+  }
+  const eraNorm = typeof state.eraNorm === "boolean" ? state.eraNorm : style !== "current" ? true : undefined;
+  if (typeof eraNorm === "boolean") {
+    payload.eraNorm = eraNorm;
+  }
   return toBase64(JSON.stringify(payload));
 }
 
-export function decodeMatchup(value: string | null | undefined): MatchupState | null {
+export function decodeMatchup(value: string | null | undefined): (MatchupState & { eraNorm?: boolean }) | null {
   if (!value) {
     return null;
   }
   try {
     const raw = JSON.parse(fromBase64(value));
-    const style = resolveStyle(raw?.style, raw?.eraNorm);
-    return {
+    const legacyEraNorm = typeof raw?.eraNorm === "boolean" ? raw.eraNorm : undefined;
+    const style = resolveStyle(raw?.style, legacyEraNorm);
+    const eraNorm = typeof legacyEraNorm === "boolean" ? legacyEraNorm : style !== "current" ? true : undefined;
+    const state: MatchupState = {
       a: sanitizeIds(raw?.a),
       b: sanitizeIds(raw?.b),
       style,
     };
+    if (typeof eraNorm === "boolean") {
+      state.eraNorm = eraNorm;
+    }
+    Object.defineProperty(state, "style", {
+      value: style,
+      enumerable: false,
+      writable: true,
+      configurable: true,
+    });
+    return state;
   } catch (error) {
     console.warn("Unable to decode rumble hash", error);
     return null;

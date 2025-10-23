@@ -325,6 +325,8 @@ export async function createRumbleExperience(options: LaunchOptions): Promise<Ru
     throw new Error("Failed to initialize Roster Rumble UI");
   }
 
+  let eraStyle: EraStyle = "current";
+
   eraSelect.value = eraStyle;
 
   if (!isOverlay) {
@@ -365,7 +367,6 @@ export async function createRumbleExperience(options: LaunchOptions): Promise<Ru
     B: { query: "", era: "", archetype: "" },
   };
 
-  let eraStyle: EraStyle = "current";
   let players: Player[] = [];
   let playerLookup = new Map<string, Player>();
   let isMounted = !isOverlay;

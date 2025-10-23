@@ -1,10 +1,11 @@
 import type { Player, SimResult } from "./types";
 import { buildChemistry, evaluateMatchup } from "./chemistry";
-import { ERA_PRESETS, type EraPreset, type EraStyle } from "./era";
+import { ERA_PRESETS, isEraStyle, type EraPreset, type EraStyle } from "./era";
 
 export interface SimulationOptions {
   games?: number;
   eraStyle?: EraStyle;
+  eraNorm?: boolean;
   rng?: () => number;
 }
 
@@ -32,19 +33,38 @@ function averageImpact(players: Player[]): number {
   return players.reduce((sum, player) => sum + player.impact, 0) / players.length;
 }
 
+function normalizeEraStyle(options: Pick<SimulationOptions, "eraStyle" | "eraNorm">): EraStyle {
+  if (isEraStyle(options.eraStyle)) {
+    return options.eraStyle;
+  }
+  if (typeof options.eraNorm === "boolean") {
+    return options.eraNorm ? "nineties" : "current";
+  }
+  return "current";
+}
+
 export function simulateSeries(
   teamA: Player[],
   teamB: Player[],
   optionsOrGames?: SimulationOptions | number,
-  eraStyleOverride?: EraStyle
+  legacyEra?: EraStyle | boolean
 ): SimResult {
-  const options: SimulationOptions =
-    typeof optionsOrGames === "number" ? { games: optionsOrGames, eraStyle: eraStyleOverride } : optionsOrGames ?? {};
+  let options: SimulationOptions;
+  if (typeof optionsOrGames === "number") {
+    options = { games: optionsOrGames };
+    if (typeof legacyEra === "boolean") {
+      options.eraNorm = legacyEra;
+    } else if (isEraStyle(legacyEra)) {
+      options.eraStyle = legacyEra;
+    }
+  } else {
+    options = { ...(optionsOrGames ?? {}) };
+  }
 
   const games = Number.isFinite(options.games) && options.games ? Math.max(1, Math.floor(options.games)) : 100;
   const rng = options.rng ?? defaultRng;
-  const eraStyle = options.eraStyle ?? "current";
-  const preset = ERA_PRESETS[eraStyle];
+  const eraStyle = normalizeEraStyle(options);
+  const preset = ERA_PRESETS[eraStyle] ?? ERA_PRESETS.current;
   const chemistryA = buildChemistry(teamA, eraStyle);
   const chemistryB = buildChemistry(teamB, eraStyle);
   const matchup = evaluateMatchup(teamA, teamB, eraStyle);

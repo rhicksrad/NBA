@@ -66,6 +66,11 @@ export interface MatchupState {
   a: string[];
   b: string[];
   style: EraStyle;
+  /**
+   * Legacy flag preserved for backwards compatibility with older URLs.
+   * When present, `true` indicates that era normalization was enabled.
+   */
+  eraNorm?: boolean;
 }
 
 export interface PlayerPoolFilters {
