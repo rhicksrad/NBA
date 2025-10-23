@@ -3,12 +3,12 @@ import { buildChemistry, evaluateMatchup } from "./chemistry";
 import { renderChemistryGraph } from "./graph";
 import { simulateSeries } from "./simulate";
 import { decodeMatchup, writeHash } from "./state";
-import type { LaunchOptions, MatchupState, Player, Team, TeamChemistry } from "./types";
+import { isEraStyle, type EraStyle } from "./era";
+import type { LaunchOptions, MatchupState, Player, Team } from "./types";
 
 interface FilterState {
   query: string;
   era: string;
-  franchise: string;
   archetype: string;
 }
 
@@ -37,6 +37,17 @@ function normalizeText(value: string | null | undefined): string {
     .trim();
 }
 
+function formatPlayerMeta(player: Player): string {
+  const parts: string[] = [];
+  if (player.pos) {
+    parts.push(player.pos);
+  }
+  if (player.era) {
+    parts.push(player.era);
+  }
+  return parts.join(" · ");
+}
+
 function filterPlayers(
   players: Player[],
   taken: Set<string>,
@@ -50,7 +61,6 @@ function filterPlayers(
     if (queryTokens.length) {
       const haystackValues = [
         player.name,
-        player.franchise ?? "",
         player.era ?? "",
         player.pos ?? "",
         player.archetypes.join(" "),
@@ -64,9 +74,6 @@ function filterPlayers(
       }
     }
     if (filters.era && normalizeText(player.era).indexOf(filters.era) === -1) {
-      return false;
-    }
-    if (filters.franchise && normalizeText(player.franchise).indexOf(filters.franchise) === -1) {
       return false;
     }
     if (filters.archetype) {
@@ -97,9 +104,10 @@ function buildPlayerListItem(player: Player): HTMLElement {
   item.type = "button";
   item.className = "rumble-player-option";
   item.dataset.playerId = player.id;
+  const meta = formatPlayerMeta(player) || "—";
   item.innerHTML = `
     <span class="rumble-player-option__name">${player.name}</span>
-    <span class="rumble-player-option__meta">${player.pos ?? ""} · ${player.franchise ?? "Free Agent"}</span>
+    <span class="rumble-player-option__meta">${meta}</span>
   `;
   return item;
 }
@@ -112,9 +120,10 @@ function buildSlotNode(player: Player | null, index: number): HTMLElement {
     slot.innerHTML = `<span class="rumble-slot__placeholder">Slot ${index + 1}</span>`;
     return slot;
   }
+  const meta = formatPlayerMeta(player) || "—";
   slot.innerHTML = `
     <span class="rumble-slot__name">${player.name}</span>
-    <span class="rumble-slot__meta">${player.pos ?? ""} · ${player.franchise ?? ""}</span>
+    <span class="rumble-slot__meta">${meta}</span>
     <button type="button" class="rumble-slot__remove" aria-label="Remove ${player.name}" data-remove="${player.id}">Remove</button>
   `;
   return slot;
@@ -198,6 +207,7 @@ export async function createRumbleExperience(options: LaunchOptions): Promise<Ru
   const overlay = document.createElement("div");
   overlay.className = isOverlay ? "rumble-overlay" : "rumble-inline";
   const shellUid = Math.random().toString(36).slice(2);
+  const eraSelectId = `rumble-era-style-${shellUid}`;
   const titleId = `rumble-shell-title-${shellUid}`;
   const descriptionId = `rumble-shell-description-${shellUid}`;
   const shellAttributes = isOverlay
@@ -228,7 +238,6 @@ export async function createRumbleExperience(options: LaunchOptions): Promise<Ru
             <input type="search" data-rumble-search="A" placeholder="Search players" />
             <div class="rumble-team__filters">
               <select data-rumble-era="A"><option value="">All eras</option></select>
-              <select data-rumble-franchise="A"><option value="">All franchises</option></select>
               <select data-rumble-archetype="A"><option value="">All archetypes</option></select>
             </div>
           </div>
@@ -239,7 +248,15 @@ export async function createRumbleExperience(options: LaunchOptions): Promise<Ru
         <section class="rumble-results">
           <div class="rumble-results__controls">
             <button type="button" data-rumble-run>Simulate 100 Games</button>
-            <button type="button" data-rumble-era-toggle aria-pressed="false">Era Norm OFF</button>
+            <div class="rumble-era-style">
+              <label class="sr-only" for="${eraSelectId}">Era Style</label>
+              <select id="${eraSelectId}" data-rumble-era-style aria-label="Era Style">
+                <option value="current">Era Style: Current</option>
+                <option value="nineties">Era Style: 90s (bullyball)</option>
+                <option value="pre3">Era Style: Pre–3 Point Line</option>
+                <option value="oldschool">Era Style: Old School</option>
+              </select>
+            </div>
           </div>
           <div class="rumble-results__kpis">
             <div>
@@ -261,6 +278,7 @@ export async function createRumbleExperience(options: LaunchOptions): Promise<Ru
             <ul data-insight="a"></ul>
             <h4>What hurts Team B?</h4>
             <ul data-insight="b"></ul>
+            <p class="rumble-results__hint" data-insight-hint hidden></p>
           </div>
         </section>
         <section class="rumble-team rumble-team--b" data-team="B">
@@ -277,7 +295,6 @@ export async function createRumbleExperience(options: LaunchOptions): Promise<Ru
             <input type="search" data-rumble-search="B" placeholder="Search players" />
             <div class="rumble-team__filters">
               <select data-rumble-era="B"><option value="">All eras</option></select>
-              <select data-rumble-franchise="B"><option value="">All franchises</option></select>
               <select data-rumble-archetype="B"><option value="">All archetypes</option></select>
             </div>
           </div>
@@ -299,13 +316,16 @@ export async function createRumbleExperience(options: LaunchOptions): Promise<Ru
 
   const closeButton = overlay.querySelector<HTMLButtonElement>(".rumble-shell__close");
   const simulateButton = overlay.querySelector<HTMLButtonElement>("[data-rumble-run]");
-  const eraToggle = overlay.querySelector<HTMLButtonElement>("[data-rumble-era-toggle]");
+  const eraSelect = overlay.querySelector<HTMLSelectElement>("[data-rumble-era-style]");
   const histogramContainer = overlay.querySelector<HTMLElement>("[data-rumble-hist]");
   const insightsA = overlay.querySelector<HTMLUListElement>("[data-insight='a']");
   const insightsB = overlay.querySelector<HTMLUListElement>("[data-insight='b']");
-  if (!closeButton || !simulateButton || !eraToggle || !histogramContainer || !insightsA || !insightsB) {
+  const eraHint = overlay.querySelector<HTMLElement>("[data-insight-hint]");
+  if (!closeButton || !simulateButton || !eraSelect || !histogramContainer || !insightsA || !insightsB || !eraHint) {
     throw new Error("Failed to initialize Roster Rumble UI");
   }
+
+  eraSelect.value = eraStyle;
 
   if (!isOverlay) {
     closeButton.setAttribute("tabindex", "-1");
@@ -319,7 +339,6 @@ export async function createRumbleExperience(options: LaunchOptions): Promise<Ru
       graph: overlay.querySelector<HTMLElement>("[data-rumble-graph='A']"),
       search: overlay.querySelector<HTMLInputElement>("[data-rumble-search='A']"),
       era: overlay.querySelector<HTMLSelectElement>("[data-rumble-era='A']"),
-      franchise: overlay.querySelector<HTMLSelectElement>("[data-rumble-franchise='A']"),
       archetype: overlay.querySelector<HTMLSelectElement>("[data-rumble-archetype='A']"),
     },
     B: {
@@ -328,7 +347,6 @@ export async function createRumbleExperience(options: LaunchOptions): Promise<Ru
       graph: overlay.querySelector<HTMLElement>("[data-rumble-graph='B']"),
       search: overlay.querySelector<HTMLInputElement>("[data-rumble-search='B']"),
       era: overlay.querySelector<HTMLSelectElement>("[data-rumble-era='B']"),
-      franchise: overlay.querySelector<HTMLSelectElement>("[data-rumble-franchise='B']"),
       archetype: overlay.querySelector<HTMLSelectElement>("[data-rumble-archetype='B']"),
     },
   } as const;
@@ -343,23 +361,14 @@ export async function createRumbleExperience(options: LaunchOptions): Promise<Ru
   };
 
   const filters: Record<"A" | "B", FilterState> = {
-    A: { query: "", era: "", franchise: "", archetype: "" },
-    B: { query: "", era: "", franchise: "", archetype: "" },
+    A: { query: "", era: "", archetype: "" },
+    B: { query: "", era: "", archetype: "" },
   };
 
+  let eraStyle: EraStyle = "current";
   let players: Player[] = [];
   let playerLookup = new Map<string, Player>();
-  let chemistryCache: Record<"A" | "B", TeamChemistry | null> = { A: null, B: null };
-  let eraNormalized = false;
   let isMounted = !isOverlay;
-
-  const syncEraToggle = () => {
-    eraToggle.textContent = eraNormalized ? "Era Norm ON" : "Era Norm OFF";
-    eraToggle.setAttribute("aria-pressed", eraNormalized ? "true" : "false");
-    eraToggle.classList.toggle("is-active", eraNormalized);
-  };
-
-  syncEraToggle();
 
   const applyFilters = (teamId: "A" | "B") => {
     const node = teamNodes[teamId];
@@ -397,7 +406,6 @@ export async function createRumbleExperience(options: LaunchOptions): Promise<Ru
   const updateTeam = (teamId: "A" | "B") => {
     const node = teamNodes[teamId];
     const team = teams[teamId];
-    chemistryCache[teamId] = null;
     if (node.slots) {
       node.slots.replaceChildren();
       team.slots.forEach((player, index) => {
@@ -416,8 +424,7 @@ export async function createRumbleExperience(options: LaunchOptions): Promise<Ru
     }
     if (node.graph) {
       const roster = getTeamPlayers(team);
-      const chemistry = buildChemistry(roster);
-      chemistryCache[teamId] = chemistry;
+      const chemistry = buildChemistry(roster, eraStyle);
       if (roster.length) {
         renderChemistryGraph(node.graph, roster, chemistry.edges, { title: team.name });
       } else {
@@ -473,9 +480,11 @@ export async function createRumbleExperience(options: LaunchOptions): Promise<Ru
   };
 
   const updateInsights = () => {
-    const chemistryA = chemistryCache.A ?? buildChemistry(getTeamPlayers(teams.A));
-    const chemistryB = chemistryCache.B ?? buildChemistry(getTeamPlayers(teams.B));
-    const matchup = evaluateMatchup(getTeamPlayers(teams.A), getTeamPlayers(teams.B));
+    const rosterA = getTeamPlayers(teams.A);
+    const rosterB = getTeamPlayers(teams.B);
+    const chemistryA = buildChemistry(rosterA, eraStyle);
+    const chemistryB = buildChemistry(rosterB, eraStyle);
+    const matchup = evaluateMatchup(rosterA, rosterB, eraStyle);
     const reasonsA = [...chemistryA.reasons.slice(0, 3), ...matchup.reasonsA.slice(0, 2)];
     const reasonsB = [...chemistryB.reasons.slice(0, 3), ...matchup.reasonsB.slice(0, 2)];
     insightsA.replaceChildren();
@@ -502,13 +511,33 @@ export async function createRumbleExperience(options: LaunchOptions): Promise<Ru
         insightsB.append(item);
       });
     }
+
+    const hintText = (() => {
+      switch (eraStyle) {
+        case "nineties":
+          return "Post-ups and POA defense boosted; 3s devalued.";
+        case "pre3":
+          return "No 3s; spacing bonuses reduced; interior play rewarded.";
+        case "oldschool":
+          return "Few possessions; size, ORB, and defense prioritized.";
+        default:
+          return "";
+      }
+    })();
+    if (hintText) {
+      eraHint.textContent = hintText;
+      eraHint.hidden = false;
+    } else {
+      eraHint.textContent = "";
+      eraHint.hidden = true;
+    }
   };
 
   const updateHash = () => {
     const state: MatchupState = {
       a: getTeamPlayers(teams.A).map((player) => player.id),
       b: getTeamPlayers(teams.B).map((player) => player.id),
-      eraNorm: eraNormalized,
+      style: eraStyle,
     };
     writeHash(state);
   };
@@ -519,7 +548,7 @@ export async function createRumbleExperience(options: LaunchOptions): Promise<Ru
     if (rosterA.length !== SLOT_COUNT || rosterB.length !== SLOT_COUNT) {
       return;
     }
-    const result = simulateSeries(rosterA, rosterB, { games: 100, eraNorm: eraNormalized });
+    const result = simulateSeries(rosterA, rosterB, { games: 100, eraStyle });
     const kpiA = overlay.querySelector<HTMLElement>("[data-kpi='a']");
     const kpiB = overlay.querySelector<HTMLElement>("[data-kpi='b']");
     const kpiMargin = overlay.querySelector<HTMLElement>("[data-kpi='margin']");
@@ -554,8 +583,12 @@ export async function createRumbleExperience(options: LaunchOptions): Promise<Ru
         }
       }
     });
-    eraNormalized = Boolean(state.eraNorm);
-    syncEraToggle();
+    if (isEraStyle(state.style)) {
+      eraStyle = state.style;
+    } else {
+      eraStyle = "current";
+    }
+    eraSelect.value = eraStyle;
     updateTeam("A");
     updateTeam("B");
     updateFooter();
@@ -576,9 +609,16 @@ export async function createRumbleExperience(options: LaunchOptions): Promise<Ru
   }
 
   simulateButton.addEventListener("click", runSimulation);
-  eraToggle.addEventListener("click", () => {
-    eraNormalized = !eraNormalized;
-    syncEraToggle();
+  eraSelect.addEventListener("change", () => {
+    const next = eraSelect.value;
+    if (isEraStyle(next)) {
+      eraStyle = next;
+    } else {
+      eraStyle = "current";
+    }
+    updateTeam("A");
+    updateTeam("B");
+    updateInsights();
     runSimulation();
     updateHash();
   });
@@ -611,10 +651,6 @@ export async function createRumbleExperience(options: LaunchOptions): Promise<Ru
       filters[teamId].era = normalizeText(node.era?.value ?? "");
       applyFilters(teamId);
     });
-    node.franchise?.addEventListener("change", () => {
-      filters[teamId].franchise = normalizeText(node.franchise?.value ?? "");
-      applyFilters(teamId);
-    });
     node.archetype?.addEventListener("change", () => {
       filters[teamId].archetype = normalizeText(node.archetype?.value ?? "");
       applyFilters(teamId);
@@ -625,7 +661,6 @@ export async function createRumbleExperience(options: LaunchOptions): Promise<Ru
   playerLookup = new Map(players.map((player) => [player.id, player]));
 
   const eraOptions = uniqueSorted(players.map((player) => player.era).filter(Boolean));
-  const franchiseOptions = uniqueSorted(players.map((player) => player.franchise).filter(Boolean));
   const archetypeOptions = uniqueSorted(players.flatMap((player) => player.archetypes));
 
   ["A", "B"].forEach((id) => {
@@ -636,12 +671,6 @@ export async function createRumbleExperience(options: LaunchOptions): Promise<Ru
       option.value = era;
       option.textContent = era;
       node.era?.append(option);
-    });
-    franchiseOptions.forEach((franchise) => {
-      const option = document.createElement("option");
-      option.value = franchise;
-      option.textContent = franchise;
-      node.franchise?.append(option);
     });
     archetypeOptions.forEach((archetype) => {
       const option = document.createElement("option");

@@ -1,3 +1,5 @@
+import type { EraStyle } from "./era";
+
 export type Archetype =
   | "Creator"
   | "Secondary"
@@ -63,7 +65,7 @@ export interface SimResult {
 export interface MatchupState {
   a: string[];
   b: string[];
-  eraNorm: boolean;
+  style: EraStyle;
 }
 
 export interface PlayerPoolFilters {
