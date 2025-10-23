@@ -2,7 +2,6 @@ import { bdl } from '../assets/js/bdl.js';
 import { registerCharts, destroyCharts, helpers } from './hub-charts.js';
 
 const REFRESH_INTERVAL_MS = 5 * 60 * 1000;
-const TREND_GAME_COUNT = 8;
 
 const palette = {
   royal: '#1156d6',
@@ -28,9 +27,6 @@ const roleColors = {
   },
 };
 
-let latestVisualization = null;
-let trendCacheKey = null;
-let cachedTrend = null;
 
 const params = new URLSearchParams(window.location.search);
 const rawGameId = params.get('gameId') || params.get('id');
@@ -635,257 +631,6 @@ function aggregateStatsByGame(rows) {
   return games;
 }
 
-async function fetchStatsForGames(gameIds) {
-  if (!gameIds || !gameIds.size) {
-    return new Map();
-  }
-  const baseParams = new URLSearchParams();
-  baseParams.set('per_page', '500');
-  Array.from(gameIds)
-    .filter((id) => Number.isFinite(id))
-    .forEach((id) => {
-      baseParams.append('game_ids[]', String(id));
-    });
-  const allRows = [];
-  let cursor = null;
-  do {
-    const params = new URLSearchParams(baseParams);
-    if (cursor) {
-      params.set('cursor', cursor);
-    }
-    const payload = await bdl(`/v1/stats?${params.toString()}`);
-    if (Array.isArray(payload?.data)) {
-      allRows.push(...payload.data);
-    }
-    cursor = payload?.meta?.next_cursor ?? null;
-  } while (cursor);
-  return aggregateStatsByGame(allRows);
-}
-
-async function loadTeamRecentGames(teamId, { season, postseason, beforeDateIso }) {
-  const params = new URLSearchParams({
-    'team_ids[]': String(teamId),
-    per_page: '60',
-  });
-  if (Number.isFinite(season)) {
-    params.append('seasons[]', String(season));
-  }
-  if (typeof postseason === 'boolean') {
-    params.append('postseason', postseason ? 'true' : 'false');
-  }
-  const payload = await bdl(`/v1/games?${params.toString()}`);
-  const rows = Array.isArray(payload?.data) ? payload.data : [];
-  const filtered = rows
-    .filter((row) => typeof row?.status === 'string' && row.status.toLowerCase().includes('final'))
-    .filter((row) => {
-      if (!beforeDateIso || typeof row?.date !== 'string') {
-        return true;
-      }
-      return row.date <= beforeDateIso;
-    });
-  filtered.sort((a, b) => {
-    const dateA = parseDateOnly(a?.date) || parseDateTime(a?.datetime) || new Date(0);
-    const dateB = parseDateOnly(b?.date) || parseDateTime(b?.datetime) || new Date(0);
-    return dateB.getTime() - dateA.getTime();
-  });
-  const limited = filtered.slice(0, TREND_GAME_COUNT);
-  limited.sort((a, b) => {
-    const dateA = parseDateOnly(a?.date) || parseDateTime(a?.datetime) || new Date(0);
-    const dateB = parseDateOnly(b?.date) || parseDateTime(b?.datetime) || new Date(0);
-    return dateA.getTime() - dateB.getTime();
-  });
-  return limited;
-}
-
-async function loadTrendData(game, aggregated) {
-  if (!game?.visitor?.id || !game?.home?.id) {
-    return { visitor: [], home: [] };
-  }
-
-  const stage = game.stage;
-  const singleGameMode = stage === 'live' || stage === 'final';
-
-  if (singleGameMode) {
-    trendCacheKey = null;
-    cachedTrend = null;
-
-    const totalsMap = aggregated instanceof Map ? aggregated : null;
-    const gameId = Number.isFinite(game?.id) ? Number(game.id) : null;
-    const tipoffDate =
-      game.tipoff instanceof Date && !Number.isNaN(game.tipoff.getTime())
-        ? game.tipoff
-        : parseDateOnly(game.dateIso);
-    const hasTipoffDate = tipoffDate instanceof Date && !Number.isNaN(tipoffDate.getTime());
-
-    const buildSingleGameEntry = (role) => {
-      const team = game[role];
-      if (!team?.id) {
-        return null;
-      }
-      const opponentRole = role === 'home' ? 'visitor' : 'home';
-      const opponent = game[opponentRole] || {};
-      const totals = totalsMap ? totalsMap.get(team.id) || null : null;
-      const opponentTotals = totalsMap && opponent?.id ? totalsMap.get(opponent.id) || null : null;
-
-      const possessionsValue = computePossessions(totals);
-      const opponentPossessionsValue = computePossessions(opponentTotals);
-      let paceValue = null;
-      if (Number.isFinite(possessionsValue) && Number.isFinite(opponentPossessionsValue)) {
-        paceValue = (possessionsValue + opponentPossessionsValue) / 2;
-      } else if (Number.isFinite(possessionsValue)) {
-        paceValue = possessionsValue;
-      }
-
-      const totalsPoints = Number.isFinite(totals?.pts) ? totals.pts : null;
-      const totalsOpponentPoints = Number.isFinite(opponentTotals?.pts) ? opponentTotals.pts : null;
-
-      const scoreboardPointsRaw = Number(team?.score);
-      const scoreboardPoints = Number.isFinite(scoreboardPointsRaw) ? scoreboardPointsRaw : null;
-      const scoreboardOpponentPointsRaw = Number(opponent?.score);
-      const scoreboardOpponentPoints = Number.isFinite(scoreboardOpponentPointsRaw)
-        ? scoreboardOpponentPointsRaw
-        : null;
-
-      const displayedPoints = totalsPoints ?? scoreboardPoints;
-      const displayedOpponentPoints = totalsOpponentPoints ?? scoreboardOpponentPoints;
-
-      const pointsValue = Number.isFinite(displayedPoints) ? displayedPoints : null;
-      const opponentPointsValue = Number.isFinite(displayedOpponentPoints) ? displayedOpponentPoints : null;
-
-      const resultPoints = scoreboardPoints ?? totalsPoints;
-      const resultOpponentPoints = scoreboardOpponentPoints ?? totalsOpponentPoints;
-      let result = '';
-      if (Number.isFinite(resultPoints) && Number.isFinite(resultOpponentPoints)) {
-        if (resultPoints > resultOpponentPoints) {
-          result = 'W';
-        } else if (resultPoints < resultOpponentPoints) {
-          result = 'L';
-        } else {
-          result = 'T';
-        }
-      }
-
-      const offRatingValue =
-        Number.isFinite(totalsPoints) && Number.isFinite(possessionsValue) && possessionsValue > 0
-          ? (totalsPoints / possessionsValue) * 100
-          : null;
-
-      const label = hasTipoffDate ? formatShortDate(tipoffDate) : 'This game';
-
-      return {
-        id: gameId,
-        role,
-        date: hasTipoffDate ? tipoffDate : null,
-        label,
-        opponent: opponent?.name || 'Opponent',
-        opponentAbbr:
-          typeof opponent?.abbreviation === 'string' && opponent.abbreviation
-            ? opponent.abbreviation.toUpperCase()
-            : '',
-        location: role === 'home' ? 'vs' : '@',
-        points: pointsValue,
-        opponentPoints: opponentPointsValue,
-        offRating: Number.isFinite(offRatingValue) ? offRatingValue : null,
-        pace: Number.isFinite(paceValue) ? paceValue : null,
-        possessions: Number.isFinite(possessionsValue) ? possessionsValue : null,
-        result,
-      };
-    };
-
-    const visitorEntry = buildSingleGameEntry('visitor');
-    const homeEntry = buildSingleGameEntry('home');
-
-    return {
-      visitor: visitorEntry ? [visitorEntry] : [],
-      home: homeEntry ? [homeEntry] : [],
-    };
-  }
-
-  const season = Number.isFinite(game.season) ? game.season : null;
-  const beforeDateIso = game.dateIso || toIsoDate(game.tipoff) || null;
-  const cacheKey = [game.visitor.id, game.home.id, season ?? 'na', game.postseason ? 'P' : 'R', beforeDateIso ?? ''];
-  const key = cacheKey.join(':');
-  if (trendCacheKey === key && cachedTrend) {
-    return cachedTrend;
-  }
-
-  const [visitorGamesRaw, homeGamesRaw] = await Promise.all([
-    loadTeamRecentGames(game.visitor.id, { season, postseason: game.postseason, beforeDateIso }),
-    loadTeamRecentGames(game.home.id, { season, postseason: game.postseason, beforeDateIso }),
-  ]);
-
-  const uniqueIds = new Set();
-  visitorGamesRaw.forEach((row) => {
-    if (Number.isFinite(row?.id)) {
-      uniqueIds.add(Number(row.id));
-    }
-  });
-  homeGamesRaw.forEach((row) => {
-    if (Number.isFinite(row?.id)) {
-      uniqueIds.add(Number(row.id));
-    }
-  });
-
-  if (game.stage === 'final' && Number.isFinite(game.id)) {
-    uniqueIds.add(Number(game.id));
-  }
-
-  const statsByGame = await fetchStatsForGames(uniqueIds);
-
-  const mapGames = (rawGames, teamId, role) =>
-    rawGames.map((row) => {
-      const gameId = Number(row?.id);
-      const isHome = Number(row?.home_team?.id) === teamId;
-      const opponent = isHome ? row?.visitor_team : row?.home_team;
-      const opponentId = Number(opponent?.id) || null;
-      const scoreboardPoints = isHome ? Number(row?.home_team_score ?? 0) : Number(row?.visitor_team_score ?? 0);
-      const opponentPoints = isHome ? Number(row?.visitor_team_score ?? 0) : Number(row?.home_team_score ?? 0);
-      const date = parseDateTime(row?.datetime) || parseDateOnly(row?.date);
-      const totalsByTeam = statsByGame.get(gameId) || new Map();
-      const teamTotals = totalsByTeam.get(teamId) || null;
-      const opponentTotals = opponentId ? totalsByTeam.get(opponentId) || null : null;
-      const possessions = computePossessions(teamTotals);
-      const opponentPossessions = computePossessions(opponentTotals);
-      let pace = null;
-      if (Number.isFinite(possessions) && Number.isFinite(opponentPossessions)) {
-        pace = (possessions + opponentPossessions) / 2;
-      } else if (Number.isFinite(possessions)) {
-        pace = possessions;
-      }
-      const offRating = Number.isFinite(possessions) && possessions > 0 ? (teamTotals.pts / possessions) * 100 : null;
-      return {
-        id: gameId,
-        role,
-        date,
-        label: formatShortDate(date),
-        opponent:
-          typeof opponent?.full_name === 'string' && opponent.full_name
-            ? opponent.full_name
-            : typeof opponent?.name === 'string'
-            ? opponent.name
-            : 'Opponent',
-        opponentAbbr:
-          typeof opponent?.abbreviation === 'string' && opponent.abbreviation
-            ? opponent.abbreviation.toUpperCase()
-            : '',
-        location: isHome ? 'vs' : '@',
-        points: Number.isFinite(teamTotals?.pts) && teamTotals.pts > 0 ? teamTotals.pts : scoreboardPoints,
-        opponentPoints,
-        offRating: Number.isFinite(offRating) ? offRating : null,
-        pace: Number.isFinite(pace) ? pace : null,
-        possessions: Number.isFinite(possessions) ? possessions : null,
-        result: scoreboardPoints > opponentPoints ? 'W' : scoreboardPoints < opponentPoints ? 'L' : 'T',
-      };
-    });
-
-  cachedTrend = {
-    visitor: mapGames(visitorGamesRaw, game.visitor.id, 'visitor'),
-    home: mapGames(homeGamesRaw, game.home.id, 'home'),
-  };
-  trendCacheKey = key;
-  return cachedTrend;
-}
-
 function renderSeasonChip(game) {
   if (!seasonLabel) {
     return;
@@ -1104,11 +849,9 @@ async function buildVisualizationData(game, aggregated) {
   }
   const visitorTotals = aggregated?.get?.(game.visitor.id) || null;
   const homeTotals = aggregated?.get?.(game.home.id) || null;
-  const trend = await loadTrendData(game, aggregated);
   const scoringBreakdown = game.scoringBreakdown || { labels: [], visitor: [], home: [] };
   return {
     game,
-    trend,
     scoringBreakdown,
     totals: {
       visitor: visitorTotals,
@@ -1142,87 +885,138 @@ function teamAbbreviation(visualization, role) {
   return teamName(visualization, role);
 }
 
-function alignTrendSeries(games, length, metricKey) {
-  const series = [];
-  const offset = Math.max(length - games.length, 0);
-  for (let index = 0; index < length; index += 1) {
-    if (index < offset) {
-      series.push(null);
-      continue;
-    }
-    const game = games[index - offset];
-    const rawValue = Number(game?.[metricKey]);
-    const value = Number.isFinite(rawValue) ? rawValue : null;
-    if (value === null) {
-      series.push(null);
-    } else {
-      const opponentLabel = `${game?.location ?? ''} ${game?.opponentAbbr || game?.opponent || ''}`.trim();
-      series.push({
-        x: index + 1,
-        y: value,
-        meta: {
-          label: game?.label || `Game ${index + 1}`,
-          opponent: opponentLabel,
-          result: game?.result || '',
-        },
-      });
-    }
-  }
-  return series;
+function getOpponentRole(role) {
+  return role === 'home' ? 'visitor' : 'home';
 }
 
-function buildTrendLineConfig(visualization, metricKey, { decimals = 1, suffix = '' } = {}) {
-  const visitorGames = Array.isArray(visualization?.trend?.visitor) ? visualization.trend.visitor : [];
-  const homeGames = Array.isArray(visualization?.trend?.home) ? visualization.trend.home : [];
-  const maxLength = Math.max(visitorGames.length, homeGames.length);
-  const labels = maxLength
-    ? Array.from({ length: maxLength }, (_, index) => `Game ${index + 1}`)
-    : ['No data'];
-  const visitorData = maxLength ? alignTrendSeries(visitorGames, maxLength, metricKey) : [null];
-  const homeData = maxLength ? alignTrendSeries(homeGames, maxLength, metricKey) : [null];
+function getTeamTotals(visualization, role) {
+  return visualization?.totals?.[role] || null;
+}
+
+function getTeamScore(visualization, role) {
+  const score = Number(visualization?.scores?.[role]);
+  if (Number.isFinite(score)) {
+    return score;
+  }
+  const totals = getTeamTotals(visualization, role);
+  if (Number.isFinite(totals?.pts)) {
+    return Number(totals.pts);
+  }
+  return null;
+}
+
+function getTeamPossessions(visualization, role) {
+  const value = Number(visualization?.possessions?.[role]);
+  if (Number.isFinite(value) && value > 0) {
+    return value;
+  }
+  return null;
+}
+
+function computeEffectiveFieldGoal(totals) {
+  if (!totals) {
+    return null;
+  }
+  const fgm = Number(totals?.fgm ?? 0);
+  const fg3m = Number(totals?.fg3m ?? 0);
+  const fga = Number(totals?.fga ?? 0);
+  if (!Number.isFinite(fga) || fga <= 0) {
+    return null;
+  }
+  return ((fgm + 0.5 * fg3m) / fga) * 100;
+}
+
+function computeTurnoverRate(totals, possessions) {
+  if (!totals || !Number.isFinite(possessions) || possessions <= 0) {
+    return null;
+  }
+  const turnovers = Number(totals?.turnover ?? 0);
+  return (turnovers / possessions) * 100;
+}
+
+function computeOffensiveReboundRate(teamTotals, opponentTotals) {
+  if (!teamTotals) {
+    return null;
+  }
+  const oreb = Number(teamTotals?.oreb ?? 0);
+  const opponentReb = Number(opponentTotals?.reb ?? 0);
+  const opponentOreb = Number(opponentTotals?.oreb ?? 0);
+  const opponentDreb = opponentReb - opponentOreb;
+  const denominator = oreb + Math.max(opponentDreb, 0);
+  if (!Number.isFinite(denominator) || denominator <= 0) {
+    return null;
+  }
+  return (oreb / denominator) * 100;
+}
+
+function computeFreeThrowRate(totals) {
+  if (!totals) {
+    return null;
+  }
+  const fta = Number(totals?.fta ?? 0);
+  const fga = Number(totals?.fga ?? 0);
+  if (!Number.isFinite(fga) || fga <= 0) {
+    return null;
+  }
+  return (fta / fga) * 100;
+}
+
+function computeOffensiveRating(points, possessions) {
+  if (!Number.isFinite(points) || !Number.isFinite(possessions) || possessions <= 0) {
+    return null;
+  }
+  return (points / possessions) * 100;
+}
+
+function computeFourFactors(visualization, role) {
+  const totals = getTeamTotals(visualization, role);
+  const opponentTotals = getTeamTotals(visualization, getOpponentRole(role));
+  const possessions = getTeamPossessions(visualization, role);
+  return {
+    efg: computeEffectiveFieldGoal(totals),
+    tov: computeTurnoverRate(totals, possessions),
+    oreb: computeOffensiveReboundRate(totals, opponentTotals),
+    ftr: computeFreeThrowRate(totals),
+  };
+}
+
+function buildScoreSummaryConfig(visualization) {
+  const roles = ['visitor', 'home'];
+  const labels = roles.map((role) => teamAbbreviation(visualization, role));
+  const scores = roles.map((role) => getTeamScore(visualization, role));
+  const safeScores = scores.map((value) => (Number.isFinite(value) ? value : 0));
+  const opponentLabels = roles.map((role) => teamAbbreviation(visualization, getOpponentRole(role)));
+  const margins = roles.map((role) => {
+    const score = getTeamScore(visualization, role);
+    const opponentScore = getTeamScore(visualization, getOpponentRole(role));
+    if (!Number.isFinite(score) || !Number.isFinite(opponentScore)) {
+      return null;
+    }
+    return score - opponentScore;
+  });
 
   return {
-    type: 'line',
+    type: 'bar',
     data: {
       labels,
       datasets: [
         {
-          label: teamName(visualization, 'visitor'),
-          data: visitorData,
-          borderColor: roleColors.visitor.line,
-          backgroundColor: roleColors.visitor.fill,
-          spanGaps: true,
-          tension: 0.35,
-          pointRadius: maxLength ? 3.5 : 0,
-          pointHoverRadius: maxLength ? 5.5 : 0,
-        },
-        {
-          label: teamName(visualization, 'home'),
-          data: homeData,
-          borderColor: roleColors.home.line,
-          backgroundColor: roleColors.home.fill,
-          spanGaps: true,
-          tension: 0.35,
-          pointRadius: maxLength ? 3.5 : 0,
-          pointHoverRadius: maxLength ? 5.5 : 0,
+          label: 'Points scored',
+          data: safeScores,
+          backgroundColor: [roleColors.visitor.fill, roleColors.home.fill],
+          borderColor: [roleColors.visitor.solid, roleColors.home.solid],
+          borderWidth: 1.5,
         },
       ],
     },
     options: {
-      interaction: { mode: 'nearest', intersect: false },
       scales: {
-        x: {
-          ticks: {
-            callback(value, index) {
-              return labels[index] || value;
-            },
-          },
-        },
+        x: { grid: { display: false } },
         y: {
           beginAtZero: true,
           ticks: {
             callback(value) {
-              return `${helpers.formatNumber(value, decimals)}${suffix}`;
+              return `${helpers.formatNumber(value, 0)} pts`;
             },
           },
         },
@@ -1230,30 +1024,234 @@ function buildTrendLineConfig(visualization, metricKey, { decimals = 1, suffix =
       plugins: {
         tooltip: {
           callbacks: {
-            title(context) {
-              const raw = context?.[0]?.raw?.meta;
-              if (raw?.label) {
-                return raw.label;
-              }
-              return context?.[0]?.label || '';
-            },
             label(context) {
-              const datasetLabel = context?.dataset?.label || '';
-              const value = context.parsed?.y;
-              const lines = [];
-              if (Number.isFinite(value)) {
-                lines.push(`${datasetLabel}: ${helpers.formatNumber(value, decimals)}${suffix}`);
-              } else {
-                lines.push(`${datasetLabel}: N/A`);
+              const value = context.parsed?.y ?? 0;
+              return `${context.dataset.label}: ${helpers.formatNumber(value, 0)} points`;
+            },
+            afterLabel(context) {
+              const index = context.dataIndex;
+              const margin = margins[index];
+              if (!Number.isFinite(margin)) {
+                return '';
               }
-              const meta = context.raw?.meta;
-              if (meta) {
-                const opponentLine = `${meta.result ?? ''} ${meta.opponent ?? ''}`.trim();
-                if (opponentLine) {
-                  lines.push(opponentLine);
-                }
+              if (margin === 0) {
+                return `Margin vs ${opponentLabels[index]}: level`;
               }
-              return lines;
+              const formatted = `${margin > 0 ? '+' : ''}${helpers.formatNumber(Math.abs(margin), 0)}`;
+              return `Margin vs ${opponentLabels[index]}: ${formatted}`;
+            },
+          },
+        },
+      },
+    },
+  };
+}
+
+function buildEfficiencyRatingsConfig(visualization) {
+  const visitorScore = getTeamScore(visualization, 'visitor');
+  const homeScore = getTeamScore(visualization, 'home');
+  const visitorPossessions = getTeamPossessions(visualization, 'visitor');
+  const homePossessions = getTeamPossessions(visualization, 'home');
+
+  const visitorOffensive = computeOffensiveRating(visitorScore, visitorPossessions);
+  const homeOffensive = computeOffensiveRating(homeScore, homePossessions);
+  const visitorDefensive = computeOffensiveRating(homeScore, visitorPossessions);
+  const homeDefensive = computeOffensiveRating(visitorScore, homePossessions);
+
+  const labels = ['Offensive rating', 'Defensive rating'];
+  const visitorSeries = [visitorOffensive, visitorDefensive];
+  const homeSeries = [homeOffensive, homeDefensive];
+
+  return {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: teamAbbreviation(visualization, 'visitor'),
+          data: visitorSeries.map((value) => (Number.isFinite(value) ? value : 0)),
+          metaValues: visitorSeries,
+          backgroundColor: roleColors.visitor.fill,
+          borderColor: roleColors.visitor.solid,
+          borderWidth: 1.5,
+        },
+        {
+          label: teamAbbreviation(visualization, 'home'),
+          data: homeSeries.map((value) => (Number.isFinite(value) ? value : 0)),
+          metaValues: homeSeries,
+          backgroundColor: roleColors.home.fill,
+          borderColor: roleColors.home.solid,
+          borderWidth: 1.5,
+        },
+      ],
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: {
+            callback(value) {
+              return helpers.formatNumber(value, 0);
+            },
+          },
+        },
+      },
+      plugins: {
+        tooltip: {
+          callbacks: {
+            label(context) {
+              const metaValues = context.dataset?.metaValues || [];
+              const rawValue = metaValues[context.dataIndex];
+              if (!Number.isFinite(rawValue)) {
+                return `${context.dataset.label}: N/A`;
+              }
+              return `${context.dataset.label}: ${helpers.formatNumber(rawValue, 1)}`;
+            },
+          },
+        },
+      },
+    },
+  };
+}
+
+function buildShotVolumeConfig(visualization) {
+  const roles = ['visitor', 'home'];
+  const labels = roles.map((role) => teamAbbreviation(visualization, role));
+
+  const toAttempts = (role) => {
+    const totals = getTeamTotals(visualization, role) || {};
+    const fga = Number(totals.fga ?? 0);
+    const fg3a = Number(totals.fg3a ?? 0);
+    const fta = Number(totals.fta ?? 0);
+    const two = Math.max(fga - fg3a, 0);
+    return { two, three: fg3a, ft: fta };
+  };
+
+  const visitorAttempts = toAttempts('visitor');
+  const homeAttempts = toAttempts('home');
+
+  return {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: '2PA',
+          data: [visitorAttempts.two, homeAttempts.two],
+          backgroundColor: 'rgba(17, 86, 214, 0.5)',
+          borderColor: palette.sky,
+          borderWidth: 1,
+        },
+        {
+          label: '3PA',
+          data: [visitorAttempts.three, homeAttempts.three],
+          backgroundColor: 'rgba(239, 61, 91, 0.45)',
+          borderColor: palette.coral,
+          borderWidth: 1,
+        },
+        {
+          label: 'FTA',
+          data: [visitorAttempts.ft, homeAttempts.ft],
+          backgroundColor: 'rgba(143, 212, 61, 0.45)',
+          borderColor: palette.lime,
+          borderWidth: 1,
+        },
+      ],
+    },
+    options: {
+      scales: {
+        x: { stacked: true },
+        y: {
+          stacked: true,
+          beginAtZero: true,
+          ticks: {
+            callback(value) {
+              return helpers.formatNumber(value, 0);
+            },
+          },
+        },
+      },
+      plugins: {
+        tooltip: {
+          callbacks: {
+            label(context) {
+              const value = context.parsed?.y ?? 0;
+              return `${context.dataset.label}: ${helpers.formatNumber(value, 0)} attempts`;
+            },
+          },
+        },
+      },
+    },
+  };
+}
+
+function buildFourFactorsConfig(visualization) {
+  const metrics = [
+    { key: 'efg', label: 'eFG%' },
+    { key: 'tov', label: 'TOV%' },
+    { key: 'oreb', label: 'OREB%' },
+    { key: 'ftr', label: 'FT Rate' },
+  ];
+
+  const visitorFactors = computeFourFactors(visualization, 'visitor');
+  const homeFactors = computeFourFactors(visualization, 'home');
+
+  const visitorValues = metrics.map((metric) => visitorFactors[metric.key]);
+  const homeValues = metrics.map((metric) => homeFactors[metric.key]);
+
+  return {
+    type: 'radar',
+    data: {
+      labels: metrics.map((metric) => metric.label),
+      datasets: [
+        {
+          label: teamAbbreviation(visualization, 'visitor'),
+          data: visitorValues.map((value) => (Number.isFinite(value) ? value : 0)),
+          metaValues: visitorValues,
+          backgroundColor: 'rgba(17, 86, 214, 0.18)',
+          borderColor: roleColors.visitor.solid,
+          pointBackgroundColor: roleColors.visitor.solid,
+          pointRadius: 3,
+        },
+        {
+          label: teamAbbreviation(visualization, 'home'),
+          data: homeValues.map((value) => (Number.isFinite(value) ? value : 0)),
+          metaValues: homeValues,
+          backgroundColor: 'rgba(244, 181, 63, 0.22)',
+          borderColor: roleColors.home.solid,
+          pointBackgroundColor: roleColors.home.solid,
+          pointRadius: 3,
+        },
+      ],
+    },
+    options: {
+      scales: {
+        r: {
+          beginAtZero: true,
+          suggestedMax: 100,
+          ticks: {
+            backdropColor: 'transparent',
+            callback(value) {
+              return `${helpers.formatNumber(value, 0)}%`;
+            },
+          },
+          pointLabels: {
+            font: { weight: 600 },
+          },
+        },
+      },
+      plugins: {
+        legend: { position: 'bottom' },
+        tooltip: {
+          callbacks: {
+            label(context) {
+              const dataset = context.dataset || {};
+              const metaValues = dataset.metaValues || [];
+              const rawValue = metaValues[context.dataIndex];
+              if (!Number.isFinite(rawValue)) {
+                return `${dataset.label}: N/A`;
+              }
+              return `${dataset.label}: ${helpers.formatNumber(rawValue, 1)}%`;
             },
           },
         },
@@ -1644,459 +1642,6 @@ function buildPossessionProfileConfig(visualization) {
   };
 }
 
-function periodDurationFromLabel(label) {
-  if (typeof label !== 'string') {
-    return 0;
-  }
-  if (/^OT\d+/i.test(label) || /^OT$/i.test(label)) {
-    return 5 * 60;
-  }
-  if (/^\dQ$/i.test(label)) {
-    return 12 * 60;
-  }
-  return 0;
-}
-
-function describePeriodEndpoint(label) {
-  if (typeof label !== 'string') {
-    return 'Period';
-  }
-  if (label === '1Q') return 'End 1Q';
-  if (label === '2Q') return 'Halftime';
-  if (label === '3Q') return 'End 3Q';
-  if (label === '4Q') return 'End 4Q';
-  if (/^OT(\d+)/i.test(label)) {
-    const match = label.match(/^OT(\d+)/i);
-    if (match) {
-      return `End OT${match[1]}`;
-    }
-  }
-  if (/^OT$/i.test(label)) {
-    return 'End OT';
-  }
-  return label;
-}
-
-function formatRemainingClock(seconds) {
-  if (!Number.isFinite(seconds)) {
-    return '';
-  }
-  const clamped = Math.max(0, seconds);
-  const wholeSeconds = Math.round(clamped);
-  const mins = Math.floor(wholeSeconds / 60);
-  const secs = wholeSeconds % 60;
-  return `${mins}:${String(secs).padStart(2, '0')}`;
-}
-
-function computeLiveElapsedSeconds(game) {
-  if (!game || !Number.isFinite(game?.period) || game.period <= 0) {
-    return null;
-  }
-  let elapsed = 0;
-  for (let index = 1; index < game.period; index += 1) {
-    const duration = getPeriodDurationSeconds(index) || 0;
-    elapsed += duration;
-  }
-  const parsed = parseElapsedClockValue(game.time);
-  const periodDuration = getPeriodDurationSeconds(game.period) || 0;
-  if (parsed && periodDuration) {
-    const fractional = parsed.fractional ? parsed.fractional / (parsed.precision || 1) : 0;
-    const elapsedInPeriod = parsed.minutes * 60 + parsed.seconds + fractional;
-    const bounded = Math.min(Math.max(elapsedInPeriod, 0), periodDuration);
-    elapsed += bounded;
-  }
-  return elapsed;
-}
-
-function computeTotalGameSeconds(game, labels, scoreboardElapsed = 0) {
-  const baseRegulation = 4 * 12 * 60;
-  const overtimeCount = Array.isArray(labels)
-    ? labels.filter((label) => /^OT\d+/i.test(label)).length
-    : 0;
-  const regulationTotal = baseRegulation + overtimeCount * 5 * 60;
-  if (game?.stage === 'final') {
-    return Math.max(regulationTotal, scoreboardElapsed, baseRegulation);
-  }
-  const period = Number(game?.period);
-  if (Number.isFinite(period) && period > 0) {
-    let total = 0;
-    for (let index = 1; index <= period; index += 1) {
-      total += getPeriodDurationSeconds(index) || 0;
-    }
-    return Math.max(total, regulationTotal, scoreboardElapsed, baseRegulation);
-  }
-  return Math.max(regulationTotal, baseRegulation, scoreboardElapsed);
-}
-
-function describeScoreboardPoint(game) {
-  if (!game) {
-    return 'Scoreboard';
-  }
-  if (game.stage === 'final') {
-    return 'Final';
-  }
-  if (game.stage === 'live') {
-    const periodLabel = formatPeriodLabel(game);
-    const clock = formatGameClock(game);
-    if (periodLabel && clock) {
-      return `Live • ${periodLabel} ${clock}`;
-    }
-    if (periodLabel) {
-      return `Live • ${periodLabel}`;
-    }
-    return 'Live update';
-  }
-  return formatGameStatus(game) || 'Scoreboard';
-}
-
-function formatLeadLabel(visualization, lead) {
-  if (!Number.isFinite(lead) || lead === 0) {
-    return 'Tied score';
-  }
-  const leaderRole = lead > 0 ? 'home' : 'visitor';
-  const prefix = teamAbbreviation(visualization, leaderRole);
-  return `${prefix} +${helpers.formatNumber(Math.abs(lead), 0)}`;
-}
-
-function estimateHomeWinProbability(lead, timeRemaining, totalSeconds) {
-  if (!Number.isFinite(lead) || !Number.isFinite(timeRemaining) || !Number.isFinite(totalSeconds)) {
-    return 0.5;
-  }
-  if (totalSeconds <= 0) {
-    if (lead > 0) return 1;
-    if (lead < 0) return 0;
-    return 0.5;
-  }
-  if (timeRemaining <= 0) {
-    if (lead > 0) return 1;
-    if (lead < 0) return 0;
-    return 0.5;
-  }
-  const remainingFraction = Math.max(0, Math.min(1, timeRemaining / totalSeconds));
-  const scale = 8 * remainingFraction + 1.6;
-  const logisticInput = lead / scale;
-  const probability = 1 / (1 + Math.exp(-logisticInput));
-  return Math.max(0, Math.min(1, probability));
-}
-
-function buildWinProbabilitySeries(visualization) {
-  const game = visualization?.game;
-  if (!game) {
-    return { points: [], totalSeconds: 0 };
-  }
-
-  const breakdown = game.scoringBreakdown || { labels: [], visitor: [], home: [] };
-  const labels = Array.isArray(breakdown.labels) ? breakdown.labels : [];
-  const homeSegments = Array.isArray(breakdown.home) ? breakdown.home : [];
-  const visitorSegments = Array.isArray(breakdown.visitor) ? breakdown.visitor : [];
-
-  const points = [
-    {
-      rawLabel: 'tip',
-      label: 'Tipoff',
-      elapsedSeconds: 0,
-      homeScore: 0,
-      visitorScore: 0,
-      stage: 'upcoming',
-    },
-  ];
-
-  let elapsedSeconds = 0;
-  let cumulativeHome = 0;
-  let cumulativeVisitor = 0;
-
-  labels.forEach((rawLabel, index) => {
-    const duration = periodDurationFromLabel(rawLabel);
-    if (duration <= 0) {
-      return;
-    }
-    const homeDelta = Number(homeSegments[index]) || 0;
-    const visitorDelta = Number(visitorSegments[index]) || 0;
-    cumulativeHome += homeDelta;
-    cumulativeVisitor += visitorDelta;
-    elapsedSeconds += duration;
-    points.push({
-      rawLabel,
-      label: describePeriodEndpoint(rawLabel),
-      elapsedSeconds,
-      homeScore: cumulativeHome,
-      visitorScore: cumulativeVisitor,
-      stage: 'period-end',
-    });
-  });
-
-  const scoreboardHome = Number(visualization?.scores?.home);
-  const scoreboardVisitor = Number(visualization?.scores?.visitor);
-  if (Number.isFinite(scoreboardHome) && Number.isFinite(scoreboardVisitor)) {
-    const liveElapsed = computeLiveElapsedSeconds(game);
-    const scoreboardElapsed = Number.isFinite(liveElapsed) ? liveElapsed : elapsedSeconds;
-    const totalSeconds = computeTotalGameSeconds(game, labels, scoreboardElapsed);
-    const clampedElapsed = Math.min(Math.max(scoreboardElapsed, 0), totalSeconds);
-    const scoreboardPoint = {
-      rawLabel: game.stage,
-      label: describeScoreboardPoint(game),
-      elapsedSeconds: clampedElapsed,
-      homeScore: scoreboardHome,
-      visitorScore: scoreboardVisitor,
-      stage: game.stage,
-      isLive: game.stage === 'live',
-      isFinal: game.stage === 'final',
-    };
-    const last = points[points.length - 1];
-    const duplicate =
-      last &&
-      Math.abs(last.homeScore - scoreboardHome) < 0.01 &&
-      Math.abs(last.visitorScore - scoreboardVisitor) < 0.01 &&
-      Math.abs(last.elapsedSeconds - clampedElapsed) < 1;
-    if (duplicate) {
-      points[points.length - 1] = { ...last, ...scoreboardPoint };
-    } else {
-      points.push(scoreboardPoint);
-    }
-    return {
-      points,
-      totalSeconds: Math.max(totalSeconds, elapsedSeconds),
-    };
-  }
-
-  const fallbackTotal = computeTotalGameSeconds(game, labels, elapsedSeconds);
-  return {
-    points,
-    totalSeconds: Math.max(fallbackTotal, elapsedSeconds),
-  };
-}
-
-function buildWinProbabilityConfig(visualization) {
-  const { points, totalSeconds } = buildWinProbabilitySeries(visualization);
-  if (!points.length) {
-    return null;
-  }
-
-  const enriched = points
-    .map((point) => {
-      const clampedElapsed = Math.min(Math.max(point.elapsedSeconds, 0), totalSeconds || 0);
-      const timeRemaining = Math.max((totalSeconds || 0) - clampedElapsed, 0);
-      const lead = Number(point.homeScore) - Number(point.visitorScore);
-      let probability = estimateHomeWinProbability(lead, timeRemaining, totalSeconds || 0);
-      if (point.isFinal) {
-        if (lead > 0) probability = 1;
-        else if (lead < 0) probability = 0;
-        else probability = 0.5;
-      }
-      const probabilityPercent = Math.max(0, Math.min(100, probability * 100));
-      return {
-        ...point,
-        elapsedSeconds: clampedElapsed,
-        timeRemaining,
-        homeWinProbability: probabilityPercent,
-        lead,
-        leadLabel: formatLeadLabel(visualization, lead),
-        timeRemainingLabel: timeRemaining > 0 ? formatRemainingClock(timeRemaining) : '',
-      };
-    })
-    .sort((a, b) => a.elapsedSeconds - b.elapsedSeconds);
-
-  if (enriched.length < 2) {
-    const placeholderLabel = enriched[0]?.label || 'Awaiting tip';
-    return {
-      type: 'line',
-      data: {
-        labels: [placeholderLabel],
-        datasets: [
-          {
-            label: `${teamName(visualization, 'home')} win %`,
-            data: [{ y: 50, meta: enriched[0] }],
-            borderColor: roleColors.home.line,
-            fill: false,
-          },
-          {
-            label: `${teamName(visualization, 'visitor')} win %`,
-            data: [{ y: 50, meta: enriched[0] }],
-            borderColor: roleColors.visitor.line,
-            borderDash: [4, 4],
-            fill: false,
-          },
-        ],
-      },
-      options: {
-        plugins: {
-          legend: { position: 'bottom' },
-          tooltip: {
-            callbacks: {
-              label() {
-                return 'Win probability will activate once the game begins.';
-              },
-            },
-          },
-        },
-        scales: {
-          x: { display: false },
-          y: {
-            min: 0,
-            max: 100,
-            ticks: {
-              callback(value) {
-                return `${helpers.formatNumber(value, 0)}%`;
-              },
-            },
-          },
-        },
-      },
-    };
-  }
-
-  const visitorAbbr = teamAbbreviation(visualization, 'visitor');
-  const homeAbbr = teamAbbreviation(visualization, 'home');
-  const labels = enriched.map((point) => point.label);
-  const homeData = enriched.map((point) => ({ y: point.homeWinProbability, meta: point }));
-  const visitorData = enriched.map((point) => ({ y: 100 - point.homeWinProbability, meta: point }));
-
-  const backgroundGradient = (context) => {
-    const { chart } = context;
-    const { ctx, chartArea } = chart;
-    if (!chartArea) {
-      return 'rgba(244, 181, 63, 0.2)';
-    }
-    const gradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
-    gradient.addColorStop(0, 'rgba(17, 86, 214, 0.18)');
-    gradient.addColorStop(0.48, 'rgba(17, 86, 214, 0.06)');
-    gradient.addColorStop(0.52, 'rgba(244, 181, 63, 0.08)');
-    gradient.addColorStop(1, 'rgba(244, 181, 63, 0.3)');
-    return gradient;
-  };
-
-  return {
-    type: 'line',
-    data: {
-      labels,
-      datasets: [
-        {
-          label: `${teamName(visualization, 'home')} win %`,
-          data: homeData,
-          borderColor: roleColors.home.line,
-          backgroundColor: backgroundGradient,
-          fill: true,
-          tension: 0.32,
-          pointRadius(context) {
-            const meta = context.raw?.meta;
-            if (meta?.isFinal) {
-              return 6;
-            }
-            if (meta?.isLive) {
-              return 5;
-            }
-            return 3.5;
-          },
-          pointHoverRadius(context) {
-            const meta = context.raw?.meta;
-            if (meta?.isFinal) {
-              return 7.5;
-            }
-            if (meta?.isLive) {
-              return 6.5;
-            }
-            return 5;
-          },
-          pointBackgroundColor(context) {
-            const meta = context.raw?.meta;
-            if (meta?.isLive) {
-              return '#ffffff';
-            }
-            if (meta?.isFinal) {
-              return roleColors.home.solid;
-            }
-            return 'rgba(244, 181, 63, 0.95)';
-          },
-          pointBorderColor(context) {
-            const meta = context.raw?.meta;
-            if (meta?.isLive) {
-              return roleColors.home.solid;
-            }
-            return '#ffffff';
-          },
-          borderWidth: 2,
-        },
-        {
-          label: `${teamName(visualization, 'visitor')} win %`,
-          data: visitorData,
-          borderColor: roleColors.visitor.line,
-          borderDash: [6, 4],
-          fill: false,
-          tension: 0.32,
-          pointRadius: 0,
-          pointHoverRadius: 0,
-        },
-      ],
-    },
-    options: {
-      interaction: { mode: 'index', intersect: false },
-      scales: {
-        x: {
-          grid: { display: false },
-          ticks: {
-            maxRotation: 0,
-            callback(value, index) {
-              return labels[index] || value;
-            },
-          },
-        },
-        y: {
-          min: 0,
-          max: 100,
-          grid: {
-            color(context) {
-              if (context.tick.value === 50) {
-                return 'rgba(11, 37, 69, 0.35)';
-              }
-              return 'rgba(11, 37, 69, 0.12)';
-            },
-            lineWidth(context) {
-              return context.tick.value === 50 ? 1.4 : 0.8;
-            },
-          },
-          ticks: {
-            callback(value) {
-              return `${helpers.formatNumber(value, 0)}%`;
-            },
-          },
-        },
-      },
-      plugins: {
-        legend: { position: 'bottom' },
-        tooltip: {
-          displayColors: false,
-          callbacks: {
-            title(context) {
-              return context?.[0]?.raw?.meta?.label || context?.[0]?.label || '';
-            },
-            label(context) {
-              const datasetLabel = context.dataset?.label || '';
-              const value = context.parsed?.y ?? 0;
-              return `${datasetLabel}: ${helpers.formatNumber(value, 1)}%`;
-            },
-            afterBody(contexts) {
-              const meta = contexts?.[0]?.raw?.meta;
-              if (!meta) {
-                return [];
-              }
-              const lines = [];
-              const visitorScore = helpers.formatNumber(meta.visitorScore ?? 0, 0);
-              const homeScore = helpers.formatNumber(meta.homeScore ?? 0, 0);
-              lines.push(`${visitorAbbr} ${visitorScore} — ${homeAbbr} ${homeScore}`);
-              if (meta.timeRemainingLabel) {
-                lines.push(`${meta.timeRemainingLabel} remaining`);
-              }
-              if (meta.leadLabel) {
-                lines.push(`Lead: ${meta.leadLabel}`);
-              }
-              return lines;
-            },
-          },
-        },
-      },
-    },
-  };
-}
 
 function collectTopScorers(visualization, limit = 6) {
   const combined = [];
@@ -2277,19 +1822,19 @@ function renderVisualizations(visualization) {
     {
       element: '#points-trend',
       async createConfig() {
-        return buildTrendLineConfig(visualization, 'points', { decimals: 0, suffix: ' pts' });
+        return buildScoreSummaryConfig(visualization);
       },
     },
     {
       element: '#off-rating-trend',
       async createConfig() {
-        return buildTrendLineConfig(visualization, 'offRating', { decimals: 1 });
+        return buildEfficiencyRatingsConfig(visualization);
       },
     },
     {
       element: '#pace-trend',
       async createConfig() {
-        return buildTrendLineConfig(visualization, 'pace', { decimals: 1, suffix: ' poss' });
+        return buildShotVolumeConfig(visualization);
       },
     },
     {
@@ -2331,7 +1876,7 @@ function renderVisualizations(visualization) {
     {
       element: '#win-probability',
       async createConfig() {
-        return buildWinProbabilityConfig(visualization);
+        return buildFourFactorsConfig(visualization);
       },
     },
     {
@@ -2445,7 +1990,6 @@ async function refreshData({ background = false } = {}) {
 
     const aggregated = aggregateTeamStats(statsRows);
     const visualizationData = await buildVisualizationData(game, aggregated);
-    latestVisualization = visualizationData;
 
     ['visitor', 'home'].forEach((role) => {
       const team = game[role];

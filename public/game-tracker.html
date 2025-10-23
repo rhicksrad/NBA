@@ -111,42 +111,40 @@
           <div class="tracker-visuals__grid">
             <article class="tracker-visuals__card" data-chart-wrapper>
               <header class="tracker-visuals__header">
-                <h3 class="tracker-visuals__title">Team scoring pulse</h3>
-                <span class="lab-chip">Last eight finals</span>
+                <h3 class="tracker-visuals__title">Score margin snapshot</h3>
+                <span class="lab-chip">Points scored</span>
               </header>
               <div class="viz-canvas">
                 <canvas id="points-trend" data-chart-ratio="0.62" aria-describedby="points-trend-caption"></canvas>
               </div>
               <p id="points-trend-caption" class="tracker-visuals__caption">
-                Line chart compares both clubs’ scoring outputs across their most recent completed games.
+                Bar chart compares each side’s total points and highlights the current margin.
               </p>
             </article>
 
             <article class="tracker-visuals__card" data-chart-wrapper>
               <header class="tracker-visuals__header">
-                <h3 class="tracker-visuals__title">Offensive rating tempo</h3>
-                <span class="lab-chip">Points per 100 possessions</span>
+                <h3 class="tracker-visuals__title">Efficiency ratings</h3>
+                <span class="lab-chip">Offensive vs defensive</span>
               </header>
               <div class="viz-canvas">
                 <canvas id="off-rating-trend" data-chart-ratio="0.62" aria-describedby="off-rating-caption"></canvas>
               </div>
               <p id="off-rating-caption" class="tracker-visuals__caption">
-                Offense efficiency trendline shows how each side has scored per 100 trips over the recent eight-game
-                sample.
+                Grouped bars show estimated offensive and defensive ratings derived from the /v1/stats box score snapshot.
               </p>
             </article>
 
             <article class="tracker-visuals__card" data-chart-wrapper>
               <header class="tracker-visuals__header">
-                <h3 class="tracker-visuals__title">Possession cadence</h3>
-                <span class="lab-chip">Estimated pace</span>
+                <h3 class="tracker-visuals__title">Shot volume mix</h3>
+                <span class="lab-chip">Attempts &amp; trips</span>
               </header>
               <div class="viz-canvas">
                 <canvas id="pace-trend" data-chart-ratio="0.62" aria-describedby="pace-caption"></canvas>
               </div>
               <p id="pace-caption" class="tracker-visuals__caption">
-                Tracks how quickly each team has been playing, using estimated possessions per game across the same run
-                of finals.
+                Stacked bars show each team’s two-point attempts, three-point attempts, and free throw trips from this game.
               </p>
             </article>
 
@@ -231,15 +229,14 @@
 
             <article class="tracker-visuals__card" data-chart-wrapper>
               <header class="tracker-visuals__header">
-                <h3 class="tracker-visuals__title">Win probability pulse</h3>
-                <span class="lab-chip">Custom live model</span>
+                <h3 class="tracker-visuals__title">Four factors duel</h3>
+                <span class="lab-chip">eFG • TOV • OREB • FTr</span>
               </header>
               <div class="viz-canvas">
                 <canvas id="win-probability" data-chart-ratio="0.6" aria-describedby="win-probability-caption"></canvas>
               </div>
               <p id="win-probability-caption" class="tracker-visuals__caption">
-                Blends score margin and clock pressure to estimate the home side&apos;s win odds from tip to
-                final horn.
+                Radar plot compares the classic four factors using the same /v1/stats feed that powers the live box score.
               </p>
             </article>
 
