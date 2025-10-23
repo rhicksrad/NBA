@@ -466,7 +466,7 @@ function renderRecentLeaderboard(records, listElement, placeholderElement) {
     placeholderElement.hidden = true;
   }
 
-  records.forEach((player) => {
+  records.slice(0, 25).forEach((player) => {
     const item = document.createElement('li');
     item.className = 'players-rankings__item';
 
@@ -3415,9 +3415,10 @@ function initPlayerAtlas() {
 initPlayerAtlas();
 
 const rumbleTrigger = document.querySelector('[data-rumble-launch]');
+const rumbleRoot = document.querySelector('[data-rumble-root]');
 const rumbleMeta = document.querySelector('meta[name="rumble-module"]');
 
-if (rumbleTrigger && rumbleMeta) {
+if (rumbleRoot && rumbleMeta) {
   const rumbleModuleUrl = new URL(rumbleMeta.getAttribute('content'), document.baseURI).toString();
   let rumbleMountPromise = null;
 
@@ -3427,21 +3428,57 @@ if (rumbleTrigger && rumbleMeta) {
         if (typeof module.mountRosterRumble !== 'function') {
           throw new Error('Roster Rumble module missing mountRosterRumble export');
         }
-        return module.mountRosterRumble({ trigger: rumbleTrigger, root: document.body });
+        return module.mountRosterRumble({
+          trigger: rumbleTrigger instanceof HTMLElement ? rumbleTrigger : undefined,
+          root: rumbleRoot,
+          mode: 'inline',
+        });
       });
     }
     return rumbleMountPromise;
   };
 
-  rumbleTrigger.addEventListener('click', async (event) => {
-    event.preventDefault();
+  const scrollToRumble = () => {
+    try {
+      rumbleRoot.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } catch (scrollError) {
+      rumbleRoot.scrollIntoView();
+    }
+  };
+
+  const openInlineRumble = async () => {
     const experience = await ensureRumbleMounted();
-    experience.open();
-  });
+    if (!experience.isOpen()) {
+      experience.open();
+    }
+  };
+
+  if (rumbleTrigger) {
+    rumbleTrigger.addEventListener('click', (event) => {
+      event.preventDefault();
+      openInlineRumble();
+      scrollToRumble();
+    });
+  }
+
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          ensureRumbleMounted();
+          observer.disconnect();
+        }
+      });
+    }, { rootMargin: '200px 0px' });
+    observer.observe(rumbleRoot);
+  } else {
+    ensureRumbleMounted();
+  }
 
   if (window.location.hash.startsWith('#rumble=')) {
     ensureRumbleMounted().then((experience) => {
       experience.open();
+      scrollToRumble();
     });
   }
 }

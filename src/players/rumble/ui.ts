@@ -29,7 +29,12 @@ function createTeam(id: "A" | "B", name: string): Team {
 }
 
 function normalizeText(value: string | null | undefined): string {
-  return (value ?? "").toLowerCase();
+  return (value ?? "")
+    .toString()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .trim();
 }
 
 function filterPlayers(
@@ -37,13 +42,24 @@ function filterPlayers(
   taken: Set<string>,
   filters: FilterState
 ): Player[] {
+  const queryTokens = filters.query ? filters.query.split(/\s+/).filter(Boolean) : [];
   return players.filter((player) => {
     if (taken.has(player.id)) {
       return false;
     }
-    if (filters.query) {
-      const normalized = normalizeText(player.name);
-      if (!normalized.includes(filters.query)) {
+    if (queryTokens.length) {
+      const haystackValues = [
+        player.name,
+        player.franchise ?? "",
+        player.era ?? "",
+        player.pos ?? "",
+        player.archetypes.join(" "),
+      ];
+      const haystack = haystackValues.map((value) => normalizeText(value));
+      const combined = `${haystack.join(" ")}`.trim();
+      const identifier = normalizeText(player.id);
+      const matchesTokens = queryTokens.every((token) => combined.includes(token) || identifier.includes(token));
+      if (!matchesTokens) {
         return false;
       }
     }
@@ -177,13 +193,18 @@ function formatPercent(value: number): string {
 }
 
 export async function createRumbleExperience(options: LaunchOptions): Promise<RumbleExperience> {
-  const { root, getPlayerPool, presets = {} } = options;
+  const { root, getPlayerPool, presets = {}, mode = "overlay" } = options;
+  const isOverlay = mode !== "inline";
   const overlay = document.createElement("div");
-  overlay.className = "rumble-overlay";
+  overlay.className = isOverlay ? "rumble-overlay" : "rumble-inline";
+  const titleId = "rumble-shell-title";
+  const shellAttributes = isOverlay
+    ? `role="dialog" aria-modal="true" aria-labelledby="${titleId}"`
+    : `role="region" aria-labelledby="${titleId}"`;
   overlay.innerHTML = `
-    <div class="rumble-shell" role="dialog" aria-modal="true" aria-label="Roster Rumble — 5v5">
+    <div class="rumble-shell" ${shellAttributes}>
       <header class="rumble-shell__header">
-        <h2>Roster Rumble — 5v5</h2>
+        <h2 id="${titleId}">Roster Rumble — 5v5</h2>
         <button type="button" class="rumble-shell__close" aria-label="Close Roster Rumble">×</button>
       </header>
       <div class="rumble-shell__body">
@@ -263,7 +284,12 @@ export async function createRumbleExperience(options: LaunchOptions): Promise<Ru
     </div>
   `;
 
-  root.appendChild(overlay);
+  if (isOverlay) {
+    root.appendChild(overlay);
+  } else {
+    root.replaceChildren(overlay);
+    overlay.classList.add("is-ready", "is-open");
+  }
 
   const closeButton = overlay.querySelector<HTMLButtonElement>(".rumble-shell__close");
   const simulateButton = overlay.querySelector<HTMLButtonElement>("[data-rumble-run]");
@@ -273,6 +299,11 @@ export async function createRumbleExperience(options: LaunchOptions): Promise<Ru
   const insightsB = overlay.querySelector<HTMLUListElement>("[data-insight='b']");
   if (!closeButton || !simulateButton || !eraToggle || !histogramContainer || !insightsA || !insightsB) {
     throw new Error("Failed to initialize Roster Rumble UI");
+  }
+
+  if (!isOverlay) {
+    closeButton.setAttribute("tabindex", "-1");
+    closeButton.setAttribute("aria-hidden", "true");
   }
 
   const teamNodes = {
@@ -314,7 +345,7 @@ export async function createRumbleExperience(options: LaunchOptions): Promise<Ru
   let playerLookup = new Map<string, Player>();
   let chemistryCache: Record<"A" | "B", TeamChemistry | null> = { A: null, B: null };
   let eraNormalized = false;
-  let isMounted = false;
+  let isMounted = !isOverlay;
 
   const applyFilters = (teamId: "A" | "B") => {
     const node = teamNodes[teamId];
@@ -323,15 +354,17 @@ export async function createRumbleExperience(options: LaunchOptions): Promise<Ru
     getTeamPlayers(teams.A).forEach((player) => taken.add(player.id));
     getTeamPlayers(teams.B).forEach((player) => taken.add(player.id));
     const results = filterPlayers(players, taken, filters[teamId]);
+    const sorted = results.slice().sort((a, b) => a.name.localeCompare(b.name));
     node.pool.replaceChildren();
-    if (!results.length) {
+    if (!sorted.length) {
       const empty = document.createElement("p");
       empty.className = "rumble-empty";
       empty.textContent = "No players match the filters.";
       node.pool.append(empty);
       return;
     }
-    results.slice(0, 30).forEach((player) => {
+    const limit = filters[teamId].query ? 50 : 30;
+    sorted.slice(0, limit).forEach((player) => {
       const item = buildPlayerListItem(player);
       item.addEventListener("click", () => {
         const slotIndex = nextOpenSlot(teams[teamId]);
@@ -516,9 +549,11 @@ export async function createRumbleExperience(options: LaunchOptions): Promise<Ru
     updateInsights();
   };
 
-  closeButton.addEventListener("click", () => {
-    overlay.classList.remove("is-open");
-  });
+  if (isOverlay) {
+    closeButton.addEventListener("click", () => {
+      overlay.classList.remove("is-open");
+    });
+  }
 
   simulateButton.addEventListener("click", runSimulation);
   eraToggle.addEventListener("click", () => {
@@ -609,16 +644,20 @@ export async function createRumbleExperience(options: LaunchOptions): Promise<Ru
         overlay.classList.add("is-ready");
         isMounted = true;
       }
-      overlay.classList.add("is-open");
+      if (isOverlay) {
+        overlay.classList.add("is-open");
+      }
       if (initial) {
         applyState(initial);
       }
     },
     close() {
-      overlay.classList.remove("is-open");
+      if (isOverlay) {
+        overlay.classList.remove("is-open");
+      }
     },
     isOpen() {
-      return overlay.classList.contains("is-open");
+      return isOverlay ? overlay.classList.contains("is-open") : true;
     },
   };
 

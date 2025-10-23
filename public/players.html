@@ -28,7 +28,7 @@
     <meta name="twitter:image:alt" content="NBA Intelligence Hub share artwork with midnight gradients, glowing court map, and season intelligence headline." />
     <link rel="icon" type="image/svg+xml" href="assets/logos/nba-logoman.svg" />
     <link rel="stylesheet" href="styles/hub.css" />
-    <meta name="rumble-module" content="assets/js/players-rumble.5b4d9f271753b3be.js" />
+    <meta name="rumble-module" content="assets/js/players-rumble.f5d59a0cdfa1b08c.js" />
   </head>
   <body>
     <div class="site-frame">
@@ -59,7 +59,7 @@
         <section class="players-lab__section player-atlas" data-player-profiles>
           <header class="players-lab__section-header">
             <h2>Player scouting atlas</h2>
-            <button type="button" class="rumble-launch" data-rumble-launch>Roster Rumble — 5v5</button>
+            <a class="rumble-launch" href="#players-rumble" data-rumble-launch>Explore Roster Rumble — 5v5</a>
             <p class="players-lab__lede">
               Search the active 2025-26 roster pool to surface bespoke scouting percentiles for every player. Choose a
               player to instantly render his GOAT index snapshot, vitals, and twelve curated visual reads.
@@ -277,6 +277,19 @@
           <p class="player-atlas__teams-goat-empty players-goat-averages__empty" data-player-teams-goat-empty hidden>
             Team GOAT averages are warming up.
           </p>
+        </section>
+
+        <section class="players-lab__section players-rumble" id="players-rumble">
+          <header class="players-lab__section-header">
+            <h2>Roster Rumble — 5v5</h2>
+            <p class="players-lab__lede">
+              Draft dream matchups from the full historical player universe, balance archetypes with chemistry graphs,
+              and simulate a hundred games to see which lineup reigns.
+            </p>
+          </header>
+          <div class="players-rumble__body" data-rumble-root aria-live="polite">
+            <p class="players-rumble__loading" role="status">Loading Roster Rumble lineups…</p>
+          </div>
         </section>
 
         <section class="players-rankings">
