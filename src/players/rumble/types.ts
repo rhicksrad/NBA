@@ -77,4 +77,5 @@ export interface LaunchOptions {
   root: HTMLElement;
   getPlayerPool(): Promise<Player[]>;
   presets?: Record<string, string[]>;
+  mode?: "overlay" | "inline";
 }
