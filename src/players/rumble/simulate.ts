@@ -69,8 +69,8 @@ export function simulateSeries(
   const chemistryB = buildChemistry(teamB, eraStyle);
   const matchup = evaluateMatchup(teamA, teamB, eraStyle);
 
-  const baseStrengthA = teamStrength(teamA, teamB, chemistryA.score, matchup.advantageA, preset);
-  const baseStrengthB = teamStrength(teamB, teamA, chemistryB.score, matchup.advantageB, preset);
+  const baseStrengthA = teamStrength(teamA, teamB, chemistryA.score, matchup.advantageA, preset, eraStyle);
+  const baseStrengthB = teamStrength(teamB, teamA, chemistryB.score, matchup.advantageB, preset, eraStyle);
 
   const margins: number[] = [];
   let totalScoreA = 0;
@@ -152,7 +152,8 @@ function teamStrength(
   opponent: Player[],
   chemistryScore: number,
   matchupAdvantage: number,
-  preset: EraPreset
+  preset: EraPreset,
+  eraStyle: EraStyle
 ): number {
   if (!team.length) {
     return 0;
@@ -176,6 +177,8 @@ function teamStrength(
   const guardCreators = countGuardCreators(team);
   const handcheckBonus = preset.handcheck * (poaStoppers * 1.5 - guardCreators);
 
+  const eraComfort = calculateEraAdjustment(team, eraStyle, preset);
+
   return (
     chemistryDelta +
     impact +
@@ -185,6 +188,89 @@ function teamStrength(
     shooterDiffBonus +
     postBonus +
     orbBonus +
-    handcheckBonus
+    handcheckBonus +
+    eraComfort
   );
+}
+
+const ERA_STYLE_ORDER: EraStyle[] = ["current", "nineties", "pre3", "oldschool"];
+
+function parseEraYear(label: string | null | undefined): number | null {
+  if (!label) {
+    return null;
+  }
+  const matches = label.match(/\d{4}/g);
+  if (!matches || !matches.length) {
+    return null;
+  }
+  const years = matches
+    .map((value) => Number.parseInt(value, 10))
+    .filter((year) => Number.isFinite(year));
+  if (!years.length) {
+    return null;
+  }
+  const sum = years.reduce((total, year) => total + year, 0);
+  return Math.round(sum / years.length);
+}
+
+function inferEraStyleFromYear(year: number | null): EraStyle | null {
+  if (year === null) {
+    return null;
+  }
+  if (year >= 2005) {
+    return "current";
+  }
+  if (year >= 1990) {
+    return "nineties";
+  }
+  if (year >= 1975) {
+    return "pre3";
+  }
+  return "oldschool";
+}
+
+function inferPlayerEraStyle(player: Player): EraStyle | null {
+  const derived = inferEraStyleFromYear(parseEraYear(player.era));
+  return derived;
+}
+
+function calculateEraAdjustment(team: Player[], eraStyle: EraStyle, preset: EraPreset): number {
+  let counted = 0;
+  let comfortSum = 0;
+  const eraCounts = new Map<EraStyle, number>();
+  const eraIndex = ERA_STYLE_ORDER.indexOf(eraStyle);
+
+  team.forEach((player) => {
+    const playerEra = inferPlayerEraStyle(player);
+    if (!playerEra) {
+      return;
+    }
+    counted += 1;
+    eraCounts.set(playerEra, (eraCounts.get(playerEra) ?? 0) + 1);
+    const playerIndex = ERA_STYLE_ORDER.indexOf(playerEra);
+    const diff = eraIndex - playerIndex;
+    let contribution: number;
+    if (diff === 0) {
+      contribution = 6 + preset.handcheck * 0.5 + preset.postBoost * 0.2;
+    } else if (diff > 0) {
+      contribution = 4 + diff * 1.25 + preset.handcheck * 0.25;
+    } else {
+      contribution = diff * 0.75;
+    }
+    comfortSum += contribution;
+  });
+
+  if (counted === 0) {
+    return 0;
+  }
+
+  const averageComfort = comfortSum / counted;
+  const matchingCount = eraCounts.get(eraStyle) ?? 0;
+  const matchingShare = matchingCount / counted;
+  const matchBonus = matchingShare > 0 ? Math.max(0, (matchingShare - 0.35) * 8) : 0;
+
+  const dominantCount = eraCounts.size ? Math.max(...Array.from(eraCounts.values())) : 0;
+  const cohesionBonus = dominantCount > 0 ? Math.max(0, (dominantCount / counted - 0.5) * 5) : 0;
+
+  return averageComfort + matchBonus + cohesionBonus;
 }
