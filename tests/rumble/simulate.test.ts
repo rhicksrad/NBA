@@ -21,8 +21,16 @@ function player(id: string, name: string, impact: number): Player {
   return { id, name, ...template, impact };
 }
 
+function playerWithEra(id: string, name: string, impact: number, era: string): Player {
+  return { id, name, ...template, era, impact };
+}
+
 function makeTeam(prefix: string, impacts: number[]): Player[] {
   return impacts.map((impact, index) => player(`${prefix}-${index}`, `${prefix}${index}`, impact));
+}
+
+function makeEraTeam(prefix: string, impacts: number[], era: string): Player[] {
+  return impacts.map((impact, index) => playerWithEra(`${prefix}-${index}`, `${prefix}${index}`, impact, era));
 }
 
 function sequenceRng(values: number[]): () => number {
@@ -46,5 +54,26 @@ describe("simulateSeries", () => {
     expect(result.teamAWins).toBeGreaterThanOrEqual(0);
     expect(Number.isFinite(result.avgScoreA)).toBe(true);
     expect(Number.isFinite(result.avgScoreB)).toBe(true);
+  });
+
+  it("boosts earlier eras when normalization is enabled", () => {
+    const vintage = makeEraTeam("V", [6, 6, 6, 6, 6], "1975");
+    const modern = makeEraTeam("M", [6, 6, 6, 6, 6], "2016");
+    const rngValues = [0.25, 0.75, 0.33, 0.67, 0.42, 0.58];
+
+    const baseline = simulateSeries(vintage, modern, { games: 1, eraNorm: false, rng: sequenceRng(rngValues) });
+    const normalized = simulateSeries(vintage, modern, { games: 1, eraNorm: true, rng: sequenceRng(rngValues) });
+
+    expect(normalized.avgScoreA - normalized.avgScoreB).toBeGreaterThan(
+      baseline.avgScoreA - baseline.avgScoreB
+    );
+  });
+
+  it("supports legacy numeric arguments", () => {
+    const teamA = makeEraTeam("A", [7, 7, 7, 7, 7], "1970");
+    const teamB = makeTeam("B", [5, 5, 5, 5, 5]);
+
+    const result = simulateSeries(teamA, teamB, 3, true);
+    expect(result.margins).toHaveLength(3);
   });
 });
