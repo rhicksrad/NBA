@@ -38,15 +38,69 @@ function averagePace(players: Player[]): number {
   return players.reduce((sum, player) => sum + player.paceZ, 0) / players.length;
 }
 
-export function simulateSeries(teamA: Player[], teamB: Player[], options: SimulationOptions = {}): SimResult {
+function parseEraYear(value: string | null | undefined): number | null {
+  if (!value) {
+    return null;
+  }
+  const match = value.match(/\d{4}/);
+  if (!match) {
+    return null;
+  }
+  const year = Number.parseInt(match[0], 10);
+  return Number.isFinite(year) ? year : null;
+}
+
+function eraMultiplier(player: Player, enabled: boolean): number {
+  if (!enabled) {
+    return 1;
+  }
+  const year = parseEraYear(player.era);
+  if (!year) {
+    return 1;
+  }
+  if (year < 1980) {
+    return 1.15;
+  }
+  if (year < 1990) {
+    return 1.1;
+  }
+  if (year < 2000) {
+    return 1.05;
+  }
+  if (year < 2010) {
+    return 1.02;
+  }
+  return 1;
+}
+
+function teamEraScale(players: Player[], enabled: boolean): number {
+  if (!enabled || !players.length) {
+    return 1;
+  }
+  const total = players.reduce((sum, player) => sum + eraMultiplier(player, enabled), 0);
+  return total / players.length;
+}
+
+export function simulateSeries(
+  teamA: Player[],
+  teamB: Player[],
+  optionsOrGames?: SimulationOptions | number,
+  eraNormOverride?: boolean
+): SimResult {
+  const options: SimulationOptions =
+    typeof optionsOrGames === "number" ? { games: optionsOrGames, eraNorm: eraNormOverride } : optionsOrGames ?? {};
+
   const games = Number.isFinite(options.games) && options.games ? Math.max(1, Math.floor(options.games)) : 100;
   const rng = options.rng ?? defaultRng;
+  const eraNorm = Boolean(options.eraNorm);
   const chemistryA = buildChemistry(teamA);
   const chemistryB = buildChemistry(teamB);
   const matchup = evaluateMatchup(teamA, teamB);
 
-  const baseStrengthA = chemistryA.score + averageImpact(teamA) + matchup.advantageA;
-  const baseStrengthB = chemistryB.score + averageImpact(teamB) + matchup.advantageB;
+  const scaleA = teamEraScale(teamA, eraNorm);
+  const scaleB = teamEraScale(teamB, eraNorm);
+  const baseStrengthA = (chemistryA.score + averageImpact(teamA) + matchup.advantageA) * scaleA;
+  const baseStrengthB = (chemistryB.score + averageImpact(teamB) + matchup.advantageB) * scaleB;
 
   const margins: number[] = [];
   let totalScoreA = 0;
@@ -56,7 +110,7 @@ export function simulateSeries(teamA: Player[], teamB: Player[], options: Simula
 
   const paceA = averagePace(teamA);
   const paceB = averagePace(teamB);
-  const paceAdjustment = options.eraNorm ? (paceA + paceB) / 2 : 0;
+  const paceAdjustment = eraNorm ? (paceA + paceB) / 2 : 0;
 
   for (let i = 0; i < games; i += 1) {
     const noise = gaussianNoise(rng) * 5;

@@ -353,6 +353,14 @@ export async function createRumbleExperience(options: LaunchOptions): Promise<Ru
   let eraNormalized = false;
   let isMounted = !isOverlay;
 
+  const syncEraToggle = () => {
+    eraToggle.textContent = eraNormalized ? "Era Norm ON" : "Era Norm OFF";
+    eraToggle.setAttribute("aria-pressed", eraNormalized ? "true" : "false");
+    eraToggle.classList.toggle("is-active", eraNormalized);
+  };
+
+  syncEraToggle();
+
   const applyFilters = (teamId: "A" | "B") => {
     const node = teamNodes[teamId];
     if (!node.pool) return;
@@ -547,12 +555,18 @@ export async function createRumbleExperience(options: LaunchOptions): Promise<Ru
       }
     });
     eraNormalized = Boolean(state.eraNorm);
-    eraToggle.textContent = eraNormalized ? "Era Norm ON" : "Era Norm OFF";
-    eraToggle.setAttribute("aria-pressed", eraNormalized ? "true" : "false");
+    syncEraToggle();
     updateTeam("A");
     updateTeam("B");
     updateFooter();
-    updateInsights();
+    if (
+      getTeamPlayers(teams.A).length === SLOT_COUNT &&
+      getTeamPlayers(teams.B).length === SLOT_COUNT
+    ) {
+      runSimulation();
+    } else {
+      updateInsights();
+    }
   };
 
   if (isOverlay) {
@@ -564,8 +578,8 @@ export async function createRumbleExperience(options: LaunchOptions): Promise<Ru
   simulateButton.addEventListener("click", runSimulation);
   eraToggle.addEventListener("click", () => {
     eraNormalized = !eraNormalized;
-    eraToggle.textContent = eraNormalized ? "Era Norm ON" : "Era Norm OFF";
-    eraToggle.setAttribute("aria-pressed", eraNormalized ? "true" : "false");
+    syncEraToggle();
+    runSimulation();
     updateHash();
   });
 
