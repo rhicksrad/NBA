@@ -197,14 +197,20 @@ export async function createRumbleExperience(options: LaunchOptions): Promise<Ru
   const isOverlay = mode !== "inline";
   const overlay = document.createElement("div");
   overlay.className = isOverlay ? "rumble-overlay" : "rumble-inline";
-  const titleId = "rumble-shell-title";
+  const shellUid = Math.random().toString(36).slice(2);
+  const titleId = `rumble-shell-title-${shellUid}`;
+  const descriptionId = `rumble-shell-description-${shellUid}`;
   const shellAttributes = isOverlay
-    ? `role="dialog" aria-modal="true" aria-labelledby="${titleId}"`
-    : `role="region" aria-labelledby="${titleId}"`;
+    ? `role="dialog" aria-modal="true" aria-labelledby="${titleId}" aria-describedby="${descriptionId}"`
+    : `role="region" aria-labelledby="${titleId}" aria-describedby="${descriptionId}"`;
   overlay.innerHTML = `
     <div class="rumble-shell" ${shellAttributes}>
       <header class="rumble-shell__header">
-        <h2 id="${titleId}">Roster Rumble — 5v5</h2>
+        <div class="rumble-shell__titles">
+          <span class="eyebrow rumble-shell__eyebrow">Game Simulator</span>
+          <h2 id="${titleId}">Roster Rumble — 5v5</h2>
+          <p id="${descriptionId}" class="rumble-shell__description">Build two all-time lineups, compare chemistry, then run a 100-game sim.</p>
+        </div>
         <button type="button" class="rumble-shell__close" aria-label="Close Roster Rumble">×</button>
       </header>
       <div class="rumble-shell__body">
