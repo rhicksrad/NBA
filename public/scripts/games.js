@@ -1761,19 +1761,35 @@ function collectTeamTotals(stats) {
   return totals;
 }
 
+function computePerGame(value, gameCount) {
+  const numericValue = Number(value);
+  const gamesPlayed = Number(gameCount);
+  if (!Number.isFinite(numericValue) || !Number.isFinite(gamesPlayed) || gamesPlayed <= 0) {
+    return 0;
+  }
+  return numericValue / gamesPlayed;
+}
+
 function buildPlayerPointLeadersChart(stats) {
   const totals = collectPlayerTotals(stats);
   const ranked = Array.from(totals.values())
-    .map((entry) => ({ ...entry, gameCount: entry.games.size }))
-    .filter((entry) => entry.pts > 0)
+    .map((entry) => {
+      const gameCount = entry.games.size;
+      return {
+        ...entry,
+        gameCount,
+        pointsPerGame: computePerGame(entry.pts, gameCount),
+      };
+    })
+    .filter((entry) => entry.pointsPerGame > 0)
     .sort((a, b) => {
-      const delta = b.pts - a.pts;
+      const delta = b.pointsPerGame - a.pointsPerGame;
       if (delta !== 0) {
         return delta;
       }
-      const gameDelta = b.gameCount - a.gameCount;
-      if (gameDelta !== 0) {
-        return gameDelta;
+      const totalDelta = b.pts - a.pts;
+      if (totalDelta !== 0) {
+        return totalDelta;
       }
       return a.name.localeCompare(b.name);
     })
@@ -1788,8 +1804,8 @@ function buildPlayerPointLeadersChart(stats) {
       labels: ranked.map((entry) => `${entry.name} (${entry.teamAbbreviation})`),
       datasets: [
         {
-          label: 'Points',
-          data: ranked.map((entry) => entry.pts),
+          label: 'Points per game',
+          data: ranked.map((entry) => entry.pointsPerGame),
           backgroundColor: ranked.map((_, index) => colors[index % colors.length]),
         },
       ],
@@ -1804,7 +1820,7 @@ function buildPlayerPointLeadersChart(stats) {
             label(context) {
               const entry = ranked[context.dataIndex];
               const games = entry.gameCount === 1 ? 'game' : 'games';
-              return `${context.formattedValue} points across ${entry.gameCount} ${games}`;
+              return `${helpers.formatNumber(entry.pointsPerGame, 1)} points per game across ${entry.gameCount} ${games}`;
             },
           },
         },
@@ -1813,6 +1829,7 @@ function buildPlayerPointLeadersChart(stats) {
         x: {
           beginAtZero: true,
           grid: { color: 'rgba(17, 86, 214, 0.12)' },
+          title: { display: true, text: 'Points per game' },
         },
         y: {
           grid: { display: false },
@@ -1825,14 +1842,22 @@ function buildPlayerPointLeadersChart(stats) {
 function buildAssistLeadersChart(stats) {
   const totals = collectPlayerTotals(stats);
   const ranked = Array.from(totals.values())
-    .map((entry) => ({ ...entry, gameCount: entry.games.size }))
-    .filter((entry) => entry.ast > 0)
+    .map((entry) => {
+      const gameCount = entry.games.size;
+      return {
+        ...entry,
+        gameCount,
+        assistsPerGame: computePerGame(entry.ast, gameCount),
+        pointsPerGame: computePerGame(entry.pts, gameCount),
+      };
+    })
+    .filter((entry) => entry.assistsPerGame > 0)
     .sort((a, b) => {
-      const delta = b.ast - a.ast;
+      const delta = b.assistsPerGame - a.assistsPerGame;
       if (delta !== 0) {
         return delta;
       }
-      const pointDelta = b.pts - a.pts;
+      const pointDelta = b.pointsPerGame - a.pointsPerGame;
       if (pointDelta !== 0) {
         return pointDelta;
       }
@@ -1849,8 +1874,8 @@ function buildAssistLeadersChart(stats) {
       labels: ranked.map((entry) => `${entry.name} (${entry.teamAbbreviation})`),
       datasets: [
         {
-          label: 'Assists',
-          data: ranked.map((entry) => entry.ast),
+          label: 'Assists per game',
+          data: ranked.map((entry) => entry.assistsPerGame),
           backgroundColor: ranked.map((_, index) => colors[index % colors.length]),
         },
       ],
@@ -1865,7 +1890,7 @@ function buildAssistLeadersChart(stats) {
             label(context) {
               const entry = ranked[context.dataIndex];
               const games = entry.gameCount === 1 ? 'game' : 'games';
-              return `${context.formattedValue} assists across ${entry.gameCount} ${games}`;
+              return `${helpers.formatNumber(entry.assistsPerGame, 1)} assists per game across ${entry.gameCount} ${games}`;
             },
           },
         },
@@ -1874,6 +1899,7 @@ function buildAssistLeadersChart(stats) {
         x: {
           beginAtZero: true,
           grid: { color: 'rgba(17, 86, 214, 0.12)' },
+          title: { display: true, text: 'Assists per game' },
         },
         y: {
           grid: { display: false },
@@ -1886,18 +1912,29 @@ function buildAssistLeadersChart(stats) {
 function buildReboundLeadersChart(stats) {
   const totals = collectPlayerTotals(stats);
   const ranked = Array.from(totals.values())
-    .map((entry) => ({
-      ...entry,
-      defensive: Math.max(Number(entry.reb ?? 0) - Number(entry.oreb ?? 0), 0),
-      gameCount: entry.games.size,
-    }))
-    .filter((entry) => entry.reb > 0)
+    .map((entry) => {
+      const gameCount = entry.games.size;
+      const offensive = Number(entry.oreb ?? 0);
+      const defensiveRaw = Math.max(Number(entry.reb ?? 0) - offensive, 0);
+      const offensivePerGame = computePerGame(offensive, gameCount);
+      const defensivePerGame = computePerGame(defensiveRaw, gameCount);
+      return {
+        ...entry,
+        gameCount,
+        offensive,
+        defensiveRaw,
+        offensivePerGame,
+        defensivePerGame,
+        totalPerGame: offensivePerGame + defensivePerGame,
+      };
+    })
+    .filter((entry) => entry.totalPerGame > 0)
     .sort((a, b) => {
-      const totalDelta = b.reb - a.reb;
+      const totalDelta = b.totalPerGame - a.totalPerGame;
       if (totalDelta !== 0) {
         return totalDelta;
       }
-      const offensiveDelta = b.oreb - a.oreb;
+      const offensiveDelta = b.offensivePerGame - a.offensivePerGame;
       if (offensiveDelta !== 0) {
         return offensiveDelta;
       }
@@ -1921,14 +1958,14 @@ function buildReboundLeadersChart(stats) {
       labels,
       datasets: [
         {
-          label: 'Offensive',
-          data: ranked.map((entry) => entry.oreb),
+          label: 'Offensive per game',
+          data: ranked.map((entry) => entry.offensivePerGame),
           backgroundColor: 'rgba(239, 61, 91, 0.82)',
           stack: 'rebounds',
         },
         {
-          label: 'Defensive',
-          data: ranked.map((entry) => entry.defensive),
+          label: 'Defensive per game',
+          data: ranked.map((entry) => entry.defensivePerGame),
           backgroundColor: 'rgba(17, 86, 214, 0.82)',
           stack: 'rebounds',
         },
@@ -1948,7 +1985,7 @@ function buildReboundLeadersChart(stats) {
               }
               const entry = ranked[items[0].dataIndex];
               const games = entry.gameCount === 1 ? 'game' : 'games';
-              return `Total ${helpers.formatNumber(entry.reb, 0)} rebounds across ${entry.gameCount} ${games}`;
+              return `Avg ${helpers.formatNumber(entry.totalPerGame, 1)} rebounds per game (${helpers.formatNumber(entry.reb, 0)} total across ${entry.gameCount} ${games})`;
             },
           },
         },
@@ -1957,9 +1994,9 @@ function buildReboundLeadersChart(stats) {
         x: {
           stacked: true,
           beginAtZero: true,
-          ticks: { precision: 0 },
+          ticks: { precision: 1 },
           grid: { color: 'rgba(17, 86, 214, 0.12)' },
-          title: { display: true, text: 'Rebounds' },
+          title: { display: true, text: 'Rebounds per game' },
         },
         y: {
           stacked: true,
@@ -1973,22 +2010,34 @@ function buildReboundLeadersChart(stats) {
 function buildStocksLeadersChart(stats) {
   const totals = collectPlayerTotals(stats);
   const ranked = Array.from(totals.values())
-    .map((entry) => ({
-      ...entry,
-      gameCount: entry.games.size,
-      stocks: Number(entry.stl ?? 0) + Number(entry.blk ?? 0),
-    }))
-    .filter((entry) => entry.stocks > 0)
+    .map((entry) => {
+      const gameCount = entry.games.size;
+      const steals = Number(entry.stl ?? 0);
+      const blocks = Number(entry.blk ?? 0);
+      const stealsPerGame = computePerGame(steals, gameCount);
+      const blocksPerGame = computePerGame(blocks, gameCount);
+      return {
+        ...entry,
+        gameCount,
+        steals,
+        blocks,
+        stealsPerGame,
+        blocksPerGame,
+        stocks: steals + blocks,
+        stocksPerGame: stealsPerGame + blocksPerGame,
+      };
+    })
+    .filter((entry) => entry.stocksPerGame > 0)
     .sort((a, b) => {
-      const stockDelta = b.stocks - a.stocks;
+      const stockDelta = b.stocksPerGame - a.stocksPerGame;
       if (stockDelta !== 0) {
         return stockDelta;
       }
-      const stealDelta = b.stl - a.stl;
+      const stealDelta = b.stealsPerGame - a.stealsPerGame;
       if (stealDelta !== 0) {
         return stealDelta;
       }
-      const blockDelta = b.blk - a.blk;
+      const blockDelta = b.blocksPerGame - a.blocksPerGame;
       if (blockDelta !== 0) {
         return blockDelta;
       }
@@ -2012,14 +2061,14 @@ function buildStocksLeadersChart(stats) {
       labels,
       datasets: [
         {
-          label: 'Steals',
-          data: ranked.map((entry) => entry.stl),
+          label: 'Steals per game',
+          data: ranked.map((entry) => entry.stealsPerGame),
           backgroundColor: 'rgba(17, 86, 214, 0.82)',
           stack: 'stocks',
         },
         {
-          label: 'Blocks',
-          data: ranked.map((entry) => entry.blk),
+          label: 'Blocks per game',
+          data: ranked.map((entry) => entry.blocksPerGame),
           backgroundColor: 'rgba(17, 181, 198, 0.72)',
           stack: 'stocks',
         },
@@ -2034,7 +2083,7 @@ function buildStocksLeadersChart(stats) {
         tooltip: {
           callbacks: {
             label(context) {
-              const value = helpers.formatNumber(context.parsed.x ?? context.parsed, 0);
+              const value = helpers.formatNumber(context.parsed.x ?? context.parsed, 1);
               return `${context.dataset.label}: ${value}`;
             },
             afterBody(items) {
@@ -2043,7 +2092,7 @@ function buildStocksLeadersChart(stats) {
                 return '';
               }
               const games = entry.gameCount === 1 ? 'game' : 'games';
-              return `Total stocks ${helpers.formatNumber(entry.stocks, 0)} across ${entry.gameCount} ${games}`;
+              return `Avg ${helpers.formatNumber(entry.stocksPerGame, 1)} stocks per game (${helpers.formatNumber(entry.stocks, 0)} total across ${entry.gameCount} ${games})`;
             },
           },
         },
@@ -2052,8 +2101,8 @@ function buildStocksLeadersChart(stats) {
         x: {
           beginAtZero: true,
           stacked: true,
-          ticks: { precision: 0 },
-          title: { display: true, text: 'Stocks (steals + blocks)' },
+          ticks: { precision: 1 },
+          title: { display: true, text: 'Stocks per game (steals + blocks)' },
           grid: { color: 'rgba(17, 86, 214, 0.12)' },
         },
         y: {
@@ -2068,13 +2117,26 @@ function buildStocksLeadersChart(stats) {
 function buildReboundBattleChart(stats) {
   const totals = collectTeamTotals(stats);
   const ranked = Array.from(totals.values())
-    .map((entry) => ({
-      ...entry,
-      defensive: Math.max(entry.reb - entry.oreb, 0),
-      total: entry.reb,
-    }))
-    .filter((entry) => entry.total > 0)
-    .sort((a, b) => b.total - a.total)
+    .map((entry) => {
+      const gameCount = entry.games.size;
+      const offensive = Number(entry.oreb ?? 0);
+      const total = Number(entry.reb ?? 0);
+      const defensive = Math.max(total - offensive, 0);
+      const offensivePerGame = computePerGame(offensive, gameCount);
+      const defensivePerGame = computePerGame(defensive, gameCount);
+      return {
+        ...entry,
+        gameCount,
+        offensive,
+        defensive,
+        total,
+        offensivePerGame,
+        defensivePerGame,
+        totalPerGame: offensivePerGame + defensivePerGame,
+      };
+    })
+    .filter((entry) => entry.totalPerGame > 0)
+    .sort((a, b) => b.totalPerGame - a.totalPerGame)
     .slice(0, 8);
   if (!ranked.length) {
     return fallbackChart('Rebound data building');
@@ -2085,14 +2147,14 @@ function buildReboundBattleChart(stats) {
       labels: ranked.map((entry) => entry.teamAbbreviation),
       datasets: [
         {
-          label: 'Offensive',
-          data: ranked.map((entry) => entry.oreb),
+          label: 'Offensive per game',
+          data: ranked.map((entry) => entry.offensivePerGame),
           backgroundColor: 'rgba(239, 61, 91, 0.82)',
           stack: 'rebounds',
         },
         {
-          label: 'Defensive',
-          data: ranked.map((entry) => entry.defensive),
+          label: 'Defensive per game',
+          data: ranked.map((entry) => entry.defensivePerGame),
           backgroundColor: 'rgba(17, 86, 214, 0.82)',
           stack: 'rebounds',
         },
@@ -2109,7 +2171,8 @@ function buildReboundBattleChart(stats) {
                 return '';
               }
               const entry = ranked[items[0].dataIndex];
-              return `Total ${helpers.formatNumber(entry.total, 0)} rebounds`;
+              const games = entry.gameCount === 1 ? 'game' : 'games';
+              return `Avg ${helpers.formatNumber(entry.totalPerGame, 1)} rebounds per game (${helpers.formatNumber(entry.total, 0)} total across ${entry.gameCount} ${games})`;
             },
           },
         },
@@ -2122,8 +2185,8 @@ function buildReboundBattleChart(stats) {
         y: {
           stacked: true,
           beginAtZero: true,
-          ticks: { precision: 0 },
-          title: { display: true, text: 'Rebounds' },
+          ticks: { precision: 1 },
+          title: { display: true, text: 'Rebounds per game' },
           grid: { color: 'rgba(17, 86, 214, 0.12)' },
         },
       },
@@ -2211,14 +2274,22 @@ function buildShootingEfficiencyChart(stats) {
 function buildFreeThrowVolumeChart(stats) {
   const totals = collectPlayerTotals(stats);
   const ranked = Array.from(totals.values())
-    .map((entry) => ({ ...entry, gameCount: entry.games.size }))
-    .filter((entry) => entry.fta > 0)
+    .map((entry) => {
+      const gameCount = entry.games.size;
+      return {
+        ...entry,
+        gameCount,
+        attemptsPerGame: computePerGame(entry.fta, gameCount),
+        makesPerGame: computePerGame(entry.ftm, gameCount),
+      };
+    })
+    .filter((entry) => entry.attemptsPerGame > 0)
     .sort((a, b) => {
-      const attemptDelta = b.fta - a.fta;
+      const attemptDelta = b.attemptsPerGame - a.attemptsPerGame;
       if (attemptDelta !== 0) {
         return attemptDelta;
       }
-      const makeDelta = b.ftm - a.ftm;
+      const makeDelta = b.makesPerGame - a.makesPerGame;
       if (makeDelta !== 0) {
         return makeDelta;
       }
@@ -2234,13 +2305,13 @@ function buildFreeThrowVolumeChart(stats) {
       labels: ranked.map((entry) => `${entry.name} (${entry.teamAbbreviation})`),
       datasets: [
         {
-          label: 'Attempts',
-          data: ranked.map((entry) => entry.fta),
+          label: 'Attempts per game',
+          data: ranked.map((entry) => entry.attemptsPerGame),
           backgroundColor: 'rgba(239, 61, 91, 0.82)',
         },
         {
-          label: 'Makes',
-          data: ranked.map((entry) => entry.ftm),
+          label: 'Makes per game',
+          data: ranked.map((entry) => entry.makesPerGame),
           backgroundColor: 'rgba(17, 86, 214, 0.82)',
         },
       ],
@@ -2254,10 +2325,10 @@ function buildFreeThrowVolumeChart(stats) {
           callbacks: {
             label(context) {
               const entry = ranked[context.dataIndex];
-              if (context.dataset.label === 'Attempts') {
-                return `${helpers.formatNumber(entry.fta, 0)} attempts`;
+              if (context.dataset.label === 'Attempts per game') {
+                return `${helpers.formatNumber(entry.attemptsPerGame, 1)} attempts per game`;
               }
-              return `${helpers.formatNumber(entry.ftm, 0)} makes`;
+              return `${helpers.formatNumber(entry.makesPerGame, 1)} makes per game`;
             },
             footer(items) {
               if (!items?.length) {
@@ -2265,10 +2336,11 @@ function buildFreeThrowVolumeChart(stats) {
               }
               const entry = ranked[items[0].dataIndex];
               const pct = computePercentage(entry.ftm, entry.fta);
+              const games = entry.gameCount === 1 ? 'game' : 'games';
               if (pct === null) {
                 return '';
               }
-              return `FT% ${helpers.formatNumber(pct, 1)}%`;
+              return `FT% ${helpers.formatNumber(pct, 1)}% (${helpers.formatNumber(entry.ftm, 0)}-${helpers.formatNumber(entry.fta, 0)} total across ${entry.gameCount} ${games})`;
             },
           },
         },
@@ -2277,6 +2349,7 @@ function buildFreeThrowVolumeChart(stats) {
         x: {
           beginAtZero: true,
           grid: { color: 'rgba(17, 86, 214, 0.12)' },
+          title: { display: true, text: 'Free throws per game' },
         },
         y: {
           grid: { display: false },
@@ -2289,12 +2362,25 @@ function buildFreeThrowVolumeChart(stats) {
 function buildDefenseImpactChart(stats) {
   const totals = collectTeamTotals(stats);
   const ranked = Array.from(totals.values())
-    .map((entry) => ({
-      ...entry,
-      total: entry.stl + entry.blk,
-    }))
-    .filter((entry) => entry.total > 0)
-    .sort((a, b) => b.total - a.total)
+    .map((entry) => {
+      const gameCount = entry.games.size;
+      const steals = Number(entry.stl ?? 0);
+      const blocks = Number(entry.blk ?? 0);
+      const stealsPerGame = computePerGame(steals, gameCount);
+      const blocksPerGame = computePerGame(blocks, gameCount);
+      return {
+        ...entry,
+        gameCount,
+        steals,
+        blocks,
+        stealsPerGame,
+        blocksPerGame,
+        total: steals + blocks,
+        totalPerGame: stealsPerGame + blocksPerGame,
+      };
+    })
+    .filter((entry) => entry.totalPerGame > 0)
+    .sort((a, b) => b.totalPerGame - a.totalPerGame)
     .slice(0, 8);
   if (!ranked.length) {
     return fallbackChart('Defensive play data building');
@@ -2305,13 +2391,13 @@ function buildDefenseImpactChart(stats) {
       labels: ranked.map((entry) => entry.teamAbbreviation),
       datasets: [
         {
-          label: 'Steals',
-          data: ranked.map((entry) => entry.stl),
+          label: 'Steals per game',
+          data: ranked.map((entry) => entry.stealsPerGame),
           backgroundColor: 'rgba(17, 181, 198, 0.85)',
         },
         {
-          label: 'Blocks',
-          data: ranked.map((entry) => entry.blk),
+          label: 'Blocks per game',
+          data: ranked.map((entry) => entry.blocksPerGame),
           backgroundColor: 'rgba(108, 79, 224, 0.82)',
         },
       ],
@@ -2327,7 +2413,8 @@ function buildDefenseImpactChart(stats) {
                 return '';
               }
               const entry = ranked[items[0].dataIndex];
-              return `Total disruptions ${helpers.formatNumber(entry.total, 0)}`;
+              const games = entry.gameCount === 1 ? 'game' : 'games';
+              return `Avg ${helpers.formatNumber(entry.totalPerGame, 1)} disruptions per game (${helpers.formatNumber(entry.total, 0)} total across ${entry.gameCount} ${games})`;
             },
           },
         },
@@ -2338,8 +2425,8 @@ function buildDefenseImpactChart(stats) {
         },
         y: {
           beginAtZero: true,
-          ticks: { precision: 0 },
-          title: { display: true, text: 'Plays' },
+          ticks: { precision: 1 },
+          title: { display: true, text: 'Plays per game' },
           grid: { color: 'rgba(17, 86, 214, 0.12)' },
         },
       },
@@ -2353,10 +2440,15 @@ function buildUsageEfficiencyChart(stats) {
     .map((entry) => ({
       ...entry,
       gameCount: entry.games.size,
-      usage: entry.fga + 0.44 * entry.fta + entry.turnover,
+      usageTotal: entry.fga + 0.44 * entry.fta + entry.turnover,
     }))
-    .filter((entry) => entry.usage > 0 && entry.pts > 0)
-    .sort((a, b) => b.usage - a.usage)
+    .map((entry) => ({
+      ...entry,
+      usagePerGame: computePerGame(entry.usageTotal, entry.gameCount),
+      pointsPerGame: computePerGame(entry.pts, entry.gameCount),
+    }))
+    .filter((entry) => entry.usagePerGame > 0 && entry.pointsPerGame > 0)
+    .sort((a, b) => b.usagePerGame - a.usagePerGame)
     .slice(0, 15);
   if (!aggregated.length) {
     return fallbackChart('Usage data building');
@@ -2366,13 +2458,15 @@ function buildUsageEfficiencyChart(stats) {
     const radius = Math.max(6, Math.min(18, averageMinutes * 0.8));
     const fgPct = computePercentage(entry.fgm, entry.fga);
     return {
-      x: entry.usage,
-      y: entry.pts,
+      x: entry.usagePerGame,
+      y: entry.pointsPerGame,
       r: radius,
       name: entry.name,
       team: entry.teamAbbreviation,
       fgPct,
       games: entry.gameCount,
+      usagePerGame: entry.usagePerGame,
+      pointsPerGame: entry.pointsPerGame,
     };
   });
   return {
@@ -2399,7 +2493,13 @@ function buildUsageEfficiencyChart(stats) {
               const prefix = raw.name ? `${raw.name} (${raw.team})` : 'Player';
               const games = raw.games === 1 ? 'game' : 'games';
               const fgPct = Number.isFinite(raw.fgPct) ? `${helpers.formatNumber(raw.fgPct, 1)}% FG` : 'FG% N/A';
-              return [`${prefix}`, `Usage involvement ${helpers.formatNumber(raw.x, 1)}`, `Points ${helpers.formatNumber(raw.y, 1)}`, `${fgPct}`, `${raw.games} ${games}`];
+              return [
+                `${prefix}`,
+                `Usage involvement ${helpers.formatNumber(raw.usagePerGame ?? raw.x, 1)} per game`,
+                `Points ${helpers.formatNumber(raw.pointsPerGame ?? raw.y, 1)} per game`,
+                `${fgPct}`,
+                `${raw.games} ${games}`,
+              ];
             },
           },
         },
@@ -2407,12 +2507,12 @@ function buildUsageEfficiencyChart(stats) {
       scales: {
         x: {
           beginAtZero: true,
-          title: { display: true, text: 'Usage involvement (FGA + 0.44 FTA + TOV)' },
+          title: { display: true, text: 'Usage involvement per game (FGA + 0.44 FTA + TOV)' },
           grid: { color: 'rgba(17, 86, 214, 0.12)' },
         },
         y: {
           beginAtZero: true,
-          title: { display: true, text: 'Points' },
+          title: { display: true, text: 'Points per game' },
           grid: { color: 'rgba(17, 86, 214, 0.12)' },
         },
       },
