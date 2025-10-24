@@ -5,7 +5,7 @@ import type {
   Player,
   TeamChemistry,
 } from "./types";
-import { ERA_PRESETS, type EraPreset, type EraStyle } from "./era";
+import { ERA_PRESETS, eraStyleDistance, inferPlayerEraStyle, type EraPreset, type EraStyle } from "./era";
 import { inferArchetypes } from "./archetypes";
 
 const MAX_POSITIVE_SYNERGIES = 4;
@@ -94,6 +94,8 @@ export function buildChemistry(players: Player[], eraStyle: EraStyle = "current"
       const poaB = hasArchetype(b, "POA Stopper");
       const rimAnchorA = hasArchetype(a, "Rim Protector") || hasArchetype(a, "Switch Big");
       const rimAnchorB = hasArchetype(b, "Rim Protector") || hasArchetype(b, "Switch Big");
+      const eraA = inferPlayerEraStyle(a);
+      const eraB = inferPlayerEraStyle(b);
 
       const paceGap = Math.abs(a.paceZ - b.paceZ);
       if (paceGap < 0.5) {
@@ -136,6 +138,31 @@ export function buildChemistry(players: Player[], eraStyle: EraStyle = "current"
 
       if ((poaA && rimAnchorB) || (poaB && rimAnchorA)) {
         addAdjustment(1.5 + preset.handcheck * 0.75, "defensive spine");
+      }
+
+      if (a.franchise && a.franchise === b.franchise) {
+        addAdjustment(1.2 + preset.postBoost * 0.2, "franchise familiarity");
+      }
+
+      if (eraA && eraB) {
+        if (eraA === eraB) {
+          const familiarityBonus = 1.6 + preset.handcheck * 0.4 + preset.postBoost * 0.2;
+          addAdjustment(familiarityBonus, "shared era rhythm");
+        } else {
+          const eraGap = eraStyleDistance(eraA, eraB);
+          if (eraGap >= 2) {
+            addAdjustment(-eraGap * (1 + preset.handcheck * 0.2), "era clash");
+          }
+        }
+      }
+
+      if (preset.threeFactor <= 0.3) {
+        const eliteDuo = a.impact >= 8.5 && b.impact >= 8.5;
+        const balancedUsage =
+          (a.usg <= 0.34 || b.astPct >= 0.2 || connectorB) && (b.usg <= 0.34 || a.astPct >= 0.2 || connectorA);
+        if (eliteDuo && balancedUsage) {
+          addAdjustment(2 + preset.postBoost * 0.2, "all-time duo versatility");
+        }
       }
 
       const defensiveGap =

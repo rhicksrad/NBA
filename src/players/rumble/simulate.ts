@@ -1,6 +1,13 @@
 import type { Player, SimResult } from "./types";
 import { buildChemistry, evaluateMatchup } from "./chemistry";
-import { ERA_PRESETS, isEraStyle, type EraPreset, type EraStyle } from "./era";
+import {
+  ERA_PRESETS,
+  ERA_STYLE_ORDER,
+  inferPlayerEraStyle,
+  isEraStyle,
+  type EraPreset,
+  type EraStyle,
+} from "./era";
 
 function clamp(value: number, min: number, max: number): number {
   if (value < min) {
@@ -8,6 +15,19 @@ function clamp(value: number, min: number, max: number): number {
   }
   if (value > max) {
     return max;
+  }
+  return value;
+}
+
+function clamp01(value: number): number {
+  if (!Number.isFinite(value)) {
+    return 0;
+  }
+  if (value <= 0) {
+    return 0;
+  }
+  if (value >= 1) {
+    return 1;
   }
   return value;
 }
@@ -211,8 +231,9 @@ function teamStrength(
   const handcheckBonus = preset.handcheck * (poaStoppers * 1.5 - guardCreators);
 
   const eraComfort = calculateEraAdjustment(team, eraStyle, preset);
+  const spacingMismatchPenalty = calculateSpacingMismatchPenalty(team, preset);
 
-  return (
+  const rawStrength =
     chemistryDelta +
     impact +
     pace +
@@ -222,49 +243,10 @@ function teamStrength(
     postBonus +
     orbBonus +
     handcheckBonus +
-    eraComfort
-  );
-}
+    eraComfort +
+    spacingMismatchPenalty;
 
-const ERA_STYLE_ORDER: EraStyle[] = ["current", "nineties", "pre3", "oldschool"];
-
-function parseEraYear(label: string | null | undefined): number | null {
-  if (!label) {
-    return null;
-  }
-  const matches = label.match(/\d{4}/g);
-  if (!matches || !matches.length) {
-    return null;
-  }
-  const years = matches
-    .map((value) => Number.parseInt(value, 10))
-    .filter((year) => Number.isFinite(year));
-  if (!years.length) {
-    return null;
-  }
-  const sum = years.reduce((total, year) => total + year, 0);
-  return Math.round(sum / years.length);
-}
-
-function inferEraStyleFromYear(year: number | null): EraStyle | null {
-  if (year === null) {
-    return null;
-  }
-  if (year >= 2005) {
-    return "current";
-  }
-  if (year >= 1990) {
-    return "nineties";
-  }
-  if (year >= 1975) {
-    return "pre3";
-  }
-  return "oldschool";
-}
-
-function inferPlayerEraStyle(player: Player): EraStyle | null {
-  const derived = inferEraStyleFromYear(parseEraYear(player.era));
-  return derived;
+  return normalizeStrength(rawStrength);
 }
 
 function calculateEraAdjustment(team: Player[], eraStyle: EraStyle, preset: EraPreset): number {
@@ -308,6 +290,57 @@ function calculateEraAdjustment(team: Player[], eraStyle: EraStyle, preset: EraP
   const archetypeAdjustment = calculateArchetypeEraPenalty(team, preset);
 
   return averageComfort + matchBonus + cohesionBonus + archetypeAdjustment;
+}
+
+function normalizeStrength(value: number): number {
+  if (value === 0) {
+    return 0;
+  }
+  return Math.tanh(value / 45) * 45;
+}
+
+function calculateSpacingMismatchPenalty(team: Player[], preset: EraPreset): number {
+  if (preset.threeFactor >= 0.6) {
+    return 0;
+  }
+
+  const relianceAllowance = 0.12 + preset.spacingBonus * 0.15 + preset.threeFactor * 0.2;
+  const severityScale =
+    (1 - clamp(preset.threeFactor, 0, 1)) * (1.6 + preset.handcheck * 0.3 + preset.postBoost * 0.25);
+
+  if (severityScale <= 0) {
+    return 0;
+  }
+
+  let penalty = 0;
+  team.forEach((player) => {
+    const rate = clamp01(player.threePA_rate);
+    if (rate <= relianceAllowance) {
+      return;
+    }
+
+    let reliance = rate - relianceAllowance;
+    if (rate >= 0.45 && preset.threeFactor === 0) {
+      reliance += (rate - 0.45) * 0.75;
+    }
+
+    const archetypeBoost = player.archetypes.some(
+      (tag) => tag === "Off-ball Shooter" || tag === "Stretch Big"
+    )
+      ? 1.4
+      : player.archetypes.some((tag) => tag === "Creator" || tag === "Secondary")
+        ? 1.1
+        : 1;
+
+    penalty += reliance * archetypeBoost;
+  });
+
+  if (penalty === 0) {
+    return 0;
+  }
+
+  const scale = 8 + severityScale * 2.5;
+  return -penalty * scale;
 }
 
 function calculateArchetypeEraPenalty(team: Player[], preset: EraPreset): number {
