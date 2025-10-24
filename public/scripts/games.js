@@ -1883,6 +1883,93 @@ function buildAssistLeadersChart(stats) {
   };
 }
 
+function buildReboundLeadersChart(stats) {
+  const totals = collectPlayerTotals(stats);
+  const ranked = Array.from(totals.values())
+    .map((entry) => ({
+      ...entry,
+      defensive: Math.max(Number(entry.reb ?? 0) - Number(entry.oreb ?? 0), 0),
+      gameCount: entry.games.size,
+    }))
+    .filter((entry) => entry.reb > 0)
+    .sort((a, b) => {
+      const totalDelta = b.reb - a.reb;
+      if (totalDelta !== 0) {
+        return totalDelta;
+      }
+      const offensiveDelta = b.oreb - a.oreb;
+      if (offensiveDelta !== 0) {
+        return offensiveDelta;
+      }
+      return a.name.localeCompare(b.name);
+    })
+    .slice(0, 8);
+  if (!ranked.length) {
+    return fallbackChart('Rebound data building', {
+      type: 'bar',
+      indexAxis: 'y',
+      scales: {
+        x: { beginAtZero: true, display: false },
+        y: { display: false },
+      },
+    });
+  }
+  const labels = ranked.map((entry) => `${entry.name} (${entry.teamAbbreviation})`);
+  return {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: 'Offensive',
+          data: ranked.map((entry) => entry.oreb),
+          backgroundColor: 'rgba(239, 61, 91, 0.82)',
+          stack: 'rebounds',
+        },
+        {
+          label: 'Defensive',
+          data: ranked.map((entry) => entry.defensive),
+          backgroundColor: 'rgba(17, 86, 214, 0.82)',
+          stack: 'rebounds',
+        },
+      ],
+    },
+    options: {
+      indexAxis: 'y',
+      maintainAspectRatio: false,
+      responsive: true,
+      plugins: {
+        legend: { position: 'bottom' },
+        tooltip: {
+          callbacks: {
+            footer(items) {
+              if (!items?.length) {
+                return '';
+              }
+              const entry = ranked[items[0].dataIndex];
+              const games = entry.gameCount === 1 ? 'game' : 'games';
+              return `Total ${helpers.formatNumber(entry.reb, 0)} rebounds across ${entry.gameCount} ${games}`;
+            },
+          },
+        },
+      },
+      scales: {
+        x: {
+          stacked: true,
+          beginAtZero: true,
+          ticks: { precision: 0 },
+          grid: { color: 'rgba(17, 86, 214, 0.12)' },
+          title: { display: true, text: 'Rebounds' },
+        },
+        y: {
+          stacked: true,
+          grid: { display: false },
+        },
+      },
+    },
+  };
+}
+
 function buildStocksLeadersChart(stats) {
   const totals = collectPlayerTotals(stats);
   const ranked = Array.from(totals.values())
@@ -2346,6 +2433,12 @@ function rebuildCharts() {
       element: '#assist-leaders',
       async createConfig() {
         return buildAssistLeadersChart(latestStats);
+      },
+    },
+    {
+      element: '#rebound-leaders',
+      async createConfig() {
+        return buildReboundLeadersChart(latestStats);
       },
     },
     {
