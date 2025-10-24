@@ -91,6 +91,52 @@ function deriveFromStats(player: Player): Archetype[] {
   return Array.from(tags);
 }
 
+function deriveFallbackArchetypes(player: Player): Archetype[] {
+  const tags = new Set<Archetype>();
+  const position = player.pos?.toUpperCase() ?? "";
+
+  if (!position.trim()) {
+    return [];
+  }
+
+  const add = (tag: Archetype): void => {
+    tags.add(tag);
+  };
+
+  const isGuard = position.includes("G");
+  const isCenter = position.includes("C");
+  const isForward = position.includes("F");
+
+  if (isGuard) {
+    if (player.astPct >= 22 || player.usg >= 26) {
+      add("Creator");
+    } else if (player.astPct >= 16 || player.usg >= 22) {
+      add("Secondary");
+    }
+    add("Connector");
+  }
+
+  if (isCenter) {
+    add("Rim Protector");
+    if (player.paceZ >= 0.2 || player.impact >= 6) {
+      add("Rim Runner");
+    }
+    if (player.threePA_rate >= 0.3 && player.threeP >= 0.35) {
+      add("Stretch Big");
+    }
+    if (player.astPct >= 14 || player.threePA_rate >= 0.25) {
+      add("Connector");
+    }
+  } else if (isForward) {
+    add("Connector");
+    if (player.paceZ >= 0.25 && player.impact >= 4) {
+      add("Switch Big");
+    }
+  }
+
+  return Array.from(tags);
+}
+
 export function inferArchetypes(
   player: Player,
   overrides?: ArchetypeOverrideMap | Map<string, readonly Archetype[]> | Record<string, readonly Archetype[]>
@@ -111,5 +157,15 @@ export function inferArchetypes(
     return provided;
   }
 
-  return deriveFromStats(player);
+  const derived = ensureArchetypeList(deriveFromStats(player));
+  if (derived.length) {
+    return derived;
+  }
+
+  const fallback = ensureArchetypeList(deriveFallbackArchetypes(player));
+  if (fallback.length) {
+    return fallback;
+  }
+
+  return ["Connector"];
 }
