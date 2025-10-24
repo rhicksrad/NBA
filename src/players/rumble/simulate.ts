@@ -2,6 +2,39 @@ import type { Player, SimResult } from "./types";
 import { buildChemistry, evaluateMatchup } from "./chemistry";
 import { ERA_PRESETS, isEraStyle, type EraPreset, type EraStyle } from "./era";
 
+function clamp(value: number, min: number, max: number): number {
+  if (value < min) {
+    return min;
+  }
+  if (value > max) {
+    return max;
+  }
+  return value;
+}
+
+type ArchetypeTraitProfile = {
+  spacing?: number;
+  three?: number;
+  pace?: number;
+  switching?: number;
+  handle?: number;
+  post?: number;
+  rebound?: number;
+  physicality?: number;
+};
+
+const ARCHETYPE_TRAITS: Record<Player["archetypes"][number], ArchetypeTraitProfile> = {
+  Creator: { handle: 1, spacing: 0.2, pace: 0.35 },
+  Secondary: { handle: 0.7, spacing: 0.35 },
+  "Off-ball Shooter": { spacing: 1, three: 1 },
+  "Rim Runner": { pace: 0.8, post: 0.35, rebound: 0.4 },
+  "Stretch Big": { spacing: 0.9, three: 0.9 },
+  "Switch Big": { switching: 1, spacing: 0.3, pace: 0.25 },
+  "POA Stopper": { physicality: 0.7 },
+  "Rim Protector": { post: 0.8, rebound: 0.6, physicality: 0.3 },
+  Connector: { spacing: 0.55, pace: 0.45 },
+};
+
 export interface SimulationOptions {
   games?: number;
   eraStyle?: EraStyle;
@@ -272,5 +305,63 @@ function calculateEraAdjustment(team: Player[], eraStyle: EraStyle, preset: EraP
   const dominantCount = eraCounts.size ? Math.max(...Array.from(eraCounts.values())) : 0;
   const cohesionBonus = dominantCount > 0 ? Math.max(0, (dominantCount / counted - 0.5) * 5) : 0;
 
-  return averageComfort + matchBonus + cohesionBonus;
+  const archetypeAdjustment = calculateArchetypeEraPenalty(team, preset);
+
+  return averageComfort + matchBonus + cohesionBonus + archetypeAdjustment;
+}
+
+function calculateArchetypeEraPenalty(team: Player[], preset: EraPreset): number {
+  if (!team.length) {
+    return 0;
+  }
+
+  const spacingValue = clamp(preset.spacingBonus, 0, 1);
+  const threeValue = clamp(preset.threeFactor, 0, 1);
+  const paceValue = clamp(preset.poss / 100, 0, 1);
+  const handcheckValue = clamp(preset.handcheck / 3, 0, 1);
+  const postValue = clamp(preset.postBoost / 5, 0, 1);
+  const reboundValue = clamp((preset.orb - 1) / 0.2, 0, 1);
+
+  const spacingPenalty = 1 - spacingValue;
+  const threePenalty = 1 - threeValue;
+  const pacePenalty = 1 - paceValue;
+  const switchingPenalty = clamp(spacingPenalty * 0.8 + threePenalty * 0.2, 0, 1);
+
+  let total = 0;
+
+  team.forEach((player) => {
+    player.archetypes.forEach((tag) => {
+      const traits = ARCHETYPE_TRAITS[tag];
+      if (!traits) {
+        return;
+      }
+
+      if (traits.spacing) {
+        total -= traits.spacing * spacingPenalty * 5;
+      }
+      if (traits.three) {
+        total -= traits.three * threePenalty * 6;
+      }
+      if (traits.pace) {
+        total -= traits.pace * pacePenalty * 3.5;
+      }
+      if (traits.switching) {
+        total -= traits.switching * switchingPenalty * 3;
+      }
+      if (traits.handle) {
+        total -= traits.handle * handcheckValue * 2.5;
+      }
+      if (traits.post) {
+        total += traits.post * postValue * 3;
+      }
+      if (traits.rebound) {
+        total += traits.rebound * reboundValue * 3;
+      }
+      if (traits.physicality) {
+        total += traits.physicality * handcheckValue * 2;
+      }
+    });
+  });
+
+  return total;
 }
