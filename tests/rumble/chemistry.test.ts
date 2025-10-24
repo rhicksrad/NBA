@@ -38,6 +38,37 @@ describe("buildChemistry", () => {
     expect(chemistry.edges[0].reasons).toContain("creator → shooter");
   });
 
+  it("limits the number of positive synergies for a pairing", () => {
+    const initiator = createPlayer("10", "Initiator", {
+      archetypes: ["Creator", "Connector", "POA Stopper"],
+      astPct: 0.31,
+      usg: 0.3,
+      threePA_rate: 0.58,
+      threeP: 0.39,
+      paceZ: 0.4,
+    });
+    const versatileBig = createPlayer("11", "Versatile Big", {
+      archetypes: ["Off-ball Shooter", "Stretch Big", "Rim Runner", "Rim Protector", "Connector"],
+      threeP: 0.38,
+      threePA_rate: 0.6,
+      astPct: 0.18,
+      usg: 0.22,
+      paceZ: 0.35,
+    });
+
+    const chemistry = buildChemistry([initiator, versatileBig], "nineties");
+    expect(chemistry.edges).toHaveLength(1);
+    const [edge] = chemistry.edges;
+    expect(edge.reasons).toEqual([
+      "creator → shooter",
+      "inside-out game",
+      "connector boost",
+      "defensive spine",
+    ]);
+    expect(edge.weight).toBeCloseTo(11.96, 2);
+    expect(chemistry.score).toBeCloseTo(111.96, 2);
+  });
+
   it("penalizes defensive gaps", () => {
     const scorer = createPlayer("3", "Scorer", {
       archetypes: ["Creator"],

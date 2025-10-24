@@ -8,6 +8,8 @@ import type {
 import { ERA_PRESETS, type EraPreset, type EraStyle } from "./era";
 import { inferArchetypes } from "./archetypes";
 
+const MAX_POSITIVE_SYNERGIES = 4;
+
 function hasArchetype(player: Player, target: Archetype): boolean {
   return player.archetypes.includes(target);
 }
@@ -72,8 +74,13 @@ export function buildChemistry(players: Player[], eraStyle: EraStyle = "current"
     for (let j = i + 1; j < entries.length; j += 1) {
       const a = entries[i];
       const b = entries[j];
-      let delta = 0;
-      const reasons: string[] = [];
+      const adjustments: Array<{ value: number; reason: string; order: number }> = [];
+      const addAdjustment = (value: number, reason: string) => {
+        if (!Number.isFinite(value) || value === 0) {
+          return;
+        }
+        adjustments.push({ value, reason, order: adjustments.length });
+      };
 
       const playmakerA = isPlaymaker(a);
       const playmakerB = isPlaymaker(b);
@@ -90,8 +97,7 @@ export function buildChemistry(players: Player[], eraStyle: EraStyle = "current"
 
       const paceGap = Math.abs(a.paceZ - b.paceZ);
       if (paceGap < 0.5) {
-        delta += 2;
-        reasons.push("pace fit");
+        addAdjustment(2, "pace fit");
       }
 
       const creatorShooter =
@@ -101,42 +107,35 @@ export function buildChemistry(players: Player[], eraStyle: EraStyle = "current"
         (hasArchetype(b, "Creator") || hasArchetype(b, "Secondary")) &&
         (hasArchetype(a, "Off-ball Shooter") || hasArchetype(a, "Stretch Big"));
       if (creatorShooter || shooterCreator) {
-        delta += 3 * preset.threeFactor;
-        reasons.push("creator → shooter");
+        addAdjustment(3 * preset.threeFactor, "creator → shooter");
       }
 
       if (a.threePA_rate > 0.5 && b.threePA_rate > 0.5) {
-        delta += 2 * preset.spacingBonus;
-        reasons.push("spacing stack");
+        addAdjustment(2 * preset.spacingBonus, "spacing stack");
       }
 
       if (a.usg > 28 && b.usg > 28 && a.astPct < 18 && b.astPct < 18) {
-        delta -= 5;
-        reasons.push("usage redundancy");
+        addAdjustment(-5, "usage redundancy");
       }
 
       if ((interiorA && playmakerB) || (interiorB && playmakerA)) {
-        delta += 2 + preset.postBoost * 0.6;
-        reasons.push("inside-out game");
+        addAdjustment(2 + preset.postBoost * 0.6, "inside-out game");
       }
 
       const hiLoEligible = preset.postBoost >= 2 && interiorA && interiorB && (connectorA || connectorB || spacingA || spacingB);
       if (hiLoEligible) {
-        delta += 1 + preset.postBoost * 0.5;
-        reasons.push("hi-lo threats");
+        addAdjustment(1 + preset.postBoost * 0.5, "hi-lo threats");
       }
 
       if (
         (connectorA && (playmakerB || interiorB || spacingB)) ||
         (connectorB && (playmakerA || interiorA || spacingA))
       ) {
-        delta += 1.8 + preset.spacingBonus * 1.2 + preset.postBoost * 0.1;
-        reasons.push("connector boost");
+        addAdjustment(1.8 + preset.spacingBonus * 1.2 + preset.postBoost * 0.1, "connector boost");
       }
 
       if ((poaA && rimAnchorB) || (poaB && rimAnchorA)) {
-        delta += 1.5 + preset.handcheck * 0.75;
-        reasons.push("defensive spine");
+        addAdjustment(1.5 + preset.handcheck * 0.75, "defensive spine");
       }
 
       const defensiveGap =
@@ -145,19 +144,41 @@ export function buildChemistry(players: Player[], eraStyle: EraStyle = "current"
         !hasArchetype(b, "POA Stopper") &&
         !hasArchetype(b, "Rim Protector");
       if (defensiveGap) {
-        delta -= 6;
-        reasons.push("defensive gaps");
+        addAdjustment(-6, "defensive gaps");
       }
 
-      if (delta !== 0) {
-        scoreDelta += delta;
-        reasons.forEach((reason) => {
-          const weight = reasonAccumulator.get(reason) ?? 0;
-          reasonAccumulator.set(reason, weight + delta);
-        });
-        const edge = describeEdge(a, b, delta, reasons);
-        if (edge) {
-          edges.push(edge);
+      if (adjustments.length) {
+        const positive = adjustments
+          .filter((entry) => entry.value > 0)
+          .sort((a, b) => {
+            const diff = Math.abs(b.value) - Math.abs(a.value);
+            if (diff !== 0) {
+              return diff;
+            }
+            return a.order - b.order;
+          })
+          .slice(0, MAX_POSITIVE_SYNERGIES);
+        const allowedPositiveOrders = new Set(positive.map((entry) => entry.order));
+        const filtered = adjustments.filter(
+          (entry) => entry.value <= 0 || allowedPositiveOrders.has(entry.order)
+        );
+
+        const delta = filtered.reduce((sum, entry) => sum + entry.value, 0);
+        if (delta !== 0) {
+          scoreDelta += delta;
+          filtered.forEach((entry) => {
+            const weight = reasonAccumulator.get(entry.reason) ?? 0;
+            reasonAccumulator.set(entry.reason, weight + entry.value);
+          });
+          const edge = describeEdge(
+            a,
+            b,
+            delta,
+            filtered.map((entry) => entry.reason)
+          );
+          if (edge) {
+            edges.push(edge);
+          }
         }
       }
     }
