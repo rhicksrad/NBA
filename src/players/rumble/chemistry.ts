@@ -18,6 +18,35 @@ function ensureArchetypes(player: Player): void {
   }
 }
 
+function isPlaymaker(player: Player): boolean {
+  return (
+    hasArchetype(player, "Creator") ||
+    hasArchetype(player, "Secondary") ||
+    player.astPct >= 22
+  );
+}
+
+function isConnector(player: Player): boolean {
+  return hasArchetype(player, "Connector") || player.astPct >= 16 || player.impact >= 8;
+}
+
+function hasSpacingThreat(player: Player): boolean {
+  return (
+    hasArchetype(player, "Off-ball Shooter") ||
+    hasArchetype(player, "Stretch Big") ||
+    (Number.isFinite(player.threeP) && player.threeP >= 0.365 && player.threePA_rate >= 0.3)
+  );
+}
+
+function isInteriorAnchor(player: Player): boolean {
+  return (
+    hasArchetype(player, "Rim Runner") ||
+    hasArchetype(player, "Stretch Big") ||
+    hasArchetype(player, "Switch Big") ||
+    hasArchetype(player, "Rim Protector")
+  );
+}
+
 function describeEdge(a: Player, b: Player, delta: number, reasons: string[]): ChemistryEdge | null {
   if (!Number.isFinite(delta) || delta === 0) {
     return null;
@@ -46,6 +75,19 @@ export function buildChemistry(players: Player[], eraStyle: EraStyle = "current"
       let delta = 0;
       const reasons: string[] = [];
 
+      const playmakerA = isPlaymaker(a);
+      const playmakerB = isPlaymaker(b);
+      const connectorA = isConnector(a);
+      const connectorB = isConnector(b);
+      const interiorA = isInteriorAnchor(a);
+      const interiorB = isInteriorAnchor(b);
+      const spacingA = hasSpacingThreat(a);
+      const spacingB = hasSpacingThreat(b);
+      const poaA = hasArchetype(a, "POA Stopper");
+      const poaB = hasArchetype(b, "POA Stopper");
+      const rimAnchorA = hasArchetype(a, "Rim Protector") || hasArchetype(a, "Switch Big");
+      const rimAnchorB = hasArchetype(b, "Rim Protector") || hasArchetype(b, "Switch Big");
+
       const paceGap = Math.abs(a.paceZ - b.paceZ);
       if (paceGap < 0.5) {
         delta += 2;
@@ -71,6 +113,30 @@ export function buildChemistry(players: Player[], eraStyle: EraStyle = "current"
       if (a.usg > 28 && b.usg > 28 && a.astPct < 18 && b.astPct < 18) {
         delta -= 5;
         reasons.push("usage redundancy");
+      }
+
+      if ((interiorA && playmakerB) || (interiorB && playmakerA)) {
+        delta += 2 + preset.postBoost * 0.6;
+        reasons.push("inside-out game");
+      }
+
+      const hiLoEligible = preset.postBoost >= 2 && interiorA && interiorB && (connectorA || connectorB || spacingA || spacingB);
+      if (hiLoEligible) {
+        delta += 1 + preset.postBoost * 0.5;
+        reasons.push("hi-lo threats");
+      }
+
+      if (
+        (connectorA && (playmakerB || interiorB || spacingB)) ||
+        (connectorB && (playmakerA || interiorA || spacingA))
+      ) {
+        delta += 1.8 + preset.spacingBonus * 1.2 + preset.postBoost * 0.1;
+        reasons.push("connector boost");
+      }
+
+      if ((poaA && rimAnchorB) || (poaB && rimAnchorA)) {
+        delta += 1.5 + preset.handcheck * 0.75;
+        reasons.push("defensive spine");
       }
 
       const defensiveGap =
