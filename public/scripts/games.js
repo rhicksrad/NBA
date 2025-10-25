@@ -710,7 +710,18 @@ function normalizeStatusText(value) {
 }
 
 function sanitizeClockValue(value) {
-  return typeof value === 'string' ? value.replace(/\s+/g, '') : '';
+  if (typeof value !== 'string') {
+    return '';
+  }
+  const trimmed = value.trim();
+  if (!trimmed) {
+    return '';
+  }
+  const timeMatch = trimmed.match(/(\d{1,2}:\d{1,2}(?:\.\d{1,3})?)$/);
+  if (timeMatch) {
+    return timeMatch[1];
+  }
+  return trimmed.replace(/\s+/g, '');
 }
 
 function parseElapsedClockValue(value) {
