@@ -1,7 +1,18 @@
 {
-  "fetched_at": "2025-10-20T18:42:02.058Z",
+  "fetched_at": "2025-10-27T02:32:14.866Z",
   "source": "Ball Don't Lie",
   "items": [
+    {
+      "player": "Nikola Durisic",
+      "status": "Out",
+      "status_level": "caution",
+      "player_id": 1028035632,
+      "team_tricode": "ATL",
+      "team_name": "Atlanta Hawks",
+      "return_date": "Oct 29",
+      "description": "Oct 26: Durisic is away from the team and out for Monday's game against the Bulls.",
+      "report_label": "Oct 26"
+    },
     {
       "player": "Jayson Tatum",
       "status": "Out",
@@ -12,6 +23,17 @@
       "return_date": "Apr 1",
       "description": "Oct 9: The Celtics have not ruled Tatum (Achilles) out for the 2025-26 season, ESPN's Shams Charania reported on the Pat McAfee Show on Thursday.",
       "report_label": "Oct 9"
+    },
+    {
+      "player": "Danny Wolf",
+      "status": "Out",
+      "status_level": "caution",
+      "player_id": 1057280779,
+      "team_tricode": "BKN",
+      "team_name": "Brooklyn Nets",
+      "return_date": "Oct 27",
+      "description": "Oct 25: Wolf (ankle) has been ruled out for Sunday's game against the Spurs, Sharif Phillips-Keaton of USA Today reports.",
+      "report_label": "Oct 25"
     },
     {
       "player": "Haywood Highsmith",
@@ -69,48 +91,26 @@
       "report_label": "Sep 30"
     },
     {
-      "player": "Kyrie Irving",
+      "player": "Daniel Gafford",
       "status": "Out",
       "status_level": "caution",
-      "player_id": 228,
+      "player_id": 666577,
       "team_tricode": "DAL",
       "team_name": "Dallas Mavericks",
-      "return_date": "Jan 1",
-      "description": "Sep 29: At Media Day on Monday, Mavericks head coach Jason Kidd refuted the report that Irving (knee) is ahead of schedule in his recovery, Christian Clark reports.",
-      "report_label": "Sep 29"
+      "return_date": "Oct 27",
+      "description": "Oct 26: Gafford (ankle) has been ruled out for Sunday's game against the Raptors.",
+      "report_label": "Oct 26"
     },
     {
-      "player": "Jaden Ivey",
+      "player": "Dante Exum",
       "status": "Out",
       "status_level": "caution",
-      "player_id": 38017682,
-      "team_tricode": "DET",
-      "team_name": "Detroit Pistons",
-      "return_date": "Nov 24",
-      "description": "Oct 16: The Pistons announced Thursday that Ivey underwent an arthroscopic procedure to relieve right knee discomfort and will be re-evaluated in four weeks.",
-      "report_label": "Oct 16"
-    },
-    {
-      "player": "Moses Moody",
-      "status": "Out",
-      "status_level": "caution",
-      "player_id": 17553992,
-      "team_tricode": "GSW",
-      "team_name": "Golden State Warriors",
-      "return_date": "Oct 23",
-      "description": "Oct 19: Moody (calf) is out for Tuesday's game against the Lakers, Danny Emerman of SFStandard.com reports.",
-      "report_label": "Oct 19"
-    },
-    {
-      "player": "De'Anthony Melton",
-      "status": "Out",
-      "status_level": "caution",
-      "player_id": 313,
-      "team_tricode": "GSW",
-      "team_name": "Golden State Warriors",
-      "return_date": "Oct 30",
-      "description": "Oct 1: Melton (knee) will be re-evaluated in about four weeks, Sam Gordon of the San Francisco Chronicle reports.",
-      "report_label": "Oct 1"
+      "player_id": 151,
+      "team_tricode": "DAL",
+      "team_name": "Dallas Mavericks",
+      "return_date": "Oct 27",
+      "description": "Oct 25: Exum (knee) has been ruled out for Sunday's game against the Raptors.",
+      "report_label": "Oct 25"
     }
   ],
   "note": "Source: Ball Don't Lie player injuries feed. Displaying the 10 most relevant recent reports."
