@@ -403,56 +403,221 @@
             </footer>
           </section>
 
-          <section class="preseason-map" id="camp-atlas">
-            <div class="preseason-map__lead">
-              <span class="chip chip--accent">Training camp atlas</span>
-              <h2>Map every 2025-26 preseason storyline</h2>
-              <p class="lead">
-                Tap a franchise pin to open the scouting capsule anchored to the 2024-25 baseline and see how
-                training camp momentum is building.
-              </p>
+          <section class="awards-preview" id="awards-preview">
+            <div class="awards-preview__lead">
+              <span class="chip chip--accent">Way-too-early awards</span>
+              <h2>Way-too-early awards preview</h2>
+              <p class="lead">Opening week snapshots of who is setting the pace for every major trophy.</p>
             </div>
-            <div class="preseason-map__layout">
-              <div class="preseason-map__canvas">
-                <div
-                  class="team-map preseason-map__map"
-                  data-preseason-map
-                  aria-label="2025-26 preseason outlook map"
-                  aria-live="polite"
-                ></div>
-              </div>
-              <section class="preseason-map__panel" data-preseason-panel aria-live="polite">
-                <div class="preseason-map__empty" data-preseason-placeholder>
-                  <h3>Select a franchise marker</h3>
-                  <p>We’ll surface the preseason storyline, core strength, and swing factor once you pick a team.</p>
-                </div>
-                <article class="preseason-map__card" data-preseason-card hidden>
-                  <header class="preseason-map__header">
-                    <span class="preseason-map__conference" data-preseason-conference></span>
-                    <h3 data-preseason-heading></h3>
-                    <p class="preseason-map__status" data-preseason-status></p>
-                    <p class="preseason-map__scoreline" data-preseason-scoreline></p>
-                  </header>
-                  <div class="preseason-map__intro" data-preseason-intro></div>
-                  <div class="preseason-map__highlights">
-                    <article>
-                      <h4>Core strength</h4>
-                      <p data-preseason-core></p>
-                    </article>
-                    <article>
-                      <h4>Primary risk</h4>
-                      <p data-preseason-risk></p>
-                    </article>
-                    <article>
-                      <h4>Swing factor</h4>
-                      <p data-preseason-swing></p>
-                    </article>
-                  </div>
-                  <footer class="preseason-map__footer">
-                    <p data-preseason-season></p>
-                  </footer>
-                </article>
-              </section>
+            <div class="awards-preview__grid" aria-live="polite">
+              <article class="awards-preview__category" aria-labelledby="awards-mvp">
+                <h3 id="awards-mvp">Most Valuable Player</h3>
+                <ul class="awards-preview__list">
+                  <li>
+                    <div class="awards-preview__candidate">
+                      <span class="awards-preview__name">Shai Gilgeous-Alexander</span>
+                      <span class="awards-preview__team">Thunder</span>
+                    </div>
+                    <p>35 on Opening Night with the game-winning FTs, then a 55-point career high in a 2OT Finals-rematch win. OKC opened 3-0.</p>
+                  </li>
+                  <li>
+                    <div class="awards-preview__candidate">
+                      <span class="awards-preview__name">Victor Wembanyama</span>
+                      <span class="awards-preview__team">Spurs</span>
+                    </div>
+                    <p>3-0 start anchored by 40 in the opener and 31-14-6 vs BKN. Western Player of the Week.</p>
+                  </li>
+                  <li>
+                    <div class="awards-preview__candidate">
+                      <span class="awards-preview__name">Giannis Antetokounmpo</span>
+                      <span class="awards-preview__team">Bucks</span>
+                    </div>
+                    <p>36-16-7 week on average per league’s weekly honor, plus a 40-14-9 in CLE.</p>
+                  </li>
+                </ul>
+              </article>
+              <article class="awards-preview__category" aria-labelledby="awards-dpoy">
+                <h3 id="awards-dpoy">Defensive Player of the Year</h3>
+                <ul class="awards-preview__list">
+                  <li>
+                    <div class="awards-preview__candidate">
+                      <span class="awards-preview__name">Victor Wembanyama</span>
+                      <span class="awards-preview__team">Spurs</span>
+                    </div>
+                    <p>6.0 blocks per, high-leverage rim deterrence in wins over DAL, NOP, BKN.</p>
+                  </li>
+                  <li>
+                    <div class="awards-preview__candidate">
+                      <span class="awards-preview__name">Evan Mobley</span>
+                      <span class="awards-preview__team">Cavaliers</span>
+                    </div>
+                    <p>Closed MIL with 12-for-12 at the line and anchored late stops.</p>
+                  </li>
+                  <li>
+                    <div class="awards-preview__candidate">
+                      <span class="awards-preview__name">Chet Holmgren</span>
+                      <span class="awards-preview__team">Thunder</span>
+                    </div>
+                    <p>Stretch-five spacing on one end, contests and glass on the other in OKC’s 3-0.</p>
+                  </li>
+                </ul>
+              </article>
+              <article class="awards-preview__category" aria-labelledby="awards-roy">
+                <h3 id="awards-roy">Rookie of the Year</h3>
+                <ul class="awards-preview__list">
+                  <li>
+                    <div class="awards-preview__candidate">
+                      <span class="awards-preview__name">VJ Edgecombe</span>
+                      <span class="awards-preview__team">76ers</span>
+                    </div>
+                    <p>Historic 34 in his debut, third-most ever in an NBA debut, in a 117-116 win at BOS.</p>
+                  </li>
+                  <li>
+                    <div class="awards-preview__candidate">
+                      <span class="awards-preview__name">Cooper Flagg</span>
+                      <span class="awards-preview__team">Mavericks</span>
+                    </div>
+                    <p>22 with a momentum-swing dunk in DAL’s first win.</p>
+                  </li>
+                  <li>
+                    <div class="awards-preview__candidate">
+                      <span class="awards-preview__name">Dylan Harper</span>
+                      <span class="awards-preview__team">Spurs</span>
+                    </div>
+                    <p>20-8 off the bench to steady SA’s fourth-quarter response vs BKN.</p>
+                  </li>
+                </ul>
+              </article>
+              <article class="awards-preview__category" aria-labelledby="awards-sixth">
+                <h3 id="awards-sixth">Sixth Man of the Year</h3>
+                <ul class="awards-preview__list">
+                  <li>
+                    <div class="awards-preview__candidate">
+                      <span class="awards-preview__name">Ajay Mitchell</span>
+                      <span class="awards-preview__team">Thunder</span>
+                    </div>
+                    <p>26 off the bench in the 2OT win at IND, plus 14 vs ATL. Role impact is immediate.</p>
+                  </li>
+                  <li>
+                    <div class="awards-preview__candidate">
+                      <span class="awards-preview__name">Jaime Jaquez Jr.</span>
+                      <span class="awards-preview__team">Heat</span>
+                    </div>
+                    <p>17 off the bench and a +18 swing in the Heat’s home-opener win.</p>
+                  </li>
+                  <li>
+                    <div class="awards-preview__candidate">
+                      <span class="awards-preview__name">Sam Merrill</span>
+                      <span class="awards-preview__team">Cavaliers</span>
+                    </div>
+                    <p>17 timely points in the win over MIL.</p>
+                  </li>
+                </ul>
+              </article>
+              <article class="awards-preview__category" aria-labelledby="awards-mip">
+                <h3 id="awards-mip">Most Improved Player</h3>
+                <ul class="awards-preview__list">
+                  <li>
+                    <div class="awards-preview__candidate">
+                      <span class="awards-preview__name">Ausar Thompson</span>
+                      <span class="awards-preview__team">Pistons</span>
+                    </div>
+                    <p>21-12 board-crushing line in comeback over BOS, flashing a two-way leap.</p>
+                  </li>
+                  <li>
+                    <div class="awards-preview__candidate">
+                      <span class="awards-preview__name">Evan Mobley</span>
+                      <span class="awards-preview__team">Cavaliers</span>
+                    </div>
+                    <p>Expanded late-game usage and playmaking touches alongside the defense.</p>
+                  </li>
+                  <li>
+                    <div class="awards-preview__candidate">
+                      <span class="awards-preview__name">Cam Thomas</span>
+                      <span class="awards-preview__team">Nets</span>
+                    </div>
+                    <p>Volume still real, 40 at SA; efficiency and creation balance are the watch items.</p>
+                  </li>
+                </ul>
+              </article>
+              <article class="awards-preview__category" aria-labelledby="awards-clutch">
+                <h3 id="awards-clutch">Clutch Player of the Year</h3>
+                <ul class="awards-preview__list">
+                  <li>
+                    <div class="awards-preview__candidate">
+                      <span class="awards-preview__name">Shai Gilgeous-Alexander</span>
+                      <span class="awards-preview__team">Thunder</span>
+                    </div>
+                    <p>Game-deciding FTs vs HOU and a torrent of late points across two 2OT wins.</p>
+                  </li>
+                  <li>
+                    <div class="awards-preview__candidate">
+                      <span class="awards-preview__name">Tyrese Maxey</span>
+                      <span class="awards-preview__team">76ers</span>
+                    </div>
+                    <p>40 in the one-point win at BOS, closing like a vet.</p>
+                  </li>
+                  <li>
+                    <div class="awards-preview__candidate">
+                      <span class="awards-preview__name">LaMelo Ball</span>
+                      <span class="awards-preview__team">Hornets</span>
+                    </div>
+                    <p>38-13-13 triple-double with a takeover second half.</p>
+                  </li>
+                </ul>
+              </article>
+              <article class="awards-preview__category" aria-labelledby="awards-coach">
+                <h3 id="awards-coach">Coach of the Year</h3>
+                <ul class="awards-preview__list">
+                  <li>
+                    <div class="awards-preview__candidate">
+                      <span class="awards-preview__name">Mitch Johnson</span>
+                      <span class="awards-preview__team">Spurs</span>
+                    </div>
+                    <p>3-0 start, clear defensive identity, and a calibrated rookie integration.</p>
+                  </li>
+                  <li>
+                    <div class="awards-preview__candidate">
+                      <span class="awards-preview__name">Mark Daigneault</span>
+                      <span class="awards-preview__team">Thunder</span>
+                    </div>
+                    <p>Navigated two chaotic 2OT wins then a comfortable third game.</p>
+                  </li>
+                  <li>
+                    <div class="awards-preview__candidate">
+                      <span class="awards-preview__name">J.B. Bickerstaff</span>
+                      <span class="awards-preview__team">Pistons</span>
+                    </div>
+                    <p>Early identity win over BOS built on size and glass.</p>
+                  </li>
+                </ul>
+              </article>
+              <article class="awards-preview__category" aria-labelledby="awards-executive">
+                <h3 id="awards-executive">Executive of the Year</h3>
+                <ul class="awards-preview__list">
+                  <li>
+                    <div class="awards-preview__candidate">
+                      <span class="awards-preview__name">Sam Presti</span>
+                      <span class="awards-preview__team">Thunder</span>
+                    </div>
+                    <p>Rotation depth already paying off with Ajay Mitchell’s bench pop and Isaiah Hartenstein’s minutes.</p>
+                  </li>
+                  <li>
+                    <div class="awards-preview__candidate">
+                      <span class="awards-preview__name">San Antonio front office</span>
+                      <span class="awards-preview__team">Spurs</span>
+                    </div>
+                    <p>Wemby’s support system plus rookie guard production fueling wins.</p>
+                  </li>
+                  <li>
+                    <div class="awards-preview__candidate">
+                      <span class="awards-preview__name">Detroit front office</span>
+                      <span class="awards-preview__team">Pistons</span>
+                    </div>
+                    <p>The size and glass emphasis around Cade was the difference vs BOS.</p>
+                  </li>
+                </ul>
+              </article>
             </div>
           </section>
         </section>
