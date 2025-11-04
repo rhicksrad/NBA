@@ -120,23 +120,6 @@
       "seasonLabel": "2024-25"
     },
     {
-      "id": 17896021,
-      "name": "Jeremiah Robinson-Earl",
-      "position": "F",
-      "teamLabel": "New Orleans Pelicans (NOP)",
-      "metrics": {
-        "points": 4.409836065573771,
-        "assists": 0.8688524590163934,
-        "rebounds": 3.4918032786885247,
-        "steals": 0.45901639344262296,
-        "blocks": 0.11475409836065574,
-        "minutes": 13.557377049180328,
-        "games": 61
-      },
-      "score": 11.746,
-      "seasonLabel": "2024-25"
-    },
-    {
       "id": 4197029,
       "name": "Vasilije Micic",
       "position": "G",
@@ -191,5 +174,5 @@
   "season": 2024,
   "seasonLabel": "2024-25",
   "rosterSnapshotFetchedAt": "2025-10-18T03:27:38.772Z",
-  "generated_at": "2025-10-27T02:37:53.097Z"
+  "generated_at": "2025-11-04T02:41:31.389Z"
 }
