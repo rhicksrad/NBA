@@ -1,7 +1,18 @@
 {
-  "fetched_at": "2025-11-04T02:35:49.729Z",
+  "fetched_at": "2025-11-11T01:08:41.096Z",
   "source": "Ball Don't Lie",
   "items": [
+    {
+      "player": "Nikola Durisic",
+      "status": "Out",
+      "status_level": "caution",
+      "player_id": 1028035632,
+      "team_tricode": "ATL",
+      "team_name": "Atlanta Hawks",
+      "return_date": "Nov 12",
+      "description": "Nov 9: Durisic (elbow) is out for Monday's game against the Clippers.",
+      "report_label": "Nov 9"
+    },
     {
       "player": "Trae Young",
       "status": "Out",
@@ -25,26 +36,15 @@
       "report_label": "Oct 9"
     },
     {
-      "player": "Michael Porter Jr.",
+      "player": "Cam Thomas",
       "status": "Out",
       "status_level": "caution",
-      "player_id": 375,
+      "player_id": 17896048,
       "team_tricode": "BKN",
       "team_name": "Brooklyn Nets",
-      "return_date": "Nov 5",
-      "description": "Nov 3: Porter (personal) will not suit up for Monday's matchup with Minnesota, Sharif Phillips-Keaton of USA Today reports.",
-      "report_label": "Nov 3"
-    },
-    {
-      "player": "Drake Powell",
-      "status": "Out",
-      "status_level": "caution",
-      "player_id": 1057279425,
-      "team_tricode": "BKN",
-      "team_name": "Brooklyn Nets",
-      "return_date": "Nov 5",
-      "description": "Nov 3: Powell (ankle) is out for Monday's game against Minnesota, Erik Slater of ClutchPoints.com reports.",
-      "report_label": "Nov 3"
+      "return_date": "Dec 18",
+      "description": "Nov 7: Thomas has been diagnosed with a left hamstring strain and he will be re-evaluated in 3-4 weeks, Marc J. Spears of ESPN.com reports.",
+      "report_label": "Nov 7"
     },
     {
       "player": "Haywood Highsmith",
@@ -64,9 +64,9 @@
       "player_id": 666965,
       "team_tricode": "CHA",
       "team_name": "Charlotte Hornets",
-      "return_date": "Nov 7",
-      "description": "Nov 3: Williams (knee) has been ruled out for Tuesday's game against the Pelicans.",
-      "report_label": "Nov 3"
+      "return_date": "Nov 12",
+      "description": "Nov 9: Williams (knee) has been ruled out for Monday's game against the Lakers.",
+      "report_label": "Nov 9"
     },
     {
       "player": "Josh Green",
@@ -75,9 +75,20 @@
       "player_id": 3547258,
       "team_tricode": "CHA",
       "team_name": "Charlotte Hornets",
-      "return_date": "Nov 7",
-      "description": "Nov 3: Green (shoulder) won't play in Tuesday's game against the Pelicans.",
-      "report_label": "Nov 3"
+      "return_date": "Nov 12",
+      "description": "Nov 9: Green (shoulder) has been ruled out for Monday's game against the Lakers.",
+      "report_label": "Nov 9"
+    },
+    {
+      "player": "LaMelo Ball",
+      "status": "Out",
+      "status_level": "caution",
+      "player_id": 3547239,
+      "team_tricode": "CHA",
+      "team_name": "Charlotte Hornets",
+      "return_date": "Nov 12",
+      "description": "Nov 9: Ball (ankle) has been ruled out for Monday's game against the Lakers.",
+      "report_label": "Nov 9"
     },
     {
       "player": "Brandon Miller",
@@ -91,26 +102,15 @@
       "report_label": "Nov 3"
     },
     {
-      "player": "Coby White",
+      "player": "Josh Giddey",
       "status": "Out",
       "status_level": "caution",
-      "player_id": 666956,
+      "player_id": 17896065,
       "team_tricode": "CHI",
       "team_name": "Chicago Bulls",
-      "return_date": "Nov 7",
-      "description": "Nov 3: White (calf) has been ruled out for Tuesday's game against the 76ers.",
-      "report_label": "Nov 3"
-    },
-    {
-      "player": "Zach Collins",
-      "status": "Out",
-      "status_level": "caution",
-      "player_id": 102,
-      "team_tricode": "CHI",
-      "team_name": "Chicago Bulls",
-      "return_date": "Nov 16",
-      "description": "Oct 18: Collins will be sidelined for at least four weeks due to a left wrist fracture, Mike McGraw of the Chicago Daily Herald reports.",
-      "report_label": "Oct 18"
+      "return_date": "Nov 12",
+      "description": "Nov 10: Giddey (ankle) has been ruled out for Monday's game against the Spurs, K.C. Johnson of Chicago Sports Network reports.",
+      "report_label": "Nov 10"
     }
   ],
   "note": "Source: Ball Don't Lie player injuries feed. Displaying the 10 most relevant recent reports."

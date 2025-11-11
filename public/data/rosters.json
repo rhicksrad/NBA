@@ -1,5 +1,5 @@
 {
-  "fetched_at": "2025-10-18T03:27:38.772Z",
+  "fetched_at": "2025-11-11T01:08:34.653Z",
   "ttl_hours": 6,
   "source": "ball_dont_lie",
   "season": "2025-26",
@@ -20,24 +20,6 @@
           "weight": "205"
         },
         {
-          "id": 17895854,
-          "first_name": "Charles",
-          "last_name": "Bassey",
-          "position": "G",
-          "jersey_number": "28",
-          "height": "6-10",
-          "weight": "230"
-        },
-        {
-          "id": 1057845228,
-          "first_name": "Lamont",
-          "last_name": "Butler",
-          "position": "G",
-          "jersey_number": null,
-          "height": null,
-          "weight": null
-        },
-        {
           "id": 38017677,
           "first_name": "Dyson",
           "last_name": "Daniels",
@@ -51,7 +33,7 @@
           "first_name": "N'Faly",
           "last_name": "Dante",
           "position": "C",
-          "jersey_number": "3",
+          "jersey_number": "12",
           "height": "6-11",
           "weight": "230"
         },
@@ -60,7 +42,7 @@
           "first_name": "Nikola",
           "last_name": "Durisic",
           "position": "G",
-          "jersey_number": null,
+          "jersey_number": "22",
           "height": "6-8",
           "weight": "214"
         },
@@ -78,7 +60,7 @@
           "first_name": "Caleb",
           "last_name": "Houstan",
           "position": "G",
-          "jersey_number": "2",
+          "jersey_number": "33",
           "height": "6-8",
           "weight": "205"
         },
@@ -90,15 +72,6 @@
           "jersey_number": "1",
           "height": "6-8",
           "weight": "219"
-        },
-        {
-          "id": 1057846878,
-          "first_name": "Kobe",
-          "last_name": "Johnson",
-          "position": null,
-          "jersey_number": null,
-          "height": null,
-          "weight": null
         },
         {
           "id": 254,
@@ -123,7 +96,7 @@
           "first_name": "Eli John",
           "last_name": "Ndiaye",
           "position": "F",
-          "jersey_number": null,
+          "jersey_number": "30",
           "height": "6-8",
           "weight": "209"
         },
@@ -164,20 +137,11 @@
           "weight": "200"
         },
         {
-          "id": 1059635242,
-          "first_name": "Deivon",
-          "last_name": "Smith",
-          "position": null,
-          "jersey_number": null,
-          "height": null,
-          "weight": null
-        },
-        {
           "id": 56677795,
           "first_name": "Jacob",
           "last_name": "Toppin",
           "position": "F",
-          "jersey_number": "00",
+          "jersey_number": "0",
           "height": "6-9",
           "weight": "200"
         },
@@ -206,24 +170,6 @@
       "abbreviation": "BKN",
       "full_name": "Brooklyn Nets",
       "roster": [
-        {
-          "id": 1028263126,
-          "first_name": "Mark",
-          "last_name": "Armstrong",
-          "position": "G",
-          "jersey_number": null,
-          "height": "6-2",
-          "weight": "180"
-        },
-        {
-          "id": 56677838,
-          "first_name": "Kobe",
-          "last_name": "Bufkin",
-          "position": "G",
-          "jersey_number": "44",
-          "height": "6-4",
-          "weight": "195"
-        },
         {
           "id": 666508,
           "first_name": "Nicolas",
@@ -259,15 +205,6 @@
           "jersey_number": "10",
           "height": "6-0",
           "weight": "200"
-        },
-        {
-          "id": 1057845931,
-          "first_name": "Zeng",
-          "last_name": "Fanbo",
-          "position": "F",
-          "jersey_number": "12",
-          "height": "6-10",
-          "weight": "199"
         },
         {
           "id": 3092,
@@ -306,15 +243,6 @@
           "weight": "215"
         },
         {
-          "id": 1059875475,
-          "first_name": "Grant",
-          "last_name": "Nelson",
-          "position": "F",
-          "jersey_number": "16",
-          "height": "7-0",
-          "weight": "215"
-        },
-        {
           "id": 375,
           "first_name": "Michael",
           "last_name": "Porter Jr.",
@@ -349,15 +277,6 @@
           "jersey_number": "20",
           "height": "6-10",
           "weight": "265"
-        },
-        {
-          "id": 1059753274,
-          "first_name": "Malachi",
-          "last_name": "Smith",
-          "position": "G",
-          "jersey_number": null,
-          "height": "6-4",
-          "weight": "205"
         },
         {
           "id": 17896048,
@@ -466,15 +385,6 @@
           "weight": "217"
         },
         {
-          "id": 1057847347,
-          "first_name": "RJ",
-          "last_name": "Luis Jr.",
-          "position": "F",
-          "jersey_number": null,
-          "height": "6-6",
-          "weight": "215"
-        },
-        {
           "id": 38017715,
           "first_name": "Josh",
           "last_name": "Minott",
@@ -509,15 +419,6 @@
           "jersey_number": "55",
           "height": "6-6",
           "weight": "205"
-        },
-        {
-          "id": 1060112014,
-          "first_name": "Aaron",
-          "last_name": "Scott",
-          "position": null,
-          "jersey_number": null,
-          "height": null,
-          "weight": null
         },
         {
           "id": 1057396191,
@@ -565,15 +466,6 @@
           "weight": "205"
         },
         {
-          "id": 1028272676,
-          "first_name": "Hason",
-          "last_name": "Ward",
-          "position": "F",
-          "jersey_number": null,
-          "height": "6-9",
-          "weight": "200"
-        },
-        {
           "id": 473,
           "first_name": "Derrick",
           "last_name": "White",
@@ -598,15 +490,6 @@
       "abbreviation": "CHA",
       "full_name": "Charlotte Hornets",
       "roster": [
-        {
-          "id": 1059872205,
-          "first_name": "Jonas",
-          "last_name": "Aidoo",
-          "position": "C",
-          "jersey_number": null,
-          "height": "6-11",
-          "weight": "240"
-        },
         {
           "id": 3547239,
           "first_name": "LaMelo",
@@ -642,15 +525,6 @@
           "jersey_number": "14",
           "height": "6-10",
           "weight": "210"
-        },
-        {
-          "id": 1057845724,
-          "first_name": "Eric",
-          "last_name": "Dixon",
-          "position": "F",
-          "jersey_number": null,
-          "height": "6-6",
-          "weight": "255"
         },
         {
           "id": 3547258,
@@ -716,20 +590,11 @@
           "weight": "200"
         },
         {
-          "id": 1057847758,
-          "first_name": "Isaih",
-          "last_name": "Moore",
-          "position": "F",
-          "jersey_number": null,
-          "height": "6-10",
-          "weight": "197"
-        },
-        {
           "id": 64270311,
           "first_name": "Drew",
           "last_name": "Peterson",
           "position": "F",
-          "jersey_number": "13",
+          "jersey_number": "9",
           "height": "6-8",
           "weight": "205"
         },
@@ -750,15 +615,6 @@
           "jersey_number": "12",
           "height": "6-5",
           "weight": "205"
-        },
-        {
-          "id": 1058094827,
-          "first_name": "DJ",
-          "last_name": "Rodman",
-          "position": "G",
-          "jersey_number": null,
-          "height": "6-6",
-          "weight": "215"
         },
         {
           "id": 1028028379,
@@ -831,15 +687,6 @@
           "weight": "250"
         },
         {
-          "id": 1028244064,
-          "first_name": "Marcus",
-          "last_name": "Domask",
-          "position": "G-F",
-          "jersey_number": null,
-          "height": "6-6",
-          "weight": "215"
-        },
-        {
           "id": 17895983,
           "first_name": "Ayo",
           "last_name": "Dosunmu",
@@ -894,15 +741,6 @@
           "weight": "185"
         },
         {
-          "id": 1028265377,
-          "first_name": "Yuki",
-          "last_name": "Kawamura",
-          "position": "G",
-          "jersey_number": "8",
-          "height": "5-7",
-          "weight": "159"
-        },
-        {
           "id": 1028245974,
           "first_name": "Emanuel",
           "last_name": "Miller",
@@ -946,15 +784,6 @@
           "jersey_number": "25",
           "height": "6-8",
           "weight": "215"
-        },
-        {
-          "id": 17553996,
-          "first_name": "DJ",
-          "last_name": "Steward",
-          "position": "G",
-          "jersey_number": "00",
-          "height": "6-2",
-          "weight": "162"
         },
         {
           "id": 38017719,
@@ -1018,15 +847,6 @@
           "weight": "190"
         },
         {
-          "id": 1028268560,
-          "first_name": "Darius",
-          "last_name": "Brown",
-          "position": null,
-          "jersey_number": null,
-          "height": null,
-          "weight": null
-        },
-        {
           "id": 74,
           "first_name": "Thomas",
           "last_name": "Bryant",
@@ -1034,15 +854,6 @@
           "jersey_number": "3",
           "height": "6-9",
           "weight": "248"
-        },
-        {
-          "id": 1028244219,
-          "first_name": "Tristan",
-          "last_name": "Enaruna",
-          "position": "F",
-          "jersey_number": null,
-          "height": "6-7",
-          "weight": "220"
         },
         {
           "id": 666581,
@@ -1063,31 +874,13 @@
           "weight": "221"
         },
         {
-          "id": 1057846840,
-          "first_name": "Chaney",
-          "last_name": "Johnson",
-          "position": null,
-          "jersey_number": null,
-          "height": null,
-          "weight": null
-        },
-        {
-          "id": 1028265485,
-          "first_name": "Miller",
-          "last_name": "Kopp",
+          "id": 56677854,
+          "first_name": "Chris",
+          "last_name": "Livingston",
           "position": "F",
-          "jersey_number": null,
-          "height": "6-7",
+          "jersey_number": "8",
+          "height": "6-6",
           "weight": "220"
-        },
-        {
-          "id": 1060126250,
-          "first_name": "Zeke",
-          "last_name": "Mayo",
-          "position": "G",
-          "jersey_number": null,
-          "height": "6-4",
-          "weight": "185"
         },
         {
           "id": 3547299,
@@ -1124,15 +917,6 @@
           "jersey_number": "22",
           "height": "6-6",
           "weight": "245"
-        },
-        {
-          "id": 1057848025,
-          "first_name": "Norchad",
-          "last_name": "Omier",
-          "position": "F",
-          "jersey_number": null,
-          "height": "6-5",
-          "weight": "248"
         },
         {
           "id": 56677872,
@@ -1205,15 +989,6 @@
       "full_name": "Dallas Mavericks",
       "roster": [
         {
-          "id": 1028044409,
-          "first_name": "Melvin",
-          "last_name": "Ajinca",
-          "position": "F",
-          "jersey_number": null,
-          "height": "6-8",
-          "weight": "210"
-        },
-        {
           "id": 38017697,
           "first_name": "Max",
           "last_name": "Christie",
@@ -1230,24 +1005,6 @@
           "jersey_number": "30",
           "height": "6-11",
           "weight": "220"
-        },
-        {
-          "id": 1057845405,
-          "first_name": "Matthew",
-          "last_name": "Cleveland",
-          "position": "G-F",
-          "jersey_number": null,
-          "height": "6-7",
-          "weight": "210"
-        },
-        {
-          "id": 1060124286,
-          "first_name": "Matt",
-          "last_name": "Cross",
-          "position": null,
-          "jersey_number": null,
-          "height": null,
-          "weight": null
         },
         {
           "id": 117,
@@ -1367,15 +1124,6 @@
           "weight": "193"
         },
         {
-          "id": 1028256970,
-          "first_name": "Jamarion",
-          "last_name": "Sharp",
-          "position": "C",
-          "jersey_number": "33",
-          "height": "7-5",
-          "weight": "235"
-        },
-        {
           "id": 443,
           "first_name": "Klay",
           "last_name": "Thompson",
@@ -1410,20 +1158,11 @@
       "full_name": "Denver Nuggets",
       "roster": [
         {
-          "id": 1028263023,
-          "first_name": "James",
-          "last_name": "Akinjo",
-          "position": "G",
-          "jersey_number": null,
-          "height": "6-1",
-          "weight": "190"
-        },
-        {
           "id": 1057844839,
           "first_name": "Tamar",
           "last_name": "Bates",
           "position": "G",
-          "jersey_number": null,
+          "jersey_number": "7",
           "height": "6-4",
           "weight": "195"
         },
@@ -1446,24 +1185,6 @@
           "weight": "202"
         },
         {
-          "id": 666476,
-          "first_name": "Moses",
-          "last_name": "Brown",
-          "position": "C",
-          "jersey_number": "3",
-          "height": "7-2",
-          "weight": "258"
-        },
-        {
-          "id": 17896044,
-          "first_name": "Kessler",
-          "last_name": "Edwards",
-          "position": "F",
-          "jersey_number": "20",
-          "height": "6-8",
-          "weight": "203"
-        },
-        {
           "id": 177,
           "first_name": "Aaron",
           "last_name": "Gordon",
@@ -1480,24 +1201,6 @@
           "jersey_number": "10",
           "height": "6-5",
           "weight": "205"
-        },
-        {
-          "id": 1059021935,
-          "first_name": "Terrence",
-          "last_name": "Hargrove Jr.",
-          "position": "F",
-          "jersey_number": null,
-          "height": "6-4",
-          "weight": "215"
-        },
-        {
-          "id": 1059021996,
-          "first_name": "Coleman",
-          "last_name": "Hawkins",
-          "position": "F",
-          "jersey_number": null,
-          "height": "6-10",
-          "weight": "225"
         },
         {
           "id": 1028026514,
@@ -1531,7 +1234,7 @@
           "first_name": "Curtis",
           "last_name": "Jones",
           "position": "G",
-          "jersey_number": null,
+          "jersey_number": "1",
           "height": "6-3",
           "weight": "195"
         },
@@ -1570,15 +1273,6 @@
           "jersey_number": "24",
           "height": "6-2",
           "weight": "202"
-        },
-        {
-          "id": 1028266733,
-          "first_name": "Will",
-          "last_name": "Richardson",
-          "position": "G",
-          "jersey_number": null,
-          "height": "6-5",
-          "weight": "170"
         },
         {
           "id": 56677776,
@@ -1624,24 +1318,6 @@
       "full_name": "Detroit Pistons",
       "roster": [
         {
-          "id": 1059276748,
-          "first_name": "Jaden",
-          "last_name": "Akins",
-          "position": null,
-          "jersey_number": null,
-          "height": null,
-          "weight": null
-        },
-        {
-          "id": 56677865,
-          "first_name": "Charles",
-          "last_name": "Bediako",
-          "position": "C",
-          "jersey_number": "27",
-          "height": "6-11",
-          "weight": "225"
-        },
-        {
           "id": 17896075,
           "first_name": "Cade",
           "last_name": "Cunningham",
@@ -1660,29 +1336,11 @@
           "weight": "250"
         },
         {
-          "id": 1028264291,
-          "first_name": "Aaron",
-          "last_name": "Estrada",
-          "position": "G",
-          "jersey_number": null,
-          "height": "6-3",
-          "weight": "190"
-        },
-        {
-          "id": 1057846106,
-          "first_name": "Dawson",
-          "last_name": "Garcia",
-          "position": "F",
-          "jersey_number": null,
-          "height": "6-9",
-          "weight": "235"
-        },
-        {
           "id": 666604,
           "first_name": "Javonte",
           "last_name": "Green",
           "position": "G-F",
-          "jersey_number": "8",
+          "jersey_number": "31",
           "height": "6-5",
           "weight": "205"
         },
@@ -1723,13 +1381,13 @@
           "weight": "165"
         },
         {
-          "id": 56677845,
-          "first_name": "Colby",
+          "id": 1028205331,
+          "first_name": "Isaac",
           "last_name": "Jones",
-          "position": "G",
-          "jersey_number": "1",
-          "height": "6-6",
-          "weight": "207"
+          "position": "F",
+          "jersey_number": "3",
+          "height": "6-8",
+          "weight": "245"
         },
         {
           "id": 1028036878,
@@ -1759,13 +1417,13 @@
           "weight": "205"
         },
         {
-          "id": 1028265891,
-          "first_name": "Javante",
-          "last_name": "McCoy",
+          "id": 38017700,
+          "first_name": "Wendell",
+          "last_name": "Moore Jr.",
           "position": "G",
-          "jersey_number": "17",
+          "jersey_number": "9",
           "height": "6-5",
-          "weight": "180"
+          "weight": "215"
         },
         {
           "id": 3547270,
@@ -1820,15 +1478,6 @@
           "jersey_number": "9",
           "height": "6-7",
           "weight": "205"
-        },
-        {
-          "id": 1057849497,
-          "first_name": "Brice",
-          "last_name": "Williams",
-          "position": "G-F",
-          "jersey_number": null,
-          "height": "6-5",
-          "weight": "214"
         }
       ]
     },
@@ -1847,24 +1496,6 @@
           "weight": "230"
         },
         {
-          "id": 1057968644,
-          "first_name": "LJ",
-          "last_name": "Cryer",
-          "position": null,
-          "jersey_number": "18",
-          "height": "6-0",
-          "weight": null
-        },
-        {
-          "id": 114,
-          "first_name": "Seth",
-          "last_name": "Curry",
-          "position": "G",
-          "jersey_number": "31",
-          "height": "6-1",
-          "weight": "185"
-        },
-        {
           "id": 115,
           "first_name": "Stephen",
           "last_name": "Curry",
@@ -1872,15 +1503,6 @@
           "jersey_number": "30",
           "height": "6-2",
           "weight": "185"
-        },
-        {
-          "id": 1057969148,
-          "first_name": "Ja'Vier",
-          "last_name": "Francis",
-          "position": null,
-          "jersey_number": null,
-          "height": null,
-          "weight": null
         },
         {
           "id": 185,
@@ -1901,15 +1523,6 @@
           "weight": "220"
         },
         {
-          "id": 1028214958,
-          "first_name": "Blake",
-          "last_name": "Hinson",
-          "position": "F",
-          "jersey_number": "26",
-          "height": "6-8",
-          "weight": "230"
-        },
-        {
           "id": 219,
           "first_name": "Al",
           "last_name": "Horford",
@@ -1928,15 +1541,6 @@
           "weight": "245"
         },
         {
-          "id": 1016082149,
-          "first_name": "Taevion",
-          "last_name": "Kinsey",
-          "position": "G",
-          "jersey_number": "77",
-          "height": "6-4",
-          "weight": "190"
-        },
-        {
           "id": 17553979,
           "first_name": "Jonathan",
           "last_name": "Kuminga",
@@ -1946,15 +1550,6 @@
           "weight": "225"
         },
         {
-          "id": 1057970707,
-          "first_name": "Chance",
-          "last_name": "McMillian",
-          "position": null,
-          "jersey_number": null,
-          "height": null,
-          "weight": null
-        },
-        {
           "id": 313,
           "first_name": "De'Anthony",
           "last_name": "Melton",
@@ -1962,15 +1557,6 @@
           "jersey_number": "8",
           "height": "6-2",
           "weight": "200"
-        },
-        {
-          "id": 1057970845,
-          "first_name": "Jacksen",
-          "last_name": "Moni",
-          "position": null,
-          "jersey_number": null,
-          "height": null,
-          "weight": null
         },
         {
           "id": 17553992,
@@ -2079,29 +1665,11 @@
           "weight": "256"
         },
         {
-          "id": 3547252,
-          "first_name": "Vernon",
-          "last_name": "Carey Jr.",
-          "position": "F-C",
-          "jersey_number": "13",
-          "height": "6-10",
-          "weight": "270"
-        },
-        {
-          "id": 56913527,
-          "first_name": "Ricky",
-          "last_name": "Council IV",
-          "position": "G",
-          "jersey_number": "14",
-          "height": "6-6",
-          "weight": "207"
-        },
-        {
           "id": 1028203948,
           "first_name": "Isaiah",
           "last_name": "Crawford",
           "position": "F",
-          "jersey_number": "24",
+          "jersey_number": "27",
           "height": "6-6",
           "weight": "220"
         },
@@ -2110,7 +1678,7 @@
           "first_name": "JD",
           "last_name": "Davison",
           "position": "G",
-          "jersey_number": "20",
+          "jersey_number": "4",
           "height": "6-1",
           "weight": "195"
         },
@@ -2155,7 +1723,7 @@
           "first_name": "Kevon",
           "last_name": "Harris",
           "position": "G",
-          "jersey_number": "8",
+          "jersey_number": "00",
           "height": "6-5",
           "weight": "216"
         },
@@ -2167,24 +1735,6 @@
           "jersey_number": "0",
           "height": "6-0",
           "weight": "185"
-        },
-        {
-          "id": 1060125450,
-          "first_name": "Tyrese",
-          "last_name": "Hunter",
-          "position": "G",
-          "jersey_number": null,
-          "height": "6-0",
-          "weight": "175"
-        },
-        {
-          "id": 1057847482,
-          "first_name": "Cameron",
-          "last_name": "Matthews",
-          "position": "F",
-          "jersey_number": null,
-          "height": "6-7",
-          "weight": "235"
         },
         {
           "id": 356,
@@ -2329,6 +1879,15 @@
           "weight": "200"
         },
         {
+          "id": 666748,
+          "first_name": "Cody",
+          "last_name": "Martin",
+          "position": "F",
+          "jersey_number": "11",
+          "height": "6-6",
+          "weight": "205"
+        },
+        {
           "id": 38017686,
           "first_name": "Bennedict",
           "last_name": "Mathurin",
@@ -2347,13 +1906,13 @@
           "weight": "190"
         },
         {
-          "id": 1028255881,
-          "first_name": "Gabe",
-          "last_name": "McGlothan",
-          "position": "F",
-          "jersey_number": "41",
-          "height": "6-6",
-          "weight": "235"
+          "id": 330,
+          "first_name": "Monte",
+          "last_name": "Morris",
+          "position": "G",
+          "jersey_number": "3",
+          "height": "6-2",
+          "weight": "183"
         },
         {
           "id": 38017507,
@@ -2374,15 +1933,6 @@
           "weight": "215"
         },
         {
-          "id": 368,
-          "first_name": "Cameron",
-          "last_name": "Payne",
-          "position": "G",
-          "jersey_number": "15",
-          "height": "6-2",
-          "weight": "183"
-        },
-        {
           "id": 1057395638,
           "first_name": "Taelon",
           "last_name": "Peter",
@@ -2390,6 +1940,15 @@
           "jersey_number": "4",
           "height": "6-3",
           "weight": "185"
+        },
+        {
+          "id": 17896021,
+          "first_name": "Jeremiah",
+          "last_name": "Robinson-Earl",
+          "position": "F",
+          "jersey_number": "25",
+          "height": "6-9",
+          "weight": "240"
         },
         {
           "id": 56677861,
@@ -2410,15 +1969,6 @@
           "weight": "245"
         },
         {
-          "id": 56677862,
-          "first_name": "Jalen",
-          "last_name": "Slawson",
-          "position": "F",
-          "jersey_number": "18",
-          "height": "6-7",
-          "weight": "215"
-        },
-        {
           "id": 3547243,
           "first_name": "Obi",
           "last_name": "Toppin",
@@ -2435,15 +1985,6 @@
           "jersey_number": "5",
           "height": "6-7",
           "weight": "235"
-        },
-        {
-          "id": 3547240,
-          "first_name": "James",
-          "last_name": "Wiseman",
-          "position": "C",
-          "jersey_number": "11",
-          "height": "6-11",
-          "weight": "240"
         }
       ]
     },
@@ -2452,15 +1993,6 @@
       "abbreviation": "LAC",
       "full_name": "LA Clippers",
       "roster": [
-        {
-          "id": 38017704,
-          "first_name": "Patrick",
-          "last_name": "Baldwin Jr.",
-          "position": "F",
-          "jersey_number": "23",
-          "height": "7-0",
-          "weight": "220"
-        },
         {
           "id": 33,
           "first_name": "Nicolas",
@@ -2565,7 +2097,7 @@
           "first_name": "Jordan",
           "last_name": "Miller",
           "position": "G",
-          "jersey_number": "11",
+          "jersey_number": "22",
           "height": "6-5",
           "weight": "194"
         },
@@ -2588,24 +2120,6 @@
           "weight": "175"
         },
         {
-          "id": 1057848244,
-          "first_name": "John",
-          "last_name": "Poulakidas",
-          "position": "G",
-          "jersey_number": null,
-          "height": null,
-          "weight": null
-        },
-        {
-          "id": 17896042,
-          "first_name": "Jason",
-          "last_name": "Preston",
-          "position": "G",
-          "jersey_number": "10",
-          "height": "6-3",
-          "weight": "181"
-        },
-        {
           "id": 1057396055,
           "first_name": "Kobe",
           "last_name": "Sanders",
@@ -2619,18 +2133,9 @@
           "first_name": "Jahmyl",
           "last_name": "Telfort",
           "position": null,
-          "jersey_number": null,
-          "height": null,
+          "jersey_number": "19",
+          "height": "6-7",
           "weight": null
-        },
-        {
-          "id": 38017691,
-          "first_name": "TyTy",
-          "last_name": "Washington Jr.",
-          "position": "G",
-          "jersey_number": "14",
-          "height": "6-3",
-          "weight": "195"
         },
         {
           "id": 493,
@@ -2656,15 +2161,6 @@
           "jersey_number": "5",
           "height": "7-0",
           "weight": "252"
-        },
-        {
-          "id": 1057845629,
-          "first_name": "R.J.",
-          "last_name": "Davis",
-          "position": "G",
-          "jersey_number": null,
-          "height": "6-0",
-          "weight": "180"
         },
         {
           "id": 132,
@@ -2712,15 +2208,6 @@
           "weight": "250"
         },
         {
-          "id": 1057846964,
-          "first_name": "Tevian",
-          "last_name": "Jones",
-          "position": "G",
-          "jersey_number": "55",
-          "height": "6-6",
-          "weight": "220"
-        },
-        {
           "id": 257,
           "first_name": "Maxi",
           "last_name": "Kleber",
@@ -2761,18 +2248,9 @@
           "first_name": "Chris",
           "last_name": "Mañon",
           "position": "G",
-          "jersey_number": null,
+          "jersey_number": "30",
           "height": "6-4",
           "weight": "209"
-        },
-        {
-          "id": 1057847467,
-          "first_name": "Augustas",
-          "last_name": "Marčiulionis",
-          "position": "G",
-          "jersey_number": null,
-          "height": "6-4",
-          "weight": "200"
         },
         {
           "id": 17553995,
@@ -2797,7 +2275,7 @@
           "first_name": "Nick",
           "last_name": "Smith Jr.",
           "position": "G",
-          "jersey_number": "3",
+          "jersey_number": "20",
           "height": "6-2",
           "weight": "185"
         },
@@ -2827,24 +2305,6 @@
           "jersey_number": "7",
           "height": "6-2",
           "weight": "200"
-        },
-        {
-          "id": 1028049017,
-          "first_name": "Anton",
-          "last_name": "Watson",
-          "position": "F",
-          "jersey_number": "28",
-          "height": "6-8",
-          "weight": "225"
-        },
-        {
-          "id": 47738533,
-          "first_name": "Jeenathan",
-          "last_name": "Williams",
-          "position": "G",
-          "jersey_number": "19",
-          "height": "6-5",
-          "weight": "205"
         }
       ]
     },
@@ -2860,24 +2320,6 @@
           "position": "F",
           "jersey_number": "7",
           "height": "7-0",
-          "weight": "215"
-        },
-        {
-          "id": 1028263166,
-          "first_name": "Armando",
-          "last_name": "Bacot",
-          "position": "C",
-          "jersey_number": null,
-          "height": "6-10",
-          "weight": "240"
-        },
-        {
-          "id": 1057845216,
-          "first_name": "Tyler",
-          "last_name": "Burton",
-          "position": "F",
-          "jersey_number": null,
-          "height": "6-7",
           "weight": "215"
         },
         {
@@ -2926,15 +2368,6 @@
           "weight": "245"
         },
         {
-          "id": 3547281,
-          "first_name": "Nate",
-          "last_name": "Hinton",
-          "position": "G-F",
-          "jersey_number": "14",
-          "height": "6-5",
-          "weight": "210"
-        },
-        {
           "id": 56677830,
           "first_name": "GG",
           "last_name": "Jackson",
@@ -2962,15 +2395,6 @@
           "weight": "195"
         },
         {
-          "id": 17896007,
-          "first_name": "Braxton",
-          "last_name": "Key",
-          "position": "G",
-          "jersey_number": "12",
-          "height": "6-7",
-          "weight": "225"
-        },
-        {
           "id": 666703,
           "first_name": "John",
           "last_name": "Konchar",
@@ -2987,15 +2411,6 @@
           "jersey_number": "31",
           "height": "6-11",
           "weight": "255"
-        },
-        {
-          "id": 1057847334,
-          "first_name": "Lawson",
-          "last_name": "Lovering",
-          "position": null,
-          "jersey_number": null,
-          "height": "7-0",
-          "weight": null
         },
         {
           "id": 666786,
@@ -3020,7 +2435,7 @@
           "first_name": "Olivier-Maxence",
           "last_name": "Prosper",
           "position": "F",
-          "jersey_number": "8",
+          "jersey_number": "18",
           "height": "6-7",
           "weight": "230"
         },
@@ -3068,15 +2483,6 @@
       "full_name": "Miami Heat",
       "roster": [
         {
-          "id": 3547249,
-          "first_name": "Precious",
-          "last_name": "Achiuwa",
-          "position": "F",
-          "jersey_number": "5",
-          "height": "6-8",
-          "weight": "243"
-        },
-        {
           "id": 4,
           "first_name": "Bam",
           "last_name": "Adebayo",
@@ -3084,24 +2490,6 @@
           "jersey_number": "13",
           "height": "6-9",
           "weight": "255"
-        },
-        {
-          "id": 1057845569,
-          "first_name": "Dain",
-          "last_name": "Dainja",
-          "position": null,
-          "jersey_number": null,
-          "height": null,
-          "weight": null
-        },
-        {
-          "id": 1028263966,
-          "first_name": "Caleb",
-          "last_name": "Daniels",
-          "position": "G",
-          "jersey_number": null,
-          "height": "6-4",
-          "weight": "210"
         },
         {
           "id": 38017739,
@@ -3185,24 +2573,6 @@
           "weight": "215"
         },
         {
-          "id": 1059253855,
-          "first_name": "Gabe",
-          "last_name": "Madsen",
-          "position": null,
-          "jersey_number": null,
-          "height": null,
-          "weight": null
-        },
-        {
-          "id": 1059992972,
-          "first_name": "Bez",
-          "last_name": "Mbeng",
-          "position": null,
-          "jersey_number": null,
-          "height": null,
-          "weight": null
-        },
-        {
           "id": 17553994,
           "first_name": "Davion",
           "last_name": "Mitchell",
@@ -3230,15 +2600,6 @@
           "weight": "190"
         },
         {
-          "id": 1059753117,
-          "first_name": "Steve",
-          "last_name": "Settle III",
-          "position": null,
-          "jersey_number": null,
-          "height": null,
-          "weight": null
-        },
-        {
           "id": 19465585,
           "first_name": "Dru",
           "last_name": "Smith",
@@ -3248,15 +2609,6 @@
           "weight": "203"
         },
         {
-          "id": 17896117,
-          "first_name": "Ethan",
-          "last_name": "Thompson",
-          "position": "G",
-          "jersey_number": "55",
-          "height": "6-4",
-          "weight": "195"
-        },
-        {
           "id": 1028029127,
           "first_name": "Kel'el",
           "last_name": "Ware",
@@ -3264,15 +2616,6 @@
           "jersey_number": "7",
           "height": "7-0",
           "weight": "230"
-        },
-        {
-          "id": 1028272702,
-          "first_name": "Warren",
-          "last_name": "Washington",
-          "position": null,
-          "jersey_number": null,
-          "height": null,
-          "weight": null
         },
         {
           "id": 475,
@@ -3426,15 +2769,6 @@
           "weight": "180"
         },
         {
-          "id": 1028266882,
-          "first_name": "Cormac",
-          "last_name": "Ryan",
-          "position": null,
-          "jersey_number": "30",
-          "height": "6-5",
-          "weight": "195"
-        },
-        {
           "id": 1057848654,
           "first_name": "Mark",
           "last_name": "Sears",
@@ -3451,33 +2785,6 @@
           "jersey_number": "00",
           "height": "6-10",
           "weight": "250"
-        },
-        {
-          "id": 1028038570,
-          "first_name": "Tyler",
-          "last_name": "Smith",
-          "position": "F",
-          "jersey_number": "21",
-          "height": "6-9",
-          "weight": "224"
-        },
-        {
-          "id": 1059994559,
-          "first_name": "Stephen",
-          "last_name": "Thompson",
-          "position": "G",
-          "jersey_number": null,
-          "height": "6-4",
-          "weight": "185"
-        },
-        {
-          "id": 1060015084,
-          "first_name": "Jeremiah",
-          "last_name": "Tilmon",
-          "position": "C",
-          "jersey_number": null,
-          "height": "6-10",
-          "weight": "260"
         },
         {
           "id": 3089,
@@ -3512,15 +2819,6 @@
           "jersey_number": "19",
           "height": "6-11",
           "weight": "230"
-        },
-        {
-          "id": 64267203,
-          "first_name": "Jules",
-          "last_name": "Bernard",
-          "position": "G",
-          "jersey_number": "14",
-          "height": "6-6",
-          "weight": "210"
         },
         {
           "id": 56677851,
@@ -3604,20 +2902,11 @@
           "weight": "220"
         },
         {
-          "id": 240,
-          "first_name": "Alize",
-          "last_name": "Johnson",
-          "position": "F",
-          "jersey_number": "24",
-          "height": "6-9",
-          "weight": "212"
-        },
-        {
           "id": 38017630,
           "first_name": "Johnny",
           "last_name": "Juzang",
           "position": "G",
-          "jersey_number": "33",
+          "jersey_number": "9",
           "height": "6-7",
           "weight": "226"
         },
@@ -3638,24 +2927,6 @@
           "jersey_number": "33",
           "height": "6-10",
           "weight": "220"
-        },
-        {
-          "id": 1028047609,
-          "first_name": "Tristen",
-          "last_name": "Newton",
-          "position": "G",
-          "jersey_number": "13",
-          "height": "6-5",
-          "weight": "190"
-        },
-        {
-          "id": 1028112004,
-          "first_name": "Zyon",
-          "last_name": "Pullin",
-          "position": "G",
-          "jersey_number": null,
-          "height": "6-4",
-          "weight": "206"
         },
         {
           "id": 387,
@@ -3728,15 +2999,6 @@
           "weight": "215"
         },
         {
-          "id": 1057845114,
-          "first_name": "Garrison",
-          "last_name": "Brooks",
-          "position": "C",
-          "jersey_number": null,
-          "height": "6-10",
-          "weight": "240"
-        },
-        {
           "id": 1057845705,
           "first_name": "Hunter",
           "last_name": "Dickinson",
@@ -3764,15 +3026,6 @@
           "weight": "190"
         },
         {
-          "id": 1059058141,
-          "first_name": "Chase",
-          "last_name": "Hunter",
-          "position": null,
-          "jersey_number": null,
-          "height": null,
-          "weight": null
-        },
-        {
           "id": 17896024,
           "first_name": "Herbert",
           "last_name": "Jones",
@@ -3780,6 +3033,15 @@
           "jersey_number": "2",
           "height": "6-7",
           "weight": "206"
+        },
+        {
+          "id": 250,
+          "first_name": "DeAndre",
+          "last_name": "Jordan",
+          "position": "C",
+          "jersey_number": "6",
+          "height": "6-11",
+          "weight": "265"
         },
         {
           "id": 282,
@@ -3818,15 +3080,6 @@
           "weight": "235"
         },
         {
-          "id": 1058920636,
-          "first_name": "Trhae",
-          "last_name": "Mitchell",
-          "position": "G",
-          "jersey_number": null,
-          "height": "6-6",
-          "weight": "195"
-        },
-        {
           "id": 18677986,
           "first_name": "Trey",
           "last_name": "Murphy III",
@@ -3843,15 +3096,6 @@
           "jersey_number": "5",
           "height": "6-4",
           "weight": "180"
-        },
-        {
-          "id": 1059059437,
-          "first_name": "Josh",
-          "last_name": "Oduro",
-          "position": "C",
-          "jersey_number": null,
-          "height": "6-9",
-          "weight": "240"
         },
         {
           "id": 1057390538,
@@ -3881,24 +3125,6 @@
           "weight": "250"
         },
         {
-          "id": 1057848715,
-          "first_name": "Christian",
-          "last_name": "Shumate",
-          "position": null,
-          "jersey_number": null,
-          "height": "6-6",
-          "weight": "213"
-        },
-        {
-          "id": 17896025,
-          "first_name": "Jaden",
-          "last_name": "Springer",
-          "position": "G",
-          "jersey_number": "9",
-          "height": "6-4",
-          "weight": "202"
-        },
-        {
           "id": 666969,
           "first_name": "Zion",
           "last_name": "Williamson",
@@ -3924,15 +3150,6 @@
           "weight": "240"
         },
         {
-          "id": 1060015883,
-          "first_name": "Adama",
-          "last_name": "Bal",
-          "position": "G",
-          "jersey_number": null,
-          "height": "6-7",
-          "weight": "190"
-        },
-        {
           "id": 61,
           "first_name": "Mikal",
           "last_name": "Bridges",
@@ -3949,15 +3166,6 @@
           "jersey_number": "11",
           "height": "6-2",
           "weight": "190"
-        },
-        {
-          "id": 1029959785,
-          "first_name": "Boo",
-          "last_name": "Buie III",
-          "position": null,
-          "jersey_number": null,
-          "height": "6-2",
-          "weight": "180"
         },
         {
           "id": 100,
@@ -4032,24 +3240,6 @@
           "weight": "195"
         },
         {
-          "id": 273,
-          "first_name": "Alex",
-          "last_name": "Len",
-          "position": "C",
-          "jersey_number": "21",
-          "height": "7-0",
-          "weight": "250"
-        },
-        {
-          "id": 666754,
-          "first_name": "Garrison",
-          "last_name": "Mathews",
-          "position": "G",
-          "jersey_number": "14",
-          "height": "6-5",
-          "weight": "215"
-        },
-        {
           "id": 17896033,
           "first_name": "Miles",
           "last_name": "McBride",
@@ -4075,15 +3265,6 @@
           "jersey_number": "23",
           "height": "7-0",
           "weight": "240"
-        },
-        {
-          "id": 17896017,
-          "first_name": "Matt",
-          "last_name": "Ryan",
-          "position": "F",
-          "jersey_number": "37",
-          "height": "6-6",
-          "weight": "215"
         },
         {
           "id": 414,
@@ -4120,15 +3301,6 @@
       "full_name": "Oklahoma City Thunder",
       "roster": [
         {
-          "id": 1057844738,
-          "first_name": "Zack",
-          "last_name": "Austin",
-          "position": null,
-          "jersey_number": null,
-          "height": "6-5",
-          "weight": "216"
-        },
-        {
           "id": 1057392335,
           "first_name": "Brooks",
           "last_name": "Barnhizer",
@@ -4136,15 +3308,6 @@
           "jersey_number": "23",
           "height": "6-5",
           "weight": "230"
-        },
-        {
-          "id": 1059990598,
-          "first_name": "Cameron",
-          "last_name": "Brown",
-          "position": "F",
-          "jersey_number": null,
-          "height": "6-6",
-          "weight": "225"
         },
         {
           "id": 1028218679,
@@ -4219,24 +3382,6 @@
           "weight": "165"
         },
         {
-          "id": 1059510388,
-          "first_name": "Viktor",
-          "last_name": "Lakhin",
-          "position": null,
-          "jersey_number": null,
-          "height": null,
-          "weight": null
-        },
-        {
-          "id": 1028265620,
-          "first_name": "Malevy",
-          "last_name": "Leons",
-          "position": "F",
-          "jersey_number": "17",
-          "height": "6-9",
-          "weight": "210"
-        },
-        {
           "id": 1028037477,
           "first_name": "Ajay",
           "last_name": "Mitchell",
@@ -4244,24 +3389,6 @@
           "jersey_number": "25",
           "height": "6-4",
           "weight": "190"
-        },
-        {
-          "id": 1059875969,
-          "first_name": "Erik",
-          "last_name": "Reynolds II",
-          "position": null,
-          "jersey_number": null,
-          "height": null,
-          "weight": null
-        },
-        {
-          "id": 1059635020,
-          "first_name": "Payton",
-          "last_name": "Sandfort",
-          "position": "F",
-          "jersey_number": null,
-          "height": "6-7",
-          "weight": "215"
         },
         {
           "id": 1057274983,
@@ -4289,15 +3416,6 @@
           "jersey_number": "22",
           "height": "6-3",
           "weight": "195"
-        },
-        {
-          "id": 56677841,
-          "first_name": "Dariq",
-          "last_name": "Whitehead",
-          "position": "F",
-          "jersey_number": "0",
-          "height": "6-6",
-          "weight": "220"
         },
         {
           "id": 17896078,
@@ -4340,7 +3458,7 @@
           "first_name": "Chris",
           "last_name": "Youngblood",
           "position": null,
-          "jersey_number": null,
+          "jersey_number": "3",
           "height": "6-4",
           "weight": null
         }
@@ -4368,15 +3486,6 @@
           "jersey_number": "3",
           "height": "6-6",
           "weight": "215"
-        },
-        {
-          "id": 1028203324,
-          "first_name": "Reece",
-          "last_name": "Beekman",
-          "position": "G",
-          "jersey_number": "26",
-          "height": "6-3",
-          "weight": "190"
         },
         {
           "id": 666442,
@@ -4433,15 +3542,6 @@
           "weight": "217"
         },
         {
-          "id": 1058697789,
-          "first_name": "Johnell",
-          "last_name": "Davis",
-          "position": "G",
-          "jersey_number": null,
-          "height": "6-4",
-          "weight": "203"
-        },
-        {
           "id": 56677839,
           "first_name": "Jett",
           "last_name": "Howard",
@@ -4469,15 +3569,6 @@
           "weight": "196"
         },
         {
-          "id": 1028271147,
-          "first_name": "Alex",
-          "last_name": "Morales",
-          "position": "G",
-          "jersey_number": null,
-          "height": "6-6",
-          "weight": "180"
-        },
-        {
           "id": 1057385481,
           "first_name": "Noah",
           "last_name": "Penda",
@@ -4485,15 +3576,6 @@
           "jersey_number": "93",
           "height": "6-7",
           "weight": "215"
-        },
-        {
-          "id": 45658838,
-          "first_name": "Lester",
-          "last_name": "Quinones",
-          "position": "G",
-          "jersey_number": "24",
-          "height": "6-5",
-          "weight": "208"
         },
         {
           "id": 1057279571,
@@ -4509,18 +3591,9 @@
           "first_name": "Orlando",
           "last_name": "Robinson",
           "position": "C",
-          "jersey_number": "21",
+          "jersey_number": "7",
           "height": "6-10",
           "weight": "235"
-        },
-        {
-          "id": 17554001,
-          "first_name": "Javonte",
-          "last_name": "Smart",
-          "position": "G",
-          "jersey_number": "39",
-          "height": "6-4",
-          "weight": "205"
         },
         {
           "id": 17896073,
@@ -4548,15 +3621,6 @@
           "jersey_number": "21",
           "height": "6-11",
           "weight": "245"
-        },
-        {
-          "id": 1046471967,
-          "first_name": "Phillip",
-          "last_name": "Wheeler",
-          "position": "F",
-          "jersey_number": null,
-          "height": "6-8",
-          "weight": "185"
         }
       ]
     },
@@ -4575,15 +3639,6 @@
           "weight": "215"
         },
         {
-          "id": 38017676,
-          "first_name": "MarJon",
-          "last_name": "Beauchamp",
-          "position": "F",
-          "jersey_number": "0",
-          "height": "6-7",
-          "weight": "199"
-        },
-        {
           "id": 1028034846,
           "first_name": "Adem",
           "last_name": "Bona",
@@ -4597,18 +3652,9 @@
           "first_name": "Johni",
           "last_name": "Broome",
           "position": "F",
-          "jersey_number": null,
+          "jersey_number": "22",
           "height": "6-10",
           "weight": "235"
-        },
-        {
-          "id": 38017702,
-          "first_name": "Kennedy",
-          "last_name": "Chandler",
-          "position": "G",
-          "jersey_number": "1",
-          "height": "6-0",
-          "weight": "170"
         },
         {
           "id": 137,
@@ -4624,7 +3670,7 @@
           "first_name": "VJ",
           "last_name": "Edgecombe",
           "position": "G",
-          "jersey_number": null,
+          "jersey_number": "77",
           "height": "6-4",
           "weight": "180"
         },
@@ -4645,15 +3691,6 @@
           "jersey_number": "21",
           "height": "7-0",
           "weight": "280"
-        },
-        {
-          "id": 1028264354,
-          "first_name": "Max",
-          "last_name": "Fiedler",
-          "position": null,
-          "jersey_number": null,
-          "height": null,
-          "weight": null
         },
         {
           "id": 172,
@@ -4683,15 +3720,6 @@
           "weight": "210"
         },
         {
-          "id": 24102469,
-          "first_name": "Malcolm",
-          "last_name": "Hill",
-          "position": "F",
-          "jersey_number": "33",
-          "height": "6-6",
-          "weight": "220"
-        },
-        {
           "id": 286,
           "first_name": "Kyle",
           "last_name": "Lowry",
@@ -4719,24 +3747,6 @@
           "weight": "195"
         },
         {
-          "id": 1057847674,
-          "first_name": "Igor",
-          "last_name": "Miličić, Jr.",
-          "position": "F",
-          "jersey_number": null,
-          "height": "6-10",
-          "weight": "225"
-        },
-        {
-          "id": 1028266060,
-          "first_name": "Judah",
-          "last_name": "Mintz",
-          "position": "G",
-          "jersey_number": null,
-          "height": "6-3",
-          "weight": "172"
-        },
-        {
           "id": 360,
           "first_name": "Kelly",
           "last_name": "Oubre Jr.",
@@ -4750,27 +3760,9 @@
           "first_name": "Hunter",
           "last_name": "Sallis",
           "position": "G",
-          "jersey_number": null,
+          "jersey_number": "45",
           "height": "6-4",
           "weight": "185"
-        },
-        {
-          "id": 1057849072,
-          "first_name": "Saint",
-          "last_name": "Thomas",
-          "position": null,
-          "jersey_number": null,
-          "height": "6-7",
-          "weight": "235"
-        },
-        {
-          "id": 1028267489,
-          "first_name": "Jordan",
-          "last_name": "Tucker",
-          "position": "F",
-          "jersey_number": null,
-          "height": "6-7",
-          "weight": "210"
         },
         {
           "id": 38017711,
@@ -4820,7 +3812,7 @@
           "first_name": "Koby",
           "last_name": "Brea",
           "position": "G",
-          "jersey_number": null,
+          "jersey_number": "14",
           "height": "6-5",
           "weight": "215"
         },
@@ -4832,24 +3824,6 @@
           "jersey_number": "3",
           "height": "6-7",
           "weight": "225"
-        },
-        {
-          "id": 18677954,
-          "first_name": "Jared",
-          "last_name": "Butler",
-          "position": "G",
-          "jersey_number": "12",
-          "height": "6-3",
-          "weight": "193"
-        },
-        {
-          "id": 17896049,
-          "first_name": "David",
-          "last_name": "Duke Jr.",
-          "position": "G",
-          "jersey_number": "7",
-          "height": "6-4",
-          "weight": "204"
         },
         {
           "id": 1028025723,
@@ -4910,7 +3884,7 @@
           "first_name": "CJ",
           "last_name": "Huntley",
           "position": "F",
-          "jersey_number": null,
+          "jersey_number": "22",
           "height": "6-9",
           "weight": "190"
         },
@@ -4928,7 +3902,7 @@
           "first_name": "Isaiah",
           "last_name": "Livers",
           "position": "F",
-          "jersey_number": "12",
+          "jersey_number": "18",
           "height": "6-6",
           "weight": "232"
         },
@@ -4937,27 +3911,9 @@
           "first_name": "Khaman",
           "last_name": "Maluach",
           "position": "C",
-          "jersey_number": null,
+          "jersey_number": "10",
           "height": "7-1",
           "weight": "250"
-        },
-        {
-          "id": 1060110806,
-          "first_name": "Nathan",
-          "last_name": "Mariano",
-          "position": "F-C",
-          "jersey_number": null,
-          "height": "6-9",
-          "weight": "211"
-        },
-        {
-          "id": 3547300,
-          "first_name": "Sean",
-          "last_name": "McDermott",
-          "position": "F",
-          "jersey_number": "30",
-          "height": "6-6",
-          "weight": "195"
         },
         {
           "id": 351,
@@ -4978,15 +3934,6 @@
           "weight": "245"
         },
         {
-          "id": 1057848571,
-          "first_name": "Tyrese",
-          "last_name": "Samuel",
-          "position": "F",
-          "jersey_number": null,
-          "height": "6-8",
-          "weight": "239"
-        },
-        {
           "id": 38017698,
           "first_name": "Mark",
           "last_name": "Williams",
@@ -4994,15 +3941,6 @@
           "jersey_number": "15",
           "height": "7-1",
           "weight": "240"
-        },
-        {
-          "id": 1028267940,
-          "first_name": "Moses",
-          "last_name": "Wood",
-          "position": null,
-          "jersey_number": null,
-          "height": null,
-          "weight": null
         }
       ]
     },
@@ -5030,15 +3968,6 @@
           "weight": "230"
         },
         {
-          "id": 1058451021,
-          "first_name": "Andrew",
-          "last_name": "Carr",
-          "position": null,
-          "jersey_number": null,
-          "height": null,
-          "weight": null
-        },
-        {
           "id": 56677817,
           "first_name": "Sidy",
           "last_name": "Cissoko",
@@ -5061,7 +3990,7 @@
           "first_name": "Javonte",
           "last_name": "Cooke",
           "position": "G",
-          "jersey_number": null,
+          "jersey_number": "18",
           "height": "6-6",
           "weight": "185"
         },
@@ -5106,7 +4035,7 @@
           "first_name": "Caleb",
           "last_name": "Love",
           "position": "G",
-          "jersey_number": null,
+          "jersey_number": "2",
           "height": "6-3",
           "weight": "212"
         },
@@ -5118,24 +4047,6 @@
           "jersey_number": "24",
           "height": "6-8",
           "weight": "218"
-        },
-        {
-          "id": 1028271224,
-          "first_name": "Nick",
-          "last_name": "Muszynski",
-          "position": "C",
-          "jersey_number": null,
-          "height": "6-11",
-          "weight": "245"
-        },
-        {
-          "id": 1058921044,
-          "first_name": "Sean",
-          "last_name": "Pedulla",
-          "position": null,
-          "jersey_number": null,
-          "height": "6-1",
-          "weight": "195"
         },
         {
           "id": 56783340,
@@ -5196,7 +4107,7 @@
           "first_name": "Hansen",
           "last_name": "Yang",
           "position": "C",
-          "jersey_number": null,
+          "jersey_number": "16",
           "height": "7-1",
           "weight": "270"
         }
@@ -5208,13 +4119,13 @@
       "full_name": "Sacramento Kings",
       "roster": [
         {
-          "id": 1059276973,
-          "first_name": "Daniel",
-          "last_name": "Batcho",
+          "id": 3547249,
+          "first_name": "Precious",
+          "last_name": "Achiuwa",
           "position": "F",
-          "jersey_number": null,
-          "height": "6-11",
-          "weight": "235"
+          "jersey_number": "5",
+          "height": "6-8",
+          "weight": "243"
         },
         {
           "id": 1057845274,
@@ -5244,15 +4155,6 @@
           "weight": "175"
         },
         {
-          "id": 666530,
-          "first_name": "Terence",
-          "last_name": "Davis",
-          "position": "G",
-          "jersey_number": "3",
-          "height": "6-4",
-          "weight": "201"
-        },
-        {
           "id": 125,
           "first_name": "DeMar",
           "last_name": "DeRozan",
@@ -5260,15 +4162,6 @@
           "jersey_number": "10",
           "height": "6-6",
           "weight": "220"
-        },
-        {
-          "id": 1028264254,
-          "first_name": "Boogie",
-          "last_name": "Ellis",
-          "position": "G",
-          "jersey_number": null,
-          "height": "6-2",
-          "weight": "190"
         },
         {
           "id": 38017714,
@@ -5289,29 +4182,11 @@
           "weight": "245"
         },
         {
-          "id": 1028205331,
-          "first_name": "Isaac",
-          "last_name": "Jones",
-          "position": "F",
-          "jersey_number": "3",
-          "height": "6-8",
-          "weight": "245"
-        },
-        {
           "id": 268,
           "first_name": "Zach",
           "last_name": "LaVine",
           "position": "G",
           "jersey_number": "8",
-          "height": "6-5",
-          "weight": "200"
-        },
-        {
-          "id": 1059279604,
-          "first_name": "Mitchell",
-          "last_name": "Mascari",
-          "position": "G",
-          "jersey_number": null,
           "height": "6-5",
           "weight": "200"
         },
@@ -5341,15 +4216,6 @@
           "jersey_number": "13",
           "height": "6-8",
           "weight": "225"
-        },
-        {
-          "id": 1057847891,
-          "first_name": "Jameer",
-          "last_name": "Nelson Jr.",
-          "position": "G",
-          "jersey_number": null,
-          "height": "6-1",
-          "weight": "190"
         },
         {
           "id": 1028246478,
@@ -5410,18 +4276,9 @@
           "first_name": "Russell",
           "last_name": "Westbrook",
           "position": "G",
-          "jersey_number": "4",
+          "jersey_number": "18",
           "height": "6-4",
           "weight": "200"
-        },
-        {
-          "id": 1028257789,
-          "first_name": "Jaylin",
-          "last_name": "Williams",
-          "position": "F",
-          "jersey_number": "10",
-          "height": "6-8",
-          "weight": "245"
         }
       ]
     },
@@ -5474,15 +4331,6 @@
           "jersey_number": "30",
           "height": "6-7",
           "weight": "217"
-        },
-        {
-          "id": 436846673,
-          "first_name": "Adam",
-          "last_name": "Flagler",
-          "position": "G",
-          "jersey_number": "14",
-          "height": "6-1",
-          "weight": "180"
         },
         {
           "id": 161,
@@ -5557,15 +4405,6 @@
           "weight": "230"
         },
         {
-          "id": 1028037710,
-          "first_name": "Juan",
-          "last_name": "Nunez",
-          "position": "G",
-          "jersey_number": null,
-          "height": "6-4",
-          "weight": "190"
-        },
-        {
           "id": 358,
           "first_name": "Kelly",
           "last_name": "Olynyk",
@@ -5575,15 +4414,6 @@
           "weight": "240"
         },
         {
-          "id": 19465584,
-          "first_name": "Micah",
-          "last_name": "Potter",
-          "position": "F",
-          "jersey_number": "33",
-          "height": "6-9",
-          "weight": "248"
-        },
-        {
           "id": 38017699,
           "first_name": "Jeremy",
           "last_name": "Sochan",
@@ -5591,15 +4421,6 @@
           "jersey_number": "10",
           "height": "6-8",
           "weight": "230"
-        },
-        {
-          "id": 44477024,
-          "first_name": "Stanley",
-          "last_name": "Umude",
-          "position": "G",
-          "jersey_number": "17",
-          "height": "6-6",
-          "weight": "210"
         },
         {
           "id": 3547246,
@@ -5699,6 +4520,15 @@
           "weight": "190"
         },
         {
+          "id": 17554004,
+          "first_name": "AJ",
+          "last_name": "Lawson",
+          "position": "G",
+          "jersey_number": "0",
+          "height": "6-6",
+          "weight": "179"
+        },
+        {
           "id": 17896059,
           "first_name": "Sandro",
           "last_name": "Mamukelashvili",
@@ -5753,15 +4583,6 @@
           "weight": "190"
         },
         {
-          "id": 1060111739,
-          "first_name": "Julian",
-          "last_name": "Reese",
-          "position": "F",
-          "jersey_number": null,
-          "height": "6-9",
-          "weight": "230"
-        },
-        {
           "id": 1028038426,
           "first_name": "Jamal",
           "last_name": "Shead",
@@ -5796,15 +4617,6 @@
       "full_name": "Utah Jazz",
       "roster": [
         {
-          "id": 1058917502,
-          "first_name": "Max",
-          "last_name": "Abmas",
-          "position": "G",
-          "jersey_number": null,
-          "height": "5-11",
-          "weight": "162"
-        },
-        {
           "id": 12,
           "first_name": "Kyle",
           "last_name": "Anderson",
@@ -5823,15 +4635,6 @@
           "weight": "200"
         },
         {
-          "id": 1059749510,
-          "first_name": "Pedro",
-          "last_name": "Bradshaw",
-          "position": "F",
-          "jersey_number": null,
-          "height": "6-7",
-          "weight": "180"
-        },
-        {
           "id": 1057271583,
           "first_name": "Walter",
           "last_name": "Clayton Jr.",
@@ -5848,24 +4651,6 @@
           "jersey_number": "8",
           "height": "6-4",
           "weight": "210"
-        },
-        {
-          "id": 1057845539,
-          "first_name": "Steven",
-          "last_name": "Crowl",
-          "position": "C",
-          "jersey_number": null,
-          "height": "7-0",
-          "weight": "247"
-        },
-        {
-          "id": 1059750273,
-          "first_name": "Sean",
-          "last_name": "East II",
-          "position": "G",
-          "jersey_number": null,
-          "height": "6-3",
-          "weight": "180"
         },
         {
           "id": 1028035794,
@@ -5931,15 +4716,6 @@
           "weight": "240"
         },
         {
-          "id": 1057847840,
-          "first_name": "Matthew",
-          "last_name": "Murrell",
-          "position": "G",
-          "jersey_number": null,
-          "height": "6-4",
-          "weight": "200"
-        },
-        {
           "id": 338,
           "first_name": "Svi",
           "last_name": "Mykhailiuk",
@@ -5965,15 +4741,6 @@
           "jersey_number": "30",
           "height": "6-11",
           "weight": "290"
-        },
-        {
-          "id": 1028256864,
-          "first_name": "Babacar",
-          "last_name": "Sane",
-          "position": "F",
-          "jersey_number": null,
-          "height": "6-7",
-          "weight": "230"
         },
         {
           "id": 56677842,
@@ -6059,7 +4826,7 @@
           "first_name": "Sharife",
           "last_name": "Cooper",
           "position": "G",
-          "jersey_number": "00",
+          "jersey_number": "13",
           "height": "6-0",
           "weight": "176"
         },
@@ -6073,24 +4840,6 @@
           "weight": "195"
         },
         {
-          "id": 1028269491,
-          "first_name": "Taylor",
-          "last_name": "Funk",
-          "position": "F",
-          "jersey_number": null,
-          "height": "6-8",
-          "weight": "230"
-        },
-        {
-          "id": 1058092439,
-          "first_name": "Akoldah",
-          "last_name": "Gak",
-          "position": "F",
-          "jersey_number": null,
-          "height": "6-11",
-          "weight": "225"
-        },
-        {
           "id": 1028026060,
           "first_name": "KyShawn",
           "last_name": "George",
@@ -6098,15 +4847,6 @@
           "jersey_number": "18",
           "height": "6-8",
           "weight": "200"
-        },
-        {
-          "id": 1057846172,
-          "first_name": "Keshon",
-          "last_name": "Gilbert",
-          "position": null,
-          "jersey_number": null,
-          "height": null,
-          "weight": null
         },
         {
           "id": 3547302,
@@ -6136,15 +4876,6 @@
           "weight": "190"
         },
         {
-          "id": 1028026812,
-          "first_name": "Dillon",
-          "last_name": "Jones",
-          "position": "F",
-          "jersey_number": "33",
-          "height": "6-5",
-          "weight": "235"
-        },
-        {
           "id": 17896045,
           "first_name": "Corey",
           "last_name": "Kispert",
@@ -6172,24 +4903,6 @@
           "weight": "222"
         },
         {
-          "id": 1057848187,
-          "first_name": "Jonathan",
-          "last_name": "Pierre",
-          "position": null,
-          "jersey_number": null,
-          "height": null,
-          "weight": null
-        },
-        {
-          "id": 1059542426,
-          "first_name": "Kadary",
-          "last_name": "Richmond",
-          "position": null,
-          "jersey_number": null,
-          "height": "6-6",
-          "weight": "205"
-        },
-        {
           "id": 1057279594,
           "first_name": "Will",
           "last_name": "Riley",
@@ -6205,15 +4918,6 @@
           "position": "C",
           "jersey_number": "20",
           "height": "7-0",
-          "weight": "205"
-        },
-        {
-          "id": 1028267244,
-          "first_name": "Erik",
-          "last_name": "Stevenson",
-          "position": "G",
-          "jersey_number": null,
-          "height": "6-4",
           "weight": "205"
         },
         {
@@ -6242,15 +4946,6 @@
           "jersey_number": "1",
           "height": "6-6",
           "weight": "230"
-        },
-        {
-          "id": 38017723,
-          "first_name": "Alondes",
-          "last_name": "Williams",
-          "position": "G",
-          "jersey_number": "31",
-          "height": "6-4",
-          "weight": "210"
         }
       ]
     }
