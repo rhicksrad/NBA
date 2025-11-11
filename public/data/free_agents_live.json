@@ -86,20 +86,20 @@
       "seasonLabel": "2024-25"
     },
     {
-      "id": 666748,
-      "name": "Cody Martin",
-      "position": "F",
-      "teamLabel": "Phoenix Suns (PHX)",
+      "id": 368,
+      "name": "Cameron Payne",
+      "position": "G",
+      "teamLabel": "New York Knicks (NYK)",
       "metrics": {
-        "points": 5.186440677966102,
-        "assists": 1.5084745762711864,
-        "rebounds": 2.983050847457627,
-        "steals": 0.7288135593220338,
-        "blocks": 0.4406779661016949,
-        "minutes": 16.389830508474578,
-        "games": 59
+        "points": 6.366666666666666,
+        "assists": 2.4,
+        "rebounds": 1.2666666666666666,
+        "steals": 0.5166666666666667,
+        "blocks": 0.2,
+        "minutes": 12.883333333333333,
+        "games": 60
       },
-      "score": 13.501,
+      "score": 14.028,
       "seasonLabel": "2024-25"
     },
     {
@@ -117,6 +117,40 @@
         "games": 60
       },
       "score": 12.781,
+      "seasonLabel": "2024-25"
+    },
+    {
+      "id": 666754,
+      "name": "Garrison Mathews",
+      "position": "G",
+      "teamLabel": "Atlanta Hawks (ATL)",
+      "metrics": {
+        "points": 5.491803278688525,
+        "assists": 0.9344262295081968,
+        "rebounds": 1.3278688524590163,
+        "steals": 0.4262295081967213,
+        "blocks": 0.21311475409836064,
+        "minutes": 12.78688524590164,
+        "games": 61
+      },
+      "score": 11.734,
+      "seasonLabel": "2024-25"
+    },
+    {
+      "id": 56913527,
+      "name": "Ricky Council IV",
+      "position": "G",
+      "teamLabel": "Philadelphia 76ers (PHI)",
+      "metrics": {
+        "points": 5.183333333333334,
+        "assists": 0.9666666666666667,
+        "rebounds": 1.8666666666666667,
+        "steals": 0.4,
+        "blocks": 0.13333333333333333,
+        "minutes": 12.15,
+        "games": 60
+      },
+      "score": 11.569,
       "seasonLabel": "2024-25"
     },
     {
@@ -173,6 +207,6 @@
   ],
   "season": 2024,
   "seasonLabel": "2024-25",
-  "rosterSnapshotFetchedAt": "2025-10-18T03:27:38.772Z",
-  "generated_at": "2025-11-04T02:41:31.389Z"
+  "rosterSnapshotFetchedAt": "2025-11-11T01:08:34.653Z",
+  "generated_at": "2025-11-11T01:14:18.544Z"
 }
