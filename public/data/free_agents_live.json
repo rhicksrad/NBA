@@ -103,6 +103,23 @@
       "seasonLabel": "2024-25"
     },
     {
+      "id": 666748,
+      "name": "Cody Martin",
+      "position": "F",
+      "teamLabel": "Phoenix Suns (PHX)",
+      "metrics": {
+        "points": 5.186440677966102,
+        "assists": 1.5084745762711864,
+        "rebounds": 2.983050847457627,
+        "steals": 0.7288135593220338,
+        "blocks": 0.4406779661016949,
+        "minutes": 16.389830508474578,
+        "games": 59
+      },
+      "score": 13.501,
+      "seasonLabel": "2024-25"
+    },
+    {
       "id": 290,
       "name": "Trey Lyles",
       "position": "F",
@@ -207,6 +224,6 @@
   ],
   "season": 2024,
   "seasonLabel": "2024-25",
-  "rosterSnapshotFetchedAt": "2025-11-11T01:08:34.653Z",
-  "generated_at": "2025-11-11T01:14:18.544Z"
+  "rosterSnapshotFetchedAt": "2025-11-17T19:18:47.014Z",
+  "generated_at": "2025-11-17T19:24:57.150Z"
 }
