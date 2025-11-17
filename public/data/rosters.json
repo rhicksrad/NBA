@@ -1,5 +1,5 @@
 {
-  "fetched_at": "2025-11-11T01:08:34.653Z",
+  "fetched_at": "2025-11-17T19:18:47.014Z",
   "ttl_hours": 6,
   "source": "ball_dont_lie",
   "season": "2025-26",
@@ -1879,15 +1879,6 @@
           "weight": "200"
         },
         {
-          "id": 666748,
-          "first_name": "Cody",
-          "last_name": "Martin",
-          "position": "F",
-          "jersey_number": "11",
-          "height": "6-6",
-          "weight": "205"
-        },
-        {
           "id": 38017686,
           "first_name": "Bennedict",
           "last_name": "Mathurin",
@@ -2359,15 +2350,6 @@
           "weight": "305"
         },
         {
-          "id": 1028244692,
-          "first_name": "PJ",
-          "last_name": "Hall",
-          "position": "C",
-          "jersey_number": "16",
-          "height": "6-8",
-          "weight": "245"
-        },
-        {
           "id": 56677830,
           "first_name": "GG",
           "last_name": "Jackson",
@@ -2411,6 +2393,15 @@
           "jersey_number": "31",
           "height": "6-11",
           "weight": "255"
+        },
+        {
+          "id": 1057394959,
+          "first_name": "Jahmai",
+          "last_name": "Mashack",
+          "position": "G",
+          "jersey_number": null,
+          "height": "6-4",
+          "weight": "203"
         },
         {
           "id": 666786,
@@ -2647,7 +2638,7 @@
           "first_name": "Alex",
           "last_name": "Antetokounmpo",
           "position": "F",
-          "jersey_number": null,
+          "jersey_number": "29",
           "height": "6-8",
           "weight": "214"
         },
