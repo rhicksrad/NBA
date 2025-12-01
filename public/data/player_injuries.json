@@ -1,7 +1,18 @@
 {
-  "fetched_at": "2025-11-17T19:18:56.221Z",
+  "fetched_at": "2025-12-01T13:03:17.235Z",
   "source": "Ball Don't Lie",
   "items": [
+    {
+      "player": "Dante Exum",
+      "status": "Out",
+      "status_level": "season",
+      "player_id": 151,
+      "team_tricode": "DAL",
+      "team_name": "Dallas Mavericks",
+      "return_date": "Oct 1",
+      "description": "Nov 20: The Mavericks announced Thursday that Exum will undergo season-ending knee surgery.",
+      "report_label": "Nov 20"
+    },
     {
       "player": "Bradley Beal",
       "status": "Out",
@@ -14,15 +25,48 @@
       "report_label": "Nov 12"
     },
     {
+      "player": "Jacob Toppin",
+      "status": "Out",
+      "status_level": "caution",
+      "player_id": 56677795,
+      "team_tricode": "ATL",
+      "team_name": "Atlanta Hawks",
+      "return_date": "Dec 1",
+      "description": "Nov 30: The Hawks recalled Toppin from the G League's College Park Skyhawks on Sunday, Brad Rowland of the Locked On Podcast Network reports. However, he won't play in Sunday's game against the 76ers due to a right shoulder sprain, per Rowland.",
+      "report_label": "Nov 30"
+    },
+    {
+      "player": "N'Faly Dante",
+      "status": "Out",
+      "status_level": "caution",
+      "player_id": 1028243921,
+      "team_tricode": "ATL",
+      "team_name": "Atlanta Hawks",
+      "return_date": "Dec 2",
+      "description": "Nov 29: Dante (knee) is out for Sunday's game against the 76ers.",
+      "report_label": "Nov 29"
+    },
+    {
+      "player": "Kristaps Porzingis",
+      "status": "Out",
+      "status_level": "caution",
+      "player_id": 378,
+      "team_tricode": "ATL",
+      "team_name": "Atlanta Hawks",
+      "return_date": "Dec 1",
+      "description": "Nov 29: Porzingis (illness) is out for Sunday's game against the 76ers, Lauren L. Williams of The Atlanta Journal-Constitution reports.",
+      "report_label": "Nov 29"
+    },
+    {
       "player": "Trae Young",
       "status": "Out",
       "status_level": "caution",
       "player_id": 490,
       "team_tricode": "ATL",
       "team_name": "Atlanta Hawks",
-      "return_date": "Nov 30",
-      "description": "Nov 1: Young (knee) will be re-evaluated in four weeks, ESPN's Shams Charania reports.",
-      "report_label": "Nov 1"
+      "return_date": "Dec 6",
+      "description": "Nov 29: Young (knee) will be re-evaluated by the Hawks' medical staff in two weeks, Ohm Youngmisuk of ESPN.com reports.",
+      "report_label": "Nov 29"
     },
     {
       "player": "Jayson Tatum",
@@ -58,59 +102,15 @@
       "report_label": "Oct 19"
     },
     {
-      "player": "Brandon Miller",
-      "status": "Out",
-      "status_level": "caution",
-      "player_id": 56677823,
-      "team_tricode": "CHA",
-      "team_name": "Charlotte Hornets",
-      "return_date": "Nov 22",
-      "description": "Nov 17: The Hornets assigned Miller (shoulder) to the G League's Greensboro Swarm on Monday to take part in practice.",
-      "report_label": "Nov 17"
-    },
-    {
-      "player": "Liam McNeeley",
-      "status": "Out",
-      "status_level": "caution",
-      "player_id": 1057278805,
-      "team_tricode": "CHA",
-      "team_name": "Charlotte Hornets",
-      "return_date": "Nov 19",
-      "description": "Nov 16: McNeeley (illness) has been ruled out for Monday's game against the Raptors.",
-      "report_label": "Nov 16"
-    },
-    {
       "player": "Grant Williams",
       "status": "Out",
       "status_level": "caution",
       "player_id": 666965,
       "team_tricode": "CHA",
       "team_name": "Charlotte Hornets",
-      "return_date": "Nov 23",
-      "description": "Nov 16: Williams (knee) is out for Monday's game against the Raptors and remains week-to-week.",
-      "report_label": "Nov 16"
-    },
-    {
-      "player": "Josh Green",
-      "status": "Out",
-      "status_level": "caution",
-      "player_id": 3547258,
-      "team_tricode": "CHA",
-      "team_name": "Charlotte Hornets",
-      "return_date": "Nov 23",
-      "description": "Nov 16: Green (shoulder) remains out for Monday's game against the Raptors and can be treated as week-to-week going forward.",
-      "report_label": "Nov 16"
-    },
-    {
-      "player": "Coby White",
-      "status": "Out",
-      "status_level": "caution",
-      "player_id": 666956,
-      "team_tricode": "CHI",
-      "team_name": "Chicago Bulls",
-      "return_date": "Nov 19",
-      "description": "Nov 17: White will not play in Monday's game against the Nuggets for injury management reasons, K.C. Johnson of Chicago Sports Network reports.",
-      "report_label": "Nov 17"
+      "return_date": "Dec 7",
+      "description": "Nov 30: Williams (knee) has been ruled out for Monday's game against the Nets.",
+      "report_label": "Nov 30"
     }
   ],
   "note": "Source: Ball Don't Lie player injuries feed. Displaying the 10 most relevant recent reports."
