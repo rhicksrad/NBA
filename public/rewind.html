@@ -5,15 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>2024-2025 Season Rewind | NBA Intelligence Hub</title>
     <meta name="title" content="2024-2025 Season Rewind | NBA Intelligence Hub" />
-    <meta name="description" content="Relive the 2024-25 NBA campaign with finals breakdowns, breakout storylines, and data-driven recaps that set up 2025-26." />
+    <meta name="description" content="Games per month, rest days, and back-to-backs from the archived 2024-25 NBA schedule." />
     <meta property="og:site_name" content="NBA Intelligence Hub" />
     <meta property="og:locale" content="en_US" />
     <meta property="og:type" content="article" />
     <meta property="og:title" content="2024-2025 Season Rewind | NBA Intelligence Hub" />
-    <meta property="og:description" content="Relive the 2024-25 NBA campaign with finals breakdowns, breakout storylines, and data-driven recaps that set up 2025-26." />
+    <meta property="og:description" content="Games per month, rest days, and back-to-backs from the archived 2024-25 NBA schedule." />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta property="og:image" content="https://nba.hicksrch.workers.dev/assets/social/card.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:image" content="https://nba.hicksrch.workers.dev/assets/social/card.jpg" />
+    <link rel="canonical" href="https://nba.hicksrch.workers.dev/rewind" />
     <meta name="twitter:title" content="2024-2025 Season Rewind | NBA Intelligence Hub" />
-    <meta name="twitter:description" content="Relive the 2024-25 NBA campaign with finals breakdowns, breakout storylines, and data-driven recaps that set up 2025-26." />
+    <meta name="twitter:description" content="Games per month, rest days, and back-to-backs from the archived 2024-25 NBA schedule." />
     <link rel="icon" type="image/svg+xml" href="assets/logos/nba-logoman.svg" />
     <link rel="preload" href="assets/fonts/bigshoulders-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="assets/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin />
@@ -40,19 +45,18 @@
         </nav>
       </div>
     </header>
-    <section class="baseline art-hero-center-court">
+    <section class="baseline art-hero-film-room">
       <div class="baseline__inner">
         <h1>2024-25 Rewind</h1>
         <p>The 2024-25 calendar taken apart: game volume by month, rest days, back-to-backs and showcase nights.</p>
       </div>
-      <img class="baseline__patch" src="assets/art/icon-rewind.webp" alt="" width="176" height="176" />
     </section>
     <div class="site-frame">
 <main>
 
         <section class="season-snapshot" id="rewind-summary">
           <div class="section-header">
-            <h2>How the 2024-25 calendar was built</h2>
+            <h2>The 2024-25 schedule</h2>
             <p class="lead">
               Every chart here is counted from the archived league schedule. Nothing is estimated.
             </p>
@@ -64,7 +68,7 @@
           <div class="season-snapshot__grid season-snapshot__grid--mosaic">
             <article class="season-snapshot__panel" data-chart-wrapper>
               <header class="season-snapshot__header">
-                <h3>Schedule tempo tracker</h3>
+                <h3>Games per month</h3>
                 <p>Monthly game volume across the 2024-25 slate.</p>
               </header>
               <div class="viz-canvas viz-canvas--flush">
@@ -78,8 +82,8 @@
             </article>
             <article class="season-snapshot__panel">
               <header class="season-snapshot__header">
-                <h3>Recovery ledger</h3>
-                <p>Rest windows and high-intensity runs the medical staffs had to manage.</p>
+                <h3>Rest days</h3>
+                <p>Days between games in the archived schedule.</p>
               </header>
               <div class="rest-overview">
                 <figure class="rest-overview__chart" data-chart-wrapper>
@@ -87,7 +91,7 @@
                     <canvas data-chart="rest-distribution" aria-describedby="rest-distribution-caption"></canvas>
                   </div>
                   <figcaption id="rest-distribution-caption" class="season-snapshot__caption">
-                    Schedule engine grouped every travel interval to flag zero-rest, overnight, and extended pauses.
+                    Intervals between scheduled games, grouped by days of rest.
                   </figcaption>
                 </figure>
                 <figure class="rest-overview__chart" data-chart-wrapper>
@@ -95,55 +99,54 @@
                     <canvas data-chart="rest-zero-share" aria-describedby="rest-zero-share-caption"></canvas>
                   </div>
                   <figcaption id="rest-zero-share-caption" class="season-snapshot__caption">
-                    Gauge charts zero-rest strain relative to all tracked intervals across the calendar.
+                    Share of tracked intervals with no rest day.
                   </figcaption>
                 </figure>
               </div>
             </article>
             <article class="season-snapshot__panel" data-chart-wrapper>
               <header class="season-snapshot__header">
-                <h3>Schedule label mix</h3>
-                <p>How regular, cup, and showcase nights split the broadcast calendar.</p>
+                <h3>Kinds of games</h3>
+                <p>Game types in the archived schedule.</p>
               </header>
               <div class="viz-canvas viz-canvas--compact">
                 <canvas data-chart="schedule-label-mix" aria-describedby="schedule-label-mix-caption"></canvas>
               </div>
               <p id="schedule-label-mix-caption" class="season-snapshot__caption">
-                Each wedge scales to total contests logged under that label with <span data-stat-total-games>—</span>
-                overall tip-offs.</p>
+                Every kind of game in the schedule, <span data-stat-total-games>—</span> in all. Bar lengths use a log scale so the small categories stay visible; the count sits beside each name.</p>
             </article>
             <article class="season-snapshot__panel" data-chart-wrapper>
               <header class="season-snapshot__header">
-                <h3>Back-to-back furnace</h3>
-                <p>Elite workload clusters sorted by total paired nights.</p>
+                <h3>Most back-to-backs</h3>
+                <p>Teams ranked by back-to-back sets in the archived schedule.</p>
               </header>
               <div class="viz-canvas viz-canvas--compact">
                 <canvas data-chart="back-to-back-loads" aria-describedby="back-to-back-loads-caption"></canvas>
               </div>
               <p id="back-to-back-loads-caption" class="season-snapshot__caption">
-                Bars highlight the eight busiest travel gauntlets and annotate average rest when available.</p>
+                The eight teams with the most back-to-backs, with average rest when available.</p>
             </article>
             <article class="season-snapshot__panel" data-chart-wrapper>
               <header class="season-snapshot__header">
-                <h3>Travel extremes scatter</h3>
-                <p>Correlation between rest days and back-to-back volume among high-usage itineraries.</p>
+                <h3>Rest against back-to-backs</h3>
+                <p>Average rest days and back-to-back sets by team in the archived schedule.</p>
               </header>
               <div class="viz-canvas viz-canvas--compact">
                 <canvas data-chart="travel-extremes" aria-describedby="travel-extremes-caption"></canvas>
               </div>
               <p id="travel-extremes-caption" class="season-snapshot__caption">
-                Bubble size maps to total games logged; hover to surface full travel readouts.</p>
+                Bubble size shows total games. Hover for schedule details.</p>
             </article>
             <article class="season-snapshot__panel" data-chart-wrapper>
               <header class="season-snapshot__header">
-                <h3>Global showcase cadence</h3>
-                <p>Neutral site, cup, and finals touchpoints sequenced across the season.</p>
+                <h3>Cup and showcase games by month</h3>
+                <p>Neutral-site games, cup games, and finals by month in the archived schedule.</p>
               </header>
               <div class="viz-canvas viz-canvas--compact">
                 <canvas data-chart="global-showcase-timeline" aria-describedby="global-showcase-timeline-caption"></canvas>
               </div>
               <p id="global-showcase-timeline-caption" class="season-snapshot__caption">
-                Timeline stacks special event families per month to spotlight when storytelling spikes hit.</p>
+                Games grouped by event type and month.</p>
             </article>
           </div>
         </section>

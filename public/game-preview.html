@@ -4,11 +4,20 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Game preview | NBA Intelligence Hub</title>
-    <meta name="description" content="Matchup previews built from ESPN's public box scores and season snapshots." />
+    <meta name="description" content="A tale of the tape for an upcoming NBA game: win chance, power index, records, last ten games, leading scorers and the injury report for both teams." />
+    <meta property="og:site_name" content="NBA Intelligence Hub" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Game preview | NBA Intelligence Hub" />
+    <meta property="og:description" content="Win chance, power index, form, scorers and injuries for both teams." />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta property="og:image" content="https://nba.hicksrch.workers.dev/assets/social/card.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:image" content="https://nba.hicksrch.workers.dev/assets/social/card.jpg" />
     <link rel="icon" type="image/svg+xml" href="assets/logos/nba-logoman.svg" />
     <link rel="preload" href="assets/fonts/bigshoulders-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="assets/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="stylesheet" href="styles/hub.css" />
+    <link rel="preload" href="data/live/league.json" as="fetch" crossorigin />
     <link rel="stylesheet" href="styles/court.css" />
     <link rel="stylesheet" href="styles/game-preview.css" />
   </head>
@@ -32,92 +41,51 @@
         </nav>
       </div>
     </header>
-    <div class="site-frame preview-frame">
-      <header class="preview-hero" aria-live="polite">
-        <div class="preview-hero__meta">
-          <a class="preview-hero__back" href="games.html">← Back to games lab</a>
-          <div class="preview-hero__chips">
-            <span class="lab-chip" data-season-label>Season loading…</span>
-            <span class="lab-chip lab-chip--accent" data-status-label></span>
+    <main>
+      <section class="tape-board">
+        <div class="tape-board__inner">
+          <a class="tape-board__back" href="games.html">&larr; Games</a>
+          <h1 data-title>Game preview</h1>
+          <p class="tape-board__when" data-when></p>
+          <a class="tape-board__started" data-started hidden></a>
+          <div class="tape-board__sides">
+            <div class="tape-side" data-side="away"></div>
+            <span class="tape-board__at">AT</span>
+            <div class="tape-side tape-side--home" data-side="home"></div>
           </div>
+          <div class="tape-board__odds" data-odds role="img"></div>
         </div>
-        <h1 class="preview-hero__title" data-matchup>Loading matchup…</h1>
-        <p class="preview-hero__subtitle" data-tipoff></p>
-        <p class="preview-hero__subtitle" data-tipoff-countdown></p>
-        <p class="preview-hero__subtitle" data-location-note></p>
-      </header>
+      </section>
 
-      <main class="preview-main" data-preview-state>
-        <section class="preview-narrative">
-          <h2>Matchup storyline</h2>
-          <div class="preview-narrative__body" data-narrative>
-            <p>Generating matchup intel…</p>
-          </div>
+      <div class="site-frame preview" data-body>
+        <section data-tape-section aria-labelledby="tape-title">
+          <header class="sheet-head">
+            <h2 id="tape-title">Tale of the tape</h2>
+            <p data-tape-note></p>
+          </header>
+          <table class="sheet tape">
+            <thead>
+              <tr>
+                <th scope="col" data-tape-away>Away</th>
+                <th scope="col"><span class="visually-hidden">Measure</span></th>
+                <th scope="col" data-tape-home>Home</th>
+              </tr>
+            </thead>
+            <tbody data-tape></tbody>
+          </table>
         </section>
 
-        <section class="preview-split" aria-label="Team capsules">
-          <article class="team-card" data-team-card="visitor">
-            <header class="team-card__header">
-              <div>
-                <span class="team-card__role">Road team</span>
-                <h2 class="team-card__title" data-team-name="visitor">Visitor</h2>
-              </div>
-              <div class="team-card__record" data-team-record="visitor">Record loading…</div>
-            </header>
-            <p class="team-card__note" data-team-note="visitor"></p>
-            <div class="team-card__grid">
-              <div>
-                <h3>Recent form</h3>
-                <ul class="team-card__list" data-team-last5="visitor"></ul>
-              </div>
-              <div>
-                <h3>Upcoming slate</h3>
-                <ul class="team-card__list" data-team-next5="visitor"></ul>
-              </div>
-            </div>
-            <div class="team-card__roster">
-              <h3>Active roster pulse</h3>
-              <ul class="team-card__roster-list" data-team-roster="visitor"></ul>
-            </div>
-          </article>
+        <div class="team-cols">
+          <section class="team-col" data-team="away"></section>
+          <section class="team-col" data-team="home"></section>
+        </div>
 
-          <article class="team-card" data-team-card="home">
-            <header class="team-card__header">
-              <div>
-                <span class="team-card__role">Home team</span>
-                <h2 class="team-card__title" data-team-name="home">Home</h2>
-              </div>
-              <div class="team-card__record" data-team-record="home">Record loading…</div>
-            </header>
-            <p class="team-card__note" data-team-note="home"></p>
-            <div class="team-card__grid">
-              <div>
-                <h3>Recent form</h3>
-                <ul class="team-card__list" data-team-last5="home"></ul>
-              </div>
-              <div>
-                <h3>Upcoming slate</h3>
-                <ul class="team-card__list" data-team-next5="home"></ul>
-              </div>
-            </div>
-            <div class="team-card__roster">
-              <h3>Active roster pulse</h3>
-              <ul class="team-card__roster-list" data-team-roster="home"></ul>
-            </div>
-          </article>
-        </section>
-
-        <section class="preview-footnotes">
-          <p class="preview-footnotes__status" data-preview-message>Loading the matchup…</p>
-          <p class="preview-footnotes__meta">
-            Data source: ESPN public JSON.
-            <br />
-            Last refreshed <span data-updated>—</span>.
-          </p>
-        </section>
-      </main>
-    </div>
-
+        <footer class="site-footer">
+          <span data-stamp>Records, form, averages and injuries from ESPN's public feeds.</span>
+          <span>Not affiliated with the NBA. <a href="about.html">How this works</a></span>
+        </footer>
+      </div>
+    </main>
     <script type="module" src="scripts/game-preview.js"></script>
   </body>
 </html>

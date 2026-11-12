@@ -10,6 +10,11 @@
     <meta property="og:title" content="NBA Intelligence Hub — Tonight" />
     <meta property="og:description" content="Live scoreboard, power index, standings, leaders and injuries." />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta property="og:image" content="https://nba.hicksrch.workers.dev/assets/social/card.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:image" content="https://nba.hicksrch.workers.dev/assets/social/card.jpg" />
+    <link rel="canonical" href="https://nba.hicksrch.workers.dev/" />
     <link rel="icon" type="image/svg+xml" href="assets/logos/nba-logoman.svg" />
     <link rel="preload" href="assets/fonts/bigshoulders-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="assets/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin />
@@ -90,14 +95,6 @@
         </section>
 
         <aside class="wire">
-          <section aria-labelledby="leaders-title">
-            <header class="sheet-head">
-              <h2 id="leaders-title">Leaders</h2>
-              <p data-leaders-note>Per game, this season.</p>
-            </header>
-            <div class="leaders" data-leaders></div>
-          </section>
-
           <section aria-labelledby="injury-title">
             <header class="sheet-head">
               <h2 id="injury-title">Injury wire</h2>
@@ -107,6 +104,14 @@
             </ul>
           </section>
         </aside>
+
+        <section class="leaders-row" aria-labelledby="leaders-title">
+          <header class="sheet-head">
+            <h2 id="leaders-title">Leaders</h2>
+            <p data-leaders-note>Per game, this season.</p>
+          </header>
+          <div class="leaders" data-leaders></div>
+        </section>
 
         <section class="standings" aria-labelledby="standings-title">
           <header class="sheet-head">

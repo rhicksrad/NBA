@@ -87,7 +87,7 @@
   padding-top: clamp(1.5rem, 4vw, 3rem);
   align-items: start;
 }
-.tonight > .standings, .tonight > .wings, .tonight > .site-footer { grid-column: 1 / -1; }
+.tonight > .standings, .tonight > .leaders-row, .tonight > .wings, .tonight > .site-footer { grid-column: 1 / -1; }
 @media (max-width: 900px) { .tonight { grid-template-columns: minmax(0, 1fr); } }
 
 /* ---------- Power index ---------- */
@@ -117,7 +117,9 @@ tbody tr:first-child .rating__value { color: var(--royal); }
 /* ---------- Wire ---------- */
 
 .wire { display: grid; gap: clamp(1.5rem, 3vw, 2.5rem); }
-.leaders { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 1.25rem; }
+.leaders { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 0 1.5rem; }
+@media (max-width: 1100px) { .leaders { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .leaders { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 1rem; } }
 .leaders__board { padding: 0.8rem 0 0.6rem; border-bottom: 1px solid var(--rule); }
 .leaders__board h3 { font-size: 1.05rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--ink-soft); margin-bottom: 0.35rem; }
 .leaders ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.12rem; }
@@ -175,3 +177,13 @@ tbody tr:first-child .rating__value { color: var(--royal); }
 .wings span { font-size: 0.86rem; color: color-mix(in srgb, var(--white) 72%, transparent); }
 .wings a:hover strong { color: var(--bulb); }
 @media (prefers-reduced-motion: reduce) { .wings img { transition: none; } }
+
+/* Phones: the whole power table fits without sideways scrolling. */
+@media (max-width: 640px) {
+  .power__table th, .power__table td { padding-inline: 0.3rem; }
+  .power__table .move { width: 1.7rem; }
+  .power__table .team { gap: 0.3rem; }
+  .rating { min-width: 4.6rem; }
+  .form i { width: 4px; }
+  .form { gap: 1px; }
+}

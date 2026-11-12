@@ -254,29 +254,38 @@ registerCharts([
       const breakdown = Array.isArray(data?.labelBreakdown) ? data.labelBreakdown : [];
       if (!breakdown.length) return null;
 
+      // One kind of game dwarfs the rest, so a pie shows a single wedge. Ranked
+      // bars on a log scale keep the small categories readable, with the count
+      // printed beside each name.
       const total = breakdown.reduce((sum, entry) => sum + (entry.games ?? 0), 0);
+      const ranked = [...breakdown].filter((entry) => (entry.games ?? 0) > 0).sort((x, y) => (y.games ?? 0) - (x.games ?? 0));
       return {
-        type: 'doughnut',
+        type: 'bar',
         data: {
-          labels: breakdown.map((entry) => entry.label ?? ''),
+          labels: ranked.map((entry) => `${entry.label ?? ''}  ${helpers.formatNumber(entry.games ?? 0, 0)}`),
           datasets: [
             {
-              data: breakdown.map((entry) => entry.games ?? 0),
-              backgroundColor: breakdown.map((_, index) => scheduleLabelColors[index % scheduleLabelColors.length]),
+              data: ranked.map((entry) => entry.games ?? 0),
+              backgroundColor: ranked.map((_, index) => (index === 0 ? '#1b4bbd' : '#d43d24')),
               borderWidth: 0,
+              barThickness: 10,
             },
           ],
         },
         options: {
-          cutout: '48%',
+          indexAxis: 'y',
+          scales: {
+            x: { type: 'logarithmic', min: 1, grid: { display: false }, ticks: { display: false }, border: { display: false } },
+            y: { grid: { display: false }, ticks: { autoSkip: false, font: { size: 11 } } },
+          },
           plugins: {
-            legend: { position: 'right', labels: { usePointStyle: true } },
+            legend: { display: false },
             tooltip: {
               callbacks: {
                 label(context) {
-                  const value = context.parsed;
+                  const value = context.parsed.x;
                   const share = total ? (value / total) * 100 : 0;
-                  return `${context.label}: ${helpers.formatNumber(value, 0)} games (${helpers.formatNumber(share, 1)}%)`;
+                  return `${helpers.formatNumber(value, 0)} games (${helpers.formatNumber(share, 1)}%)`;
                 },
               },
             },
@@ -467,7 +476,7 @@ registerCharts([
           fill: true,
         },
         {
-          label: 'Cup action',
+          label: 'Cup games',
           data: orderedBuckets.map((bucket) => bucket.cup ?? 0),
           borderColor: palette.gold,
           backgroundColor: 'rgba(227, 164, 28, 0.24)',
@@ -475,7 +484,7 @@ registerCharts([
           fill: true,
         },
         {
-          label: 'Finale spotlight',
+          label: 'Finals',
           data: orderedBuckets.map((bucket) => bucket.marquee ?? 0),
           borderColor: palette.coral,
           backgroundColor: 'rgba(212, 61, 36, 0.18)',

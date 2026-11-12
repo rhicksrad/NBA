@@ -5,15 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Teams | NBA Intelligence Hub</title>
     <meta name="title" content="Teams | NBA Intelligence Hub" />
-    <meta name="description" content="Explore every franchise through interactive maps, performance dashboards, and franchise footprint rankings across NBA history." />
+    <meta name="description" content="Compare NBA franchises using maps, archived stats, and franchise footprint rankings." />
     <meta property="og:site_name" content="NBA Intelligence Hub" />
     <meta property="og:locale" content="en_US" />
     <meta property="og:type" content="article" />
     <meta property="og:title" content="Teams | NBA Intelligence Hub" />
-    <meta property="og:description" content="Explore every franchise through interactive maps, performance dashboards, and franchise footprint rankings across NBA history." />
+    <meta property="og:description" content="Compare NBA franchises using maps, archived stats, and franchise footprint rankings." />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta property="og:image" content="https://nba.hicksrch.workers.dev/assets/social/card.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:image" content="https://nba.hicksrch.workers.dev/assets/social/card.jpg" />
+    <link rel="canonical" href="https://nba.hicksrch.workers.dev/teams" />
     <meta name="twitter:title" content="Teams | NBA Intelligence Hub" />
-    <meta name="twitter:description" content="Explore every franchise through interactive maps, performance dashboards, and franchise footprint rankings across NBA history." />
+    <meta name="twitter:description" content="Compare NBA franchises using maps, archived stats, and franchise footprint rankings." />
     <link rel="icon" type="image/svg+xml" href="assets/logos/nba-logoman.svg" />
     <link rel="preload" href="assets/fonts/bigshoulders-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="assets/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin />
@@ -40,22 +45,20 @@
         </nav>
       </div>
     </header>
-    <section class="baseline art-hero-center-court">
+    <section class="baseline art-hero-road-map">
       <div class="baseline__inner">
         <h1>Teams</h1>
         <p>Thirty franchises on the map, plus the ones that folded, with eight decades of results behind every pin.</p>
       </div>
-      <img class="baseline__patch" src="assets/art/icon-pennant.webp" alt="" width="176" height="176" />
     </section>
     <div class="site-frame">
 <main>
         <section class="team-explorer">
           <div class="team-explorer__intro">
             <span class="eyebrow">Conference geography</span>
-            <h2>Explore every franchise through a living map.</h2>
+            <h2>The franchise map</h2>
             <p data-team-mode-copy>
-              Pins are color coded by conference and expand into a live dashboard with scoring, efficiency, and depth
-              insights pulled from the league archive (1946-2025).
+              Pins show each team's conference. Select one for stats from the league archive (1946-2025).
             </p>
             <div class="team-explorer__legend">
               <span class="legend-chip legend-chip--east">Eastern Conference</span>
@@ -108,25 +111,23 @@
         </section>
         <section class="franchise-footprint" data-footprint>
           <div class="franchise-footprint__intro">
-            <span class="eyebrow">Franchise Footprint</span>
-            <h2 data-footprint-title>Ranking every active team by footprint strength.</h2>
+            <span class="eyebrow"></span>
+            <h2 data-footprint-title>Franchise footprint</h2>
             <p data-footprint-description>
-              We blended results, efficiency, and rotational depth to surface how each club's on-court identity
-              resonates across the league in 2024-25. Explore the full ladder below, then dig into the numbers that
-              power every badge.
+              Compare franchises by championships, Hall of Fame players, and win percentage from the archived snapshot.
             </p>
           </div>
           <div class="franchise-footprint__panel">
             <ol class="franchise-footprint__list" data-footprint-list aria-live="polite"></ol>
           </div>
           <section class="franchise-footprint__methodology" aria-label="Franchise Footprint methodology">
-            <h3>How the Franchise Footprint score is built</h3>
+            <h3>The franchise footprint formula</h3>
             <div data-footprint-methodology></div>
           </section>
         </section>
       </main>
 
-      <footer class="page-footer">Team stories will anchor the hub's competitive scouting tools.</footer>
+      <footer class="page-footer">Team stats and franchise rankings come from archived league records.</footer>
     </div>
     <script type="module" src="scripts/teams.js"></script>
   </body>

@@ -243,6 +243,11 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .art-hero-key-paint { --baseline-art: url("../assets/art/hero-key-paint.webp"); --baseline-art-s: url("../assets/art/hero-key-paint-800.webp"); --baseline-pos: center 38%; }
 .art-banner-rafters { --baseline-art: url("../assets/art/banner-rafters.webp"); --baseline-art-s: url("../assets/art/banner-rafters-800.webp"); --baseline-pos: center 42%; }
 .art-chalkboard-clipboard { --baseline-art: url("../assets/art/chalkboard-clipboard.webp"); --baseline-art-s: url("../assets/art/chalkboard-clipboard-800.webp"); --baseline-pos: center 45%; }
+.art-hero-scorers-table { --baseline-art: url("../assets/art/hero-scorers-table.webp"); --baseline-art-s: url("../assets/art/hero-scorers-table-800.webp"); --baseline-pos: center 58%; }
+.art-hero-locker-room { --baseline-art: url("../assets/art/hero-locker-room.webp"); --baseline-art-s: url("../assets/art/hero-locker-room-800.webp"); --baseline-pos: center 40%; }
+.art-hero-road-map { --baseline-art: url("../assets/art/hero-road-map.webp"); --baseline-art-s: url("../assets/art/hero-road-map-800.webp"); --baseline-pos: center 48%; }
+.art-hero-trophy-case { --baseline-art: url("../assets/art/hero-trophy-case.webp"); --baseline-art-s: url("../assets/art/hero-trophy-case-800.webp"); --baseline-pos: center 30%; }
+.art-hero-film-room { --baseline-art: url("../assets/art/hero-film-room.webp"); --baseline-art-s: url("../assets/art/hero-film-room-800.webp"); --baseline-pos: center 55%; }
 @media (max-width: 700px) { .baseline { background-image: var(--baseline-art-s, none) !important; } }
 
 .baseline {
@@ -421,3 +426,378 @@ main :where(section, article, div, figure, ul, ol, dl) { min-width: 0; }
 .sources .sheet { margin-block: 1rem 1.1rem; }
 .sources p:last-child { max-width: 72ch; color: var(--ink-soft); }
 .sheet-wrap { overflow-x: auto; }
+
+/* ---------- Legacy pages, flattened ----------
+   The older pages were built as cards inside cards inside cards. On Court a
+   section sits straight on the paper under an ink rule, a list is ruled rows,
+   and only a chart gets a plate. */
+
+.site-frame :is(
+  .players-lab__section, .players-goat-averages, .players-rankings, .player-atlas__panel, .player-atlas__teams,
+  .team-explorer, .team-detail, .franchise-footprint, .franchise-footprint__panel, .franchise-footprint__methodology,
+  .goat-leaderboard, .goat-table-wrapper, .goat-tree, .goat-methodology, .goat-methodology-panel, .goat-formula-card,
+  .goat-methodology-panel__weights, .goat-methodology-panel__sources, .goat-visuals,
+  .history-section, .history-search-panel, .history-search--panel, .history-player, .history-visuals, .timeline-panel,
+  .lab-module, .hero-metrics, .season-snapshot, .season-snapshot__panel, .sources, .pillars, .pillar-card,
+  .viz-card, .state-map,
+  .tracker-scoreboard, .tracker-team-totals, .tracker-leaders, .tracker-visuals, .tracker-footnotes,
+  .tracker-team-card, .tracker-leaders__card, .tracker-visuals__card, .preview-narrative, .preview-split, .preview-footnotes, .team-card
+) {
+  background: none;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 0;
+  backdrop-filter: none;
+}
+
+/* Section titles get the scorebook rule. */
+.site-frame :is(
+  .players-lab__section, .players-goat-averages, .players-rankings, .team-explorer, .franchise-footprint,
+  .goat-leaderboard, .goat-methodology, .goat-visuals, .history-section, .season-snapshot, .sources, .pillars,
+  .tracker-visuals, .lab-module
+) > :is(header, h2):first-child {
+  padding-bottom: 0.7rem;
+  margin-bottom: 1.1rem;
+  border-bottom: 3px solid var(--ink);
+}
+.site-frame :is(main, .hub-layout, .lab-content, .lab-grid) { gap: clamp(2rem, 4vw, 3.25rem) clamp(1.25rem, 3vw, 2.5rem); }
+
+/* A chart sits on a white plate with a hairline, nothing more. */
+.site-frame .viz-canvas {
+  background: var(--white);
+  border: 1px solid var(--rule);
+  border-radius: 0;
+  box-shadow: none;
+}
+.site-frame :is(.viz-card, .lab-module, .season-snapshot__panel) :is(figcaption, .viz-card__caption, .lab-module__caption) {
+  color: var(--ink-soft);
+  font-size: 0.86rem;
+  font-stretch: 90%;
+}
+
+/* Ranked lists are ruled rows, not a stack of boxes. */
+.site-frame :is(.players-rankings__item, .franchise-footprint__item) {
+  background: var(--white);
+  border: 0;
+  border-bottom: 1px solid var(--rule);
+  border-radius: 0;
+  box-shadow: none;
+  margin: 0;
+  padding: 0.5rem 0.7rem;
+}
+.site-frame :is(.players-rankings__list, .franchise-footprint__list) { gap: 0; border-top: 1.5px solid var(--ink); }
+.site-frame :is(.players-rankings__item, .franchise-footprint__item):hover { background: color-mix(in srgb, var(--bulb) 14%, var(--white)); transform: none; }
+
+/* Spaced capitals read as a template. Labels are plain small text. */
+.site-frame :is(
+  dt, label, .player-atlas__label, .player-atlas__team-name, .player-atlas__team-count, .player-card__goat-label,
+  .player-card__goat-rank, .player-card__stats-season, .player-card__stat-label, .player-atlas__teams-goat-name,
+  .state-spotlight__state, .state-spotlight__ranking-ordinal, .atlas-mode-toggle, .tracker-score__role, .team-card__role
+) {
+  letter-spacing: 0;
+  text-transform: none;
+}
+.site-frame :is(input[type="search"], input[type="text"], select, .player-atlas__input, .history-search__input) {
+  border: 2px solid var(--ink);
+  border-radius: var(--r);
+  background: var(--white);
+  box-shadow: none;
+}
+
+/* Rank numbers are set in the display face, the way a standings sheet prints them. */
+.site-frame :is(.players-rankings__rank, .franchise-footprint__rank, .player-atlas__teams-goat-rank, .goat-tier__player-rank),
+.site-frame :is(.players-rankings__item, .franchise-footprint__item, .player-atlas__teams-goat-entry):nth-child(n) :is(.players-rankings__rank, .franchise-footprint__rank, .player-atlas__teams-goat-rank) {
+  background: none;
+  color: var(--ink);
+  border-radius: 0;
+  width: 2.4rem;
+  height: auto;
+  font: 900 1.7rem/1 var(--display);
+  justify-content: end;
+  place-items: center end;
+}
+.site-frame :is(.players-rankings__item, .franchise-footprint__item):nth-child(-n + 3) :is(.players-rankings__rank, .franchise-footprint__rank) { color: var(--paint); }
+.site-frame .player-atlas__teams-goat-rank { font-size: 1.25rem; width: 1.7rem; }
+.site-frame .goat-tier__player-rank { font-size: 1.35rem; width: 2rem; }
+.site-frame .franchise-footprint__score { background: none; padding: 0; border-radius: 0; font: 800 1.25rem/1 var(--display); color: var(--royal); }
+
+/* Section intros read left to right; nothing is centered on the page. */
+.site-frame .players-goat-averages { max-width: none; margin-inline: 0; }
+.site-frame :is(.players-goat-averages__header, .team-detail__empty) { justify-self: start; text-align: left; max-width: 70ch; }
+.site-frame .player-atlas__teams-goat-entry { border: 0; border-bottom: 1px solid var(--rule); border-radius: 0; background: var(--white); }
+.site-frame .rumble-launch {
+  display: inline-flex;
+  width: auto;
+  justify-self: start;
+  padding: 0.5rem 0.9rem;
+  border: 2px solid var(--ink);
+  border-radius: var(--r);
+  background: var(--ink);
+  color: var(--white);
+  font: 700 1.05rem/1.1 var(--display);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  text-decoration: none;
+  box-shadow: none;
+}
+.site-frame .rumble-launch:hover { background: var(--paint); border-color: var(--paint); }
+
+/* Toggles: one ruled box, the pressed side inked in. */
+.site-frame .team-mode-toggle { gap: 0; padding: 0; border: 2px solid var(--ink); border-radius: var(--r); background: var(--white); overflow: hidden; }
+.site-frame .team-mode-toggle__button { border-radius: 0; font: 700 0.98rem/1.2 var(--display); letter-spacing: 0.04em; text-transform: uppercase; padding: 0.4rem 0.85rem; color: var(--ink); }
+.site-frame .team-mode-toggle__button[aria-pressed="true"] { background: var(--ink); color: var(--white); }
+.site-frame .team-mode-toggle__button:hover:not([aria-pressed="true"]) { background: color-mix(in srgb, var(--bulb) 18%, var(--white)); }
+
+/* GOAT: tiers are ruled rows, the detail is a white sheet under an ink rule. */
+.site-frame .goat-tree { display: grid; gap: 0; border-top: 1.5px solid var(--ink); }
+.site-frame .goat-tier { border: 0; border-bottom: 1px solid var(--rule); border-radius: 0; background: var(--white); }
+.site-frame .goat-tier__summary { font: 800 1.2rem/1 var(--display); letter-spacing: 0.03em; padding: 0.7rem 0.8rem; }
+.site-frame .goat-tier__summary-count { font: 500 0.8rem/1 var(--text); letter-spacing: 0; text-transform: none; }
+.site-frame .goat-tier__summary::after { border-color: var(--ink); border-radius: 0; }
+.site-frame .goat-tier__list { gap: 0; padding: 0; border-top: 1px solid var(--rule-strong); grid-template-columns: repeat(auto-fit, minmax(min(250px, 100%), 1fr)); }
+.site-frame .goat-tier__player { border: 0; border-bottom: 1px solid var(--rule); border-right: 1px solid var(--rule); border-radius: 0; min-height: 0; padding: 0.6rem 0.8rem; }
+.site-frame .goat-tier__player:is(:hover, :focus-visible) { transform: none; box-shadow: none; background: color-mix(in srgb, var(--bulb) 14%, var(--white)); }
+.site-frame .goat-tier__player.is-selected { background: var(--tint); box-shadow: inset 4px 0 0 var(--paint); }
+.site-frame .goat-detail { background: var(--white); border: 0; border-top: 3px solid var(--ink); border-radius: 0; padding: 1rem 1.1rem 1.2rem; align-content: start; }
+.site-frame .goat-detail header h3 { font-size: clamp(1.7rem, 3vw, 2.3rem); }
+.site-frame .goat-detail__footer { letter-spacing: 0; text-transform: none; }
+.site-frame :is(.goat-methodology-panel__weights, .goat-methodology-panel__sources) { align-content: start; }
+.site-frame :is(.goat-weight-card, .goat-source-panel) { background: none; border: 0; border-top: 1.5px solid var(--ink); border-radius: 0; padding: 0.7rem 0 0.4rem; min-height: 0; }
+.site-frame .goat-source-panel__weight { background: none; padding: 0; color: var(--paint); letter-spacing: 0; text-transform: none; font-size: 0.85rem; }
+
+/* Teams */
+.site-frame .team-detail { border-top: 3px solid var(--ink); padding-top: 1rem; }
+.site-frame .team-explorer__map { background: var(--white); border: 1px solid var(--rule); border-radius: 0; }
+
+/* Lab stat strip: four plain figures over a rule, not a card. */
+.site-frame .hero-metrics { max-width: none; gap: 0; border-top: 3px solid var(--ink); border-bottom: 1px solid var(--rule-strong); }
+.site-frame .hero-metrics .hero-metrics__item { padding: 0.7rem 1rem 0.8rem 0; }
+.site-frame .hero-metrics dt { color: var(--ink-soft); font-weight: 600; font-size: 0.82rem; }
+.site-frame .hero-metrics--lab dd { font: 900 clamp(1.7rem, 3vw, 2.4rem)/1 var(--display); }
+
+/* Legacy odds and ends */
+.site-frame [hidden] { display: none !important; }
+.site-frame .lab-module { align-content: start; }
+.site-frame .lab-module--tall { grid-row: auto; }
+.site-frame :is(.lab-module__source, .lab-module__footer, .lab-source, [class*="__source"]:not([class*="goat-source"])) { letter-spacing: 0; text-transform: none; }
+.site-frame .goat-weight-card :is(h4, h3, header > :first-child) { letter-spacing: 0; text-transform: none; font: 800 1.2rem/1.05 var(--display); }
+.site-frame .goat-weight-card header > :last-child { background: none; color: var(--paint); padding: 0; font-weight: 700; }
+.site-frame .goat-detail :is([class*="value"], [class*="score"]) { color: var(--ink); }
+.site-frame .goat-detail__list dt { color: var(--ink-soft); font-size: 0.82rem; font-weight: 600; }
+.site-frame .goat-component-bar { background: var(--tint); border-radius: 0; border-left: 1.5px solid var(--ink); }
+.site-frame .goat-component-fill { background: var(--royal); border-radius: 0; }
+.site-frame .goat-component-value { color: var(--ink); font-weight: 700; }
+.site-frame .goat-weight-label { letter-spacing: 0; text-transform: none; font: 800 1.2rem/1.05 var(--display); }
+.site-frame .goat-weight-chip { background: none; color: var(--paint); padding: 0; font: 800 1.2rem/1 var(--display); }
+.site-frame .goat-weight-meter { border-radius: 0; background: var(--tint); }
+.site-frame .goat-weight-meter span { border-radius: 0; background: var(--royal); }
+/* History and Players */
+.site-frame :is(.history-section__header, .players-lab__section-header) {
+  max-width: none;
+  padding-bottom: 0.7rem;
+  margin-bottom: 1.1rem;
+  border-bottom: 3px solid var(--ink);
+}
+.site-frame .players-lab__section > .players-lab__section-header:first-child { border-bottom: 3px solid var(--ink); }
+.site-frame .history-section__header p { color: var(--ink-soft); font-size: 0.92rem; }
+.site-frame .viz-card__title--atlas { display: flex; justify-content: flex-end; font-size: 0; gap: 0; }
+.site-frame .atlas-mode-toggle {
+  font: 700 0.98rem/1.2 var(--display);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 0.4rem 0.85rem;
+  border: 2px solid var(--ink);
+  border-radius: var(--r);
+  background: var(--white);
+  color: var(--ink);
+}
+.site-frame .atlas-mode-toggle:hover { background: var(--ink); color: var(--white); }
+.site-frame .state-map { background: var(--white); border: 1px solid var(--rule); padding: 0.75rem; }
+/* The map fills its plate. Left narrower, the pan code centres it a second
+   time and pushes the world map half off the right edge. */
+.site-frame .state-map > svg { width: 100%; max-width: none; height: auto; margin: 0; }
+.site-frame .atlas-mode-toggle:is(:hover, :focus-visible, [aria-pressed="true"]) { background: var(--ink); color: var(--white); }
+.site-frame .state-spotlight :is(.badge, [class*="team"]):not(ul):not(ol):not(div) { background: none; border: 0; border-radius: 0; padding: 0; color: var(--ink-soft); font-weight: 500; letter-spacing: 0; }
+.site-frame .state-map .state-shape--available { fill: var(--maple-wash); stroke: var(--maple-deep); stroke-width: 0.6; }
+.site-frame .state-map .state-shape--available:hover { fill: var(--maple); }
+.site-frame .state-map .state-shape--empty { fill: var(--paper); stroke: var(--rule-strong); }
+.site-frame .state-map .state-shape--selected { fill: var(--paint); stroke: var(--ink); }
+.site-frame .timeline-panel { background: var(--white); border-top: 3px solid var(--ink); padding: 0.9rem 1.1rem 1.1rem; }
+.site-frame .state-spotlight__state { color: var(--paint); font: 800 1.2rem/1 var(--display); text-transform: uppercase; letter-spacing: 0.04em; }
+.site-frame :is(.history-search__results, .player-atlas__results) { border: 1px solid var(--rule); border-radius: 0; background: var(--white); box-shadow: none; }
+.site-frame .players-rumble__loading { background: none; border: 0; padding: 0; color: var(--ink-soft); }
+.site-frame .player-atlas__teams-goat-entry :is(span, b, strong):not(.player-atlas__teams-goat-rank):not(.player-atlas__teams-goat-name) {
+  background: none;
+  border: 0;
+  padding: 0;
+  color: var(--ink-soft);
+  letter-spacing: 0;
+  text-transform: none;
+  font-size: 0.82rem;
+}
+.site-frame .player-atlas__teams-goat-name { font: 800 1.15rem/1 var(--display); letter-spacing: 0.03em; }
+.site-frame .player-atlas__teams-goat-entry { gap: 0.7rem; padding: 0.3rem 0.6rem; }
+.site-frame .player-card { background: var(--white); border: 0; border-top: 3px solid var(--ink); border-radius: 0; box-shadow: none; }
+
+/* Franchise footprint: list rows laid out as table columns. */
+.site-frame .franchise-footprint__item {
+  display: grid;
+  grid-template-columns: 2.6rem minmax(9rem, 1.3fr) minmax(8rem, 1.6fr) repeat(4, minmax(4rem, 0.5fr));
+  align-items: center;
+  gap: 0 0.9rem;
+  padding: 0.4rem 0.7rem;
+  font-stretch: 88%;
+}
+.site-frame .franchise-footprint__item--head { background: var(--tint); border-bottom: 1.5px solid var(--ink); font-size: 0.78rem; font-weight: 600; color: var(--ink-soft); padding-block: 0.35rem; }
+.site-frame .franchise-footprint__item--head span:nth-child(n + 4) { text-align: right; }
+.site-frame .franchise-footprint__item--head:hover { background: var(--tint); }
+.site-frame .franchise-footprint__name { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 0.6rem; min-width: 0; }
+.site-frame .franchise-footprint__name strong { font-weight: 650; }
+.site-frame .franchise-footprint__meta { font-size: 0.76rem; color: var(--ink-soft); }
+.site-frame .franchise-footprint__score { position: relative; display: block; text-align: right; padding: 0.15rem 0.4rem; font: 800 1.15rem/1.2 var(--display); color: var(--ink); }
+.site-frame .franchise-footprint__score i { position: absolute; inset: 12% auto 12% 0; width: var(--w); background: color-mix(in srgb, var(--gold) 40%, transparent); border-left: 1.5px solid var(--ink); }
+.site-frame .franchise-footprint__score span { position: relative; }
+.site-frame .franchise-footprint__num { text-align: right; }
+@media (max-width: 720px) {
+  .site-frame .franchise-footprint__item { grid-template-columns: 2.2rem repeat(3, minmax(0, 1fr)); row-gap: 0.15rem; }
+  .site-frame .franchise-footprint__item--head { display: none; }
+  .site-frame .franchise-footprint__name { grid-column: 2 / span 2; }
+  .site-frame .franchise-footprint__rank { grid-row: span 2; }
+  .site-frame .franchise-footprint__num { text-align: left; font-size: 0.8rem; color: var(--ink-soft); white-space: nowrap; }
+  .site-frame .franchise-footprint__num::before { content: attr(data-label) " "; }
+  .site-frame .franchise-footprint__games { display: none; }
+}
+
+/* Roster Rumble: two team sheets either side of the result, on navy felt. */
+.site-frame :is(.rumble-inline, .rumble-shell) { border: 0; border-radius: 0; background: none; box-shadow: none; padding: 0; }
+.site-frame .rumble-shell__header { display: none; }
+.site-frame .rumble-shell__body { background: var(--felt) url("../assets/art/navy-felt.webp") 0 0 / 256px 256px; border: 2px solid var(--ink); padding: clamp(0.75rem, 2vw, 1.25rem); gap: clamp(0.75rem, 2vw, 1.25rem); }
+.site-frame :is(.rumble-team, .rumble-results) { background: var(--white); border: 0; border-radius: var(--r); box-shadow: none; padding: 1rem; }
+.site-frame .rumble-team--a { border-top: 5px solid var(--royal); }
+.site-frame .rumble-team--b { border-top: 5px solid var(--paint); }
+.site-frame .rumble-results { border-top: 5px solid var(--gold); }
+.site-frame .rumble-team__header h3 { font-size: 1.7rem; text-transform: uppercase; white-space: nowrap; }
+.site-frame :is(.rumble-team, .rumble-results) button {
+  border: 1.5px solid var(--ink);
+  border-radius: var(--r);
+  background: var(--white);
+  color: var(--ink);
+  font: 700 0.92rem/1.2 var(--display);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 0.35rem 0.6rem;
+  box-shadow: none;
+}
+.site-frame :is(.rumble-team, .rumble-results) button:hover:not(:disabled) { background: var(--ink); color: var(--white); }
+.site-frame .rumble-results__controls > button { background: var(--paint); border-color: var(--paint); color: var(--white); font-size: 1.1rem; padding: 0.55rem 0.9rem; }
+.site-frame .rumble-results__controls > button:disabled { background: var(--tint); border-color: var(--rule-strong); color: var(--ink-soft); opacity: 1; }
+.site-frame :is(.rumble-team__pool, .rumble-team__graph, .rumble-results__histogram) { border: 1px solid var(--rule); border-radius: 0; background: var(--white); box-shadow: none; }
+.site-frame .rumble-shell__body { align-items: start; }
+.site-frame .rumble-team__graph { height: 15rem; min-height: 0; overflow: hidden; }
+.site-frame .rumble-team__graph svg { width: 100%; height: 100%; }
+.site-frame .rumble-results__label { letter-spacing: 0; text-transform: none; color: var(--ink-soft); font-size: 0.8rem; }
+.site-frame .rumble-results__kpis strong { font: 900 2rem/1 var(--display); }
+.site-frame .rumble-shell__footer { background: none; border: 0; padding: 0.6rem 0 0; color: var(--ink-soft); }
+
+/* GOAT tier rows: teams and status are small plain text, the score is the figure. */
+.site-frame .goat-tier__player :is(.badge, .goat-status) { background: none; border: 0; border-radius: 0; padding: 0; letter-spacing: 0; text-transform: none; font-size: 0.76rem; font-weight: 500; color: var(--ink-soft); width: auto; display: inline; }
+.site-frame .goat-tier__player .badge-list { gap: 0 0.4rem; }
+.site-frame .goat-tier__player-name { gap: 0.1rem; }
+.site-frame .goat-tier__player-name > :first-child { font-weight: 700; font-size: 1rem; }
+.site-frame .goat-tier__player-score { font: 800 1.35rem/1 var(--display); color: var(--ink); }
+.site-frame .goat-tier__player-delta { font-size: 0.78rem; }
+
+/* Teams: a chosen franchise's numbers as ruled rows, one line per measure:
+   name, value, where it sits between the league low and high, and its rank. */
+.site-frame :is(.team-visuals, .team-detail__visuals) { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0; border-top: 1.5px solid var(--ink); }
+.site-frame .team-visual {
+  display: grid;
+  grid-template-columns: minmax(8rem, 1.1fr) 4.6rem minmax(5rem, 1.4fr) 7.2rem 5.2rem 5.2rem;
+  align-items: center;
+  gap: 0 0.9rem;
+  padding: 0.38rem 0.7rem;
+  background: var(--white);
+  border: 0;
+  border-bottom: 1px solid var(--rule);
+  border-radius: 0;
+  box-shadow: none;
+  font-stretch: 88%;
+}
+.site-frame .team-visual :is(.team-visual__header, .team-visual__heading, .team-visual__range, .team-visual__range > div) { display: contents; }
+.site-frame .team-visual__label { order: 1; font: 650 0.95rem/1.2 var(--text); font-stretch: 88%; letter-spacing: 0; text-transform: none; color: var(--ink); }
+.site-frame .team-visual__value { order: 2; text-align: right; font: 800 1.25rem/1 var(--display); }
+.site-frame .team-visual__meter { order: 3; position: relative; height: 0.7rem; background: var(--tint); border-radius: 0; margin: 0; }
+.site-frame .team-visual__meter-track { display: none; }
+.site-frame .team-visual__meter-fill { position: absolute; inset: 0 auto 0 0; width: var(--fill); background: var(--royal); border-radius: 0; height: auto; }
+.site-frame .team-visual__percentile { order: 4; background: none; padding: 0; border-radius: 0; color: var(--ink-soft); font-size: 0.8rem; font-weight: 500; letter-spacing: 0; text-transform: none; }
+.site-frame .team-visual__description { display: none; }
+.site-frame .team-visual__range dt { display: none; }
+.site-frame .team-visual__range dd { order: 5; margin: 0; text-align: right; font-size: 0.8rem; color: var(--ink-soft); }
+.site-frame .team-visual__range > div:first-child dd::before { content: "low "; }
+.site-frame .team-visual__range > div:last-child dd::before { content: "high "; }
+.site-frame .team-detail__conference { letter-spacing: 0; text-transform: none; }
+.site-frame .team-detail__summary dd { font: 800 1.5rem/1 var(--display); }
+@media (max-width: 720px) {
+  .site-frame .team-visual { grid-template-columns: minmax(0, 1fr) 4.6rem 6.4rem; }
+  .site-frame .team-visual__meter { grid-column: 1 / -1; order: 6; margin-top: 0.25rem; }
+  .site-frame .team-visual__range dd { display: none; }
+}
+
+/* History: career totals as scorebook sheets, GOAT measures as ruled rows. */
+.site-frame .history-player__totals-table { width: 100%; border-collapse: collapse; background: var(--white); font-stretch: 88%; font-size: 0.95rem; }
+.site-frame .history-player__totals-table :is(th, td) { padding: 0.38rem 0.6rem; border-bottom: 1px solid var(--rule); text-align: right; font-weight: 500; }
+.site-frame .history-player__totals-table :is(th, td):first-child { text-align: left; }
+.site-frame .history-player__totals-table thead th { background: var(--tint); border-bottom: 1.5px solid var(--ink); font-size: 0.78rem; font-weight: 600; color: var(--ink-soft); }
+.site-frame .history-player__totals-table tbody td:nth-child(2) { font-weight: 700; }
+.site-frame .history-player__totals-heading { font-size: 1.35rem; text-transform: uppercase; margin-top: 1.1rem; }
+.site-frame .history-player__totals-meta { color: var(--ink-soft); font-size: 0.86rem; margin-bottom: 0.4rem; }
+.site-frame .history-player__hint { background: none; border: 0; padding: 0; color: var(--ink-soft); font-size: 0.86rem; }
+.site-frame .history-player h3 { font-size: clamp(2rem, 4vw, 3.2rem); text-transform: uppercase; line-height: 0.9; }
+.site-frame .history-visuals__grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0; border-top: 1.5px solid var(--ink); }
+.site-frame .history-visual { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: baseline; gap: 0.15rem 0.75rem; padding: 0.4rem 0.6rem; background: var(--white); border: 0; border-bottom: 1px solid var(--rule); border-radius: 0; box-shadow: none; }
+.site-frame .history-visual__label { font: 600 0.86rem/1.2 var(--text); letter-spacing: 0; text-transform: none; color: var(--ink-soft); }
+.site-frame .history-visual__value { font: 800 1.25rem/1 var(--display); text-align: right; }
+.site-frame .history-visual__meter { grid-column: 1; height: 0.45rem; background: var(--tint); border-radius: 0; }
+.site-frame .history-visual__meter-fill { background: var(--royal); border-radius: 0; }
+.site-frame .history-visual__percentile { font-size: 0.76rem; color: var(--ink-soft); text-align: right; }
+
+/* The player card: a name plate, a facts strip and a stat line. */
+.site-frame .player-card { padding: 1rem 1.2rem 1.2rem; gap: 1rem; align-content: start; }
+@media (min-width: 901px) { .site-frame .player-card { align-self: start; position: sticky; top: 4.25rem; } }
+.site-frame .player-card__name { font-size: clamp(2rem, 4vw, 3.2rem); text-transform: uppercase; line-height: 0.9; }
+.site-frame .player-card__meta { color: var(--ink-soft); }
+.site-frame .player-card__goat { background: none; border: 0; padding: 0; }
+.site-frame .player-card__goat-score { font: 900 2.4rem/1 var(--display); color: var(--paint); }
+.site-frame .player-card__bio { font-size: 1.05rem; max-width: 60ch; }
+.site-frame .player-card__facts { gap: 0; border-top: 1.5px solid var(--ink); background: var(--white); }
+.site-frame .player-card__fact { padding: 0.4rem 0.6rem 0.45rem 0; border-bottom: 1px solid var(--rule); }
+.site-frame .player-card__fact dt { color: var(--ink-soft); font-size: 0.78rem; font-weight: 600; }
+.site-frame .player-card__fact dd { font-weight: 650; }
+.site-frame .player-card__stats { background: none; border: 0; border-top: 3px solid var(--ink); border-radius: 0; padding: 0.7rem 0 0; box-shadow: none; }
+.site-frame .player-card__stats-grid { gap: 0; }
+.site-frame .player-card__stat { padding: 0.5rem 0.75rem 0.55rem 0; border-bottom: 1px solid var(--rule); text-align: left; justify-items: start; background: none; border-radius: 0; }
+.site-frame .player-card__stat-label { color: var(--ink-soft); font-size: 0.78rem; font-weight: 600; }
+.site-frame .player-card__stat dd, .site-frame .player-card__stat-value { font: 900 2rem/1 var(--display); color: var(--ink); }
+.site-frame .player-card__footer { color: var(--ink-soft); font-size: 0.82rem; border: 0; padding: 0; }
+
+/* Until a player is chosen the card is hidden, so the team picker takes the
+   whole row: thirty teams, six across, instead of a half-empty page. */
+.site-frame .player-atlas__layout:has(.player-card[hidden]) .player-atlas__teams { grid-column: 1 / -1; grid-template-columns: minmax(0, 1fr); }
+.site-frame .player-atlas__layout:has(.player-card[hidden]) .player-atlas__teams-tree { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 0.4rem; }
+.site-frame .player-atlas__layout:has(.player-card[hidden]) .player-atlas__teams-tree > [open] { grid-column: 1 / -1; }
+.site-frame .player-atlas__team { background: var(--white); border: 0; border-bottom: 1px solid var(--rule); border-radius: 0; }
+.site-frame .player-atlas__team-name { font: 800 1.2rem/1 var(--display); letter-spacing: 0.04em; }
+.site-frame .player-atlas__team-count { background: none; padding: 0; color: var(--ink-soft); font-size: 0.8rem; font-weight: 500; }
+.site-frame .player-atlas__team[open] .player-atlas__team-roster { display: grid; grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr)); gap: 0 0.75rem; }
+@media (max-width: 900px) { .site-frame .player-atlas__layout:has(.player-card[hidden]) .player-atlas__teams-tree { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+
+/* Phones: the thirty team buttons sit three across instead of one long column. */
+@media (max-width: 640px) {
+  .site-frame .player-atlas__teams-tree { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.35rem; }
+  .site-frame .player-atlas__teams-tree > * { margin: 0; min-width: 0; }
+  .site-frame .player-atlas__teams-tree > [open] { grid-column: 1 / -1; }
+}
+
+/* The legacy sheet pads the body on phones, which insets the header and hero. */
+html body { padding: 0; }

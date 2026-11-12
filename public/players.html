@@ -5,15 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Players | NBA Intelligence Hub</title>
     <meta name="title" content="Players | NBA Intelligence Hub" />
-    <meta name="description" content="Search the full 2025-26 roster pool to surface bespoke scouting cards, GOAT Index snapshots, and percentile breakdowns." />
+    <meta name="description" content="Search every current NBA roster for a player's profile, season averages and GOAT score, or draft two all-time fives in Roster Rumble." />
     <meta property="og:site_name" content="NBA Intelligence Hub" />
     <meta property="og:locale" content="en_US" />
     <meta property="og:type" content="article" />
     <meta property="og:title" content="Players | NBA Intelligence Hub" />
-    <meta property="og:description" content="Search the full 2025-26 roster pool to surface bespoke scouting cards, GOAT Index snapshots, and percentile breakdowns." />
+    <meta property="og:description" content="Search every current NBA roster for a player's profile, season averages and GOAT score, or draft two all-time fives in Roster Rumble." />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta property="og:image" content="https://nba.hicksrch.workers.dev/assets/social/card.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:image" content="https://nba.hicksrch.workers.dev/assets/social/card.jpg" />
+    <link rel="canonical" href="https://nba.hicksrch.workers.dev/players" />
     <meta name="twitter:title" content="Players | NBA Intelligence Hub" />
-    <meta name="twitter:description" content="Search the full 2025-26 roster pool to surface bespoke scouting cards, GOAT Index snapshots, and percentile breakdowns." />
+    <meta name="twitter:description" content="Search every current NBA roster for a player's profile, season averages and GOAT score, or draft two all-time fives in Roster Rumble." />
     <link rel="icon" type="image/svg+xml" href="assets/logos/nba-logoman.svg" />
     <link rel="preload" href="assets/fonts/bigshoulders-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="assets/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin />
@@ -41,22 +46,20 @@
         </nav>
       </div>
     </header>
-    <section class="baseline art-hero-key-paint">
+    <section class="baseline art-hero-locker-room">
       <div class="baseline__inner">
         <h1>Players</h1>
         <p>Search any active player for a scouting card, or draft two all-time fives and let Roster Rumble play a hundred games.</p>
       </div>
-      <img class="baseline__patch" src="assets/art/icon-jersey.webp" alt="" width="176" height="176" />
     </section>
     <div class="site-frame">
 <main id="players-app" class="players-lab">
         <section class="players-lab__section player-atlas" data-player-profiles>
           <header class="players-lab__section-header">
-            <h2>Player scouting atlas</h2>
-            <a class="rumble-launch" href="#players-rumble" data-rumble-launch>Explore Roster Rumble — 5v5</a>
+            <h2>Find a player</h2>
+            <a class="rumble-launch" href="#players-rumble" data-rumble-launch>Play Roster Rumble, 5v5</a>
             <p class="players-lab__lede">
-              Search the active 2025-26 roster pool to surface bespoke scouting percentiles for every player. Choose a
-              player to instantly render his GOAT index snapshot, vitals, and twelve curated visual reads.
+              Search every current roster for a player's profile, season averages and GOAT score.
             </p>
           </header>
           <div class="player-atlas__layout">
@@ -66,7 +69,7 @@
             >
               <div class="player-atlas__searchbox">
                 <label class="player-atlas__label" id="player-atlas-search-label" for="player-atlas-search">
-                  Search the scouting atlas
+                  Search players
                 </label>
                 <div class="player-atlas__field">
                   <input
@@ -96,19 +99,19 @@
                 ></ul>
               </div>
               <p class="player-atlas__hint" data-player-hint>
-                Start typing a player's name, jersey number, or franchise to surface his scouting capsule.
+                Search by name, jersey number, or team.
               </p>
               <p class="player-atlas__empty" data-player-empty hidden>
                 No matches found. Try another player, jersey number, or team.
               </p>
               <p class="player-atlas__error" data-player-error hidden>
-                We couldn't load the scouting atlas right now. Refresh to try again soon.
+                Player profiles are unavailable. Refresh to try again.
               </p>
             </section>
             <div class="player-atlas__teams" data-player-teams hidden>
               <h3 class="player-atlas__teams-title">Browse by franchise</h3>
               <p class="player-atlas__teams-copy">
-                Expand a team to scan its 2025-26 roster and jump straight to a player's scouting card.
+                Open a team to see its roster.
               </p>
               <div class="player-atlas__teams-tree" data-player-team-tree></div>
             </div>
@@ -174,10 +177,6 @@
                     <dd data-player-weight>—</dd>
                   </div>
                   <div class="player-card__fact">
-                    <dt>Vitals</dt>
-                    <dd data-player-vitals>—</dd>
-                  </div>
-                  <div class="player-card__fact">
                     <dt>Origin</dt>
                     <dd data-player-origin>—</dd>
                   </div>
@@ -233,26 +232,6 @@
                   </div>
                 </dl>
               </section>
-              <section
-                class="player-card__visuals-section"
-                aria-labelledby="player-card-visuals-title"
-              >
-                <header class="player-card__visuals-header">
-                  <h4 id="player-card-visuals-title">Percentile visual reads</h4>
-                  <p>
-                    Twelve scouting gauges anchor the 2025-26 outlook on each player's 2024-25
-                    production — a quick scan of creation, feel, and defensive range.
-                  </p>
-                </header>
-                <div
-                  class="player-card__visuals"
-                  data-player-metrics
-                  aria-label="Percentile visualizations"
-                ></div>
-                <p class="player-card__visuals-empty" data-player-metrics-empty hidden>
-                  Percentile visuals are coming soon for this player.
-                </p>
-              </section>
               <footer class="player-card__footer">
                 <p data-player-updated></p>
               </footer>
@@ -269,16 +248,15 @@
           </header>
           <ol class="player-atlas__teams-goat-list players-goat-averages__list" data-player-teams-goat-list></ol>
           <p class="player-atlas__teams-goat-empty players-goat-averages__empty" data-player-teams-goat-empty hidden>
-            Team GOAT averages are warming up.
+            Team GOAT averages are unavailable.
           </p>
         </section>
 
         <section class="players-lab__section players-rumble" id="players-rumble">
           <header class="players-lab__section-header">
-            <h2>Roster Rumble — 5v5</h2>
+            <h2>Roster Rumble, 5v5</h2>
             <p class="players-lab__lede">
-              Draft dream matchups from the full historical player universe, balance archetypes with chemistry graphs,
-              and simulate a hundred games to see which lineup reigns.
+              Pick two five-player lineups from the archive and simulate a hundred games.
             </p>
           </header>
           <div class="players-rumble__body" data-rumble-root aria-live="polite">
@@ -288,24 +266,22 @@
 
         <section class="players-rankings">
           <div class="players-rankings__intro">
-            <h2>Who's the Man Right Now?</h2>
+            <h2>Best players right now</h2>
             <p>
-              Using our GOAT ranking system of active players and production over the last three
-              seasons, here's how we stack the game's current apex performers.
+              Active players ranked by GOAT score over the last three seasons in the archived snapshot.
             </p>
           </div>
           <ol class="players-rankings__list" data-recent-leaderboard aria-live="polite"></ol>
           <p class="players-rankings__empty" data-recent-placeholder hidden>
-            Recent GOAT rankings are warming up. Refresh to try again soon.
+            Recent GOAT rankings are unavailable. Refresh to try again.
           </p>
         </section>
 
         <section class="players-lab__section">
           <header class="players-lab__section-header">
-            <h2>Morphology lab</h2>
+            <h2>Height and weight</h2>
             <p class="players-lab__lede">
-              Track how body types and roles stretch across eras — from the tallest towers ever
-              logged to the shape of today's positionless rotations.
+              Compare player heights and weights from archived player records and the roster snapshot.
             </p>
           </header>
           <div class="players-lab__grid viz-grid viz-grid--dense">
@@ -315,24 +291,22 @@
                 <canvas data-chart="league-heights" aria-describedby="league-heights-caption"></canvas>
               </div>
               <figcaption id="league-heights-caption" class="viz-card__caption">
-                Density curve of roster heights sourced from <code>Players.csv</code> buckets — a quick
-                way to spot outlier size archetypes.
+                Height distribution from <code>Players.csv</code> records.
               </figcaption>
             </figure>
 
             <figure class="viz-card viz-card--inline" data-chart-wrapper>
-              <header class="viz-card__title">Skyline mass bubbles</header>
+              <header class="viz-card__title">Seven-footers</header>
               <div class="viz-canvas">
                 <canvas data-chart="tallest-bubbles" aria-describedby="tallest-bubbles-caption"></canvas>
               </div>
               <figcaption id="tallest-bubbles-caption" class="viz-card__caption">
-                Bubble chart of every 7-foot-plus player in league history — bubble size mirrors
-                listed weight to show which giants carried the most mass.
+                Players listed at seven feet or taller in the archive. Bubble size shows listed weight.
               </figcaption>
             </figure>
 
             <figure class="viz-card viz-card--inline" data-chart-wrapper>
-              <header class="viz-card__title">Roster height stacks</header>
+              <header class="viz-card__title">Average height by team</header>
               <div class="viz-canvas">
                 <canvas
                   data-chart="team-height-averages"
@@ -351,43 +325,39 @@
 
         <section class="players-lab__section">
           <header class="players-lab__section-header">
-            <h2>Global &amp; collegiate pipelines</h2>
+            <h2>Where players come from</h2>
             <p class="players-lab__lede">
-              Follow the journeys that feed the league — from international launch pads to the
-              college programs producing the deepest alumni pools.
+              Countries, colleges, and draft years from archived player records.
             </p>
           </header>
           <div class="players-lab__grid viz-grid viz-grid--dense">
             <figure class="viz-card viz-card--inline" data-chart-wrapper>
-              <header class="viz-card__title">Global talent spectrum</header>
+              <header class="viz-card__title">Players by country</header>
               <div class="viz-canvas">
                 <canvas data-chart="country-spectrum" aria-describedby="country-spectrum-caption"></canvas>
               </div>
               <figcaption id="country-spectrum-caption" class="viz-card__caption">
-                Polar area bloom of the top international contributors — each petal encodes how many
-                pros hail from that nation.
+                Each segment shows the number of players from a country in the archive.
               </figcaption>
             </figure>
 
             <figure class="viz-card viz-card--inline" data-chart-wrapper>
-              <header class="viz-card__title">College pipeline power grid</header>
+              <header class="viz-card__title">Players by college</header>
               <div class="viz-canvas">
                 <canvas data-chart="college-pipeline" aria-describedby="college-pipeline-caption"></canvas>
               </div>
               <figcaption id="college-pipeline-caption" class="viz-card__caption">
-                Horizontal bar ranks for the collegiate programs that have launched the most NBA
-                talent.
+                Colleges ranked by their number of NBA players in the archive.
               </figcaption>
             </figure>
 
             <figure class="viz-card viz-card--inline" data-chart-wrapper>
-              <header class="viz-card__title">Draft cadence stream</header>
+              <header class="viz-card__title">Draft picks by decade</header>
               <div class="viz-canvas">
                 <canvas data-chart="draft-timeline" aria-describedby="draft-timeline-caption"></canvas>
               </div>
               <figcaption id="draft-timeline-caption" class="viz-card__caption">
-                Smoothed line of draft counts by decade — a pulse check on how the pipeline has
-                swollen and contracted over time.
+                Players drafted by decade, from archived player records.
               </figcaption>
             </figure>
           </div>
@@ -395,43 +365,39 @@
 
         <section class="players-lab__section">
           <header class="players-lab__section-header">
-            <h2>Momentum &amp; mythology</h2>
+            <h2>Streaks and big nights</h2>
             <p class="players-lab__lede">
-              Dive into production rhythms, legendary streaks, and single-game supernovas that define
-              the lore of NBA players.
+              Season averages, triple-doubles, and high-scoring games from the archive.
             </p>
           </header>
           <div class="players-lab__grid viz-grid viz-grid--dense" data-viz-grid="momentum">
             <figure class="viz-card viz-card--inline" data-chart-wrapper>
-              <header class="viz-card__title">Scoring era waveform</header>
+              <header class="viz-card__title">Season averages over time</header>
               <div class="viz-canvas">
                 <canvas data-chart="season-trends" aria-describedby="season-trends-caption"></canvas>
               </div>
               <figcaption id="season-trends-caption" class="viz-card__caption">
-                Multi-line stream of league-wide scoring, assisting, and rebounding averages from
-                1946 onward.
+                League-wide points, assists, and rebounds per game from 1946 onward in the archive.
               </figcaption>
             </figure>
 
             <figure class="viz-card viz-card--inline" data-chart-wrapper>
-              <header class="viz-card__title">Triple-double nebula</header>
+              <header class="viz-card__title">Career triple-doubles</header>
               <div class="viz-canvas">
                 <canvas data-chart="triple-double-cloud" aria-describedby="triple-double-cloud-caption"></canvas>
               </div>
               <figcaption id="triple-double-cloud-caption" class="viz-card__caption">
-                Bubble timeline of career triple-double totals — bubble radius scales with how many
-                seasons featured the feat.
+                Career triple-double totals from the archive. Bubble radius shows the number of seasons with a triple-double.
               </figcaption>
             </figure>
 
             <figure class="viz-card viz-card--inline" data-chart-wrapper>
-              <header class="viz-card__title">Scoring supernovas</header>
+              <header class="viz-card__title">Highest-scoring games</header>
               <div class="viz-canvas">
                 <canvas data-chart="scoring-eruptions" aria-describedby="scoring-eruptions-caption"></canvas>
               </div>
               <figcaption id="scoring-eruptions-caption" class="viz-card__caption">
-                Scatter of the biggest single-game point totals — hover to see rebounds, assists, and
-                the minute loads required.
+                The highest-scoring games in the archive. Hover for rebounds, assists, and minutes played.
               </figcaption>
             </figure>
 
@@ -439,7 +405,7 @@
         </section>
       </main>
 
-      <footer class="page-footer">Player insights are the heartbeat of the hub — more soon.</footer>
+      <footer class="page-footer">Player records and GOAT scores come from archived snapshots. Live season averages come from ESPN public JSON.</footer>
     </div>
     <script src="vendor/chart.umd.js" defer></script>
     <script type="module" src="scripts/players.js"></script>

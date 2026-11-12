@@ -23,9 +23,9 @@ const atlasMetricBlueprint = {
     describe(context) {
       const value = context.components?.impact;
       if (Number.isFinite(value)) {
-        return `Impact pillar graded at ${helpers.formatNumber(value, 1)} GOAT points.`;
+        return `Impact component: ${helpers.formatNumber(value, 1)} GOAT points.`;
       }
-      return 'Impact pillar percentile unavailable.';
+      return 'Impact percentile unavailable.';
     },
   },
   'half-court-shotmaking': {
@@ -36,9 +36,9 @@ const atlasMetricBlueprint = {
     describe(context) {
       const value = context.components?.stage;
       if (Number.isFinite(value)) {
-        return `Stage pillar captures ${helpers.formatNumber(value, 1)} GOAT points of playoff shotmaking.`;
+        return `Stage component: ${helpers.formatNumber(value, 1)} GOAT points.`;
       }
-      return 'Stage pillar percentile unavailable.';
+      return 'Stage percentile unavailable.';
     },
   },
   'passing-vision': {
@@ -49,9 +49,9 @@ const atlasMetricBlueprint = {
     describe(context) {
       const value = context.components?.versatility;
       if (Number.isFinite(value)) {
-        return `Versatility pillar logs ${helpers.formatNumber(value, 1)} GOAT points of creation.`;
+        return `Versatility component: ${helpers.formatNumber(value, 1)} GOAT points.`;
       }
-      return 'Versatility pillar percentile unavailable.';
+      return 'Versatility percentile unavailable.';
     },
   },
   'rim-pressure': {
@@ -77,13 +77,13 @@ const atlasMetricBlueprint = {
         ? helpers.formatNumber(context.components.versatility, 1)
         : null;
       if (impact && versatility) {
-        return `Blend of impact (${impact}) and versatility (${versatility}) GOAT points fuels rim pressure.`;
+        return `Based on impact (${impact}) and versatility (${versatility}) GOAT points.`;
       }
       if (impact) {
-        return `Impact pillar at ${impact} GOAT points drives rim pressure.`;
+        return `Based on ${impact} impact GOAT points.`;
       }
       if (versatility) {
-        return `Versatility pillar at ${versatility} GOAT points steadies rim pressure.`;
+        return `Based on ${versatility} versatility GOAT points.`;
       }
       return 'Rim pressure percentile unavailable.';
     },
@@ -111,13 +111,13 @@ const atlasMetricBlueprint = {
         ? helpers.formatNumber(context.components.longevity, 1)
         : null;
       if (longevity && impact) {
-        return `Longevity (${longevity}) and impact (${impact}) GOAT scores anchor the glass profile.`;
+        return `Based on longevity (${longevity}) and impact (${impact}) GOAT points.`;
       }
       if (longevity) {
-        return `Longevity pillar at ${longevity} GOAT points highlights sustained board work.`;
+        return `Based on ${longevity} longevity GOAT points.`;
       }
       if (impact) {
-        return `Impact pillar at ${impact} GOAT points fuels board dominance.`;
+        return `Based on ${impact} impact GOAT points.`;
       }
       return 'Rebound dominance percentile unavailable.';
     },
@@ -145,13 +145,13 @@ const atlasMetricBlueprint = {
         ? helpers.formatNumber(context.components.versatility, 1)
         : null;
       if (impact && versatility) {
-        return `Versatility (${versatility}) and impact (${impact}) GOAT points shape defensive playmaking.`;
+        return `Based on versatility (${versatility}) and impact (${impact}) GOAT points.`;
       }
       if (versatility) {
-        return `Versatility pillar contributes ${versatility} GOAT points of defensive playmaking.`;
+        return `Based on ${versatility} versatility GOAT points.`;
       }
       if (impact) {
-        return `Impact pillar contributes ${impact} GOAT points of defensive playmaking.`;
+        return `Based on ${impact} impact GOAT points.`;
       }
       return 'Defensive playmaking percentile unavailable.';
     },
@@ -164,7 +164,7 @@ const atlasMetricBlueprint = {
     describe(context) {
       const value = context.components?.stage;
       if (Number.isFinite(value)) {
-        return `Stage pillar at ${helpers.formatNumber(value, 1)} GOAT points reflects postseason post craft.`;
+        return `Based on ${helpers.formatNumber(value, 1)} stage GOAT points.`;
       }
       return 'Post efficiency percentile unavailable.';
     },
@@ -177,7 +177,7 @@ const atlasMetricBlueprint = {
     describe(context) {
       const value = context.components?.versatility;
       if (Number.isFinite(value)) {
-        return `Versatility pillar logged at ${helpers.formatNumber(value, 1)} GOAT points.`;
+        return `Versatility component: ${helpers.formatNumber(value, 1)} GOAT points.`;
       }
       return 'Stretch gravity percentile unavailable.';
     },
@@ -208,22 +208,22 @@ const atlasMetricBlueprint = {
         ? helpers.formatNumber(context.components.longevity, 1)
         : null;
       if (winPct && versatility && longevity) {
-        return `Versatility (${versatility}) and longevity (${longevity}) GOAT points plus a ${winPct}% win rate steer tempo.`;
+        return `Based on versatility (${versatility}) and longevity (${longevity}) GOAT points, plus a ${winPct}% win rate.`;
       }
       if (versatility && winPct) {
-        return `Versatility pillar at ${versatility} GOAT points and a ${winPct}% win rate steer tempo.`;
+        return `Based on ${versatility} versatility GOAT points and a ${winPct}% win rate.`;
       }
       if (longevity && winPct) {
-        return `Longevity pillar at ${longevity} GOAT points with a ${winPct}% win rate steadies tempo.`;
+        return `Based on ${longevity} longevity GOAT points and a ${winPct}% win rate.`;
       }
       if (versatility) {
-        return `Versatility pillar at ${versatility} GOAT points anchors pace control.`;
+        return `Based on ${versatility} versatility GOAT points.`;
       }
       if (longevity) {
-        return `Longevity pillar at ${longevity} GOAT points anchors pace control.`;
+        return `Based on ${longevity} longevity GOAT points.`;
       }
       if (winPct) {
-        return `Career win rate of ${winPct}% keeps possessions in command.`;
+        return `Career win rate: ${winPct}%.`;
       }
       return 'Tempo control percentile unavailable.';
     },
@@ -251,13 +251,13 @@ const atlasMetricBlueprint = {
         ? helpers.formatNumber(context.playoffWinPct * 100, 1)
         : null;
       if (stage && playoff) {
-        return `Stage pillar (${stage}) and ${playoff}% playoff win clip highlight clutch DNA.`;
+        return `Based on ${stage} stage GOAT points and a ${playoff}% playoff win rate.`;
       }
       if (stage) {
-        return `Stage pillar at ${stage} GOAT points drives late-game shotmaking.`;
+        return `Based on ${stage} stage GOAT points.`;
       }
       if (playoff) {
-        return `Playoff win rate of ${playoff}% underscores clutch pedigree.`;
+        return `Playoff win rate: ${playoff}%.`;
       }
       return 'Clutch index percentile unavailable.';
     },
@@ -285,13 +285,13 @@ const atlasMetricBlueprint = {
         ? helpers.formatNumber(context.careerSeasons, 0)
         : null;
       if (longevity && seasons) {
-        return `Longevity (${longevity}) GOAT points across ${seasons} seasons underline availability.`;
+        return `Based on ${longevity} longevity GOAT points and ${seasons} seasons.`;
       }
       if (longevity) {
-        return `Longevity pillar at ${longevity} GOAT points tracks the mileage.`;
+        return `Based on ${longevity} longevity GOAT points.`;
       }
       if (seasons) {
-        return `${seasons} seasons logged keep durability near the top of the class.`;
+        return `Career length: ${seasons} seasons.`;
       }
       return 'Durability percentile unavailable.';
     },
@@ -315,13 +315,13 @@ const atlasMetricBlueprint = {
         : null;
       const delta = Number.isFinite(context.delta) ? helpers.formatNumber(context.delta, 1) : null;
       if (versatility && delta) {
-        return `Versatility (${versatility}) GOAT points and a ${delta} season delta speed up reads.`;
+        return `Based on ${versatility} versatility GOAT points and a ${delta} season change.`;
       }
       if (versatility) {
-        return `Versatility pillar at ${versatility} GOAT points captures processing feel.`;
+        return `Based on ${versatility} versatility GOAT points.`;
       }
       if (delta) {
-        return `Season-over-season delta of ${delta} fuels processing momentum.`;
+        return `Season-over-season change: ${delta}.`;
       }
       return 'Processing speed percentile unavailable.';
     },
@@ -480,7 +480,7 @@ function renderRecentLeaderboard(records, listElement, placeholderElement) {
     const title = document.createElement('strong');
     const displayName = player?.displayName || player?.name || '—';
     const team = player?.team;
-    title.textContent = team ? `${displayName} — ${team}` : displayName;
+    title.textContent = team ? `${displayName}, ${team}` : displayName;
 
     const note = document.createElement('span');
     note.textContent = player?.blurb || '';
@@ -1875,14 +1875,14 @@ function initPlayerAtlas() {
   if (statsSeasonEl) {
     statsSeasonEl.textContent = seasonLabel;
   }
-  const defaultStatsMeta = `Season averages for the ${seasonLabel} season.`;
+  const defaultStatsMeta = 'Per game this season, from ESPN.';
   if (statsMeta) {
     statsMeta.textContent = defaultStatsMeta;
   }
   const defaultStatsError =
     statsError?.textContent?.trim() ? statsError.textContent : "We couldn't load season averages right now.";
   const unavailableStatsMeta = 'Season averages are temporarily unavailable.';
-  const unavailableStatsError = 'Season averages are temporarily unavailable — try again soon.';
+  const unavailableStatsError = 'Season averages are unavailable. Try again soon.';
 
   const seasonAveragesCache = new Map();
   let statsRequestToken = 0;
@@ -1905,7 +1905,7 @@ function initPlayerAtlas() {
   let currentRostersDoc = null;
   let isUsingFallbackRoster = false;
   const defaultEmptyText = empty?.textContent?.trim() ?? '';
-  const defaultTeamGoatEmptyText = teamGoatEmpty?.textContent?.trim() ?? 'Team GOAT averages are warming up.';
+  const defaultTeamGoatEmptyText = teamGoatEmpty?.textContent?.trim() ?? 'Team GOAT averages are unavailable.';
 
   const resolveAssetUrls = (path) => {
     if (typeof path !== 'string') {
@@ -2070,7 +2070,7 @@ function initPlayerAtlas() {
 
     if (statsMeta) {
       if (status === 'loading') {
-        statsMeta.textContent = `Loading season averages for the ${seasonLabel} season…`;
+        statsMeta.textContent = 'Loading season averages…';
       } else if (status === 'ready') {
         statsMeta.textContent = defaultStatsMeta;
       } else if (status === 'empty') {
@@ -2166,7 +2166,7 @@ function initPlayerAtlas() {
 
   const updateRosterTimestamp = () => {
     if (isUsingFallbackRoster) {
-      updatedEl.textContent = 'Live roster snapshot unavailable — showing scouting atlas roster data.';
+      updatedEl.textContent = 'Live roster data is unavailable. Showing archived player profiles.';
       return;
     }
     if (!currentRostersDoc) {
@@ -2188,13 +2188,10 @@ function initPlayerAtlas() {
     }
 
     const sourceName = currentRostersDoc.source === 'ball_dont_lie' || !currentRostersDoc.source
-      ? 'Primary league data feed'
-      : String(currentRostersDoc.source);
-    parts.push(`Source: ${sourceName}`);
+      ? 'the archived roster file'
+      : String(currentRostersDoc.source).toLowerCase() === 'espn' ? 'ESPN' : String(currentRostersDoc.source);
+    parts.push(`Roster from ${sourceName}`);
 
-    if (Number.isFinite(currentRostersDoc.ttl_hours)) {
-      parts.push(`TTL ${currentRostersDoc.ttl_hours}h`);
-    }
 
     updatedEl.textContent = parts.join(' • ');
   };
@@ -2407,7 +2404,7 @@ function initPlayerAtlas() {
       description.textContent =
         (typeof payload?.note === 'string' && payload.note.trim()) ||
         (typeof definition.description === 'string' && definition.description.trim()) ||
-        'Percentile visual is warming up.';
+        'Percentile unavailable.';
 
       card.append(header, meter, description);
       metricsContainer.append(card);
@@ -2898,7 +2895,7 @@ function initPlayerAtlas() {
       if (hint) hint.hidden = true;
       if (empty) {
         empty.hidden = false;
-        empty.textContent = 'Loading player atlas…';
+        empty.textContent = 'Loading players...';
       }
       return;
     }
@@ -3034,14 +3031,11 @@ function initPlayerAtlas() {
     }
 
     if (bioEl) {
-      const biography = typeof player?.bio === 'string' ? player.bio.trim() : '';
+      // The stored bios are filled-in templates that repeat the fact rows below.
+      // Only the one-line GOAT resume says something those rows do not.
       const resume = typeof player?.goatResume === 'string' ? player.goatResume.trim() : '';
-      let copy = biography || `Scouting capsule for ${player.name}.`;
-      if (resume && !copy.toLowerCase().includes(resume.toLowerCase())) {
-        const punctuated = /[.!?]$/.test(copy) ? copy : `${copy}.`;
-        copy = `${punctuated} GOAT resume: ${resume}${/[.!?]$/.test(resume) ? '' : '.'}`;
-      }
-      bioEl.textContent = copy;
+      bioEl.textContent = resume ? `${resume}${/[.!?]$/.test(resume) ? '' : '.'}` : '';
+      bioEl.hidden = !resume;
     }
 
     if (archetypeEl) {
@@ -3370,7 +3364,7 @@ function initPlayerAtlas() {
       renderRecentLeaderboard([], recentLeaderboard, recentPlaceholder);
       if (error) {
         error.hidden = false;
-        error.textContent = 'Unable to load the scouting atlas right now. Please refresh the page to try again.';
+        error.textContent = 'Player profiles are unavailable. Refresh to try again.';
       }
       if (hint) hint.hidden = true;
       if (searchInput) {
