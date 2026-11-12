@@ -1,0 +1,12 @@
+{
+  // The site is static: Cloudflare serves public/ as Workers static assets, no Worker script.
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "nba",
+  "compatibility_date": "2026-11-12",
+  "assets": {
+    "directory": "./public",
+    // Old GitHub Pages links end in .html; keep them working, serve clean URLs too.
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "404-page"
+  }
+}

@@ -68,3 +68,33 @@ jobs:
       - name: Clean workspace
         if: always() && runner.environment == 'self-hosted'
         run: git clean -ffdx
+
+  smoke:
+    name: Browser smoke (every page, phone + desktop)
+    if: github.event_name != 'pull_request' || !github.event.pull_request.draft
+    runs-on: ${{ vars.CI_RUNNER == 'local' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) && fromJSON('["self-hosted","web-trusted","playwright"]') || 'ubuntu-latest' }}
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: ${{ runner.environment == 'github-hosted' && 'pnpm' || '' }}
+      - run: pnpm install --frozen-lockfile
+      # The PCs already have Chromium's system libraries and share one browser
+      # folder (PLAYWRIGHT_BROWSERS_PATH); only hosted runners need --with-deps.
+      - name: Chromium (hosted)
+        if: runner.environment == 'github-hosted'
+        run: pnpm exec playwright install --with-deps chromium
+      - name: Chromium (self-hosted)
+        if: runner.environment == 'self-hosted'
+        run: pnpm exec playwright install chromium
+      # Loads every page offline at two widths, then replays a recorded ESPN
+      # scoreboard to prove the live path.
+      - run: pnpm check:smoke
+      - name: Clean workspace
+        if: always() && runner.environment == 'self-hosted'
+        run: git clean -ffdx

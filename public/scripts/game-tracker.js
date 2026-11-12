@@ -4,24 +4,24 @@ import { registerCharts, destroyCharts, helpers } from './hub-charts.js';
 const REFRESH_INTERVAL_MS = 5 * 60 * 1000;
 
 const palette = {
-  royal: '#1156d6',
-  sky: '#1f7bff',
-  gold: '#f4b53f',
-  coral: '#ef3d5b',
-  teal: '#11b5c6',
-  violet: '#6c4fe0',
-  lime: '#8fd43d',
-  navy: '#0b2545',
+  royal: '#1b4bbd',
+  sky: '#1b4bbd',
+  gold: '#e3a41c',
+  coral: '#d43d24',
+  teal: '#157a86',
+  violet: '#1b4bbd',
+  lime: '#1c7748',
+  navy: '#0f1a2e',
 };
 
 const roleColors = {
   visitor: {
-    fill: 'rgba(17, 86, 214, 0.18)',
+    fill: 'rgba(27, 75, 189, 0.18)',
     line: palette.sky,
     solid: palette.sky,
   },
   home: {
-    fill: 'rgba(244, 181, 63, 0.22)',
+    fill: 'rgba(227, 164, 28, 0.22)',
     line: palette.gold,
     solid: palette.gold,
   },
@@ -1149,21 +1149,21 @@ function buildShotVolumeConfig(visualization) {
         {
           label: '2PA',
           data: [visitorAttempts.two, homeAttempts.two],
-          backgroundColor: 'rgba(17, 86, 214, 0.5)',
+          backgroundColor: 'rgba(27, 75, 189, 0.5)',
           borderColor: palette.sky,
           borderWidth: 1,
         },
         {
           label: '3PA',
           data: [visitorAttempts.three, homeAttempts.three],
-          backgroundColor: 'rgba(239, 61, 91, 0.45)',
+          backgroundColor: 'rgba(212, 61, 36, 0.45)',
           borderColor: palette.coral,
           borderWidth: 1,
         },
         {
           label: 'FTA',
           data: [visitorAttempts.ft, homeAttempts.ft],
-          backgroundColor: 'rgba(143, 212, 61, 0.45)',
+          backgroundColor: 'rgba(28, 119, 72, 0.45)',
           borderColor: palette.lime,
           borderWidth: 1,
         },
@@ -1219,7 +1219,7 @@ function buildFourFactorsConfig(visualization) {
           label: teamAbbreviation(visualization, 'visitor'),
           data: visitorValues.map((value) => (Number.isFinite(value) ? value : 0)),
           metaValues: visitorValues,
-          backgroundColor: 'rgba(17, 86, 214, 0.18)',
+          backgroundColor: 'rgba(27, 75, 189, 0.18)',
           borderColor: roleColors.visitor.solid,
           pointBackgroundColor: roleColors.visitor.solid,
           pointRadius: 3,
@@ -1228,7 +1228,7 @@ function buildFourFactorsConfig(visualization) {
           label: teamAbbreviation(visualization, 'home'),
           data: homeValues.map((value) => (Number.isFinite(value) ? value : 0)),
           metaValues: homeValues,
-          backgroundColor: 'rgba(244, 181, 63, 0.22)',
+          backgroundColor: 'rgba(227, 164, 28, 0.22)',
           borderColor: roleColors.home.solid,
           pointBackgroundColor: roleColors.home.solid,
           pointRadius: 3,
@@ -1608,7 +1608,7 @@ function buildPossessionProfileConfig(visualization) {
         {
           label: teamAbbreviation(visualization, 'visitor'),
           data: [visitorShares.shots, visitorShares.ft, visitorShares.turnovers],
-          backgroundColor: 'rgba(31, 123, 255, 0.18)',
+          backgroundColor: 'rgba(27, 75, 189, 0.18)',
           borderColor: roleColors.visitor.solid,
           pointBackgroundColor: roleColors.visitor.solid,
           pointRadius: 3,
@@ -1616,7 +1616,7 @@ function buildPossessionProfileConfig(visualization) {
         {
           label: teamAbbreviation(visualization, 'home'),
           data: [homeShares.shots, homeShares.ft, homeShares.turnovers],
-          backgroundColor: 'rgba(244, 181, 63, 0.22)',
+          backgroundColor: 'rgba(227, 164, 28, 0.22)',
           borderColor: roleColors.home.solid,
           pointBackgroundColor: roleColors.home.solid,
           pointRadius: 3,
@@ -1695,8 +1695,8 @@ function buildScoringHierarchyConfig(visualization) {
         datasets: [
           {
             data: [0],
-            backgroundColor: 'rgba(11, 37, 69, 0.16)',
-            borderColor: 'rgba(11, 37, 69, 0.38)',
+            backgroundColor: 'rgba(15, 26, 46, 0.16)',
+            borderColor: 'rgba(15, 26, 46, 0.38)',
             borderWidth: 1,
           },
         ],
@@ -1800,8 +1800,8 @@ function buildRotationWorkloadConfig(visualization) {
         datasets: [
           {
             data: [0],
-            backgroundColor: 'rgba(11, 37, 69, 0.16)',
-            borderColor: 'rgba(11, 37, 69, 0.38)',
+            backgroundColor: 'rgba(15, 26, 46, 0.16)',
+            borderColor: 'rgba(15, 26, 46, 0.38)',
             borderWidth: 1,
           },
         ],

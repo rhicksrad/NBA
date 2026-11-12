@@ -64,12 +64,10 @@
 }
 
 .tracker-scoreboard {
-  border-radius: var(--radius-lg);
+  border-radius: var(--r);
   border: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
   background:
-    linear-gradient(150deg, rgba(12, 54, 136, 0.09), rgba(244, 181, 63, 0.08)),
     rgba(255, 255, 255, 0.94);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65);
   padding: 1.75rem 2rem;
   display: grid;
   gap: 1.5rem;
@@ -85,10 +83,9 @@
   display: grid;
   gap: 0.65rem;
   padding: 1.1rem 1.2rem;
-  border-radius: var(--radius-md);
-  background: rgba(255, 255, 255, 0.78);
+  border-radius: var(--r);
+  background: color-mix(in srgb, var(--white) 78%, transparent);
   border: 1px solid color-mix(in srgb, var(--border) 68%, transparent);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55);
 }
 
 .tracker-score__header {
@@ -143,12 +140,12 @@
 .tracker-scoreboard__refresh {
   appearance: none;
   border: none;
-  border-radius: 999px;
+  border-radius: var(--r-pill);
   padding: 0.5rem 1.25rem;
   font-size: 0.9rem;
   font-weight: 600;
   background: color-mix(in srgb, var(--royal) 92%, var(--navy) 8%);
-  color: white;
+  color: var(--white);
   cursor: pointer;
   transition: transform 0.18s ease, box-shadow 0.18s ease;
 }
@@ -156,13 +153,12 @@
 .tracker-scoreboard__refresh:hover,
 .tracker-scoreboard__refresh:focus {
   transform: translateY(-1px);
-  box-shadow: 0 6px 16px rgba(17, 86, 214, 0.26);
+  box-shadow: 0 0 0 3px var(--focus);
 }
 
 .tracker-scoreboard__refresh:disabled {
   cursor: not-allowed;
   opacity: 0.6;
-  box-shadow: none;
   transform: none;
 }
 
@@ -176,12 +172,10 @@
   display: grid;
   gap: 1.25rem;
   padding: 1.6rem 1.75rem 1.9rem;
-  border-radius: var(--radius-lg);
+  border-radius: var(--r);
   border: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
   background:
-    linear-gradient(150deg, rgba(11, 37, 69, 0.08), rgba(255, 208, 128, 0.06)),
     rgba(255, 255, 255, 0.95);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
 }
 
 .tracker-team-card__header {
@@ -243,12 +237,10 @@
   display: grid;
   gap: 1.1rem;
   padding: 1.6rem 1.75rem 1.85rem;
-  border-radius: var(--radius-lg);
+  border-radius: var(--r);
   border: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
   background:
-    linear-gradient(145deg, rgba(17, 86, 214, 0.08), rgba(47, 180, 200, 0.07)),
     rgba(255, 255, 255, 0.95);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
 }
 
 .tracker-leaders__title {
@@ -369,12 +361,10 @@
   display: grid;
   gap: 1.1rem;
   padding: 1.55rem 1.75rem 1.8rem;
-  border-radius: var(--radius-lg);
+  border-radius: var(--r);
   border: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
   background:
-    linear-gradient(160deg, rgba(17, 86, 214, 0.08), rgba(244, 181, 63, 0.06)),
     rgba(255, 255, 255, 0.96);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.58);
 }
 
 .tracker-visuals__header {

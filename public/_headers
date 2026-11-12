@@ -1,0 +1,9 @@
+/assets/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+/assets/art/*
+  Cache-Control: public, max-age=2592000
+/data/live/*
+  Cache-Control: public, max-age=300, stale-while-revalidate=3600
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin

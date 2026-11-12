@@ -46,7 +46,7 @@ function fallbackConfig(message) {
         {
           label: 'Pending data',
           data: [1],
-          backgroundColor: ['rgba(17, 86, 214, 0.12)'],
+          backgroundColor: ['rgba(27, 75, 189, 0.12)'],
           borderWidth: 0,
         },
       ],
@@ -201,8 +201,8 @@ function buildSeasonalChart(dataRef) {
         {
           label: 'Regular season',
           data: regular,
-          borderColor: '#0b2545',
-          backgroundColor: 'rgba(11, 37, 69, 0.12)',
+          borderColor: '#0f1a2e',
+          backgroundColor: 'rgba(15, 26, 46, 0.12)',
           borderWidth: 1.5,
           tension: 0.3,
           spanGaps: false,
@@ -211,8 +211,8 @@ function buildSeasonalChart(dataRef) {
         {
           label: 'Playoffs',
           data: playoff,
-          borderColor: '#ef3d5b',
-          backgroundColor: 'rgba(239, 61, 91, 0.12)',
+          borderColor: '#d43d24',
+          backgroundColor: 'rgba(212, 61, 36, 0.12)',
           borderWidth: 1.5,
           tension: 0.3,
           spanGaps: false,
@@ -226,10 +226,10 @@ function buildSeasonalChart(dataRef) {
       scales: {
         y: {
           title: { display: true, text: 'Average combined points' },
-          grid: { color: 'rgba(17, 86, 214, 0.12)' },
+          grid: { color: 'rgba(27, 75, 189, 0.12)' },
         },
         x: {
-          grid: { color: 'rgba(17, 86, 214, 0.05)' },
+          grid: { color: 'rgba(27, 75, 189, 0.05)' },
           ticks: {
             callback(value, index) {
               const label = labels[index];
@@ -265,8 +265,8 @@ function buildRestImpactChart(dataRef) {
           type: 'bar',
           label: 'Road win %',
           data: winPct,
-          backgroundColor: '#ef3d5b',
-          borderRadius: 18,
+          backgroundColor: '#d43d24',
+          borderRadius: 0,
           maxBarThickness: 52,
         },
         {
@@ -274,7 +274,7 @@ function buildRestImpactChart(dataRef) {
           label: 'Avg point margin',
           data: margin,
           yAxisID: 'margin',
-          borderColor: '#0b2545',
+          borderColor: '#0f1a2e',
           borderWidth: 2,
           tension: 0.32,
           pointRadius: 4,
@@ -290,7 +290,7 @@ function buildRestImpactChart(dataRef) {
           beginAtZero: true,
           title: { display: true, text: 'Road win percentage' },
           ticks: { callback: (value) => `${helpers.formatNumber(value, 0)}%` },
-          grid: { color: 'rgba(239, 61, 91, 0.12)' },
+          grid: { color: 'rgba(212, 61, 36, 0.12)' },
         },
         margin: {
           position: 'right',
@@ -298,7 +298,7 @@ function buildRestImpactChart(dataRef) {
           grid: { drawOnChartArea: false },
         },
         x: {
-          grid: { color: 'rgba(239, 61, 91, 0.05)' },
+          grid: { color: 'rgba(212, 61, 36, 0.05)' },
         },
       },
     },
@@ -323,15 +323,15 @@ function buildRestTravelChart(dataRef) {
         {
           label: 'Rested road win %',
           data: rested,
-          backgroundColor: 'rgba(17, 86, 214, 0.85)',
-          borderRadius: 16,
+          backgroundColor: 'rgba(27, 75, 189, 0.85)',
+          borderRadius: 0,
           maxBarThickness: 44,
         },
         {
           label: 'Fatigued road win %',
           data: fatigued,
-          backgroundColor: 'rgba(239, 61, 91, 0.78)',
-          borderRadius: 16,
+          backgroundColor: 'rgba(212, 61, 36, 0.78)',
+          borderRadius: 0,
           maxBarThickness: 44,
         },
       ],
@@ -345,10 +345,10 @@ function buildRestTravelChart(dataRef) {
           suggestedMax: 60,
           ticks: { callback: (value) => `${helpers.formatNumber(value, 0)}%` },
           title: { display: true, text: 'Road win percentage' },
-          grid: { color: 'rgba(17, 86, 214, 0.12)' },
+          grid: { color: 'rgba(27, 75, 189, 0.12)' },
         },
         x: {
-          grid: { color: 'rgba(17, 86, 214, 0.05)' },
+          grid: { color: 'rgba(27, 75, 189, 0.05)' },
         },
       },
       plugins: {
@@ -379,8 +379,8 @@ function buildCloseMarginsChart(dataRef) {
           type: 'bar',
           label: 'Share of games',
           data: shares,
-          backgroundColor: '#1156d6',
-          borderRadius: 18,
+          backgroundColor: '#1b4bbd',
+          borderRadius: 0,
           maxBarThickness: 48,
         },
         {
@@ -388,7 +388,7 @@ function buildCloseMarginsChart(dataRef) {
           label: 'Average margin',
           data: margins,
           yAxisID: 'margin',
-          borderColor: '#f4b53f',
+          borderColor: '#e3a41c',
           borderWidth: 2,
           tension: 0.32,
           pointRadius: 4,
@@ -404,7 +404,7 @@ function buildCloseMarginsChart(dataRef) {
           beginAtZero: true,
           ticks: { callback: (value) => `${helpers.formatNumber(value, 0)}%` },
           title: { display: true, text: 'Share of total games' },
-          grid: { color: 'rgba(17, 86, 214, 0.12)' },
+          grid: { color: 'rgba(27, 75, 189, 0.12)' },
         },
         margin: {
           position: 'right',
@@ -412,7 +412,7 @@ function buildCloseMarginsChart(dataRef) {
           grid: { drawOnChartArea: false },
         },
         x: {
-          grid: { color: 'rgba(17, 86, 214, 0.05)' },
+          grid: { color: 'rgba(27, 75, 189, 0.05)' },
         },
       },
     },
@@ -438,8 +438,8 @@ function buildOvertimeChart(dataRef) {
           type: 'bar',
           label: 'Share of games',
           data: shares,
-          backgroundColor: '#0b2545',
-          borderRadius: 16,
+          backgroundColor: '#0f1a2e',
+          borderRadius: 0,
           maxBarThickness: 48,
         },
         {
@@ -447,7 +447,7 @@ function buildOvertimeChart(dataRef) {
           label: 'Road win %',
           data: winPct,
           yAxisID: 'win',
-          borderColor: '#ef3d5b',
+          borderColor: '#d43d24',
           borderWidth: 2,
           tension: 0.32,
           pointRadius: 4,
@@ -463,7 +463,7 @@ function buildOvertimeChart(dataRef) {
           beginAtZero: true,
           ticks: { callback: (value) => `${helpers.formatNumber(value, 0)}%` },
           title: { display: true, text: 'Share of total games' },
-          grid: { color: 'rgba(11, 37, 69, 0.12)' },
+          grid: { color: 'rgba(15, 26, 46, 0.12)' },
         },
         win: {
           position: 'right',
@@ -471,7 +471,7 @@ function buildOvertimeChart(dataRef) {
           grid: { drawOnChartArea: false },
         },
         x: {
-          grid: { color: 'rgba(11, 37, 69, 0.05)' },
+          grid: { color: 'rgba(15, 26, 46, 0.05)' },
         },
       },
     },
@@ -505,8 +505,8 @@ function buildSeasonAveragesChart(dataRef) {
         {
           label: 'All games',
           data: overall,
-          borderColor: '#1156d6',
-          backgroundColor: 'rgba(17, 86, 214, 0.18)',
+          borderColor: '#1b4bbd',
+          backgroundColor: 'rgba(27, 75, 189, 0.18)',
           borderWidth: 2,
           tension: 0.28,
           spanGaps: true,
@@ -515,8 +515,8 @@ function buildSeasonAveragesChart(dataRef) {
         {
           label: 'Regular season',
           data: regular,
-          borderColor: '#0b2545',
-          backgroundColor: 'rgba(11, 37, 69, 0.16)',
+          borderColor: '#0f1a2e',
+          backgroundColor: 'rgba(15, 26, 46, 0.16)',
           borderWidth: 1.5,
           tension: 0.28,
           spanGaps: true,
@@ -525,8 +525,8 @@ function buildSeasonAveragesChart(dataRef) {
         {
           label: 'Playoffs',
           data: playoff,
-          borderColor: '#ef3d5b',
-          backgroundColor: 'rgba(239, 61, 91, 0.16)',
+          borderColor: '#d43d24',
+          backgroundColor: 'rgba(212, 61, 36, 0.16)',
           borderWidth: 1.5,
           tension: 0.28,
           spanGaps: true,
@@ -540,11 +540,11 @@ function buildSeasonAveragesChart(dataRef) {
       scales: {
         y: {
           title: { display: true, text: 'Average combined points' },
-          grid: { color: 'rgba(17, 86, 214, 0.12)' },
+          grid: { color: 'rgba(27, 75, 189, 0.12)' },
         },
         x: {
           ticks: { maxRotation: 0, autoSkip: true, maxTicksLimit: 12 },
-          grid: { color: 'rgba(17, 86, 214, 0.05)' },
+          grid: { color: 'rgba(27, 75, 189, 0.05)' },
         },
       },
     },
@@ -570,8 +570,8 @@ function buildHomeRoadChart(dataRef) {
         {
           label: 'Home win %',
           data: homePct,
-          borderColor: '#1156d6',
-          backgroundColor: 'rgba(17, 86, 214, 0.18)',
+          borderColor: '#1b4bbd',
+          backgroundColor: 'rgba(27, 75, 189, 0.18)',
           borderWidth: 2,
           tension: 0.28,
           spanGaps: true,
@@ -580,8 +580,8 @@ function buildHomeRoadChart(dataRef) {
         {
           label: 'Road win %',
           data: roadPct,
-          borderColor: '#ef3d5b',
-          backgroundColor: 'rgba(239, 61, 91, 0.18)',
+          borderColor: '#d43d24',
+          backgroundColor: 'rgba(212, 61, 36, 0.18)',
           borderWidth: 2,
           tension: 0.28,
           spanGaps: true,
@@ -591,8 +591,8 @@ function buildHomeRoadChart(dataRef) {
           type: 'bar',
           label: 'Home edge (pp)',
           data: gap,
-          backgroundColor: 'rgba(244, 181, 63, 0.28)',
-          borderRadius: 16,
+          backgroundColor: 'rgba(227, 164, 28, 0.28)',
+          borderRadius: 0,
           yAxisID: 'gap',
           maxBarThickness: 32,
         },
@@ -607,7 +607,7 @@ function buildHomeRoadChart(dataRef) {
           suggestedMax: 80,
           title: { display: true, text: 'Win percentage' },
           ticks: { callback: (value) => `${helpers.formatNumber(value, 0)}%` },
-          grid: { color: 'rgba(17, 86, 214, 0.12)' },
+          grid: { color: 'rgba(27, 75, 189, 0.12)' },
         },
         gap: {
           position: 'right',
@@ -616,7 +616,7 @@ function buildHomeRoadChart(dataRef) {
         },
         x: {
           ticks: { maxRotation: 0, autoSkip: true, maxTicksLimit: 12 },
-          grid: { color: 'rgba(17, 86, 214, 0.05)' },
+          grid: { color: 'rgba(27, 75, 189, 0.05)' },
         },
       },
     },
@@ -643,15 +643,15 @@ function buildHomeClutchChart(dataRef) {
         {
           label: 'Home win %',
           data: homeShare,
-          backgroundColor: 'rgba(17, 86, 214, 0.85)',
-          borderRadius: 14,
+          backgroundColor: 'rgba(27, 75, 189, 0.85)',
+          borderRadius: 0,
           stack: 'venue',
         },
         {
           label: 'Road win %',
           data: roadShare,
-          backgroundColor: 'rgba(239, 61, 91, 0.78)',
-          borderRadius: 14,
+          backgroundColor: 'rgba(212, 61, 36, 0.78)',
+          borderRadius: 0,
           stack: 'venue',
         },
       ],
@@ -665,11 +665,11 @@ function buildHomeClutchChart(dataRef) {
           max: 100,
           ticks: { callback: (value) => `${helpers.formatNumber(value, 0)}%` },
           title: { display: true, text: 'Win percentage' },
-          grid: { color: 'rgba(17, 86, 214, 0.1)' },
+          grid: { color: 'rgba(27, 75, 189, 0.1)' },
           stacked: true,
         },
         x: {
-          grid: { color: 'rgba(17, 86, 214, 0.05)' },
+          grid: { color: 'rgba(27, 75, 189, 0.05)' },
           stacked: true,
         },
       },

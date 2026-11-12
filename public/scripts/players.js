@@ -2,17 +2,17 @@ import { bdl } from '../assets/js/bdl.js';
 import { registerCharts, helpers } from './hub-charts.js';
 
 const palette = {
-  royal: '#1156d6',
-  sky: '#1f7bff',
-  gold: '#f4b53f',
-  coral: '#ef3d5b',
-  teal: '#11b5c6',
-  violet: '#6c4fe0',
-  lime: '#8fd43d',
-  navy: '#0b2545',
+  royal: '#1b4bbd',
+  sky: '#1b4bbd',
+  gold: '#e3a41c',
+  coral: '#d43d24',
+  teal: '#157a86',
+  violet: '#1b4bbd',
+  lime: '#1c7748',
+  navy: '#0f1a2e',
 };
 
-const accents = [palette.royal, palette.gold, palette.coral, palette.violet, palette.teal, '#9050d8', palette.sky, '#f48fb1'];
+const accents = [palette.royal, palette.gold, palette.coral, palette.violet, palette.teal, '#6b3f8f', palette.sky, '#d43d24'];
 
 const atlasMetricBlueprint = {
   'offensive-creation': {
@@ -335,7 +335,7 @@ function createVerticalGradient(context, stops) {
     return stops?.[0] ?? palette.sky;
   }
   const gradient = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
-  const colorStops = Array.isArray(stops) && stops.length ? stops : [palette.sky, 'rgba(31, 123, 255, 0.05)'];
+  const colorStops = Array.isArray(stops) && stops.length ? stops : [palette.sky, 'rgba(27, 75, 189, 0.05)'];
   const step = 1 / Math.max(colorStops.length - 1, 1);
   colorStops.forEach((color, index) => {
     gradient.addColorStop(Math.min(index * step, 1), color);
@@ -534,7 +534,7 @@ registerCharts([
               fill: true,
               borderColor: palette.royal,
               backgroundColor: (context) =>
-                createVerticalGradient(context, ['rgba(17, 86, 214, 0.45)', 'rgba(17, 86, 214, 0.05)']),
+                createVerticalGradient(context, ['rgba(27, 75, 189, 0.45)', 'rgba(27, 75, 189, 0.05)']),
               tension: 0.32,
               pointRadius: 0,
               pointHoverRadius: 4,
@@ -561,7 +561,7 @@ registerCharts([
             },
             y: {
               beginAtZero: true,
-              grid: { color: 'rgba(11, 37, 69, 0.08)' },
+              grid: { color: 'rgba(15, 26, 46, 0.08)' },
               ticks: {
                 callback: (value) => `${helpers.formatNumber(value, 0)}`,
               },
@@ -637,7 +637,7 @@ registerCharts([
               data: points,
               parsing: false,
               backgroundColor: points.map((point) => point.backgroundColor),
-              borderColor: 'rgba(11, 37, 69, 0.2)',
+              borderColor: 'rgba(15, 26, 46, 0.2)',
               borderWidth: 1,
               hoverBorderWidth: 2,
             },
@@ -663,13 +663,13 @@ registerCharts([
           scales: {
             x: {
               title: { display: true, text: 'Height (inches)' },
-              grid: { color: 'rgba(11, 37, 69, 0.08)' },
+              grid: { color: 'rgba(15, 26, 46, 0.08)' },
               min: xMin,
               max: xMax,
             },
             y: {
               title: { display: true, text: 'Weight (pounds)' },
-              grid: { color: 'rgba(11, 37, 69, 0.08)' },
+              grid: { color: 'rgba(15, 26, 46, 0.08)' },
               suggestedMin: yMin,
               suggestedMax: yMax,
               ticks: {
@@ -768,10 +768,10 @@ registerCharts([
               label: 'Average roster height (inches)',
               data: averages,
               backgroundColor: (context) =>
-                createVerticalGradient(context, ['rgba(108, 79, 224, 0.55)', 'rgba(108, 79, 224, 0.08)']),
-              borderColor: 'rgba(108, 79, 224, 0.6)',
+                createVerticalGradient(context, ['rgba(27, 75, 189, 0.55)', 'rgba(27, 75, 189, 0.08)']),
+              borderColor: 'rgba(27, 75, 189, 0.6)',
               borderWidth: 1.5,
-              hoverBackgroundColor: 'rgba(108, 79, 224, 0.72)',
+              hoverBackgroundColor: 'rgba(27, 75, 189, 0.72)',
               maxBarThickness: 22,
             },
           ],
@@ -809,7 +809,7 @@ registerCharts([
           },
           scales: {
             x: {
-              grid: { color: 'rgba(11, 37, 69, 0.08)' },
+              grid: { color: 'rgba(15, 26, 46, 0.08)' },
               title: { display: true, text: 'Average listed height' },
               min: domainMin,
               max: domainMax,
@@ -848,7 +848,7 @@ registerCharts([
               data: countries.map((country) => country.players),
               backgroundColor: countries.map((_, index) => accents[index % accents.length]),
               borderWidth: 1,
-              borderColor: 'rgba(255, 255, 255, 0.6)',
+              borderColor: 'rgba(252, 253, 250, 0.6)',
             },
           ],
         },
@@ -856,7 +856,7 @@ registerCharts([
           scales: {
             r: {
               ticks: { display: false },
-              grid: { color: 'rgba(11, 37, 69, 0.12)' },
+              grid: { color: 'rgba(15, 26, 46, 0.12)' },
             },
           },
           plugins: {
@@ -890,10 +890,10 @@ registerCharts([
             {
               label: 'Players',
               data: totals,
-              borderRadius: 12,
+              borderRadius: 0,
               borderSkipped: false,
               backgroundColor: (context) =>
-                createVerticalGradient(context, ['rgba(244, 181, 63, 0.75)', 'rgba(239, 61, 91, 0.35)']),
+                createVerticalGradient(context, ['rgba(227, 164, 28, 0.75)', 'rgba(212, 61, 36, 0.35)']),
             },
           ],
         },
@@ -913,7 +913,7 @@ registerCharts([
           scales: {
             x: {
               beginAtZero: true,
-              grid: { color: 'rgba(11, 37, 69, 0.08)' },
+              grid: { color: 'rgba(15, 26, 46, 0.08)' },
               ticks: {
                 callback: (value) => helpers.formatNumber(value, 0),
               },
@@ -949,7 +949,7 @@ registerCharts([
               fill: true,
               borderColor: palette.teal,
               backgroundColor: (context) =>
-                createVerticalGradient(context, ['rgba(17, 181, 198, 0.45)', 'rgba(17, 181, 198, 0.05)']),
+                createVerticalGradient(context, ['rgba(21, 122, 134, 0.45)', 'rgba(21, 122, 134, 0.05)']),
               tension: 0.28,
               pointRadius: 3,
               pointHoverRadius: 6,
@@ -970,11 +970,11 @@ registerCharts([
           },
           scales: {
             x: {
-              grid: { color: 'rgba(11, 37, 69, 0.08)' },
+              grid: { color: 'rgba(15, 26, 46, 0.08)' },
             },
             y: {
               beginAtZero: true,
-              grid: { color: 'rgba(11, 37, 69, 0.1)' },
+              grid: { color: 'rgba(15, 26, 46, 0.1)' },
               ticks: {
                 callback: (value) => helpers.formatNumber(value, 0),
               },
@@ -1004,7 +1004,7 @@ registerCharts([
               label: 'Points per game',
               data: points,
               borderColor: palette.coral,
-              backgroundColor: 'rgba(239, 61, 91, 0.08)',
+              backgroundColor: 'rgba(212, 61, 36, 0.08)',
               tension: 0.3,
               borderWidth: 2,
               pointRadius: 0,
@@ -1014,7 +1014,7 @@ registerCharts([
               label: 'Assists per game',
               data: assists,
               borderColor: palette.sky,
-              backgroundColor: 'rgba(31, 123, 255, 0.08)',
+              backgroundColor: 'rgba(27, 75, 189, 0.08)',
               tension: 0.3,
               borderDash: [6, 4],
               borderWidth: 2,
@@ -1025,7 +1025,7 @@ registerCharts([
               label: 'Rebounds per game',
               data: rebounds,
               borderColor: palette.gold,
-              backgroundColor: 'rgba(244, 181, 63, 0.12)',
+              backgroundColor: 'rgba(227, 164, 28, 0.12)',
               tension: 0.3,
               borderWidth: 2,
               pointRadius: 0,
@@ -1050,7 +1050,7 @@ registerCharts([
           },
           scales: {
             x: {
-              grid: { color: 'rgba(11, 37, 69, 0.05)' },
+              grid: { color: 'rgba(15, 26, 46, 0.05)' },
               ticks: {
                 maxRotation: 0,
                 callback(value, index, values) {
@@ -1061,7 +1061,7 @@ registerCharts([
             },
             y: {
               beginAtZero: true,
-              grid: { color: 'rgba(11, 37, 69, 0.08)' },
+              grid: { color: 'rgba(15, 26, 46, 0.08)' },
             },
           },
         },
@@ -1098,7 +1098,7 @@ registerCharts([
               data: points,
               parsing: false,
               backgroundColor: points.map((point) => point.backgroundColor),
-              borderColor: 'rgba(11, 37, 69, 0.2)',
+              borderColor: 'rgba(15, 26, 46, 0.2)',
               borderWidth: 1,
             },
           ],
@@ -1124,14 +1124,14 @@ registerCharts([
             x: {
               type: 'linear',
               title: { display: true, text: 'Career span midpoint' },
-              grid: { color: 'rgba(11, 37, 69, 0.06)' },
+              grid: { color: 'rgba(15, 26, 46, 0.06)' },
               suggestedMin: 1955,
               suggestedMax: 2030,
             },
             y: {
               beginAtZero: true,
               title: { display: true, text: 'Total triple-doubles' },
-              grid: { color: 'rgba(11, 37, 69, 0.08)' },
+              grid: { color: 'rgba(15, 26, 46, 0.08)' },
               ticks: {
                 callback: (value) => helpers.formatNumber(value, 0),
               },
@@ -1161,9 +1161,9 @@ registerCharts([
         : topGames;
       const games = [...gamesSource].sort((a, b) => (b?.points ?? 0) - (a?.points ?? 0));
       if (!games.length) return null;
-      const baseColor = 'rgba(31, 123, 255, 0.32)';
-      const defaultBorder = 'rgba(11, 37, 69, 0.12)';
-      const highlightBorder = 'rgba(11, 37, 69, 0.3)';
+      const baseColor = 'rgba(27, 75, 189, 0.32)';
+      const defaultBorder = 'rgba(15, 26, 46, 0.12)';
+      const highlightBorder = 'rgba(15, 26, 46, 0.3)';
       const points = games.map((game) => {
         const rebounds = Number.isFinite(game?.rebounds) ? game.rebounds : 0;
         const assists = Number.isFinite(game?.assists) ? game.assists : 0;
@@ -1222,14 +1222,14 @@ registerCharts([
           scales: {
             x: {
               title: { display: true, text: 'Minutes played' },
-              grid: { color: 'rgba(11, 37, 69, 0.05)' },
+              grid: { color: 'rgba(15, 26, 46, 0.05)' },
             },
             y: {
               title: { display: true, text: 'Points scored' },
               beginAtZero: false,
               suggestedMin: 40,
               suggestedMax: 110,
-              grid: { color: 'rgba(11, 37, 69, 0.08)' },
+              grid: { color: 'rgba(15, 26, 46, 0.08)' },
             },
           },
         },
@@ -2130,6 +2130,9 @@ function initPlayerAtlas() {
       params.set('player_id', cacheKey);
       const payload = await bdl(`/v1/season_averages?${params.toString()}`, { cache: 'no-store' });
       const record = Array.isArray(payload?.data) ? payload.data[0] : null;
+      if (payload?.seasonLabel && statsSeasonEl) {
+        statsSeasonEl.textContent = payload.seasonLabel;
+      }
       if (!record) {
         const entry = { status: 'empty', data: null };
         seasonAveragesCache.set(cacheKey, entry);

@@ -59,12 +59,10 @@
 
 .preview-narrative {
   padding: 1.6rem 1.8rem;
-  border-radius: var(--radius-lg);
+  border-radius: var(--r);
   border: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
   background:
-    linear-gradient(145deg, rgba(15, 66, 178, 0.08), rgba(236, 242, 255, 0.9)),
-    rgba(255, 255, 255, 0.92);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    var(--paper);
 }
 
 .preview-narrative h2 {
@@ -97,12 +95,10 @@
 }
 
 .team-card {
-  border-radius: var(--radius-lg);
+  border-radius: var(--r);
   border: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
   background:
-    linear-gradient(155deg, rgba(10, 46, 118, 0.08), rgba(255, 208, 128, 0.05)),
     rgba(255, 255, 255, 0.95);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65);
   padding: 1.6rem 1.75rem 1.85rem;
   display: grid;
   gap: 1.5rem;
@@ -173,8 +169,8 @@
 
 .team-card__list li {
   padding: 0.55rem 0.65rem;
-  border-radius: var(--radius-sm);
-  background: rgba(255, 255, 255, 0.75);
+  border-radius: var(--r);
+  background: color-mix(in srgb, var(--white) 75%, transparent);
   border: 1px solid color-mix(in srgb, var(--border) 60%, transparent);
 }
 
@@ -201,9 +197,9 @@
 
 .team-card__roster-list li {
   padding: 0.45rem 0.55rem;
-  border-radius: var(--radius-sm);
+  border-radius: var(--r);
   border: 1px solid color-mix(in srgb, var(--border) 50%, transparent);
-  background: rgba(255, 255, 255, 0.65);
+  background: color-mix(in srgb, var(--white) 65%, transparent);
   display: flex;
   justify-content: space-between;
   gap: 0.5rem;
@@ -228,7 +224,7 @@
 }
 
 .preview-footnotes__status[data-tone='error'] {
-  color: rgba(239, 61, 91, 0.88);
+  color: color-mix(in srgb, var(--paint) 88%, transparent);
 }
 
 .preview-footnotes__status[data-tone='default'] {

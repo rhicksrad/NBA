@@ -3,59 +3,53 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <base href="/NBA/" />
     <title>Players | NBA Intelligence Hub</title>
     <meta name="title" content="Players | NBA Intelligence Hub" />
     <meta name="description" content="Search the full 2025-26 roster pool to surface bespoke scouting cards, GOAT Index snapshots, and percentile breakdowns." />
-    <link rel="canonical" href="https://rhicksrad.github.io/NBA/players.html" />
     <meta property="og:site_name" content="NBA Intelligence Hub" />
     <meta property="og:locale" content="en_US" />
     <meta property="og:type" content="article" />
-    <meta property="og:url" content="https://rhicksrad.github.io/NBA/players.html" />
     <meta property="og:title" content="Players | NBA Intelligence Hub" />
     <meta property="og:description" content="Search the full 2025-26 roster pool to surface bespoke scouting cards, GOAT Index snapshots, and percentile breakdowns." />
-    <meta property="og:image" content="https://rhicksrad.github.io/NBA/assets/social/nba-intelligence-hub-card.svg" />
-    <meta property="og:image:secure_url" content="https://rhicksrad.github.io/NBA/assets/social/nba-intelligence-hub-card.svg" />
-    <meta property="og:image:type" content="image/svg+xml" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="NBA Intelligence Hub share artwork with midnight gradients, glowing court map, and season intelligence headline." />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:url" content="https://rhicksrad.github.io/NBA/players.html" />
     <meta name="twitter:title" content="Players | NBA Intelligence Hub" />
     <meta name="twitter:description" content="Search the full 2025-26 roster pool to surface bespoke scouting cards, GOAT Index snapshots, and percentile breakdowns." />
-    <meta name="twitter:image" content="https://rhicksrad.github.io/NBA/assets/social/nba-intelligence-hub-card.svg" />
-    <meta name="twitter:image:alt" content="NBA Intelligence Hub share artwork with midnight gradients, glowing court map, and season intelligence headline." />
     <link rel="icon" type="image/svg+xml" href="assets/logos/nba-logoman.svg" />
+    <link rel="preload" href="assets/fonts/bigshoulders-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="assets/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="stylesheet" href="styles/hub.css" />
+    <link rel="stylesheet" href="styles/court.css" />
     <meta name="rumble-module" content="assets/js/players-rumble.4f01c6ec25e3baa5.js" />
   </head>
   <body>
+    <header class="table">
+      <div class="table__inner">
+        <a class="table__brand" href="index.html">
+          <img src="assets/logos/nba-logoman.svg" alt="" width="14" height="30" />
+          <span>Intelligence Hub</span>
+        </a>
+        <nav class="table__nav" aria-label="Sections">
+          <a href="index.html">Tonight</a>
+          <a href="games.html">Games</a>
+          <a href="players.html" aria-current="page">Players</a>
+          <a href="teams.html">Teams</a>
+          <a href="goat.html">GOAT Index</a>
+          <a href="history.html">History</a>
+          <a href="insights.html">Insights Lab</a>
+          <a href="rewind.html">Rewind</a>
+          <a href="about.html">About</a>
+        </nav>
+      </div>
+    </header>
+    <section class="baseline art-hero-key-paint">
+      <div class="baseline__inner">
+        <h1>Players</h1>
+        <p>Search any active player for a scouting card, or draft two all-time fives and let Roster Rumble play a hundred games.</p>
+      </div>
+      <img class="baseline__patch" src="assets/art/icon-jersey.webp" alt="" width="176" height="176" />
+    </section>
     <div class="site-frame">
-      <header class="site-header site-header--compact">
-        <div class="hub-nav">
-          <a class="brand" href="index.html">
-            <span class="brand__logo"><img src="assets/logos/nba-logoman.svg" alt="NBA logo" class="brand__logo-icon" /></span>
-            <span class="brand__wordmark"><span class="brand__wordmark-accent">NBA</span> Intelligence Hub</span>
-          </a>
-          <nav class="nav-links">
-            <a href="index.html">2025-2026 Season</a>
-            <a href="rewind.html">2024-2025 Season Rewind</a>
-            <a class="active" href="players.html">Players</a>
-            <a href="teams.html">Teams</a>
-            <a href="games.html">Games</a>
-            <a href="history.html">History</a>
-            <a href="insights.html">Insights Lab</a>
-            <a href="goat.html">GOAT Index</a>
-            <a href="about.html">About</a>
-          </nav>
-        </div>
-        <div class="hero hero--compact">
-          <span class="eyebrow">Player Intelligence</span>
-        </div>
-      </header>
-
-      <main id="players-app" class="players-lab">
+<main id="players-app" class="players-lab">
         <section class="players-lab__section player-atlas" data-player-profiles>
           <header class="players-lab__section-header">
             <h2>Player scouting atlas</h2>
