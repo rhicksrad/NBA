@@ -26,6 +26,9 @@ jobs:
       - uses: pnpm/action-setup@v4
         with:
           run_install: false
+          # Every web runner on a PC shares one home, so the default ~/setup-pnpm
+          # is raced by jobs from other repos. Install pnpm per job instead.
+          dest: ${{ runner.temp }}/setup-pnpm
       - uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -79,6 +82,9 @@ jobs:
       - uses: pnpm/action-setup@v4
         with:
           run_install: false
+          # Every web runner on a PC shares one home, so the default ~/setup-pnpm
+          # is raced by jobs from other repos. Install pnpm per job instead.
+          dest: ${{ runner.temp }}/setup-pnpm
       - uses: actions/setup-node@v4
         with:
           node-version: 20
