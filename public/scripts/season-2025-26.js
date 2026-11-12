@@ -3,11 +3,11 @@ import { createTeamLogo } from './team-logos.js';
 import { renderFreeAgents } from './free_agents.js';
 
 const palette = {
-  royal: '#1156d6',
-  sky: 'rgba(31, 123, 255, 0.85)',
-  gold: '#f4b53f',
-  red: '#ef3d5b',
-  navy: '#0b2545',
+  royal: '#1b4bbd',
+  sky: 'rgba(27, 75, 189, 0.85)',
+  gold: '#e3a41c',
+  red: '#d43d24',
+  navy: '#0f1a2e',
 };
 
 const preseasonPowerIndex = [
@@ -1176,11 +1176,11 @@ async function bootstrap() {
             scales: {
               x: {
                 title: { display: true, text: 'Points scored per game' },
-                grid: { color: 'rgba(11, 37, 69, 0.08)' },
+                grid: { color: 'rgba(15, 26, 46, 0.08)' },
               },
               y: {
                 title: { display: true, text: 'Points allowed per game' },
-                grid: { color: 'rgba(11, 37, 69, 0.08)' },
+                grid: { color: 'rgba(15, 26, 46, 0.08)' },
               },
             },
           },
@@ -1215,7 +1215,7 @@ async function bootstrap() {
             scales: {
               x: {
                 beginAtZero: true,
-                grid: { color: 'rgba(11, 37, 69, 0.08)' },
+                grid: { color: 'rgba(15, 26, 46, 0.08)' },
                 ticks: {
                   callback: (value) => `${helpers.formatNumber(value, 0)}`,
                 },

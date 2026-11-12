@@ -3,16 +3,16 @@ import { toNum } from '@/lib/rank';
 import { groupByTier, orderedTierNames } from '@/lib/tiers';
 
 const palette = {
-  royal: '#1156d6',
-  sky: 'rgba(31, 123, 255, 0.75)',
-  gold: '#f4b53f',
-  navy: '#0b2545',
-  coral: '#ef3d5b',
-  teal: '#12b886',
-  lilac: '#8f6efc',
+  royal: '#1b4bbd',
+  sky: 'rgba(27, 75, 189, 0.75)',
+  gold: '#e3a41c',
+  navy: '#0f1a2e',
+  coral: '#d43d24',
+  teal: '#1c7748',
+  lilac: '#6b3f8f',
 };
 
-const componentPalette = ['#1156d6', '#1f7bff', '#12b886', '#ef3d5b', '#f4b53f'];
+const componentPalette = ['#1b4bbd', '#1b4bbd', '#1c7748', '#d43d24', '#e3a41c'];
 
 const heroStats = {
   averageGoat: 0,
@@ -307,11 +307,11 @@ const gaugeLabelPlugin = {
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillStyle = opts.valueColor ?? palette.navy;
-    ctx.font = `700 ${opts.valueSize ?? 16}px "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif`;
+    ctx.font = `700 ${opts.valueSize ?? 16}px Archivo, "Helvetica Neue", Arial, sans-serif`;
     ctx.fillText(opts.valueText, x, y - 6);
     if (opts.labelText) {
-      ctx.font = `600 ${opts.labelSize ?? 11}px "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif`;
-      ctx.fillStyle = opts.labelColor ?? 'rgba(11, 37, 69, 0.68)';
+      ctx.font = `600 ${opts.labelSize ?? 11}px Archivo, "Helvetica Neue", Arial, sans-serif`;
+      ctx.fillStyle = opts.labelColor ?? 'rgba(15, 26, 46, 0.68)';
       ctx.fillText(opts.labelText, x, y + 12);
     }
     ctx.restore();
@@ -1038,7 +1038,7 @@ async function init() {
               datasets: [
                 {
                   data: [safeAverage, Math.max(0, 100 - safeAverage)],
-                  backgroundColor: [palette.royal, 'rgba(17, 86, 214, 0.12)'],
+                  backgroundColor: [palette.royal, 'rgba(27, 75, 189, 0.12)'],
                   borderWidth: 0,
                   hoverOffset: 0,
                 },
@@ -1085,7 +1085,7 @@ async function init() {
               datasets: [
                 {
                   data: [percent, Math.max(0, 100 - percent)],
-                  backgroundColor: ['rgba(18, 184, 134, 0.9)', 'rgba(18, 184, 134, 0.12)'],
+                  backgroundColor: ['rgba(28, 119, 72, 0.9)', 'rgba(28, 119, 72, 0.12)'],
                   borderWidth: 0,
                   hoverOffset: 0,
                 },
@@ -1132,7 +1132,7 @@ async function init() {
               datasets: [
                 {
                   data: [percent, Math.max(0, 100 - percent)],
-                  backgroundColor: ['rgba(239, 61, 91, 0.9)', 'rgba(239, 61, 91, 0.12)'],
+                  backgroundColor: ['rgba(212, 61, 36, 0.9)', 'rgba(212, 61, 36, 0.12)'],
                   borderWidth: 0,
                   hoverOffset: 0,
                 },
@@ -1241,7 +1241,7 @@ async function init() {
                 y: {
                   beginAtZero: true,
                   suggestedMax: 100,
-                  grid: { color: 'rgba(11, 37, 69, 0.08)' },
+                  grid: { color: 'rgba(15, 26, 46, 0.08)' },
                 },
               },
             },
@@ -1278,8 +1278,8 @@ async function init() {
                 r: {
                   suggestedMin: 0,
                   suggestedMax: 40,
-                  angleLines: { color: 'rgba(11, 37, 69, 0.08)' },
-                  grid: { color: 'rgba(11, 37, 69, 0.1)' },
+                  angleLines: { color: 'rgba(15, 26, 46, 0.08)' },
+                  grid: { color: 'rgba(15, 26, 46, 0.1)' },
                   ticks: { display: false },
                 },
               },
@@ -1309,7 +1309,7 @@ async function init() {
                 {
                   label: 'Players',
                   data: dataset,
-                  backgroundColor: 'rgba(17, 86, 214, 0.35)',
+                  backgroundColor: 'rgba(27, 75, 189, 0.35)',
                   borderColor: palette.royal,
                   borderWidth: 1,
                   pointRadius(context) {
@@ -1338,11 +1338,11 @@ async function init() {
               scales: {
                 x: {
                   title: { display: true, text: 'Prime impact' },
-                  grid: { color: 'rgba(11, 37, 69, 0.08)' },
+                  grid: { color: 'rgba(15, 26, 46, 0.08)' },
                 },
                 y: {
                   title: { display: true, text: 'Longevity credit' },
-                  grid: { color: 'rgba(11, 37, 69, 0.08)' },
+                  grid: { color: 'rgba(15, 26, 46, 0.08)' },
                 },
               },
             },
@@ -1371,7 +1371,7 @@ async function init() {
                 {
                   label: 'Stage vs versatility',
                   data: dataset,
-                  backgroundColor: 'rgba(239, 61, 91, 0.32)',
+                  backgroundColor: 'rgba(212, 61, 36, 0.32)',
                   borderColor: palette.coral,
                   borderWidth: 1,
                 },
@@ -1396,11 +1396,11 @@ async function init() {
               scales: {
                 x: {
                   title: { display: true, text: 'Stage dominance' },
-                  grid: { color: 'rgba(11, 37, 69, 0.08)' },
+                  grid: { color: 'rgba(15, 26, 46, 0.08)' },
                 },
                 y: {
                   title: { display: true, text: 'Versatility credit' },
-                  grid: { color: 'rgba(11, 37, 69, 0.08)' },
+                  grid: { color: 'rgba(15, 26, 46, 0.08)' },
                 },
               },
             },
@@ -1418,7 +1418,7 @@ async function init() {
             .slice(0, 10);
           if (!deltaSeries.length) return null;
           const colors = deltaSeries.map((player) =>
-            player.delta > 0 ? 'rgba(18, 184, 134, 0.85)' : player.delta < 0 ? 'rgba(239, 61, 91, 0.85)' : palette.gold,
+            player.delta > 0 ? 'rgba(28, 119, 72, 0.85)' : player.delta < 0 ? 'rgba(212, 61, 36, 0.85)' : palette.gold,
           );
           return {
             type: 'bar',
@@ -1446,7 +1446,7 @@ async function init() {
               },
               scales: {
                 x: {
-                  grid: { color: 'rgba(11, 37, 69, 0.08)' },
+                  grid: { color: 'rgba(15, 26, 46, 0.08)' },
                   title: { display: true, text: '12-month delta' },
                 },
                 y: {
@@ -1481,7 +1481,7 @@ async function init() {
                   data: entries.map(([, count]) => count),
                   tension: 0.35,
                   fill: 'origin',
-                  backgroundColor: 'rgba(17, 86, 214, 0.18)',
+                  backgroundColor: 'rgba(27, 75, 189, 0.18)',
                   borderColor: palette.royal,
                   pointRadius: 3,
                 },
@@ -1493,7 +1493,7 @@ async function init() {
                 x: { grid: { display: false } },
                 y: {
                   beginAtZero: true,
-                  grid: { color: 'rgba(11, 37, 69, 0.08)' },
+                  grid: { color: 'rgba(15, 26, 46, 0.08)' },
                   ticks: { precision: 0 },
                 },
               },
@@ -1567,7 +1567,7 @@ async function init() {
                   data: values,
                   fill: 'origin',
                   tension: 0.38,
-                  backgroundColor: 'rgba(143, 110, 252, 0.18)',
+                  backgroundColor: 'rgba(107, 63, 143, 0.18)',
                   borderColor: palette.lilac,
                   pointRadius: 0,
                 },
@@ -1578,7 +1578,7 @@ async function init() {
               scales: {
                 x: { display: false },
                 y: {
-                  grid: { color: 'rgba(11, 37, 69, 0.08)' },
+                  grid: { color: 'rgba(15, 26, 46, 0.08)' },
                   suggestedMin: Math.max(0, Math.min(...values) - 2),
                 },
               },
@@ -1647,7 +1647,7 @@ async function init() {
                 {
                   label: 'Era deltas',
                   data: dataset,
-                  backgroundColor: 'rgba(244, 181, 63, 0.32)',
+                  backgroundColor: 'rgba(227, 164, 28, 0.32)',
                   borderColor: palette.gold,
                   borderWidth: 1,
                   pointRadius: 5,
@@ -1671,12 +1671,12 @@ async function init() {
                 x: {
                   type: 'linear',
                   title: { display: true, text: 'Debut year' },
-                  grid: { color: 'rgba(11, 37, 69, 0.08)' },
+                  grid: { color: 'rgba(15, 26, 46, 0.08)' },
                   ticks: { stepSize: 5 },
                 },
                 y: {
                   title: { display: true, text: '12-month GOAT delta' },
-                  grid: { color: 'rgba(11, 37, 69, 0.08)' },
+                  grid: { color: 'rgba(15, 26, 46, 0.08)' },
                 },
               },
             },

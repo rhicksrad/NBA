@@ -3,654 +3,134 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <base href="/NBA/" />
-    <title>NBA Intelligence Hub — 2025-26 Season Preview Radar</title>
-    <meta name="title" content="NBA Intelligence Hub — 2025-26 Season Preview Radar" />
-    <meta name="description" content="Track preseason power tiers, training camp atlas, injury intel, and tempo analytics for the 2025-26 NBA season." />
-    <link rel="canonical" href="https://rhicksrad.github.io/NBA/index.html" />
+    <title>NBA Intelligence Hub — Tonight's scoreboard, power index and standings</title>
+    <meta name="description" content="Live NBA scoreboard, a schedule-adjusted power index, standings, league leaders and the injury wire. No paywalled feeds, no keys." />
     <meta property="og:site_name" content="NBA Intelligence Hub" />
-    <meta property="og:locale" content="en_US" />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://rhicksrad.github.io/NBA/index.html" />
-    <meta property="og:title" content="NBA Intelligence Hub — 2025-26 Season Preview Radar" />
-    <meta property="og:description" content="Track preseason power tiers, training camp atlas, injury intel, and tempo analytics for the 2025-26 NBA season." />
-    <meta property="og:image" content="https://rhicksrad.github.io/NBA/assets/social/nba-intelligence-hub-card.svg" />
-    <meta property="og:image:secure_url" content="https://rhicksrad.github.io/NBA/assets/social/nba-intelligence-hub-card.svg" />
-    <meta property="og:image:type" content="image/svg+xml" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="NBA Intelligence Hub share artwork with midnight gradients, glowing court map, and season intelligence headline." />
+    <meta property="og:title" content="NBA Intelligence Hub — Tonight" />
+    <meta property="og:description" content="Live scoreboard, power index, standings, leaders and injuries." />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:url" content="https://rhicksrad.github.io/NBA/index.html" />
-    <meta name="twitter:title" content="NBA Intelligence Hub — 2025-26 Season Preview Radar" />
-    <meta name="twitter:description" content="Track preseason power tiers, training camp atlas, injury intel, and tempo analytics for the 2025-26 NBA season." />
-    <meta name="twitter:image" content="https://rhicksrad.github.io/NBA/assets/social/nba-intelligence-hub-card.svg" />
-    <meta name="twitter:image:alt" content="NBA Intelligence Hub share artwork with midnight gradients, glowing court map, and season intelligence headline." />
     <link rel="icon" type="image/svg+xml" href="assets/logos/nba-logoman.svg" />
-    <link rel="stylesheet" href="styles/hub.css" />
+    <link rel="preload" href="assets/fonts/bigshoulders-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="assets/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="data/live/league.json" as="fetch" crossorigin />
+    <link rel="stylesheet" href="styles/court.css" />
+    <link rel="stylesheet" href="styles/tonight.css" />
   </head>
   <body>
-    <div class="site-frame">
-      <header class="site-header">
-        <div class="hub-nav">
-          <a class="brand" href="index.html">
-            <span class="brand__logo"><img src="assets/logos/nba-logoman.svg" alt="NBA logo" class="brand__logo-icon" /></span>
-            <span class="brand__wordmark"><span class="brand__wordmark-accent">NBA</span> Intelligence Hub</span>
-          </a>
-          <nav class="nav-links">
-            <a class="active" href="index.html">2025-2026 Season</a>
-            <a href="rewind.html">2024-2025 Season Rewind</a>
-            <a href="players.html">Players</a>
-            <a href="teams.html">Teams</a>
-            <a href="games.html">Games</a>
-            <a href="history.html">History</a>
-            <a href="insights.html">Insights Lab</a>
-            <a href="goat.html">GOAT Index</a>
-            <a href="about.html">About</a>
-          </nav>
+    <header class="table">
+      <div class="table__inner">
+        <a class="table__brand" href="index.html">
+          <img src="assets/logos/nba-logoman.svg" alt="" width="14" height="30" />
+          <span>Intelligence Hub</span>
+        </a>
+        <nav class="table__nav" aria-label="Sections">
+          <a href="index.html" aria-current="page">Tonight</a>
+          <a href="games.html">Games</a>
+          <a href="players.html">Players</a>
+          <a href="teams.html">Teams</a>
+          <a href="goat.html">GOAT Index</a>
+          <a href="history.html">History</a>
+          <a href="insights.html">Insights Lab</a>
+          <a href="rewind.html">Rewind</a>
+          <a href="about.html">About</a>
+        </nav>
+      </div>
+    </header>
+    <main>
+      <section class="baseline art-hero-center-court">
+        <div class="baseline__inner">
+          <h1 data-hero-title>Game night</h1>
+          <p data-hero-line>Every score as it happens, and a power index that reads nothing but the final scores.</p>
         </div>
-      </header>
+      </section>
 
-      <main class="hub-layout">
-        <section class="hub-main">
-          <section id="nba-week6-power-poll" aria-live="polite">
-            <h2>NBA Power Poll — Week 6 (through Nov 30, 2025)</h2>
-            <p class="source">Records via league standings; notable results linked per team.</p>
-            <ol class="power-poll">
-              <li class="power-poll__item">
-                <div class="power-poll__team">
-                  <img src="assets/logos/teams/oklahoma-city-thunder.svg" alt="Oklahoma City Thunder logo" class="power-poll__logo" loading="lazy" />
-                  <div class="power-poll__team-details">
-                    <strong class="power-poll__team-name">Thunder</strong>
-                    <span class="power-poll__record">(20–1)</span>
-                  </div>
-                </div>
-                <p class="power-poll__blurb">12 straight and still defending like a metronome; closed out Portland behind SGA’s 26 and Chet’s two-way floor-raising.</p>
-              </li>
-              <li class="power-poll__item">
-                <div class="power-poll__team">
-                  <img src="assets/logos/teams/denver-nuggets.svg" alt="Denver Nuggets logo" class="power-poll__logo" loading="lazy" />
-                  <div class="power-poll__team-details">
-                    <strong class="power-poll__team-name">Nuggets</strong>
-                    <span class="power-poll__record">(14–5)</span>
-                  </div>
-                </div>
-                <p class="power-poll__blurb">Jokic’s weekly form remains MVP-ladder strong; machine wins minutes even when the bench shuffles.</p>
-              </li>
-              <li class="power-poll__item">
-                <div class="power-poll__team">
-                  <img src="assets/logos/teams/los-angeles-lakers.svg" alt="Los Angeles Lakers logo" class="power-poll__logo" loading="lazy" />
-                  <div class="power-poll__team-details">
-                    <strong class="power-poll__team-name">Lakers</strong>
-                    <span class="power-poll__record">(15–4)</span>
-                  </div>
-                </div>
-                <p class="power-poll__blurb">Second in the West on record strength; high-usage Reaves game early set the tone while stars cycle health.</p>
-              </li>
-              <li class="power-poll__item">
-                <div class="power-poll__team">
-                  <img src="assets/logos/teams/houston-rockets.svg" alt="Houston Rockets logo" class="power-poll__logo" loading="lazy" />
-                  <div class="power-poll__team-details">
-                    <strong class="power-poll__team-name">Rockets</strong>
-                    <span class="power-poll__record">(13–4)</span>
-                  </div>
-                </div>
-                <p class="power-poll__blurb">Three straight capped by a 129–101 in Salt Lake; Durant and Şengün toggled lead scorer roles and the defense traveled.</p>
-              </li>
-              <li class="power-poll__item">
-                <div class="power-poll__team">
-                  <img src="assets/logos/teams/detroit-pistons.svg" alt="Detroit Pistons logo" class="power-poll__logo" loading="lazy" />
-                  <div class="power-poll__team-details">
-                    <strong class="power-poll__team-name">Pistons</strong>
-                    <span class="power-poll__record">(16–4)</span>
-                  </div>
-                </div>
-                <p class="power-poll__blurb">East leaders; tight, high-scoring win in Miami ended a mini-skid and kept the cadence.</p>
-              </li>
-              <li class="power-poll__item">
-                <div class="power-poll__team">
-                  <img src="assets/logos/teams/san-antonio-spurs.svg" alt="San Antonio Spurs logo" class="power-poll__logo" loading="lazy" />
-                  <div class="power-poll__team-details">
-                    <strong class="power-poll__team-name">Spurs</strong>
-                    <span class="power-poll__record">(13–6)</span>
-                  </div>
-                </div>
-                <p class="power-poll__blurb">Wemby gravity stabilizes lineups; profile stays top-8 with rim deterrence and cleaner late-game reps.</p>
-              </li>
-              <li class="power-poll__item">
-                <div class="power-poll__team">
-                  <img src="assets/logos/teams/minnesota-timberwolves.svg" alt="Minnesota Timberwolves logo" class="power-poll__logo" loading="lazy" />
-                  <div class="power-poll__team-details">
-                    <strong class="power-poll__team-name">Timberwolves</strong>
-                    <span class="power-poll__record">(12–8)</span>
-                  </div>
-                </div>
-                <p class="power-poll__blurb">Defense + glass back near identity; offense matchup-dependent but holding the line.</p>
-              </li>
-              <li class="power-poll__item">
-                <div class="power-poll__team">
-                  <img src="assets/logos/teams/philadelphia-76ers.svg" alt="Philadelphia 76ers logo" class="power-poll__logo" loading="lazy" />
-                  <div class="power-poll__team-details">
-                    <strong class="power-poll__team-name">76ers</strong>
-                    <span class="power-poll__record">(10–9)</span>
-                  </div>
-                </div>
-                <p class="power-poll__blurb">Maxey-led creation keeps them above water through bumps; schedule-light lift coming.</p>
-              </li>
-              <li class="power-poll__item">
-                <div class="power-poll__team">
-                  <img src="assets/logos/teams/new-york-knicks.svg" alt="New York Knicks logo" class="power-poll__logo" loading="lazy" />
-                  <div class="power-poll__team-details">
-                    <strong class="power-poll__team-name">Knicks</strong>
-                    <span class="power-poll__record">(13–6)</span>
-                  </div>
-                </div>
-                <p class="power-poll__blurb">Physicality and bench lifts push a top-3 East record; half-court structure holding.</p>
-              </li>
-              <li class="power-poll__item">
-                <div class="power-poll__team">
-                  <img src="assets/logos/teams/miami-heat.svg" alt="Miami Heat logo" class="power-poll__logo" loading="lazy" />
-                  <div class="power-poll__team-details">
-                    <strong class="power-poll__team-name">Heat</strong>
-                    <span class="power-poll__record">(13–7)</span>
-                  </div>
-                </div>
-                <p class="power-poll__blurb">Lost a shootout to DET but the two-way baseline is intact; bench scoring continues to matter.</p>
-              </li>
-              <li class="power-poll__item">
-                <div class="power-poll__team">
-                  <img src="assets/logos/teams/toronto-raptors.svg" alt="Toronto Raptors logo" class="power-poll__logo" loading="lazy" />
-                  <div class="power-poll__team-details">
-                    <strong class="power-poll__team-name">Raptors</strong>
-                    <span class="power-poll__record">(14–7)</span>
-                  </div>
-                </div>
-                <p class="power-poll__blurb">Barnes shoulder-load is working; secondary rim pressure unlock remains the swing item.</p>
-              </li>
-              <li class="power-poll__item">
-                <div class="power-poll__team">
-                  <img src="assets/logos/teams/milwaukee-bucks.svg" alt="Milwaukee Bucks logo" class="power-poll__logo" loading="lazy" />
-                  <div class="power-poll__team-details">
-                    <strong class="power-poll__team-name">Bucks</strong>
-                    <span class="power-poll__record">(9–12)</span>
-                  </div>
-                </div>
-                <p class="power-poll__blurb">Record lagging; half-court engine still projects up once rotation settles.</p>
-              </li>
-              <li class="power-poll__item">
-                <div class="power-poll__team">
-                  <img src="assets/logos/teams/cleveland-cavaliers.svg" alt="Cleveland Cavaliers logo" class="power-poll__logo" loading="lazy" />
-                  <div class="power-poll__team-details">
-                    <strong class="power-poll__team-name">Cavaliers</strong>
-                    <span class="power-poll__record">(12–9)</span>
-                  </div>
-                </div>
-                <p class="power-poll__blurb">Structure + late stops = high floor; trending toward solid Central footing.</p>
-              </li>
-              <li class="power-poll__item">
-                <div class="power-poll__team">
-                  <img src="assets/logos/teams/phoenix-suns.svg" alt="Phoenix Suns logo" class="power-poll__logo" loading="lazy" />
-                  <div class="power-poll__team-details">
-                    <strong class="power-poll__team-name">Suns</strong>
-                    <span class="power-poll__record">(12–9)</span>
-                  </div>
-                </div>
-                <p class="power-poll__blurb">Talent obvious; closing detail and health timing decide the seed line.</p>
-              </li>
-              <li class="power-poll__item">
-                <div class="power-poll__team">
-                  <img src="assets/logos/teams/golden-state-warriors.svg" alt="Golden State Warriors logo" class="power-poll__logo" loading="lazy" />
-                  <div class="power-poll__team-details">
-                    <strong class="power-poll__team-name">Warriors</strong>
-                    <span class="power-poll__record">(11–10)</span>
-                  </div>
-                </div>
-                <p class="power-poll__blurb">Shot-variance week to week yet still winning enough clutch minutes to hover above water.</p>
-              </li>
-              <li class="power-poll__item">
-                <div class="power-poll__team">
-                  <img src="assets/logos/teams/atlanta-hawks.svg" alt="Atlanta Hawks logo" class="power-poll__logo" loading="lazy" />
-                  <div class="power-poll__team-details">
-                    <strong class="power-poll__team-name">Hawks</strong>
-                    <span class="power-poll__record">(13–8)</span>
-                  </div>
-                </div>
-                <p class="power-poll__blurb">Shot quality fine; turnover profile dictates ceiling. East mid-pack with upside.</p>
-              </li>
-              <li class="power-poll__item">
-                <div class="power-poll__team">
-                  <img src="assets/logos/teams/orlando-magic.svg" alt="Orlando Magic logo" class="power-poll__logo" loading="lazy" />
-                  <div class="power-poll__team-details">
-                    <strong class="power-poll__team-name">Magic</strong>
-                    <span class="power-poll__record">(12–8)</span>
-                  </div>
-                </div>
-                <p class="power-poll__blurb">Switchable, physical, and creeping upward as half-court timing improves.</p>
-              </li>
-              <li class="power-poll__item">
-                <div class="power-poll__team">
-                  <img src="assets/logos/teams/utah-jazz.svg" alt="Utah Jazz logo" class="power-poll__logo" loading="lazy" />
-                  <div class="power-poll__team-details">
-                    <strong class="power-poll__team-name">Jazz</strong>
-                    <span class="power-poll__record">(6–13)</span>
-                  </div>
-                </div>
-                <p class="power-poll__blurb">Blown off their defensive spots by Houston; need healthier paint protection and glass.</p>
-              </li>
-              <li class="power-poll__item">
-                <div class="power-poll__team">
-                  <img src="assets/logos/teams/memphis-grizzlies.svg" alt="Memphis Grizzlies logo" class="power-poll__logo" loading="lazy" />
-                  <div class="power-poll__team-details">
-                    <strong class="power-poll__team-name">Grizzlies</strong>
-                    <span class="power-poll__record">(9–12)</span>
-                  </div>
-                </div>
-                <p class="power-poll__blurb">Tempo control appears in pockets; closing versus elite guards remains the problem.</p>
-              </li>
-              <li class="power-poll__item">
-                <div class="power-poll__team">
-                  <img src="assets/logos/teams/los-angeles-clippers.svg" alt="Los Angeles Clippers logo" class="power-poll__logo" loading="lazy" />
-                  <div class="power-poll__team-details">
-                    <strong class="power-poll__team-name">Clippers</strong>
-                    <span class="power-poll__record">(5–15)</span>
-                  </div>
-                </div>
-                <p class="power-poll__blurb">Defense shows in bursts; offense lacks consistent rim pressure. West table stakes are unforgiving.</p>
-              </li>
-              <li class="power-poll__item">
-                <div class="power-poll__team">
-                  <img src="assets/logos/teams/portland-trail-blazers.svg" alt="Portland Trail Blazers logo" class="power-poll__logo" loading="lazy" />
-                  <div class="power-poll__team-details">
-                    <strong class="power-poll__team-name">Trail Blazers</strong>
-                    <span class="power-poll__record">(8–12)</span>
-                  </div>
-                </div>
-                <p class="power-poll__blurb">Competed with OKC before late separation; structure is visible even while shorthanded inside.</p>
-              </li>
-              <li class="power-poll__item">
-                <div class="power-poll__team">
-                  <img src="assets/logos/teams/dallas-mavericks.svg" alt="Dallas Mavericks logo" class="power-poll__logo" loading="lazy" />
-                  <div class="power-poll__team-details">
-                    <strong class="power-poll__team-name">Mavericks</strong>
-                    <span class="power-poll__record">(6–15)</span>
-                  </div>
-                </div>
-                <p class="power-poll__blurb">Rookie flashes aside, interior defense and defensive rebounding cap runs.</p>
-              </li>
-              <li class="power-poll__item">
-                <div class="power-poll__team">
-                  <img src="assets/logos/teams/sacramento-kings.svg" alt="Sacramento Kings logo" class="power-poll__logo" loading="lazy" />
-                  <div class="power-poll__team-details">
-                    <strong class="power-poll__team-name">Kings</strong>
-                    <span class="power-poll__record">(5–16)</span>
-                  </div>
-                </div>
-                <p class="power-poll__blurb">Offense fine; point-of-attack defense bleeding value late. Needs a stopper and a whistle win.</p>
-              </li>
-              <li class="power-poll__item">
-                <div class="power-poll__team">
-                  <img src="assets/logos/teams/new-orleans-pelicans.svg" alt="New Orleans Pelicans logo" class="power-poll__logo" loading="lazy" />
-                  <div class="power-poll__team-details">
-                    <strong class="power-poll__team-name">Pelicans</strong>
-                    <span class="power-poll__record">(3–18)</span>
-                  </div>
-                </div>
-                <p class="power-poll__blurb">Efficiency holes + schedule teeth; must lift rim deterrence to stop the slide.</p>
-              </li>
-              <li class="power-poll__item">
-                <div class="power-poll__team">
-                  <img src="assets/logos/teams/chicago-bulls.svg" alt="Chicago Bulls logo" class="power-poll__logo" loading="lazy" />
-                  <div class="power-poll__team-details">
-                    <strong class="power-poll__team-name">Bulls</strong>
-                    <span class="power-poll__record">(9–10)</span>
-                  </div>
-                </div>
-                <p class="power-poll__blurb">Bench minutes keep them competitive; shot diet consistency is the lever.</p>
-              </li>
-              <li class="power-poll__item">
-                <div class="power-poll__team">
-                  <img src="assets/logos/teams/boston-celtics.svg" alt="Boston Celtics logo" class="power-poll__logo" loading="lazy" />
-                  <div class="power-poll__team-details">
-                    <strong class="power-poll__team-name">Celtics</strong>
-                    <span class="power-poll__record">(11–9)</span>
-                  </div>
-                </div>
-                <p class="power-poll__blurb">Talent base says patience; glass and crunch-time organization decide trajectory.</p>
-              </li>
-              <li class="power-poll__item">
-                <div class="power-poll__team">
-                  <img src="assets/logos/teams/charlotte-hornets.svg" alt="Charlotte Hornets logo" class="power-poll__logo" loading="lazy" />
-                  <div class="power-poll__team-details">
-                    <strong class="power-poll__team-name">Hornets</strong>
-                    <span class="power-poll__record">(6–14)</span>
-                  </div>
-                </div>
-                <p class="power-poll__blurb">When LaMelo runs, they score; defensive floor still searching.</p>
-              </li>
-              <li class="power-poll__item">
-                <div class="power-poll__team">
-                  <img src="assets/logos/teams/indiana-pacers.svg" alt="Indiana Pacers logo" class="power-poll__logo" loading="lazy" />
-                  <div class="power-poll__team-details">
-                    <strong class="power-poll__team-name">Pacers</strong>
-                    <span class="power-poll__record">(4–16)</span>
-                  </div>
-                </div>
-                <p class="power-poll__blurb">Pace without stops is empty calories; retool the shell, then run.</p>
-              </li>
-              <li class="power-poll__item">
-                <div class="power-poll__team">
-                  <img src="assets/logos/teams/brooklyn-nets.svg" alt="Brooklyn Nets logo" class="power-poll__logo" loading="lazy" />
-                  <div class="power-poll__team-details">
-                    <strong class="power-poll__team-name">Nets</strong>
-                    <span class="power-poll__record">(3–16)</span>
-                  </div>
-                </div>
-                <p class="power-poll__blurb">Creating shots isn’t the problem; preventing them is. Bottom-tier defensive metrics to date.</p>
-              </li>
-              <li class="power-poll__item">
-                <div class="power-poll__team">
-                  <img src="assets/logos/teams/washington-wizards.svg" alt="Washington Wizards logo" class="power-poll__logo" loading="lazy" />
-                  <div class="power-poll__team-details">
-                    <strong class="power-poll__team-name">Wizards</strong>
-                    <span class="power-poll__record">(2–16)</span>
-                  </div>
-                </div>
-                <p class="power-poll__blurb">Need a defensive baseline first; everything else flows from that.</p>
-              </li>
-            </ol>
-          </section>
-
-          <section class="free-agent-radar" aria-live="polite" data-free-agent-board>
-            <header class="free-agent-radar__header">
-              <span class="chip chip--accent">Free agent market</span>
-              <h2>Top available free agents</h2>
-              <p data-free-agent-subtitle>
-                Tracking the open market board straight from Ball Don&apos;t Lie. Rankings refresh with the latest totals.
-              </p>
-            </header>
-            <ol class="free-agent-radar__list" data-free-agent-list>
-              <li class="free-agent-radar__placeholder">Free agent intelligence syncing…</li>
-            </ol>
-            <footer class="free-agent-radar__footer">
-              <p data-free-agent-footnote></p>
-            </footer>
-          </section>
-
-          <section class="awards-preview" id="awards-preview">
-            <div class="awards-preview__lead">
-              <span class="chip chip--accent">Way-too-early awards</span>
-              <h2>Way-too-early awards preview</h2>
-              <p class="lead">Opening week snapshots of who is setting the pace for every major trophy.</p>
+      <section class="board" aria-labelledby="board-title">
+        <div class="board__inner">
+          <header class="board__head">
+            <h2 id="board-title" data-board-title>Scoreboard</h2>
+            <div class="board__days" role="group" aria-label="Choose a day">
+              <button type="button" data-day="-1">Yesterday</button>
+              <button type="button" data-day="0" aria-pressed="true">Today</button>
+              <button type="button" data-day="1">Tomorrow</button>
             </div>
-            <div class="awards-preview__grid" aria-live="polite">
-              <article class="awards-preview__category" aria-labelledby="awards-mvp">
-                <h3 id="awards-mvp">Most Valuable Player</h3>
-                <ul class="awards-preview__list">
-                  <li>
-                    <div class="awards-preview__candidate">
-                      <span class="awards-preview__name">Shai Gilgeous-Alexander</span>
-                      <span class="awards-preview__team">Thunder</span>
-                    </div>
-                    <p>35 on Opening Night with the game-winning FTs, then a 55-point career high in a 2OT Finals-rematch win. OKC opened 3-0.</p>
-                  </li>
-                  <li>
-                    <div class="awards-preview__candidate">
-                      <span class="awards-preview__name">Victor Wembanyama</span>
-                      <span class="awards-preview__team">Spurs</span>
-                    </div>
-                    <p>3-0 start anchored by 40 in the opener and 31-14-6 vs BKN. Western Player of the Week.</p>
-                  </li>
-                  <li>
-                    <div class="awards-preview__candidate">
-                      <span class="awards-preview__name">Giannis Antetokounmpo</span>
-                      <span class="awards-preview__team">Bucks</span>
-                    </div>
-                    <p>36-16-7 week on average per league’s weekly honor, plus a 40-14-9 in CLE.</p>
-                  </li>
-                </ul>
-              </article>
-              <article class="awards-preview__category" aria-labelledby="awards-dpoy">
-                <h3 id="awards-dpoy">Defensive Player of the Year</h3>
-                <ul class="awards-preview__list">
-                  <li>
-                    <div class="awards-preview__candidate">
-                      <span class="awards-preview__name">Victor Wembanyama</span>
-                      <span class="awards-preview__team">Spurs</span>
-                    </div>
-                    <p>6.0 blocks per, high-leverage rim deterrence in wins over DAL, NOP, BKN.</p>
-                  </li>
-                  <li>
-                    <div class="awards-preview__candidate">
-                      <span class="awards-preview__name">Evan Mobley</span>
-                      <span class="awards-preview__team">Cavaliers</span>
-                    </div>
-                    <p>Closed MIL with 12-for-12 at the line and anchored late stops.</p>
-                  </li>
-                  <li>
-                    <div class="awards-preview__candidate">
-                      <span class="awards-preview__name">Chet Holmgren</span>
-                      <span class="awards-preview__team">Thunder</span>
-                    </div>
-                    <p>Stretch-five spacing on one end, contests and glass on the other in OKC’s 3-0.</p>
-                  </li>
-                </ul>
-              </article>
-              <article class="awards-preview__category" aria-labelledby="awards-roy">
-                <h3 id="awards-roy">Rookie of the Year</h3>
-                <ul class="awards-preview__list">
-                  <li>
-                    <div class="awards-preview__candidate">
-                      <span class="awards-preview__name">VJ Edgecombe</span>
-                      <span class="awards-preview__team">76ers</span>
-                    </div>
-                    <p>Historic 34 in his debut, third-most ever in an NBA debut, in a 117-116 win at BOS.</p>
-                  </li>
-                  <li>
-                    <div class="awards-preview__candidate">
-                      <span class="awards-preview__name">Cooper Flagg</span>
-                      <span class="awards-preview__team">Mavericks</span>
-                    </div>
-                    <p>22 with a momentum-swing dunk in DAL’s first win.</p>
-                  </li>
-                  <li>
-                    <div class="awards-preview__candidate">
-                      <span class="awards-preview__name">Dylan Harper</span>
-                      <span class="awards-preview__team">Spurs</span>
-                    </div>
-                    <p>20-8 off the bench to steady SA’s fourth-quarter response vs BKN.</p>
-                  </li>
-                </ul>
-              </article>
-              <article class="awards-preview__category" aria-labelledby="awards-sixth">
-                <h3 id="awards-sixth">Sixth Man of the Year</h3>
-                <ul class="awards-preview__list">
-                  <li>
-                    <div class="awards-preview__candidate">
-                      <span class="awards-preview__name">Ajay Mitchell</span>
-                      <span class="awards-preview__team">Thunder</span>
-                    </div>
-                    <p>26 off the bench in the 2OT win at IND, plus 14 vs ATL. Role impact is immediate.</p>
-                  </li>
-                  <li>
-                    <div class="awards-preview__candidate">
-                      <span class="awards-preview__name">Jaime Jaquez Jr.</span>
-                      <span class="awards-preview__team">Heat</span>
-                    </div>
-                    <p>17 off the bench and a +18 swing in the Heat’s home-opener win.</p>
-                  </li>
-                  <li>
-                    <div class="awards-preview__candidate">
-                      <span class="awards-preview__name">Sam Merrill</span>
-                      <span class="awards-preview__team">Cavaliers</span>
-                    </div>
-                    <p>17 timely points in the win over MIL.</p>
-                  </li>
-                </ul>
-              </article>
-              <article class="awards-preview__category" aria-labelledby="awards-mip">
-                <h3 id="awards-mip">Most Improved Player</h3>
-                <ul class="awards-preview__list">
-                  <li>
-                    <div class="awards-preview__candidate">
-                      <span class="awards-preview__name">Ausar Thompson</span>
-                      <span class="awards-preview__team">Pistons</span>
-                    </div>
-                    <p>21-12 board-crushing line in comeback over BOS, flashing a two-way leap.</p>
-                  </li>
-                  <li>
-                    <div class="awards-preview__candidate">
-                      <span class="awards-preview__name">Evan Mobley</span>
-                      <span class="awards-preview__team">Cavaliers</span>
-                    </div>
-                    <p>Expanded late-game usage and playmaking touches alongside the defense.</p>
-                  </li>
-                  <li>
-                    <div class="awards-preview__candidate">
-                      <span class="awards-preview__name">Cam Thomas</span>
-                      <span class="awards-preview__team">Nets</span>
-                    </div>
-                    <p>Volume still real, 40 at SA; efficiency and creation balance are the watch items.</p>
-                  </li>
-                </ul>
-              </article>
-              <article class="awards-preview__category" aria-labelledby="awards-clutch">
-                <h3 id="awards-clutch">Clutch Player of the Year</h3>
-                <ul class="awards-preview__list">
-                  <li>
-                    <div class="awards-preview__candidate">
-                      <span class="awards-preview__name">Shai Gilgeous-Alexander</span>
-                      <span class="awards-preview__team">Thunder</span>
-                    </div>
-                    <p>Game-deciding FTs vs HOU and a torrent of late points across two 2OT wins.</p>
-                  </li>
-                  <li>
-                    <div class="awards-preview__candidate">
-                      <span class="awards-preview__name">Tyrese Maxey</span>
-                      <span class="awards-preview__team">76ers</span>
-                    </div>
-                    <p>40 in the one-point win at BOS, closing like a vet.</p>
-                  </li>
-                  <li>
-                    <div class="awards-preview__candidate">
-                      <span class="awards-preview__name">LaMelo Ball</span>
-                      <span class="awards-preview__team">Hornets</span>
-                    </div>
-                    <p>38-13-13 triple-double with a takeover second half.</p>
-                  </li>
-                </ul>
-              </article>
-              <article class="awards-preview__category" aria-labelledby="awards-coach">
-                <h3 id="awards-coach">Coach of the Year</h3>
-                <ul class="awards-preview__list">
-                  <li>
-                    <div class="awards-preview__candidate">
-                      <span class="awards-preview__name">Mitch Johnson</span>
-                      <span class="awards-preview__team">Spurs</span>
-                    </div>
-                    <p>3-0 start, clear defensive identity, and a calibrated rookie integration.</p>
-                  </li>
-                  <li>
-                    <div class="awards-preview__candidate">
-                      <span class="awards-preview__name">Mark Daigneault</span>
-                      <span class="awards-preview__team">Thunder</span>
-                    </div>
-                    <p>Navigated two chaotic 2OT wins then a comfortable third game.</p>
-                  </li>
-                  <li>
-                    <div class="awards-preview__candidate">
-                      <span class="awards-preview__name">J.B. Bickerstaff</span>
-                      <span class="awards-preview__team">Pistons</span>
-                    </div>
-                    <p>Early identity win over BOS built on size and glass.</p>
-                  </li>
-                </ul>
-              </article>
-              <article class="awards-preview__category" aria-labelledby="awards-executive">
-                <h3 id="awards-executive">Executive of the Year</h3>
-                <ul class="awards-preview__list">
-                  <li>
-                    <div class="awards-preview__candidate">
-                      <span class="awards-preview__name">Sam Presti</span>
-                      <span class="awards-preview__team">Thunder</span>
-                    </div>
-                    <p>Rotation depth already paying off with Ajay Mitchell’s bench pop and Isaiah Hartenstein’s minutes.</p>
-                  </li>
-                  <li>
-                    <div class="awards-preview__candidate">
-                      <span class="awards-preview__name">San Antonio front office</span>
-                      <span class="awards-preview__team">Spurs</span>
-                    </div>
-                    <p>Wemby’s support system plus rookie guard production fueling wins.</p>
-                  </li>
-                  <li>
-                    <div class="awards-preview__candidate">
-                      <span class="awards-preview__name">Detroit front office</span>
-                      <span class="awards-preview__team">Pistons</span>
-                    </div>
-                    <p>The size and glass emphasis around Cade was the difference vs BOS.</p>
-                  </li>
-                </ul>
-              </article>
-            </div>
-          </section>
+            <p class="board__sync" data-board-sync aria-live="polite"></p>
+          </header>
+          <ol class="board__games" data-board-games>
+            <li class="board__empty">Loading the slate…</li>
+          </ol>
+        </div>
+      </section>
+
+      <div class="site-frame tonight">
+        <section class="power" aria-labelledby="power-title">
+          <header class="sheet-head">
+            <h2 id="power-title">Power index</h2>
+            <p data-power-note>Points better than an average team on a neutral floor, adjusted for schedule and weighted toward recent games.</p>
+          </header>
+          <div class="sheet-scroll">
+            <table class="sheet power__table">
+              <thead>
+                <tr>
+                  <th scope="col" class="num">#</th>
+                  <th scope="col"><span class="visually-hidden">Change</span></th>
+                  <th scope="col">Team</th>
+                  <th scope="col" class="num">W–L</th>
+                  <th scope="col" class="num" title="Schedule-adjusted points vs an average team">Rating</th>
+                  <th scope="col" class="num hide-s" title="Average scoring margin">Net</th>
+                  <th scope="col" class="num hide-s" title="Average opponent rating">Sched</th>
+                  <th scope="col">Last 10</th>
+                </tr>
+              </thead>
+              <tbody data-power-body>
+                <tr><td colspan="8" class="sheet__empty">Loading ratings…</td></tr>
+              </tbody>
+            </table>
+          </div>
         </section>
 
-        <aside class="hub-sidebar" aria-labelledby="sidebar-updates">
-          <h2 id="sidebar-updates" class="visually-hidden">Season watchlist</h2>
-
-          <section class="sidebar-card sidebar-card--injury">
-            <header class="sidebar-card__header">
-              <span class="chip chip--accent">Health monitor</span>
-              <h3>Injury availability pulse</h3>
-              <p>Tracking readiness scores for stars rehabbing into opening night.</p>
+        <aside class="wire">
+          <section aria-labelledby="leaders-title">
+            <header class="sheet-head">
+              <h2 id="leaders-title">Leaders</h2>
+              <p data-leaders-note>Per game, this season.</p>
             </header>
-            <div class="injury-grid" data-injury-report>
-              <p class="injury-grid__placeholder">Injury intelligence syncing…</p>
-            </div>
-            <p class="injury-grid__footnote" data-injury-footnote></p>
+            <div class="leaders" data-leaders></div>
           </section>
 
-          <section class="sidebar-card sidebar-card--tempo">
-            <header class="sidebar-card__header">
-              <span class="chip chip--accent">Tempo tracker</span>
-              <h3>Pace pressure gauge</h3>
-              <p>Projecting which teams weaponize tempo via travel, possessions, and spacing tweaks.</p>
+          <section aria-labelledby="injury-title">
+            <header class="sheet-head">
+              <h2 id="injury-title">Injury wire</h2>
             </header>
-            <ol class="tempo-gauge" data-pace-radar>
-              <li class="tempo-gauge__placeholder">Tempo telemetry syncing…</li>
-            </ol>
-            <p class="tempo-gauge__footnote" data-pace-footnote></p>
-          </section>
-
-          <section class="sidebar-card sidebar-card--rest">
-            <header class="sidebar-card__header">
-              <span class="chip chip--accent">Travel analytics</span>
-              <h3>Rest management radar</h3>
-              <p>Who shoulders the toughest travel math before All-Star weekend.</p>
-            </header>
-            <ul class="rest-list" data-back-to-back-list>
-              <li class="rest-list__placeholder">Back-to-back intensity table incoming…</li>
+            <ul class="injuries" data-injuries>
+              <li class="sheet__empty">Loading reports…</li>
             </ul>
-            <p class="rest-list__footer">
-              League average rest: <span data-rest-average>3.0 days</span> across
-              <span data-rest-intervals>2,779</span> tracked windows.
-            </p>
-          </section>
-
-          <section class="sidebar-card sidebar-card--milestones">
-            <header class="sidebar-card__header">
-              <span class="chip chip--accent">Chase file</span>
-              <h3>Milestones on deck</h3>
-              <p>Keep these thresholds on your radar—the chase frames weekly coverage and fuels the season-long narrative.</p>
-            </header>
-            <div class="milestone-chase__grid milestone-chase__grid--stacked" data-milestone-chase>
-              <p class="milestone-chase__placeholder">Milestone tracking is syncing with the latest BallDontLie data…</p>
-            </div>
           </section>
         </aside>
-      </main>
-    </div>
-    <script src="vendor/chart.umd.js" defer></script>
-    <script type="module" src="scripts/index.js"></script>
+
+        <section class="standings" aria-labelledby="standings-title">
+          <header class="sheet-head">
+            <h2 id="standings-title">Standings</h2>
+            <p>Top six are in. Seven through ten play in.</p>
+          </header>
+          <div class="standings__grid" data-standings></div>
+        </section>
+
+        <nav class="wings" aria-label="More of the hub">
+          <a href="goat.html"><img src="assets/art/icon-goat.webp" alt="" width="96" height="96" loading="lazy" /><strong>GOAT Index</strong><span>6,500 careers, one number each.</span></a>
+          <a href="players.html"><img src="assets/art/icon-jersey.webp" alt="" width="96" height="96" loading="lazy" /><strong>Players</strong><span>Every roster, with Roster Rumble 5v5.</span></a>
+          <a href="teams.html"><img src="assets/art/icon-pennant.webp" alt="" width="96" height="96" loading="lazy" /><strong>Teams</strong><span>The franchise map, 1946 to now.</span></a>
+          <a href="history.html"><img src="assets/art/icon-trophy.webp" alt="" width="96" height="96" loading="lazy" /><strong>History</strong><span>Best player born in every state.</span></a>
+          <a href="insights.html"><img src="assets/art/icon-clipboard.webp" alt="" width="96" height="96" loading="lazy" /><strong>Insights Lab</strong><span>Rest, travel, clutch and home court.</span></a>
+          <a href="rewind.html"><img src="assets/art/icon-rewind.webp" alt="" width="96" height="96" loading="lazy" /><strong>Rewind</strong><span>The 2024-25 season, replayed.</span></a>
+        </nav>
+
+        <footer class="site-footer">
+          <span data-footer-stamp>Scores, standings and injuries from ESPN's public feeds.</span>
+          <span>Not affiliated with the NBA. <a href="about.html">How this works</a></span>
+        </footer>
+      </div>
+    </main>
+    <script type="module" src="scripts/tonight.js"></script>
   </body>
 </html>

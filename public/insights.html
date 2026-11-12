@@ -3,57 +3,55 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <base href="/NBA/" />
     <title>Insights Lab | NBA Intelligence Hub</title>
     <meta name="title" content="Insights Lab | NBA Intelligence Hub" />
     <meta name="description" content="Prototype new NBA data stories with experimental visuals, pace studies, and rest analytics inside the Insights Lab." />
-    <link rel="canonical" href="https://rhicksrad.github.io/NBA/insights.html" />
     <meta property="og:site_name" content="NBA Intelligence Hub" />
     <meta property="og:locale" content="en_US" />
     <meta property="og:type" content="article" />
-    <meta property="og:url" content="https://rhicksrad.github.io/NBA/insights.html" />
     <meta property="og:title" content="Insights Lab | NBA Intelligence Hub" />
     <meta property="og:description" content="Prototype new NBA data stories with experimental visuals, pace studies, and rest analytics inside the Insights Lab." />
-    <meta property="og:image" content="https://rhicksrad.github.io/NBA/assets/social/nba-intelligence-hub-card.svg" />
-    <meta property="og:image:secure_url" content="https://rhicksrad.github.io/NBA/assets/social/nba-intelligence-hub-card.svg" />
-    <meta property="og:image:type" content="image/svg+xml" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="NBA Intelligence Hub share artwork with midnight gradients, glowing court map, and season intelligence headline." />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:url" content="https://rhicksrad.github.io/NBA/insights.html" />
     <meta name="twitter:title" content="Insights Lab | NBA Intelligence Hub" />
     <meta name="twitter:description" content="Prototype new NBA data stories with experimental visuals, pace studies, and rest analytics inside the Insights Lab." />
-    <meta name="twitter:image" content="https://rhicksrad.github.io/NBA/assets/social/nba-intelligence-hub-card.svg" />
-    <meta name="twitter:image:alt" content="NBA Intelligence Hub share artwork with midnight gradients, glowing court map, and season intelligence headline." />
     <link rel="icon" type="image/svg+xml" href="assets/logos/nba-logoman.svg" />
+    <link rel="preload" href="assets/fonts/bigshoulders-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="assets/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="stylesheet" href="styles/hub.css" />
+    <link rel="stylesheet" href="styles/court.css" />
   </head>
   <body>
+    <header class="table">
+      <div class="table__inner">
+        <a class="table__brand" href="index.html">
+          <img src="assets/logos/nba-logoman.svg" alt="" width="14" height="30" />
+          <span>Intelligence Hub</span>
+        </a>
+        <nav class="table__nav" aria-label="Sections">
+          <a href="index.html">Tonight</a>
+          <a href="games.html">Games</a>
+          <a href="players.html">Players</a>
+          <a href="teams.html">Teams</a>
+          <a href="goat.html">GOAT Index</a>
+          <a href="history.html">History</a>
+          <a href="insights.html" aria-current="page">Insights Lab</a>
+          <a href="rewind.html">Rewind</a>
+          <a href="about.html">About</a>
+        </nav>
+      </div>
+    </header>
+    <section class="baseline art-chalkboard-clipboard">
+      <div class="baseline__inner">
+        <h1>Insights Lab</h1>
+        <p>Rest, travel, overtime and home court, tested against 19,000 games since 2010.</p>
+      </div>
+      <img class="baseline__patch" src="assets/art/icon-clipboard.webp" alt="" width="176" height="176" />
+    </section>
     <div class="site-frame">
-      <header class="site-header">
-        <div class="hub-nav">
-          <a class="brand" href="index.html">
-            <span class="brand__logo"><img src="assets/logos/nba-logoman.svg" alt="NBA logo" class="brand__logo-icon" /></span>
-            <span class="brand__wordmark"><span class="brand__wordmark-accent">NBA</span> Intelligence Hub</span>
-          </a>
-          <nav class="nav-links">
-            <a href="index.html">2025-2026 Season</a>
-            <a href="rewind.html">2024-2025 Season Rewind</a>
-            <a href="players.html">Players</a>
-            <a href="teams.html">Teams</a>
-            <a href="games.html">Games</a>
-            <a href="history.html">History</a>
-            <a class="active" href="insights.html">Insights Lab</a>
-            <a href="goat.html">GOAT Index</a>
-            <a href="about.html">About</a>
-          </nav>
-        </div>
+<main class="lab-content">
+
         <div class="hero hero--lab">
           <div class="hero__intro">
-            <span class="eyebrow">Insights Lab Reset</span>
-            <h1>The place where we test data insights</h1>
-            <p class="hero__lead" aria-hidden="true">&nbsp;</p>
           </div>
           <dl class="hero-metrics hero-metrics--lab">
             <div class="hero-metrics__item">
@@ -74,9 +72,7 @@
             </div>
           </dl>
         </div>
-      </header>
 
-      <main class="lab-content">
         <section class="lab-grid">
           <article class="lab-module lab-module--wide" data-chart-wrapper>
             <header class="lab-module__header">
@@ -90,7 +86,7 @@
             <div class="viz-canvas">
               <canvas id="seasonal-scoring" data-chart-ratio="0.55"></canvas>
             </div>
-            <p class="lab-module__source" data-source-stamp="seasonal-scoring">Source: Ball Don't Lie API</p>
+            <p class="lab-module__source" data-source-stamp="seasonal-scoring">Source: archived game logs</p>
           </article>
 
           <article class="lab-module lab-module--tall" data-chart-wrapper>
@@ -110,7 +106,7 @@
                 <canvas id="rest-travel" data-chart-ratio="0.9"></canvas>
               </div>
             </div>
-            <p class="lab-module__source" data-source-stamp="rest-impact">Source: Ball Don't Lie API</p>
+            <p class="lab-module__source" data-source-stamp="rest-impact">Source: archived game logs</p>
           </article>
 
           <article class="lab-module" data-chart-wrapper>
@@ -124,7 +120,7 @@
             <div class="viz-canvas">
               <canvas id="close-margins" data-chart-ratio="0.7"></canvas>
             </div>
-            <p class="lab-module__source" data-source-stamp="close-margins">Source: Ball Don't Lie API</p>
+            <p class="lab-module__source" data-source-stamp="close-margins">Source: archived game logs</p>
           </article>
 
           <article class="lab-module" data-chart-wrapper>
@@ -138,7 +134,7 @@
             <div class="viz-canvas">
               <canvas id="overtime-breakdown" data-chart-ratio="0.68"></canvas>
             </div>
-            <p class="lab-module__source" data-source-stamp="overtime-breakdown">Source: Ball Don't Lie API</p>
+            <p class="lab-module__source" data-source-stamp="overtime-breakdown">Source: archived game logs</p>
           </article>
 
           <article class="lab-module" data-chart-wrapper>
@@ -159,7 +155,7 @@
                 <canvas id="home-clutch" data-chart-ratio="0.82"></canvas>
               </div>
             </div>
-            <p class="lab-module__source" data-source-stamp="home-road-splits">Source: Ball Don't Lie API</p>
+            <p class="lab-module__source" data-source-stamp="home-road-splits">Source: archived game logs</p>
           </article>
 
           <article class="lab-module lab-module--wide" data-chart-wrapper>
@@ -174,7 +170,7 @@
             <div class="viz-canvas">
               <canvas id="season-averages" data-chart-ratio="0.6"></canvas>
             </div>
-            <p class="lab-module__source" data-source-stamp="season-averages">Source: Ball Don't Lie API</p>
+            <p class="lab-module__source" data-source-stamp="season-averages">Source: archived game logs</p>
           </article>
         </section>
       </main>

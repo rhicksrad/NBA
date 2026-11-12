@@ -1,9 +1,10 @@
 import { createServer } from 'node:http';
 import { readFile, stat } from 'node:fs/promises';
 import { extname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const DEFAULT_PORT = 4173;
-const PUBLIC_ROOT = resolve(new URL('../../public', import.meta.url).pathname);
+const PUBLIC_ROOT = fileURLToPath(new URL('../../public', import.meta.url));
 
 const MIME_TYPES = new Map([
   ['.html', 'text/html; charset=utf-8'],

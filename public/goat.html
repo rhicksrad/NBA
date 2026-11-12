@@ -3,61 +3,52 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <base href="/NBA/" />
     <title>GOAT Index | NBA Intelligence Hub</title>
     <meta name="title" content="GOAT Index | NBA Intelligence Hub" />
     <meta name="description" content="Examine the GOAT Index leaderboard, methodology, and player tiers powering the NBA Intelligence Hub&#x27;s all-era rankings." />
-    <link rel="canonical" href="https://rhicksrad.github.io/NBA/goat.html" />
     <meta property="og:site_name" content="NBA Intelligence Hub" />
     <meta property="og:locale" content="en_US" />
     <meta property="og:type" content="article" />
-    <meta property="og:url" content="https://rhicksrad.github.io/NBA/goat.html" />
     <meta property="og:title" content="GOAT Index | NBA Intelligence Hub" />
     <meta property="og:description" content="Examine the GOAT Index leaderboard, methodology, and player tiers powering the NBA Intelligence Hub&#x27;s all-era rankings." />
-    <meta property="og:image" content="https://rhicksrad.github.io/NBA/assets/social/nba-intelligence-hub-card.svg" />
-    <meta property="og:image:secure_url" content="https://rhicksrad.github.io/NBA/assets/social/nba-intelligence-hub-card.svg" />
-    <meta property="og:image:type" content="image/svg+xml" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="NBA Intelligence Hub share artwork with midnight gradients, glowing court map, and season intelligence headline." />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:url" content="https://rhicksrad.github.io/NBA/goat.html" />
     <meta name="twitter:title" content="GOAT Index | NBA Intelligence Hub" />
     <meta name="twitter:description" content="Examine the GOAT Index leaderboard, methodology, and player tiers powering the NBA Intelligence Hub&#x27;s all-era rankings." />
-    <meta name="twitter:image" content="https://rhicksrad.github.io/NBA/assets/social/nba-intelligence-hub-card.svg" />
-    <meta name="twitter:image:alt" content="NBA Intelligence Hub share artwork with midnight gradients, glowing court map, and season intelligence headline." />
     <link rel="icon" type="image/svg+xml" href="assets/logos/nba-logoman.svg" />
+    <link rel="preload" href="assets/fonts/bigshoulders-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="assets/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="stylesheet" href="styles/hub.css" />
+    <link rel="stylesheet" href="styles/court.css" />
   </head>
   <body>
+    <header class="table">
+      <div class="table__inner">
+        <a class="table__brand" href="index.html">
+          <img src="assets/logos/nba-logoman.svg" alt="" width="14" height="30" />
+          <span>Intelligence Hub</span>
+        </a>
+        <nav class="table__nav" aria-label="Sections">
+          <a href="index.html">Tonight</a>
+          <a href="games.html">Games</a>
+          <a href="players.html">Players</a>
+          <a href="teams.html">Teams</a>
+          <a href="goat.html" aria-current="page">GOAT Index</a>
+          <a href="history.html">History</a>
+          <a href="insights.html">Insights Lab</a>
+          <a href="rewind.html">Rewind</a>
+          <a href="about.html">About</a>
+        </nav>
+      </div>
+    </header>
+    <section class="baseline art-banner-rafters">
+      <div class="baseline__inner">
+        <h1>GOAT Index</h1>
+        <p>General Overall Attribute Total: one number for every career in the archive, and the recipe behind it.</p>
+      </div>
+      <img class="baseline__patch" src="assets/art/icon-goat.webp" alt="" width="176" height="176" />
+    </section>
     <div class="site-frame">
-      <header class="site-header">
-        <div class="hub-nav">
-          <a class="brand" href="index.html">
-            <span class="brand__logo"><img src="assets/logos/nba-logoman.svg" alt="NBA logo" class="brand__logo-icon" /></span>
-            <span class="brand__wordmark"><span class="brand__wordmark-accent">NBA</span> Intelligence Hub</span>
-          </a>
-          <nav class="nav-links">
-            <a href="index.html">2025-2026 Season</a>
-            <a href="rewind.html">2024-2025 Season Rewind</a>
-            <a href="players.html">Players</a>
-            <a href="teams.html">Teams</a>
-            <a href="games.html">Games</a>
-            <a href="history.html">History</a>
-            <a href="insights.html">Insights Lab</a>
-            <a class="active" href="goat.html">GOAT Index</a>
-            <a href="about.html">About</a>
-          </nav>
-        </div>
-        <div class="hero hero--goat">
-          <div class="hero__intro">
-            <span class="eyebrow">GOAT Index</span>
-            <h1>General Overall Attribute Total.</h1>
-          </div>
-        </div>
-      </header>
-
-      <main>
+<main>
         <section id="goat-board" class="goat-leaderboard">
           <div class="section-header">
             <h2>Pantheon leaderboard</h2>

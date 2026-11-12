@@ -1348,7 +1348,7 @@ function setFetchMessage(message = '', type = 'idle') {
 
 function fallbackChart(message, options = {}) {
   const { type = 'doughnut', indexAxis, scales } = options ?? {};
-  const datasetColor = type === 'bar' ? 'rgba(17, 86, 214, 0.25)' : 'rgba(17, 86, 214, 0.12)';
+  const datasetColor = type === 'bar' ? 'rgba(27, 75, 189, 0.25)' : 'rgba(27, 75, 189, 0.12)';
   const dataValues = type === 'bar' ? [0] : [1];
   const config = {
     type,
@@ -1433,8 +1433,8 @@ function buildMarginChart(games) {
         {
           label: 'Games',
           data: counts,
-          backgroundColor: 'rgba(17, 86, 214, 0.78)',
-          borderRadius: 12,
+          backgroundColor: 'rgba(27, 75, 189, 0.78)',
+          borderRadius: 0,
         },
       ],
     },
@@ -1446,7 +1446,7 @@ function buildMarginChart(games) {
           beginAtZero: true,
           ticks: { precision: 0 },
           title: { display: true, text: 'Game count' },
-          grid: { color: 'rgba(17, 86, 214, 0.12)' },
+          grid: { color: 'rgba(27, 75, 189, 0.12)' },
         },
         x: {
           grid: { display: false },
@@ -1480,7 +1480,7 @@ function buildScoringChart(games) {
   if (!top.length) {
     return fallbackChart('Scoring data building');
   }
-  const colors = ['#1156d6', '#ef3d5b', '#1f7bff', '#f4b53f', '#6c4fe0', '#11b5c6'];
+  const colors = ['#1b4bbd', '#d43d24', '#1b4bbd', '#e3a41c', '#1b4bbd', '#157a86'];
   return {
     type: 'bar',
     data: {
@@ -1512,7 +1512,7 @@ function buildScoringChart(games) {
         x: {
           beginAtZero: true,
           title: { display: true, text: 'Points' },
-          grid: { color: 'rgba(17, 86, 214, 0.12)' },
+          grid: { color: 'rgba(27, 75, 189, 0.12)' },
         },
         y: {
           grid: { display: false },
@@ -1566,14 +1566,14 @@ function buildBalanceChart(games) {
 
   const stagePalette = {
     final: {
-      home: 'rgba(17, 86, 214, 0.85)',
-      visitor: 'rgba(239, 61, 91, 0.85)',
-      neutral: 'rgba(154, 165, 196, 0.8)',
+      home: 'rgba(27, 75, 189, 0.85)',
+      visitor: 'rgba(212, 61, 36, 0.85)',
+      neutral: 'rgba(148, 162, 182, 0.8)',
     },
     live: {
-      home: 'rgba(17, 86, 214, 0.65)',
-      visitor: 'rgba(239, 61, 91, 0.72)',
-      neutral: 'rgba(154, 165, 196, 0.6)',
+      home: 'rgba(27, 75, 189, 0.65)',
+      visitor: 'rgba(212, 61, 36, 0.72)',
+      neutral: 'rgba(148, 162, 182, 0.6)',
     },
   };
 
@@ -1599,7 +1599,7 @@ function buildBalanceChart(games) {
           data: datasetEntries,
           parsing: false,
           backgroundColor: colors,
-          borderRadius: 8,
+          borderRadius: 0,
           barThickness: 18,
         },
       ],
@@ -1639,7 +1639,7 @@ function buildBalanceChart(games) {
           beginAtZero: true,
           min: -1 * (maxMagnitude + marginPadding),
           max: maxMagnitude + marginPadding,
-          grid: { color: 'rgba(17, 86, 214, 0.12)' },
+          grid: { color: 'rgba(27, 75, 189, 0.12)' },
           title: { display: true, text: 'Point margin (home - visitor)' },
           ticks: {
             callback(value) {
@@ -1808,7 +1808,7 @@ function buildPlayerPointLeadersChart(stats) {
   if (!ranked.length) {
     return fallbackChart('Player points building');
   }
-  const colors = ['#1156d6', '#ef3d5b', '#1f7bff', '#f4b53f', '#6c4fe0', '#11b5c6', '#0b2545', '#2bb7da'];
+  const colors = ['#1b4bbd', '#d43d24', '#1b4bbd', '#e3a41c', '#1b4bbd', '#157a86', '#0f1a2e', '#1b4bbd'];
   return {
     type: 'bar',
     data: {
@@ -1839,7 +1839,7 @@ function buildPlayerPointLeadersChart(stats) {
       scales: {
         x: {
           beginAtZero: true,
-          grid: { color: 'rgba(17, 86, 214, 0.12)' },
+          grid: { color: 'rgba(27, 75, 189, 0.12)' },
           title: { display: true, text: 'Points per game' },
         },
         y: {
@@ -1878,7 +1878,7 @@ function buildAssistLeadersChart(stats) {
   if (!ranked.length) {
     return fallbackChart('Assist data building');
   }
-  const colors = ['#11b5c6', '#6c4fe0', '#1156d6', '#ef3d5b', '#1f7bff', '#f4b53f', '#0b2545', '#2bb7da'];
+  const colors = ['#157a86', '#1b4bbd', '#1b4bbd', '#d43d24', '#1b4bbd', '#e3a41c', '#0f1a2e', '#1b4bbd'];
   return {
     type: 'bar',
     data: {
@@ -1909,7 +1909,7 @@ function buildAssistLeadersChart(stats) {
       scales: {
         x: {
           beginAtZero: true,
-          grid: { color: 'rgba(17, 86, 214, 0.12)' },
+          grid: { color: 'rgba(27, 75, 189, 0.12)' },
           title: { display: true, text: 'Assists per game' },
         },
         y: {
@@ -1971,13 +1971,13 @@ function buildReboundLeadersChart(stats) {
         {
           label: 'Offensive per game',
           data: ranked.map((entry) => entry.offensivePerGame),
-          backgroundColor: 'rgba(239, 61, 91, 0.82)',
+          backgroundColor: 'rgba(212, 61, 36, 0.82)',
           stack: 'rebounds',
         },
         {
           label: 'Defensive per game',
           data: ranked.map((entry) => entry.defensivePerGame),
-          backgroundColor: 'rgba(17, 86, 214, 0.82)',
+          backgroundColor: 'rgba(27, 75, 189, 0.82)',
           stack: 'rebounds',
         },
       ],
@@ -2006,7 +2006,7 @@ function buildReboundLeadersChart(stats) {
           stacked: true,
           beginAtZero: true,
           ticks: { precision: 1 },
-          grid: { color: 'rgba(17, 86, 214, 0.12)' },
+          grid: { color: 'rgba(27, 75, 189, 0.12)' },
           title: { display: true, text: 'Rebounds per game' },
         },
         y: {
@@ -2074,13 +2074,13 @@ function buildStocksLeadersChart(stats) {
         {
           label: 'Steals per game',
           data: ranked.map((entry) => entry.stealsPerGame),
-          backgroundColor: 'rgba(17, 86, 214, 0.82)',
+          backgroundColor: 'rgba(27, 75, 189, 0.82)',
           stack: 'stocks',
         },
         {
           label: 'Blocks per game',
           data: ranked.map((entry) => entry.blocksPerGame),
-          backgroundColor: 'rgba(17, 181, 198, 0.72)',
+          backgroundColor: 'rgba(21, 122, 134, 0.72)',
           stack: 'stocks',
         },
       ],
@@ -2114,7 +2114,7 @@ function buildStocksLeadersChart(stats) {
           stacked: true,
           ticks: { precision: 1 },
           title: { display: true, text: 'Stocks per game (steals + blocks)' },
-          grid: { color: 'rgba(17, 86, 214, 0.12)' },
+          grid: { color: 'rgba(27, 75, 189, 0.12)' },
         },
         y: {
           stacked: true,
@@ -2160,13 +2160,13 @@ function buildReboundBattleChart(stats) {
         {
           label: 'Offensive per game',
           data: ranked.map((entry) => entry.offensivePerGame),
-          backgroundColor: 'rgba(239, 61, 91, 0.82)',
+          backgroundColor: 'rgba(212, 61, 36, 0.82)',
           stack: 'rebounds',
         },
         {
           label: 'Defensive per game',
           data: ranked.map((entry) => entry.defensivePerGame),
-          backgroundColor: 'rgba(17, 86, 214, 0.82)',
+          backgroundColor: 'rgba(27, 75, 189, 0.82)',
           stack: 'rebounds',
         },
       ],
@@ -2198,7 +2198,7 @@ function buildReboundBattleChart(stats) {
           beginAtZero: true,
           ticks: { precision: 1 },
           title: { display: true, text: 'Rebounds per game' },
-          grid: { color: 'rgba(17, 86, 214, 0.12)' },
+          grid: { color: 'rgba(27, 75, 189, 0.12)' },
         },
       },
     },
@@ -2228,17 +2228,17 @@ function buildShootingEfficiencyChart(stats) {
         {
           label: 'FG%',
           data: ranked.map((entry) => entry.fgPct ?? 0),
-          backgroundColor: 'rgba(17, 86, 214, 0.82)',
+          backgroundColor: 'rgba(27, 75, 189, 0.82)',
         },
         {
           label: '3P%',
           data: ranked.map((entry) => entry.fg3Pct ?? 0),
-          backgroundColor: 'rgba(239, 61, 91, 0.78)',
+          backgroundColor: 'rgba(212, 61, 36, 0.78)',
         },
         {
           label: 'FT%',
           data: ranked.map((entry) => entry.ftPct ?? 0),
-          backgroundColor: 'rgba(244, 181, 63, 0.78)',
+          backgroundColor: 'rgba(227, 164, 28, 0.78)',
         },
       ],
     },
@@ -2275,7 +2275,7 @@ function buildShootingEfficiencyChart(stats) {
             },
           },
           title: { display: true, text: 'Percentage' },
-          grid: { color: 'rgba(17, 86, 214, 0.12)' },
+          grid: { color: 'rgba(27, 75, 189, 0.12)' },
         },
       },
     },
@@ -2318,12 +2318,12 @@ function buildFreeThrowVolumeChart(stats) {
         {
           label: 'Attempts per game',
           data: ranked.map((entry) => entry.attemptsPerGame),
-          backgroundColor: 'rgba(239, 61, 91, 0.82)',
+          backgroundColor: 'rgba(212, 61, 36, 0.82)',
         },
         {
           label: 'Makes per game',
           data: ranked.map((entry) => entry.makesPerGame),
-          backgroundColor: 'rgba(17, 86, 214, 0.82)',
+          backgroundColor: 'rgba(27, 75, 189, 0.82)',
         },
       ],
     },
@@ -2359,7 +2359,7 @@ function buildFreeThrowVolumeChart(stats) {
       scales: {
         x: {
           beginAtZero: true,
-          grid: { color: 'rgba(17, 86, 214, 0.12)' },
+          grid: { color: 'rgba(27, 75, 189, 0.12)' },
           title: { display: true, text: 'Free throws per game' },
         },
         y: {
@@ -2404,12 +2404,12 @@ function buildDefenseImpactChart(stats) {
         {
           label: 'Steals per game',
           data: ranked.map((entry) => entry.stealsPerGame),
-          backgroundColor: 'rgba(17, 181, 198, 0.85)',
+          backgroundColor: 'rgba(21, 122, 134, 0.85)',
         },
         {
           label: 'Blocks per game',
           data: ranked.map((entry) => entry.blocksPerGame),
-          backgroundColor: 'rgba(108, 79, 224, 0.82)',
+          backgroundColor: 'rgba(27, 75, 189, 0.82)',
         },
       ],
     },
@@ -2438,7 +2438,7 @@ function buildDefenseImpactChart(stats) {
           beginAtZero: true,
           ticks: { precision: 1 },
           title: { display: true, text: 'Plays per game' },
-          grid: { color: 'rgba(17, 86, 214, 0.12)' },
+          grid: { color: 'rgba(27, 75, 189, 0.12)' },
         },
       },
     },
@@ -2488,8 +2488,8 @@ function buildUsageEfficiencyChart(stats) {
           label: 'Usage to points',
           data: points,
           parsing: false,
-          backgroundColor: 'rgba(17, 86, 214, 0.45)',
-          borderColor: 'rgba(17, 86, 214, 0.9)',
+          backgroundColor: 'rgba(27, 75, 189, 0.45)',
+          borderColor: 'rgba(27, 75, 189, 0.9)',
         },
       ],
     },
@@ -2519,12 +2519,12 @@ function buildUsageEfficiencyChart(stats) {
         x: {
           beginAtZero: true,
           title: { display: true, text: 'Usage involvement per game (FGA + 0.44 FTA + TOV)' },
-          grid: { color: 'rgba(17, 86, 214, 0.12)' },
+          grid: { color: 'rgba(27, 75, 189, 0.12)' },
         },
         y: {
           beginAtZero: true,
           title: { display: true, text: 'Points per game' },
-          grid: { color: 'rgba(17, 86, 214, 0.12)' },
+          grid: { color: 'rgba(27, 75, 189, 0.12)' },
         },
       },
     },

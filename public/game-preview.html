@@ -3,14 +3,35 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <base href="/NBA/" />
     <title>Game preview | NBA Intelligence Hub</title>
-    <meta name="description" content="Procedural matchup previews powered by the Ball Don't Lie API." />
+    <meta name="description" content="Matchup previews built from ESPN's public box scores and season snapshots." />
     <link rel="icon" type="image/svg+xml" href="assets/logos/nba-logoman.svg" />
+    <link rel="preload" href="assets/fonts/bigshoulders-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="assets/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="stylesheet" href="styles/hub.css" />
+    <link rel="stylesheet" href="styles/court.css" />
     <link rel="stylesheet" href="styles/game-preview.css" />
   </head>
   <body>
+    <header class="table">
+      <div class="table__inner">
+        <a class="table__brand" href="index.html">
+          <img src="assets/logos/nba-logoman.svg" alt="" width="14" height="30" />
+          <span>Intelligence Hub</span>
+        </a>
+        <nav class="table__nav" aria-label="Sections">
+          <a href="index.html">Tonight</a>
+          <a href="games.html" aria-current="page">Games</a>
+          <a href="players.html">Players</a>
+          <a href="teams.html">Teams</a>
+          <a href="goat.html">GOAT Index</a>
+          <a href="history.html">History</a>
+          <a href="insights.html">Insights Lab</a>
+          <a href="rewind.html">Rewind</a>
+          <a href="about.html">About</a>
+        </nav>
+      </div>
+    </header>
     <div class="site-frame preview-frame">
       <header class="preview-hero" aria-live="polite">
         <div class="preview-hero__meta">
@@ -87,9 +108,9 @@
         </section>
 
         <section class="preview-footnotes">
-          <p class="preview-footnotes__status" data-preview-message>Pulling Ball Don't Lie data…</p>
+          <p class="preview-footnotes__status" data-preview-message>Loading the matchup…</p>
           <p class="preview-footnotes__meta">
-            Data source: Ball Don't Lie API via NBA Intelligence Hub proxy.
+            Data source: ESPN public JSON.
             <br />
             Last refreshed <span data-updated>—</span>.
           </p>
