@@ -635,5 +635,60 @@ main :where(section, article, div, figure, ul, ol, dl) { min-width: 0; }
 .site-frame .player-atlas__teams-goat-entry { gap: 0.7rem; padding: 0.3rem 0.6rem; }
 .site-frame .player-card { background: var(--white); border: 0; border-top: 3px solid var(--ink); border-radius: 0; box-shadow: none; }
 
+/* Franchise footprint: list rows laid out as table columns. */
+.site-frame .franchise-footprint__item {
+  display: grid;
+  grid-template-columns: 2.6rem minmax(9rem, 1.3fr) minmax(8rem, 1.6fr) repeat(4, minmax(4rem, 0.5fr));
+  align-items: center;
+  gap: 0 0.9rem;
+  padding: 0.4rem 0.7rem;
+  font-stretch: 88%;
+}
+.site-frame .franchise-footprint__item--head { background: var(--tint); border-bottom: 1.5px solid var(--ink); font-size: 0.78rem; font-weight: 600; color: var(--ink-soft); padding-block: 0.35rem; }
+.site-frame .franchise-footprint__item--head span:nth-child(n + 4) { text-align: right; }
+.site-frame .franchise-footprint__item--head:hover { background: var(--tint); }
+.site-frame .franchise-footprint__name { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 0.6rem; min-width: 0; }
+.site-frame .franchise-footprint__name strong { font-weight: 650; }
+.site-frame .franchise-footprint__meta { font-size: 0.76rem; color: var(--ink-soft); }
+.site-frame .franchise-footprint__score { position: relative; display: block; text-align: right; padding: 0.15rem 0.4rem; font: 800 1.15rem/1.2 var(--display); color: var(--ink); }
+.site-frame .franchise-footprint__score i { position: absolute; inset: 12% auto 12% 0; width: var(--w); background: color-mix(in srgb, var(--gold) 40%, transparent); border-left: 1.5px solid var(--ink); }
+.site-frame .franchise-footprint__score span { position: relative; }
+.site-frame .franchise-footprint__num { text-align: right; }
+@media (max-width: 720px) {
+  .site-frame .franchise-footprint__item { grid-template-columns: 2.2rem minmax(0, 1fr) 5.5rem; row-gap: 0.15rem; }
+  .site-frame .franchise-footprint__item--head { display: none; }
+  .site-frame .franchise-footprint__num { grid-column: 2 / -1; text-align: left; font-size: 0.82rem; color: var(--ink-soft); display: inline; }
+  .site-frame .franchise-footprint__num::before { content: attr(data-label) " "; }
+  .site-frame .franchise-footprint__games { display: none; }
+}
+
+/* Roster Rumble: two team sheets either side of the result, on navy felt. */
+.site-frame :is(.rumble-inline, .rumble-shell) { border: 0; border-radius: 0; background: none; box-shadow: none; padding: 0; }
+.site-frame .rumble-shell__header { display: none; }
+.site-frame .rumble-shell__body { background: var(--felt) url("../assets/art/navy-felt.webp") 0 0 / 256px 256px; border: 2px solid var(--ink); padding: clamp(0.75rem, 2vw, 1.25rem); gap: clamp(0.75rem, 2vw, 1.25rem); }
+.site-frame :is(.rumble-team, .rumble-results) { background: var(--white); border: 0; border-radius: var(--r); box-shadow: none; padding: 1rem; }
+.site-frame .rumble-team--a { border-top: 5px solid var(--royal); }
+.site-frame .rumble-team--b { border-top: 5px solid var(--paint); }
+.site-frame .rumble-results { border-top: 5px solid var(--gold); }
+.site-frame .rumble-team__header h3 { font-size: 1.7rem; text-transform: uppercase; white-space: nowrap; }
+.site-frame :is(.rumble-team, .rumble-results) button {
+  border: 1.5px solid var(--ink);
+  border-radius: var(--r);
+  background: var(--white);
+  color: var(--ink);
+  font: 700 0.92rem/1.2 var(--display);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 0.35rem 0.6rem;
+  box-shadow: none;
+}
+.site-frame :is(.rumble-team, .rumble-results) button:hover:not(:disabled) { background: var(--ink); color: var(--white); }
+.site-frame .rumble-results__controls > button { background: var(--paint); border-color: var(--paint); color: var(--white); font-size: 1.1rem; padding: 0.55rem 0.9rem; }
+.site-frame .rumble-results__controls > button:disabled { background: var(--tint); border-color: var(--rule-strong); color: var(--ink-soft); opacity: 1; }
+.site-frame :is(.rumble-team__pool, .rumble-team__graph, .rumble-results__histogram) { border: 1px solid var(--rule); border-radius: 0; background: var(--white); box-shadow: none; }
+.site-frame .rumble-results__label { letter-spacing: 0; text-transform: none; color: var(--ink-soft); font-size: 0.8rem; }
+.site-frame .rumble-results__kpis strong { font: 900 2rem/1 var(--display); }
+.site-frame .rumble-shell__footer { background: none; border: 0; padding: 0.6rem 0 0; color: var(--ink-soft); }
+
 /* The legacy sheet pads the body on phones, which insets the header and hero. */
 html body { padding: 0; }

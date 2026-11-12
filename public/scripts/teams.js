@@ -427,49 +427,49 @@ function renderFootprintRankings(teams, mode = 'active') {
     return;
   }
 
+  // One ruled row per franchise, set out as columns: the score with its bar,
+  // then the three numbers the score is built from.
+  const head = document.createElement('li');
+  head.className = 'franchise-footprint__item franchise-footprint__item--head';
+  head.setAttribute('aria-hidden', 'true');
+  head.innerHTML = '<span>#</span><span>Franchise</span><span>Footprint</span><span>Titles</span><span>Hall of Famers</span><span>Win rate</span><span>Games</span>';
+  footprintList.append(head);
+  const top = ranked[0]?.footprintScore || 1;
+
   ranked.forEach((team, index) => {
     const metrics = team?.metrics ?? {};
     const legacy = team?.legacy ?? {};
-    const metaParts = [];
-    if (team?.conference) {
-      metaParts.push(`${team.conference} Conference`);
-    }
-    if (Number.isFinite(metrics.winPct)) {
-      metaParts.push(`${(metrics.winPct * 100).toFixed(1)}% win rate`);
-    }
-    if (Number.isFinite(legacy.titles)) {
-      metaParts.push(`${legacy.titles} title${legacy.titles === 1 ? '' : 's'}`);
-    }
-    if (Number.isFinite(legacy.hallOfFamers) && legacy.hallOfFamers > 0) {
-      metaParts.push(`${legacy.hallOfFamers} Hall of Famer${legacy.hallOfFamers === 1 ? '' : 's'}`);
-    }
-    if (Number.isFinite(team?.gamesSampled)) {
-      metaParts.push(`${team.gamesSampled.toLocaleString()} games sampled`);
-    }
-    if (team?.era) {
-      metaParts.push(`Active ${team.era}`);
-    }
-    const topSignals = (team.footprintContributions ?? [])
-      .map((entry) => describeFootprintSignal(entry.key, entry.value))
-      .filter(Boolean)
-      .slice(0, 3);
-    const signalsText = topSignals.join(' • ');
-
+    const sub = [team?.conference ? `${team.conference}` : null, team?.era ? `${team.era}` : null].filter(Boolean).join(' · ');
     const item = document.createElement('li');
     item.className = 'franchise-footprint__item';
-    item.innerHTML = `
-      <span class="franchise-footprint__rank">${index + 1}</span>
-      <div class="franchise-footprint__body">
-        <div class="franchise-footprint__heading">
-          <strong>${team?.name ?? team?.abbreviation ?? 'Team'}</strong>
-          <span class="franchise-footprint__score" aria-label="Franchise Footprint composite score">${formatFootprintScore(
-            team.footprintScore,
-          )}</span>
-        </div>
-        ${metaParts.length ? `<span class="franchise-footprint__meta">${metaParts.join(' • ')}</span>` : ''}
-        ${signalsText ? `<span class="franchise-footprint__signals">Key drivers: ${signalsText}</span>` : ''}
-      </div>
-    `;
+    const cell = (className, text, label) => {
+      const span = document.createElement('span');
+      span.className = className;
+      span.textContent = text;
+      if (label) span.dataset.label = label;
+      return span;
+    };
+    const name = document.createElement('span');
+    name.className = 'franchise-footprint__name';
+    const strong = document.createElement('strong');
+    strong.textContent = team?.name ?? team?.abbreviation ?? 'Team';
+    name.append(strong);
+    if (sub) name.append(cell('franchise-footprint__meta', sub));
+    const score = document.createElement('span');
+    score.className = 'franchise-footprint__score';
+    score.setAttribute('aria-label', 'Franchise footprint score');
+    const bar = document.createElement('i');
+    bar.style.setProperty('--w', `${Math.max(0, (team.footprintScore / top) * 100)}%`);
+    score.append(bar, cell('', formatFootprintScore(team.footprintScore)));
+    item.append(
+      cell('franchise-footprint__rank', String(index + 1)),
+      name,
+      score,
+      cell('franchise-footprint__num', Number.isFinite(legacy.titles) ? String(legacy.titles) : '', 'Titles'),
+      cell('franchise-footprint__num', Number.isFinite(legacy.hallOfFamers) ? String(legacy.hallOfFamers) : '', 'Hall of Famers'),
+      cell('franchise-footprint__num', Number.isFinite(metrics.winPct) ? `${(metrics.winPct * 100).toFixed(1)}%` : '', 'Win rate'),
+      cell('franchise-footprint__num franchise-footprint__games', Number.isFinite(team?.gamesSampled) ? team.gamesSampled.toLocaleString() : '', 'Games'),
+    );
     footprintList.append(item);
   });
 }
