@@ -25,6 +25,10 @@ The look is taken from the game's own objects: scorebook paper, navy ink, key-pa
 ## Layout
 
 - `public/` is the deployed site: one HTML file per page, page scripts in `public/scripts/`, styles in `public/styles/`, snapshots in `public/data/`.
+- Tonight, Games, the game preview and the box score are Court-native: they load `court.css` plus one small page stylesheet, no Chart.js and no legacy CSS. Build new pages this way.
+- Players, Teams, GOAT, History, Insights, Rewind and About still load `public/styles/hub.css` under `court.css`. The "Legacy pages, flattened" block at the end of `court.css` restyles them. `hub.css` has been purged of rules no page uses; when a legacy page is rebuilt, drop its `hub.css` link rather than adding to that file.
+- Game pages share parts: `game-preview.css` owns the bulb board header and the side-by-side "tape" table, and the box score page loads it too.
+- The live site is https://nba.hicksrch.workers.dev. Every page names `assets/social/card.jpg` as its social image.
 - `public/assets/js/espn.js` is the live data layer. `public/assets/js/bdl.js` keeps the old paid-API call shape for legacy page scripts and answers from ESPN and snapshots.
 - `scripts/refresh/` builds the live snapshots (`live.mjs`), with the parsers and the power index unit-tested against recorded ESPN responses in `scripts/testdata/espn/`.
 - `scripts/ci/` holds the checks CI runs. Other folders under `scripts/` are older one-off pipelines; some still expect the retired paid API and are not run by anything.
