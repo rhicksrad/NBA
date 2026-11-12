@@ -1,21 +1,26 @@
 name: CI
 
+# PR gate. Same-repo PRs run on Ryan's self-hosted web runners when the repo
+# variable CI_RUNNER is "local"; fork PRs (and everything, when the variable is
+# unset) run on GitHub-hosted runners. See docs/CI.md.
 on:
-  push:
-    branches: [main]
   pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+  workflow_dispatch:
 
 concurrency:
-  group: ci-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 permissions:
   contents: read
 
 jobs:
-  site:
-    name: Site (tests + integrity)
-    runs-on: ubuntu-latest
+  gate:
+    name: Gate (tests + integrity)
+    if: github.event_name != 'pull_request' || !github.event.pull_request.draft
+    runs-on: ${{ vars.CI_RUNNER == 'local' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) && fromJSON('["self-hosted","web-trusted"]') || 'ubuntu-latest' }}
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -24,23 +29,42 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: pnpm
+          # The PCs keep one shared pnpm store on disk; only hosted runners need GitHub's cache.
+          cache: ${{ runner.environment == 'github-hosted' && 'pnpm' || '' }}
       - run: pnpm install --frozen-lockfile
       - name: Unit tests
         run: pnpm test
       - name: Static integrity (links, JSON, weight budgets)
         run: pnpm check:site
+      - name: Clean workspace
+        if: always() && runner.environment == 'self-hosted'
+        run: git clean -ffdx
 
   python:
     name: Python (ruff + pytest)
-    runs-on: ubuntu-latest
+    if: github.event_name != 'pull_request' || !github.event.pull_request.draft
+    runs-on: ${{ vars.CI_RUNNER == 'local' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) && fromJSON('["self-hosted","web-trusted","python"]') || 'ubuntu-latest' }}
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
+      # setup-python ships Ubuntu builds and can refuse other distros, so the PCs use uv instead.
       - uses: actions/setup-python@v5
+        if: runner.environment == 'github-hosted'
         with:
           python-version: "3.11"
-      - run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements-dev.txt
+          cache: pip
+          cache-dependency-path: requirements-dev.txt
+      - name: Install (hosted)
+        if: runner.environment == 'github-hosted'
+        run: pip install -r requirements-dev.txt
+      - name: Install (self-hosted, uv)
+        if: runner.environment == 'self-hosted'
+        run: |
+          uv venv --python 3.11 .venv
+          uv pip install --python .venv/bin/python -r requirements-dev.txt
+          echo "$PWD/.venv/bin" >> "$GITHUB_PATH"
       - run: ruff check .
       - run: pytest
+      - name: Clean workspace
+        if: always() && runner.environment == 'self-hosted'
+        run: git clean -ffdx

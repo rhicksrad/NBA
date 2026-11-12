@@ -9,7 +9,7 @@ A static, multi-page NBA site served from `public/` on GitHub Pages (`/NBA/`). I
 - No paid APIs and no API keys, anywhere. Data comes from committed snapshots in `public/data/` or from free, keyless public endpoints.
 - The site must work with every third-party host down. Live data is an enhancement layered on top of a snapshot, never a requirement.
 - Never invent data. Regenerate it from a pipeline, or label it clearly as a snapshot with its date.
-- Every PR runs CI (`.github/workflows/ci.yml`) and merges only when it is green. Never skip or disable a test to get there.
+- Every PR runs CI (`.github/workflows/ci.yml`) and merges only when it is green. Never skip or disable a test to get there. `docs/CI.md` explains the self-hosted runners and why fork PRs never touch them.
 
 ## Layout
 
