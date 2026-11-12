@@ -218,7 +218,7 @@ function renderInjuries(injuries) {
     return;
   }
   host.replaceChildren(
-    ...injuries.slice(0, 12).map((injury) => {
+    ...injuries.slice(0, 14).map((injury) => {
       const item = el('li', `injuries__item level-${injury.status_level}`);
       const head = el('p', 'injuries__head');
       head.append(el('strong', null, injury.player), el('span', 'injuries__team', injury.team_tricode ?? ''), el('span', 'injuries__status', injury.status));
