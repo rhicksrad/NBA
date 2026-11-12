@@ -569,7 +569,7 @@ function renderTotalsTable(title, data) {
     const wrapper = createElement('div', 'history-player__totals');
     wrapper.append(createElement('h4', 'history-player__totals-heading', title));
     wrapper.append(
-      createElement('p', 'history-player__totals-empty', 'No games recorded in the archive yet.'),
+      createElement('p', 'history-player__totals-empty', 'No games in the archive.'),
     );
     return wrapper;
   }
@@ -1468,6 +1468,15 @@ async function bootstrap() {
       };
 
       totalsContainer.innerHTML = '';
+
+      // The archive is the source of truth for career totals. The old live
+      // lookup now answers with an empty career, which used to replace real
+      // totals with "no games recorded", so it only runs when the archive has
+      // nothing for this player.
+      if (cachedCareer) {
+        renderCachedCareer(totalsContainer, cachedCareer, null);
+        return;
+      }
 
       totalsContainer.append(
         createElement('p', 'history-player__hint', "Loading career stats..."),

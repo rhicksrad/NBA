@@ -692,6 +692,68 @@ main :where(section, article, div, figure, ul, ol, dl) { min-width: 0; }
 .site-frame .rumble-results__kpis strong { font: 900 2rem/1 var(--display); }
 .site-frame .rumble-shell__footer { background: none; border: 0; padding: 0.6rem 0 0; color: var(--ink-soft); }
 
+/* GOAT tier rows: teams and status are small plain text, the score is the figure. */
+.site-frame .goat-tier__player :is(.badge, .goat-status) { background: none; border: 0; border-radius: 0; padding: 0; letter-spacing: 0; text-transform: none; font-size: 0.76rem; font-weight: 500; color: var(--ink-soft); width: auto; display: inline; }
+.site-frame .goat-tier__player .badge-list { gap: 0 0.4rem; }
+.site-frame .goat-tier__player-name { gap: 0.1rem; }
+.site-frame .goat-tier__player-name > :first-child { font-weight: 700; font-size: 1rem; }
+.site-frame .goat-tier__player-score { font: 800 1.35rem/1 var(--display); color: var(--ink); }
+.site-frame .goat-tier__player-delta { font-size: 0.78rem; }
+
+/* Teams: a chosen franchise's numbers as ruled rows, one line per measure:
+   name, value, where it sits between the league low and high, and its rank. */
+.site-frame :is(.team-visuals, .team-detail__visuals) { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0; border-top: 1.5px solid var(--ink); }
+.site-frame .team-visual {
+  display: grid;
+  grid-template-columns: minmax(8rem, 1.1fr) 4.6rem minmax(5rem, 1.4fr) 7.2rem 5.2rem 5.2rem;
+  align-items: center;
+  gap: 0 0.9rem;
+  padding: 0.38rem 0.7rem;
+  background: var(--white);
+  border: 0;
+  border-bottom: 1px solid var(--rule);
+  border-radius: 0;
+  box-shadow: none;
+  font-stretch: 88%;
+}
+.site-frame .team-visual :is(.team-visual__header, .team-visual__heading, .team-visual__range, .team-visual__range > div) { display: contents; }
+.site-frame .team-visual__label { order: 1; font: 650 0.95rem/1.2 var(--text); font-stretch: 88%; letter-spacing: 0; text-transform: none; color: var(--ink); }
+.site-frame .team-visual__value { order: 2; text-align: right; font: 800 1.25rem/1 var(--display); }
+.site-frame .team-visual__meter { order: 3; position: relative; height: 0.7rem; background: var(--tint); border-radius: 0; margin: 0; }
+.site-frame .team-visual__meter-track { display: none; }
+.site-frame .team-visual__meter-fill { position: absolute; inset: 0 auto 0 0; width: var(--fill); background: var(--royal); border-radius: 0; height: auto; }
+.site-frame .team-visual__percentile { order: 4; background: none; padding: 0; border-radius: 0; color: var(--ink-soft); font-size: 0.8rem; font-weight: 500; letter-spacing: 0; text-transform: none; }
+.site-frame .team-visual__description { display: none; }
+.site-frame .team-visual__range dt { display: none; }
+.site-frame .team-visual__range dd { order: 5; margin: 0; text-align: right; font-size: 0.8rem; color: var(--ink-soft); }
+.site-frame .team-visual__range > div:first-child dd::before { content: "low "; }
+.site-frame .team-visual__range > div:last-child dd::before { content: "high "; }
+.site-frame .team-detail__conference { letter-spacing: 0; text-transform: none; }
+.site-frame .team-detail__summary dd { font: 800 1.5rem/1 var(--display); }
+@media (max-width: 720px) {
+  .site-frame .team-visual { grid-template-columns: minmax(0, 1fr) 4.6rem 6.4rem; }
+  .site-frame .team-visual__meter { grid-column: 1 / -1; order: 6; margin-top: 0.25rem; }
+  .site-frame .team-visual__range dd { display: none; }
+}
+
+/* History: career totals as scorebook sheets, GOAT measures as ruled rows. */
+.site-frame .history-player__totals-table { width: 100%; border-collapse: collapse; background: var(--white); font-stretch: 88%; font-size: 0.95rem; }
+.site-frame .history-player__totals-table :is(th, td) { padding: 0.38rem 0.6rem; border-bottom: 1px solid var(--rule); text-align: right; font-weight: 500; }
+.site-frame .history-player__totals-table :is(th, td):first-child { text-align: left; }
+.site-frame .history-player__totals-table thead th { background: var(--tint); border-bottom: 1.5px solid var(--ink); font-size: 0.78rem; font-weight: 600; color: var(--ink-soft); }
+.site-frame .history-player__totals-table tbody td:nth-child(2) { font-weight: 700; }
+.site-frame .history-player__totals-heading { font-size: 1.35rem; text-transform: uppercase; margin-top: 1.1rem; }
+.site-frame .history-player__totals-meta { color: var(--ink-soft); font-size: 0.86rem; margin-bottom: 0.4rem; }
+.site-frame .history-player__hint { background: none; border: 0; padding: 0; color: var(--ink-soft); font-size: 0.86rem; }
+.site-frame .history-player h3 { font-size: clamp(2rem, 4vw, 3.2rem); text-transform: uppercase; line-height: 0.9; }
+.site-frame .history-visuals__grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0; border-top: 1.5px solid var(--ink); }
+.site-frame .history-visual { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: baseline; gap: 0.15rem 0.75rem; padding: 0.4rem 0.6rem; background: var(--white); border: 0; border-bottom: 1px solid var(--rule); border-radius: 0; box-shadow: none; }
+.site-frame .history-visual__label { font: 600 0.86rem/1.2 var(--text); letter-spacing: 0; text-transform: none; color: var(--ink-soft); }
+.site-frame .history-visual__value { font: 800 1.25rem/1 var(--display); text-align: right; }
+.site-frame .history-visual__meter { grid-column: 1; height: 0.45rem; background: var(--tint); border-radius: 0; }
+.site-frame .history-visual__meter-fill { background: var(--royal); border-radius: 0; }
+.site-frame .history-visual__percentile { font-size: 0.76rem; color: var(--ink-soft); text-align: right; }
+
 /* The player card: a name plate, a facts strip and a stat line. */
 .site-frame .player-card { padding: 1rem 1.2rem 1.2rem; gap: 1rem; align-content: start; }
 @media (min-width: 901px) { .site-frame .player-card { align-self: start; position: sticky; top: 4.25rem; } }
