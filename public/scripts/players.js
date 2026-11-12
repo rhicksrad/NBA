@@ -1875,7 +1875,7 @@ function initPlayerAtlas() {
   if (statsSeasonEl) {
     statsSeasonEl.textContent = seasonLabel;
   }
-  const defaultStatsMeta = `Season averages for the ${seasonLabel} season.`;
+  const defaultStatsMeta = 'Per game this season, from ESPN.';
   if (statsMeta) {
     statsMeta.textContent = defaultStatsMeta;
   }
@@ -2070,7 +2070,7 @@ function initPlayerAtlas() {
 
     if (statsMeta) {
       if (status === 'loading') {
-        statsMeta.textContent = `Loading season averages for the ${seasonLabel} season…`;
+        statsMeta.textContent = 'Loading season averages…';
       } else if (status === 'ready') {
         statsMeta.textContent = defaultStatsMeta;
       } else if (status === 'empty') {
@@ -2188,13 +2188,10 @@ function initPlayerAtlas() {
     }
 
     const sourceName = currentRostersDoc.source === 'ball_dont_lie' || !currentRostersDoc.source
-      ? 'Primary league data feed'
-      : String(currentRostersDoc.source);
-    parts.push(`Source: ${sourceName}`);
+      ? 'the archived roster file'
+      : String(currentRostersDoc.source).toLowerCase() === 'espn' ? 'ESPN' : String(currentRostersDoc.source);
+    parts.push(`Roster from ${sourceName}`);
 
-    if (Number.isFinite(currentRostersDoc.ttl_hours)) {
-      parts.push(`TTL ${currentRostersDoc.ttl_hours}h`);
-    }
 
     updatedEl.textContent = parts.join(' • ');
   };
@@ -3034,14 +3031,11 @@ function initPlayerAtlas() {
     }
 
     if (bioEl) {
-      const biography = typeof player?.bio === 'string' ? player.bio.trim() : '';
+      // The stored bios are filled-in templates that repeat the fact rows below.
+      // Only the one-line GOAT resume says something those rows do not.
       const resume = typeof player?.goatResume === 'string' ? player.goatResume.trim() : '';
-      let copy = biography || `Player profile for ${player.name}.`;
-      if (resume && !copy.toLowerCase().includes(resume.toLowerCase())) {
-        const punctuated = /[.!?]$/.test(copy) ? copy : `${copy}.`;
-        copy = `${punctuated} GOAT resume: ${resume}${/[.!?]$/.test(resume) ? '' : '.'}`;
-      }
-      bioEl.textContent = copy;
+      bioEl.textContent = resume ? `${resume}${/[.!?]$/.test(resume) ? '' : '.'}` : '';
+      bioEl.hidden = !resume;
     }
 
     if (archetypeEl) {

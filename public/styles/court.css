@@ -692,6 +692,25 @@ main :where(section, article, div, figure, ul, ol, dl) { min-width: 0; }
 .site-frame .rumble-results__kpis strong { font: 900 2rem/1 var(--display); }
 .site-frame .rumble-shell__footer { background: none; border: 0; padding: 0.6rem 0 0; color: var(--ink-soft); }
 
+/* The player card: a name plate, a facts strip and a stat line. */
+.site-frame .player-card { padding: 1rem 1.2rem 1.2rem; gap: 1rem; align-content: start; }
+@media (min-width: 901px) { .site-frame .player-card { align-self: start; position: sticky; top: 4.25rem; } }
+.site-frame .player-card__name { font-size: clamp(2rem, 4vw, 3.2rem); text-transform: uppercase; line-height: 0.9; }
+.site-frame .player-card__meta { color: var(--ink-soft); }
+.site-frame .player-card__goat { background: none; border: 0; padding: 0; }
+.site-frame .player-card__goat-score { font: 900 2.4rem/1 var(--display); color: var(--paint); }
+.site-frame .player-card__bio { font-size: 1.05rem; max-width: 60ch; }
+.site-frame .player-card__facts { gap: 0; border-top: 1.5px solid var(--ink); background: var(--white); }
+.site-frame .player-card__fact { padding: 0.4rem 0.6rem 0.45rem 0; border-bottom: 1px solid var(--rule); }
+.site-frame .player-card__fact dt { color: var(--ink-soft); font-size: 0.78rem; font-weight: 600; }
+.site-frame .player-card__fact dd { font-weight: 650; }
+.site-frame .player-card__stats { background: none; border: 0; border-top: 3px solid var(--ink); border-radius: 0; padding: 0.7rem 0 0; box-shadow: none; }
+.site-frame .player-card__stats-grid { gap: 0; }
+.site-frame .player-card__stat { padding: 0.5rem 0.75rem 0.55rem 0; border-bottom: 1px solid var(--rule); text-align: left; justify-items: start; background: none; border-radius: 0; }
+.site-frame .player-card__stat-label { color: var(--ink-soft); font-size: 0.78rem; font-weight: 600; }
+.site-frame .player-card__stat dd, .site-frame .player-card__stat-value { font: 900 2rem/1 var(--display); color: var(--ink); }
+.site-frame .player-card__footer { color: var(--ink-soft); font-size: 0.82rem; border: 0; padding: 0; }
+
 /* Until a player is chosen the card is hidden, so the team picker takes the
    whole row: thirty teams, six across, instead of a half-empty page. */
 .site-frame .player-atlas__layout:has(.player-card[hidden]) .player-atlas__teams { grid-column: 1 / -1; grid-template-columns: minmax(0, 1fr); }

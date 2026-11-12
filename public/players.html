@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Players | NBA Intelligence Hub</title>
     <meta name="title" content="Players | NBA Intelligence Hub" />
-    <meta name="description" content="Find player profiles, GOAT scores, and percentiles from the 2025-26 roster snapshot." />
+    <meta name="description" content="Search every current NBA roster for a player's profile, season averages and GOAT score, or draft two all-time fives in Roster Rumble." />
     <meta property="og:site_name" content="NBA Intelligence Hub" />
     <meta property="og:locale" content="en_US" />
     <meta property="og:type" content="article" />
     <meta property="og:title" content="Players | NBA Intelligence Hub" />
-    <meta property="og:description" content="Find player profiles, GOAT scores, and percentiles from the 2025-26 roster snapshot." />
+    <meta property="og:description" content="Search every current NBA roster for a player's profile, season averages and GOAT score, or draft two all-time fives in Roster Rumble." />
     <meta name="twitter:card" content="summary_large_image" />
     <meta property="og:image" content="https://nba.hicksrch.workers.dev/assets/social/card.jpg" />
     <meta property="og:image:width" content="1200" />
@@ -18,7 +18,7 @@
     <meta name="twitter:image" content="https://nba.hicksrch.workers.dev/assets/social/card.jpg" />
     <link rel="canonical" href="https://nba.hicksrch.workers.dev/players" />
     <meta name="twitter:title" content="Players | NBA Intelligence Hub" />
-    <meta name="twitter:description" content="Find player profiles, GOAT scores, and percentiles from the 2025-26 roster snapshot." />
+    <meta name="twitter:description" content="Search every current NBA roster for a player's profile, season averages and GOAT score, or draft two all-time fives in Roster Rumble." />
     <link rel="icon" type="image/svg+xml" href="assets/logos/nba-logoman.svg" />
     <link rel="preload" href="assets/fonts/bigshoulders-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="assets/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin />
@@ -59,7 +59,7 @@
             <h2>Find a player</h2>
             <a class="rumble-launch" href="#players-rumble" data-rumble-launch>Play Roster Rumble, 5v5</a>
             <p class="players-lab__lede">
-              Search the 2025-26 roster snapshot for player profiles, GOAT scores, and percentiles.
+              Search every current roster for a player's profile, season averages and GOAT score.
             </p>
           </header>
           <div class="player-atlas__layout">
@@ -111,7 +111,7 @@
             <div class="player-atlas__teams" data-player-teams hidden>
               <h3 class="player-atlas__teams-title">Browse by franchise</h3>
               <p class="player-atlas__teams-copy">
-                Select a team to see its 2025-26 roster and player profiles.
+                Open a team to see its roster.
               </p>
               <div class="player-atlas__teams-tree" data-player-team-tree></div>
             </div>
@@ -177,10 +177,6 @@
                     <dd data-player-weight>—</dd>
                   </div>
                   <div class="player-card__fact">
-                    <dt>Vitals</dt>
-                    <dd data-player-vitals>—</dd>
-                  </div>
-                  <div class="player-card__fact">
                     <dt>Origin</dt>
                     <dd data-player-origin>—</dd>
                   </div>
@@ -235,25 +231,6 @@
                     <dd class="player-card__stat-value" data-player-stat-blocks>—</dd>
                   </div>
                 </dl>
-              </section>
-              <section
-                class="player-card__visuals-section"
-                aria-labelledby="player-card-visuals-title"
-              >
-                <header class="player-card__visuals-header">
-                  <h4 id="player-card-visuals-title">Player percentiles</h4>
-                  <p>
-                    These percentiles compare players using 2024-25 stats from the archived snapshot.
-                  </p>
-                </header>
-                <div
-                  class="player-card__visuals"
-                  data-player-metrics
-                  aria-label="Percentile visualizations"
-                ></div>
-                <p class="player-card__visuals-empty" data-player-metrics-empty hidden>
-                  Percentiles are unavailable for this player.
-                </p>
               </section>
               <footer class="player-card__footer">
                 <p data-player-updated></p>
