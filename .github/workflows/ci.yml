@@ -60,6 +60,11 @@ jobs:
       - name: Install (hosted)
         if: runner.environment == 'github-hosted'
         run: pip install -r requirements-dev.txt
+      # Not every PC has uv on the runner's PATH, so fetch it per job (cached in the tool cache).
+      - uses: astral-sh/setup-uv@v10.3.2
+        if: runner.environment == 'self-hosted'
+        with:
+          enable-cache: false
       - name: Install (self-hosted, uv)
         if: runner.environment == 'self-hosted'
         run: |
