@@ -692,6 +692,17 @@ main :where(section, article, div, figure, ul, ol, dl) { min-width: 0; }
 .site-frame .rumble-results__kpis strong { font: 900 2rem/1 var(--display); }
 .site-frame .rumble-shell__footer { background: none; border: 0; padding: 0.6rem 0 0; color: var(--ink-soft); }
 
+/* Until a player is chosen the card is hidden, so the team picker takes the
+   whole row: thirty teams, six across, instead of a half-empty page. */
+.site-frame .player-atlas__layout:has(.player-card[hidden]) .player-atlas__teams { grid-column: 1 / -1; grid-template-columns: minmax(0, 1fr); }
+.site-frame .player-atlas__layout:has(.player-card[hidden]) .player-atlas__teams-tree { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 0.4rem; }
+.site-frame .player-atlas__layout:has(.player-card[hidden]) .player-atlas__teams-tree > [open] { grid-column: 1 / -1; }
+.site-frame .player-atlas__team { background: var(--white); border: 0; border-bottom: 1px solid var(--rule); border-radius: 0; }
+.site-frame .player-atlas__team-name { font: 800 1.2rem/1 var(--display); letter-spacing: 0.04em; }
+.site-frame .player-atlas__team-count { background: none; padding: 0; color: var(--ink-soft); font-size: 0.8rem; font-weight: 500; }
+.site-frame .player-atlas__team[open] .player-atlas__team-roster { display: grid; grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr)); gap: 0 0.75rem; }
+@media (max-width: 900px) { .site-frame .player-atlas__layout:has(.player-card[hidden]) .player-atlas__teams-tree { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+
 /* Phones: the thirty team buttons sit three across instead of one long column. */
 @media (max-width: 640px) {
   .site-frame .player-atlas__teams-tree { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.35rem; }
