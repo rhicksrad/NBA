@@ -1,4 +1,4 @@
-﻿// Game preview: a tale of the tape. Everything here is read from the stored
+// Game preview: a tale of the tape. Everything here is read from the stored
 // league snapshot (power index, standings, injuries, season averages), so the
 // page paints offline; ESPN is only asked for a game the snapshot does not hold.
 import { fetchSummary, gameFromSummary } from '../assets/js/espn.js';
@@ -12,7 +12,7 @@ const el = (tag, className, text) => {
   if (text != null) node.textContent = text;
   return node;
 };
-const signed = (value, places = 1) => `${value > 0 ? '+' : value < 0 ? 'âˆ’' : ''}${Math.abs(value).toFixed(places)}`;
+const signed = (value, places = 1) => `${value > 0 ? '+' : value < 0 ? '−' : ''}${Math.abs(value).toFixed(places)}`;
 const json = (url) => fetch(url).then((r) => (r.ok ? r.json() : {})).catch(() => ({}));
 const logo = (abbreviation, size) => {
   const img = el('img');
@@ -36,7 +36,7 @@ function renderBoard(game, away, home, chance) {
   $('[data-title]').textContent = `${game.visitor_team.name} at ${game.home_team.name}`;
   const tip = game.datetime ? new Date(game.datetime) : null;
   const when = tip ? tip.toLocaleString(undefined, { weekday: 'long', month: 'long', day: 'numeric', hour: 'numeric', minute: '2-digit' }) : '';
-  $('[data-when]').textContent = [when, game.venue, game.broadcast].filter(Boolean).join(' Â· ');
+  $('[data-when]').textContent = [when, game.venue, game.broadcast].filter(Boolean).join(' · ');
 
   [['away', game.visitor_team, away], ['home', game.home_team, home]].forEach(([side, team, row], index) => {
     const host = $(`[data-side="${side}"]`);
@@ -90,7 +90,7 @@ function renderTape(game, away, home) {
   if (s(away) && s(home)) {
     add('Points scored', s(away).ppg?.toFixed(1), s(home).ppg?.toFixed(1), { av: s(away).ppg, hv: s(home).ppg });
     add('Points allowed', s(away).oppg?.toFixed(1), s(home).oppg?.toFixed(1), { av: s(away).oppg, hv: s(home).oppg, low: true });
-    add('Tonightâ€™s setting', `${s(away).road} on the road`, `${s(home).home} at home`, { av: winPct(s(away).road), hv: winPct(s(home).home) });
+    add('Tonight’s setting', `${s(away).road} on the road`, `${s(home).home} at home`, { av: winPct(s(away).road), hv: winPct(s(home).home) });
     add('Last ten', s(away).last10, s(home).last10, { av: winPct(s(away).last10), hv: winPct(s(home).last10) });
     add('Streak', s(away).streak, s(home).streak);
   }
