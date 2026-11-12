@@ -655,9 +655,11 @@ main :where(section, article, div, figure, ul, ol, dl) { min-width: 0; }
 .site-frame .franchise-footprint__score span { position: relative; }
 .site-frame .franchise-footprint__num { text-align: right; }
 @media (max-width: 720px) {
-  .site-frame .franchise-footprint__item { grid-template-columns: 2.2rem minmax(0, 1fr) 5.5rem; row-gap: 0.15rem; }
+  .site-frame .franchise-footprint__item { grid-template-columns: 2.2rem repeat(3, minmax(0, 1fr)); row-gap: 0.15rem; }
   .site-frame .franchise-footprint__item--head { display: none; }
-  .site-frame .franchise-footprint__num { grid-column: 2 / -1; text-align: left; font-size: 0.82rem; color: var(--ink-soft); display: inline; }
+  .site-frame .franchise-footprint__name { grid-column: 2 / span 2; }
+  .site-frame .franchise-footprint__rank { grid-row: span 2; }
+  .site-frame .franchise-footprint__num { text-align: left; font-size: 0.8rem; color: var(--ink-soft); white-space: nowrap; }
   .site-frame .franchise-footprint__num::before { content: attr(data-label) " "; }
   .site-frame .franchise-footprint__games { display: none; }
 }

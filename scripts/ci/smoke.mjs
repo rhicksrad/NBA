@@ -3,11 +3,21 @@
 // hosts blocked (the site must stand on its snapshots alone), then loads the
 // home page again against a recorded ESPN scoreboard to prove the live path.
 import { spawn } from 'node:child_process';
+import { createServer } from 'node:net';
 import { readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
 
-const PORT = 4319;
+// Ask the OS for a free port. A fixed one collides when another project's
+// checks run on the same machine at the same time.
+const PORT = await new Promise((resolve, reject) => {
+  const probe = createServer();
+  probe.once('error', reject);
+  probe.listen(0, '127.0.0.1', () => {
+    const { port } = probe.address();
+    probe.close(() => resolve(port));
+  });
+});
 const BASE = `http://127.0.0.1:${PORT}/`;
 const PAGES = [
   'index.html', 'games.html', 'players.html', 'teams.html', 'goat.html', 'history.html',
