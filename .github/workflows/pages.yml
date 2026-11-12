@@ -39,10 +39,10 @@ jobs:
       - name: Install deps
         run: pnpm i --frozen-lockfile
 
-      - name: Build site data
-        run: pnpm build:data
-        env:
-          BDL_PROXY_BASE: https://bdlproxy.hicksrch.workers.dev/bdl
+      # Data snapshots are committed under public/data, so the deploy never
+      # depends on a third-party API being reachable.
+      - name: Static integrity
+        run: pnpm check:site
 
       - name: Configure Pages
         uses: actions/configure-pages@v5

@@ -23,6 +23,7 @@
     "predeploy": "pnpm fetch:active-rosters && pnpm fetch:injuries",
     "deploy": "echo 'static site build only'",
     "test": "vitest run",
+    "check:site": "node scripts/ci/check-site.mjs",
     "verify:bdl": "tsx scripts/dev/verify_bdl.ts",
     "verify:history": "tsx scripts/history/verify_history_assets.ts",
     "prewarm:player": "tsx scripts/prewarm_bdl.ts",
