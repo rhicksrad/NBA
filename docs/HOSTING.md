@@ -17,7 +17,7 @@ The hourly run is why standings, leaders, injuries and the power index stay curr
 The workflow needs two repository secrets. Until they exist it runs, warns, and deploys nothing.
 
 1. Cloudflare dashboard → My Profile → API Tokens → Create Token → template **Edit Cloudflare Workers**. Scope it to the one account.
-2. GitHub → repo Settings → Secrets and variables → Actions → add `CLOUDFLARE_API_TOKEN` (the token) and `CLOUDFLARE_ACCOUNT_ID` (shown on the Workers overview page).
+2. GitHub → repo Settings → Secrets and variables → Actions → add `CLOUDFLARE_API_TOKEN` (the token; `CLOUDFLARE_API_KEY` is accepted too) and `CLOUDFLARE_ACCOUNT_ID` (shown on the Workers overview page).
 3. Run the **Deploy** workflow once from the Actions tab. The Worker is named `nba` and appears at `nba.<your-subdomain>.workers.dev`. Attach a custom domain under the Worker's Settings → Domains & Routes if wanted.
 
 To deploy by hand from a machine where `wrangler login` has been run: `pnpm deploy`.
