@@ -75,7 +75,14 @@ function ensureChartDefaults() {
   Chart.defaults.scale.grid.color = '#cdd6e2';
   Chart.defaults.scale.border = { ...(Chart.defaults.scale.border || {}), color: '#0f1a2e' };
   Chart.defaults.plugins.tooltip.cornerRadius = 2;
-  Chart.defaults.animation = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? false : { duration: 350, easing: 'easeOutCubic' };
+  // Set the two fields rather than replacing the object: Chart.js keeps `fn`,
+  // `from` and `to` on it, and a replaced object makes every animation tick throw.
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    Chart.defaults.animation = false;
+  } else {
+    Chart.defaults.animation.duration = 350;
+    Chart.defaults.animation.easing = 'easeOutCubic';
+  }
   Chart.defaults.font.weight = 500;
   Chart.defaults.color = '#0f1a2e';
   Chart.defaults.plugins.legend.labels.usePointStyle = true;
