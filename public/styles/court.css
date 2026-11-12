@@ -614,6 +614,11 @@ main :where(section, article, div, figure, ul, ol, dl) { min-width: 0; }
 }
 .site-frame .atlas-mode-toggle:hover { background: var(--ink); color: var(--white); }
 .site-frame .state-map { background: var(--white); border: 1px solid var(--rule); padding: 0.75rem; }
+/* The map fills its plate. Left narrower, the pan code centres it a second
+   time and pushes the world map half off the right edge. */
+.site-frame .state-map > svg { width: 100%; max-width: none; height: auto; margin: 0; }
+.site-frame .atlas-mode-toggle:is(:hover, :focus-visible, [aria-pressed="true"]) { background: var(--ink); color: var(--white); }
+.site-frame .state-spotlight :is(.badge, [class*="team"]):not(ul):not(ol):not(div) { background: none; border: 0; border-radius: 0; padding: 0; color: var(--ink-soft); font-weight: 500; letter-spacing: 0; }
 .site-frame .state-map .state-shape--available { fill: var(--maple-wash); stroke: var(--maple-deep); stroke-width: 0.6; }
 .site-frame .state-map .state-shape--available:hover { fill: var(--maple); }
 .site-frame .state-map .state-shape--empty { fill: var(--paper); stroke: var(--rule-strong); }
@@ -688,6 +693,9 @@ main :where(section, article, div, figure, ul, ol, dl) { min-width: 0; }
 .site-frame .rumble-results__controls > button { background: var(--paint); border-color: var(--paint); color: var(--white); font-size: 1.1rem; padding: 0.55rem 0.9rem; }
 .site-frame .rumble-results__controls > button:disabled { background: var(--tint); border-color: var(--rule-strong); color: var(--ink-soft); opacity: 1; }
 .site-frame :is(.rumble-team__pool, .rumble-team__graph, .rumble-results__histogram) { border: 1px solid var(--rule); border-radius: 0; background: var(--white); box-shadow: none; }
+.site-frame .rumble-shell__body { align-items: start; }
+.site-frame .rumble-team__graph { height: 15rem; min-height: 0; overflow: hidden; }
+.site-frame .rumble-team__graph svg { width: 100%; height: 100%; }
 .site-frame .rumble-results__label { letter-spacing: 0; text-transform: none; color: var(--ink-soft); font-size: 0.8rem; }
 .site-frame .rumble-results__kpis strong { font: 900 2rem/1 var(--display); }
 .site-frame .rumble-shell__footer { background: none; border: 0; padding: 0.6rem 0 0; color: var(--ink-soft); }
