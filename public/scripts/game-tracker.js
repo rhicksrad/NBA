@@ -757,7 +757,7 @@ function renderTeamTotals(role, totals) {
   if (!totals || !Array.isArray(totals.players) || !totals.players.length) {
     const state = document.createElement('div');
     state.className = 'tracker-team-card__state';
-    state.textContent = "Ball Don't Lie hasn’t published the box score yet.";
+    state.textContent = "The ESPN box score is unavailable.";
     targets.totals.appendChild(state);
     if (targets.pace) {
       targets.pace.textContent = '';
@@ -816,7 +816,7 @@ function renderTeamLeaders(role, totals) {
   if (!totals || !Array.isArray(totals.players) || !totals.players.length) {
     if (targets.leadersState) {
       targets.leadersState.hidden = false;
-      targets.leadersState.textContent = "Ball Don't Lie hasn’t posted the player line yet.";
+      targets.leadersState.textContent = "ESPN player stats are unavailable.";
       targets.leadersBody.appendChild(targets.leadersState);
     }
     return;
@@ -2012,7 +2012,7 @@ async function refreshData({ background = false } = {}) {
   loading = true;
   setManualRefreshDisabled(true);
   if (!background) {
-    setTrackerMessage('Syncing Ball Don\'t Lie data…');
+    setTrackerMessage('Loading ESPN stats...');
   }
   try {
     const gameId = parseGameId(rawGameId);
@@ -2024,7 +2024,7 @@ async function refreshData({ background = false } = {}) {
     const gameRaw = await loadGame(gameId);
     const game = normalizeGame(gameRaw);
     if (!game) {
-      setTrackerMessage('Unable to locate that matchup in the Ball Don\'t Lie dataset.', 'error');
+      setTrackerMessage('Matchup not found in the ESPN data.', 'error');
       return;
     }
 
@@ -2059,9 +2059,9 @@ async function refreshData({ background = false } = {}) {
     if (game.stage === 'upcoming') {
       setTrackerMessage('This matchup has not tipped off yet. We will refresh automatically.');
     } else if (game.stage === 'live') {
-      setTrackerMessage('Tracking live stats on a five minute delay from Ball Don\'t Lie.');
+      setTrackerMessage('ESPN stats refresh every five minutes.');
     } else {
-      setTrackerMessage('Final totals captured from the Ball Don\'t Lie box score.');
+      setTrackerMessage('Final totals from the ESPN box score.');
     }
 
     updateUpdatedTimestamp();

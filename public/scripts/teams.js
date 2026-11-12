@@ -14,28 +14,28 @@ const TEAM_MODE_CONFIG = {
   active: {
     dataset: 'data/team_profiles.json',
     mapCopy:
-      "Pins are color coded by conference and expand into a live dashboard with scoring, efficiency, and depth insights pulled from the league archive (1946-2025).",
-    footprintTitle: 'Ranking every active team by footprint strength.',
+      "Pins show each team's conference. Select one for stats from the league archive (1946-2025).",
+    footprintTitle: 'Franchise footprint',
     footprintDescription:
-      "We blended results, efficiency, and rotational depth to surface how each club's on-court identity resonates across the league in 2024-25. Explore the full ladder below, then dig into the numbers that power every badge.",
+      "Compare franchises by championships, Hall of Fame players, and win percentage from the archived snapshot.",
     footprintEmpty: 'We were unable to load active team data for this refresh.',
     methodologyIntro: (seasonText) =>
-      `Franchise Footprint scores normalise each legacy signal to a league-wide 0-100 scale${seasonText}, then blend the results using the weighted recipe below. The composite number now spotlights franchises that pair trophy cases, Hall of Fame representation, and sustained winning across eras.`,
+      `Franchise footprint scores put championships, Hall of Fame players, and win percentage on a 0-100 scale${seasonText}. The weights below combine them into one score.`,
     methodologyOutro:
-      'This historical view keeps weights fixed so the rankings emphasise enduring impact rather than short-term swings.',
+      'The same weights apply to every franchise in this ranking.',
   },
   inactive: {
     dataset: 'data/inactive_team_profiles.json',
     mapCopy:
-      'Pins now spotlight inactive franchises from the NBA archives. Click a dormant club to surface its historical performance profile and relive defunct eras.',
-    footprintTitle: 'Ranking every inactive franchise by archive footprint.',
+      'Pins show inactive franchises. Select one for its archived stats.',
+    footprintTitle: 'Inactive franchise footprint',
     footprintDescription:
-      'We remix legacy signals to celebrate the dormant brands that still cast a shadow across the league. Compare inactive clubs on trophies, legends, and peak efficiency to see who is most ready for a revival.',
+      'Compare inactive franchises by championships, Hall of Fame players, and win percentage from archived records.',
     footprintEmpty: 'We were unable to load inactive franchise data for this refresh.',
     methodologyIntro: (seasonText) =>
-      `Inactive franchise Footprint scores normalise each legacy marker to the vintage peer set${seasonText} before applying the same weighted recipe. The blend lets dormant clubs compete on even footing, from trophy hauls to star power.`,
+      `Inactive franchise scores compare championships, Hall of Fame players, and win percentage within this group${seasonText}. The weights below combine them into one score.`,
     methodologyOutro:
-      'Because the inactive set is frozen in time, the weights emphasise enduring resonance rather than contemporary results.',
+      'These rankings use archived results and fixed weights.',
   },
 };
 
@@ -937,7 +937,7 @@ async function initialise() {
     }
   } catch (error) {
     if (mapCanvas) {
-      mapCanvas.innerHTML = '<p class="team-map__error">Unable to load the map experience right now. Please refresh to try again.</p>';
+      mapCanvas.innerHTML = '<p class="team-map__error">The map is unavailable. Refresh to try again.</p>';
     }
     if (detailPanel) {
       detailPanel.setAttribute('aria-busy', 'false');

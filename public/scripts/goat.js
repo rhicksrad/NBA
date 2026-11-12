@@ -26,11 +26,11 @@ const goatPlayersByName = new Map();
 
 const FALLBACK_SOURCE_PANELS = [
   {
-    label: 'Prime Impact & Possession Value',
+    label: 'Prime impact and possession value',
     description: 'Possession-weighted scoring, playmaking, and stocks blended with BDI opponent-adjusted impact.',
     sources: [
       {
-        name: "Ball Don't Lie API game logs (PlayerStatistics.7z)",
+        name: "Archived game logs (PlayerStatistics.7z)",
         contribution: 'Points, assists, rebounds, steals, blocks, and minutes per game.',
         fields: ['points', 'assists', 'reboundsTotal', 'steals', 'blocks', 'numMinutes'],
       },
@@ -43,11 +43,11 @@ const FALLBACK_SOURCE_PANELS = [
     ],
   },
   {
-    label: 'Stage Dominance',
+    label: 'Stage dominance',
     description: 'Championship equity from playoff wins, Finals performance, and BDI postseason deltas.',
     sources: [
       {
-        name: "Ball Don't Lie API game logs (PlayerStatistics.7z)",
+        name: "Archived game logs (PlayerStatistics.7z)",
         contribution: 'Playoff wins, Finals games, and close-out opportunities.',
         fields: ['gameType', 'gameLabel', 'win'],
       },
@@ -65,11 +65,11 @@ const FALLBACK_SOURCE_PANELS = [
     ],
   },
   {
-    label: 'Longevity & Availability',
+    label: 'Longevity and availability',
     description: 'Career minutes, appearances, and durability context aligned with BDI aging curves.',
     sources: [
       {
-        name: "Ball Don't Lie API game logs (PlayerStatistics.7z)",
+        name: "Archived game logs (PlayerStatistics.7z)",
         contribution: 'Total minutes, games played, and availability counts.',
         fields: ['numMinutes', 'personId'],
       },
@@ -87,11 +87,11 @@ const FALLBACK_SOURCE_PANELS = [
     ],
   },
   {
-    label: 'Versatility & Scalability',
+    label: 'Versatility and scalability',
     description: 'Positional flexibility, on-ball creation, and multi-team adaptability factors.',
     sources: [
       {
-        name: "Ball Don't Lie API game logs (PlayerStatistics.7z)",
+        name: "Archived game logs (PlayerStatistics.7z)",
         contribution: 'Assist, rebound, steal, and block rates per game.',
         fields: ['assists', 'reboundsTotal', 'steals', 'blocks'],
       },
@@ -114,11 +114,11 @@ const FALLBACK_SOURCE_PANELS = [
     ],
   },
   {
-    label: 'Cultural Capital',
-    description: 'Leadership credit rooted in championships, global reach, and BDI cultural resonance.',
+    label: 'Cultural capital',
+    description: 'Leadership credit based on championships, global reach, and BDI cultural scores.',
     sources: [
       {
-        name: "Ball Don't Lie API game logs (PlayerStatistics.7z)",
+        name: "Archived game logs (PlayerStatistics.7z)",
         contribution: 'Win totals and postseason success that underpin leadership value.',
         fields: ['win', 'gameType'],
       },
@@ -205,7 +205,7 @@ function renderGoatEquation(weights) {
 
   if (!Array.isArray(weights) || !weights.length) {
     if (equationTarget) {
-      equationTarget.textContent = 'GOAT score equation becomes available once weighting data loads.';
+      equationTarget.textContent = 'The score formula is unavailable.';
     }
     if (listTarget) {
       listTarget.innerHTML = '';
@@ -270,7 +270,7 @@ function updateGeneratedTimestamp(data, sourceUrl, { selector = '[data-goat-gene
 
   const formatted = formatGeneratedTimestamp(data?.generatedAt);
   if (!formatted) {
-    target.textContent = 'Latest refresh pending from GOAT data feeds.';
+    target.textContent = 'Update date unavailable.';
     return;
   }
 
@@ -564,7 +564,7 @@ function buildSourceNotes(weights) {
 
     const description = document.createElement('p');
     description.className = 'goat-source-panel__description';
-    description.textContent = 'The source inventory populates as soon as the monthly GOAT snapshot finishes loading.';
+    description.textContent = 'Source details are unavailable.';
     panel.appendChild(description);
 
     container.appendChild(panel);
@@ -650,7 +650,7 @@ function buildSourceNotes(weights) {
     } else if (hasWeights) {
       const note = document.createElement('p');
       note.className = 'goat-source-panel__description';
-      note.textContent = 'Detailed sourcing will publish with the next GOAT refresh.';
+      note.textContent = 'Detailed source information is unavailable.';
       panel.appendChild(note);
     }
 
@@ -662,7 +662,7 @@ function buildLeaderboard(
   players,
   {
     treeSelector = '[data-goat-tree]',
-    placeholderText = 'Pantheon order will populate soon.',
+    placeholderText = 'Rankings are unavailable.',
     playerAttribute = 'data-goat-player',
     groupPlayers = groupPlayersByTier,
   } = {},
@@ -839,7 +839,7 @@ function renderComponents(player, weights) {
   if (!orderedComponents.length) {
     const placeholder = document.createElement('p');
     placeholder.className = 'goat-detail__placeholder';
-    placeholder.textContent = 'Component breakdown coming soon.';
+    placeholder.textContent = 'Component scores are unavailable.';
     list.appendChild(placeholder);
     return;
   }
@@ -1081,7 +1081,7 @@ async function init() {
           return {
             type: 'doughnut',
             data: {
-              labels: ['Active pantheon', 'Legends'],
+              labels: ['Active players', 'Legends'],
               datasets: [
                 {
                   data: [percent, Math.max(0, 100 - percent)],

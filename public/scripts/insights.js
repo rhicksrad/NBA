@@ -32,8 +32,8 @@ function setSourceStamp(key, isoString) {
   }
   const formatted = formatUpdatedAt(isoString);
   const stamp = formatted
-    ? `Source: Ball Don't Lie API · Updated ${formatted} UTC`
-    : "Source: Ball Don't Lie API";
+    ? `Source: archived game logs · Updated ${formatted} UTC`
+    : "Source: archived game logs";
   target.textContent = stamp;
 }
 
@@ -118,7 +118,7 @@ function updateHero(data) {
     : null;
   setMetric('season-range', rangeText);
   const calendarNote = Number.isFinite(seasonRangeStart) && Number.isFinite(seasonRangeEnd)
-    ? `Regular-season months (Oct–Apr) appear on the left in season order; playoff months (Apr–Jun, with bubble exceptions) are on the right. Ball Don't Lie seasons ${seasonRangeStart}-${seasonRangeEnd}.`
+    ? `Regular-season months (Oct–Apr) appear on the left in season order; playoff months (Apr–Jun, with bubble exceptions) are on the right. Archived game logs from seasons ${seasonRangeStart}-${seasonRangeEnd}.`
     : 'Regular-season months (Oct–Apr) appear on the left in season order; playoff months (Apr–Jun, with bubble exceptions) are on the right.';
   setMetric('seasonal-calendar-note', calendarNote);
 

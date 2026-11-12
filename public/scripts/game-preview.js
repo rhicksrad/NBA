@@ -449,7 +449,7 @@ function renderRoster(target, roster) {
   target.innerHTML = '';
   if (!roster || !roster.length) {
     const li = document.createElement('li');
-    li.textContent = 'Roster will populate once Ball Don\'t Lie logs active players for this season.';
+    li.textContent = 'Roster data is unavailable for this season.';
     target.appendChild(li);
     return;
   }
@@ -480,8 +480,8 @@ function renderTeamGames(target, games, options) {
   if (!games || !games.length) {
     const li = document.createElement('li');
     li.textContent = upcoming
-      ? 'No upcoming contests logged in the Ball Don\'t Lie window.'
-      : 'No completed contests logged yet.';
+      ? 'No upcoming games in the ESPN results.'
+      : 'No completed games in the results.';
     target.innerHTML = '';
     target.appendChild(li);
     return;
@@ -532,7 +532,7 @@ function renderTeamSection(role, team, context, opponentName) {
         ? `${team.name} are averaging ${pieces.join(', ')} across ${context.record.total} contests.`
         : `${team.name} have logged ${context.record.total} contests so far.`;
     } else {
-      targets.note.textContent = `${team.name} are awaiting their first result of the ${opponentName} matchup build-up.`;
+      targets.note.textContent = `No results for ${team.name} are available ahead of the ${opponentName} matchup.`;
     }
   }
   renderTeamGames(targets.last5, context.lastFive, { upcoming: false });
@@ -549,7 +549,7 @@ function buildNarrativeLines(game, visitorContext, homeContext) {
       `${game.visitor.name} enter at ${formatRecord(visitorRecord)} while ${game.home.name} sit at ${formatRecord(homeRecord)}.`,
     );
   } else {
-    lines.push('Both teams are building toward their first logged contests in the Ball Don\'t Lie data feed.');
+    lines.push('No results are available for either team in the ESPN data.');
   }
   if (visitorRecord.averageFor !== null && homeRecord.averageFor !== null) {
     lines.push(
@@ -559,15 +559,15 @@ function buildNarrativeLines(game, visitorContext, homeContext) {
   const visitorUpcoming = Array.isArray(visitorContext.nextFive) ? visitorContext.nextFive[0] : null;
   const homeUpcoming = Array.isArray(homeContext.nextFive) ? homeContext.nextFive[0] : null;
   if (visitorUpcoming) {
-    const locationDescriptor = visitorUpcoming.isHome ? 'home tilt' : 'road trip';
+    const locationDescriptor = visitorUpcoming.isHome ? 'home game' : 'road game';
     lines.push(
-      `${game.visitor.name} continue a ${locationDescriptor} on ${formatShortDate(visitorUpcoming.tipoff)} as part of their run-up.`,
+      `Next listed game for ${game.visitor.name}: ${locationDescriptor} on ${formatShortDate(visitorUpcoming.tipoff)}.`,
     );
   }
   if (homeUpcoming) {
-    const locationDescriptor = homeUpcoming.isHome ? 'home stand' : 'road swing';
+    const locationDescriptor = homeUpcoming.isHome ? 'home game' : 'road game';
     lines.push(
-      `${game.home.name} transition into a ${locationDescriptor} on ${formatShortDate(homeUpcoming.tipoff)} immediately after this game.`,
+      `Next listed game for ${game.home.name}: ${locationDescriptor} on ${formatShortDate(homeUpcoming.tipoff)}.`,
     );
   }
   return lines;
@@ -581,7 +581,7 @@ function renderNarrative(game, visitorContext, homeContext) {
   narrativeContainer.innerHTML = '';
   if (!lines.length) {
     const paragraph = document.createElement('p');
-    paragraph.textContent = 'Awaiting more Ball Don\'t Lie data to build this storyline.';
+    paragraph.textContent = 'Matchup stats are unavailable.';
     narrativeContainer.appendChild(paragraph);
     return;
   }
@@ -629,7 +629,7 @@ async function initialize() {
   try {
     const game = await loadGame(gameId);
     if (!game) {
-      setPreviewMessage('Unable to locate that matchup in the Ball Don\'t Lie dataset.', 'error');
+      setPreviewMessage('Matchup not found in the ESPN data.', 'error');
       return;
     }
     if (game.stage === 'live' || game.stage === 'final') {
@@ -674,7 +674,7 @@ async function initialize() {
     renderTeamSection('home', game.home, homeContext, game.visitor.name);
     renderNarrative(game, visitorContext, homeContext);
 
-    setPreviewMessage('Preview generated from live Ball Don\'t Lie data.');
+    setPreviewMessage('Preview stats come from ESPN public JSON.');
     if (updatedLabel) {
       updatedLabel.textContent = formatDateTime(new Date());
     }

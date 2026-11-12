@@ -467,7 +467,7 @@ registerCharts([
           fill: true,
         },
         {
-          label: 'Cup action',
+          label: 'Cup games',
           data: orderedBuckets.map((bucket) => bucket.cup ?? 0),
           borderColor: palette.gold,
           backgroundColor: 'rgba(227, 164, 28, 0.24)',
@@ -475,7 +475,7 @@ registerCharts([
           fill: true,
         },
         {
-          label: 'Finale spotlight',
+          label: 'Finals',
           data: orderedBuckets.map((bucket) => bucket.marquee ?? 0),
           borderColor: palette.coral,
           backgroundColor: 'rgba(212, 61, 36, 0.18)',

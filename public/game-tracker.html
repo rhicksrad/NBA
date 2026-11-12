@@ -38,7 +38,7 @@
     <div class="site-frame tracker-frame">
       <header class="tracker-hero" aria-live="polite">
         <div class="tracker-hero__meta">
-          <a class="tracker-hero__back" href="games.html">← Back to games lab</a>
+          <a class="tracker-hero__back" href="games.html">← Back to games</a>
           <div class="tracker-hero__chips">
             <span class="lab-chip" data-season-label>Season loading…</span>
             <span class="lab-chip lab-chip--accent" data-status-label>Syncing…</span>
@@ -122,10 +122,9 @@
 
         <section class="tracker-visuals" aria-label="Game intelligence board">
           <header class="tracker-visuals__intro">
-            <h2 class="tracker-visuals__heading">Game intelligence board</h2>
+            <h2 class="tracker-visuals__heading">The game in charts</h2>
             <p class="tracker-visuals__lead">
-              Twelve curated charts track how each matchup is unfolding, spotlighting trends from the latest slate of
-              finals alongside tonight’s live pulse.
+              Team and player stats from the ESPN public JSON box score.
             </p>
           </header>
 
@@ -152,7 +151,7 @@
                 <canvas id="off-rating-trend" data-chart-ratio="0.62" aria-describedby="off-rating-caption"></canvas>
               </div>
               <p id="off-rating-caption" class="tracker-visuals__caption">
-                Grouped bars show estimated offensive and defensive ratings derived from the /v1/stats box score snapshot.
+                Estimated offensive and defensive ratings from the ESPN box score.
               </p>
             </article>
 
@@ -178,27 +177,26 @@
                 <canvas id="period-scoring" data-chart-ratio="0.58" aria-describedby="period-caption"></canvas>
               </div>
               <p id="period-caption" class="tracker-visuals__caption">
-                Stacked bars surface when each club generated its offense tonight, highlighting quarter and overtime
-                swings.
+                Points by quarter and overtime period for each team.
               </p>
             </article>
 
             <article class="tracker-visuals__card" data-chart-wrapper>
               <header class="tracker-visuals__header">
                 <h3 class="tracker-visuals__title">Shot value mix</h3>
-                <span class="lab-chip">2s vs 3s vs freebies</span>
+                <span class="lab-chip">Two-pointers, threes, free throws</span>
               </header>
               <div class="viz-canvas">
                 <canvas id="scoring-sources" data-chart-ratio="0.58" aria-describedby="scoring-sources-caption"></canvas>
               </div>
               <p id="scoring-sources-caption" class="tracker-visuals__caption">
-                Shows how many points came from two-pointers, threes, and the stripe for each roster.
+                Points from two-pointers, threes, and free throws for each team.
               </p>
             </article>
 
             <article class="tracker-visuals__card" data-chart-wrapper>
               <header class="tracker-visuals__header">
-                <h3 class="tracker-visuals__title">Shooting touch</h3>
+                <h3 class="tracker-visuals__title">Shooting percentages</h3>
                 <span class="lab-chip">FG • 3P • FT%</span>
               </header>
               <div class="viz-canvas">
@@ -211,14 +209,14 @@
 
             <article class="tracker-visuals__card" data-chart-wrapper>
               <header class="tracker-visuals__header">
-                <h3 class="tracker-visuals__title">Glass control</h3>
+                <h3 class="tracker-visuals__title">Rebounds</h3>
                 <span class="lab-chip">Off vs. defensive boards</span>
               </header>
               <div class="viz-canvas">
                 <canvas id="rebound-control" data-chart-ratio="0.58" aria-describedby="rebound-caption"></canvas>
               </div>
               <p id="rebound-caption" class="tracker-visuals__caption">
-                Highlights how each team split its rebounding haul between extra chances and clean finishes.
+                Offensive and defensive rebounds for each team.
               </p>
             </article>
 
@@ -231,46 +229,46 @@
                 <canvas id="playmaking-balance" data-chart-ratio="0.58" aria-describedby="playmaking-caption"></canvas>
               </div>
               <p id="playmaking-caption" class="tracker-visuals__caption">
-                Bar chart tracks creation versus giveaways to spotlight which side is dictating possessions.
+                Assists and turnovers for each team.
               </p>
             </article>
 
             <article class="tracker-visuals__card" data-chart-wrapper>
               <header class="tracker-visuals__header">
                 <h3 class="tracker-visuals__title">Possession profile</h3>
-                <span class="lab-chip">Shot • stripe • miscues</span>
+                <span class="lab-chip">Shots, free throws, turnovers</span>
               </header>
               <div class="viz-canvas">
                 <canvas id="possession-profile" data-chart-ratio="0.58" aria-describedby="possession-caption"></canvas>
               </div>
               <p id="possession-caption" class="tracker-visuals__caption">
-                Radar readout compares how possessions ended — shots, free throws, or turnovers — for each club.
+                Shots, free throws, and turnovers for each team.
               </p>
             </article>
 
             <article class="tracker-visuals__card" data-chart-wrapper>
               <header class="tracker-visuals__header">
-                <h3 class="tracker-visuals__title">Four factors duel</h3>
+                <h3 class="tracker-visuals__title">Four factors</h3>
                 <span class="lab-chip">eFG • TOV • OREB • FTr</span>
               </header>
               <div class="viz-canvas">
                 <canvas id="win-probability" data-chart-ratio="0.6" aria-describedby="win-probability-caption"></canvas>
               </div>
               <p id="win-probability-caption" class="tracker-visuals__caption">
-                Radar plot compares the classic four factors using the same /v1/stats feed that powers the live box score.
+                Effective field goal percentage, turnover rate, offensive rebound rate, and free throw rate from the ESPN box score.
               </p>
             </article>
 
             <article class="tracker-visuals__card" data-chart-wrapper>
               <header class="tracker-visuals__header">
-                <h3 class="tracker-visuals__title">Scoring hierarchy</h3>
+                <h3 class="tracker-visuals__title">Leading scorers</h3>
                 <span class="lab-chip">Top six point-getters</span>
               </header>
               <div class="viz-canvas viz-canvas--compact">
                 <canvas id="scoring-leaders" data-chart-ratio="0.72" aria-describedby="leaders-caption"></canvas>
               </div>
               <p id="leaders-caption" class="tracker-visuals__caption">
-                Horizontal bars spotlight the six biggest scoring lines from the box score.
+                The six leading scorers in the box score.
               </p>
             </article>
 
@@ -292,7 +290,7 @@
         <section class="tracker-footnotes">
           <p class="tracker-footnotes__status" data-tracker-message>Loading the box score…</p>
           <p class="tracker-footnotes__meta">
-            Box scores refresh every few seconds and can trail the broadcast by a possession or two.
+            Box scores come from ESPN public JSON and may trail the broadcast.
             <br />
             Data source: ESPN public JSON.
           </p>

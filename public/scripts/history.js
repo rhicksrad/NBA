@@ -240,14 +240,14 @@ function buildCareerCaches(document) {
 
 function formatCareerSnapshotNote() {
   if (!cachedCareerGeneratedAt) {
-    return "Showing cached career totals from the Ball Don't Lie archive snapshot.";
+    return "Career totals from archived game logs.";
   }
   const timestamp = new Date(cachedCareerGeneratedAt);
   if (Number.isNaN(timestamp.getTime())) {
-    return "Showing cached career totals from the Ball Don't Lie archive snapshot.";
+    return "Career totals from archived game logs.";
   }
   const formatted = cachedCareerTimestampFormatter.format(timestamp);
-  return `Showing cached career totals captured ${formatted} UTC from the Ball Don't Lie archive snapshot.`;
+  return `Career totals from archived game logs captured ${formatted} UTC.`;
 }
 
 function renderCachedCareer(totalsContainer, cachedCareer, contextMessage) {
@@ -1166,8 +1166,8 @@ async function renderAtlas(mode, atlasData, svgCache) {
         entryName: 'countryName',
         shapeAttribute: 'data-country',
         title: 'Best NBA star born in each country',
-        caption: 'Select a country outline to spotlight the standout NBA player born there.',
-        spotlightHeading: 'Country spotlight',
+        caption: 'Select a country to see its highest-ranked player by GOAT score.',
+        spotlightHeading: 'Top player in the country',
       }
     : {
         id: 'domestic',
@@ -1177,8 +1177,8 @@ async function renderAtlas(mode, atlasData, svgCache) {
         entryName: 'stateName',
         shapeAttribute: 'data-state',
         title: 'Best NBA star born in each state',
-        caption: 'Select a tile to spotlight the most decorated NBA player born in that state.',
-        spotlightHeading: 'State spotlight',
+        caption: 'Select a state to see its highest-ranked player by GOAT score.',
+        spotlightHeading: 'Top player in the state',
       };
 
   const entries = atlasData[config.datasetKey] ?? [];
@@ -1286,7 +1286,7 @@ function renderAtlasSpotlight(entry, config) {
   selectors.atlasSpotlight.innerHTML = '';
   if (!entry) {
     selectors.atlasSpotlight.append(
-      createElement('p', 'state-spotlight__placeholder', 'Select a tile to meet its headline legend.'),
+      createElement('p', 'state-spotlight__placeholder', 'Select a place to see its top player.'),
     );
     return;
   }
@@ -1470,7 +1470,7 @@ async function bootstrap() {
       totalsContainer.innerHTML = '';
 
       totalsContainer.append(
-        createElement('p', 'history-player__hint', "Fetching the live career log from Ball Don't Lie…"),
+        createElement('p', 'history-player__hint', "Loading career stats..."),
       );
 
       let renderedPrewarmed = false;
@@ -1482,8 +1482,8 @@ async function bootstrap() {
             renderedPrewarmed = true;
             totalsContainer.innerHTML = '';
             const hint = needsHydration
-              ? 'Loaded prewarmed Ball Don\'t Lie archive — checking the latest season…'
-              : 'Loaded prewarmed Ball Don\'t Lie archive.';
+              ? 'Loaded archived game logs. Checking the latest season...'
+              : 'Loaded archived game logs.';
             totalsContainer.append(createElement('p', 'history-player__hint', hint));
             totalsContainer.append(renderTotalsTable('Regular season', partialCareer.regular));
             totalsContainer.append(renderTotalsTable('Postseason', partialCareer.postseason));
@@ -1501,14 +1501,14 @@ async function bootstrap() {
             createElement(
               'p',
               'history-player__hint',
-              'Live Ball Don\'t Lie refresh is currently unavailable — showing the prewarmed archive above.',
+              'Live stats are unavailable. Showing archived game logs above.',
             ),
           );
         } else if (cachedCareer) {
           renderCachedCareer(
             totalsContainer,
             cachedCareer,
-            'Live Ball Don\'t Lie stats are unavailable — showing the cached snapshot instead.',
+            'Live stats are unavailable. Showing the archived snapshot.',
           );
         } else {
           renderUnavailable('We hit a snag pulling the career stats. Try again in a moment.');
