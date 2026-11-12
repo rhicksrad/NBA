@@ -177,3 +177,13 @@ tbody tr:first-child .rating__value { color: var(--royal); }
 .wings span { font-size: 0.86rem; color: color-mix(in srgb, var(--white) 72%, transparent); }
 .wings a:hover strong { color: var(--bulb); }
 @media (prefers-reduced-motion: reduce) { .wings img { transition: none; } }
+
+/* Phones: the whole power table fits without sideways scrolling. */
+@media (max-width: 640px) {
+  .power__table th, .power__table td { padding-inline: 0.3rem; }
+  .power__table .move { width: 1.7rem; }
+  .power__table .team { gap: 0.3rem; }
+  .rating { min-width: 4.6rem; }
+  .form i { width: 4px; }
+  .form { gap: 1px; }
+}

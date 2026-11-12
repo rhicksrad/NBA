@@ -690,5 +690,12 @@ main :where(section, article, div, figure, ul, ol, dl) { min-width: 0; }
 .site-frame .rumble-results__kpis strong { font: 900 2rem/1 var(--display); }
 .site-frame .rumble-shell__footer { background: none; border: 0; padding: 0.6rem 0 0; color: var(--ink-soft); }
 
+/* Phones: the thirty team buttons sit three across instead of one long column. */
+@media (max-width: 640px) {
+  .site-frame .player-atlas__teams-tree { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.35rem; }
+  .site-frame .player-atlas__teams-tree > * { margin: 0; min-width: 0; }
+  .site-frame .player-atlas__teams-tree > [open] { grid-column: 1 / -1; }
+}
+
 /* The legacy sheet pads the body on phones, which insets the header and hero. */
 html body { padding: 0; }
