@@ -1,0 +1,19 @@
+{
+  "cachedAt": "2026-11-12T18:01:30.885Z",
+  "value": [
+    {
+      "id": 1,
+      "first_name": "Ada",
+      "last_name": "Lovelace",
+      "position": null,
+      "jersey_number": null,
+      "height": null,
+      "weight": null,
+      "team": {
+        "id": 42,
+        "abbreviation": "ALG",
+        "full_name": "Algorithm City"
+      }
+    }
+  ]
+}

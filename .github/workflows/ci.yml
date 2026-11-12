@@ -2,28 +2,45 @@ name: CI
 
 on:
   push:
-    branches: ["main", "master"]
+    branches: [main]
   pull_request:
 
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
 jobs:
-  lint-and-test:
+  site:
+    name: Site (tests + integrity)
     runs-on: ubuntu-latest
     steps:
-      - name: Check out repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Unit tests
+        run: pnpm test
+      - name: Static integrity (links, JSON, weight budgets)
+        run: pnpm check:site
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+  python:
+    name: Python (ruff + pytest)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-
-      - name: Install dependencies
-        run: |
+      - run: |
           python -m pip install --upgrade pip
           pip install -r requirements-dev.txt
-
-      - name: Run Ruff
-        run: ruff check .
-
-      - name: Run tests
-        run: pytest
+      - run: ruff check .
+      - run: pytest

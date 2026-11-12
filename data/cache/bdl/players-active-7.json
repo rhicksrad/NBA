@@ -1,0 +1,19 @@
+{
+  "cachedAt": "2026-11-12T18:01:30.887Z",
+  "value": [
+    {
+      "id": 3,
+      "first_name": "Grace",
+      "last_name": "Hopper",
+      "position": "G",
+      "jersey_number": "99",
+      "height": "5-6",
+      "weight": "140",
+      "team": {
+        "id": 7,
+        "abbreviation": "ALT",
+        "full_name": "Alt Mechanics"
+      }
+    }
+  ]
+}
